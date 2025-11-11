@@ -1,74 +1,185 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Text?>
 
-<BorderPane fx:id="rootPane" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+<BorderPane fx:id="rootPane" styleClass="root" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.noteflix.pcm.ui.MainController">
 
-    <!-- Top: Menu Bar and Tool Bar -->
-    <top>
-        <VBox>
-            <!-- Menu Bar -->
-            <MenuBar fx:id="menuBar">
-                <Menu text="File">
-                    <MenuItem text="New" onAction="#handleFileNew" accelerator="Ctrl+N"/>
-                    <MenuItem text="Open" onAction="#handleFileOpen" accelerator="Ctrl+O"/>
-                    <SeparatorMenuItem/>
-                    <MenuItem text="Exit" onAction="#handleFileExit" accelerator="Ctrl+Q"/>
-                </Menu>
-                <Menu text="Edit">
-                    <MenuItem text="Cut" accelerator="Ctrl+X"/>
-                    <MenuItem text="Copy" accelerator="Ctrl+C"/>
-                    <MenuItem text="Paste" accelerator="Ctrl+V"/>
-                </Menu>
-                <Menu text="View">
-                    <CheckMenuItem text="Show Navigation" selected="true"/>
-                    <CheckMenuItem text="Show Toolbar" selected="true"/>
-                    <CheckMenuItem text="Show Status Bar" selected="true"/>
-                </Menu>
-                <Menu text="Help">
-                    <MenuItem text="Documentation"/>
-                    <MenuItem text="About" onAction="#handleHelpAbout"/>
-                </Menu>
-            </MenuBar>
-
-            <!-- Tool Bar -->
-            <ToolBar fx:id="toolBar">
-                <Button text="New" style="-fx-font-size: 12px;"/>
-                <Button text="Open" style="-fx-font-size: 12px;"/>
-                <Button text="Save" style="-fx-font-size: 12px;"/>
-                <Separator orientation="VERTICAL"/>
-                <Button text="Cut" style="-fx-font-size: 12px;"/>
-                <Button text="Copy" style="-fx-font-size: 12px;"/>
-                <Button text="Paste" style="-fx-font-size: 12px;"/>
-            </ToolBar>
-        </VBox>
-    </top>
-
-    <!-- Left: Navigation Tree -->
-    <left>
-        <VBox style="-fx-min-width: 250px; -fx-border-color: #ddd; -fx-border-width: 0 1 0 0;">
-            <Label text="Navigation" style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-padding: 10;"/>
-            <TreeView fx:id="navigationTree" VBox.vgrow="ALWAYS"/>
-        </VBox>
-    </left>
-
-    <!-- Center: Content Area with Tabs -->
     <center>
-        <TabPane fx:id="contentTabPane" tabClosingPolicy="ALL_TABS">
-            <!-- Tabs will be added dynamically -->
-        </TabPane>
-    </center>
+        <HBox>
+            <!-- Left: Sidebar -->
+            <VBox fx:id="sidebar" styleClass="sidebar" minWidth="280" maxWidth="280">
+                <!-- Logo and Title -->
+                <HBox styleClass="sidebar-header" alignment="CENTER_LEFT">
+                    <VBox.margin>
+                        <Insets top="20" left="20" right="20" bottom="20"/>
+                    </VBox.margin>
+                    <Label text="📦" styleClass="app-icon"/>
+                    <VBox spacing="2">
+                        <Label text="PCM Desktop" styleClass="app-title"/>
+                        <Label text="Project Code Manager" styleClass="app-subtitle"/>
+                    </VBox>
+                </HBox>
+                
+                <!-- Sidebar search -->
+                <TextField fx:id="sidebarSearch" promptText="Search projects..." styleClass="sidebar-search">
+                    <VBox.margin>
+                        <Insets left="15" right="15" bottom="15"/>
+                    </VBox.margin>
+                </TextField>
+                
+                <!-- Favorites section -->
+                <VBox styleClass="sidebar-section">
+                    <VBox.margin>
+                        <Insets left="15" right="15" bottom="20"/>
+                    </VBox.margin>
+                    <Label text="FAVORITES" styleClass="section-header"/>
+                    <VBox styleClass="favorites-list">
+                        <HBox styleClass="favorite-item">
+                            <Label text="CU" styleClass="avatar blue"/>
+                            <Text text="Customer Service" styleClass="favorite-text"/>
+                            <Region HBox.hgrow="ALWAYS"/>
+                            <Label text="⭐" styleClass="star"/>
+                        </HBox>
+                        <HBox styleClass="favorite-item">
+                            <Label text="PR" styleClass="avatar orange"/>
+                            <Text text="Product Catalog Ser..." styleClass="favorite-text"/>
+                            <Region HBox.hgrow="ALWAYS"/>
+                            <Label text="⭐" styleClass="star"/>
+                        </HBox>
+                        <HBox styleClass="favorite-item">
+                            <Label text="OR" styleClass="avatar red"/>
+                            <Text text="Order Service" styleClass="favorite-text"/>
+                            <Region HBox.hgrow="ALWAYS"/>
+                            <Label text="⭐" styleClass="star"/>
+                        </HBox>
+                        <HBox styleClass="favorite-item">
+                            <Label text="PA" styleClass="avatar purple"/>
+                            <Text text="Payment Service" styleClass="favorite-text"/>
+                            <Region HBox.hgrow="ALWAYS"/>
+                            <Label text="⭐" styleClass="star"/>
+                        </HBox>
+                    </VBox>
+                </VBox>
+                
+                <!-- Projects section -->
+                <VBox styleClass="sidebar-section" VBox.vgrow="ALWAYS">
+                    <VBox.margin>
+                        <Insets left="15" right="15"/>
+                    </VBox.margin>
+                    <Label text="PROJECTS" styleClass="section-header"/>
+                    <VBox styleClass="projects-list">
+                        <HBox styleClass="project-item">
+                            <Label text="IN" styleClass="avatar green"/>
+                            <Text text="Inventory Service" styleClass="project-text"/>
+                        </HBox>
+                        <HBox styleClass="project-item">
+                            <Label text="SH" styleClass="avatar blue"/>
+                            <Text text="Shipping Service" styleClass="project-text"/>
+                        </HBox>
+                        <HBox styleClass="project-item">
+                            <Label text="PR" styleClass="avatar orange"/>
+                            <Text text="Promotion Engine" styleClass="project-text"/>
+                        </HBox>
+                        <HBox styleClass="project-item">
+                            <Label text="AN" styleClass="avatar purple"/>
+                            <Text text="Analytics Service" styleClass="project-text"/>
+                        </HBox>
+                        <HBox styleClass="project-item">
+                            <Label text="AD" styleClass="avatar gray"/>
+                            <Text text="Admin Dashboard" styleClass="project-text"/>
+                        </HBox>
+                    </VBox>
+                </VBox>
+                
+                <!-- Bottom navigation -->
+                <VBox styleClass="sidebar-bottom">
+                    <HBox styleClass="bottom-nav-item">
+                        <Label text="🏠" styleClass="nav-icon"/>
+                        <Text text="Knowledge Base" styleClass="nav-text"/>
+                    </HBox>
+                    <HBox styleClass="bottom-nav-item">
+                        <Label text="⚙️" styleClass="nav-icon"/>
+                        <Text text="Settings" styleClass="nav-text"/>
+                    </HBox>
+                </VBox>
+            </VBox>
 
-    <!-- Bottom: Status Bar -->
-    <bottom>
-        <HBox style="-fx-padding: 5 10; -fx-background-color: #f0f0f0; -fx-border-color: #ddd; -fx-border-width: 1 0 0 0;">
-            <Label fx:id="statusLabel" text="Ready" style="-fx-font-size: 12px;"/>
-            <Region HBox.hgrow="ALWAYS"/>
-            <Label text="PCM Desktop v1.0.0" style="-fx-font-size: 11px; -fx-text-fill: #666;"/>
+            <!-- Right: Main content area -->
+            <VBox fx:id="mainContent" styleClass="main-content" HBox.hgrow="ALWAYS">
+                <!-- Content tabs -->
+                <HBox styleClass="content-tabs">
+                    <Button text="ℹ️ Screen Info" styleClass="content-tab active"/>
+                    <Button text="⚡ Events" styleClass="content-tab"/>
+                    <Button text="📝 Notes" styleClass="content-tab"/>
+                    <Button text="💻 Source Code" styleClass="content-tab"/>
+                    <Button text="🗄️ Database" styleClass="content-tab"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Button text="✏️ Edit Screen" styleClass="edit-button"/>
+                </HBox>
+                
+                <!-- Main content -->
+                <HBox styleClass="content-body" VBox.vgrow="ALWAYS">
+                    <!-- Center: Description area -->
+                    <VBox styleClass="description-area" HBox.hgrow="ALWAYS">
+                        <VBox.margin>
+                            <Insets top="30" left="30" right="30" bottom="30"/>
+                        </VBox.margin>
+                        <Label text="✏️" styleClass="edit-icon"/>
+                        <TextArea fx:id="descriptionArea" 
+                                text="Main customer account dashboard showing overview of profile status, recent orders, saved addresses, payment methods, and wishlist items. Provides quick access to all account management functions. Displays profile completion percentage with prompts to add missing information. Shows personalized recommendations and recently viewed products. Includes shortcuts to frequently used features like order tracking, returns, and customer support."
+                                styleClass="description-text" 
+                                wrapText="true" 
+                                VBox.vgrow="ALWAYS"/>
+                    </VBox>
+                    
+                    <!-- Right: Properties panel -->
+                    <VBox styleClass="properties-panel" minWidth="300">
+                        <VBox.margin>
+                            <Insets top="30" right="30" bottom="30"/>
+                        </VBox.margin>
+                        
+                        <!-- Screen name -->
+                        <VBox styleClass="property-section">
+                            <Label text="SCREEN NAME" styleClass="property-header"/>
+                            <TextField text="Customer Profile Dashboard" styleClass="property-input"/>
+                        </VBox>
+                        
+                        <!-- Permissions -->
+                        <VBox styleClass="property-section">
+                            <Label text="PERMISSIONS" styleClass="property-header"/>
+                            <HBox styleClass="permission-item">
+                                <Button text="View Profile" styleClass="permission-tag"/>
+                                <Label text="PROFILE_VIEW" styleClass="permission-code"/>
+                            </HBox>
+                        </VBox>
+                        
+                        <!-- Statistics -->
+                        <VBox styleClass="property-section">
+                            <Label text="STATISTICS" styleClass="property-header"/>
+                            <VBox styleClass="stats-list">
+                                <Label text="3 Source Files" styleClass="stat-item"/>
+                                <Label text="3 Database Tables" styleClass="stat-item"/>
+                                <Label text="5 Events" styleClass="stat-item"/>
+                            </VBox>
+                        </VBox>
+                        
+                        <!-- Timestamps -->
+                        <VBox styleClass="property-section">
+                            <Label text="TIMESTAMPS" styleClass="property-header"/>
+                            <VBox styleClass="timestamps">
+                                <Label text="Created: 11/8/2025" styleClass="timestamp"/>
+                                <Label text="Updated: 11/8/2025" styleClass="timestamp"/>
+                            </VBox>
+                        </VBox>
+                    </VBox>
+                </HBox>
+            </VBox>
         </HBox>
-    </bottom>
+    </center>
 
 </BorderPane>
 

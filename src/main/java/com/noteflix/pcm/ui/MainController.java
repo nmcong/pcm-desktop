@@ -4,6 +4,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.VBox;
 import lombok.extern.slf4j.Slf4j;
 
 import java.net.URL;
@@ -32,97 +33,64 @@ public class MainController implements Initializable {
     private BorderPane rootPane;
 
     @FXML
-    private MenuBar menuBar;
+    private TextField sidebarSearch;
 
     @FXML
-    private ToolBar toolBar;
+    private VBox sidebar;
 
     @FXML
-    private TreeView<String> navigationTree;
+    private VBox mainContent;
 
     @FXML
-    private TabPane contentTabPane;
-
-    @FXML
-    private Label statusLabel;
+    private TextArea descriptionArea;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         log.info("Initializing Main Controller...");
         
-        setupMenuBar();
-        setupNavigationTree();
-        setupTabPane();
-        updateStatus("Ready");
+        setupSearchFunctionality();
+        setupSidebar();
+        setupMainContent();
         
         log.info("Main Controller initialized");
     }
 
     /**
-     * Setup menu bar with actions
+     * Setup search functionality
      */
-    private void setupMenuBar() {
-        // Menu bar is defined in FXML
-        log.debug("Setting up menu bar...");
+    private void setupSearchFunctionality() {
+        log.debug("Setting up search functionality...");
+        
+        if (sidebarSearch != null) {
+            sidebarSearch.setOnAction(e -> handleSidebarSearch(sidebarSearch.getText()));
+        }
     }
 
     /**
-     * Setup navigation tree
+     * Setup sidebar navigation
      */
-    private void setupNavigationTree() {
-        log.debug("Setting up navigation tree...");
-        
-        TreeItem<String> rootItem = new TreeItem<>("PCM");
-        rootItem.setExpanded(true);
-
-        // Create main categories for PCM
-        TreeItem<String> dashboardItem = new TreeItem<>("📊 Dashboard");
-        TreeItem<String> subsystemsItem = new TreeItem<>("🏗️ Subsystems & Projects");
-        TreeItem<String> screensItem = new TreeItem<>("🖥️ Screens & Forms");
-        TreeItem<String> databaseItem = new TreeItem<>("🗄️ Database Objects");
-        TreeItem<String> batchJobsItem = new TreeItem<>("⚙️ Batch Jobs");
-        TreeItem<String> workflowItem = new TreeItem<>("🔄 Workflows");
-        TreeItem<String> knowledgeItem = new TreeItem<>("📚 Knowledge Base");
-        TreeItem<String> queryItem = new TreeItem<>("🤖 AI Query");
-        TreeItem<String> settingsItem = new TreeItem<>("⚙️ Settings");
-
-        rootItem.getChildren().addAll(
-            dashboardItem,
-            subsystemsItem,
-            screensItem,
-            databaseItem,
-            batchJobsItem,
-            workflowItem,
-            knowledgeItem,
-            queryItem,
-            settingsItem
-        );
-
-        navigationTree.setRoot(rootItem);
-        navigationTree.setShowRoot(false);
-
-        // Handle selection
-        navigationTree.getSelectionModel().selectedItemProperty().addListener(
-            (observable, oldValue, newValue) -> {
-                if (newValue != null) {
-                    handleNavigationSelection(newValue.getValue());
-                }
-            }
-        );
+    private void setupSidebar() {
+        log.debug("Setting up sidebar...");
+        // Sidebar structure is defined in FXML
+        // Add any dynamic behavior here if needed
     }
 
     /**
-     * Setup tab pane
+     * Setup main content area
      */
-    private void setupTabPane() {
-        log.debug("Setting up tab pane...");
+    private void setupMainContent() {
+        log.debug("Setting up main content...");
         
-        // Add welcome tab
-        Tab welcomeTab = new Tab("Welcome");
-        welcomeTab.setClosable(false);
-        welcomeTab.setContent(createWelcomeView());
-        
-        contentTabPane.getTabs().add(welcomeTab);
+        // Initialize description area if available
+        if (descriptionArea != null) {
+            descriptionArea.setWrapText(true);
+            descriptionArea.setEditable(true);
+            
+            // Add change listener for description updates
+            descriptionArea.textProperty().addListener((observable, oldValue, newValue) -> {
+                log.debug("Description updated");
+            });
+        }
     }
 
     /**
@@ -153,22 +121,11 @@ public class MainController implements Initializable {
     }
 
     /**
-     * Handle navigation selection
+     * Handle sidebar search
      */
-    private void handleNavigationSelection(String item) {
-        log.info("Navigation selected: {}", item);
-        updateStatus("Selected: " + item);
-        
-        // Create new tab based on selection
-        String tabTitle = item.replaceAll("[^\\w\\s]", "").trim();
-        Tab newTab = new Tab(tabTitle);
-        
-        Label content = new Label("Content for: " + tabTitle);
-        content.setStyle("-fx-font-size: 24; -fx-padding: 40;");
-        newTab.setContent(content);
-        
-        contentTabPane.getTabs().add(newTab);
-        contentTabPane.getSelectionModel().select(newTab);
+    private void handleSidebarSearch(String query) {
+        log.info("Sidebar search: {}", query);
+        // Implement sidebar project search
     }
 
     /**
@@ -234,11 +191,11 @@ public class MainController implements Initializable {
     }
 
     /**
-     * Update status bar
+     * Update description area
      */
-    private void updateStatus(String message) {
-        if (statusLabel != null) {
-            statusLabel.setText(message);
+    private void updateDescription(String description) {
+        if (descriptionArea != null) {
+            descriptionArea.setText(description);
         }
     }
 
