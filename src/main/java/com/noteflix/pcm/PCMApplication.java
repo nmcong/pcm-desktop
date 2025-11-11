@@ -13,17 +13,33 @@ import java.util.Objects;
 
 /**
  * PCM Desktop Application - Main Entry Point
- * Personal Content Manager for Desktop
+ * 
+ * Project Code Management (PCM)
+ * AI-Powered System Analysis & Business Management Tool
+ * 
+ * This application provides comprehensive management and analysis capabilities for
+ * enterprise software systems, including:
+ * - Source code analysis and mapping
+ * - Subsystem and project management
+ * - Screen/form tracking with event management
+ * - Database object (Oracle) management
+ * - Batch job configuration and analysis
+ * - Workflow visualization
+ * - Knowledge base management
+ * - AI-powered natural language queries via LLM integration
+ * 
+ * @author Noteflix Team
+ * @version 1.0.0
  */
 @Slf4j
 public class PCMApplication extends Application {
 
-    private static final String APP_TITLE = "PCM - Personal Content Manager";
-    private static final int WINDOW_WIDTH = 1200;
-    private static final int WINDOW_HEIGHT = 800;
+    private static final String APP_TITLE = "PCM Desktop - AI-Powered System Analysis";
+    private static final int WINDOW_WIDTH = 1400;
+    private static final int WINDOW_HEIGHT = 900;
 
     public static void main(String[] args) {
-        log.info("🚀 Starting PCM Desktop Application...");
+        log.info("🚀 Starting PCM Desktop Application - AI-Powered System Analysis Tool...");
         launch(args);
     }
 

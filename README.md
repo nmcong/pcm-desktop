@@ -1,60 +1,131 @@
 # PCM Desktop Application
 
-Personal Content Manager - Desktop Application built with JavaFX (No Maven)
+**Project Code Management** - AI-Powered System Analysis & Business Management Tool
 
 ## 📋 Overview
 
-PCM Desktop là ứng dụng desktop cross-platform cho personal content management. Xây dựng với JavaFX, không sử dụng Maven, import thư viện trực tiếp.
+PCM Desktop là ứng dụng desktop AI-powered sử dụng Large Language Models (LLM) để phân tích và quản lý toàn bộ hệ thống phần mềm doanh nghiệp. Ứng dụng cho phép người dùng đặt câu hỏi và nhận được phân tích chi tiết về source code, nghiệp vụ, database, và các thành phần hệ thống.
 
-## ✨ Features
+## ✨ Core Features
 
-- 📊 **Dashboard** - Overview of your content
-- 📁 **Projects** - Manage your projects
-- 📝 **Notes** - Quick note-taking
-- ✓ **Tasks** - Task management
-- ⚙️ **Settings** - Customize your experience
+### 🤖 AI-Powered Analysis
+- **LLM Integration** - Tích hợp AI models để phân tích và trả lời câu hỏi
+- **Natural Language Queries** - Đặt câu hỏi bằng ngôn ngữ tự nhiên
+- **Intelligent Responses** - Phân tích sâu và đưa ra insights
+
+### 📊 System Management
+- **Subsystems & Projects** - Quản lý cấu trúc hệ thống phân cấp
+- **Screen/Form Management** - Theo dõi tất cả màn hình trong hệ thống
+- **Event Tracking** - Quản lý events và sự kiện trên từng màn hình
+- **Source Code Mapping** - Liên kết source code với màn hình tương ứng
+
+### 🗄️ Database Management
+- **Oracle DB Objects** - Quản lý toàn bộ database objects (Tables, Views, Procedures, Functions, Packages, Triggers, etc.)
+- **Schema Analysis** - Phân tích cấu trúc database
+- **Relationship Mapping** - Theo dõi mối quan hệ giữa các objects
+
+### ⚙️ Batch Job Management
+- **Job Configuration** - Thông tin cấu hình batch jobs
+- **Schedule Information** - Thời gian chạy và tần suất
+- **Code Analysis** - Source code của batch jobs
+- **Database Connections** - Theo dõi database connections của jobs
+- **Dependencies** - Mối quan hệ giữa các jobs
+
+### 🔄 Workflow Management
+- **Business Process Flows** - Quản lý quy trình nghiệp vụ
+- **Workflow Visualization** - Hiển thị workflow diagram
+- **Process Documentation** - Tài liệu hóa quy trình
+
+### 📚 Knowledge Base
+- **System Documentation** - Tài liệu hệ thống tập trung
+- **Business Rules** - Quản lý nghiệp vụ rules
+- **Technical Specifications** - Spec kỹ thuật
+- **Best Practices** - Tài liệu best practices
 
 ## 🛠️ Tech Stack
 
-- **Java 17+** - Programming language
-- **JavaFX 23** - UI framework (Latest)
+### Backend & Core
+- **Java 21** - Programming language
+- **JavaFX 21.0.9** - UI framework (compatible with Java 21)
 - **Lombok 1.18.34** - Reduce boilerplate (Latest)
-- **Jackson 2.17.2** - JSON processing (Latest)
-- **SQLite 3.46.1.0** - Local database (Latest)
-- **Logback 1.5.6** - Logging (Latest)
-- **No Build Tool** - Direct JAR import
+- **Jackson 2.17.2** - JSON processing for data serialization (Latest)
+- **SQLite 3.46.1.0** - Local metadata database (Latest)
+- **Logback 1.5.6** - Logging framework (Latest)
+
+### AI & Analysis
+- **LLM Integration** - Large Language Model APIs
+- **Oracle JDBC** - Connection to Oracle databases
+- **Source Code Parser** - Java/SQL code analysis
+- **AST Analysis** - Abstract Syntax Tree parsing
+
+### Architecture
+- **No Build Tool** - Direct JAR import for simplicity
+- **Domain-Driven Design** - Clean architecture
+- **Repository Pattern** - Data access abstraction
+- **Service Layer** - Business logic separation
 
 ## 📦 Project Structure
 
 ```
 pcm-desktop/
 ├── lib/                           # External Libraries
-│   ├── javafx/                    # JavaFX 23 JARs
-│   └── others/                    # Other library JARs
+│   ├── javafx/                    # JavaFX 21.0.9 JARs (platform-specific)
+│   └── others/                    # Other library JARs (platform-independent)
 ├── src/
 │   ├── main/
 │   │   ├── java/
 │   │   │   └── com/noteflix/pcm/
-│   │   │       ├── PCMApplication.java      # Main entry
-│   │   │       ├── ui/                      # UI Controllers
+│   │   │       ├── PCMApplication.java      # Main entry point
+│   │   │       ├── ui/                      # UI Controllers & Views
+│   │   │       │   ├── MainController.java  # Main window controller
+│   │   │       │   ├── dashboard/           # Dashboard views
+│   │   │       │   ├── subsystem/           # Subsystem management
+│   │   │       │   ├── screen/              # Screen/Form management
+│   │   │       │   ├── database/            # DB objects management
+│   │   │       │   ├── batch/               # Batch job management
+│   │   │       │   ├── workflow/            # Workflow visualization
+│   │   │       │   ├── knowledge/           # Knowledge base
+│   │   │       │   └── query/               # AI Query interface
 │   │   │       ├── domain/                  # Domain models
-│   │   │       ├── application/             # Services
-│   │   │       └── infrastructure/          # Data access
+│   │   │       │   ├── model/               # Entity models
+│   │   │       │   │   ├── Subsystem.java
+│   │   │       │   │   ├── Screen.java
+│   │   │       │   │   ├── Event.java
+│   │   │       │   │   ├── SourceFile.java
+│   │   │       │   │   ├── DatabaseObject.java
+│   │   │       │   │   ├── BatchJob.java
+│   │   │       │   │   ├── Workflow.java
+│   │   │       │   │   └── KnowledgeEntry.java
+│   │   │       │   └── repository/          # Repository interfaces
+│   │   │       ├── application/             # Application services
+│   │   │       │   ├── service/
+│   │   │       │   │   ├── LLMService.java        # LLM integration
+│   │   │       │   │   ├── CodeAnalyzer.java      # Source code analysis
+│   │   │       │   │   ├── DatabaseAnalyzer.java  # DB analysis
+│   │   │       │   │   ├── BatchJobService.java   # Batch job management
+│   │   │       │   │   ├── WorkflowService.java   # Workflow management
+│   │   │       │   │   └── QueryService.java      # Query processing
+│   │   │       │   └── dto/                 # Data Transfer Objects
+│   │   │       └── infrastructure/          # Infrastructure layer
+│   │   │           ├── persistence/         # Data access implementations
+│   │   │           ├── oracle/              # Oracle DB integration
+│   │   │           ├── ai/                  # AI/LLM integration
+│   │   │           └── parser/              # Code parsers
 │   │   └── resources/
-│   │       ├── fxml/                        # UI layouts
+│   │       ├── fxml/                        # UI layouts (FXML files)
 │   │       ├── css/                         # Stylesheets
-│   │       ├── images/                      # Assets
-│   │       └── logback.xml                  # Logging config
-│   └── test/java/                           # Tests
+│   │       ├── images/                      # Icons & assets
+│   │       └── logback.xml                  # Logging configuration
+│   └── test/java/                           # Unit & integration tests
 ├── docs/                                    # Documentation
-│   ├── README.md                            # Main docs (moved)
-│   ├── QUICK_START.md                       # Quick guide (moved)
-│   ├── STEP_BY_STEP_GUIDE.md                # Tutorial (moved)
-│   ├── PROJECT_SUMMARY.md                   # Summary (moved)
-│   └── LIBRARY_SETUP.md                     # Library guide
-├── download-libs.sh                         # Download script (Unix)
+│   ├── README.md                            # Full documentation
+│   ├── LIBRARY_SETUP.md                     # Library setup guide
+│   ├── ARCHITECTURE.md                      # System architecture
+│   └── API_GUIDE.md                         # LLM API integration guide
+├── download-libs.sh                         # Download script (Unix/macOS)
 ├── download-libs.ps1                        # Download script (Windows)
-├── .gitignore                               # Git rules
+├── compile-windows.bat                      # Compile script (Windows)
+├── run-windows.bat                          # Run script (Windows)
 └── README.md                                # This file
 ```
 
@@ -75,19 +146,30 @@ chmod +x download-libs.sh
 powershell -ExecutionPolicy Bypass -File download-libs.ps1
 ```
 
-### Step 2: Download JavaFX 23 Manually
+### Step 2: Download JavaFX 21.0.9 Manually
+
+**⚠️ Important:** JavaFX contains platform-specific native libraries. You MUST download the correct version for your OS.
 
 **Visit:** https://gluonhq.com/products/javafx/
 
-**Download cho platform của bạn:**
-- macOS (Apple Silicon): `openjfx-23_osx-aarch64_bin-sdk.zip`
-- macOS (Intel): `openjfx-23_osx-x64_bin-sdk.zip`  
-- Windows: `openjfx-23_windows-x64_bin-sdk.zip`
-- Linux: `openjfx-23_linux-x64_bin-sdk.zip`
+**Download for your platform:**
+- macOS (Apple Silicon): `openjfx-21.0.9_osx-aarch64_bin-sdk.zip`
+- macOS (Intel): `openjfx-21.0.9_osx-x64_bin-sdk.zip`  
+- Windows: `openjfx-21.0.9_windows-x64_bin-sdk.zip`
+- Linux: `openjfx-21.0.9_linux-x64_bin-sdk.zip`
 
-**Extract và copy:**
-- Copy tất cả `.jar` files từ `lib/` folder trong ZIP
-- Paste vào `pcm-desktop/lib/javafx/`
+**Direct download links:**
+- macOS (Apple Silicon): https://download2.gluonhq.com/openjfx/21.0.9/openjfx-21.0.9_osx-aarch64_bin-sdk.zip
+- macOS (Intel): https://download2.gluonhq.com/openjfx/21.0.9/openjfx-21.0.9_osx-x64_bin-sdk.zip
+- Windows: https://download2.gluonhq.com/openjfx/21.0.9/openjfx-21.0.9_windows-x64_bin-sdk.zip
+- Linux: https://download2.gluonhq.com/openjfx/21.0.9/openjfx-21.0.9_linux-x64_bin-sdk.zip
+
+**Extract and install:**
+1. Extract the downloaded ZIP file
+2. Navigate to `javafx-sdk-21.0.9/lib/` folder
+3. Copy all `.jar` files to `pcm-desktop/lib/javafx/`
+
+**Why platform-specific?** JavaFX JARs contain native libraries (.dll for Windows, .dylib for macOS, .so for Linux) that are OS-specific and cannot be shared between platforms.
 
 ### Step 3: Verify Libraries
 
@@ -239,18 +321,42 @@ jpackage \
 
 ## 🔧 Library Versions
 
-| Library | Version | Latest | Download |
-|---------|---------|--------|----------|
-| JavaFX | 23 | ✅ Nov 2025 | https://gluonhq.com/products/javafx/ |
-| Lombok | 1.18.34 | ✅ Nov 2025 | https://projectlombok.org/ |
-| Jackson | 2.17.2 | ✅ Nov 2025 | https://github.com/FasterXML/jackson |
-| SLF4J | 2.0.13 | ✅ Nov 2025 | https://www.slf4j.org/ |
-| Logback | 1.5.6 | ✅ Nov 2025 | https://logback.qos.ch/ |
-| SQLite JDBC | 3.46.1.0 | ✅ Nov 2025 | https://github.com/xerial/sqlite-jdbc |
+| Library | Version | Java Compatibility | Download |
+|---------|---------|-------------------|----------|
+| JavaFX | 21.0.9 | Java 21 ✅ | https://gluonhq.com/products/javafx/ |
+| Lombok | 1.18.34 | All Java versions ✅ | https://projectlombok.org/ |
+| Jackson | 2.17.2 | All Java versions ✅ | https://github.com/FasterXML/jackson |
+| SLF4J | 2.0.13 | All Java versions ✅ | https://www.slf4j.org/ |
+| Logback | 1.5.6 | All Java versions ✅ | https://logback.qos.ch/ |
+| SQLite JDBC | 3.46.1.0 | All Java versions ✅ | https://github.com/xerial/sqlite-jdbc |
 
-**All libraries are the latest stable versions as of November 2025.**
+**Note:** This project uses **Java 21** and **JavaFX 21.0.9** (not JavaFX 23/25) for compatibility.
 
 ## 🐛 Troubleshooting
+
+### Java Version Mismatch
+
+**Error:** `class file has wrong version 67.0, should be 65.0`
+
+**Cause:** Using JavaFX 25 (requires Java 23) with Java 21
+
+**Solution:**
+1. Delete all JARs in `lib/javafx/`
+2. Download **JavaFX 21.0.9** (not 23 or 25)
+3. Extract and copy JARs to `lib/javafx/`
+4. Rebuild project
+
+### Platform Mismatch
+
+**Error:** `UnsatisfiedLinkError` or `Can't load library`
+
+**Cause:** Using JavaFX JARs from different OS (e.g., macOS JARs on Windows)
+
+**Solution:**
+- Download the **correct platform-specific JavaFX 21.0.9**
+- Windows: `openjfx-21.0.9_windows-x64_bin-sdk.zip`
+- macOS (M1/M2/M3): `openjfx-21.0.9_osx-aarch64_bin-sdk.zip`
+- macOS (Intel): `openjfx-21.0.9_osx-x64_bin-sdk.zip`
 
 ### JavaFX not found
 
@@ -275,18 +381,31 @@ jpackage \
 **Error:** `ClassNotFoundException`
 
 **Solution:**
-1. Run download script: `./download-libs.sh`
-2. Download JavaFX manually
+1. Run download script: `./download-libs.sh` or `.\download-libs.ps1`
+2. Download JavaFX manually for your OS
 3. Refresh IDE libraries
 
 See **[docs/LIBRARY_SETUP.md](docs/LIBRARY_SETUP.md)** for complete troubleshooting guide.
 
 ## 📚 Learning Resources
 
+### JavaFX & UI
 - [JavaFX Documentation](https://openjfx.io/)
 - [JavaFX Tutorial](https://docs.oracle.com/javafx/2/)
 - [Scene Builder](https://gluonhq.com/products/scene-builder/) - Visual FXML editor
+
+### Development Tools
 - [Lombok Documentation](https://projectlombok.org/)
+- [Jackson Documentation](https://github.com/FasterXML/jackson-docs)
+
+### AI & LLM Integration
+- [OpenAI API](https://platform.openai.com/docs)
+- [Anthropic Claude API](https://docs.anthropic.com/)
+- [LangChain Java](https://github.com/hwchase17/langchain)
+
+### Database
+- [Oracle JDBC Driver](https://www.oracle.com/database/technologies/appdev/jdbc.html)
+- [SQLite JDBC](https://github.com/xerial/sqlite-jdbc)
 
 ## 🤝 Contributing
 
@@ -308,10 +427,44 @@ Noteflix Team
 **✅ No Maven Required - Pure JAR Import!**
 
 **🚀 Ready to Start:**
+
 ```bash
-./download-libs.sh    # Download libraries
-# Download JavaFX from https://gluonhq.com/products/javafx/
+# macOS/Linux
+./download-libs.sh
+# Download JavaFX 21.0.9 for your platform
 # Open in IntelliJ IDEA
-# Run PCMApplication
+# Configure libraries and run PCMApplication
+
+# Windows
+.\download-libs.ps1
+# JavaFX 21.0.9 will be downloaded automatically
+# Or run: .\compile-windows.bat && .\run-windows.bat
 ```
-# pcm-desktop
+
+---
+
+## 🎯 Use Cases
+
+### For System Analysts
+- Query system architecture and component relationships
+- Understand business flows across subsystems
+- Find screens and related code quickly
+
+### For Developers
+- Locate source code for specific features
+- Understand database schema and dependencies
+- Analyze batch job logic and schedules
+
+### For Database Administrators
+- Browse all Oracle database objects
+- Understand table relationships and dependencies
+- Find stored procedures and packages by functionality
+
+### For Project Managers
+- Get overview of system complexity
+- Understand subsystem boundaries
+- Track workflow implementations
+
+---
+
+**PCM Desktop - AI-Powered System Analysis for Enterprise Software**
