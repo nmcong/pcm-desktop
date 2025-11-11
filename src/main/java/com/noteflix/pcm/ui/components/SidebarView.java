@@ -1,39 +1,44 @@
 package com.noteflix.pcm.ui.components;
 
 import atlantafx.base.theme.Styles;
-import atlantafx.base.theme.NordLight;
-import atlantafx.base.theme.NordDark;
-import javafx.application.Application;
+import com.noteflix.pcm.core.constants.AppConstants;
+import com.noteflix.pcm.core.events.ThemeChangeListener;
+import com.noteflix.pcm.core.theme.ThemeManager;
+import com.noteflix.pcm.core.utils.IconUtils;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import lombok.extern.slf4j.Slf4j;
 import org.kordamp.ikonli.feather.Feather;
 import org.kordamp.ikonli.javafx.FontIcon;
 
-import java.util.Objects;
-
 /**
  * Sidebar component built with pure Java (no FXML)
  * Following AtlantaFX Sampler patterns
  */
 @Slf4j
-public class SidebarView extends VBox {
+public class SidebarView extends VBox implements ThemeChangeListener {
     
-    private boolean isDarkTheme = false;
+    private final ThemeManager themeManager;
     private ImageView appIcon;
+    private ImageView botIcon;
+    private Button themeButton;
     
     public SidebarView() {
         super(16);
         
+        this.themeManager = ThemeManager.getInstance();
+        
         getStyleClass().add("sidebar");
         setPadding(new Insets(16, 12, 16, 12));
-        setPrefWidth(280);
-        setMinWidth(280);
-        setMaxWidth(280);
+        setPrefWidth(AppConstants.SIDEBAR_WIDTH);
+        setMinWidth(AppConstants.SIDEBAR_WIDTH);
+        setMaxWidth(AppConstants.SIDEBAR_WIDTH);
+        
+        // Register for theme changes
+        themeManager.addThemeChangeListener(this);
         
         // Build sidebar components
         getChildren().addAll(
@@ -52,20 +57,20 @@ public class SidebarView extends VBox {
         headerSection.getStyleClass().add("header");
         
         // Logo section with theme-aware brain-circuit icon
-        updateAppIcon();
-        appIcon.setFitWidth(32);
-        appIcon.setFitHeight(32);
-        appIcon.setPreserveRatio(true);
-        appIcon.setSmooth(true);
+        appIcon = IconUtils.createImageView(
+            themeManager.getBrainCircuitIcon(), 
+            AppConstants.ICON_SIZE_LARGE, 
+            AppConstants.ICON_SIZE_LARGE
+        );
         
         Label titleLabel = new Label("PCM Desktop");
         titleLabel.getStyleClass().add(Styles.TITLE_3);
         
-        Button themeButton = new Button();
-        themeButton.setGraphic(new FontIcon(Feather.SUN));
+        themeButton = new Button();
+        themeButton.setGraphic(new FontIcon(themeManager.isDarkTheme() ? Feather.MOON : Feather.SUN));
         themeButton.getStyleClass().addAll(Styles.BUTTON_ICON, Styles.FLAT, Styles.SMALL);
         themeButton.setTooltip(new Tooltip("Switch Theme"));
-        themeButton.setOnAction(e -> handleThemeSwitch());
+        themeButton.setOnAction(e -> themeManager.toggleTheme());
         
         HBox logoSection = new HBox(10, appIcon, titleLabel, createSpacer(), themeButton);
         logoSection.setAlignment(Pos.CENTER_LEFT);
@@ -132,13 +137,11 @@ public class SidebarView extends VBox {
      */
     private Button createAIAssistantMenuItem() {
         // Theme-aware bot icon
-        String iconPath = isDarkTheme ? "/images/icons/bot_dark.png" : "/images/icons/bot.png";
-        Image botImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream(iconPath)));
-        ImageView botIcon = new ImageView(botImage);
-        botIcon.setFitWidth(20);
-        botIcon.setFitHeight(20);
-        botIcon.setPreserveRatio(true);
-        botIcon.setSmooth(true);
+        botIcon = IconUtils.createImageView(
+            themeManager.getBotIcon(), 
+            AppConstants.ICON_SIZE_MEDIUM, 
+            AppConstants.ICON_SIZE_MEDIUM
+        );
         
         Label label = new Label("AI Assistant");
         
@@ -314,87 +317,25 @@ public class SidebarView extends VBox {
             "Tip: Use keyboard shortcut '/' to open search quickly");
     }
     
-    private void handleThemeSwitch() {
-        try {
-            isDarkTheme = !isDarkTheme;
-            
-            if (isDarkTheme) {
-                log.info("Switching to Dark Theme");
-                Application.setUserAgentStylesheet(new NordDark().getUserAgentStylesheet());
-            } else {
-                log.info("Switching to Light Theme"); 
-                Application.setUserAgentStylesheet(new NordLight().getUserAgentStylesheet());
-            }
-            
-            // Update all theme-dependent icons
-            updateAllIcons();
-            
-        } catch (Exception e) {
-            log.error("Error switching theme", e);
-            showInfo("Theme Switch Error", "Failed to switch theme: " + e.getMessage());
+    @Override
+    public void onThemeChanged(boolean isDarkTheme) {
+        log.debug("Theme changed to: {}", isDarkTheme ? "dark" : "light");
+        
+        // Update app icon
+        if (appIcon != null) {
+            IconUtils.updateImageView(appIcon, themeManager.getBrainCircuitIcon());
         }
-    }
-    
-    private void updateThemeButton() {
-        // Find theme button in the header and update its icon
-        try {
-            VBox header = (VBox) getChildren().get(0); // First child is header
-            HBox logoSection = (HBox) header.getChildren().get(0); // First child of header is logo section
-            Button themeButton = (Button) logoSection.getChildren().get(3); // Last child is theme button
-            
+        
+        // Update bot icon
+        if (botIcon != null) {
+            IconUtils.updateImageView(botIcon, themeManager.getBotIcon());
+        }
+        
+        // Update theme button
+        if (themeButton != null) {
             FontIcon newIcon = new FontIcon(isDarkTheme ? Feather.MOON : Feather.SUN);
             themeButton.setGraphic(newIcon);
             themeButton.setTooltip(new Tooltip(isDarkTheme ? "Switch to Light Theme" : "Switch to Dark Theme"));
-        } catch (Exception e) {
-            log.warn("Could not update theme button icon", e);
-        }
-    }
-    
-    /**
-     * Updates app icon based on current theme
-     */
-    private void updateAppIcon() {
-        try {
-            String iconPath = isDarkTheme ? "/images/icons/brain-circuit_dark.png" : "/images/icons/brain-circuit.png";
-            Image iconImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream(iconPath)));
-            if (appIcon == null) {
-                appIcon = new ImageView();
-            }
-            appIcon.setImage(iconImage);
-        } catch (Exception e) {
-            log.warn("Could not load brain-circuit icon, falling back to app-icon.png", e);
-            // Fallback to original app-icon if brain-circuit images not found
-            try {
-                Image fallbackImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/images/icons/app-icon.png")));
-                if (appIcon == null) {
-                    appIcon = new ImageView();
-                }
-                appIcon.setImage(fallbackImage);
-            } catch (Exception ex) {
-                log.error("Could not load any app icon", ex);
-            }
-        }
-    }
-    
-    /**
-     * Updates all theme-dependent icons
-     */
-    private void updateAllIcons() {
-        updateAppIcon();
-        updateThemeButton();
-        
-        // Update AI Assistant bot icon
-        try {
-            VBox mainMenu = (VBox) getChildren().get(1); // Second child is main menu
-            Button aiButton = (Button) mainMenu.getChildren().get(0); // First item is AI Assistant
-            HBox content = (HBox) aiButton.getGraphic();
-            ImageView botIcon = (ImageView) content.getChildren().get(0);
-            
-            String iconPath = isDarkTheme ? "/images/icons/bot_dark.png" : "/images/icons/bot.png";
-            Image botImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream(iconPath)));
-            botIcon.setImage(botImage);
-        } catch (Exception e) {
-            log.warn("Could not update AI Assistant bot icon", e);
         }
     }
     
@@ -466,6 +407,16 @@ public class SidebarView extends VBox {
         alert.setHeaderText(null);
         alert.setContentText(content);
         alert.showAndWait();
+    }
+    
+    /**
+     * Cleanup method to unregister listeners
+     * Should be called when the component is no longer needed
+     */
+    public void cleanup() {
+        if (themeManager != null) {
+            themeManager.removeThemeChangeListener(this);
+        }
     }
 }
 

@@ -1,5 +1,6 @@
 package com.noteflix.pcm.ui.layout;
 
+import com.noteflix.pcm.core.constants.AppConstants;
 import com.noteflix.pcm.ui.components.SidebarView;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
@@ -14,7 +15,6 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class MainLayer extends BorderPane {
     
-    private static final double SIDEBAR_WIDTH = 280;
 
     /**
      * -- GETTER --
@@ -37,8 +37,8 @@ public class MainLayer extends BorderPane {
     private void createView() {
         // LEFT PART: Sidebar with fixed width (full height)
         sidebar = new SidebarView();
-        sidebar.setMinWidth(SIDEBAR_WIDTH);
-        sidebar.setMaxWidth(SIDEBAR_WIDTH);
+        sidebar.setMinWidth(AppConstants.SIDEBAR_WIDTH);
+        sidebar.setMaxWidth(AppConstants.SIDEBAR_WIDTH);
         sidebar.getStyleClass().add("sidebar-full-height");
         
         // CENTER PART: Main content area (flexible width) - will contain navbar + content

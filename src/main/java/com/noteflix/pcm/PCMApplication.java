@@ -1,6 +1,7 @@
 package com.noteflix.pcm;
 
 import atlantafx.base.theme.PrimerLight;
+import com.noteflix.pcm.core.constants.AppConstants;
 import com.noteflix.pcm.ui.MainController;
 import com.noteflix.pcm.ui.MainView;
 import javafx.application.Application;
@@ -34,9 +35,6 @@ import java.util.Objects;
 @Slf4j
 public class PCMApplication extends Application {
 
-    private static final String APP_TITLE = "PCM - AI-Powered System Analysis";
-    private static final int WINDOW_WIDTH = 1400;
-    private static final int WINDOW_HEIGHT = 900;
 
     public static void main(String[] args) {
         log.info("🚀 Starting PCM Desktop Application - AI-Powered System Analysis Tool...");
@@ -58,25 +56,25 @@ public class PCMApplication extends Application {
             log.info("✅ Main view created with Java code (no FXML)");
 
             // Create scene
-            Scene scene = new Scene(mainView, WINDOW_WIDTH, WINDOW_HEIGHT);
+            Scene scene = new Scene(mainView, AppConstants.DEFAULT_WINDOW_WIDTH, AppConstants.DEFAULT_WINDOW_HEIGHT);
 
             // Load custom CSS (this will override/extend AtlantaFX theme)
             String css = Objects.requireNonNull(
-                getClass().getResource("/css/styles.css")
+                getClass().getResource(AppConstants.CSS_STYLES)
             ).toExternalForm();
             scene.getStylesheets().add(css);
 
             // Configure stage
-            primaryStage.setTitle(APP_TITLE);
+            primaryStage.setTitle(AppConstants.APP_TITLE);
             primaryStage.setScene(scene);
-            primaryStage.setMinWidth(1000);
-            primaryStage.setMinHeight(600);
+            primaryStage.setMinWidth(AppConstants.MIN_WINDOW_WIDTH);
+            primaryStage.setMinHeight(AppConstants.MIN_WINDOW_HEIGHT);
 
             // Set application icon (optional)
             try {
                 Image icon = new Image(
                     Objects.requireNonNull(
-                        getClass().getResourceAsStream("/images/icons/app-icon.png")
+                        getClass().getResourceAsStream(AppConstants.ICON_APP)
                     )
                 );
                 primaryStage.getIcons().add(icon);
