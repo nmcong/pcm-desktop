@@ -3,6 +3,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
 
 <BorderPane fx:id="rootPane" styleClass="root" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.noteflix.pcm.ui.MainController">
@@ -12,7 +13,11 @@
         <HBox styleClass="navbar">
             <!-- Brand -->
             <HBox styleClass="navbar-brand" alignment="CENTER_LEFT">
-                <Label text="📦" styleClass="brand-icon"/>
+                <ImageView styleClass="brand-icon" fitHeight="24" fitWidth="24" preserveRatio="true">
+                    <image>
+                        <Image url="@../images/icons/app-icon.png"/>
+                    </image>
+                </ImageView>
                 <Label text="PCM" styleClass="brand-text"/>
             </HBox>
             

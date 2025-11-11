@@ -73,7 +73,7 @@ public class PCMApplication extends Application {
             try {
                 Image icon = new Image(
                     Objects.requireNonNull(
-                        getClass().getResourceAsStream("/images/app-icon.png")
+                        getClass().getResourceAsStream("/images/icons/app-icon.png")
                     )
                 );
                 primaryStage.getIcons().add(icon);
