@@ -4,6 +4,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.image.*?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
 
 <HBox styleClass="top-nav" spacing="12" alignment="CENTER_LEFT" 
       xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
@@ -28,17 +29,30 @@
     <!-- Right Actions -->
     <HBox spacing="8" alignment="CENTER_RIGHT">
         <!-- New Screen Button - Accent -->
-        <Button text="＋ New Screen" onAction="#handleNewScreen" styleClass="accent"/>
+        <Button onAction="#handleNewScreen" styleClass="accent">
+            <graphic>
+                <HBox spacing="6" alignment="CENTER">
+                    <FontIcon iconLiteral="fth-plus-circle" iconSize="18"/>
+                    <Label text="New Screen"/>
+                </HBox>
+            </graphic>
+        </Button>
         
         <!-- Notification Button -->
-        <Button text="🔔" onAction="#handleNotifications" styleClass="flat">
+        <Button onAction="#handleNotifications" styleClass="flat">
+            <graphic>
+                <FontIcon iconLiteral="fth-bell" iconSize="20"/>
+            </graphic>
             <tooltip>
                 <Tooltip text="Notifications"/>
             </tooltip>
         </Button>
         
         <!-- Settings Button -->
-        <Button text="⚙" fx:id="settingsBtn" onAction="#handleSettings" styleClass="flat">
+        <Button fx:id="settingsBtn" onAction="#handleSettings" styleClass="flat">
+            <graphic>
+                <FontIcon iconLiteral="fth-settings" iconSize="20"/>
+            </graphic>
             <tooltip>
                 <Tooltip text="Settings"/>
             </tooltip>

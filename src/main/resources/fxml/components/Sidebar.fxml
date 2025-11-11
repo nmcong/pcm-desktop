@@ -3,6 +3,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
 
 <VBox fx:id="sidebar" styleClass="sidebar" spacing="16" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="com.noteflix.pcm.ui.components.SidebarController">
@@ -14,7 +15,7 @@
     <!-- Favorites Section -->
     <VBox spacing="8">
         <HBox alignment="CENTER_LEFT" spacing="8">
-            <Label text="★" styleClass="title-4"/>
+            <FontIcon iconLiteral="fth-star" iconSize="16" style="-fx-icon-color: -color-warning-emphasis;"/>
             <Label text="ƯU THÍCH" styleClass="title-4"/>
             <Region HBox.hgrow="ALWAYS"/>
         </HBox>
@@ -55,10 +56,13 @@
     <!-- All Projects Section -->
     <VBox spacing="8" VBox.vgrow="ALWAYS">
         <HBox alignment="CENTER_LEFT" spacing="8">
-            <Label text="📁" styleClass="title-4"/>
+            <FontIcon iconLiteral="fth-folder" iconSize="16" style="-fx-icon-color: -color-fg-default;"/>
             <Label text="DỰ ÁN" styleClass="title-4"/>
             <Region HBox.hgrow="ALWAYS"/>
-            <Button text="＋" onAction="#handleNewProject" styleClass="flat, small">
+            <Button onAction="#handleNewProject" styleClass="flat, small">
+                <graphic>
+                    <FontIcon iconLiteral="fth-plus" iconSize="14"/>
+                </graphic>
                 <tooltip>
                     <Tooltip text="New Project"/>
                 </tooltip>
@@ -140,5 +144,12 @@
     </VBox>
     
     <!-- Settings at Bottom -->
-    <Button text="⚙  Settings" onMouseClicked="#handleSettings" alignment="CENTER_LEFT" maxWidth="Infinity" styleClass="flat, left-pill"/>
+    <Button alignment="CENTER_LEFT" maxWidth="Infinity" styleClass="flat, left-pill" onMouseClicked="#handleSettings">
+        <graphic>
+            <HBox spacing="8" alignment="CENTER_LEFT">
+                <FontIcon iconLiteral="fth-settings" iconSize="16"/>
+                <Label text="Settings"/>
+            </HBox>
+        </graphic>
+    </Button>
 </VBox>
