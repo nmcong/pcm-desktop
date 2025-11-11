@@ -2,13 +2,14 @@
 
 ## 📦 Required Libraries (Latest Versions - Nov 2025)
 
-### 1. JavaFX 23 (Latest Stable)
+### 1. JavaFX 21.0.9 (For Java 21)
 
 **Download:**
 - **Site:** https://gluonhq.com/products/javafx/
-- **Direct:** https://download2.gluonhq.com/openjfx/23/openjfx-23_windows-x64_bin-sdk.zip (Windows)
-- **Direct:** https://download2.gluonhq.com/openjfx/23/openjfx-23_osx-aarch64_bin-sdk.zip (macOS M1/M2/M3)
-- **Direct:** https://download2.gluonhq.com/openjfx/23/openjfx-23_linux-x64_bin-sdk.zip (Linux)
+- **Direct:** https://download2.gluonhq.com/openjfx/21.0.9/openjfx-21.0.9_windows-x64_bin-sdk.zip (Windows)
+- **Direct:** https://download2.gluonhq.com/openjfx/21.0.9/openjfx-21.0.9_osx-aarch64_bin-sdk.zip (macOS M1/M2/M3)
+- **Direct:** https://download2.gluonhq.com/openjfx/21.0.9/openjfx-21.0.9_osx-x64_bin-sdk.zip (macOS Intel)
+- **Direct:** https://download2.gluonhq.com/openjfx/21.0.9/openjfx-21.0.9_linux-x64_bin-sdk.zip (Linux)
 
 **Files Needed:**
 ```

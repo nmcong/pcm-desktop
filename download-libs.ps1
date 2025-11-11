@@ -38,14 +38,41 @@ Write-Host "📋 Downloaded libraries in lib\others\:" -ForegroundColor Cyan
 Get-ChildItem "lib\others\" | Format-Table Name, Length -AutoSize
 
 Write-Host ""
-Write-Host "⚠️  Manual Step Required:" -ForegroundColor Red
-Write-Host "   JavaFX 23 must be downloaded manually from:"
-Write-Host "   https://gluonhq.com/products/javafx/"
+Write-Host "6️⃣ Downloading JavaFX 21.0.9 for Windows..." -ForegroundColor Yellow
+$javafxUrl = "https://download2.gluonhq.com/openjfx/21.0.9/openjfx-21.0.9_windows-x64_bin-sdk.zip"
+$javafxZip = "javafx-21.zip"
+
+try {
+    Invoke-WebRequest -Uri $javafxUrl -OutFile $javafxZip
+    
+    Write-Host "7️⃣ Extracting JavaFX..." -ForegroundColor Yellow
+    Expand-Archive -Path $javafxZip -DestinationPath "." -Force
+    
+    Write-Host "8️⃣ Installing JavaFX JARs..." -ForegroundColor Yellow
+    Copy-Item "javafx-sdk-21.0.9\lib\*.jar" -Destination "lib\javafx\" -Force
+    
+    Write-Host "9️⃣ Cleaning up..." -ForegroundColor Yellow
+    Remove-Item $javafxZip
+    Remove-Item "javafx-sdk-21.0.9" -Recurse -Force
+    
+    Write-Host ""
+    Write-Host "✅ JavaFX 21.0.9 installed successfully!" -ForegroundColor Green
+} catch {
+    Write-Host ""
+    Write-Host "⚠️  Failed to download JavaFX automatically!" -ForegroundColor Red
+    Write-Host "   Please download manually from:"
+    Write-Host "   $javafxUrl"
+    Write-Host ""
+    Write-Host "   Steps:"
+    Write-Host "   1. Download: openjfx-21.0.9_windows-x64_bin-sdk.zip"
+    Write-Host "   2. Extract the ZIP file"
+    Write-Host "   3. Copy all .jar files from 'javafx-sdk-21.0.9\lib\' to: .\lib\javafx\"
+}
+
 Write-Host ""
-Write-Host "   Download: openjfx-23_windows-x64_bin-sdk.zip"
+Write-Host "📋 Installed JavaFX libraries:" -ForegroundColor Cyan
+Get-ChildItem "lib\javafx\" | Format-Table Name, Length -AutoSize
+
 Write-Host ""
-Write-Host "   Then extract and copy all .jar files from 'lib\' folder to:"
-Write-Host "   .\lib\javafx\"
-Write-Host ""
-Write-Host "🚀 After adding JavaFX JARs, you can run the application!" -ForegroundColor Green
+Write-Host "🚀 All libraries downloaded! You can now run the application!" -ForegroundColor Green
 
