@@ -4,7 +4,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextInputDialog;
-import javafx.scene.layout.HBox;
+import javafx.scene.layout.FlowPane;
 import lombok.extern.slf4j.Slf4j;
 
 import java.net.URL;
@@ -17,7 +17,7 @@ import java.util.ResourceBundle;
 public class TagsCardController implements Initializable {
 
     @FXML
-    private HBox tagsContainer;
+    private FlowPane tagsContainer;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {

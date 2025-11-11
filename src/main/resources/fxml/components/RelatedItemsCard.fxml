@@ -1,33 +1,51 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
 <VBox styleClass="card" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="com.noteflix.pcm.ui.components.RelatedItemsCardController">
     
-    <Label text="Related Screens" styleClass="card-title"/>
+    <padding>
+        <Insets top="16" right="16" bottom="16" left="16"/>
+    </padding>
     
-    <VBox styleClass="related-list" spacing="8">
-        <HBox styleClass="related-item" onMouseClicked="#handleRelatedItemClick">
-            <Label text="📱" styleClass="related-icon"/>
-            <VBox spacing="2">
-                <Label text="Login Screen" styleClass="related-name"/>
-                <Label text="Authentication flow entry point" styleClass="related-desc"/>
+    <Label text="Related Screens" styleClass="title-4"/>
+    
+    <VBox spacing="8">
+        <VBox.margin>
+            <Insets top="12"/>
+        </VBox.margin>
+        
+        <!-- Related Item 1 -->
+        <HBox styleClass="list-item" onMouseClicked="#handleRelatedItemClick" spacing="12" alignment="CENTER_LEFT">
+            <padding>
+                <Insets top="12" right="12" bottom="12" left="12"/>
+            </padding>
+            
+            <Label text="📱" style="-fx-font-size: 20px;"/>
+            <VBox spacing="4" HBox.hgrow="ALWAYS">
+                <Label text="Login Screen" styleClass="text-bold"/>
+                <Label text="Authentication flow entry point" styleClass="text-small, text-muted"/>
             </VBox>
-            <Region HBox.hgrow="ALWAYS"/>
-            <Button text="→" styleClass="btn-nav"/>
+            <Button text="→" styleClass="flat, small"/>
         </HBox>
         
-        <HBox styleClass="related-item" onMouseClicked="#handleRelatedItemClick">
-            <Label text="📱" styleClass="related-icon"/>
-            <VBox spacing="2">
-                <Label text="Order History" styleClass="related-name"/>
-                <Label text="Shows customer's past orders" styleClass="related-desc"/>
+        <Separator/>
+        
+        <!-- Related Item 2 -->
+        <HBox styleClass="list-item" onMouseClicked="#handleRelatedItemClick" spacing="12" alignment="CENTER_LEFT">
+            <padding>
+                <Insets top="12" right="12" bottom="12" left="12"/>
+            </padding>
+            
+            <Label text="📱" style="-fx-font-size: 20px;"/>
+            <VBox spacing="4" HBox.hgrow="ALWAYS">
+                <Label text="Order History" styleClass="text-bold"/>
+                <Label text="Shows customer's past orders" styleClass="text-small, text-muted"/>
             </VBox>
-            <Region HBox.hgrow="ALWAYS"/>
-            <Button text="→" styleClass="btn-nav"/>
+            <Button text="→" styleClass="flat, small"/>
         </HBox>
     </VBox>
 </VBox>
-

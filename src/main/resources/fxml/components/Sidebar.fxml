@@ -1,185 +1,154 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.geometry.*?>
 
-<VBox fx:id="sidebar" styleClass="sidebar" spacing="12" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+<VBox fx:id="sidebar" styleClass="sidebar" spacing="16" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="com.noteflix.pcm.ui.components.SidebarController">
     
     <padding>
-        <Insets top="16" right="16" bottom="16" left="16"/>
+        <Insets top="16" right="12" bottom="16" left="12"/>
     </padding>
     
     <!-- Favorites Section -->
-    <VBox styleClass="nav-group" spacing="8">
-        <HBox styleClass="section-header" alignment="CENTER_LEFT" spacing="12">
-            <Label text="★" styleClass="section-icon"/>
-            <Label text="ƯU THÍCH" styleClass="nav-header"/>
+    <VBox spacing="8">
+        <HBox alignment="CENTER_LEFT" spacing="8">
+            <Label text="★" styleClass="title-4"/>
+            <Label text="ƯU THÍCH" styleClass="title-4"/>
             <Region HBox.hgrow="ALWAYS"/>
         </HBox>
         
-        <VBox spacing="4">
-            <HBox styleClass="nav-item project-item" onMouseClicked="#handleProject" spacing="12">
-                <StackPane styleClass="project-avatar blue">
-                    <Label text="CS" styleClass="project-initials"/>
-                </StackPane>
-                <VBox spacing="4" HBox.hgrow="ALWAYS">
-                    <Label text="Customer Service" styleClass="nav-text"/>
-                    <HBox spacing="8" alignment="CENTER_LEFT">
-                        <Label text="24 screens" styleClass="nav-desc"/>
-                        <Label text="•" styleClass="nav-desc"/>
-                        <Label text="Active" styleClass="nav-status active"/>
-                    </HBox>
-                </VBox>
-                <Button text="★" styleClass="favorite-btn active"/>
-            </HBox>
+        <VBox styleClass="card" spacing="4">
+            <padding>
+                <Insets top="8" right="8" bottom="8" left="8"/>
+            </padding>
             
-            <HBox styleClass="nav-item project-item" onMouseClicked="#handleProject" spacing="12">
-                <StackPane styleClass="project-avatar green">
-                    <Label text="OM" styleClass="project-initials"/>
+            <HBox styleClass="list-item" onMouseClicked="#handleProject" spacing="12" alignment="CENTER_LEFT">
+                <padding>
+                    <Insets top="8" right="8" bottom="8" left="8"/>
+                </padding>
+                <StackPane styleClass="project-avatar, accent" minWidth="36" minHeight="36" maxWidth="36" maxHeight="36">
+                    <Label text="CS" style="-fx-text-fill: white; -fx-font-weight: bold;"/>
                 </StackPane>
                 <VBox spacing="2" HBox.hgrow="ALWAYS">
-                    <Label text="Order Management" styleClass="nav-text"/>
-                    <HBox spacing="6" alignment="CENTER_LEFT">
-                        <Label text="18 screens" styleClass="nav-desc"/>
-                        <Label text="•" styleClass="nav-desc"/>
-                        <Label text="Active" styleClass="nav-status active"/>
-                    </HBox>
+                    <Label text="Customer Service" styleClass="text-bold"/>
+                    <Label text="24 screens • Active" styleClass="text-small, text-muted"/>
                 </VBox>
-                <Button text="★" styleClass="favorite-btn active"/>
+            </HBox>
+            
+            <Separator/>
+            
+            <HBox styleClass="list-item" onMouseClicked="#handleProject" spacing="12" alignment="CENTER_LEFT">
+                <padding>
+                    <Insets top="8" right="8" bottom="8" left="8"/>
+                </padding>
+                <StackPane styleClass="project-avatar, success" minWidth="36" minHeight="36" maxWidth="36" maxHeight="36">
+                    <Label text="OM" style="-fx-text-fill: white; -fx-font-weight: bold;"/>
+                </StackPane>
+                <VBox spacing="2" HBox.hgrow="ALWAYS">
+                    <Label text="Order Management" styleClass="text-bold"/>
+                    <Label text="18 screens • Active" styleClass="text-small, text-muted"/>
+                </VBox>
             </HBox>
         </VBox>
     </VBox>
     
-    <Separator styleClass="sidebar-separator"/>
-    
     <!-- All Projects Section -->
-    <VBox styleClass="nav-group" spacing="8" VBox.vgrow="ALWAYS">
-        <HBox styleClass="section-header" alignment="CENTER_LEFT" spacing="12">
-            <Label text="📁" styleClass="section-icon"/>
-            <Label text="DỰ ÁN" styleClass="nav-header"/>
+    <VBox spacing="8" VBox.vgrow="ALWAYS">
+        <HBox alignment="CENTER_LEFT" spacing="8">
+            <Label text="📁" styleClass="title-4"/>
+            <Label text="DỰ ÁN" styleClass="title-4"/>
             <Region HBox.hgrow="ALWAYS"/>
-            <Label text="5" styleClass="nav-count"/>
-            <Button text="+" styleClass="header-action" onAction="#handleNewProject"/>
+            <Button text="＋" onAction="#handleNewProject" styleClass="flat, small">
+                <tooltip>
+                    <Tooltip text="New Project"/>
+                </tooltip>
+            </Button>
         </HBox>
         
-        <!-- Search Box -->
-        <HBox styleClass="search-box" alignment="CENTER_LEFT" spacing="12">
-            <Label text="🔍" styleClass="search-icon"/>
-            <TextField promptText="Tìm kiếm dự án..." styleClass="search-input" HBox.hgrow="ALWAYS"/>
-        </HBox>
-        
-        <ScrollPane styleClass="projects-scroll" fitToWidth="true" VBox.vgrow="ALWAYS">
-            <VBox spacing="4">
-                <HBox styleClass="nav-item project-item" onMouseClicked="#handleProject" spacing="12">
-                    <StackPane styleClass="project-avatar blue">
-                        <Label text="CS" styleClass="project-initials"/>
+        <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" styleClass="edge-to-edge">
+            <VBox styleClass="card" spacing="4">
+                <padding>
+                    <Insets top="8" right="8" bottom="8" left="8"/>
+                </padding>
+                
+                <HBox styleClass="list-item" onMouseClicked="#handleProject" spacing="12" alignment="CENTER_LEFT">
+                    <padding>
+                        <Insets top="8" right="8" bottom="8" left="8"/>
+                    </padding>
+                    <StackPane styleClass="project-avatar, accent" minWidth="32" minHeight="32" maxWidth="32" maxHeight="32">
+                        <Label text="CS" style="-fx-text-fill: white; -fx-font-size: 11px; -fx-font-weight: bold;"/>
                     </StackPane>
-                    <VBox spacing="4" HBox.hgrow="ALWAYS">
-                        <HBox spacing="8" alignment="CENTER_LEFT">
-                            <Label text="Customer Service" styleClass="nav-text"/>
-                            <Label text="🔥" styleClass="project-badge hot"/>
-                        </HBox>
-                        <HBox spacing="8" alignment="CENTER_LEFT">
-                            <Label text="24 screens" styleClass="nav-desc"/>
-                            <Label text="•" styleClass="nav-desc"/>
-                            <Label text="Active" styleClass="nav-status active"/>
-                        </HBox>
-                    </VBox>
-                    <VBox spacing="4" alignment="CENTER_RIGHT">
-                        <Button text="⋯" styleClass="project-menu-btn"/>
-                        <Button text="☆" styleClass="favorite-btn"/>
+                    <VBox spacing="2">
+                        <Label text="Customer Service"/>
+                        <Label text="24 screens" styleClass="text-small, text-muted"/>
                     </VBox>
                 </HBox>
                 
-                <HBox styleClass="nav-item project-item" onMouseClicked="#handleProject" spacing="12">
-                    <StackPane styleClass="project-avatar green">
-                        <Label text="OM" styleClass="project-initials"/>
+                <Separator/>
+                
+                <HBox styleClass="list-item" onMouseClicked="#handleProject" spacing="12" alignment="CENTER_LEFT">
+                    <padding>
+                        <Insets top="8" right="8" bottom="8" left="8"/>
+                    </padding>
+                    <StackPane styleClass="project-avatar, success" minWidth="32" minHeight="32" maxWidth="32" maxHeight="32">
+                        <Label text="OM" style="-fx-text-fill: white; -fx-font-size: 11px; -fx-font-weight: bold;"/>
                     </StackPane>
-                    <VBox spacing="4" HBox.hgrow="ALWAYS">
-                        <Label text="Order Management" styleClass="nav-text"/>
-                        <HBox spacing="8" alignment="CENTER_LEFT">
-                            <Label text="18 screens" styleClass="nav-desc"/>
-                            <Label text="•" styleClass="nav-desc"/>
-                            <Label text="Active" styleClass="nav-status active"/>
-                        </HBox>
-                    </VBox>
-                    <VBox spacing="2" alignment="CENTER_RIGHT">
-                        <Button text="⋯" styleClass="project-menu-btn"/>
-                        <Button text="☆" styleClass="favorite-btn"/>
+                    <VBox spacing="2">
+                        <Label text="Order Management"/>
+                        <Label text="18 screens" styleClass="text-small, text-muted"/>
                     </VBox>
                 </HBox>
                 
-                <HBox styleClass="nav-item project-item" onMouseClicked="#handleProject" spacing="12">
-                    <StackPane styleClass="project-avatar orange">
-                        <Label text="PG" styleClass="project-initials"/>
+                <Separator/>
+                
+                <HBox styleClass="list-item" onMouseClicked="#handleProject" spacing="12" alignment="CENTER_LEFT">
+                    <padding>
+                        <Insets top="8" right="8" bottom="8" left="8"/>
+                    </padding>
+                    <StackPane styleClass="project-avatar, warning" minWidth="32" minHeight="32" maxWidth="32" maxHeight="32">
+                        <Label text="PG" style="-fx-text-fill: white; -fx-font-size: 11px; -fx-font-weight: bold;"/>
                     </StackPane>
-                    <VBox spacing="4" HBox.hgrow="ALWAYS">
-                        <Label text="Payment Gateway" styleClass="nav-text"/>
-                        <HBox spacing="8" alignment="CENTER_LEFT">
-                            <Label text="12 screens" styleClass="nav-desc"/>
-                            <Label text="•" styleClass="nav-desc"/>
-                            <Label text="In Dev" styleClass="nav-status in-dev"/>
-                        </HBox>
-                    </VBox>
-                    <VBox spacing="2" alignment="CENTER_RIGHT">
-                        <Button text="⋯" styleClass="project-menu-btn"/>
-                        <Button text="☆" styleClass="favorite-btn"/>
+                    <VBox spacing="2">
+                        <Label text="Payment Gateway"/>
+                        <Label text="12 screens" styleClass="text-small, text-muted"/>
                     </VBox>
                 </HBox>
                 
-                <HBox styleClass="nav-item project-item" onMouseClicked="#handleProject" spacing="12">
-                    <StackPane styleClass="project-avatar purple">
-                        <Label text="IA" styleClass="project-initials"/>
+                <Separator/>
+                
+                <HBox styleClass="list-item" onMouseClicked="#handleProject" spacing="12" alignment="CENTER_LEFT">
+                    <padding>
+                        <Insets top="8" right="8" bottom="8" left="8"/>
+                    </padding>
+                    <StackPane styleClass="project-avatar, danger" minWidth="32" minHeight="32" maxWidth="32" maxHeight="32">
+                        <Label text="IA" style="-fx-text-fill: white; -fx-font-size: 11px; -fx-font-weight: bold;"/>
                     </StackPane>
-                    <VBox spacing="4" HBox.hgrow="ALWAYS">
-                        <Label text="Inventory Admin" styleClass="nav-text"/>
-                        <HBox spacing="8" alignment="CENTER_LEFT">
-                            <Label text="15 screens" styleClass="nav-desc"/>
-                            <Label text="•" styleClass="nav-desc"/>
-                            <Label text="Planning" styleClass="nav-status planning"/>
-                        </HBox>
-                    </VBox>
-                    <VBox spacing="2" alignment="CENTER_RIGHT">
-                        <Button text="⋯" styleClass="project-menu-btn"/>
-                        <Button text="☆" styleClass="favorite-btn"/>
+                    <VBox spacing="2">
+                        <Label text="Inventory Admin"/>
+                        <Label text="15 screens" styleClass="text-small, text-muted"/>
                     </VBox>
                 </HBox>
                 
-                <HBox styleClass="nav-item project-item" onMouseClicked="#handleProject" spacing="12">
-                    <StackPane styleClass="project-avatar red">
-                        <Label text="RP" styleClass="project-initials"/>
+                <Separator/>
+                
+                <HBox styleClass="list-item" onMouseClicked="#handleProject" spacing="12" alignment="CENTER_LEFT">
+                    <padding>
+                        <Insets top="8" right="8" bottom="8" left="8"/>
+                    </padding>
+                    <StackPane style="-fx-background-color: -color-danger-emphasis; -fx-background-radius: 6px;" minWidth="32" minHeight="32" maxWidth="32" maxHeight="32">
+                        <Label text="RP" style="-fx-text-fill: white; -fx-font-size: 11px; -fx-font-weight: bold;"/>
                     </StackPane>
-                    <VBox spacing="4" HBox.hgrow="ALWAYS">
-                        <Label text="Reports Portal" styleClass="nav-text"/>
-                        <HBox spacing="8" alignment="CENTER_LEFT">
-                            <Label text="8 screens" styleClass="nav-desc"/>
-                            <Label text="•" styleClass="nav-desc"/>
-                            <Label text="Active" styleClass="nav-status active"/>
-                        </HBox>
-                    </VBox>
-                    <VBox spacing="2" alignment="CENTER_RIGHT">
-                        <Button text="⋯" styleClass="project-menu-btn"/>
-                        <Button text="☆" styleClass="favorite-btn"/>
+                    <VBox spacing="2">
+                        <Label text="Reports Portal"/>
+                        <Label text="8 screens" styleClass="text-small, text-muted"/>
                     </VBox>
                 </HBox>
             </VBox>
         </ScrollPane>
     </VBox>
     
-    <Separator styleClass="sidebar-separator"/>
-    
-    <!-- Bottom Actions -->
-    <VBox spacing="8">
-        <!-- Settings -->
-        <HBox styleClass="nav-item settings-item" onMouseClicked="#handleSettings" spacing="12">
-            <Label text="⚙️" styleClass="nav-icon-box"/>
-            <VBox spacing="4" HBox.hgrow="ALWAYS">
-                <Label text="Settings" styleClass="nav-text"/>
-                <Label text="Preferences &amp; configuration" styleClass="nav-desc"/>
-            </VBox>
-            <Button text="→" styleClass="nav-arrow"/>
-        </HBox>
-    </VBox>
+    <!-- Settings at Bottom -->
+    <Button text="⚙  Settings" onMouseClicked="#handleSettings" alignment="CENTER_LEFT" maxWidth="Infinity" styleClass="flat, left-pill"/>
 </VBox>

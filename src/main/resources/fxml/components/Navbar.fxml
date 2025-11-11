@@ -1,29 +1,47 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.image.*?>
 
-<HBox styleClass="navbar" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+<HBox styleClass="top-nav" spacing="12" alignment="CENTER_LEFT" 
+      xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="com.noteflix.pcm.ui.components.NavbarController">
     
+    <padding>
+        <Insets top="12" right="20" bottom="12" left="20"/>
+    </padding>
+    
     <!-- Brand -->
-    <HBox styleClass="navbar-brand" alignment="CENTER_LEFT">
-        <ImageView styleClass="brand-icon" fitHeight="24" fitWidth="24" preserveRatio="true">
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <ImageView fitHeight="24" fitWidth="24" preserveRatio="true">
             <image>
                 <Image url="@../../images/icons/app-icon.png"/>
             </image>
         </ImageView>
-        <Label text="PCM" styleClass="brand-text"/>
+        <Label text="PCM Desktop" styleClass="title-3"/>
     </HBox>
     
     <Region HBox.hgrow="ALWAYS"/>
     
     <!-- Right Actions -->
-    <HBox styleClass="navbar-actions" spacing="10">
-        <Button text="+ New Screen" styleClass="btn-new" onAction="#handleNewScreen"/>
-        <Button text="🔔" styleClass="btn-icon" fx:id="notificationBtn" onAction="#handleNotifications"/>
-        <Button text="⚙️" styleClass="btn-icon" fx:id="settingsBtn" onAction="#handleSettings"/>
+    <HBox spacing="8" alignment="CENTER_RIGHT">
+        <!-- New Screen Button - Accent -->
+        <Button text="＋ New Screen" onAction="#handleNewScreen" styleClass="accent"/>
+        
+        <!-- Notification Button -->
+        <Button text="🔔" onAction="#handleNotifications" styleClass="flat">
+            <tooltip>
+                <Tooltip text="Notifications"/>
+            </tooltip>
+        </Button>
+        
+        <!-- Settings Button -->
+        <Button text="⚙" fx:id="settingsBtn" onAction="#handleSettings" styleClass="flat">
+            <tooltip>
+                <Tooltip text="Settings"/>
+            </tooltip>
+        </Button>
     </HBox>
 </HBox>
-

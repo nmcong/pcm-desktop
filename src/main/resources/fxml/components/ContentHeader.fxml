@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
@@ -7,32 +8,45 @@
       fx:controller="com.noteflix.pcm.ui.components.ContentHeaderController">
     
     <!-- Page Header -->
-    <HBox styleClass="page-header">
-        <VBox spacing="4">
-            <Label fx:id="pageTitle" text="Customer Profile Dashboard" styleClass="page-title"/>
+    <HBox styleClass="card-flat" alignment="CENTER_LEFT" spacing="16">
+        <padding>
+            <Insets top="16" right="20" bottom="16" left="20"/>
+        </padding>
+        
+        <VBox spacing="4" HBox.hgrow="ALWAYS">
+            <Label fx:id="pageTitle" text="Customer Profile Dashboard" styleClass="title-2"/>
             <HBox spacing="8" alignment="CENTER_LEFT">
-                <Label text="•" styleClass="status-dot active"/>
-                <Label fx:id="statusText" text="Active" styleClass="status-text"/>
-                <Label text="•" styleClass="separator"/>
-                <Label fx:id="metaText" text="Last updated 2h ago" styleClass="meta-text"/>
+                <Label text="●" style="-fx-text-fill: -color-success-emphasis; -fx-font-size: 8px;"/>
+                <Label fx:id="statusText" text="Active" style="-fx-text-fill: -color-success-emphasis; -fx-font-weight: 500;"/>
+                <Label text="•" styleClass="text-muted"/>
+                <Label fx:id="metaText" text="Last updated 2h ago" styleClass="text-muted"/>
             </HBox>
         </VBox>
         
-        <Region HBox.hgrow="ALWAYS"/>
-        
-        <HBox spacing="10">
-            <Button text="Share" styleClass="btn-outline" onAction="#handleShare"/>
-            <Button text="⋮" styleClass="btn-icon" onAction="#handleMore"/>
+        <HBox spacing="8">
+            <Button text="Share" onAction="#handleShare"/>
+            <MenuButton text="⋮" styleClass="flat">
+                <items>
+                    <MenuItem text="Edit"/>
+                    <MenuItem text="Duplicate"/>
+                    <SeparatorMenuItem/>
+                    <MenuItem text="Export"/>
+                    <MenuItem text="Delete"/>
+                </items>
+            </MenuButton>
         </HBox>
     </HBox>
     
     <!-- Tabs -->
-    <HBox styleClass="tabs-bar">
-        <Button text="Overview" styleClass="tab-item active" onAction="#handleTabOverview"/>
-        <Button text="Events" styleClass="tab-item" onAction="#handleTabEvents"/>
-        <Button text="Source Code" styleClass="tab-item" onAction="#handleTabSourceCode"/>
-        <Button text="Database" styleClass="tab-item" onAction="#handleTabDatabase"/>
-        <Button text="API Endpoints" styleClass="tab-item" onAction="#handleTabAPI"/>
-    </HBox>
+    <TabPane styleClass="floating" tabClosingPolicy="UNAVAILABLE">
+        <padding>
+            <Insets top="0" right="20" bottom="0" left="20"/>
+        </padding>
+        
+        <Tab text="Overview" onSelectionChanged="#handleTabOverview"/>
+        <Tab text="Events" onSelectionChanged="#handleTabEvents"/>
+        <Tab text="Source Code" onSelectionChanged="#handleTabSourceCode"/>
+        <Tab text="Database" onSelectionChanged="#handleTabDatabase"/>
+        <Tab text="API Endpoints" onSelectionChanged="#handleTabAPI"/>
+    </TabPane>
 </VBox>
-

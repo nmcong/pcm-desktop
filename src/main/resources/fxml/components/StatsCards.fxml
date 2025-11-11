@@ -1,36 +1,69 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<HBox styleClass="stats-grid" spacing="16" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+<HBox spacing="16" alignment="CENTER_LEFT" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="com.noteflix.pcm.ui.components.StatsCardsController">
     
-    <VBox styleClass="stat-card">
+    <!-- Events Card -->
+    <VBox styleClass="card" HBox.hgrow="ALWAYS" minWidth="200">
+        <padding>
+            <Insets top="16" right="16" bottom="16" left="16"/>
+        </padding>
+        
         <HBox alignment="CENTER_LEFT" spacing="8">
-            <Label text="⚡" styleClass="stat-icon"/>
-            <Label text="Events" styleClass="stat-title"/>
+            <Label text="⚡" style="-fx-font-size: 18px;"/>
+            <Label text="Events" styleClass="text-muted"/>
         </HBox>
-        <Label fx:id="eventsValue" text="5" styleClass="stat-value"/>
-        <Label fx:id="eventsChange" text="+2 this week" styleClass="stat-change positive"/>
+        
+        <Label fx:id="eventsValue" text="5" styleClass="title-1">
+            <padding>
+                <Insets top="8" bottom="4"/>
+            </padding>
+        </Label>
+        
+        <Label fx:id="eventsChange" text="↑ +2 this week" style="-fx-text-fill: -color-success-emphasis; -fx-font-size: 12px;"/>
     </VBox>
     
-    <VBox styleClass="stat-card">
+    <!-- Source Files Card -->
+    <VBox styleClass="card" HBox.hgrow="ALWAYS" minWidth="200">
+        <padding>
+            <Insets top="16" right="16" bottom="16" left="16"/>
+        </padding>
+        
         <HBox alignment="CENTER_LEFT" spacing="8">
-            <Label text="📄" styleClass="stat-icon"/>
-            <Label text="Source Files" styleClass="stat-title"/>
+            <Label text="📄" style="-fx-font-size: 18px;"/>
+            <Label text="Source Files" styleClass="text-muted"/>
         </HBox>
-        <Label fx:id="filesValue" text="3" styleClass="stat-value"/>
-        <Label fx:id="filesChange" text="No changes" styleClass="stat-change neutral"/>
+        
+        <Label fx:id="filesValue" text="3" styleClass="title-1">
+            <padding>
+                <Insets top="8" bottom="4"/>
+            </padding>
+        </Label>
+        
+        <Label fx:id="filesChange" text="No changes" styleClass="text-muted, text-small"/>
     </VBox>
     
-    <VBox styleClass="stat-card">
+    <!-- DB Tables Card -->
+    <VBox styleClass="card" HBox.hgrow="ALWAYS" minWidth="200">
+        <padding>
+            <Insets top="16" right="16" bottom="16" left="16"/>
+        </padding>
+        
         <HBox alignment="CENTER_LEFT" spacing="8">
-            <Label text="🗄️" styleClass="stat-icon"/>
-            <Label text="DB Tables" styleClass="stat-title"/>
+            <Label text="🗄️" style="-fx-font-size: 18px;"/>
+            <Label text="DB Tables" styleClass="text-muted"/>
         </HBox>
-        <Label fx:id="tablesValue" text="3" styleClass="stat-value"/>
-        <Label fx:id="tablesChange" text="All synced" styleClass="stat-change positive"/>
+        
+        <Label fx:id="tablesValue" text="3" styleClass="title-1">
+            <padding>
+                <Insets top="8" bottom="4"/>
+            </padding>
+        </Label>
+        
+        <Label fx:id="tablesChange" text="✓ All synced" style="-fx-text-fill: -color-success-emphasis; -fx-font-size: 12px;"/>
     </VBox>
 </HBox>
-

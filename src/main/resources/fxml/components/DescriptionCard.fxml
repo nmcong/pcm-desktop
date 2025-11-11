@@ -1,21 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
 <VBox styleClass="card" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="com.noteflix.pcm.ui.components.DescriptionCardController">
     
-    <HBox alignment="CENTER_LEFT">
-        <Label text="Description" styleClass="card-title"/>
-        <Region HBox.hgrow="ALWAYS"/>
-        <Button text="✨ AI Enhance" styleClass="btn-ai" onAction="#handleAIEnhance"/>
+    <padding>
+        <Insets top="16" right="16" bottom="16" left="16"/>
+    </padding>
+    
+    <HBox alignment="CENTER_LEFT" spacing="8">
+        <Label text="Description" styleClass="title-4" HBox.hgrow="ALWAYS"/>
+        <Button text="✨ AI Enhance" onAction="#handleAIEnhance" styleClass="accent, small"/>
     </HBox>
     
     <TextArea fx:id="descriptionArea" 
               text="Main customer account dashboard showing overview of profile status, recent orders, saved addresses, payment methods, and wishlist items.&#10;&#10;Provides quick access to all account management functions. Displays profile completion percentage with prompts to add missing information."
-              styleClass="description-area" 
               wrapText="true" 
-              VBox.vgrow="ALWAYS"/>
+              minHeight="120"
+              VBox.vgrow="ALWAYS">
+        <VBox.margin>
+            <Insets top="12"/>
+        </VBox.margin>
+    </TextArea>
 </VBox>
-
