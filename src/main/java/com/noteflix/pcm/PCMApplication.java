@@ -50,7 +50,7 @@ public class PCMApplication extends Application {
 
             // Load FXML
             FXMLLoader loader = new FXMLLoader(
-                getClass().getResource("/fxml/MainView.fxml")
+                getClass().getClassLoader().getResource("fxml/MainView.fxml")
             );
             Parent root = loader.load();
 

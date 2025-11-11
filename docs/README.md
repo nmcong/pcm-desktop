@@ -1,3 +1,41 @@
+# PCM Desktop - Tài liệu
+
+## Cấu trúc tài liệu
+
+### 📋 Tổng quan
+- [README.md](../README.md) - Tổng quan dự án
+- [CHANGELOG.md](CHANGELOG.md) - Lịch sử thay đổi
+
+### 🔧 Cài đặt (Setup)
+- [INTELLIJ_SETUP.md](setup/INTELLIJ_SETUP.md) - Hướng dẫn cài đặt IntelliJ IDEA
+- [RUN_CONFIGURATION_INSTRUCTIONS.md](setup/RUN_CONFIGURATION_INSTRUCTIONS.md) - Cấu hình chạy ứng dụng
+- [LIBRARY_SETUP.md](setup/LIBRARY_SETUP.md) - Cài đặt thư viện
+
+### 📖 Hướng dẫn sử dụng (Guides)
+- [QUICK_START.md](guides/QUICK_START.md) - Bắt đầu nhanh
+- [STEP_BY_STEP_GUIDE.md](guides/STEP_BY_STEP_GUIDE.md) - Hướng dẫn từng bước
+- [MIGRATION_GUIDE.md](guides/MIGRATION_GUIDE.md) - Hướng dẫn migration
+- [SETUP_WINDOWS.md](guides/SETUP_WINDOWS.md) - Cài đặt trên Windows
+- [QUICK_START_WINDOWS.md](guides/QUICK_START_WINDOWS.md) - Bắt đầu nhanh trên Windows
+- [PCM_CONCEPT.md](guides/PCM_CONCEPT.md) - Khái niệm PCM
+
+### 🔧 Khắc phục sự cố (Troubleshooting)
+- [TROUBLESHOOTING.md](troubleshooting/TROUBLESHOOTING.md) - Khắc phục sự cố chung
+- [QUICK_FIX_GUIDE.md](troubleshooting/QUICK_FIX_GUIDE.md) - Sửa lỗi nhanh
+
+### 💻 Phát triển (Development)
+- [RAG_IMPLEMENTATION_PLAN.md](development/RAG_IMPLEMENTATION_PLAN.md) - Kế hoạch RAG implementation
+- [PROJECT_SUMMARY.md](development/PROJECT_SUMMARY.md) - Tóm tắt dự án
+
+## Hướng dẫn đóng góp
+
+1. Tạo tài liệu mới trong thư mục phù hợp
+2. Cập nhật README.md này khi thêm tài liệu mới
+3. Sử dụng format Markdown chuẩn
+4. Thêm liên kết tương hỗ giữa các tài liệu
+
+---
+
 # PCM Desktop Application
 
 Personal Content Manager - Desktop Application built with JavaFX
