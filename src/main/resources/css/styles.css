@@ -272,6 +272,15 @@
     -fx-background-color: -color-bg-default;
 }
 
+/* Right side layout */
+.right-side {
+    -fx-background-color: -color-bg-default;
+}
+
+.content-area {
+    -fx-background-color: -color-bg-default;
+}
+
 /* ================================================================
    PAGE SPECIFIC STYLES
    ================================================================ */
@@ -322,8 +331,30 @@
     -fx-background-color: -color-bg-default;
 }
 
-.chat-layout {
+.chat-content-layout {
     -fx-background-color: -color-bg-default;
+}
+
+.chat-area-wrapper {
+    -fx-background-color: -color-bg-default;
+    -fx-padding: 0;
+}
+
+/* Welcome content styling */
+.welcome-content {
+    -fx-background-color: -color-bg-default;
+    -fx-alignment: center;
+}
+
+.welcome-bot-icon {
+    -fx-opacity: 0.8;
+}
+
+/* Fixed input area for chat state */
+.fixed-input-area {
+    -fx-background-color: -color-bg-default;
+    -fx-border-color: -color-border-default;
+    -fx-border-width: 1px 0 0 0;
 }
 
 /* Chat Sidebar */
@@ -371,14 +402,30 @@
 
 .session-title {
     -fx-text-fill: -color-fg-default;
+    -fx-font-size: 14px;
 }
 
 .session-preview {
     -fx-text-fill: -color-fg-muted;
+    -fx-font-size: 12px;
 }
 
 .session-time {
     -fx-text-fill: -color-fg-muted;
+    -fx-font-size: 11px;
+}
+
+.session-bot-icon {
+    -fx-opacity: 0.8;
+}
+
+.message-count-badge {
+    -fx-background-color: -color-accent-emphasis;
+    -fx-text-fill: white;
+    -fx-background-radius: 8px;
+    -fx-padding: 2px 6px;
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
 }
 
 .new-chat-btn {
@@ -459,6 +506,24 @@
 
 .message-time {
     -fx-opacity: 0.7;
+}
+
+/* Message icons */
+.message-bot-icon {
+    -fx-background-radius: 16px;
+}
+
+.message-user-icon {
+    -fx-text-fill: -color-accent-emphasis;
+}
+
+.user-icon-wrapper {
+    -fx-background-color: -color-accent-emphasis;
+    -fx-background-radius: 16px;
+}
+
+.user-icon-wrapper .ikonli-font-icon {
+    -fx-text-fill: white;
 }
 
 /* Welcome Message */
@@ -596,5 +661,28 @@
 /* Status indicators */
 .status-connected {
     -fx-text-fill: -color-success-emphasis;
+    -fx-font-weight: bold;
+}
+
+/* Loading Indicator */
+.loading-indicator {
+    -fx-padding: 8px 0;
+}
+
+.loading-bubble {
+    -fx-background-color: -color-bg-subtle;
+    -fx-background-radius: 18px 18px 18px 4px;
+    -fx-text-fill: -color-fg-default;
+}
+
+.loading-text {
+    -fx-font-size: 14px;
+    -fx-text-fill: -color-fg-muted;
+    -fx-font-style: italic;
+}
+
+.loading-dot {
+    -fx-font-size: 16px;
+    -fx-text-fill: -color-accent-emphasis;
     -fx-font-weight: bold;
 }

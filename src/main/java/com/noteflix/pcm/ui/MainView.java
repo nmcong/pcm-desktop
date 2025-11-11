@@ -2,7 +2,6 @@ package com.noteflix.pcm.ui;
 
 import atlantafx.base.theme.Styles;
 import com.noteflix.pcm.ui.components.*;
-import com.noteflix.pcm.ui.layout.MainLayer;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
@@ -19,25 +18,60 @@ import org.kordamp.ikonli.javafx.FontIcon;
 public class MainView extends BorderPane {
 
     private final MainController controller;
-    private MainLayer mainLayer;
+    private SidebarView sidebar;
 
     public MainView(MainController controller) {
         this.controller = controller;
         
         getStyleClass().add("root");
         
-        // Build UI with navbar always at top and MainLayer below
-        setTop(createNavbar());
-        setCenter(createMainLayer());
+        // Build UI: Sidebar left, right side divided into navbar (top) and content (bottom)
+        setLeft(createSidebar());
+        setCenter(createRightSide());
     }
     
     /**
-     * Creates main layer with 2-part division (following AtlantaFX Sampler pattern)
-     * MainLayer now handles page navigation directly
+     * Creates the left sidebar
      */
-    private MainLayer createMainLayer() {
-        mainLayer = new MainLayer();
-        return mainLayer;
+    private SidebarView createSidebar() {
+        sidebar = new SidebarView();
+        return sidebar;
+    }
+    
+    /**
+     * Creates the right side with navbar at top and content below
+     */
+    private BorderPane createRightSide() {
+        BorderPane rightSide = new BorderPane();
+        rightSide.getStyleClass().add("right-side");
+        
+        // Top: Navbar
+        rightSide.setTop(createNavbar());
+        
+        // Center: Content area (pages will be displayed here)
+        StackPane contentArea = new StackPane();
+        contentArea.getStyleClass().add("content-area");
+        rightSide.setCenter(contentArea);
+        
+        // Initialize navigation system for the content area
+        initializeNavigation(contentArea);
+        
+        return rightSide;
+    }
+    
+    /**
+     * Initialize navigation system
+     */
+    private void initializeNavigation(StackPane contentArea) {
+        var pageNavigator = new com.noteflix.pcm.core.navigation.DefaultPageNavigator(contentArea);
+        
+        // Set navigator for sidebar
+        if (sidebar != null) {
+            sidebar.setPageNavigator(pageNavigator);
+        }
+        
+        // Navigate to default page
+        pageNavigator.navigateToPage(com.noteflix.pcm.ui.pages.AIAssistantPage.class);
     }
     
     /**
@@ -109,14 +143,12 @@ public class MainView extends BorderPane {
      * Toggles sidebar visibility
      */
     private void toggleSidebar() {
-        if (mainLayer != null) {
-            if (mainLayer.getLeft() != null) {
-                // Hide sidebar
-                mainLayer.setLeft(null);
-            } else {
-                // Show sidebar
-                mainLayer.setLeft(mainLayer.getSidebar());
-            }
+        if (getLeft() != null) {
+            // Hide sidebar
+            setLeft(null);
+        } else {
+            // Show sidebar
+            setLeft(sidebar);
         }
     }
     

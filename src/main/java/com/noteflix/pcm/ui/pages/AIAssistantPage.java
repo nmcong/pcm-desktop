@@ -7,6 +7,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import lombok.extern.slf4j.Slf4j;
 import org.kordamp.ikonli.feather.Feather;
@@ -31,6 +32,8 @@ public class AIAssistantPage extends BasePage {
     private VBox chatMessagesArea;
     private TextArea chatInput;
     private ScrollPane chatScroll;
+    private VBox mainChatContentArea; // Store reference to rebuild layout
+    private VBox loadingIndicator;
     
     public AIAssistantPage() {
         super(
@@ -72,14 +75,17 @@ public class AIAssistantPage extends BasePage {
     protected VBox createMainContent() {
         VBox mainContent = new VBox();
         mainContent.getStyleClass().add("ai-chat-main");
-        mainContent.setPadding(new Insets(0)); // Remove default padding for full-screen chat
+        mainContent.setPadding(new Insets(0));
         VBox.setVgrow(mainContent, Priority.ALWAYS);
         
-        // Create ChatGPT-like layout: sidebar + main chat area
-        HBox chatLayout = createChatLayout();
-        VBox.setVgrow(chatLayout, Priority.ALWAYS);
+        // AI Chat header always at top
+        HBox chatHeader = createChatHeader();
         
-        mainContent.getChildren().add(chatLayout);
+        // Chat content layout: sidebar + main chat area
+        HBox chatContentLayout = createChatContentLayout();
+        VBox.setVgrow(chatContentLayout, Priority.ALWAYS);
+        
+        mainContent.getChildren().addAll(chatHeader, chatContentLayout);
         return mainContent;
     }
     
@@ -91,10 +97,10 @@ public class AIAssistantPage extends BasePage {
     }
     
     
-    private HBox createChatLayout() {
+    private HBox createChatContentLayout() {
         HBox layout = new HBox();
-        layout.getStyleClass().add("chat-layout");
-        layout.setSpacing(0); // No gap between sidebar and main content
+        layout.getStyleClass().add("chat-content-layout");
+        layout.setSpacing(0);
         
         // Left sidebar with chat history
         VBox sidebar = createChatSidebar();
@@ -102,7 +108,7 @@ public class AIAssistantPage extends BasePage {
         sidebar.setMinWidth(280);
         sidebar.setMaxWidth(280);
         
-        // Main chat area
+        // Main chat area (centered with max width)
         VBox mainChatArea = createMainChatArea();
         HBox.setHgrow(mainChatArea, Priority.ALWAYS);
         
@@ -178,23 +184,56 @@ public class AIAssistantPage extends BasePage {
     }
     
     private Button createChatSessionButton(ChatSession session) {
-        VBox content = new VBox(4);
+        HBox content = new HBox(12);
         content.setAlignment(Pos.CENTER_LEFT);
         content.setPadding(new Insets(12));
         
+        // Bot icon
+        com.noteflix.pcm.core.theme.ThemeManager themeManager = com.noteflix.pcm.core.theme.ThemeManager.getInstance();
+        javafx.scene.image.ImageView botIcon = com.noteflix.pcm.core.utils.IconUtils.createImageView(
+            themeManager.getBotIcon(), 24, 24
+        );
+        botIcon.getStyleClass().add("session-bot-icon");
+        
+        // Text content
+        VBox textContent = new VBox(4);
+        textContent.setAlignment(Pos.CENTER_LEFT);
+        HBox.setHgrow(textContent, Priority.ALWAYS);
+        
         Label titleLabel = new Label(session.getTitle());
         titleLabel.getStyleClass().addAll(Styles.TEXT_BOLD, "session-title");
-        titleLabel.setMaxWidth(200);
+        titleLabel.setMaxWidth(180);
         
         Label previewLabel = new Label(session.getPreview());
         previewLabel.getStyleClass().addAll(Styles.TEXT_SMALL, "text-muted", "session-preview");
-        previewLabel.setWrapText(true);
-        previewLabel.setMaxWidth(200);
+        previewLabel.setWrapText(false);
+        previewLabel.setMaxWidth(180);
+        
+        // Truncate preview text if too long
+        String preview = session.getPreview();
+        if (preview.length() > 35) {
+            preview = preview.substring(0, 32) + "...";
+        }
+        previewLabel.setText(preview);
+        
+        textContent.getChildren().addAll(titleLabel, previewLabel);
+        
+        // Time and status
+        VBox rightContent = new VBox(4);
+        rightContent.setAlignment(Pos.TOP_RIGHT);
         
         Label timeLabel = new Label(session.getLastMessageTime().format(DateTimeFormatter.ofPattern("MMM dd")));
         timeLabel.getStyleClass().addAll(Styles.TEXT_SMALL, "text-muted", "session-time");
         
-        content.getChildren().addAll(titleLabel, previewLabel, timeLabel);
+        // Message count indicator (optional)
+        if (!session.getMessages().isEmpty()) {
+            Label countLabel = new Label(String.valueOf(session.getMessages().size()));
+            countLabel.getStyleClass().add("message-count-badge");
+        }
+        
+        rightContent.getChildren().add(timeLabel);
+        
+        content.getChildren().addAll(botIcon, textContent, rightContent);
         
         Button sessionBtn = new Button();
         sessionBtn.setGraphic(content);
@@ -213,18 +252,72 @@ public class AIAssistantPage extends BasePage {
     }
     
     private VBox createMainChatArea() {
-        // Wrapper to center content with max width
-        HBox wrapper = new HBox();
+        mainChatContentArea = new VBox();
+        mainChatContentArea.getStyleClass().add("main-chat-area");
+        mainChatContentArea.setMaxWidth(768);
+        mainChatContentArea.setAlignment(Pos.CENTER);
+        VBox.setVgrow(mainChatContentArea, Priority.ALWAYS);
+        
+        // Build initial content based on current state
+        buildChatContent();
+        
+        // Wrap to center the main area horizontally
+        VBox wrapper = new VBox();
+        wrapper.getStyleClass().add("chat-area-wrapper");
         wrapper.setAlignment(Pos.CENTER);
-        HBox.setHgrow(wrapper, Priority.ALWAYS);
+        VBox.setVgrow(wrapper, Priority.ALWAYS);
         
-        VBox mainArea = new VBox();
-        mainArea.getStyleClass().add("main-chat-area");
-        mainArea.setMaxWidth(768);
+        // Center the main area
+        HBox centeringBox = new HBox(mainChatContentArea);
+        centeringBox.setAlignment(Pos.CENTER);
+        HBox.setHgrow(centeringBox, Priority.ALWAYS);
         
-        // Chat header
-        HBox chatHeader = createChatHeader();
+        wrapper.getChildren().add(centeringBox);
         
+        return wrapper;
+    }
+    
+    private void buildChatContent() {
+        // Clear existing content
+        mainChatContentArea.getChildren().clear();
+        
+        // Check if there are messages to determine layout
+        if (currentSession == null || currentSession.getMessages().isEmpty()) {
+            // Welcome state: centered welcome message, suggestions, and input
+            VBox welcomeContent = createWelcomeContent();
+            VBox.setVgrow(welcomeContent, Priority.ALWAYS);
+            mainChatContentArea.getChildren().add(welcomeContent);
+            
+            // Reset chatMessagesArea to null for welcome state
+            chatMessagesArea = null;
+        } else {
+            // Chat state: messages scroll area + fixed input at bottom
+            createChatStateContent(mainChatContentArea);
+        }
+    }
+    
+    private VBox createWelcomeContent() {
+        VBox welcomeContent = new VBox(40);
+        welcomeContent.setAlignment(Pos.CENTER);
+        welcomeContent.getStyleClass().add("welcome-content");
+        welcomeContent.setPadding(new Insets(60, 40, 60, 40));
+        VBox.setVgrow(welcomeContent, Priority.ALWAYS);
+        
+        // Welcome message
+        VBox welcome = showWelcomeMessage();
+        
+        // Quick suggestions
+        HBox suggestions = createQuickSuggestions();
+        
+        // Input area
+        VBox inputArea = createChatInputArea();
+        
+        welcomeContent.getChildren().addAll(welcome, suggestions, inputArea);
+        
+        return welcomeContent;
+    }
+    
+    private void createChatStateContent(VBox mainArea) {
         // Messages area
         chatMessagesArea = new VBox(16);
         chatMessagesArea.getStyleClass().add("chat-messages-area");
@@ -237,20 +330,20 @@ public class AIAssistantPage extends BasePage {
         chatScroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         VBox.setVgrow(chatScroll, Priority.ALWAYS);
         
-        // Input area at bottom
+        // Input area at bottom (fixed)
         VBox inputArea = createChatInputArea();
+        inputArea.getStyleClass().add("fixed-input-area");
         
-        mainArea.getChildren().addAll(chatHeader, chatScroll, inputArea);
+        mainArea.getChildren().addAll(chatScroll, inputArea);
         
-        // Load current session messages
-        loadCurrentSessionMessages();
-        
-        // Wrap main area to center it
-        VBox centeredWrapper = new VBox(mainArea);
-        centeredWrapper.setAlignment(Pos.CENTER);
-        HBox.setHgrow(centeredWrapper, Priority.ALWAYS);
-        
-        return centeredWrapper;
+        // Load current session messages if they exist
+        if (currentSession != null && !currentSession.getMessages().isEmpty()) {
+            for (ChatMessage message : currentSession.getMessages()) {
+                VBox messageBox = createMessageBox(message);
+                chatMessagesArea.getChildren().add(messageBox);
+            }
+            scrollToBottom();
+        }
     }
     
     private HBox createChatHeader() {
@@ -384,33 +477,18 @@ public class AIAssistantPage extends BasePage {
         return suggestions;
     }
     
-    private void loadCurrentSessionMessages() {
-        chatMessagesArea.getChildren().clear();
-        
-        if (currentSession == null) {
-            // Show welcome message
-            showWelcomeMessage();
-            return;
-        }
-        
-        for (ChatMessage message : currentSession.getMessages()) {
-            VBox messageBox = createMessageBox(message);
-            chatMessagesArea.getChildren().add(messageBox);
-        }
-        
-        // Scroll to bottom
-        scrollToBottom();
-    }
     
-    private void showWelcomeMessage() {
+    private VBox showWelcomeMessage() {
         VBox welcome = new VBox(16);
         welcome.setAlignment(Pos.CENTER);
         welcome.getStyleClass().add("welcome-message");
-        welcome.setPadding(new Insets(40));
         
-        FontIcon icon = new FontIcon(Feather.MESSAGE_CIRCLE);
-        icon.setIconSize(48);
-        icon.getStyleClass().add("welcome-icon");
+        // Use bot icon instead of message circle
+        com.noteflix.pcm.core.theme.ThemeManager themeManager = com.noteflix.pcm.core.theme.ThemeManager.getInstance();
+        javafx.scene.image.ImageView botIcon = com.noteflix.pcm.core.utils.IconUtils.createImageView(
+            themeManager.getBotIcon(), 64, 64
+        );
+        botIcon.getStyleClass().add("welcome-bot-icon");
         
         Label title = new Label("AI Assistant");
         title.getStyleClass().addAll(Styles.TITLE_2, "welcome-title");
@@ -418,21 +496,19 @@ public class AIAssistantPage extends BasePage {
         Label subtitle = new Label("How can I help you today?");
         subtitle.getStyleClass().addAll(Styles.TEXT_MUTED, "welcome-subtitle");
         
-        welcome.getChildren().addAll(icon, title, subtitle);
-        chatMessagesArea.getChildren().add(welcome);
+        welcome.getChildren().addAll(botIcon, title, subtitle);
+        return welcome;
     }
     
     private VBox createMessageBox(ChatMessage message) {
         VBox messageBox = new VBox(8);
         messageBox.getStyleClass().add("message-box");
         
-        if (message.isFromAI()) {
-            messageBox.getStyleClass().add("ai-message-box");
-            messageBox.setAlignment(Pos.CENTER_LEFT);
-        } else {
-            messageBox.getStyleClass().add("user-message-box");
-            messageBox.setAlignment(Pos.CENTER_RIGHT);
-        }
+        HBox messageRow = new HBox(12);
+        messageRow.setAlignment(message.isFromAI() ? Pos.CENTER_LEFT : Pos.CENTER_RIGHT);
+        
+        // Create message icon
+        javafx.scene.Node messageIcon = createMessageIcon(message.isFromAI());
         
         // Message bubble
         VBox bubble = new VBox(4);
@@ -448,9 +524,42 @@ public class AIAssistantPage extends BasePage {
         timeLabel.getStyleClass().addAll(Styles.TEXT_SMALL, "text-muted", "message-time");
         
         bubble.getChildren().addAll(messageLabel, timeLabel);
-        messageBox.getChildren().add(bubble);
         
+        if (message.isFromAI()) {
+            messageBox.getStyleClass().add("ai-message-box");
+            messageRow.getChildren().addAll(messageIcon, bubble);
+        } else {
+            messageBox.getStyleClass().add("user-message-box");
+            messageRow.getChildren().addAll(bubble, messageIcon);
+        }
+        
+        messageBox.getChildren().add(messageRow);
         return messageBox;
+    }
+    
+    private javafx.scene.Node createMessageIcon(boolean isFromAI) {
+        if (isFromAI) {
+            // Use bot icon for AI messages
+            com.noteflix.pcm.core.theme.ThemeManager themeManager = com.noteflix.pcm.core.theme.ThemeManager.getInstance();
+            javafx.scene.image.ImageView botIcon = com.noteflix.pcm.core.utils.IconUtils.createImageView(
+                themeManager.getBotIcon(), 32, 32
+            );
+            botIcon.getStyleClass().add("message-bot-icon");
+            return botIcon;
+        } else {
+            // Use user icon for user messages
+            FontIcon userIcon = new FontIcon(Feather.USER);
+            userIcon.setIconSize(24);
+            userIcon.getStyleClass().add("message-user-icon");
+            
+            // Wrap in a circular background
+            StackPane iconWrapper = new StackPane(userIcon);
+            iconWrapper.getStyleClass().add("user-icon-wrapper");
+            iconWrapper.setMinSize(32, 32);
+            iconWrapper.setMaxSize(32, 32);
+            
+            return iconWrapper;
+        }
     }
     
     private void handleSendMessage() {
@@ -470,17 +579,142 @@ public class AIAssistantPage extends BasePage {
         ChatMessage userMessage = new ChatMessage("You", message, false);
         currentSession.addMessage(userMessage);
         
-        // Clear input
+        // Clear input and disable it
         chatInput.clear();
         chatInput.setPrefRowCount(1);
+        chatInput.setDisable(true);
+        
+        // Check if we need to rebuild the layout (from welcome state to chat state)
+        if (chatMessagesArea == null) {
+            rebuildChatLayout();
+        }
         
         // Add message to UI
         VBox messageBox = createMessageBox(userMessage);
         chatMessagesArea.getChildren().add(messageBox);
+        
+        // Add loading indicator
+        showLoadingIndicator();
         scrollToBottom();
         
         // Simulate AI response
         simulateAIResponse(message);
+    }
+    
+    private void rebuildChatLayout() {
+        // Rebuild the chat content using the stored reference
+        buildChatContent();
+    }
+    
+    private void showLoadingIndicator() {
+        if (chatMessagesArea != null) {
+            loadingIndicator = createLoadingIndicator();
+            chatMessagesArea.getChildren().add(loadingIndicator);
+        }
+    }
+    
+    private void hideLoadingIndicator() {
+        if (chatMessagesArea != null && loadingIndicator != null) {
+            // Stop the animation
+            javafx.animation.Timeline timeline = (javafx.animation.Timeline) loadingIndicator.getUserData();
+            if (timeline != null) {
+                timeline.stop();
+            }
+            
+            chatMessagesArea.getChildren().remove(loadingIndicator);
+            loadingIndicator = null;
+        }
+    }
+    
+    private VBox createLoadingIndicator() {
+        VBox indicator = new VBox(8);
+        indicator.getStyleClass().add("loading-indicator");
+        indicator.setAlignment(Pos.CENTER_LEFT);
+        indicator.setPadding(new Insets(16, 20, 16, 20));
+        
+        HBox messageRow = new HBox(12);
+        messageRow.setAlignment(Pos.CENTER_LEFT);
+        
+        // Bot icon
+        com.noteflix.pcm.core.theme.ThemeManager themeManager = com.noteflix.pcm.core.theme.ThemeManager.getInstance();
+        javafx.scene.image.ImageView botIcon = com.noteflix.pcm.core.utils.IconUtils.createImageView(
+            themeManager.getBotIcon(), 32, 32
+        );
+        botIcon.getStyleClass().add("message-bot-icon");
+        
+        // Loading bubble with animated dots
+        VBox bubble = new VBox(4);
+        bubble.getStyleClass().add("loading-bubble");
+        bubble.setPadding(new Insets(12, 16, 12, 16));
+        bubble.setMaxWidth(600);
+        
+        // Animated loading text
+        Label loadingText = new Label("AI is thinking");
+        loadingText.getStyleClass().addAll("loading-text");
+        
+        // Three animated dots
+        HBox dotsBox = new HBox(4);
+        dotsBox.setAlignment(Pos.CENTER_LEFT);
+        
+        Label dot1 = new Label("•");
+        Label dot2 = new Label("•");
+        Label dot3 = new Label("•");
+        
+        dot1.getStyleClass().add("loading-dot");
+        dot2.getStyleClass().add("loading-dot");
+        dot3.getStyleClass().add("loading-dot");
+        
+        dotsBox.getChildren().addAll(dot1, dot2, dot3);
+        
+        // Create simple animation using opacity changes
+        javafx.animation.Timeline timeline = new javafx.animation.Timeline();
+        
+        // Dot 1 animation
+        javafx.animation.KeyFrame kf1a = new javafx.animation.KeyFrame(
+            javafx.util.Duration.millis(0), 
+            new javafx.animation.KeyValue(dot1.opacityProperty(), 1.0)
+        );
+        javafx.animation.KeyFrame kf1b = new javafx.animation.KeyFrame(
+            javafx.util.Duration.millis(300), 
+            new javafx.animation.KeyValue(dot1.opacityProperty(), 0.3)
+        );
+        
+        // Dot 2 animation (delayed)
+        javafx.animation.KeyFrame kf2a = new javafx.animation.KeyFrame(
+            javafx.util.Duration.millis(300), 
+            new javafx.animation.KeyValue(dot2.opacityProperty(), 1.0)
+        );
+        javafx.animation.KeyFrame kf2b = new javafx.animation.KeyFrame(
+            javafx.util.Duration.millis(600), 
+            new javafx.animation.KeyValue(dot2.opacityProperty(), 0.3)
+        );
+        
+        // Dot 3 animation (more delayed)
+        javafx.animation.KeyFrame kf3a = new javafx.animation.KeyFrame(
+            javafx.util.Duration.millis(600), 
+            new javafx.animation.KeyValue(dot3.opacityProperty(), 1.0)
+        );
+        javafx.animation.KeyFrame kf3b = new javafx.animation.KeyFrame(
+            javafx.util.Duration.millis(900), 
+            new javafx.animation.KeyValue(dot3.opacityProperty(), 0.3)
+        );
+        
+        timeline.getKeyFrames().addAll(kf1a, kf1b, kf2a, kf2b, kf3a, kf3b);
+        timeline.setCycleCount(javafx.animation.Timeline.INDEFINITE);
+        timeline.play();
+        
+        // Store animation reference to stop it later
+        indicator.setUserData(timeline);
+        
+        HBox textAndDots = new HBox(8);
+        textAndDots.setAlignment(Pos.CENTER_LEFT);
+        textAndDots.getChildren().addAll(loadingText, dotsBox);
+        
+        bubble.getChildren().add(textAndDots);
+        messageRow.getChildren().addAll(botIcon, bubble);
+        indicator.getChildren().add(messageRow);
+        
+        return indicator;
     }
     
     private void simulateAIResponse(String userMessage) {
@@ -492,10 +726,17 @@ public class AIAssistantPage extends BasePage {
                 ChatMessage aiMessage = new ChatMessage("AI Assistant", response, true);
                 
                 javafx.application.Platform.runLater(() -> {
+                    // Remove loading indicator
+                    hideLoadingIndicator();
+                    
                     currentSession.addMessage(aiMessage);
                     VBox messageBox = createMessageBox(aiMessage);
                     chatMessagesArea.getChildren().add(messageBox);
                     scrollToBottom();
+                    
+                    // Re-enable input
+                    chatInput.setDisable(false);
+                    chatInput.requestFocus();
                     
                     // Update session preview
                     currentSession.setPreview(response.length() > 50 ? response.substring(0, 47) + "..." : response);
@@ -532,29 +773,38 @@ public class AIAssistantPage extends BasePage {
     private void switchToSession(ChatSession session) {
         if (currentSession != session) {
             currentSession = session;
-            loadCurrentSessionMessages();
+            
+            // Rebuild the entire chat content to reflect the new session
+            buildChatContent();
             updateChatSessionsList(); // Update active state
             
-            // Update chat header
-            if (chatMessagesArea.getParent() != null) {
-                VBox mainArea = (VBox) chatMessagesArea.getParent().getParent();
-                HBox newHeader = createChatHeader();
-                mainArea.getChildren().set(0, newHeader);
-            }
+            // Update chat header (rebuild the main content to include updated header)
+            rebuildMainContent();
         }
+    }
+    
+    private void rebuildMainContent() {
+        // Get the main content VBox and rebuild it
+        VBox mainContent = (VBox) getChildren().get(getChildren().size() - 1);
+        mainContent.getChildren().clear();
+        
+        // Add header and chat content
+        HBox chatHeader = createChatHeader();
+        HBox chatContentLayout = createChatContentLayout();
+        VBox.setVgrow(chatContentLayout, Priority.ALWAYS);
+        
+        mainContent.getChildren().addAll(chatHeader, chatContentLayout);
     }
     
     private void createNewChat() {
         currentSession = null;
-        loadCurrentSessionMessages();
+        
+        // Rebuild content for welcome state
+        buildChatContent();
         updateChatSessionsList();
         
-        // Update header
-        if (chatMessagesArea.getParent() != null) {
-            VBox mainArea = (VBox) chatMessagesArea.getParent().getParent();
-            HBox newHeader = createChatHeader();
-            mainArea.getChildren().set(0, newHeader);
-        }
+        // Rebuild main content to update header
+        rebuildMainContent();
         
         // Focus input
         if (chatInput != null) {
@@ -565,7 +815,9 @@ public class AIAssistantPage extends BasePage {
     private void clearCurrentChat() {
         if (currentSession != null) {
             currentSession.getMessages().clear();
-            loadCurrentSessionMessages();
+            
+            // Rebuild content since messages are now empty
+            buildChatContent();
         }
     }
     
