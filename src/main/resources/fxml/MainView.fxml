@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane fx:id="rootPane" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.noteflix.pcm.ui.MainController">
+
+    <!-- Top: Menu Bar and Tool Bar -->
+    <top>
+        <VBox>
+            <!-- Menu Bar -->
+            <MenuBar fx:id="menuBar">
+                <Menu text="File">
+                    <MenuItem text="New" onAction="#handleFileNew" accelerator="Ctrl+N"/>
+                    <MenuItem text="Open" onAction="#handleFileOpen" accelerator="Ctrl+O"/>
+                    <SeparatorMenuItem/>
+                    <MenuItem text="Exit" onAction="#handleFileExit" accelerator="Ctrl+Q"/>
+                </Menu>
+                <Menu text="Edit">
+                    <MenuItem text="Cut" accelerator="Ctrl+X"/>
+                    <MenuItem text="Copy" accelerator="Ctrl+C"/>
+                    <MenuItem text="Paste" accelerator="Ctrl+V"/>
+                </Menu>
+                <Menu text="View">
+                    <CheckMenuItem text="Show Navigation" selected="true"/>
+                    <CheckMenuItem text="Show Toolbar" selected="true"/>
+                    <CheckMenuItem text="Show Status Bar" selected="true"/>
+                </Menu>
+                <Menu text="Help">
+                    <MenuItem text="Documentation"/>
+                    <MenuItem text="About" onAction="#handleHelpAbout"/>
+                </Menu>
+            </MenuBar>
+
+            <!-- Tool Bar -->
+            <ToolBar fx:id="toolBar">
+                <Button text="New" style="-fx-font-size: 12px;"/>
+                <Button text="Open" style="-fx-font-size: 12px;"/>
+                <Button text="Save" style="-fx-font-size: 12px;"/>
+                <Separator orientation="VERTICAL"/>
+                <Button text="Cut" style="-fx-font-size: 12px;"/>
+                <Button text="Copy" style="-fx-font-size: 12px;"/>
+                <Button text="Paste" style="-fx-font-size: 12px;"/>
+            </ToolBar>
+        </VBox>
+    </top>
+
+    <!-- Left: Navigation Tree -->
+    <left>
+        <VBox style="-fx-min-width: 250px; -fx-border-color: #ddd; -fx-border-width: 0 1 0 0;">
+            <Label text="Navigation" style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-padding: 10;"/>
+            <TreeView fx:id="navigationTree" VBox.vgrow="ALWAYS"/>
+        </VBox>
+    </left>
+
+    <!-- Center: Content Area with Tabs -->
+    <center>
+        <TabPane fx:id="contentTabPane" tabClosingPolicy="ALL_TABS">
+            <!-- Tabs will be added dynamically -->
+        </TabPane>
+    </center>
+
+    <!-- Bottom: Status Bar -->
+    <bottom>
+        <HBox style="-fx-padding: 5 10; -fx-background-color: #f0f0f0; -fx-border-color: #ddd; -fx-border-width: 1 0 0 0;">
+            <Label fx:id="statusLabel" text="Ready" style="-fx-font-size: 12px;"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Label text="PCM Desktop v1.0.0" style="-fx-font-size: 11px; -fx-text-fill: #666;"/>
+        </HBox>
+    </bottom>
+
+</BorderPane>
+

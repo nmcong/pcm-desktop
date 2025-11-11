@@ -1,0 +1,220 @@
+/* PCM Desktop Application Styles */
+
+/* Root */
+.root {
+    -fx-font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    -fx-font-size: 14px;
+    -fx-base: #f5f5f5;
+    -fx-background: white;
+}
+
+/* Menu Bar */
+.menu-bar {
+    -fx-background-color: linear-gradient(to bottom, #fafafa, #f0f0f0);
+    -fx-border-color: #ddd;
+    -fx-border-width: 0 0 1 0;
+}
+
+.menu-bar .label {
+    -fx-font-size: 13px;
+}
+
+/* Tool Bar */
+.tool-bar {
+    -fx-background-color: linear-gradient(to bottom, #fafafa, #f0f0f0);
+    -fx-border-color: #ddd;
+    -fx-border-width: 0 0 1 0;
+    -fx-padding: 5px;
+}
+
+.tool-bar .button {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-padding: 5px 10px;
+}
+
+.tool-bar .button:hover {
+    -fx-background-color: rgba(0, 0, 0, 0.05);
+    -fx-border-radius: 4px;
+}
+
+.tool-bar .button:pressed {
+    -fx-background-color: rgba(0, 0, 0, 0.1);
+}
+
+/* Tree View */
+.tree-view {
+    -fx-background-color: white;
+    -fx-border-color: transparent;
+}
+
+.tree-cell {
+    -fx-padding: 8px;
+    -fx-font-size: 13px;
+}
+
+.tree-cell:selected {
+    -fx-background-color: #e3f2fd;
+    -fx-text-fill: #1976d2;
+}
+
+.tree-cell:hover {
+    -fx-background-color: #f5f5f5;
+}
+
+/* Tab Pane */
+.tab-pane {
+    -fx-background-color: white;
+}
+
+.tab-pane .tab-header-area {
+    -fx-padding: 0;
+}
+
+.tab-pane .tab {
+    -fx-background-color: #f5f5f5;
+    -fx-border-color: #ddd;
+    -fx-border-width: 1 1 0 1;
+    -fx-border-radius: 4 4 0 0;
+    -fx-padding: 8px 16px;
+}
+
+.tab-pane .tab:selected {
+    -fx-background-color: white;
+    -fx-font-weight: bold;
+}
+
+.tab-pane .tab:hover {
+    -fx-background-color: #eeeeee;
+}
+
+.tab-pane .tab .tab-label {
+    -fx-font-size: 13px;
+}
+
+/* Buttons */
+.button {
+    -fx-background-color: linear-gradient(to bottom, #fafafa, #f0f0f0);
+    -fx-border-color: #ccc;
+    -fx-border-radius: 4px;
+    -fx-background-radius: 4px;
+    -fx-padding: 8px 16px;
+    -fx-cursor: hand;
+}
+
+.button:hover {
+    -fx-background-color: linear-gradient(to bottom, #f0f0f0, #e0e0e0);
+    -fx-border-color: #999;
+}
+
+.button:pressed {
+    -fx-background-color: linear-gradient(to bottom, #e0e0e0, #d0d0d0);
+}
+
+.button:focused {
+    -fx-border-color: #1976d2;
+    -fx-border-width: 2px;
+}
+
+/* Primary Button */
+.button-primary {
+    -fx-background-color: linear-gradient(to bottom, #2196f3, #1976d2);
+    -fx-text-fill: white;
+    -fx-border-color: #1565c0;
+}
+
+.button-primary:hover {
+    -fx-background-color: linear-gradient(to bottom, #1976d2, #1565c0);
+}
+
+/* Labels */
+.label {
+    -fx-text-fill: #333;
+}
+
+/* Text Fields */
+.text-field {
+    -fx-background-color: white;
+    -fx-border-color: #ccc;
+    -fx-border-radius: 4px;
+    -fx-background-radius: 4px;
+    -fx-padding: 6px 10px;
+}
+
+.text-field:focused {
+    -fx-border-color: #1976d2;
+    -fx-border-width: 2px;
+}
+
+/* Text Area */
+.text-area {
+    -fx-background-color: white;
+    -fx-border-color: #ccc;
+    -fx-border-radius: 4px;
+    -fx-background-radius: 4px;
+}
+
+.text-area:focused {
+    -fx-border-color: #1976d2;
+    -fx-border-width: 2px;
+}
+
+.text-area .content {
+    -fx-background-color: white;
+}
+
+/* Scroll Bar */
+.scroll-bar:vertical {
+    -fx-pref-width: 12px;
+}
+
+.scroll-bar:horizontal {
+    -fx-pref-height: 12px;
+}
+
+.scroll-bar .thumb {
+    -fx-background-color: #bbb;
+    -fx-background-radius: 6px;
+}
+
+.scroll-bar .thumb:hover {
+    -fx-background-color: #999;
+}
+
+.scroll-bar .track {
+    -fx-background-color: #f0f0f0;
+}
+
+/* Status Bar */
+.status-bar {
+    -fx-background-color: #f0f0f0;
+    -fx-padding: 5px 10px;
+}
+
+/* Alerts */
+.alert .header-panel {
+    -fx-background-color: white;
+}
+
+.alert .content {
+    -fx-padding: 20px;
+}
+
+/* Welcome Screen */
+.welcome-view {
+    -fx-alignment: center;
+    -fx-spacing: 20px;
+    -fx-padding: 40px;
+}
+
+.welcome-title {
+    -fx-font-size: 32px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1976d2;
+}
+
+.welcome-subtitle {
+    -fx-font-size: 18px;
+    -fx-text-fill: #666;
+}
+
