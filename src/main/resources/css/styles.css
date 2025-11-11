@@ -117,6 +117,12 @@
     -fx-text-fill: -color-accent-emphasis;
 }
 
+/* Icon buttons with soft borders */
+.icon-btn-bordered {
+    -fx-background-radius: 6px;
+    -fx-transition: all 0.2s ease-in-out;
+}
+
 /* ================================================================
    CONTENT AREA
    ================================================================ */

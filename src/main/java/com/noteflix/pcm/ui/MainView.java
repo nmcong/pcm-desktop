@@ -19,6 +19,7 @@ import org.kordamp.ikonli.javafx.FontIcon;
 public class MainView extends BorderPane {
 
     private final MainController controller;
+    private MainLayer mainLayer;
 
     public MainView(MainController controller) {
         this.controller = controller;
@@ -34,7 +35,7 @@ public class MainView extends BorderPane {
      * Navbar is now part of the content area, not top-level
      */
     private MainLayer createMainLayer() {
-        MainLayer mainLayer = new MainLayer();
+        mainLayer = new MainLayer();
         
         // Create content area with navbar + demo content
         VBox contentWithNavbar = new VBox();
@@ -57,10 +58,11 @@ public class MainView extends BorderPane {
         navbar.setPadding(new Insets(12, 16, 12, 16));
         navbar.setAlignment(Pos.CENTER_LEFT);
         
-        // Logo/Title
-        Label title = new Label("PCM Desktop");
-        title.getStyleClass().addAll(Styles.TITLE_3);
-        title.setStyle("-fx-font-weight: bold;");
+        // Sidebar toggle button
+        Button sidebarToggleBtn = new Button();
+        sidebarToggleBtn.setGraphic(new FontIcon(Feather.MENU));
+        sidebarToggleBtn.getStyleClass().addAll(Styles.BUTTON_ICON, Styles.FLAT, "icon-btn-bordered");
+        sidebarToggleBtn.setOnAction(e -> toggleSidebar());
         
         // Spacer
         Region spacer = new Region();
@@ -74,15 +76,15 @@ public class MainView extends BorderPane {
         
         Button notificationsBtn = new Button();
         notificationsBtn.setGraphic(new FontIcon(Feather.BELL));
-        notificationsBtn.getStyleClass().addAll(Styles.BUTTON_ICON, Styles.FLAT);
+        notificationsBtn.getStyleClass().addAll(Styles.BUTTON_ICON, Styles.FLAT, "icon-btn-bordered");
         
         Button settingsBtn = new Button();
         settingsBtn.setGraphic(new FontIcon(Feather.SETTINGS));
-        settingsBtn.getStyleClass().addAll(Styles.BUTTON_ICON, Styles.FLAT);
+        settingsBtn.getStyleClass().addAll(Styles.BUTTON_ICON, Styles.FLAT, "icon-btn-bordered");
         
         MenuButton userMenu = new MenuButton();
         userMenu.setGraphic(new FontIcon(Feather.USER));
-        userMenu.getStyleClass().addAll(Styles.BUTTON_ICON, Styles.FLAT);
+        userMenu.getStyleClass().addAll(Styles.BUTTON_ICON, Styles.FLAT, "icon-btn-bordered");
         
         MenuItem profileItem = new MenuItem("Profile");
         MenuItem preferencesItem = new MenuItem("Preferences");
@@ -101,7 +103,7 @@ public class MainView extends BorderPane {
         );
         
         navbar.getChildren().addAll(
-            title,
+            sidebarToggleBtn,
             spacer,
             newScreenBtn,
             notificationsBtn,
@@ -110,6 +112,21 @@ public class MainView extends BorderPane {
         );
         
         return navbar;
+    }
+    
+    /**
+     * Toggles sidebar visibility
+     */
+    private void toggleSidebar() {
+        if (mainLayer != null) {
+            if (mainLayer.getLeft() != null) {
+                // Hide sidebar
+                mainLayer.setLeft(null);
+            } else {
+                // Show sidebar
+                mainLayer.setLeft(mainLayer.getSidebar());
+            }
+        }
     }
     
     /**
