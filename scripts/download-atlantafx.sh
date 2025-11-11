@@ -8,7 +8,7 @@ cd "$(dirname "$0")/.."
 echo "📦 Downloading AtlantaFX..."
 echo "================================"
 
-ATLANTAFX_VERSION="2.1.0"
+ATLANTAFX_VERSION="2.0.1"
 ATLANTAFX_JAR="atlantafx-base-${ATLANTAFX_VERSION}.jar"
 ATLANTAFX_URL="https://repo1.maven.org/maven2/io/github/mkpaz/atlantafx-base/${ATLANTAFX_VERSION}/${ATLANTAFX_JAR}"
 
