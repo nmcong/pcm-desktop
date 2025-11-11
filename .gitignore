@@ -69,3 +69,6 @@ hs_err_pid*
 *.swp
 *~
 
+# Sampler directory
+sampler/
+
