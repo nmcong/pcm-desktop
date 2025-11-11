@@ -28,23 +28,21 @@
                 <padding>
                     <Insets top="8" right="8" bottom="8" left="8"/>
                 </padding>
-                <StackPane styleClass="project-avatar, accent" minWidth="36" minHeight="36" maxWidth="36" maxHeight="36">
-                    <Label text="CS" style="-fx-text-fill: white; -fx-font-weight: bold;"/>
+                <StackPane style="-fx-background-color: -color-accent-emphasis; -fx-background-radius: 6px;" minWidth="36" minHeight="36" maxWidth="36" maxHeight="36">
+                    <Label text="CS" style="-fx-text-fill: white; -fx-font-size: 13px; -fx-font-weight: bold;"/>
                 </StackPane>
                 <VBox spacing="2" HBox.hgrow="ALWAYS">
                     <Label text="Customer Service" styleClass="text-bold"/>
                     <Label text="24 screens • Active" styleClass="text-small, text-muted"/>
                 </VBox>
             </HBox>
-            
-            <Separator/>
-            
+
             <HBox styleClass="list-item" onMouseClicked="#handleProject" spacing="12" alignment="CENTER_LEFT">
                 <padding>
                     <Insets top="8" right="8" bottom="8" left="8"/>
                 </padding>
-                <StackPane styleClass="project-avatar, success" minWidth="36" minHeight="36" maxWidth="36" maxHeight="36">
-                    <Label text="OM" style="-fx-text-fill: white; -fx-font-weight: bold;"/>
+                <StackPane style="-fx-background-color: -color-success-emphasis; -fx-background-radius: 6px;" minWidth="36" minHeight="36" maxWidth="36" maxHeight="36">
+                    <Label text="OM" style="-fx-text-fill: white; -fx-font-size: 13px; -fx-font-weight: bold;"/>
                 </StackPane>
                 <VBox spacing="2" HBox.hgrow="ALWAYS">
                     <Label text="Order Management" styleClass="text-bold"/>
@@ -77,7 +75,7 @@
                     <padding>
                         <Insets top="8" right="8" bottom="8" left="8"/>
                     </padding>
-                    <StackPane styleClass="project-avatar, accent" minWidth="32" minHeight="32" maxWidth="32" maxHeight="32">
+                    <StackPane style="-fx-background-color: -color-accent-emphasis; -fx-background-radius: 6px;" minWidth="32" minHeight="32" maxWidth="32" maxHeight="32">
                         <Label text="CS" style="-fx-text-fill: white; -fx-font-size: 11px; -fx-font-weight: bold;"/>
                     </StackPane>
                     <VBox spacing="2">
@@ -85,14 +83,12 @@
                         <Label text="24 screens" styleClass="text-small, text-muted"/>
                     </VBox>
                 </HBox>
-                
-                <Separator/>
-                
+
                 <HBox styleClass="list-item" onMouseClicked="#handleProject" spacing="12" alignment="CENTER_LEFT">
                     <padding>
                         <Insets top="8" right="8" bottom="8" left="8"/>
                     </padding>
-                    <StackPane styleClass="project-avatar, success" minWidth="32" minHeight="32" maxWidth="32" maxHeight="32">
+                    <StackPane style="-fx-background-color: -color-success-emphasis; -fx-background-radius: 6px;" minWidth="32" minHeight="32" maxWidth="32" maxHeight="32">
                         <Label text="OM" style="-fx-text-fill: white; -fx-font-size: 11px; -fx-font-weight: bold;"/>
                     </StackPane>
                     <VBox spacing="2">
@@ -100,14 +96,12 @@
                         <Label text="18 screens" styleClass="text-small, text-muted"/>
                     </VBox>
                 </HBox>
-                
-                <Separator/>
-                
+
                 <HBox styleClass="list-item" onMouseClicked="#handleProject" spacing="12" alignment="CENTER_LEFT">
                     <padding>
                         <Insets top="8" right="8" bottom="8" left="8"/>
                     </padding>
-                    <StackPane styleClass="project-avatar, warning" minWidth="32" minHeight="32" maxWidth="32" maxHeight="32">
+                    <StackPane style="-fx-background-color: -color-warning-emphasis; -fx-background-radius: 6px;" minWidth="32" minHeight="32" maxWidth="32" maxHeight="32">
                         <Label text="PG" style="-fx-text-fill: white; -fx-font-size: 11px; -fx-font-weight: bold;"/>
                     </StackPane>
                     <VBox spacing="2">
@@ -115,14 +109,12 @@
                         <Label text="12 screens" styleClass="text-small, text-muted"/>
                     </VBox>
                 </HBox>
-                
-                <Separator/>
-                
+
                 <HBox styleClass="list-item" onMouseClicked="#handleProject" spacing="12" alignment="CENTER_LEFT">
                     <padding>
                         <Insets top="8" right="8" bottom="8" left="8"/>
                     </padding>
-                    <StackPane styleClass="project-avatar, danger" minWidth="32" minHeight="32" maxWidth="32" maxHeight="32">
+                    <StackPane style="-fx-background-color: -color-accent-emphasis; -fx-background-radius: 6px;" minWidth="32" minHeight="32" maxWidth="32" maxHeight="32">
                         <Label text="IA" style="-fx-text-fill: white; -fx-font-size: 11px; -fx-font-weight: bold;"/>
                     </StackPane>
                     <VBox spacing="2">
@@ -130,9 +122,7 @@
                         <Label text="15 screens" styleClass="text-small, text-muted"/>
                     </VBox>
                 </HBox>
-                
-                <Separator/>
-                
+
                 <HBox styleClass="list-item" onMouseClicked="#handleProject" spacing="12" alignment="CENTER_LEFT">
                     <padding>
                         <Insets top="8" right="8" bottom="8" left="8"/>
