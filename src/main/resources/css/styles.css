@@ -257,6 +257,22 @@
 }
 
 /* ================================================================
+   MAIN VIEW LAYOUT STYLES  
+   ================================================================ */
+
+/* Navbar always at top */
+.navbar {
+    -fx-background-color: -color-bg-default;
+    -fx-border-color: -color-border-default;
+    -fx-border-width: 0 0 1px 0;
+}
+
+/* AI Chat page specific styling */
+.ai-chat-page {
+    -fx-background-color: -color-bg-default;
+}
+
+/* ================================================================
    PAGE SPECIFIC STYLES
    ================================================================ */
 
@@ -383,6 +399,8 @@
 /* Main Chat Area */
 .main-chat-area {
     -fx-background-color: -color-bg-default;
+    -fx-max-width: 768px;
+    -fx-alignment: center;
 }
 
 .chat-header {

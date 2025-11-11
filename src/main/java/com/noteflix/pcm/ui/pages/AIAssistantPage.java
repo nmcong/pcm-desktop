@@ -39,6 +39,11 @@ public class AIAssistantPage extends BasePage {
             new FontIcon(Feather.MESSAGE_CIRCLE)
         );
         initializeChatData();
+        
+        // Override default padding for full-screen chat
+        setPadding(new Insets(0));
+        setSpacing(0);
+        getStyleClass().add("ai-chat-page");
     }
     
     private void initializeChatData() {
@@ -67,6 +72,7 @@ public class AIAssistantPage extends BasePage {
     protected VBox createMainContent() {
         VBox mainContent = new VBox();
         mainContent.getStyleClass().add("ai-chat-main");
+        mainContent.setPadding(new Insets(0)); // Remove default padding for full-screen chat
         VBox.setVgrow(mainContent, Priority.ALWAYS);
         
         // Create ChatGPT-like layout: sidebar + main chat area
@@ -76,6 +82,14 @@ public class AIAssistantPage extends BasePage {
         mainContent.getChildren().add(chatLayout);
         return mainContent;
     }
+    
+    // Override to customize the AI Chat layout (no standard page header)
+    @Override
+    protected VBox createPageHeader() {
+        // AI Chat doesn't need the standard page header - it has its own chat header
+        return null;
+    }
+    
     
     private HBox createChatLayout() {
         HBox layout = new HBox();
@@ -199,8 +213,14 @@ public class AIAssistantPage extends BasePage {
     }
     
     private VBox createMainChatArea() {
+        // Wrapper to center content with max width
+        HBox wrapper = new HBox();
+        wrapper.setAlignment(Pos.CENTER);
+        HBox.setHgrow(wrapper, Priority.ALWAYS);
+        
         VBox mainArea = new VBox();
         mainArea.getStyleClass().add("main-chat-area");
+        mainArea.setMaxWidth(768);
         
         // Chat header
         HBox chatHeader = createChatHeader();
@@ -225,7 +245,12 @@ public class AIAssistantPage extends BasePage {
         // Load current session messages
         loadCurrentSessionMessages();
         
-        return mainArea;
+        // Wrap main area to center it
+        VBox centeredWrapper = new VBox(mainArea);
+        centeredWrapper.setAlignment(Pos.CENTER);
+        HBox.setHgrow(centeredWrapper, Priority.ALWAYS);
+        
+        return centeredWrapper;
     }
     
     private HBox createChatHeader() {

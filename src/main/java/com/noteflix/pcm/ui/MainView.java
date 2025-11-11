@@ -26,26 +26,17 @@ public class MainView extends BorderPane {
         
         getStyleClass().add("root");
         
-        // Build UI following MainLayer pattern with navbar in content area
+        // Build UI with navbar always at top and MainLayer below
+        setTop(createNavbar());
         setCenter(createMainLayer());
     }
     
     /**
      * Creates main layer with 2-part division (following AtlantaFX Sampler pattern)
-     * Navbar is now part of the content area, not top-level
+     * MainLayer now handles page navigation directly
      */
     private MainLayer createMainLayer() {
         mainLayer = new MainLayer();
-        
-        // Create content area with navbar + demo content
-        VBox contentWithNavbar = new VBox();
-        contentWithNavbar.getChildren().addAll(
-            createNavbar(),     // Navbar is now part of content area
-            createDemoContent() // Main content below navbar
-        );
-        
-        mainLayer.setMainContent(contentWithNavbar);
-        
         return mainLayer;
     }
     

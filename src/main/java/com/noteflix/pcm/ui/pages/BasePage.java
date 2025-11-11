@@ -47,8 +47,11 @@ public abstract class BasePage extends VBox {
      * Build the page content - template method pattern
      */
     private void buildContent() {
-        // Header section
-        getChildren().add(createPageHeader());
+        // Header section (if provided)
+        var header = createPageHeader();
+        if (header != null) {
+            getChildren().add(header);
+        }
         
         // Main content - implemented by subclasses
         getChildren().add(createMainContent());
