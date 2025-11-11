@@ -694,3 +694,108 @@
     -fx-text-fill: -color-accent-emphasis;
     -fx-font-weight: bold;
 }
+
+/* ================================================================
+   UNIVERSAL TEXT COMPONENT
+   ================================================================ */
+.universal-text-component {
+    -fx-background-color: -color-bg-default;
+    -fx-border-color: -color-border-default;
+    -fx-border-radius: 6px;
+    -fx-background-radius: 6px;
+}
+
+.text-component-toolbar {
+    -fx-background-color: -color-bg-subtle;
+    -fx-border-color: -color-border-default;
+    -fx-border-width: 0 0 1px 0;
+    -fx-padding: 8px 12px;
+}
+
+.text-content-area {
+    -fx-background-color: -color-bg-default;
+}
+
+.text-editor {
+    -fx-background-color: -color-bg-default;
+    -fx-text-fill: -color-fg-default;
+    -fx-border-color: transparent;
+    -fx-background-insets: 0;
+    -fx-border-insets: 0;
+    -fx-font-family: "JetBrains Mono", "Consolas", "Monaco", "Lucida Console", monospace;
+    -fx-font-size: 13px;
+    -fx-wrap-text: true;
+}
+
+.text-editor:focused {
+    -fx-border-color: -color-accent-emphasis;
+    -fx-border-width: 2px;
+}
+
+.text-split-pane {
+    -fx-background-color: -color-bg-default;
+}
+
+.text-split-pane > .split-pane-divider {
+    -fx-background-color: -color-border-default;
+    -fx-padding: 0 1px 0 1px;
+}
+
+.editor-pane {
+    -fx-background-color: -color-bg-default;
+    -fx-padding: 0;
+}
+
+.view-pane {
+    -fx-background-color: -color-bg-default;
+    -fx-padding: 0;
+}
+
+/* Markdown Container */
+.markdown-container {
+    -fx-background-color: -color-bg-default;
+}
+
+.markdown-scroll {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-padding: 0;
+}
+
+/* Plain Text Renderer */
+.plain-text-container {
+    -fx-background-color: -color-bg-default;
+    -fx-spacing: 2px;
+}
+
+.plain-text-line {
+    -fx-text-fill: -color-fg-default;
+    -fx-font-size: 13px;
+    -fx-wrap-text: true;
+}
+
+.plain-text-placeholder {
+    -fx-text-fill: -color-fg-muted;
+    -fx-font-style: italic;
+}
+
+.plain-text-scroll {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+/* Demo Page Controls */
+.demo-controls {
+    -fx-background-color: -color-bg-subtle;
+    -fx-border-color: -color-border-default;
+    -fx-border-radius: 6px;
+    -fx-background-radius: 6px;
+    -fx-border-width: 1px;
+}
+
+/* Error handling */
+.error-label {
+    -fx-text-fill: -color-danger-emphasis;
+    -fx-font-style: italic;
+    -fx-padding: 20px;
+}

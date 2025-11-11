@@ -4,6 +4,7 @@ import atlantafx.base.theme.NordDark;
 import atlantafx.base.theme.NordLight;
 import com.noteflix.pcm.core.events.ThemeChangeListener;
 import javafx.application.Application;
+import javafx.scene.Scene;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
@@ -19,6 +20,7 @@ public class ThemeManager {
     private static ThemeManager instance;
     private boolean isDarkTheme = false;
     private final List<ThemeChangeListener> listeners = new ArrayList<>();
+    private Scene mainScene; // Reference to main scene for CSS management
     
     private ThemeManager() {}
     
@@ -62,6 +64,15 @@ public class ThemeManager {
     }
     
     /**
+     * Sets the main scene reference for CSS management
+     */
+    public void setMainScene(Scene scene) {
+        this.mainScene = scene;
+        // Apply theme to the scene immediately
+        applyThemeToScene();
+    }
+    
+    /**
      * Applies the current theme to the application
      */
     private void applyTheme() {
@@ -74,11 +85,60 @@ public class ThemeManager {
                 Application.setUserAgentStylesheet(new NordLight().getUserAgentStylesheet());
             }
             
+            // Apply theme-specific CSS to scene
+            applyThemeToScene();
+            
             // Notify all listeners about theme change
             notifyListeners();
         } catch (Exception e) {
             log.error("Error applying theme", e);
             throw new RuntimeException("Failed to apply theme", e);
+        }
+    }
+    
+    /**
+     * Applies theme-specific CSS files to the main scene
+     */
+    private void applyThemeToScene() {
+        if (mainScene == null) {
+            log.warn("Main scene not set, cannot apply custom CSS");
+            return;
+        }
+        
+        try {
+            // Clear existing stylesheets (except user agent stylesheet)
+            mainScene.getStylesheets().clear();
+            
+            // Always add the main styles
+            if (getClass().getResource("/css/styles.css") != null) {
+                String mainCssUrl = getClass().getResource("/css/styles.css").toExternalForm();
+                mainScene.getStylesheets().add(mainCssUrl);
+                log.info("Applied main CSS: {}", mainCssUrl);
+            } else {
+                log.warn("Main CSS file not found: /css/styles.css");
+            }
+            
+            // Add theme-specific CSS
+            if (isDarkTheme) {
+                if (getClass().getResource("/css/ai-assistant-dark.css") != null) {
+                    String darkCssUrl = getClass().getResource("/css/ai-assistant-dark.css").toExternalForm();
+                    mainScene.getStylesheets().add(darkCssUrl);
+                    log.info("Applied dark theme CSS: {}", darkCssUrl);
+                } else {
+                    log.warn("Dark theme CSS file not found: /css/ai-assistant-dark.css");
+                }
+            }
+            // Note: You can add light-specific CSS here if needed
+            // else {
+            //     if (getClass().getResource("/css/ai-assistant-light.css") != null) {
+            //         String lightCssUrl = getClass().getResource("/css/ai-assistant-light.css").toExternalForm();
+            //         mainScene.getStylesheets().add(lightCssUrl);
+            //         log.info("Applied light theme CSS: {}", lightCssUrl);
+            //     }
+            // }
+            
+        } catch (Exception e) {
+            log.error("Failed to apply theme CSS to scene", e);
         }
     }
     

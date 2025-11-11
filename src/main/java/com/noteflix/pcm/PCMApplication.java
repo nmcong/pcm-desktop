@@ -2,6 +2,7 @@ package com.noteflix.pcm;
 
 import atlantafx.base.theme.PrimerLight;
 import com.noteflix.pcm.core.constants.AppConstants;
+import com.noteflix.pcm.core.theme.ThemeManager;
 import com.noteflix.pcm.ui.MainController;
 import com.noteflix.pcm.ui.MainView;
 import javafx.application.Application;
@@ -46,9 +47,9 @@ public class PCMApplication extends Application {
         try {
             log.info("Initializing application window...");
             
-            // Apply AtlantaFX theme (modern GitHub-inspired theme)
-            Application.setUserAgentStylesheet(new PrimerLight().getUserAgentStylesheet());
-            log.info("✨ AtlantaFX PrimerLight theme applied");
+            // Initialize ThemeManager with default light theme
+            ThemeManager themeManager = ThemeManager.getInstance();
+            log.info("✨ ThemeManager initialized");
 
             // Create controller and view (Java-based, no FXML)
             MainController controller = new MainController();
@@ -58,11 +59,10 @@ public class PCMApplication extends Application {
             // Create scene
             Scene scene = new Scene(mainView, AppConstants.DEFAULT_WINDOW_WIDTH, AppConstants.DEFAULT_WINDOW_HEIGHT);
 
-            // Load custom CSS (this will override/extend AtlantaFX theme)
-            String css = Objects.requireNonNull(
-                getClass().getResource(AppConstants.CSS_STYLES)
-            ).toExternalForm();
-            scene.getStylesheets().add(css);
+            // Set scene reference in ThemeManager for CSS management
+            themeManager.setMainScene(scene);
+            themeManager.setTheme(false); // Start with light theme
+            log.info("✨ Theme system initialized with CSS management");
 
             // Configure stage
             primaryStage.setTitle(AppConstants.APP_TITLE);

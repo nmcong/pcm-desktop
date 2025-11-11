@@ -1,0 +1,174 @@
+package com.noteflix.pcm.ui.components.text.renderers;
+
+import com.noteflix.pcm.ui.components.text.TextContentType;
+import javafx.scene.Node;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.layout.VBox;
+
+import io.github.raghultech.javafx.markdownpreview.MarkdownPreview;
+import io.github.raghultech.javafx.markdownpreview.MarkdownViewMode;
+
+/**
+ * Renderer for Markdown content using the JavaFX Markdown Preview library.
+ * 
+ * This renderer converts Markdown text into rendered HTML and displays it
+ * in a JavaFX WebView component with proper styling and theme support.
+ */
+public class MarkdownRenderer implements TextRenderer {
+    
+    private MarkdownPreview markdownPreview;
+    private boolean isDarkTheme = false;
+    
+    public MarkdownRenderer() {
+        initializeRenderer();
+    }
+    
+    private void initializeRenderer() {
+        try {
+            markdownPreview = new MarkdownPreview();
+            markdownPreview.setViewMode(MarkdownViewMode.PREVIEW_ONLY);
+            
+            // Configure markdown preview settings
+            markdownPreview.setLineWrapping(true);
+            markdownPreview.setCopyButtonEnabled(true);
+            
+        } catch (Exception e) {
+            System.err.println("Failed to initialize MarkdownRenderer: " + e.getMessage());
+            markdownPreview = null;
+        }
+    }
+    
+    @Override
+    public Node render(String content, TextContentType contentType) throws RenderException {
+        if (markdownPreview == null) {
+            throw new RenderException("MarkdownPreview not available. Please check if javafx-markdown-preview library is in classpath.");
+        }
+        
+        if (content == null) {
+            content = "";
+        }
+        
+        try {
+            // Set the markdown content
+            markdownPreview.showMarkdown(content);
+            
+            // Apply theme
+            applyTheme();
+            
+            // Create container
+            VBox container = new VBox();
+            container.getStyleClass().add("markdown-container");
+            
+            // Get the rendered view
+            Node renderedView = markdownPreview.getMarkdownView();
+            
+            // Wrap in ScrollPane for better scrolling experience
+            ScrollPane scrollPane = new ScrollPane(renderedView);
+            scrollPane.setFitToWidth(true);
+            scrollPane.setFitToHeight(true);
+            scrollPane.getStyleClass().add("markdown-scroll");
+            scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
+            scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+            
+            container.getChildren().add(scrollPane);
+            
+            return container;
+            
+        } catch (Exception e) {
+            throw new RenderException("Failed to render markdown content", e);
+        }
+    }
+    
+    @Override
+    public boolean supports(TextContentType contentType) {
+        return contentType == TextContentType.MARKDOWN;
+    }
+    
+    @Override
+    public String getRendererName() {
+        return "Markdown Renderer";
+    }
+    
+    @Override
+    public boolean supportsLiveUpdate() {
+        return true;
+    }
+    
+    @Override
+    public Node updateContent(Node node, String newContent, TextContentType contentType) 
+            throws RenderException {
+        if (markdownPreview != null && newContent != null) {
+            try {
+                markdownPreview.showMarkdown(newContent);
+                return node; // Return the same node as content is updated in place
+            } catch (Exception e) {
+                throw new RenderException("Failed to update markdown content", e);
+            }
+        }
+        return render(newContent, contentType);
+    }
+    
+    /**
+     * Set the theme for the markdown renderer
+     * 
+     * @param darkTheme true for dark theme, false for light theme
+     */
+    public void setDarkTheme(boolean darkTheme) {
+        this.isDarkTheme = darkTheme;
+        applyTheme();
+    }
+    
+    private void applyTheme() {
+        if (markdownPreview != null) {
+            try {
+                if (isDarkTheme) {
+                    markdownPreview.setDarkTheme(true);
+                } else {
+                    markdownPreview.setDarkTheme(false);
+                }
+            } catch (Exception e) {
+                System.err.println("Failed to apply theme: " + e.getMessage());
+            }
+        }
+    }
+    
+    /**
+     * Export the current markdown content to HTML
+     * 
+     * @return HTML string of the rendered content
+     */
+    public String exportToHtml() {
+        if (markdownPreview != null) {
+            try {
+                return markdownPreview.getRenderedHtml();
+            } catch (Exception e) {
+                System.err.println("Failed to export to HTML: " + e.getMessage());
+            }
+        }
+        return null;
+    }
+    
+    /**
+     * Check if copy buttons are enabled for code blocks
+     */
+    public boolean isCopyButtonEnabled() {
+        return markdownPreview != null && markdownPreview.isCopyButtonEnabled();
+    }
+    
+    /**
+     * Enable or disable copy buttons for code blocks
+     */
+    public void setCopyButtonEnabled(boolean enabled) {
+        if (markdownPreview != null) {
+            markdownPreview.setCopyButtonEnabled(enabled);
+        }
+    }
+    
+    @Override
+    public void dispose() {
+        if (markdownPreview != null) {
+            // Clean up resources if needed
+            markdownPreview = null;
+        }
+    }
+}

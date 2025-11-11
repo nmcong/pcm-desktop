@@ -135,6 +135,8 @@ public class SidebarView extends VBox implements ThemeChangeListener {
         menu.getChildren().addAll(
             createAIAssistantMenuItem(),
             createMenuItem("Knowledge Base", Feather.BOOK_OPEN, this::handleKnowledgeBase),
+            createMenuItem("Text Component", Feather.FILE_TEXT, this::handleTextComponent),
+            createMenuItem("CSS Theme Test", Feather.SETTINGS, this::handleCSSTest),
             createMenuItem("Batch Jobs", Feather.CLOCK, this::handleBatchJobs),
             createMenuItem("DB Objects", Feather.DATABASE, this::handleDBObjects),
             createMenuItem("Settings", Feather.SLIDERS, this::handleSettingsMenu)
@@ -377,6 +379,35 @@ public class SidebarView extends VBox implements ThemeChangeListener {
                 "• Best practices\n" +
                 "• Design patterns\n" +
                 "• Technical notes");
+        }
+    }
+    
+    private void handleTextComponent() {
+        if (pageNavigator != null) {
+            pageNavigator.navigateToPage(UniversalTextDemoPage.class);
+        } else {
+            log.warn("PageNavigator not set - showing fallback dialog");
+            showInfo("Universal Text Component", 
+                "Demo of Universal Text Component:\n\n" +
+                "• Markdown rendering\n" +
+                "• Syntax highlighting\n" +
+                "• Multiple view modes\n" +
+                "• Live preview\n" +
+                "• Theme support");
+        }
+    }
+    
+    private void handleCSSTest() {
+        if (pageNavigator != null) {
+            pageNavigator.navigateToPage(CSSTestPage.class);
+        } else {
+            log.warn("PageNavigator not set - showing fallback dialog");
+            showInfo("CSS Theme Test", 
+                "Test CSS theme system:\n\n" +
+                "• Light/Dark theme switching\n" +
+                "• ai-assistant-dark.css application\n" +
+                "• Color variables testing\n" +
+                "• Theme-aware components");
         }
     }
     
