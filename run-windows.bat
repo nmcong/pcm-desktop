@@ -32,6 +32,17 @@ if not exist "lib\javafx\javafx.base.jar" (
 
 echo [INFO] JavaFX libraries found!
 echo.
+
+REM Copy resources to output directory
+echo [INFO] Copying resources...
+if not exist "out\fxml" mkdir out\fxml
+if not exist "out\css" mkdir out\css
+if not exist "out\images" mkdir out\images
+xcopy /Y src\main\resources\fxml\*.fxml out\fxml\ >nul 2>&1
+xcopy /Y src\main\resources\css\*.css out\css\ >nul 2>&1
+xcopy /Y src\main\resources\logback.xml out\ >nul 2>&1
+echo [INFO] Resources copied!
+echo.
 echo [INFO] Starting PCM Application...
 echo.
 

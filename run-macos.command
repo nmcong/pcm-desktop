@@ -27,6 +27,15 @@ if [ ! -d "out" ] || [ -z "$(ls -A out 2>/dev/null)" ]; then
     echo ""
 fi
 
+# Copy resources to output directory
+echo "📦 Copying resources..."
+mkdir -p out/fxml out/css out/images
+cp src/main/resources/fxml/*.fxml out/fxml/ 2>/dev/null || true
+cp src/main/resources/css/*.css out/css/ 2>/dev/null || true
+cp src/main/resources/logback.xml out/ 2>/dev/null || true
+echo "✅ Resources copied!"
+echo ""
+
 # Run application
 java --module-path lib/javafx \
   --add-modules javafx.controls,javafx.fxml,javafx.web,javafx.media \
