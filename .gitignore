@@ -72,3 +72,6 @@ hs_err_pid*
 # Sampler directory
 sampler/
 
+# Claude AI directory
+.claude/
+
