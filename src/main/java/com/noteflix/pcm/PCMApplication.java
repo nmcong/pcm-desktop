@@ -34,7 +34,7 @@ import java.util.Objects;
 @Slf4j
 public class PCMApplication extends Application {
 
-    private static final String APP_TITLE = "PCM Desktop - AI-Powered System Analysis";
+    private static final String APP_TITLE = "PCM - AI-Powered System Analysis";
     private static final int WINDOW_WIDTH = 1400;
     private static final int WINDOW_HEIGHT = 900;
 

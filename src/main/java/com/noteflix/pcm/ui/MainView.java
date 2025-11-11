@@ -19,8 +19,7 @@ import org.kordamp.ikonli.javafx.FontIcon;
 public class MainView extends BorderPane {
 
     private final MainController controller;
-    private MainLayer mainLayer;
-    
+
     public MainView(MainController controller) {
         this.controller = controller;
         
@@ -35,7 +34,7 @@ public class MainView extends BorderPane {
      * Navbar is now part of the content area, not top-level
      */
     private MainLayer createMainLayer() {
-        mainLayer = new MainLayer();
+        MainLayer mainLayer = new MainLayer();
         
         // Create content area with navbar + demo content
         VBox contentWithNavbar = new VBox();

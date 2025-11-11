@@ -24,6 +24,7 @@ import java.util.Objects;
 public class SidebarView extends VBox {
     
     private boolean isDarkTheme = false;
+    private ImageView appIcon;
     
     public SidebarView() {
         super(16);
@@ -50,9 +51,8 @@ public class SidebarView extends VBox {
         VBox headerSection = new VBox(20);
         headerSection.getStyleClass().add("header");
         
-        // Logo section with app icon
-        Image iconImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/images/icons/app-icon.png")));
-        ImageView appIcon = new ImageView(iconImage);
+        // Logo section with theme-aware brain-circuit icon
+        updateAppIcon();
         appIcon.setFitWidth(32);
         appIcon.setFitHeight(32);
         appIcon.setPreserveRatio(true);
@@ -117,6 +117,7 @@ public class SidebarView extends VBox {
         menu.setPadding(new Insets(8));
         
         menu.getChildren().addAll(
+            createAIAssistantMenuItem(),
             createMenuItem("Knowledge Base", Feather.BOOK_OPEN, this::handleKnowledgeBase),
             createMenuItem("Batch Jobs", Feather.CLOCK, this::handleBatchJobs),
             createMenuItem("DB Objects", Feather.DATABASE, this::handleDBObjects),
@@ -124,6 +125,34 @@ public class SidebarView extends VBox {
         );
         
         return menu;
+    }
+    
+    /**
+     * Creates AI Assistant menu item with theme-aware bot icon
+     */
+    private Button createAIAssistantMenuItem() {
+        // Theme-aware bot icon
+        String iconPath = isDarkTheme ? "/images/icons/bot_dark.png" : "/images/icons/bot.png";
+        Image botImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream(iconPath)));
+        ImageView botIcon = new ImageView(botImage);
+        botIcon.setFitWidth(20);
+        botIcon.setFitHeight(20);
+        botIcon.setPreserveRatio(true);
+        botIcon.setSmooth(true);
+        
+        Label label = new Label("AI Assistant");
+        
+        HBox content = new HBox(12, botIcon, label);
+        content.setAlignment(Pos.CENTER_LEFT);
+        
+        Button button = new Button();
+        button.setGraphic(content);
+        button.setMaxWidth(Double.MAX_VALUE);
+        button.getStyleClass().addAll(Styles.FLAT, Styles.LEFT_PILL, "ai-assistant-btn");
+        button.setAlignment(Pos.CENTER_LEFT);
+        button.setOnAction(e -> handleAIAssistant());
+        
+        return button;
     }
     
     /**
@@ -297,8 +326,8 @@ public class SidebarView extends VBox {
                 Application.setUserAgentStylesheet(new NordLight().getUserAgentStylesheet());
             }
             
-            // Update theme button icon
-            updateThemeButton();
+            // Update all theme-dependent icons
+            updateAllIcons();
             
         } catch (Exception e) {
             log.error("Error switching theme", e);
@@ -319,6 +348,66 @@ public class SidebarView extends VBox {
         } catch (Exception e) {
             log.warn("Could not update theme button icon", e);
         }
+    }
+    
+    /**
+     * Updates app icon based on current theme
+     */
+    private void updateAppIcon() {
+        try {
+            String iconPath = isDarkTheme ? "/images/icons/brain-circuit_dark.png" : "/images/icons/brain-circuit.png";
+            Image iconImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream(iconPath)));
+            if (appIcon == null) {
+                appIcon = new ImageView();
+            }
+            appIcon.setImage(iconImage);
+        } catch (Exception e) {
+            log.warn("Could not load brain-circuit icon, falling back to app-icon.png", e);
+            // Fallback to original app-icon if brain-circuit images not found
+            try {
+                Image fallbackImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/images/icons/app-icon.png")));
+                if (appIcon == null) {
+                    appIcon = new ImageView();
+                }
+                appIcon.setImage(fallbackImage);
+            } catch (Exception ex) {
+                log.error("Could not load any app icon", ex);
+            }
+        }
+    }
+    
+    /**
+     * Updates all theme-dependent icons
+     */
+    private void updateAllIcons() {
+        updateAppIcon();
+        updateThemeButton();
+        
+        // Update AI Assistant bot icon
+        try {
+            VBox mainMenu = (VBox) getChildren().get(1); // Second child is main menu
+            Button aiButton = (Button) mainMenu.getChildren().get(0); // First item is AI Assistant
+            HBox content = (HBox) aiButton.getGraphic();
+            ImageView botIcon = (ImageView) content.getChildren().get(0);
+            
+            String iconPath = isDarkTheme ? "/images/icons/bot_dark.png" : "/images/icons/bot.png";
+            Image botImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream(iconPath)));
+            botIcon.setImage(botImage);
+        } catch (Exception e) {
+            log.warn("Could not update AI Assistant bot icon", e);
+        }
+    }
+    
+    private void handleAIAssistant() {
+        log.info("Opening AI Assistant");
+        showInfo("AI Assistant", 
+            "AI-Powered System Analysis Assistant:\n\n" +
+            "• Natural language queries\n" +
+            "• Code analysis and suggestions\n" +
+            "• Database insights\n" +
+            "• Workflow optimization\n" +
+            "• Business process analysis\n\n" +
+            "Ask me anything about your system!");
     }
     
     private void handleKnowledgeBase() {
