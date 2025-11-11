@@ -15,8 +15,6 @@ import org.kordamp.ikonli.javafx.FontIcon;
  */
 @Slf4j
 public class SidebarView extends VBox {
-
-    private TextField searchField;
     
     public SidebarView() {
         super(16);
@@ -30,7 +28,6 @@ public class SidebarView extends VBox {
         // Build sidebar components
         getChildren().addAll(
             createHeader(),
-            createSearchButton(),
             createMainMenu(),
             createFavoritesSection(),
             createProjectsSection(),
@@ -39,49 +36,65 @@ public class SidebarView extends VBox {
     }
     
     /**
-     * Creates the header with app title
+     * Creates the header with app title and theme switch (AtlantaFX Sampler pattern)
      */
-    private HBox createHeader() {
+    private VBox createHeader() {
+        VBox headerSection = new VBox(20);
+        headerSection.getStyleClass().add("header");
+        
+        // Logo section
+        FontIcon appIcon = new FontIcon(Feather.LAYERS);
+        appIcon.setIconSize(32);
+        appIcon.setStyle("-fx-icon-color: -color-accent-emphasis;");
+        
         Label titleLabel = new Label("PCM Desktop");
-        titleLabel.getStyleClass().addAll(Styles.TITLE_2);
-        titleLabel.setStyle("-fx-font-weight: bold;");
+        titleLabel.getStyleClass().add(Styles.TITLE_3);
         
-        Button menuButton = new Button();
-        menuButton.setGraphic(new FontIcon(Feather.MENU));
-        menuButton.getStyleClass().addAll(Styles.BUTTON_ICON, Styles.FLAT);
+        Button themeButton = new Button();
+        themeButton.setGraphic(new FontIcon(Feather.SUN));
+        themeButton.getStyleClass().addAll(Styles.BUTTON_ICON, Styles.FLAT, Styles.SMALL);
+        themeButton.setTooltip(new Tooltip("Switch Theme"));
+        themeButton.setOnAction(e -> handleThemeSwitch());
         
-        HBox header = new HBox(12, titleLabel, createSpacer(), menuButton);
-        header.setAlignment(Pos.CENTER_LEFT);
+        HBox logoSection = new HBox(10, appIcon, titleLabel, createSpacer(), themeButton);
+        logoSection.setAlignment(Pos.CENTER_LEFT);
+        logoSection.getStyleClass().add("logo");
         
-        return header;
+        headerSection.getChildren().addAll(logoSection, createSearchButton());
+        return headerSection;
     }
     
     /**
-     * Creates search button/field following AtlantaFX Sampler pattern
+     * Creates search button following AtlantaFX Sampler pattern
      */
-    private HBox createSearchButton() {
-        // Search icon
+    private Button createSearchButton() {
+        // Search label with icon
         FontIcon searchIcon = new FontIcon(Feather.SEARCH);
-        searchIcon.getStyleClass().add("text-muted");
-        searchIcon.setIconSize(16);
+        searchIcon.setIconSize(14);
         
-        // Search field
-        searchField = new TextField();
-        searchField.setPromptText("Search projects...");
-        searchField.getStyleClass().add(Styles.ROUNDED);
-        HBox.setHgrow(searchField, Priority.ALWAYS);
+        Label searchLabel = new Label("Search");
+        searchLabel.setGraphic(searchIcon);
+        searchLabel.getStyleClass().add("search-label");
+        searchLabel.setGraphicTextGap(8);
         
-        // Search event handler
-        searchField.setOnAction(e -> handleSearch(searchField.getText()));
+        // Keyboard hint
+        Label hintLabel = new Label("Press /");
+        hintLabel.getStyleClass().addAll("hint", "text-muted", "text-small");
         
-        // Container with icon and field
-        HBox searchContainer = new HBox(8, searchIcon, searchField);
-        searchContainer.setAlignment(Pos.CENTER_LEFT);
-        searchContainer.getStyleClass().add("search-box");
-        searchContainer.setPadding(new Insets(8, 12, 8, 12));
-        searchContainer.setStyle("-fx-background-color: -color-bg-subtle; -fx-background-radius: 6px;");
+        // Content container
+        HBox content = new HBox(12, searchLabel, createSpacer(), hintLabel);
+        content.setAlignment(Pos.CENTER_LEFT);
+        content.getStyleClass().add("content");
         
-        return searchContainer;
+        // Search button
+        Button searchButton = new Button();
+        searchButton.setGraphic(content);
+        searchButton.getStyleClass().add("search-button");
+        searchButton.setMaxWidth(Double.MAX_VALUE);
+        searchButton.setAlignment(Pos.CENTER_LEFT);
+        searchButton.setOnAction(e -> openSearchDialog());
+        
+        return searchButton;
     }
     
     /**
@@ -271,9 +284,26 @@ public class SidebarView extends VBox {
     
     // Event handlers
     
-    private void handleSearch(String query) {
-        log.info("Search: {}", query);
-        showInfo("Search", "Searching for: " + query);
+    private void openSearchDialog() {
+        log.info("Opening Search Dialog");
+        showInfo("Search", 
+            "Search across your projects:\n\n" +
+            "• Find projects by name\n" +
+            "• Search in descriptions\n" +
+            "• Filter by status\n" +
+            "• Quick navigation\n\n" +
+            "Tip: Use keyboard shortcut '/' to open search quickly");
+    }
+    
+    private void handleThemeSwitch() {
+        log.info("Switching Theme");
+        showInfo("Theme Switch", 
+            "Theme customization:\n\n" +
+            "• Light mode\n" +
+            "• Dark mode\n" +
+            "• Auto (system)\n" +
+            "• Custom themes\n\n" +
+            "Current theme will be applied globally");
     }
     
     private void handleKnowledgeBase() {
