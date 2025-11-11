@@ -12,10 +12,53 @@
         <Insets top="16" right="12" bottom="16" left="12"/>
     </padding>
     
+    <!-- Main Menu -->
+    <VBox spacing="4" styleClass="card">
+        <padding>
+            <Insets top="8" right="8" bottom="8" left="8"/>
+        </padding>
+        
+        <Button alignment="CENTER_LEFT" maxWidth="Infinity" styleClass="flat, left-pill" onMouseClicked="#handleKnowledgeBase">
+            <graphic>
+                <HBox spacing="12" alignment="CENTER_LEFT">
+                    <FontIcon iconLiteral="fth-book-open" iconSize="16"/>
+                    <Label text="Knowledge Base"/>
+                </HBox>
+            </graphic>
+        </Button>
+        
+        <Button alignment="CENTER_LEFT" maxWidth="Infinity" styleClass="flat, left-pill" onMouseClicked="#handleBatchJobs">
+            <graphic>
+                <HBox spacing="12" alignment="CENTER_LEFT">
+                    <FontIcon iconLiteral="fth-clock" iconSize="16"/>
+                    <Label text="Batch Jobs"/>
+                </HBox>
+            </graphic>
+        </Button>
+        
+        <Button alignment="CENTER_LEFT" maxWidth="Infinity" styleClass="flat, left-pill" onMouseClicked="#handleDBObjects">
+            <graphic>
+                <HBox spacing="12" alignment="CENTER_LEFT">
+                    <FontIcon iconLiteral="fth-database" iconSize="16"/>
+                    <Label text="DB Objects"/>
+                </HBox>
+            </graphic>
+        </Button>
+        
+        <Button alignment="CENTER_LEFT" maxWidth="Infinity" styleClass="flat, left-pill" onMouseClicked="#handleSettingsMenu">
+            <graphic>
+                <HBox spacing="12" alignment="CENTER_LEFT">
+                    <FontIcon iconLiteral="fth-sliders" iconSize="16"/>
+                    <Label text="Settings"/>
+                </HBox>
+            </graphic>
+        </Button>
+    </VBox>
+    
     <!-- Favorites Section -->
     <VBox spacing="8">
         <HBox alignment="CENTER_LEFT" spacing="8">
-            <FontIcon iconLiteral="fth-star" iconSize="16" style="-fx-icon-color: -color-warning-emphasis;"/>
+            <FontIcon iconLiteral="fth-star" iconSize="16"/>
             <Label text="ƯU THÍCH" styleClass="title-4"/>
             <Region HBox.hgrow="ALWAYS"/>
         </HBox>
@@ -56,7 +99,7 @@
     <!-- All Projects Section -->
     <VBox spacing="8" VBox.vgrow="ALWAYS">
         <HBox alignment="CENTER_LEFT" spacing="8">
-            <FontIcon iconLiteral="fth-folder" iconSize="16" style="-fx-icon-color: -color-fg-default;"/>
+            <FontIcon iconLiteral="fth-folder" iconSize="16"/>
             <Label text="DỰ ÁN" styleClass="title-4"/>
             <Region HBox.hgrow="ALWAYS"/>
             <Button onAction="#handleNewProject" styleClass="flat, small">

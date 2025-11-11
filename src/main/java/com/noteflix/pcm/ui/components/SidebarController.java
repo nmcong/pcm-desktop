@@ -37,6 +37,50 @@ public class SidebarController implements Initializable {
     }
 
     @FXML
+    private void handleKnowledgeBase(MouseEvent event) {
+        log.info("Opening Knowledge Base");
+        showInfo("Knowledge Base", 
+            "Browse and search your knowledge base:\n\n" +
+            "• Documentation\n" +
+            "• Best practices\n" +
+            "• Design patterns\n" +
+            "• Technical notes");
+    }
+
+    @FXML
+    private void handleBatchJobs(MouseEvent event) {
+        log.info("Opening Batch Jobs");
+        showInfo("Batch Jobs", 
+            "Manage scheduled and batch operations:\n\n" +
+            "• View running jobs\n" +
+            "• Schedule new tasks\n" +
+            "• Job history\n" +
+            "• Execution logs");
+    }
+
+    @FXML
+    private void handleDBObjects(MouseEvent event) {
+        log.info("Opening DB Objects");
+        showInfo("Database Objects", 
+            "Database schema and objects:\n\n" +
+            "• Tables\n" +
+            "• Views\n" +
+            "• Stored procedures\n" +
+            "• Triggers & Functions");
+    }
+
+    @FXML
+    private void handleSettingsMenu(MouseEvent event) {
+        log.info("Opening Settings from menu");
+        showInfo("Settings", 
+            "Application configuration:\n\n" +
+            "• User preferences\n" +
+            "• Project settings\n" +
+            "• Database connections\n" +
+            "• Theme & appearance");
+    }
+
+    @FXML
     private void handleSettings(MouseEvent event) {
         log.info("Opening Settings");
         showInfo("Settings", 
