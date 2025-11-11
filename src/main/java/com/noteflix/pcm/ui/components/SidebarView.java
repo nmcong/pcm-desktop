@@ -1,13 +1,20 @@
 package com.noteflix.pcm.ui.components;
 
 import atlantafx.base.theme.Styles;
+import atlantafx.base.theme.NordLight;
+import atlantafx.base.theme.NordDark;
+import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import lombok.extern.slf4j.Slf4j;
 import org.kordamp.ikonli.feather.Feather;
 import org.kordamp.ikonli.javafx.FontIcon;
+
+import java.util.Objects;
 
 /**
  * Sidebar component built with pure Java (no FXML)
@@ -15,6 +22,8 @@ import org.kordamp.ikonli.javafx.FontIcon;
  */
 @Slf4j
 public class SidebarView extends VBox {
+    
+    private boolean isDarkTheme = false;
     
     public SidebarView() {
         super(16);
@@ -30,8 +39,7 @@ public class SidebarView extends VBox {
             createHeader(),
             createMainMenu(),
             createFavoritesSection(),
-            createProjectsSection(),
-            createSettingsButton()
+            createProjectsSection()
         );
     }
     
@@ -42,10 +50,13 @@ public class SidebarView extends VBox {
         VBox headerSection = new VBox(20);
         headerSection.getStyleClass().add("header");
         
-        // Logo section
-        FontIcon appIcon = new FontIcon(Feather.LAYERS);
-        appIcon.setIconSize(32);
-        appIcon.setStyle("-fx-icon-color: -color-accent-emphasis;");
+        // Logo section with app icon
+        Image iconImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/images/icons/app-icon.png")));
+        ImageView appIcon = new ImageView(iconImage);
+        appIcon.setFitWidth(32);
+        appIcon.setFitHeight(32);
+        appIcon.setPreserveRatio(true);
+        appIcon.setSmooth(true);
         
         Label titleLabel = new Label("PCM Desktop");
         titleLabel.getStyleClass().add(Styles.TITLE_3);
@@ -251,27 +262,6 @@ public class SidebarView extends VBox {
         return projectItem;
     }
     
-    /**
-     * Creates settings button at bottom
-     */
-    private Button createSettingsButton() {
-        FontIcon icon = new FontIcon(Feather.SETTINGS);
-        icon.setIconSize(16);
-        
-        Label label = new Label("Settings");
-        
-        HBox content = new HBox(8, icon, label);
-        content.setAlignment(Pos.CENTER_LEFT);
-        
-        Button settingsButton = new Button();
-        settingsButton.setGraphic(content);
-        settingsButton.setMaxWidth(Double.MAX_VALUE);
-        settingsButton.getStyleClass().addAll(Styles.FLAT, Styles.LEFT_PILL);
-        settingsButton.setAlignment(Pos.CENTER_LEFT);
-        settingsButton.setOnAction(e -> handleSettings());
-        
-        return settingsButton;
-    }
     
     /**
      * Creates a horizontal spacer
@@ -296,14 +286,39 @@ public class SidebarView extends VBox {
     }
     
     private void handleThemeSwitch() {
-        log.info("Switching Theme");
-        showInfo("Theme Switch", 
-            "Theme customization:\n\n" +
-            "• Light mode\n" +
-            "• Dark mode\n" +
-            "• Auto (system)\n" +
-            "• Custom themes\n\n" +
-            "Current theme will be applied globally");
+        try {
+            isDarkTheme = !isDarkTheme;
+            
+            if (isDarkTheme) {
+                log.info("Switching to Dark Theme");
+                Application.setUserAgentStylesheet(new NordDark().getUserAgentStylesheet());
+            } else {
+                log.info("Switching to Light Theme"); 
+                Application.setUserAgentStylesheet(new NordLight().getUserAgentStylesheet());
+            }
+            
+            // Update theme button icon
+            updateThemeButton();
+            
+        } catch (Exception e) {
+            log.error("Error switching theme", e);
+            showInfo("Theme Switch Error", "Failed to switch theme: " + e.getMessage());
+        }
+    }
+    
+    private void updateThemeButton() {
+        // Find theme button in the header and update its icon
+        try {
+            VBox header = (VBox) getChildren().get(0); // First child is header
+            HBox logoSection = (HBox) header.getChildren().get(0); // First child of header is logo section
+            Button themeButton = (Button) logoSection.getChildren().get(3); // Last child is theme button
+            
+            FontIcon newIcon = new FontIcon(isDarkTheme ? Feather.MOON : Feather.SUN);
+            themeButton.setGraphic(newIcon);
+            themeButton.setTooltip(new Tooltip(isDarkTheme ? "Switch to Light Theme" : "Switch to Dark Theme"));
+        } catch (Exception e) {
+            log.warn("Could not update theme button icon", e);
+        }
     }
     
     private void handleKnowledgeBase() {
@@ -354,17 +369,6 @@ public class SidebarView extends VBox {
     private void handleProjectClick(String projectName) {
         log.info("Opening project: {}", projectName);
         showInfo("Project", "View details for: " + projectName);
-    }
-    
-    private void handleSettings() {
-        log.info("Opening Settings");
-        showInfo("Settings", 
-            "PCM Desktop Settings\n\n" +
-            "Configure your preferences:\n" +
-            "• User preferences\n" +
-            "• Project configuration\n" +
-            "• Database connections\n" +
-            "• Theme customization");
     }
     
     private void showInfo(String title, String content) {

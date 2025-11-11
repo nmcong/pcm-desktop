@@ -2,6 +2,7 @@ package com.noteflix.pcm.ui;
 
 import atlantafx.base.theme.Styles;
 import com.noteflix.pcm.ui.components.*;
+import com.noteflix.pcm.ui.layout.MainLayer;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
@@ -18,17 +19,34 @@ import org.kordamp.ikonli.javafx.FontIcon;
 public class MainView extends BorderPane {
 
     private final MainController controller;
-    private SidebarView sidebar;
-    private VBox mainContent;
+    private MainLayer mainLayer;
     
     public MainView(MainController controller) {
         this.controller = controller;
         
         getStyleClass().add("root");
         
-        // Build UI
-        setTop(createNavbar());
-        setCenter(createMainContent());
+        // Build UI following MainLayer pattern with navbar in content area
+        setCenter(createMainLayer());
+    }
+    
+    /**
+     * Creates main layer with 2-part division (following AtlantaFX Sampler pattern)
+     * Navbar is now part of the content area, not top-level
+     */
+    private MainLayer createMainLayer() {
+        mainLayer = new MainLayer();
+        
+        // Create content area with navbar + demo content
+        VBox contentWithNavbar = new VBox();
+        contentWithNavbar.getChildren().addAll(
+            createNavbar(),     // Navbar is now part of content area
+            createDemoContent() // Main content below navbar
+        );
+        
+        mainLayer.setMainContent(contentWithNavbar);
+        
+        return mainLayer;
     }
     
     /**
@@ -96,23 +114,15 @@ public class MainView extends BorderPane {
     }
     
     /**
-     * Creates the main content area with sidebar and content
+     * Creates demo content for the main area
      */
-    private HBox createMainContent() {
-        HBox container = new HBox();
-        container.getStyleClass().add("app-container");
-        
-        // Left sidebar
-        sidebar = new SidebarView();
-        
-        // Main content area
-        mainContent = new VBox(16);
-        mainContent.getStyleClass().add("content-area");
-        HBox.setHgrow(mainContent, Priority.ALWAYS);
-        mainContent.setPadding(new Insets(16));
+    private VBox createDemoContent() {
+        VBox content = new VBox(16);
+        content.getStyleClass().add("content-wrapper");
+        content.setPadding(new Insets(16));
         
         // Content header with tabs
-        mainContent.getChildren().add(createContentHeader());
+        content.getChildren().add(createContentHeader());
         
         // Content body with scroll
         ScrollPane scrollPane = new ScrollPane(createContentBody());
@@ -120,11 +130,9 @@ public class MainView extends BorderPane {
         scrollPane.getStyleClass().add("content-scroll");
         VBox.setVgrow(scrollPane, Priority.ALWAYS);
         
-        mainContent.getChildren().add(scrollPane);
+        content.getChildren().add(scrollPane);
         
-        container.getChildren().addAll(sidebar, mainContent);
-        
-        return container;
+        return content;
     }
     
     /**

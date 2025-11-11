@@ -9,16 +9,16 @@
 }
 
 /* ================================================================
-   TOP NAVIGATION BAR
+   NAVIGATION BAR (now part of content area)
    ================================================================ */
-.top-nav {
+.navbar {
     -fx-background-color: -color-bg-default;
     -fx-border-color: -color-border-default;
     -fx-border-width: 0 0 1 0;
 }
 
 /* ================================================================
-   SIDEBAR
+   SIDEBAR (full height)
    ================================================================ */
 .sidebar {
     -fx-background-color: -color-bg-subtle;
@@ -27,6 +27,10 @@
     -fx-min-width: 280px;
     -fx-pref-width: 280px;
     -fx-max-width: 280px;
+}
+
+.sidebar-full-height {
+    -fx-min-height: 100vh;
 }
 
 /* Header Section */
@@ -92,10 +96,25 @@
     -fx-background-color: transparent;
     -fx-background-radius: 6px;
     -fx-cursor: hand;
+    -fx-transition: all 0.2s ease-in-out;
 }
 
 .list-item:hover {
-    -fx-background-color: -color-bg-subtle;
+    -fx-background-color: -color-bg-inset;
+}
+
+/* Menu button hover effects */
+.button.flat {
+    -fx-transition: all 0.15s ease-in-out;
+}
+
+.button.flat:hover {
+    -fx-background-color: -color-bg-inset;
+}
+
+.button.left-pill:hover {
+    -fx-background-color: -color-accent-subtle;
+    -fx-text-fill: -color-accent-emphasis;
 }
 
 /* ================================================================
