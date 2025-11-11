@@ -48,9 +48,9 @@ PCM Desktop là ứng dụng desktop AI-powered sử dụng Large Language Model
 - **Java 21** - Programming language
 - **JavaFX 21.0.9** - UI framework (compatible with Java 21)
 - **Lombok 1.18.34** - Reduce boilerplate (Latest)
-- **Jackson 2.17.2** - JSON processing for data serialization (Latest)
-- **SQLite 3.46.1.0** - Local metadata database (Latest)
-- **Logback 1.5.6** - Logging framework (Latest)
+- **Jackson 2.18.2** - JSON processing for data serialization (Latest)
+- **SQLite 3.47.1.0** - Local metadata database (Latest)
+- **Logback 1.5.12** - Logging framework (Latest)
 
 ### AI & Analysis
 - **LLM Integration** - Large Language Model APIs
@@ -325,10 +325,10 @@ jpackage \
 |---------|---------|-------------------|----------|
 | JavaFX | 21.0.9 | Java 21 ✅ | https://gluonhq.com/products/javafx/ |
 | Lombok | 1.18.34 | All Java versions ✅ | https://projectlombok.org/ |
-| Jackson | 2.17.2 | All Java versions ✅ | https://github.com/FasterXML/jackson |
-| SLF4J | 2.0.13 | All Java versions ✅ | https://www.slf4j.org/ |
-| Logback | 1.5.6 | All Java versions ✅ | https://logback.qos.ch/ |
-| SQLite JDBC | 3.46.1.0 | All Java versions ✅ | https://github.com/xerial/sqlite-jdbc |
+| Jackson | 2.18.2 | All Java versions ✅ | https://github.com/FasterXML/jackson |
+| SLF4J | 2.0.16 | All Java versions ✅ | https://www.slf4j.org/ |
+| Logback | 1.5.12 | All Java versions ✅ | https://logback.qos.ch/ |
+| SQLite JDBC | 3.47.1.0 | All Java versions ✅ | https://github.com/xerial/sqlite-jdbc |
 
 **Note:** This project uses **Java 21** and **JavaFX 21.0.9** (not JavaFX 23/25) for compatibility.
 

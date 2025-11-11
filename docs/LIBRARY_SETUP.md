@@ -36,56 +36,56 @@ lib/others/
 └── lombok-1.18.34.jar
 ```
 
-### 3. Jackson 2.17.2 (Latest)
+### 3. Jackson 2.18.2 (Latest)
 
 **Download from Maven Central:**
-- **jackson-databind:** https://repo1.maven.org/maven2/com/fasterxml/jackson/core/jackson-databind/2.17.2/jackson-databind-2.17.2.jar
-- **jackson-core:** https://repo1.maven.org/maven2/com/fasterxml/jackson/core/jackson-core/2.17.2/jackson-core-2.17.2.jar
-- **jackson-annotations:** https://repo1.maven.org/maven2/com/fasterxml/jackson/core/jackson-annotations/2.17.2/jackson-annotations-2.17.2.jar
-- **jackson-datatype-jsr310:** https://repo1.maven.org/maven2/com/fasterxml/jackson/datatype/jackson-datatype-jsr310/2.17.2/jackson-datatype-jsr310-2.17.2.jar
+- **jackson-databind:** https://repo1.maven.org/maven2/com/fasterxml/jackson/core/jackson-databind/2.18.2/jackson-databind-2.18.2.jar
+- **jackson-core:** https://repo1.maven.org/maven2/com/fasterxml/jackson/core/jackson-core/2.18.2/jackson-core-2.18.2.jar
+- **jackson-annotations:** https://repo1.maven.org/maven2/com/fasterxml/jackson/core/jackson-annotations/2.18.2/jackson-annotations-2.18.2.jar
+- **jackson-datatype-jsr310:** https://repo1.maven.org/maven2/com/fasterxml/jackson/datatype/jackson-datatype-jsr310/2.18.2/jackson-datatype-jsr310-2.18.2.jar
 
 **Files:**
 ```
 lib/others/
-├── jackson-databind-2.17.2.jar
-├── jackson-core-2.17.2.jar
-├── jackson-annotations-2.17.2.jar
-└── jackson-datatype-jsr310-2.17.2.jar
+├── jackson-databind-2.18.2.jar
+├── jackson-core-2.18.2.jar
+├── jackson-annotations-2.18.2.jar
+└── jackson-datatype-jsr310-2.18.2.jar
 ```
 
-### 4. SLF4J 2.0.13 (Latest)
+### 4. SLF4J 2.0.16 (Latest)
 
 **Download:**
-- **slf4j-api:** https://repo1.maven.org/maven2/org/slf4j/slf4j-api/2.0.13/slf4j-api-2.0.13.jar
+- **slf4j-api:** https://repo1.maven.org/maven2/org/slf4j/slf4j-api/2.0.16/slf4j-api-2.0.16.jar
 
 **File:**
 ```
 lib/others/
-└── slf4j-api-2.0.13.jar
+└── slf4j-api-2.0.16.jar
 ```
 
-### 5. Logback 1.5.6 (Latest)
+### 5. Logback 1.5.12 (Latest)
 
 **Download:**
-- **logback-classic:** https://repo1.maven.org/maven2/ch/qos/logback/logback-classic/1.5.6/logback-classic-1.5.6.jar
-- **logback-core:** https://repo1.maven.org/maven2/ch/qos/logback/logback-core/1.5.6/logback-core-1.5.6.jar
+- **logback-classic:** https://repo1.maven.org/maven2/ch/qos/logback/logback-classic/1.5.12/logback-classic-1.5.12.jar
+- **logback-core:** https://repo1.maven.org/maven2/ch/qos/logback/logback-core/1.5.12/logback-core-1.5.12.jar
 
 **Files:**
 ```
 lib/others/
-├── logback-classic-1.5.6.jar
-└── logback-core-1.5.6.jar
+├── logback-classic-1.5.12.jar
+└── logback-core-1.5.12.jar
 ```
 
-### 6. SQLite JDBC 3.46.1.0 (Latest)
+### 6. SQLite JDBC 3.47.1.0 (Latest)
 
 **Download:**
-- **Direct:** https://repo1.maven.org/maven2/org/xerial/sqlite-jdbc/3.46.1.0/sqlite-jdbc-3.46.1.0.jar
+- **Direct:** https://repo1.maven.org/maven2/org/xerial/sqlite-jdbc/3.47.1.0/sqlite-jdbc-3.47.1.0.jar
 
 **File:**
 ```
 lib/others/
-└── sqlite-jdbc-3.46.1.0.jar
+└── sqlite-jdbc-3.47.1.0.jar
 ```
 
 ---
@@ -103,20 +103,20 @@ curl -O https://projectlombok.org/downloads/lombok.jar
 mv lombok.jar lombok-1.18.34.jar
 
 # Jackson
-curl -O https://repo1.maven.org/maven2/com/fasterxml/jackson/core/jackson-databind/2.17.2/jackson-databind-2.17.2.jar
-curl -O https://repo1.maven.org/maven2/com/fasterxml/jackson/core/jackson-core/2.17.2/jackson-core-2.17.2.jar
-curl -O https://repo1.maven.org/maven2/com/fasterxml/jackson/core/jackson-annotations/2.17.2/jackson-annotations-2.17.2.jar
-curl -O https://repo1.maven.org/maven2/com/fasterxml/jackson/datatype/jackson-datatype-jsr310/2.17.2/jackson-datatype-jsr310-2.17.2.jar
+curl -O https://repo1.maven.org/maven2/com/fasterxml/jackson/core/jackson-databind/2.18.2/jackson-databind-2.18.2.jar
+curl -O https://repo1.maven.org/maven2/com/fasterxml/jackson/core/jackson-core/2.18.2/jackson-core-2.18.2.jar
+curl -O https://repo1.maven.org/maven2/com/fasterxml/jackson/core/jackson-annotations/2.18.2/jackson-annotations-2.18.2.jar
+curl -O https://repo1.maven.org/maven2/com/fasterxml/jackson/datatype/jackson-datatype-jsr310/2.18.2/jackson-datatype-jsr310-2.18.2.jar
 
 # SLF4J
-curl -O https://repo1.maven.org/maven2/org/slf4j/slf4j-api/2.0.13/slf4j-api-2.0.13.jar
+curl -O https://repo1.maven.org/maven2/org/slf4j/slf4j-api/2.0.16/slf4j-api-2.0.16.jar
 
 # Logback
-curl -O https://repo1.maven.org/maven2/ch/qos/logback/logback-classic/1.5.6/logback-classic-1.5.6.jar
-curl -O https://repo1.maven.org/maven2/ch/qos/logback/logback-core/1.5.6/logback-core-1.5.6.jar
+curl -O https://repo1.maven.org/maven2/ch/qos/logback/logback-classic/1.5.12/logback-classic-1.5.12.jar
+curl -O https://repo1.maven.org/maven2/ch/qos/logback/logback-core/1.5.12/logback-core-1.5.12.jar
 
 # SQLite
-curl -O https://repo1.maven.org/maven2/org/xerial/sqlite-jdbc/3.46.1.0/sqlite-jdbc-3.46.1.0.jar
+curl -O https://repo1.maven.org/maven2/org/xerial/sqlite-jdbc/3.47.1.0/sqlite-jdbc-3.47.1.0.jar
 
 cd ../javafx
 # Download JavaFX for your platform
@@ -132,20 +132,20 @@ cd lib\others
 Invoke-WebRequest -Uri "https://projectlombok.org/downloads/lombok.jar" -OutFile "lombok-1.18.34.jar"
 
 # Jackson
-Invoke-WebRequest -Uri "https://repo1.maven.org/maven2/com/fasterxml/jackson/core/jackson-databind/2.17.2/jackson-databind-2.17.2.jar" -OutFile "jackson-databind-2.17.2.jar"
-Invoke-WebRequest -Uri "https://repo1.maven.org/maven2/com/fasterxml/jackson/core/jackson-core/2.17.2/jackson-core-2.17.2.jar" -OutFile "jackson-core-2.17.2.jar"
-Invoke-WebRequest -Uri "https://repo1.maven.org/maven2/com/fasterxml/jackson/core/jackson-annotations/2.17.2/jackson-annotations-2.17.2.jar" -OutFile "jackson-annotations-2.17.2.jar"
-Invoke-WebRequest -Uri "https://repo1.maven.org/maven2/com/fasterxml/jackson/datatype/jackson-datatype-jsr310/2.17.2/jackson-datatype-jsr310-2.17.2.jar" -OutFile "jackson-datatype-jsr310-2.17.2.jar"
+Invoke-WebRequest -Uri "https://repo1.maven.org/maven2/com/fasterxml/jackson/core/jackson-databind/2.18.2/jackson-databind-2.18.2.jar" -OutFile "jackson-databind-2.18.2.jar"
+Invoke-WebRequest -Uri "https://repo1.maven.org/maven2/com/fasterxml/jackson/core/jackson-core/2.18.2/jackson-core-2.18.2.jar" -OutFile "jackson-core-2.18.2.jar"
+Invoke-WebRequest -Uri "https://repo1.maven.org/maven2/com/fasterxml/jackson/core/jackson-annotations/2.18.2/jackson-annotations-2.18.2.jar" -OutFile "jackson-annotations-2.18.2.jar"
+Invoke-WebRequest -Uri "https://repo1.maven.org/maven2/com/fasterxml/jackson/datatype/jackson-datatype-jsr310/2.18.2/jackson-datatype-jsr310-2.18.2.jar" -OutFile "jackson-datatype-jsr310-2.18.2.jar"
 
 # SLF4J
-Invoke-WebRequest -Uri "https://repo1.maven.org/maven2/org/slf4j/slf4j-api/2.0.13/slf4j-api-2.0.13.jar" -OutFile "slf4j-api-2.0.13.jar"
+Invoke-WebRequest -Uri "https://repo1.maven.org/maven2/org/slf4j/slf4j-api/2.0.16/slf4j-api-2.0.16.jar" -OutFile "slf4j-api-2.0.16.jar"
 
 # Logback
-Invoke-WebRequest -Uri "https://repo1.maven.org/maven2/ch/qos/logback/logback-classic/1.5.6/logback-classic-1.5.6.jar" -OutFile "logback-classic-1.5.6.jar"
-Invoke-WebRequest -Uri "https://repo1.maven.org/maven2/ch/qos/logback/logback-core/1.5.6/logback-core-1.5.6.jar" -OutFile "logback-core-1.5.6.jar"
+Invoke-WebRequest -Uri "https://repo1.maven.org/maven2/ch/qos/logback/logback-classic/1.5.12/logback-classic-1.5.12.jar" -OutFile "logback-classic-1.5.12.jar"
+Invoke-WebRequest -Uri "https://repo1.maven.org/maven2/ch/qos/logback/logback-core/1.5.12/logback-core-1.5.12.jar" -OutFile "logback-core-1.5.12.jar"
 
 # SQLite
-Invoke-WebRequest -Uri "https://repo1.maven.org/maven2/org/xerial/sqlite-jdbc/3.46.1.0/sqlite-jdbc-3.46.1.0.jar" -OutFile "sqlite-jdbc-3.46.1.0.jar"
+Invoke-WebRequest -Uri "https://repo1.maven.org/maven2/org/xerial/sqlite-jdbc/3.47.1.0/sqlite-jdbc-3.47.1.0.jar" -OutFile "sqlite-jdbc-3.47.1.0.jar"
 ```
 
 ---
@@ -166,14 +166,14 @@ pcm-desktop/
 │   │   └── javafx-swt.jar
 │   └── others/                    # Other JARs
 │       ├── lombok-1.18.34.jar
-│       ├── jackson-databind-2.17.2.jar
-│       ├── jackson-core-2.17.2.jar
-│       ├── jackson-annotations-2.17.2.jar
-│       ├── jackson-datatype-jsr310-2.17.2.jar
-│       ├── slf4j-api-2.0.13.jar
-│       ├── logback-classic-1.5.6.jar
-│       ├── logback-core-1.5.6.jar
-│       └── sqlite-jdbc-3.46.1.0.jar
+│       ├── jackson-databind-2.18.2.jar
+│       ├── jackson-core-2.18.2.jar
+│       ├── jackson-annotations-2.18.2.jar
+│       ├── jackson-datatype-jsr310-2.18.2.jar
+│       ├── slf4j-api-2.0.16.jar
+│       ├── logback-classic-1.5.12.jar
+│       ├── logback-core-1.5.12.jar
+│       └── sqlite-jdbc-3.47.1.0.jar
 ├── src/                           # Source code
 └── docs/                          # Documentation
 ```
