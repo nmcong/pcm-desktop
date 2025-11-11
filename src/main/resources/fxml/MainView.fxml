@@ -3,183 +3,390 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.Text?>
 
 <BorderPane fx:id="rootPane" styleClass="root" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.noteflix.pcm.ui.MainController">
 
+    <!-- Top Navigation Bar -->
+    <top>
+        <HBox styleClass="navbar">
+            <!-- Brand -->
+            <HBox styleClass="navbar-brand" alignment="CENTER_LEFT">
+                <Label text="📦" styleClass="brand-icon"/>
+                <Label text="PCM" styleClass="brand-text"/>
+            </HBox>
+            
+            <!-- Global Search -->
+            <TextField fx:id="globalSearch" promptText="🔍 Search screens, projects, code..." styleClass="global-search"/>
+            
+            <Region HBox.hgrow="ALWAYS"/>
+            
+            <!-- Right Actions -->
+            <HBox styleClass="navbar-actions" spacing="10">
+                <Button text="+ New Screen" styleClass="btn-new"/>
+                <Button text="🔔" styleClass="btn-icon" fx:id="notificationBtn"/>
+                <Button text="⚙️" styleClass="btn-icon" fx:id="settingsBtn"/>
+            </HBox>
+        </HBox>
+    </top>
+
     <center>
-        <HBox>
-            <!-- Left: Sidebar -->
-            <VBox fx:id="sidebar" styleClass="sidebar" minWidth="280" maxWidth="280">
-                <!-- Logo and Title -->
-                <HBox styleClass="sidebar-header" alignment="CENTER_LEFT">
-                    <VBox.margin>
-                        <Insets top="20" left="20" right="20" bottom="20"/>
-                    </VBox.margin>
-                    <Label text="📦" styleClass="app-icon"/>
-                    <VBox spacing="2">
-                        <Label text="PCM Desktop" styleClass="app-title"/>
-                        <Label text="Project Code Manager" styleClass="app-subtitle"/>
-                    </VBox>
+        <HBox styleClass="app-container">
+            <!-- Sidebar Navigation -->
+            <VBox fx:id="sidebar" styleClass="sidebar">
+                <!-- User Profile Section -->
+                <VBox styleClass="user-section">
+                    <HBox styleClass="user-profile" spacing="12" alignment="CENTER_LEFT">
+                        <Label text="SK" styleClass="user-avatar-large"/>
+                        <VBox spacing="2">
+                            <Label text="Sarah Kim" styleClass="user-name"/>
+                            <Label text="Product Manager" styleClass="user-role"/>
+                        </VBox>
+                    </HBox>
+                </VBox>
+                
+                <Separator styleClass="sidebar-separator"/>
+                
+                <!-- Quick Actions -->
+                <HBox styleClass="quick-actions" spacing="8">
+                    <Button text="＋" styleClass="quick-btn"/>
+                    <Button text="↑" styleClass="quick-btn"/>
+                    <Button text="★" styleClass="quick-btn"/>
                 </HBox>
                 
-                <!-- Sidebar search -->
-                <TextField fx:id="sidebarSearch" promptText="Search projects..." styleClass="sidebar-search">
-                    <VBox.margin>
-                        <Insets left="15" right="15" bottom="15"/>
-                    </VBox.margin>
-                </TextField>
+                <Separator styleClass="sidebar-separator"/>
                 
-                <!-- Favorites section -->
-                <VBox styleClass="sidebar-section">
-                    <VBox.margin>
-                        <Insets left="15" right="15" bottom="20"/>
-                    </VBox.margin>
-                    <Label text="FAVORITES" styleClass="section-header"/>
-                    <VBox styleClass="favorites-list">
-                        <HBox styleClass="favorite-item">
-                            <Label text="CU" styleClass="avatar blue"/>
-                            <Text text="Customer Service" styleClass="favorite-text"/>
-                            <Region HBox.hgrow="ALWAYS"/>
-                            <Label text="⭐" styleClass="star"/>
-                        </HBox>
-                        <HBox styleClass="favorite-item">
-                            <Label text="PR" styleClass="avatar orange"/>
-                            <Text text="Product Catalog Ser..." styleClass="favorite-text"/>
-                            <Region HBox.hgrow="ALWAYS"/>
-                            <Label text="⭐" styleClass="star"/>
-                        </HBox>
-                        <HBox styleClass="favorite-item">
-                            <Label text="OR" styleClass="avatar red"/>
-                            <Text text="Order Service" styleClass="favorite-text"/>
-                            <Region HBox.hgrow="ALWAYS"/>
-                            <Label text="⭐" styleClass="star"/>
-                        </HBox>
-                        <HBox styleClass="favorite-item">
-                            <Label text="PA" styleClass="avatar purple"/>
-                            <Text text="Payment Service" styleClass="favorite-text"/>
-                            <Region HBox.hgrow="ALWAYS"/>
-                            <Label text="⭐" styleClass="star"/>
-                        </HBox>
-                    </VBox>
+                <!-- Main Navigation -->
+                <VBox styleClass="nav-group">
+                    <HBox styleClass="nav-item active">
+                        <Label text="◼" styleClass="nav-icon-box"/>
+                        <VBox spacing="2">
+                            <Label text="Dashboard" styleClass="nav-text"/>
+                            <Label text="Overview &amp; analytics" styleClass="nav-desc"/>
+                        </VBox>
+                    </HBox>
+                    
+                    <HBox styleClass="nav-item">
+                        <Label text="□" styleClass="nav-icon-box"/>
+                        <VBox spacing="2">
+                            <Label text="Screens" styleClass="nav-text"/>
+                            <Label text="48 screens" styleClass="nav-desc"/>
+                        </VBox>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <Label text="48" styleClass="nav-count"/>
+                    </HBox>
+                    
+                    <HBox styleClass="nav-item">
+                        <Label text="◇" styleClass="nav-icon-box"/>
+                        <VBox spacing="2">
+                            <Label text="Workflows" styleClass="nav-text"/>
+                            <Label text="Business processes" styleClass="nav-desc"/>
+                        </VBox>
+                    </HBox>
+                    
+                    <HBox styleClass="nav-item">
+                        <Label text="▦" styleClass="nav-icon-box"/>
+                        <VBox spacing="2">
+                            <Label text="Database" styleClass="nav-text"/>
+                            <Label text="Tables &amp; objects" styleClass="nav-desc"/>
+                        </VBox>
+                    </HBox>
+                    
+                    <HBox styleClass="nav-item">
+                        <Label text="◐" styleClass="nav-icon-box"/>
+                        <VBox spacing="2">
+                            <Label text="Analytics" styleClass="nav-text"/>
+                            <Label text="Reports &amp; insights" styleClass="nav-desc"/>
+                        </VBox>
+                    </HBox>
                 </VBox>
                 
-                <!-- Projects section -->
-                <VBox styleClass="sidebar-section" VBox.vgrow="ALWAYS">
-                    <VBox.margin>
-                        <Insets left="15" right="15"/>
-                    </VBox.margin>
-                    <Label text="PROJECTS" styleClass="section-header"/>
-                    <VBox styleClass="projects-list">
-                        <HBox styleClass="project-item">
-                            <Label text="IN" styleClass="avatar green"/>
-                            <Text text="Inventory Service" styleClass="project-text"/>
-                        </HBox>
-                        <HBox styleClass="project-item">
-                            <Label text="SH" styleClass="avatar blue"/>
-                            <Text text="Shipping Service" styleClass="project-text"/>
-                        </HBox>
-                        <HBox styleClass="project-item">
-                            <Label text="PR" styleClass="avatar orange"/>
-                            <Text text="Promotion Engine" styleClass="project-text"/>
-                        </HBox>
-                        <HBox styleClass="project-item">
-                            <Label text="AN" styleClass="avatar purple"/>
-                            <Text text="Analytics Service" styleClass="project-text"/>
-                        </HBox>
-                        <HBox styleClass="project-item">
-                            <Label text="AD" styleClass="avatar gray"/>
-                            <Text text="Admin Dashboard" styleClass="project-text"/>
-                        </HBox>
-                    </VBox>
+                <Separator styleClass="sidebar-separator"/>
+                
+                <!-- Projects Section -->
+                <VBox styleClass="nav-group">
+                    <HBox styleClass="section-header" alignment="CENTER_LEFT">
+                        <Label text="PROJECTS" styleClass="nav-header"/>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <Button text="＋" styleClass="header-action"/>
+                    </HBox>
+                    
+                    <HBox styleClass="nav-item project-item">
+                        <StackPane styleClass="project-avatar blue">
+                            <Label text="CS" styleClass="project-initials"/>
+                        </StackPane>
+                        <VBox spacing="2">
+                            <Label text="Customer Service" styleClass="nav-text"/>
+                            <Label text="24 screens • Active" styleClass="nav-desc"/>
+                        </VBox>
+                    </HBox>
+                    
+                    <HBox styleClass="nav-item project-item">
+                        <StackPane styleClass="project-avatar green">
+                            <Label text="OM" styleClass="project-initials"/>
+                        </StackPane>
+                        <VBox spacing="2">
+                            <Label text="Order Management" styleClass="nav-text"/>
+                            <Label text="18 screens • Active" styleClass="nav-desc"/>
+                        </VBox>
+                    </HBox>
+                    
+                    <HBox styleClass="nav-item project-item">
+                        <StackPane styleClass="project-avatar orange">
+                            <Label text="PG" styleClass="project-initials"/>
+                        </StackPane>
+                        <VBox spacing="2">
+                            <Label text="Payment Gateway" styleClass="nav-text"/>
+                            <Label text="12 screens • In Dev" styleClass="nav-desc"/>
+                        </VBox>
+                    </HBox>
+                    
+                    <Button text="View all projects →" styleClass="view-all-btn"/>
                 </VBox>
                 
-                <!-- Bottom navigation -->
-                <VBox styleClass="sidebar-bottom">
-                    <HBox styleClass="bottom-nav-item">
-                        <Label text="🏠" styleClass="nav-icon"/>
-                        <Text text="Knowledge Base" styleClass="nav-text"/>
+                <Region VBox.vgrow="ALWAYS"/>
+                
+                <!-- AI Tools Section -->
+                <VBox styleClass="nav-group ai-section">
+                    <Label text="AI POWERED" styleClass="nav-header"/>
+                    
+                    <HBox styleClass="nav-item ai-item">
+                        <Label text="✦" styleClass="nav-icon-star"/>
+                        <VBox spacing="2">
+                            <Label text="AI Assistant" styleClass="nav-text"/>
+                            <Label text="Ask anything" styleClass="nav-desc"/>
+                        </VBox>
                     </HBox>
-                    <HBox styleClass="bottom-nav-item">
-                        <Label text="⚙️" styleClass="nav-icon"/>
-                        <Text text="Settings" styleClass="nav-text"/>
+                    
+                    <HBox styleClass="nav-item ai-item">
+                        <Label text="◈" styleClass="nav-icon-star"/>
+                        <VBox spacing="2">
+                            <Label text="Code Analysis" styleClass="nav-text"/>
+                            <Label text="Smart insights" styleClass="nav-desc"/>
+                        </VBox>
                     </HBox>
+                </VBox>
+                
+                <!-- Upgrade Banner -->
+                <VBox styleClass="upgrade-banner">
+                    <Label text="⚡" styleClass="upgrade-icon"/>
+                    <Label text="Upgrade to Pro" styleClass="upgrade-title"/>
+                    <Label text="Unlock unlimited screens and AI features" styleClass="upgrade-desc"/>
+                    <Button text="Upgrade Now" styleClass="upgrade-btn"/>
                 </VBox>
             </VBox>
 
-            <!-- Right: Main content area -->
-            <VBox fx:id="mainContent" styleClass="main-content" HBox.hgrow="ALWAYS">
-                <!-- Content tabs -->
-                <HBox styleClass="content-tabs">
-                    <Button text="ℹ️ Screen Info" styleClass="content-tab active"/>
-                    <Button text="⚡ Events" styleClass="content-tab"/>
-                    <Button text="📝 Notes" styleClass="content-tab"/>
-                    <Button text="💻 Source Code" styleClass="content-tab"/>
-                    <Button text="🗄️ Database" styleClass="content-tab"/>
-                    <Region HBox.hgrow="ALWAYS"/>
-                    <Button text="✏️ Edit Screen" styleClass="edit-button"/>
-                </HBox>
-                
-                <!-- Main content -->
-                <HBox styleClass="content-body" VBox.vgrow="ALWAYS">
-                    <!-- Center: Description area -->
-                    <VBox styleClass="description-area" HBox.hgrow="ALWAYS">
-                        <VBox.margin>
-                            <Insets top="30" left="30" right="30" bottom="30"/>
-                        </VBox.margin>
-                        <Label text="✏️" styleClass="edit-icon"/>
-                        <TextArea fx:id="descriptionArea" 
-                                text="Main customer account dashboard showing overview of profile status, recent orders, saved addresses, payment methods, and wishlist items. Provides quick access to all account management functions. Displays profile completion percentage with prompts to add missing information. Shows personalized recommendations and recently viewed products. Includes shortcuts to frequently used features like order tracking, returns, and customer support."
-                                styleClass="description-text" 
-                                wrapText="true" 
-                                VBox.vgrow="ALWAYS"/>
+            <!-- Main Content Area -->
+            <VBox fx:id="mainContent" styleClass="content-area" HBox.hgrow="ALWAYS">
+                <!-- Page Header -->
+                <HBox styleClass="page-header">
+                    <VBox spacing="4">
+                        <Label text="Customer Profile Dashboard" styleClass="page-title"/>
+                        <HBox spacing="8" alignment="CENTER_LEFT">
+                            <Label text="•" styleClass="status-dot active"/>
+                            <Label text="Active" styleClass="status-text"/>
+                            <Label text="•" styleClass="separator"/>
+                            <Label text="Last updated 2h ago" styleClass="meta-text"/>
+                        </HBox>
                     </VBox>
                     
-                    <!-- Right: Properties panel -->
-                    <VBox styleClass="properties-panel" minWidth="300">
-                        <VBox.margin>
-                            <Insets top="30" right="30" bottom="30"/>
-                        </VBox.margin>
-                        
-                        <!-- Screen name -->
-                        <VBox styleClass="property-section">
-                            <Label text="SCREEN NAME" styleClass="property-header"/>
-                            <TextField text="Customer Profile Dashboard" styleClass="property-input"/>
-                        </VBox>
-                        
-                        <!-- Permissions -->
-                        <VBox styleClass="property-section">
-                            <Label text="PERMISSIONS" styleClass="property-header"/>
-                            <HBox styleClass="permission-item">
-                                <Button text="View Profile" styleClass="permission-tag"/>
-                                <Label text="PROFILE_VIEW" styleClass="permission-code"/>
-                            </HBox>
-                        </VBox>
-                        
-                        <!-- Statistics -->
-                        <VBox styleClass="property-section">
-                            <Label text="STATISTICS" styleClass="property-header"/>
-                            <VBox styleClass="stats-list">
-                                <Label text="3 Source Files" styleClass="stat-item"/>
-                                <Label text="3 Database Tables" styleClass="stat-item"/>
-                                <Label text="5 Events" styleClass="stat-item"/>
-                            </VBox>
-                        </VBox>
-                        
-                        <!-- Timestamps -->
-                        <VBox styleClass="property-section">
-                            <Label text="TIMESTAMPS" styleClass="property-header"/>
-                            <VBox styleClass="timestamps">
-                                <Label text="Created: 11/8/2025" styleClass="timestamp"/>
-                                <Label text="Updated: 11/8/2025" styleClass="timestamp"/>
-                            </VBox>
-                        </VBox>
-                    </VBox>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    
+                    <HBox spacing="10">
+                        <Button text="Share" styleClass="btn-outline"/>
+                        <Button text="⋮" styleClass="btn-icon"/>
+                    </HBox>
                 </HBox>
+                
+                <!-- Tabs -->
+                <HBox styleClass="tabs-bar">
+                    <Button text="Overview" styleClass="tab-item active"/>
+                    <Button text="Events" styleClass="tab-item"/>
+                    <Button text="Source Code" styleClass="tab-item"/>
+                    <Button text="Database" styleClass="tab-item"/>
+                    <Button text="API Endpoints" styleClass="tab-item"/>
+                </HBox>
+                
+                <!-- Content Body -->
+                <ScrollPane styleClass="content-scroll" fitToWidth="true" VBox.vgrow="ALWAYS">
+                    <HBox styleClass="content-wrapper">
+                        <!-- Main Content -->
+                        <VBox styleClass="content-main" HBox.hgrow="ALWAYS">
+                            <!-- Stats Cards -->
+                            <HBox styleClass="stats-grid" spacing="16">
+                                <VBox styleClass="stat-card">
+                                    <HBox alignment="CENTER_LEFT" spacing="8">
+                                        <Label text="⚡" styleClass="stat-icon"/>
+                                        <Label text="Events" styleClass="stat-title"/>
+                                    </HBox>
+                                    <Label text="5" styleClass="stat-value"/>
+                                    <Label text="+2 this week" styleClass="stat-change positive"/>
+                                </VBox>
+                                
+                                <VBox styleClass="stat-card">
+                                    <HBox alignment="CENTER_LEFT" spacing="8">
+                                        <Label text="📄" styleClass="stat-icon"/>
+                                        <Label text="Source Files" styleClass="stat-title"/>
+                                    </HBox>
+                                    <Label text="3" styleClass="stat-value"/>
+                                    <Label text="No changes" styleClass="stat-change neutral"/>
+                                </VBox>
+                                
+                                <VBox styleClass="stat-card">
+                                    <HBox alignment="CENTER_LEFT" spacing="8">
+                                        <Label text="🗄️" styleClass="stat-icon"/>
+                                        <Label text="DB Tables" styleClass="stat-title"/>
+                                    </HBox>
+                                    <Label text="3" styleClass="stat-value"/>
+                                    <Label text="All synced" styleClass="stat-change positive"/>
+                                </VBox>
+                            </HBox>
+                            
+                            <!-- Description Card -->
+                            <VBox styleClass="card">
+                                <HBox alignment="CENTER_LEFT">
+                                    <Label text="Description" styleClass="card-title"/>
+                                    <Region HBox.hgrow="ALWAYS"/>
+                                    <Button text="✨ AI Enhance" styleClass="btn-ai"/>
+                                </HBox>
+                                <TextArea fx:id="descriptionArea" 
+                                        text="Main customer account dashboard showing overview of profile status, recent orders, saved addresses, payment methods, and wishlist items.&#10;&#10;Provides quick access to all account management functions. Displays profile completion percentage with prompts to add missing information."
+                                        styleClass="description-area" 
+                                        wrapText="true" 
+                                        VBox.vgrow="ALWAYS"/>
+                            </VBox>
+                            
+                            <!-- Tags -->
+                            <VBox styleClass="card">
+                                <Label text="Tags" styleClass="card-title"/>
+                                <HBox styleClass="tags-list" spacing="8">
+                                    <Label text="Customer" styleClass="tag tag-blue"/>
+                                    <Label text="Dashboard" styleClass="tag tag-purple"/>
+                                    <Label text="Priority" styleClass="tag tag-red"/>
+                                    <Button text="+ Add" styleClass="btn-add-tag"/>
+                                </HBox>
+                            </VBox>
+                            
+                            <!-- Related Items -->
+                            <VBox styleClass="card">
+                                <Label text="Related Screens" styleClass="card-title"/>
+                                <VBox styleClass="related-list" spacing="8">
+                                    <HBox styleClass="related-item">
+                                        <Label text="📱" styleClass="related-icon"/>
+                                        <VBox spacing="2">
+                                            <Label text="Login Screen" styleClass="related-name"/>
+                                            <Label text="Authentication flow entry point" styleClass="related-desc"/>
+                                        </VBox>
+                                        <Region HBox.hgrow="ALWAYS"/>
+                                        <Button text="→" styleClass="btn-nav"/>
+                                    </HBox>
+                                    
+                                    <HBox styleClass="related-item">
+                                        <Label text="📱" styleClass="related-icon"/>
+                                        <VBox spacing="2">
+                                            <Label text="Order History" styleClass="related-name"/>
+                                            <Label text="Shows customer's past orders" styleClass="related-desc"/>
+                                        </VBox>
+                                        <Region HBox.hgrow="ALWAYS"/>
+                                        <Button text="→" styleClass="btn-nav"/>
+                                    </HBox>
+                                </VBox>
+                            </VBox>
+                        </VBox>
+                        
+                        <!-- Right Sidebar -->
+                        <VBox styleClass="sidebar-right">
+                            <!-- Properties -->
+                            <VBox styleClass="panel">
+                                <Label text="Properties" styleClass="panel-title"/>
+                                
+                                <VBox styleClass="prop-group">
+                                    <Label text="Status" styleClass="prop-label"/>
+                                    <HBox styleClass="prop-select">
+                                        <Label text="●" styleClass="status-indicator active"/>
+                                        <Label text="Active" styleClass="prop-value"/>
+                                        <Region HBox.hgrow="ALWAYS"/>
+                                        <Label text="▼" styleClass="dropdown-arrow"/>
+                                    </HBox>
+                                </VBox>
+                                
+                                <VBox styleClass="prop-group">
+                                    <Label text="Priority" styleClass="prop-label"/>
+                                    <HBox styleClass="priority-pills" spacing="6">
+                                        <Label text="Low" styleClass="priority-pill"/>
+                                        <Label text="Med" styleClass="priority-pill"/>
+                                        <Label text="High" styleClass="priority-pill active"/>
+                                    </HBox>
+                                </VBox>
+                                
+                                <VBox styleClass="prop-group">
+                                    <Label text="Project" styleClass="prop-label"/>
+                                    <HBox styleClass="project-select">
+                                        <Label text="•" styleClass="project-color blue"/>
+                                        <Label text="Customer Service" styleClass="prop-value"/>
+                                    </HBox>
+                                </VBox>
+                                
+                                <Separator styleClass="prop-separator"/>
+                                
+                                <VBox styleClass="prop-group">
+                                    <Label text="Screen ID" styleClass="prop-label"/>
+                                    <Label text="SCR-0042" styleClass="prop-value-mono"/>
+                                </VBox>
+                                
+                                <VBox styleClass="prop-group">
+                                    <Label text="Created" styleClass="prop-label"/>
+                                    <Label text="Nov 8, 2025" styleClass="prop-value"/>
+                                </VBox>
+                                
+                                <VBox styleClass="prop-group">
+                                    <Label text="Last Updated" styleClass="prop-label"/>
+                                    <Label text="Nov 11, 2025 at 2:30 PM" styleClass="prop-value"/>
+                                </VBox>
+                                
+                                <VBox styleClass="prop-group">
+                                    <Label text="Author" styleClass="prop-label"/>
+                                    <HBox spacing="8" alignment="CENTER_LEFT">
+                                        <Label text="SK" styleClass="avatar"/>
+                                        <Label text="Sarah Kim" styleClass="prop-value"/>
+                                    </HBox>
+                                </VBox>
+                            </VBox>
+                            
+                            <!-- Activity -->
+                            <VBox styleClass="panel">
+                                <Label text="Recent Activity" styleClass="panel-title"/>
+                                <VBox styleClass="activity-list" spacing="12">
+                                    <HBox styleClass="activity-item" spacing="10">
+                                        <Label text="JD" styleClass="activity-avatar"/>
+                                        <VBox spacing="2">
+                                            <Label text="John Doe updated description" styleClass="activity-text"/>
+                                            <Label text="2 hours ago" styleClass="activity-time"/>
+                                        </VBox>
+                                    </HBox>
+                                    
+                                    <HBox styleClass="activity-item" spacing="10">
+                                        <Label text="SK" styleClass="activity-avatar"/>
+                                        <VBox spacing="2">
+                                            <Label text="Sarah Kim added tag" styleClass="activity-text"/>
+                                            <Label text="5 hours ago" styleClass="activity-time"/>
+                                        </VBox>
+                                    </HBox>
+                                    
+                                    <HBox styleClass="activity-item" spacing="10">
+                                        <Label text="MS" styleClass="activity-avatar"/>
+                                        <VBox spacing="2">
+                                            <Label text="Mike Smith created screen" styleClass="activity-text"/>
+                                            <Label text="1 day ago" styleClass="activity-time"/>
+                                        </VBox>
+                                    </HBox>
+                                </VBox>
+                            </VBox>
+                        </VBox>
+                    </HBox>
+                </ScrollPane>
             </VBox>
         </HBox>
     </center>
 
 </BorderPane>
-

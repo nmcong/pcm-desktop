@@ -2,7 +2,16 @@
   "permissions": {
     "allow": [
       "Bash(mv:*)",
-      "Bash(mkdir:*)"
+      "Bash(mkdir:*)",
+      "Bash(chmod:*)",
+      "Bash(./run-macos.command)",
+      "Bash(rm:*)",
+      "Bash(./compile-macos.command)",
+      "Bash(ls:*)",
+      "Bash(find:*)",
+      "Bash(javac:*)",
+      "Bash(cp:*)",
+      "Bash(./download-lucide-icon.sh:*)"
     ],
     "deny": []
   }
