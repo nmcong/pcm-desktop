@@ -128,49 +128,43 @@ public class DatabaseObjectsPage extends BasePage {
         // Tables
         TreeItem<String> tables = new TreeItem<>("Tables (45)");
         tables.setGraphic(new FontIcon(Feather.GRID));
-        tables.getChildren().addAll(
-            createTableItem("USERS", "Table"),
-            createTableItem("PROJECTS", "Table"),
-            createTableItem("SCREENS", "Table"),
-            createTableItem("WORKFLOWS", "Table"),
-            createTableItem("AUDIT_LOG", "Table")
-        );
+        tables.getChildren().add(createTableItem("USERS", "Table"));
+        tables.getChildren().add(createTableItem("PROJECTS", "Table"));
+        tables.getChildren().add(createTableItem("SCREENS", "Table"));
+        tables.getChildren().add(createTableItem("WORKFLOWS", "Table"));
+        tables.getChildren().add(createTableItem("AUDIT_LOG", "Table"));
         
         // Views
         TreeItem<String> views = new TreeItem<>("Views (12)");
         views.setGraphic(new FontIcon(Feather.EYE));
-        views.getChildren().addAll(
-            createTableItem("V_USER_PROJECTS", "View"),
-            createTableItem("V_ACTIVE_WORKFLOWS", "View"),
-            createTableItem("V_PROJECT_STATS", "View")
-        );
+        views.getChildren().add(createTableItem("V_USER_PROJECTS", "View"));
+        views.getChildren().add(createTableItem("V_ACTIVE_WORKFLOWS", "View"));
+        views.getChildren().add(createTableItem("V_PROJECT_STATS", "View"));
         
         // Procedures
         TreeItem<String> procedures = new TreeItem<>("Procedures (28)");
         procedures.setGraphic(new FontIcon(Feather.SETTINGS));
-        procedures.getChildren().addAll(
-            createTableItem("SP_CREATE_PROJECT", "Procedure"),
-            createTableItem("SP_UPDATE_WORKFLOW", "Procedure"),
-            createTableItem("SP_GENERATE_REPORT", "Procedure")
-        );
+        procedures.getChildren().add(createTableItem("SP_CREATE_PROJECT", "Procedure"));
+        procedures.getChildren().add(createTableItem("SP_UPDATE_WORKFLOW", "Procedure"));
+        procedures.getChildren().add(createTableItem("SP_GENERATE_REPORT", "Procedure"));
         
         // Functions
         TreeItem<String> functions = new TreeItem<>("Functions (15)");
         functions.setGraphic(new FontIcon(Feather.ZAP));
-        functions.getChildren().addAll(
-            createTableItem("FN_CALCULATE_METRICS", "Function"),
-            createTableItem("FN_VALIDATE_USER", "Function")
-        );
+        functions.getChildren().add(createTableItem("FN_CALCULATE_METRICS", "Function"));
+        functions.getChildren().add(createTableItem("FN_VALIDATE_USER", "Function"));
         
         // Sequences
         TreeItem<String> sequences = new TreeItem<>("Sequences (8)");
         sequences.setGraphic(new FontIcon(Feather.HASH));
-        sequences.getChildren().addAll(
-            createTableItem("SEQ_USER_ID", "Sequence"),
-            createTableItem("SEQ_PROJECT_ID", "Sequence")
-        );
+        sequences.getChildren().add(createTableItem("SEQ_USER_ID", "Sequence"));
+        sequences.getChildren().add(createTableItem("SEQ_PROJECT_ID", "Sequence"));
         
-        root.getChildren().addAll(tables, views, procedures, functions, sequences);
+        root.getChildren().add(tables);
+        root.getChildren().add(views);
+        root.getChildren().add(procedures);
+        root.getChildren().add(functions);
+        root.getChildren().add(sequences);
         schemaTree.setRoot(root);
         
         // Handle selection
@@ -305,16 +299,17 @@ public class DatabaseObjectsPage extends BasePage {
         TableColumn<ColumnInfo, String> defaultCol = new TableColumn<>("Default");
         defaultCol.setCellValueFactory(data -> new javafx.beans.property.SimpleStringProperty(data.getValue().getDefaultValue()));
         
-        columnsTable.getColumns().addAll(nameCol, typeCol, nullableCol, defaultCol);
+        columnsTable.getColumns().add(nameCol);
+        columnsTable.getColumns().add(typeCol);
+        columnsTable.getColumns().add(nullableCol);
+        columnsTable.getColumns().add(defaultCol);
         
         // Sample data
-        columnsTable.getItems().addAll(
-            new ColumnInfo("ID", "NUMBER(10)", "NO", "SEQ_" + tableName + "_ID.NEXTVAL"),
-            new ColumnInfo("NAME", "VARCHAR2(100)", "NO", null),
-            new ColumnInfo("DESCRIPTION", "VARCHAR2(500)", "YES", null),
-            new ColumnInfo("CREATED_DATE", "TIMESTAMP", "NO", "SYSTIMESTAMP"),
-            new ColumnInfo("UPDATED_DATE", "TIMESTAMP", "YES", null)
-        );
+        columnsTable.getItems().add(new ColumnInfo("ID", "NUMBER(10)", "NO", "SEQ_" + tableName + "_ID.NEXTVAL"));
+        columnsTable.getItems().add(new ColumnInfo("NAME", "VARCHAR2(100)", "NO", null));
+        columnsTable.getItems().add(new ColumnInfo("DESCRIPTION", "VARCHAR2(500)", "YES", null));
+        columnsTable.getItems().add(new ColumnInfo("CREATED_DATE", "TIMESTAMP", "NO", "SYSTIMESTAMP"));
+        columnsTable.getItems().add(new ColumnInfo("UPDATED_DATE", "TIMESTAMP", "YES", null));
         
         tab.setContent(columnsTable);
         return tab;

@@ -78,14 +78,11 @@ public class AIAssistantPage extends BasePage {
         mainContent.setPadding(new Insets(0));
         VBox.setVgrow(mainContent, Priority.ALWAYS);
         
-        // AI Chat header always at top
-        HBox chatHeader = createChatHeader();
+        // Main layout: 2 columns (sidebar + content)
+        HBox mainLayout = createMainLayout();
+        VBox.setVgrow(mainLayout, Priority.ALWAYS);
         
-        // Chat content layout: sidebar + main chat area
-        HBox chatContentLayout = createChatContentLayout();
-        VBox.setVgrow(chatContentLayout, Priority.ALWAYS);
-        
-        mainContent.getChildren().addAll(chatHeader, chatContentLayout);
+        mainContent.getChildren().add(mainLayout);
         return mainContent;
     }
     
@@ -96,6 +93,134 @@ public class AIAssistantPage extends BasePage {
         return null;
     }
     
+    
+    private HBox createMainLayout() {
+        HBox mainLayout = new HBox();
+        mainLayout.getStyleClass().add("main-layout");
+        mainLayout.setSpacing(0);
+        
+        // Left sidebar (280px fixed width)
+        VBox sidebar = createChatSidebar();
+        sidebar.setPrefWidth(280);
+        sidebar.setMinWidth(280);
+        sidebar.setMaxWidth(280);
+        
+        // Right content area (grows to fill remaining space)
+        VBox contentArea = createContentArea();
+        HBox.setHgrow(contentArea, Priority.ALWAYS);
+        
+        mainLayout.getChildren().addAll(sidebar, contentArea);
+        return mainLayout;
+    }
+    
+    private VBox createContentArea() {
+        VBox contentArea = new VBox();
+        contentArea.getStyleClass().add("content-area");
+        VBox.setVgrow(contentArea, Priority.ALWAYS);
+        
+        // Top: Header
+        HBox chatHeader = createChatHeader();
+        
+        // Bottom: Messages area + Input area (grows to fill remaining space)
+        VBox messagesAndInputArea = createMessagesAndInputArea();
+        VBox.setVgrow(messagesAndInputArea, Priority.ALWAYS);
+        
+        contentArea.getChildren().addAll(chatHeader, messagesAndInputArea);
+        return contentArea;
+    }
+    
+    private VBox createMessagesAndInputArea() {
+        VBox container = new VBox();
+        container.getStyleClass().add("messages-and-input-area");
+        VBox.setVgrow(container, Priority.ALWAYS);
+        
+        // Messages area (grows to fill remaining space)
+        VBox messagesArea = createMessagesArea();
+        VBox.setVgrow(messagesArea, Priority.ALWAYS);
+        
+        // Input area (fixed height at bottom)
+        VBox inputArea = createChatInputArea();
+        inputArea.getStyleClass().add("fixed-bottom-input");
+        
+        container.getChildren().addAll(messagesArea, inputArea);
+        return container;
+    }
+    
+    private VBox createMessagesArea() {
+        VBox messagesArea = new VBox();
+        messagesArea.getStyleClass().add("messages-area");
+        VBox.setVgrow(messagesArea, Priority.ALWAYS);
+        
+        // Build content based on current state
+        buildMessagesContent(messagesArea);
+        
+        return messagesArea;
+    }
+    
+    private void buildMessagesContent(VBox messagesArea) {
+        // Clear existing content
+        messagesArea.getChildren().clear();
+        
+        if (currentSession == null || currentSession.getMessages().isEmpty()) {
+            // Welcome state: center the welcome content
+            VBox welcomeContent = createWelcomeContentCentered();
+            messagesArea.getChildren().add(welcomeContent);
+            messagesArea.setAlignment(Pos.CENTER);
+            
+            // Reset chatMessagesArea to null for welcome state
+            chatMessagesArea = null;
+        } else {
+            // Chat state: messages from top to bottom
+            messagesArea.setAlignment(Pos.TOP_LEFT);
+            
+            // Messages container - align from top
+            VBox messagesContainer = new VBox();
+            messagesContainer.setAlignment(Pos.TOP_CENTER);
+            messagesContainer.setPadding(new Insets(20));
+            
+            chatMessagesArea = new VBox(16);
+            chatMessagesArea.getStyleClass().add("chat-messages-area");
+            chatMessagesArea.setMaxWidth(768); // Keep messages readable width
+            chatMessagesArea.setAlignment(Pos.TOP_LEFT); // Messages from top
+            
+            messagesContainer.getChildren().add(chatMessagesArea);
+            
+            chatScroll = new ScrollPane(messagesContainer);
+            chatScroll.setFitToWidth(true);
+            chatScroll.getStyleClass().add("chat-scroll");
+            chatScroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
+            chatScroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+            VBox.setVgrow(chatScroll, Priority.ALWAYS);
+            
+            messagesArea.getChildren().add(chatScroll);
+            
+            // Load current session messages if they exist
+            if (currentSession != null && !currentSession.getMessages().isEmpty()) {
+                for (ChatMessage message : currentSession.getMessages()) {
+                    VBox messageBox = createMessageBox(message);
+                    chatMessagesArea.getChildren().add(messageBox);
+                }
+                scrollToBottom();
+            }
+        }
+    }
+    
+    private VBox createWelcomeContentCentered() {
+        VBox welcomeContent = new VBox(40);
+        welcomeContent.setAlignment(Pos.CENTER);
+        welcomeContent.getStyleClass().add("welcome-content-centered");
+        welcomeContent.setPadding(new Insets(60, 40, 60, 40));
+        
+        // Welcome message
+        VBox welcome = showWelcomeMessage();
+        
+        // Quick suggestions
+        HBox suggestions = createQuickSuggestions();
+        
+        welcomeContent.getChildren().addAll(welcome, suggestions);
+        
+        return welcomeContent;
+    }
     
     private HBox createChatContentLayout() {
         HBox layout = new HBox();
@@ -188,31 +313,24 @@ public class AIAssistantPage extends BasePage {
         content.setAlignment(Pos.CENTER_LEFT);
         content.setPadding(new Insets(12));
         
-        // Bot icon
-        com.noteflix.pcm.core.theme.ThemeManager themeManager = com.noteflix.pcm.core.theme.ThemeManager.getInstance();
-        javafx.scene.image.ImageView botIcon = com.noteflix.pcm.core.utils.IconUtils.createImageView(
-            themeManager.getBotIcon(), 24, 24
-        );
-        botIcon.getStyleClass().add("session-bot-icon");
-        
-        // Text content
+        // Text content (no bot icon)
         VBox textContent = new VBox(4);
         textContent.setAlignment(Pos.CENTER_LEFT);
         HBox.setHgrow(textContent, Priority.ALWAYS);
         
         Label titleLabel = new Label(session.getTitle());
         titleLabel.getStyleClass().addAll(Styles.TEXT_BOLD, "session-title");
-        titleLabel.setMaxWidth(180);
+        titleLabel.setMaxWidth(220);
         
         Label previewLabel = new Label(session.getPreview());
         previewLabel.getStyleClass().addAll(Styles.TEXT_SMALL, "text-muted", "session-preview");
         previewLabel.setWrapText(false);
-        previewLabel.setMaxWidth(180);
+        previewLabel.setMaxWidth(220);
         
         // Truncate preview text if too long
         String preview = session.getPreview();
-        if (preview.length() > 35) {
-            preview = preview.substring(0, 32) + "...";
+        if (preview.length() > 40) {
+            preview = preview.substring(0, 37) + "...";
         }
         previewLabel.setText(preview);
         
@@ -233,7 +351,7 @@ public class AIAssistantPage extends BasePage {
         
         rightContent.getChildren().add(timeLabel);
         
-        content.getChildren().addAll(botIcon, textContent, rightContent);
+        content.getChildren().addAll(textContent, rightContent);
         
         Button sessionBtn = new Button();
         sessionBtn.setGraphic(content);
@@ -254,49 +372,126 @@ public class AIAssistantPage extends BasePage {
     private VBox createMainChatArea() {
         mainChatContentArea = new VBox();
         mainChatContentArea.getStyleClass().add("main-chat-area");
-        mainChatContentArea.setMaxWidth(768);
-        mainChatContentArea.setAlignment(Pos.CENTER);
+        
+        // Set width and style based on whether we have messages
+        if (currentSession == null || currentSession.getMessages().isEmpty()) {
+            // Welcome state: centered with max width
+            mainChatContentArea.setMaxWidth(768);
+            mainChatContentArea.setAlignment(Pos.CENTER);
+            mainChatContentArea.getStyleClass().remove("chat-state");
+            if (!mainChatContentArea.getStyleClass().contains("welcome-state")) {
+                mainChatContentArea.getStyleClass().add("welcome-state");
+            }
+        } else {
+            // Chat state: full width
+            mainChatContentArea.setMaxWidth(Double.MAX_VALUE);
+            mainChatContentArea.setAlignment(Pos.TOP_LEFT);
+            mainChatContentArea.getStyleClass().remove("welcome-state");
+            if (!mainChatContentArea.getStyleClass().contains("chat-state")) {
+                mainChatContentArea.getStyleClass().add("chat-state");
+            }
+        }
+        
         VBox.setVgrow(mainChatContentArea, Priority.ALWAYS);
         
-        // Build initial content based on current state
-        buildChatContent();
+        // Build initial content based on current state (without input area)
+        buildChatContentWithoutInput();
         
-        // Wrap to center the main area horizontally
+        // Wrap to center the main area horizontally in welcome state only
         VBox wrapper = new VBox();
         wrapper.getStyleClass().add("chat-area-wrapper");
-        wrapper.setAlignment(Pos.CENTER);
         VBox.setVgrow(wrapper, Priority.ALWAYS);
         
-        // Center the main area
-        HBox centeringBox = new HBox(mainChatContentArea);
-        centeringBox.setAlignment(Pos.CENTER);
-        HBox.setHgrow(centeringBox, Priority.ALWAYS);
-        
-        wrapper.getChildren().add(centeringBox);
+        if (currentSession == null || currentSession.getMessages().isEmpty()) {
+            // Welcome state: center the main area
+            wrapper.setAlignment(Pos.CENTER);
+            HBox centeringBox = new HBox(mainChatContentArea);
+            centeringBox.setAlignment(Pos.CENTER);
+            HBox.setHgrow(centeringBox, Priority.ALWAYS);
+            wrapper.getChildren().add(centeringBox);
+        } else {
+            // Chat state: full width
+            wrapper.setAlignment(Pos.TOP_LEFT);
+            HBox.setHgrow(mainChatContentArea, Priority.ALWAYS);
+            wrapper.getChildren().add(mainChatContentArea);
+        }
         
         return wrapper;
     }
     
     private void buildChatContent() {
+        buildChatContentWithoutInput();
+    }
+    
+    private void buildChatContentWithoutInput() {
         // Clear existing content
         mainChatContentArea.getChildren().clear();
         
         // Check if there are messages to determine layout
         if (currentSession == null || currentSession.getMessages().isEmpty()) {
-            // Welcome state: centered welcome message, suggestions, and input
-            VBox welcomeContent = createWelcomeContent();
+            // Welcome state: centered welcome message and suggestions only
+            mainChatContentArea.setMaxWidth(768);
+            mainChatContentArea.setAlignment(Pos.CENTER);
+            mainChatContentArea.getStyleClass().remove("chat-state");
+            if (!mainChatContentArea.getStyleClass().contains("welcome-state")) {
+                mainChatContentArea.getStyleClass().add("welcome-state");
+            }
+            
+            VBox welcomeContent = createWelcomeContentWithoutInput();
             VBox.setVgrow(welcomeContent, Priority.ALWAYS);
             mainChatContentArea.getChildren().add(welcomeContent);
             
             // Reset chatMessagesArea to null for welcome state
             chatMessagesArea = null;
         } else {
-            // Chat state: messages scroll area + fixed input at bottom
-            createChatStateContent(mainChatContentArea);
+            // Chat state: messages scroll area only (no input)
+            mainChatContentArea.setMaxWidth(Double.MAX_VALUE);
+            mainChatContentArea.setAlignment(Pos.TOP_LEFT);
+            mainChatContentArea.getStyleClass().remove("welcome-state");
+            if (!mainChatContentArea.getStyleClass().contains("chat-state")) {
+                mainChatContentArea.getStyleClass().add("chat-state");
+            }
+            
+            createChatStateContentWithoutInput(mainChatContentArea);
         }
     }
     
     private VBox createWelcomeContent() {
+        VBox welcomeContent = new VBox();
+        welcomeContent.setAlignment(Pos.TOP_CENTER);
+        welcomeContent.getStyleClass().add("welcome-content");
+        VBox.setVgrow(welcomeContent, Priority.ALWAYS);
+        
+        // Scrollable welcome area
+        VBox scrollableWelcome = new VBox(40);
+        scrollableWelcome.setAlignment(Pos.CENTER);
+        scrollableWelcome.setPadding(new Insets(60, 40, 20, 40));
+        
+        // Welcome message
+        VBox welcome = showWelcomeMessage();
+        
+        // Quick suggestions
+        HBox suggestions = createQuickSuggestions();
+        
+        scrollableWelcome.getChildren().addAll(welcome, suggestions);
+        
+        ScrollPane welcomeScroll = new ScrollPane(scrollableWelcome);
+        welcomeScroll.setFitToWidth(true);
+        welcomeScroll.getStyleClass().add("welcome-scroll");
+        welcomeScroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
+        welcomeScroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        VBox.setVgrow(welcomeScroll, Priority.ALWAYS);
+        
+        // Fixed input area at bottom
+        VBox inputArea = createChatInputArea();
+        inputArea.getStyleClass().add("fixed-input-area");
+        
+        welcomeContent.getChildren().addAll(welcomeScroll, inputArea);
+        
+        return welcomeContent;
+    }
+    
+    private VBox createWelcomeContentWithoutInput() {
         VBox welcomeContent = new VBox(40);
         welcomeContent.setAlignment(Pos.CENTER);
         welcomeContent.getStyleClass().add("welcome-content");
@@ -309,32 +504,68 @@ public class AIAssistantPage extends BasePage {
         // Quick suggestions
         HBox suggestions = createQuickSuggestions();
         
-        // Input area
-        VBox inputArea = createChatInputArea();
-        
-        welcomeContent.getChildren().addAll(welcome, suggestions, inputArea);
+        welcomeContent.getChildren().addAll(welcome, suggestions);
         
         return welcomeContent;
     }
     
     private void createChatStateContent(VBox mainArea) {
-        // Messages area
+        // Messages area - constrain to max width for readability but allow horizontal scrolling if needed
+        VBox messagesContainer = new VBox();
+        messagesContainer.setAlignment(Pos.CENTER);
+        messagesContainer.setPadding(new Insets(20));
+        
         chatMessagesArea = new VBox(16);
         chatMessagesArea.getStyleClass().add("chat-messages-area");
-        chatMessagesArea.setPadding(new Insets(20));
+        chatMessagesArea.setMaxWidth(768); // Keep messages readable width
+        chatMessagesArea.setAlignment(Pos.CENTER);
         
-        chatScroll = new ScrollPane(chatMessagesArea);
+        messagesContainer.getChildren().add(chatMessagesArea);
+        
+        chatScroll = new ScrollPane(messagesContainer);
         chatScroll.setFitToWidth(true);
         chatScroll.getStyleClass().add("chat-scroll");
         chatScroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
         chatScroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         VBox.setVgrow(chatScroll, Priority.ALWAYS);
         
-        // Input area at bottom (fixed)
+        // Input area at bottom (fixed) - full width
         VBox inputArea = createChatInputArea();
         inputArea.getStyleClass().add("fixed-input-area");
         
         mainArea.getChildren().addAll(chatScroll, inputArea);
+        
+        // Load current session messages if they exist
+        if (currentSession != null && !currentSession.getMessages().isEmpty()) {
+            for (ChatMessage message : currentSession.getMessages()) {
+                VBox messageBox = createMessageBox(message);
+                chatMessagesArea.getChildren().add(messageBox);
+            }
+            scrollToBottom();
+        }
+    }
+    
+    private void createChatStateContentWithoutInput(VBox mainArea) {
+        // Messages area - constrain to max width for readability but allow horizontal scrolling if needed
+        VBox messagesContainer = new VBox();
+        messagesContainer.setAlignment(Pos.CENTER);
+        messagesContainer.setPadding(new Insets(20));
+        
+        chatMessagesArea = new VBox(16);
+        chatMessagesArea.getStyleClass().add("chat-messages-area");
+        chatMessagesArea.setMaxWidth(768); // Keep messages readable width
+        chatMessagesArea.setAlignment(Pos.CENTER);
+        
+        messagesContainer.getChildren().add(chatMessagesArea);
+        
+        chatScroll = new ScrollPane(messagesContainer);
+        chatScroll.setFitToWidth(true);
+        chatScroll.getStyleClass().add("chat-scroll");
+        chatScroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
+        chatScroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        VBox.setVgrow(chatScroll, Priority.ALWAYS);
+        
+        mainArea.getChildren().add(chatScroll);
         
         // Load current session messages if they exist
         if (currentSession != null && !currentSession.getMessages().isEmpty()) {
@@ -389,17 +620,17 @@ public class AIAssistantPage extends BasePage {
         VBox inputArea = new VBox(12);
         inputArea.getStyleClass().add("chat-input-container");
         inputArea.setPadding(new Insets(20));
+        inputArea.setAlignment(Pos.CENTER);
         
-        // Quick suggestions (like ChatGPT)
-        if (currentSession == null || currentSession.getMessages().isEmpty()) {
-            HBox suggestions = createQuickSuggestions();
-            inputArea.getChildren().add(suggestions);
-        }
+        // Container for input with max width constraint
+        VBox inputContainer = new VBox();
+        inputContainer.setAlignment(Pos.CENTER);
         
-        // Main input box
+        // Main input box - always constrained to 768px max width
         HBox inputBox = new HBox(12);
         inputBox.setAlignment(Pos.CENTER);
         inputBox.getStyleClass().add("chat-input-box");
+        inputBox.setMaxWidth(768); // Always 768px max width like messages
         
         VBox inputWrapper = new VBox();
         inputWrapper.getStyleClass().add("input-wrapper");
@@ -439,7 +670,8 @@ public class AIAssistantPage extends BasePage {
         HBox.setHgrow(inputWrapper, Priority.ALWAYS);
         
         inputBox.getChildren().add(inputWrapper);
-        inputArea.getChildren().add(inputBox);
+        inputContainer.getChildren().add(inputBox);
+        inputArea.getChildren().add(inputContainer);
         
         // Handle Enter key
         chatInput.setOnKeyPressed(e -> {
@@ -459,9 +691,7 @@ public class AIAssistantPage extends BasePage {
         
         String[] suggestionTexts = {
             "Analyze my database schema",
-            "Review code quality",
-            "Check system performance",
-            "Security assessment"
+            "Review code quality"
         };
         
         for (String text : suggestionTexts) {
@@ -505,7 +735,7 @@ public class AIAssistantPage extends BasePage {
         messageBox.getStyleClass().add("message-box");
         
         HBox messageRow = new HBox(12);
-        messageRow.setAlignment(message.isFromAI() ? Pos.CENTER_LEFT : Pos.CENTER_RIGHT);
+        messageRow.setAlignment(message.isFromAI() ? Pos.TOP_LEFT : Pos.TOP_RIGHT);
         
         // Create message icon
         javafx.scene.Node messageIcon = createMessageIcon(message.isFromAI());
@@ -590,8 +820,10 @@ public class AIAssistantPage extends BasePage {
         }
         
         // Add message to UI
-        VBox messageBox = createMessageBox(userMessage);
-        chatMessagesArea.getChildren().add(messageBox);
+        if (chatMessagesArea != null) {
+            VBox messageBox = createMessageBox(userMessage);
+            chatMessagesArea.getChildren().add(messageBox);
+        }
         
         // Add loading indicator
         showLoadingIndicator();
@@ -602,8 +834,8 @@ public class AIAssistantPage extends BasePage {
     }
     
     private void rebuildChatLayout() {
-        // Rebuild the chat content using the stored reference
-        buildChatContent();
+        // Rebuild the entire main content with new layout
+        rebuildMainContent();
     }
     
     private void showLoadingIndicator() {
@@ -633,7 +865,7 @@ public class AIAssistantPage extends BasePage {
         indicator.setPadding(new Insets(16, 20, 16, 20));
         
         HBox messageRow = new HBox(12);
-        messageRow.setAlignment(Pos.CENTER_LEFT);
+        messageRow.setAlignment(Pos.TOP_LEFT);
         
         // Bot icon
         com.noteflix.pcm.core.theme.ThemeManager themeManager = com.noteflix.pcm.core.theme.ThemeManager.getInstance();
@@ -774,11 +1006,8 @@ public class AIAssistantPage extends BasePage {
         if (currentSession != session) {
             currentSession = session;
             
-            // Rebuild the entire chat content to reflect the new session
-            buildChatContent();
-            updateChatSessionsList(); // Update active state
-            
-            // Update chat header (rebuild the main content to include updated header)
+            // Update active state and rebuild entire layout
+            updateChatSessionsList();
             rebuildMainContent();
         }
     }
@@ -788,22 +1017,18 @@ public class AIAssistantPage extends BasePage {
         VBox mainContent = (VBox) getChildren().get(getChildren().size() - 1);
         mainContent.getChildren().clear();
         
-        // Add header and chat content
-        HBox chatHeader = createChatHeader();
-        HBox chatContentLayout = createChatContentLayout();
-        VBox.setVgrow(chatContentLayout, Priority.ALWAYS);
+        // Use the new 2-column layout
+        HBox mainLayout = createMainLayout();
+        VBox.setVgrow(mainLayout, Priority.ALWAYS);
         
-        mainContent.getChildren().addAll(chatHeader, chatContentLayout);
+        mainContent.getChildren().add(mainLayout);
     }
     
     private void createNewChat() {
         currentSession = null;
         
-        // Rebuild content for welcome state
-        buildChatContent();
+        // Rebuild entire layout for welcome state
         updateChatSessionsList();
-        
-        // Rebuild main content to update header
         rebuildMainContent();
         
         // Focus input
@@ -816,8 +1041,8 @@ public class AIAssistantPage extends BasePage {
         if (currentSession != null) {
             currentSession.getMessages().clear();
             
-            // Rebuild content since messages are now empty
-            buildChatContent();
+            // Rebuild entire layout since messages are now empty
+            rebuildMainContent();
         }
     }
     

@@ -446,8 +446,16 @@
 /* Main Chat Area */
 .main-chat-area {
     -fx-background-color: -color-bg-default;
+}
+
+.main-chat-area.welcome-state {
     -fx-max-width: 768px;
     -fx-alignment: center;
+}
+
+.main-chat-area.chat-state {
+    -fx-max-width: infinity;
+    -fx-alignment: top-left;
 }
 
 .chat-header {

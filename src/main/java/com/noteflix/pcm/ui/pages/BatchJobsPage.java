@@ -185,7 +185,12 @@ public class BatchJobsPage extends BasePage {
             }
         });
         
-        jobsTable.getColumns().addAll(nameColumn, statusColumn, lastRunColumn, nextRunColumn, durationColumn, actionsColumn);
+        jobsTable.getColumns().add(nameColumn);
+        jobsTable.getColumns().add(statusColumn);
+        jobsTable.getColumns().add(lastRunColumn);
+        jobsTable.getColumns().add(nextRunColumn);
+        jobsTable.getColumns().add(durationColumn);
+        jobsTable.getColumns().add(actionsColumn);
         
         // Sample data
         loadSampleData();
@@ -195,15 +200,13 @@ public class BatchJobsPage extends BasePage {
     }
     
     private void loadSampleData() {
-        jobsTable.getItems().addAll(
-            new JobEntry("Daily Report Generation", "Completed", "Today 02:00", "Tomorrow 02:00", "5m 32s"),
-            new JobEntry("Database Backup", "Running", "Today 01:45", "Tomorrow 01:45", "Running..."),
-            new JobEntry("Data Cleanup", "Scheduled", "Yesterday 23:00", "Today 23:00", "2m 15s"),
-            new JobEntry("Email Notifications", "Failed", "Today 08:00", "Today 09:00", "Failed"),
-            new JobEntry("Log Archive", "Completed", "Today 00:30", "Tomorrow 00:30", "12m 05s"),
-            new JobEntry("User Sync", "Scheduled", "Not run yet", "Today 18:00", "-"),
-            new JobEntry("Cache Refresh", "Completed", "Today 12:00", "Today 18:00", "30s")
-        );
+        jobsTable.getItems().add(new JobEntry("Daily Report Generation", "Completed", "Today 02:00", "Tomorrow 02:00", "5m 32s"));
+        jobsTable.getItems().add(new JobEntry("Database Backup", "Running", "Today 01:45", "Tomorrow 01:45", "Running..."));
+        jobsTable.getItems().add(new JobEntry("Data Cleanup", "Scheduled", "Yesterday 23:00", "Today 23:00", "2m 15s"));
+        jobsTable.getItems().add(new JobEntry("Email Notifications", "Failed", "Today 08:00", "Today 09:00", "Failed"));
+        jobsTable.getItems().add(new JobEntry("Log Archive", "Completed", "Today 00:30", "Tomorrow 00:30", "12m 05s"));
+        jobsTable.getItems().add(new JobEntry("User Sync", "Scheduled", "Not run yet", "Today 18:00", "-"));
+        jobsTable.getItems().add(new JobEntry("Cache Refresh", "Completed", "Today 12:00", "Today 18:00", "30s"));
     }
     
     private void handleNewJob() {
