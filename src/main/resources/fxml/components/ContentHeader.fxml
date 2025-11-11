@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.noteflix.pcm.ui.components.ContentHeaderController">
+    
+    <!-- Page Header -->
+    <HBox styleClass="page-header">
+        <VBox spacing="4">
+            <Label fx:id="pageTitle" text="Customer Profile Dashboard" styleClass="page-title"/>
+            <HBox spacing="8" alignment="CENTER_LEFT">
+                <Label text="•" styleClass="status-dot active"/>
+                <Label fx:id="statusText" text="Active" styleClass="status-text"/>
+                <Label text="•" styleClass="separator"/>
+                <Label fx:id="metaText" text="Last updated 2h ago" styleClass="meta-text"/>
+            </HBox>
+        </VBox>
+        
+        <Region HBox.hgrow="ALWAYS"/>
+        
+        <HBox spacing="10">
+            <Button text="Share" styleClass="btn-outline" onAction="#handleShare"/>
+            <Button text="⋮" styleClass="btn-icon" onAction="#handleMore"/>
+        </HBox>
+    </HBox>
+    
+    <!-- Tabs -->
+    <HBox styleClass="tabs-bar">
+        <Button text="Overview" styleClass="tab-item active" onAction="#handleTabOverview"/>
+        <Button text="Events" styleClass="tab-item" onAction="#handleTabEvents"/>
+        <Button text="Source Code" styleClass="tab-item" onAction="#handleTabSourceCode"/>
+        <Button text="Database" styleClass="tab-item" onAction="#handleTabDatabase"/>
+        <Button text="API Endpoints" styleClass="tab-item" onAction="#handleTabAPI"/>
+    </HBox>
+</VBox>
+

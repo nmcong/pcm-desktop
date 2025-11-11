@@ -38,10 +38,12 @@ echo.
 
 REM Copy resources to output directory
 echo [INFO] Copying resources...
-if not exist "out\fxml" mkdir out\fxml
+if not exist "out\fxml\components" mkdir out\fxml\components
 if not exist "out\css" mkdir out\css
 if not exist "out\images\icons" mkdir out\images\icons
-xcopy /Y src\main\resources\fxml\*.fxml out\fxml\ >nul 2>&1
+REM Copy all FXML files including subdirectories
+xcopy /Y /E /I src\main\resources\fxml\*.fxml out\fxml\ >nul 2>&1
+xcopy /Y /E /I src\main\resources\fxml\components\*.fxml out\fxml\components\ >nul 2>&1
 xcopy /Y src\main\resources\css\*.css out\css\ >nul 2>&1
 xcopy /Y src\main\resources\images\icons\*.png out\images\icons\ >nul 2>&1
 xcopy /Y src\main\resources\images\icons\*.svg out\images\icons\ >nul 2>&1

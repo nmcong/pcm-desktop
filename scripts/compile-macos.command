@@ -12,12 +12,14 @@ echo ""
 # Create output directory
 mkdir -p out
 
-# Compile Java files
+# Compile Java files (find all .java files recursively)
+find src/main/java -name "*.java" > sources.txt
 javac -cp "lib/javafx/*:lib/others/*" \
   -d out \
   -encoding UTF-8 \
   -Xlint:unchecked \
-  src/main/java/com/noteflix/pcm/**/*.java
+  @sources.txt
+rm sources.txt
 
 if [ $? -eq 0 ]; then
     echo ""
@@ -26,8 +28,9 @@ if [ $? -eq 0 ]; then
     
     # Copy resources to output directory
     echo "📦 Copying resources..."
-    mkdir -p out/fxml out/css out/images/icons
-    cp src/main/resources/fxml/*.fxml out/fxml/ 2>/dev/null || true
+    mkdir -p out/fxml/components out/css out/images/icons
+    # Copy all FXML files including subdirectories
+    find src/main/resources/fxml -name "*.fxml" -exec sh -c 'mkdir -p "out/fxml/$(dirname "{}" | sed "s|src/main/resources/fxml/||")" && cp "{}" "out/fxml/$(echo "{}" | sed "s|src/main/resources/fxml/||")"' \;
     cp src/main/resources/css/*.css out/css/ 2>/dev/null || true
     cp src/main/resources/images/icons/*.png out/images/icons/ 2>/dev/null || true
     cp src/main/resources/images/icons/*.svg out/images/icons/ 2>/dev/null || true

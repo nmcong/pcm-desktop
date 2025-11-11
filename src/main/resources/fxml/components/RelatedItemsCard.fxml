@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox styleClass="card" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.noteflix.pcm.ui.components.RelatedItemsCardController">
+    
+    <Label text="Related Screens" styleClass="card-title"/>
+    
+    <VBox styleClass="related-list" spacing="8">
+        <HBox styleClass="related-item" onMouseClicked="#handleRelatedItemClick">
+            <Label text="📱" styleClass="related-icon"/>
+            <VBox spacing="2">
+                <Label text="Login Screen" styleClass="related-name"/>
+                <Label text="Authentication flow entry point" styleClass="related-desc"/>
+            </VBox>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Button text="→" styleClass="btn-nav"/>
+        </HBox>
+        
+        <HBox styleClass="related-item" onMouseClicked="#handleRelatedItemClick">
+            <Label text="📱" styleClass="related-icon"/>
+            <VBox spacing="2">
+                <Label text="Order History" styleClass="related-name"/>
+                <Label text="Shows customer's past orders" styleClass="related-desc"/>
+            </VBox>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Button text="→" styleClass="btn-nav"/>
+        </HBox>
+    </VBox>
+</VBox>
+

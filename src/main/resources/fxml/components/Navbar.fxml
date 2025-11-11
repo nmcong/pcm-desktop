@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
+
+<HBox styleClass="navbar" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.noteflix.pcm.ui.components.NavbarController">
+    
+    <!-- Brand -->
+    <HBox styleClass="navbar-brand" alignment="CENTER_LEFT">
+        <ImageView styleClass="brand-icon" fitHeight="24" fitWidth="24" preserveRatio="true">
+            <image>
+                <Image url="@../../images/icons/app-icon.png"/>
+            </image>
+        </ImageView>
+        <Label text="PCM" styleClass="brand-text"/>
+    </HBox>
+    
+    <Region HBox.hgrow="ALWAYS"/>
+    
+    <!-- Right Actions -->
+    <HBox styleClass="navbar-actions" spacing="10">
+        <Button text="+ New Screen" styleClass="btn-new" onAction="#handleNewScreen"/>
+        <Button text="🔔" styleClass="btn-icon" fx:id="notificationBtn" onAction="#handleNotifications"/>
+        <Button text="⚙️" styleClass="btn-icon" fx:id="settingsBtn" onAction="#handleSettings"/>
+    </HBox>
+</HBox>
+

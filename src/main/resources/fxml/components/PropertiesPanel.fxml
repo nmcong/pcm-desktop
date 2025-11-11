@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox styleClass="panel" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.noteflix.pcm.ui.components.PropertiesPanelController">
+    
+    <Label text="Properties" styleClass="panel-title"/>
+    
+    <VBox styleClass="prop-group">
+        <Label text="Status" styleClass="prop-label"/>
+        <HBox styleClass="prop-select">
+            <Label text="●" styleClass="status-indicator active"/>
+            <Label fx:id="statusValue" text="Active" styleClass="prop-value"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Label text="▼" styleClass="dropdown-arrow"/>
+        </HBox>
+    </VBox>
+    
+    <VBox styleClass="prop-group">
+        <Label text="Priority" styleClass="prop-label"/>
+        <HBox styleClass="priority-pills" spacing="6">
+            <Label text="Low" styleClass="priority-pill"/>
+            <Label text="Med" styleClass="priority-pill"/>
+            <Label text="High" styleClass="priority-pill active"/>
+        </HBox>
+    </VBox>
+    
+    <VBox styleClass="prop-group">
+        <Label text="Project" styleClass="prop-label"/>
+        <HBox styleClass="project-select">
+            <Label text="•" styleClass="project-color blue"/>
+            <Label fx:id="projectValue" text="Customer Service" styleClass="prop-value"/>
+        </HBox>
+    </VBox>
+    
+    <Separator styleClass="prop-separator"/>
+    
+    <VBox styleClass="prop-group">
+        <Label text="Screen ID" styleClass="prop-label"/>
+        <Label fx:id="screenIdValue" text="SCR-0042" styleClass="prop-value-mono"/>
+    </VBox>
+    
+    <VBox styleClass="prop-group">
+        <Label text="Created" styleClass="prop-label"/>
+        <Label fx:id="createdValue" text="Nov 8, 2025" styleClass="prop-value"/>
+    </VBox>
+    
+    <VBox styleClass="prop-group">
+        <Label text="Last Updated" styleClass="prop-label"/>
+        <Label fx:id="updatedValue" text="Nov 11, 2025 at 2:30 PM" styleClass="prop-value"/>
+    </VBox>
+    
+    <VBox styleClass="prop-group">
+        <Label text="Author" styleClass="prop-label"/>
+        <HBox spacing="8" alignment="CENTER_LEFT">
+            <Label text="SK" styleClass="avatar"/>
+            <Label fx:id="authorValue" text="Sarah Kim" styleClass="prop-value"/>
+        </HBox>
+    </VBox>
+</VBox>
+

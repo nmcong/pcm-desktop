@@ -146,8 +146,12 @@
 
 /* Sidebar Separator */
 .sidebar-separator {
-    -fx-background-color: #e1e4e8;
-    -fx-padding: 8px 0;
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+    -fx-min-height: 1px;
+    -fx-max-height: 1px;
+    -fx-border-color: rgba(175, 184, 193, 0.2);
+    -fx-border-width: 0 0 1px 0;
 }
 
 /* Quick Actions */
@@ -216,7 +220,7 @@
 }
 
 .nav-item:hover {
-    -fx-background-color: #f6f8fa;
+    -fx-background-color: rgba(246, 248, 250, 0.8);
 }
 
 .nav-item.active {
@@ -314,10 +318,63 @@
     -fx-background-color: linear-gradient(135deg, #bf3800, #fb8500);
 }
 
+.project-avatar.purple {
+    -fx-background-color: linear-gradient(135deg, #8250df, #a371f7);
+}
+
+.project-avatar.red {
+    -fx-background-color: linear-gradient(135deg, #cf222e, #ff6b6b);
+}
+
 .project-initials {
     -fx-text-fill: #ffffff;
     -fx-font-size: 12px;
     -fx-font-weight: bold;
+}
+
+/* Favorite Buttons */
+.favorite-btn {
+    -fx-background-color: transparent;
+    -fx-text-fill: #656d76;
+    -fx-font-size: 14px;
+    -fx-padding: 4px;
+    -fx-background-radius: 4px;
+    -fx-border-color: transparent;
+    -fx-cursor: hand;
+    -fx-min-width: 24px;
+    -fx-min-height: 24px;
+}
+
+.favorite-btn:hover {
+    -fx-background-color: rgba(175, 184, 193, 0.15);
+    -fx-text-fill: #0969da;
+}
+
+.favorite-btn.active {
+    -fx-text-fill: #fb8500;
+}
+
+.favorite-btn.active:hover {
+    -fx-background-color: rgba(251, 133, 0, 0.1);
+    -fx-text-fill: #bf6900;
+}
+
+/* Project Menu Buttons */
+.project-menu-btn {
+    -fx-background-color: transparent;
+    -fx-text-fill: #656d76;
+    -fx-font-size: 12px;
+    -fx-padding: 4px;
+    -fx-background-radius: 4px;
+    -fx-border-color: transparent;
+    -fx-cursor: hand;
+    -fx-min-width: 24px;
+    -fx-min-height: 24px;
+}
+
+.project-menu-btn:hover {
+    -fx-background-color: rgba(175, 184, 193, 0.15);
+    -fx-text-fill: #24292f;
 }
 
 .view-all-btn {
@@ -333,6 +390,31 @@
 .view-all-btn:hover {
     -fx-background-color: #f6f8fa;
     -fx-text-fill: #0860ca;
+}
+
+/* Projects Scroll Area */
+.projects-scroll {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.projects-scroll .viewport {
+    -fx-background-color: transparent;
+}
+
+.projects-scroll .content {
+    -fx-background-color: transparent;
+}
+
+/* Settings Item */
+.settings-item {
+    -fx-background-color: #f6f8fa;
+    -fx-background-radius: 8px;
+    -fx-padding: 12px;
+}
+
+.settings-item:hover {
+    -fx-background-color: #eaeef2;
 }
 
 /* AI Section */
@@ -714,6 +796,89 @@
 
 .btn-nav:hover {
     -fx-text-fill: #0969da;
+}
+
+/* Search Box */
+.search-box {
+    -fx-background-color: rgba(246, 248, 250, 0.5);
+    -fx-background-radius: 6px;
+    -fx-padding: 10px 12px;
+    -fx-border-color: rgba(175, 184, 193, 0.3);
+    -fx-border-width: 1px;
+    -fx-border-radius: 6px;
+}
+
+.search-icon {
+    -fx-text-fill: #656d76;
+    -fx-font-size: 12px;
+}
+
+.search-input {
+    -fx-background-color: transparent;
+    -fx-text-fill: #24292f;
+    -fx-font-size: 12px;
+    -fx-border-color: transparent;
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+}
+
+.search-input:focused {
+    -fx-border-color: transparent;
+    -fx-focus-color: transparent;
+}
+
+/* Section Icons */
+.section-icon {
+    -fx-text-fill: #656d76;
+    -fx-font-size: 14px;
+}
+
+/* Status Labels */
+.nav-status {
+    -fx-font-size: 11px;
+    -fx-font-weight: 600;
+    -fx-padding: 2px 6px;
+    -fx-background-radius: 10px;
+}
+
+.nav-status.active {
+    -fx-text-fill: #1a7f37;
+    -fx-background-color: rgba(26, 127, 55, 0.15);
+}
+
+.nav-status.in-dev {
+    -fx-text-fill: #bf8700;
+    -fx-background-color: rgba(191, 135, 0, 0.15);
+}
+
+.nav-status.planning {
+    -fx-text-fill: #8250df;
+    -fx-background-color: rgba(130, 80, 223, 0.15);
+}
+
+/* Project Badges */
+.project-badge {
+    -fx-font-size: 12px;
+}
+
+.project-badge.hot {
+    -fx-text-fill: #ff6b6b;
+}
+
+/* Navigation Arrow */
+.nav-arrow {
+    -fx-background-color: transparent;
+    -fx-text-fill: #656d76;
+    -fx-font-size: 12px;
+    -fx-padding: 4px;
+    -fx-background-radius: 4px;
+    -fx-border-color: transparent;
+    -fx-cursor: hand;
+}
+
+.nav-arrow:hover {
+    -fx-background-color: rgba(175, 184, 193, 0.15);
+    -fx-text-fill: #24292f;
 }
 
 /* ================================================================

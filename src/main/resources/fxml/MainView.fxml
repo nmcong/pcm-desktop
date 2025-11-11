@@ -1,216 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.image.*?>
 
 <BorderPane fx:id="rootPane" styleClass="root" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.noteflix.pcm.ui.MainController">
 
     <!-- Top Navigation Bar -->
     <top>
-        <HBox styleClass="navbar">
-            <!-- Brand -->
-            <HBox styleClass="navbar-brand" alignment="CENTER_LEFT">
-                <ImageView styleClass="brand-icon" fitHeight="24" fitWidth="24" preserveRatio="true">
-                    <image>
-                        <Image url="@../images/icons/app-icon.png"/>
-                    </image>
-                </ImageView>
-                <Label text="PCM" styleClass="brand-text"/>
-            </HBox>
-            
-            <!-- Global Search -->
-            <TextField fx:id="globalSearch" promptText="🔍 Search screens, projects, code..." styleClass="global-search"/>
-            
-            <Region HBox.hgrow="ALWAYS"/>
-            
-            <!-- Right Actions -->
-            <HBox styleClass="navbar-actions" spacing="10">
-                <Button text="+ New Screen" styleClass="btn-new"/>
-                <Button text="🔔" styleClass="btn-icon" fx:id="notificationBtn"/>
-                <Button text="⚙️" styleClass="btn-icon" fx:id="settingsBtn"/>
-            </HBox>
-        </HBox>
+        <fx:include source="components/Navbar.fxml"/>
     </top>
 
     <center>
         <HBox styleClass="app-container">
             <!-- Sidebar Navigation -->
-            <VBox fx:id="sidebar" styleClass="sidebar">
-                <!-- User Profile Section -->
-                <VBox styleClass="user-section">
-                    <HBox styleClass="user-profile" spacing="12" alignment="CENTER_LEFT">
-                        <Label text="SK" styleClass="user-avatar-large"/>
-                        <VBox spacing="2">
-                            <Label text="Sarah Kim" styleClass="user-name"/>
-                            <Label text="Product Manager" styleClass="user-role"/>
-                        </VBox>
-                    </HBox>
-                </VBox>
-                
-                <Separator styleClass="sidebar-separator"/>
-                
-                <!-- Quick Actions -->
-                <HBox styleClass="quick-actions" spacing="8">
-                    <Button text="＋" styleClass="quick-btn"/>
-                    <Button text="↑" styleClass="quick-btn"/>
-                    <Button text="★" styleClass="quick-btn"/>
-                </HBox>
-                
-                <Separator styleClass="sidebar-separator"/>
-                
-                <!-- Main Navigation -->
-                <VBox styleClass="nav-group">
-                    <HBox styleClass="nav-item active">
-                        <Label text="◼" styleClass="nav-icon-box"/>
-                        <VBox spacing="2">
-                            <Label text="Dashboard" styleClass="nav-text"/>
-                            <Label text="Overview &amp; analytics" styleClass="nav-desc"/>
-                        </VBox>
-                    </HBox>
-                    
-                    <HBox styleClass="nav-item">
-                        <Label text="□" styleClass="nav-icon-box"/>
-                        <VBox spacing="2">
-                            <Label text="Screens" styleClass="nav-text"/>
-                            <Label text="48 screens" styleClass="nav-desc"/>
-                        </VBox>
-                        <Region HBox.hgrow="ALWAYS"/>
-                        <Label text="48" styleClass="nav-count"/>
-                    </HBox>
-                    
-                    <HBox styleClass="nav-item">
-                        <Label text="◇" styleClass="nav-icon-box"/>
-                        <VBox spacing="2">
-                            <Label text="Workflows" styleClass="nav-text"/>
-                            <Label text="Business processes" styleClass="nav-desc"/>
-                        </VBox>
-                    </HBox>
-                    
-                    <HBox styleClass="nav-item">
-                        <Label text="▦" styleClass="nav-icon-box"/>
-                        <VBox spacing="2">
-                            <Label text="Database" styleClass="nav-text"/>
-                            <Label text="Tables &amp; objects" styleClass="nav-desc"/>
-                        </VBox>
-                    </HBox>
-                    
-                    <HBox styleClass="nav-item">
-                        <Label text="◐" styleClass="nav-icon-box"/>
-                        <VBox spacing="2">
-                            <Label text="Analytics" styleClass="nav-text"/>
-                            <Label text="Reports &amp; insights" styleClass="nav-desc"/>
-                        </VBox>
-                    </HBox>
-                </VBox>
-                
-                <Separator styleClass="sidebar-separator"/>
-                
-                <!-- Projects Section -->
-                <VBox styleClass="nav-group">
-                    <HBox styleClass="section-header" alignment="CENTER_LEFT">
-                        <Label text="PROJECTS" styleClass="nav-header"/>
-                        <Region HBox.hgrow="ALWAYS"/>
-                        <Button text="＋" styleClass="header-action"/>
-                    </HBox>
-                    
-                    <HBox styleClass="nav-item project-item">
-                        <StackPane styleClass="project-avatar blue">
-                            <Label text="CS" styleClass="project-initials"/>
-                        </StackPane>
-                        <VBox spacing="2">
-                            <Label text="Customer Service" styleClass="nav-text"/>
-                            <Label text="24 screens • Active" styleClass="nav-desc"/>
-                        </VBox>
-                    </HBox>
-                    
-                    <HBox styleClass="nav-item project-item">
-                        <StackPane styleClass="project-avatar green">
-                            <Label text="OM" styleClass="project-initials"/>
-                        </StackPane>
-                        <VBox spacing="2">
-                            <Label text="Order Management" styleClass="nav-text"/>
-                            <Label text="18 screens • Active" styleClass="nav-desc"/>
-                        </VBox>
-                    </HBox>
-                    
-                    <HBox styleClass="nav-item project-item">
-                        <StackPane styleClass="project-avatar orange">
-                            <Label text="PG" styleClass="project-initials"/>
-                        </StackPane>
-                        <VBox spacing="2">
-                            <Label text="Payment Gateway" styleClass="nav-text"/>
-                            <Label text="12 screens • In Dev" styleClass="nav-desc"/>
-                        </VBox>
-                    </HBox>
-                    
-                    <Button text="View all projects →" styleClass="view-all-btn"/>
-                </VBox>
-                
-                <Region VBox.vgrow="ALWAYS"/>
-                
-                <!-- AI Tools Section -->
-                <VBox styleClass="nav-group ai-section">
-                    <Label text="AI POWERED" styleClass="nav-header"/>
-                    
-                    <HBox styleClass="nav-item ai-item">
-                        <Label text="✦" styleClass="nav-icon-star"/>
-                        <VBox spacing="2">
-                            <Label text="AI Assistant" styleClass="nav-text"/>
-                            <Label text="Ask anything" styleClass="nav-desc"/>
-                        </VBox>
-                    </HBox>
-                    
-                    <HBox styleClass="nav-item ai-item">
-                        <Label text="◈" styleClass="nav-icon-star"/>
-                        <VBox spacing="2">
-                            <Label text="Code Analysis" styleClass="nav-text"/>
-                            <Label text="Smart insights" styleClass="nav-desc"/>
-                        </VBox>
-                    </HBox>
-                </VBox>
-                
-                <!-- Upgrade Banner -->
-                <VBox styleClass="upgrade-banner">
-                    <Label text="⚡" styleClass="upgrade-icon"/>
-                    <Label text="Upgrade to Pro" styleClass="upgrade-title"/>
-                    <Label text="Unlock unlimited screens and AI features" styleClass="upgrade-desc"/>
-                    <Button text="Upgrade Now" styleClass="upgrade-btn"/>
-                </VBox>
-            </VBox>
+            <fx:include source="components/Sidebar.fxml"/>
 
             <!-- Main Content Area -->
             <VBox fx:id="mainContent" styleClass="content-area" HBox.hgrow="ALWAYS">
-                <!-- Page Header -->
-                <HBox styleClass="page-header">
-                    <VBox spacing="4">
-                        <Label text="Customer Profile Dashboard" styleClass="page-title"/>
-                        <HBox spacing="8" alignment="CENTER_LEFT">
-                            <Label text="•" styleClass="status-dot active"/>
-                            <Label text="Active" styleClass="status-text"/>
-                            <Label text="•" styleClass="separator"/>
-                            <Label text="Last updated 2h ago" styleClass="meta-text"/>
-                        </HBox>
-                    </VBox>
-                    
-                    <Region HBox.hgrow="ALWAYS"/>
-                    
-                    <HBox spacing="10">
-                        <Button text="Share" styleClass="btn-outline"/>
-                        <Button text="⋮" styleClass="btn-icon"/>
-                    </HBox>
-                </HBox>
-                
-                <!-- Tabs -->
-                <HBox styleClass="tabs-bar">
-                    <Button text="Overview" styleClass="tab-item active"/>
-                    <Button text="Events" styleClass="tab-item"/>
-                    <Button text="Source Code" styleClass="tab-item"/>
-                    <Button text="Database" styleClass="tab-item"/>
-                    <Button text="API Endpoints" styleClass="tab-item"/>
-                </HBox>
+                <!-- Content Header with Tabs -->
+                <fx:include source="components/ContentHeader.fxml"/>
                 
                 <!-- Content Body -->
                 <ScrollPane styleClass="content-scroll" fitToWidth="true" VBox.vgrow="ALWAYS">
@@ -218,175 +27,25 @@
                         <!-- Main Content -->
                         <VBox styleClass="content-main" HBox.hgrow="ALWAYS">
                             <!-- Stats Cards -->
-                            <HBox styleClass="stats-grid" spacing="16">
-                                <VBox styleClass="stat-card">
-                                    <HBox alignment="CENTER_LEFT" spacing="8">
-                                        <Label text="⚡" styleClass="stat-icon"/>
-                                        <Label text="Events" styleClass="stat-title"/>
-                                    </HBox>
-                                    <Label text="5" styleClass="stat-value"/>
-                                    <Label text="+2 this week" styleClass="stat-change positive"/>
-                                </VBox>
-                                
-                                <VBox styleClass="stat-card">
-                                    <HBox alignment="CENTER_LEFT" spacing="8">
-                                        <Label text="📄" styleClass="stat-icon"/>
-                                        <Label text="Source Files" styleClass="stat-title"/>
-                                    </HBox>
-                                    <Label text="3" styleClass="stat-value"/>
-                                    <Label text="No changes" styleClass="stat-change neutral"/>
-                                </VBox>
-                                
-                                <VBox styleClass="stat-card">
-                                    <HBox alignment="CENTER_LEFT" spacing="8">
-                                        <Label text="🗄️" styleClass="stat-icon"/>
-                                        <Label text="DB Tables" styleClass="stat-title"/>
-                                    </HBox>
-                                    <Label text="3" styleClass="stat-value"/>
-                                    <Label text="All synced" styleClass="stat-change positive"/>
-                                </VBox>
-                            </HBox>
+                            <fx:include source="components/StatsCards.fxml"/>
                             
                             <!-- Description Card -->
-                            <VBox styleClass="card">
-                                <HBox alignment="CENTER_LEFT">
-                                    <Label text="Description" styleClass="card-title"/>
-                                    <Region HBox.hgrow="ALWAYS"/>
-                                    <Button text="✨ AI Enhance" styleClass="btn-ai"/>
-                                </HBox>
-                                <TextArea fx:id="descriptionArea" 
-                                        text="Main customer account dashboard showing overview of profile status, recent orders, saved addresses, payment methods, and wishlist items.&#10;&#10;Provides quick access to all account management functions. Displays profile completion percentage with prompts to add missing information."
-                                        styleClass="description-area" 
-                                        wrapText="true" 
-                                        VBox.vgrow="ALWAYS"/>
-                            </VBox>
+                            <fx:include source="components/DescriptionCard.fxml"/>
                             
-                            <!-- Tags -->
-                            <VBox styleClass="card">
-                                <Label text="Tags" styleClass="card-title"/>
-                                <HBox styleClass="tags-list" spacing="8">
-                                    <Label text="Customer" styleClass="tag tag-blue"/>
-                                    <Label text="Dashboard" styleClass="tag tag-purple"/>
-                                    <Label text="Priority" styleClass="tag tag-red"/>
-                                    <Button text="+ Add" styleClass="btn-add-tag"/>
-                                </HBox>
-                            </VBox>
+                            <!-- Tags Card -->
+                            <fx:include source="components/TagsCard.fxml"/>
                             
-                            <!-- Related Items -->
-                            <VBox styleClass="card">
-                                <Label text="Related Screens" styleClass="card-title"/>
-                                <VBox styleClass="related-list" spacing="8">
-                                    <HBox styleClass="related-item">
-                                        <Label text="📱" styleClass="related-icon"/>
-                                        <VBox spacing="2">
-                                            <Label text="Login Screen" styleClass="related-name"/>
-                                            <Label text="Authentication flow entry point" styleClass="related-desc"/>
-                                        </VBox>
-                                        <Region HBox.hgrow="ALWAYS"/>
-                                        <Button text="→" styleClass="btn-nav"/>
-                                    </HBox>
-                                    
-                                    <HBox styleClass="related-item">
-                                        <Label text="📱" styleClass="related-icon"/>
-                                        <VBox spacing="2">
-                                            <Label text="Order History" styleClass="related-name"/>
-                                            <Label text="Shows customer's past orders" styleClass="related-desc"/>
-                                        </VBox>
-                                        <Region HBox.hgrow="ALWAYS"/>
-                                        <Button text="→" styleClass="btn-nav"/>
-                                    </HBox>
-                                </VBox>
-                            </VBox>
+                            <!-- Related Items Card -->
+                            <fx:include source="components/RelatedItemsCard.fxml"/>
                         </VBox>
                         
                         <!-- Right Sidebar -->
                         <VBox styleClass="sidebar-right">
-                            <!-- Properties -->
-                            <VBox styleClass="panel">
-                                <Label text="Properties" styleClass="panel-title"/>
-                                
-                                <VBox styleClass="prop-group">
-                                    <Label text="Status" styleClass="prop-label"/>
-                                    <HBox styleClass="prop-select">
-                                        <Label text="●" styleClass="status-indicator active"/>
-                                        <Label text="Active" styleClass="prop-value"/>
-                                        <Region HBox.hgrow="ALWAYS"/>
-                                        <Label text="▼" styleClass="dropdown-arrow"/>
-                                    </HBox>
-                                </VBox>
-                                
-                                <VBox styleClass="prop-group">
-                                    <Label text="Priority" styleClass="prop-label"/>
-                                    <HBox styleClass="priority-pills" spacing="6">
-                                        <Label text="Low" styleClass="priority-pill"/>
-                                        <Label text="Med" styleClass="priority-pill"/>
-                                        <Label text="High" styleClass="priority-pill active"/>
-                                    </HBox>
-                                </VBox>
-                                
-                                <VBox styleClass="prop-group">
-                                    <Label text="Project" styleClass="prop-label"/>
-                                    <HBox styleClass="project-select">
-                                        <Label text="•" styleClass="project-color blue"/>
-                                        <Label text="Customer Service" styleClass="prop-value"/>
-                                    </HBox>
-                                </VBox>
-                                
-                                <Separator styleClass="prop-separator"/>
-                                
-                                <VBox styleClass="prop-group">
-                                    <Label text="Screen ID" styleClass="prop-label"/>
-                                    <Label text="SCR-0042" styleClass="prop-value-mono"/>
-                                </VBox>
-                                
-                                <VBox styleClass="prop-group">
-                                    <Label text="Created" styleClass="prop-label"/>
-                                    <Label text="Nov 8, 2025" styleClass="prop-value"/>
-                                </VBox>
-                                
-                                <VBox styleClass="prop-group">
-                                    <Label text="Last Updated" styleClass="prop-label"/>
-                                    <Label text="Nov 11, 2025 at 2:30 PM" styleClass="prop-value"/>
-                                </VBox>
-                                
-                                <VBox styleClass="prop-group">
-                                    <Label text="Author" styleClass="prop-label"/>
-                                    <HBox spacing="8" alignment="CENTER_LEFT">
-                                        <Label text="SK" styleClass="avatar"/>
-                                        <Label text="Sarah Kim" styleClass="prop-value"/>
-                                    </HBox>
-                                </VBox>
-                            </VBox>
+                            <!-- Properties Panel -->
+                            <fx:include source="components/PropertiesPanel.fxml"/>
                             
-                            <!-- Activity -->
-                            <VBox styleClass="panel">
-                                <Label text="Recent Activity" styleClass="panel-title"/>
-                                <VBox styleClass="activity-list" spacing="12">
-                                    <HBox styleClass="activity-item" spacing="10">
-                                        <Label text="JD" styleClass="activity-avatar"/>
-                                        <VBox spacing="2">
-                                            <Label text="John Doe updated description" styleClass="activity-text"/>
-                                            <Label text="2 hours ago" styleClass="activity-time"/>
-                                        </VBox>
-                                    </HBox>
-                                    
-                                    <HBox styleClass="activity-item" spacing="10">
-                                        <Label text="SK" styleClass="activity-avatar"/>
-                                        <VBox spacing="2">
-                                            <Label text="Sarah Kim added tag" styleClass="activity-text"/>
-                                            <Label text="5 hours ago" styleClass="activity-time"/>
-                                        </VBox>
-                                    </HBox>
-                                    
-                                    <HBox styleClass="activity-item" spacing="10">
-                                        <Label text="MS" styleClass="activity-avatar"/>
-                                        <VBox spacing="2">
-                                            <Label text="Mike Smith created screen" styleClass="activity-text"/>
-                                            <Label text="1 day ago" styleClass="activity-time"/>
-                                        </VBox>
-                                    </HBox>
-                                </VBox>
-                            </VBox>
+                            <!-- Activity Panel -->
+                            <fx:include source="components/ActivityPanel.fxml"/>
                         </VBox>
                     </HBox>
                 </ScrollPane>
