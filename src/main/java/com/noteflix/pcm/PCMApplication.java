@@ -1,5 +1,6 @@
 package com.noteflix.pcm;
 
+import atlantafx.base.theme.PrimerLight;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -47,6 +48,10 @@ public class PCMApplication extends Application {
     public void start(Stage primaryStage) {
         try {
             log.info("Initializing application window...");
+            
+            // Apply AtlantaFX theme (modern GitHub-inspired theme)
+            Application.setUserAgentStylesheet(new PrimerLight().getUserAgentStylesheet());
+            log.info("✨ AtlantaFX PrimerLight theme applied");
 
             // Load FXML
             FXMLLoader loader = new FXMLLoader(
@@ -57,7 +62,7 @@ public class PCMApplication extends Application {
             // Create scene
             Scene scene = new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT);
 
-            // Load CSS
+            // Load custom CSS (this will override/extend AtlantaFX theme)
             String css = Objects.requireNonNull(
                 getClass().getResource("/css/styles.css")
             ).toExternalForm();

@@ -1,13 +1,16 @@
 /* ================================================================
    PCM WebApp - Modern Project Management Interface
+   Powered by AtlantaFX Theme
    ================================================================ */
 
-/* ROOT & BASE */
+/* ROOT & BASE - Extended from AtlantaFX */
 .root {
     -fx-font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     -fx-font-size: 14px;
-    -fx-base: #fafbfc;
-    -fx-background: #fafbfc;
+    
+    /* Use AtlantaFX color variables where possible */
+    -fx-base: -color-bg-default;
+    -fx-background: -color-bg-default;
 }
 
 /* ================================================================
