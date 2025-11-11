@@ -3,6 +3,9 @@
 # PCM Desktop - Library Verification Script
 # Verifies that all required libraries are present
 
+# Change to project root directory (parent of scripts folder)
+cd "$(dirname "$0")/.."
+
 echo "🔍 Verifying PCM Desktop Libraries..."
 echo ""
 
@@ -75,7 +78,7 @@ else
     echo -e "${RED}❌ $errors library/libraries missing!${NC}"
     echo ""
     echo "Run the download script:"
-    echo "  ./download-libs.sh"
+    echo "  ./scripts/download-libs.sh"
     echo ""
     echo "And download JavaFX 21.0.9 manually:"
     echo "  https://download2.gluonhq.com/openjfx/21.0.9/openjfx-21.0.9_osx-aarch64_bin-sdk.zip"

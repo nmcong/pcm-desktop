@@ -1,6 +1,9 @@
 # PCM Desktop - Library Download Script (PowerShell)
 # Downloads all required libraries (latest versions)
 
+# Change to project root directory (parent of scripts folder)
+Set-Location (Split-Path -Parent $PSScriptRoot)
+
 Write-Host "📦 Downloading PCM Desktop Libraries..." -ForegroundColor Cyan
 Write-Host ""
 

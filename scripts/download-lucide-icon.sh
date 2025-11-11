@@ -12,9 +12,10 @@ BLUE='\033[0;34m'
 YELLOW='\033[1;33m'
 NC='\033[0m' # No Color
 
-# Script directory
+# Script directory and project root
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-ICONS_DIR="${SCRIPT_DIR}/src/main/resources/images/icons"
+PROJECT_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
+ICONS_DIR="${PROJECT_ROOT}/src/main/resources/images/icons"
 
 # Create icons directory if it doesn't exist
 mkdir -p "$ICONS_DIR"
@@ -304,6 +305,21 @@ if download_icon "$icon_name" "$size" "$color" "$output_dir"; then
     if [[ -f "${output_dir}/${icon_name}-${size}px-${color}.png" ]]; then
         echo "  • ${icon_name}-${size}px-${color}.png"
     fi
+    
+    # Copy to build directory
+    echo ""
+    echo -e "${BLUE}📋 Copying to build directory...${NC}"
+    BUILD_DIR="${PROJECT_ROOT}/out/images/icons"
+    mkdir -p "$BUILD_DIR"
+    
+    # Copy the downloaded files
+    cp "${output_dir}/${icon_name}-${size}px-${color}.svg" "$BUILD_DIR/" 2>/dev/null
+    if [[ -f "${output_dir}/${icon_name}-${size}px-${color}.png" ]]; then
+        cp "${output_dir}/${icon_name}-${size}px-${color}.png" "$BUILD_DIR/" 2>/dev/null
+        echo -e "${GREEN}✓ Copied PNG to build directory${NC}"
+    fi
+    echo -e "${GREEN}✓ Copied SVG to build directory${NC}"
+    
     echo ""
     echo -e "${BLUE}💡 Usage in JavaFX:${NC}"
     echo "  // For SVG (using SVGPath or similar)"

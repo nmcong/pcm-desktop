@@ -5,6 +5,9 @@
 
 set -e
 
+# Change to project root directory (parent of scripts folder)
+cd "$(dirname "$0")/.."
+
 echo "📦 Downloading PCM Desktop Libraries..."
 echo ""
 

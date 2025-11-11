@@ -2,6 +2,9 @@
 REM PCM Desktop Application - Windows Compile Script
 REM Compiles the Java source code
 
+REM Change to project root directory (parent of scripts folder)
+cd /d "%~dp0\.."
+
 echo.
 echo ========================================
 echo    Compiling PCM Desktop
@@ -24,14 +27,14 @@ echo.
 REM Check if libraries exist
 if not exist "lib\javafx\javafx.base.jar" (
     echo [ERROR] JavaFX libraries not found!
-    echo Please run: download-libs.ps1
+    echo Please run: scripts\download-libs.ps1
     pause
     exit /b 1
 )
 
 if not exist "lib\others\lombok-1.18.34.jar" (
     echo [ERROR] Other libraries not found!
-    echo Please run: download-libs.ps1
+    echo Please run: scripts\download-libs.ps1
     pause
     exit /b 1
 )
@@ -65,9 +68,12 @@ echo.
 echo [INFO] Copying resources...
 if not exist "out\fxml" mkdir out\fxml
 if not exist "out\css" mkdir out\css
-if not exist "out\images" mkdir out\images
+if not exist "out\images\icons" mkdir out\images\icons
 xcopy /Y src\main\resources\fxml\*.fxml out\fxml\ >nul 2>&1
 xcopy /Y src\main\resources\css\*.css out\css\ >nul 2>&1
+xcopy /Y src\main\resources\images\icons\*.png out\images\icons\ >nul 2>&1
+xcopy /Y src\main\resources\images\icons\*.svg out\images\icons\ >nul 2>&1
+xcopy /Y src\main\resources\images\*.png out\images\ >nul 2>&1
 xcopy /Y src\main\resources\logback.xml out\ >nul 2>&1
 
 echo.
@@ -75,7 +81,7 @@ echo ========================================
 echo    Compilation Successful!
 echo ========================================
 echo.
-echo You can now run: run-windows.bat
+echo You can now run: scripts\run-windows.bat
 echo.
 pause
 

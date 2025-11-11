@@ -3,7 +3,8 @@
 # PCM Desktop - macOS Run Script
 # Double-click this file to run the application
 
-cd "$(dirname "$0")"
+# Change to project root directory (parent of scripts folder)
+cd "$(dirname "$0")/.."
 
 echo "🚀 Starting PCM Desktop Application..."
 echo ""
@@ -29,9 +30,12 @@ fi
 
 # Copy resources to output directory
 echo "📦 Copying resources..."
-mkdir -p out/fxml out/css out/images
+mkdir -p out/fxml out/css out/images/icons
 cp src/main/resources/fxml/*.fxml out/fxml/ 2>/dev/null || true
 cp src/main/resources/css/*.css out/css/ 2>/dev/null || true
+cp src/main/resources/images/icons/*.png out/images/icons/ 2>/dev/null || true
+cp src/main/resources/images/icons/*.svg out/images/icons/ 2>/dev/null || true
+cp src/main/resources/images/*.png out/images/ 2>/dev/null || true
 cp src/main/resources/logback.xml out/ 2>/dev/null || true
 echo "✅ Resources copied!"
 echo ""
