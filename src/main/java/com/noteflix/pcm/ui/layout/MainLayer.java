@@ -1,7 +1,10 @@
 package com.noteflix.pcm.ui.layout;
 
 import com.noteflix.pcm.core.constants.AppConstants;
+import com.noteflix.pcm.core.navigation.DefaultPageNavigator;
+import com.noteflix.pcm.core.navigation.PageNavigator;
 import com.noteflix.pcm.ui.components.SidebarView;
+import com.noteflix.pcm.ui.pages.AIAssistantPage;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 import lombok.Getter;
@@ -26,6 +29,7 @@ public class MainLayer extends BorderPane {
      *  Gets the main content pane for external manipulation
      */
     private StackPane mainContentPane;
+    private PageNavigator pageNavigator;
     
     public MainLayer() {
         createView();
@@ -46,8 +50,8 @@ public class MainLayer extends BorderPane {
         mainContentPane.getStyleClass().add("content-area");
         HBox.setHgrow(mainContentPane, Priority.ALWAYS);
         
-        // Set initial content
-        setDefaultContent();
+        // Initialize navigation
+        initializeNavigation();
         
         // Setup main layout - sidebar takes full height, content area is on the right
         setId("main");
@@ -58,21 +62,19 @@ public class MainLayer extends BorderPane {
     }
     
     /**
-     * Sets default content in the main area
+     * Initializes navigation system
      */
-    private void setDefaultContent() {
-        VBox defaultContent = new VBox(20);
-        defaultContent.getStyleClass().add("content-wrapper");
-        defaultContent.setStyle("-fx-alignment: center; -fx-padding: 40px;");
+    private void initializeNavigation() {
+        // Create page navigator
+        pageNavigator = new DefaultPageNavigator(mainContentPane);
         
-        Label welcomeLabel = new Label("Welcome to PCM Desktop");
-        welcomeLabel.setStyle("-fx-font-size: 24px; -fx-font-weight: bold;");
+        // Inject navigator into sidebar
+        sidebar.setPageNavigator(pageNavigator);
         
-        Label instructionLabel = new Label("Select an item from the sidebar to get started");
-        instructionLabel.setStyle("-fx-font-size: 14px; -fx-text-fill: -color-fg-muted;");
+        // Navigate to default page (AI Assistant)
+        pageNavigator.navigateToPage(AIAssistantPage.class);
         
-        defaultContent.getChildren().addAll(welcomeLabel, instructionLabel);
-        mainContentPane.getChildren().setAll(defaultContent);
+        log.info("Navigation system initialized");
     }
     
     /**

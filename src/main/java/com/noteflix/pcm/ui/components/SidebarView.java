@@ -3,8 +3,10 @@ package com.noteflix.pcm.ui.components;
 import atlantafx.base.theme.Styles;
 import com.noteflix.pcm.core.constants.AppConstants;
 import com.noteflix.pcm.core.events.ThemeChangeListener;
+import com.noteflix.pcm.core.navigation.PageNavigator;
 import com.noteflix.pcm.core.theme.ThemeManager;
 import com.noteflix.pcm.core.utils.IconUtils;
+import com.noteflix.pcm.ui.pages.*;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
@@ -22,6 +24,7 @@ import org.kordamp.ikonli.javafx.FontIcon;
 public class SidebarView extends VBox implements ThemeChangeListener {
     
     private final ThemeManager themeManager;
+    private PageNavigator pageNavigator;
     private ImageView appIcon;
     private ImageView botIcon;
     private Button themeButton;
@@ -47,6 +50,14 @@ public class SidebarView extends VBox implements ThemeChangeListener {
             createFavoritesSection(),
             createProjectsSection()
         );
+    }
+    
+    /**
+     * Sets the page navigator for navigation functionality
+     * Dependency Injection - follows Dependency Inversion Principle
+     */
+    public void setPageNavigator(PageNavigator pageNavigator) {
+        this.pageNavigator = pageNavigator;
     }
     
     /**
@@ -340,55 +351,75 @@ public class SidebarView extends VBox implements ThemeChangeListener {
     }
     
     private void handleAIAssistant() {
-        log.info("Opening AI Assistant");
-        showInfo("AI Assistant", 
-            "AI-Powered System Analysis Assistant:\n\n" +
-            "• Natural language queries\n" +
-            "• Code analysis and suggestions\n" +
-            "• Database insights\n" +
-            "• Workflow optimization\n" +
-            "• Business process analysis\n\n" +
-            "Ask me anything about your system!");
+        if (pageNavigator != null) {
+            pageNavigator.navigateToPage(AIAssistantPage.class);
+        } else {
+            log.warn("PageNavigator not set - showing fallback dialog");
+            showInfo("AI Assistant", 
+                "AI-Powered System Analysis Assistant:\n\n" +
+                "• Natural language queries\n" +
+                "• Code analysis and suggestions\n" +
+                "• Database insights\n" +
+                "• Workflow optimization\n" +
+                "• Business process analysis\n\n" +
+                "Ask me anything about your system!");
+        }
     }
     
     private void handleKnowledgeBase() {
-        log.info("Opening Knowledge Base");
-        showInfo("Knowledge Base", 
-            "Browse and search your knowledge base:\n\n" +
-            "• Documentation\n" +
-            "• Best practices\n" +
-            "• Design patterns\n" +
-            "• Technical notes");
+        if (pageNavigator != null) {
+            pageNavigator.navigateToPage(KnowledgeBasePage.class);
+        } else {
+            log.warn("PageNavigator not set - showing fallback dialog");
+            showInfo("Knowledge Base", 
+                "Browse and search your knowledge base:\n\n" +
+                "• Documentation\n" +
+                "• Best practices\n" +
+                "• Design patterns\n" +
+                "• Technical notes");
+        }
     }
     
     private void handleBatchJobs() {
-        log.info("Opening Batch Jobs");
-        showInfo("Batch Jobs", 
-            "Manage scheduled and batch operations:\n\n" +
-            "• View running jobs\n" +
-            "• Schedule new tasks\n" +
-            "• Job history\n" +
-            "• Execution logs");
+        if (pageNavigator != null) {
+            pageNavigator.navigateToPage(BatchJobsPage.class);
+        } else {
+            log.warn("PageNavigator not set - showing fallback dialog");
+            showInfo("Batch Jobs", 
+                "Manage scheduled and batch operations:\n\n" +
+                "• View running jobs\n" +
+                "• Schedule new tasks\n" +
+                "• Job history\n" +
+                "• Execution logs");
+        }
     }
     
     private void handleDBObjects() {
-        log.info("Opening DB Objects");
-        showInfo("Database Objects", 
-            "Database schema and objects:\n\n" +
-            "• Tables\n" +
-            "• Views\n" +
-            "• Stored procedures\n" +
-            "• Triggers & Functions");
+        if (pageNavigator != null) {
+            pageNavigator.navigateToPage(DatabaseObjectsPage.class);
+        } else {
+            log.warn("PageNavigator not set - showing fallback dialog");
+            showInfo("Database Objects", 
+                "Database schema and objects:\n\n" +
+                "• Tables\n" +
+                "• Views\n" +
+                "• Stored procedures\n" +
+                "• Triggers & Functions");
+        }
     }
     
     private void handleSettingsMenu() {
-        log.info("Opening Settings from menu");
-        showInfo("Settings", 
-            "Application configuration:\n\n" +
-            "• User preferences\n" +
-            "• Project settings\n" +
-            "• Database connections\n" +
-            "• Theme & appearance");
+        if (pageNavigator != null) {
+            pageNavigator.navigateToPage(SettingsPage.class);
+        } else {
+            log.warn("PageNavigator not set - showing fallback dialog");
+            showInfo("Settings", 
+                "Application configuration:\n\n" +
+                "• User preferences\n" +
+                "• Project settings\n" +
+                "• Database connections\n" +
+                "• Theme & appearance");
+        }
     }
     
     private void handleNewProject() {
