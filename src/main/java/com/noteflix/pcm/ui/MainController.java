@@ -1,52 +1,24 @@
 package com.noteflix.pcm.ui;
 
-import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.VBox;
 import lombok.extern.slf4j.Slf4j;
-
-import java.net.URL;
-import java.util.ResourceBundle;
 
 /**
  * Main Controller for PCM Desktop WebApp
  * 
  * This controller manages the main PCM interface for project code management.
- * Individual components are now managed by their own controllers:
- * - NavbarController: Top navigation bar
- * - SidebarController: Left sidebar with navigation and projects
- * - ContentHeaderController: Page header with tabs
- * - StatsCardsController: Statistics cards
- * - DescriptionCardController: Description editor
- * - TagsCardController: Tags management
- * - RelatedItemsCardController: Related items
- * - PropertiesPanelController: Properties panel
- * - ActivityPanelController: Activity feed
+ * Now using pure Java code (no FXML) following AtlantaFX Sampler patterns.
  * 
  * @author Noteflix Team
- * @version 3.0.0 - Modular Component Architecture
+ * @version 4.0.0 - Pure Java UI Architecture
  */
 @Slf4j
-public class MainController implements Initializable {
+public class MainController {
 
-    @FXML
-    private BorderPane rootPane;
-
-    @FXML
-    private VBox mainContent;
-
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        log.info("🚀 Initializing PCM Desktop - Modular Component Architecture...");
-        
-        try {
-            log.info("✅ PCM WebApp Controller initialized successfully");
-            log.info("📦 All components are now self-contained with their own controllers");
-        } catch (Exception e) {
-            log.error("❌ Error initializing PCM controller", e);
-        }
+    public MainController() {
+        log.info("🚀 Initializing PCM Desktop Controller - Pure Java Architecture...");
+        log.info("✅ Controller initialized successfully");
+        log.info("🎨 Using AtlantaFX Sampler patterns for UI");
     }
 
     // ===== MENU HANDLERS =====
@@ -54,8 +26,7 @@ public class MainController implements Initializable {
     /**
      * Handle File -> New
      */
-    @FXML
-    private void handleFileNew() {
+    public void handleFileNew() {
         log.info("📄 File -> New");
         showInfo("New Screen", 
             "Create New Screen\n\n" +
@@ -70,8 +41,7 @@ public class MainController implements Initializable {
     /**
      * Handle File -> Open
      */
-    @FXML
-    private void handleFileOpen() {
+    public void handleFileOpen() {
         log.info("📂 File -> Open");
         showInfo("Open Project", "Select a PCM project to open");
     }
@@ -79,8 +49,7 @@ public class MainController implements Initializable {
     /**
      * Handle File -> Save
      */
-    @FXML
-    private void handleFileSave() {
+    public void handleFileSave() {
         log.info("💾 File -> Save");
         showInfo("Save", "Saving current changes...");
         // TODO: Implement save functionality
@@ -89,8 +58,7 @@ public class MainController implements Initializable {
     /**
      * Handle File -> Exit
      */
-    @FXML
-    private void handleFileExit() {
+    public void handleFileExit() {
         log.info("🚪 File -> Exit");
         javafx.application.Platform.exit();
     }
@@ -98,8 +66,7 @@ public class MainController implements Initializable {
     /**
      * Handle Help -> About
      */
-    @FXML
-    private void handleHelpAbout() {
+    public void handleHelpAbout() {
         log.info("ℹ️ Help -> About");
         
         Alert alert = new Alert(Alert.AlertType.INFORMATION);

@@ -1,15 +1,14 @@
 package com.noteflix.pcm;
 
 import atlantafx.base.theme.PrimerLight;
+import com.noteflix.pcm.ui.MainController;
+import com.noteflix.pcm.ui.MainView;
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import lombok.extern.slf4j.Slf4j;
 
-import java.io.IOException;
 import java.util.Objects;
 
 /**
@@ -53,14 +52,13 @@ public class PCMApplication extends Application {
             Application.setUserAgentStylesheet(new PrimerLight().getUserAgentStylesheet());
             log.info("✨ AtlantaFX PrimerLight theme applied");
 
-            // Load FXML
-            FXMLLoader loader = new FXMLLoader(
-                getClass().getClassLoader().getResource("fxml/MainView.fxml")
-            );
-            Parent root = loader.load();
+            // Create controller and view (Java-based, no FXML)
+            MainController controller = new MainController();
+            MainView mainView = new MainView(controller);
+            log.info("✅ Main view created with Java code (no FXML)");
 
             // Create scene
-            Scene scene = new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT);
+            Scene scene = new Scene(mainView, WINDOW_WIDTH, WINDOW_HEIGHT);
 
             // Load custom CSS (this will override/extend AtlantaFX theme)
             String css = Objects.requireNonNull(
@@ -90,8 +88,9 @@ public class PCMApplication extends Application {
             primaryStage.show();
 
             log.info("✅ Application started successfully");
+            log.info("🎨 UI built with pure Java code following AtlantaFX Sampler patterns");
 
-        } catch (IOException e) {
+        } catch (Exception e) {
             log.error("❌ Failed to start application", e);
             throw new RuntimeException("Failed to load application UI", e);
         }
