@@ -28,13 +28,14 @@ if [ $? -eq 0 ]; then
     
     # Copy resources to output directory
     echo "📦 Copying resources..."
-    mkdir -p out/fxml/components out/css out/images/icons
+    mkdir -p out/fxml/components out/css out/images/icons out/db/migration
     # Copy all FXML files including subdirectories
-    find src/main/resources/fxml -name "*.fxml" -exec sh -c 'mkdir -p "out/fxml/$(dirname "{}" | sed "s|src/main/resources/fxml/||")" && cp "{}" "out/fxml/$(echo "{}" | sed "s|src/main/resources/fxml/||")"' \;
+    find src/main/resources/fxml -name "*.fxml" -exec sh -c 'mkdir -p "out/fxml/$(dirname "{}" | sed "s|src/main/resources/fxml/||")" && cp "{}" "out/fxml/$(echo "{}" | sed "s|src/main/resources/fxml/||")"' \; 2>/dev/null || true
     cp src/main/resources/css/*.css out/css/ 2>/dev/null || true
     cp src/main/resources/images/icons/*.png out/images/icons/ 2>/dev/null || true
     cp src/main/resources/images/icons/*.svg out/images/icons/ 2>/dev/null || true
     cp src/main/resources/images/*.png out/images/ 2>/dev/null || true
+    cp src/main/resources/db/migration/*.sql out/db/migration/ 2>/dev/null || true
     cp src/main/resources/logback.xml out/ 2>/dev/null || true
     echo "✅ Resources copied!"
     echo ""

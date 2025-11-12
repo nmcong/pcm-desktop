@@ -354,7 +354,7 @@ public class SidebarView extends VBox implements ThemeChangeListener {
     
     private void handleAIAssistant() {
         if (pageNavigator != null) {
-            pageNavigator.navigateToPage(AIAssistantPage.class);
+            pageNavigator.navigateToPage(AIAssistantPageRefactored.class);
         } else {
             log.warn("PageNavigator not set - showing fallback dialog");
             showInfo("AI Assistant", 

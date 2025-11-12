@@ -1,41 +1,50 @@
-# AI Assistant Page Refactoring Plan
+# AI Assistant Page - Refactoring Plan
 
-## 🎯 Goals
+## 🎯 Current Problems
 
-1. **Apply SOLID Principles** - Single Responsibility, Dependency Inversion
-2. **Clean Architecture** - Separate concerns (Domain, Data, Presentation)
-3. **Database Integration** - Store conversations in SQLite
-4. **LLM Integration** - Real AI responses via LLM providers
-5. **Dark Theme** - Apply dark theme from reference image
-6. **Best Practices** - Clean code, design patterns
+### Violations of SOLID Principles
+
+1. **Single Responsibility Principle (SRP) ❌**
+   - `AIAssistantPage` does EVERYTHING: UI, data management, business logic, animations
+   - Inner classes `ChatSession` and `ChatMessage` should be separate entities
+   - Hard-coded AI responses (no LLM integration)
+   - No database persistence
+
+2. **Open/Closed Principle (OCP) ❌**
+   - Hard to extend without modifying the page
+   - Hard-coded message generation logic
+
+3. **Dependency Inversion Principle (DIP) ❌**
+   - Depends on concrete implementations, not abstractions
+   - No interfaces for services
+
+### Code Smells
+
+- **God Class**: 1,100+ lines doing everything
+- **Feature Envy**: UI code accessing data structures directly
+- **Primitive Obsession**: Using Lists instead of repositories
+- **Long Method**: Methods like `createMainLayout()`, `simulateAIResponse()`
+- **Data Clumps**: ChatSession and ChatMessage should be domain entities
 
 ---
 
-## 📊 Current Issues
+## 🏗️ Refactoring Architecture
 
-### ❌ Problems with Current Code
-
-1. **Violates Single Responsibility** - One class does everything
-2. **Data Models Inside UI** - ChatSession, ChatMessage in same file
-3. **No Separation of Concerns** - UI + Business Logic + Data mixed
-4. **Hardcoded Responses** - Fake AI responses
-5. **No Database** - Data lost on restart
-6. **No Real LLM** - Just simulated responses
-7. **1104 lines** - Too long, hard to maintain
-
----
-
-## 🏗️ New Architecture
+### Clean Architecture Layers
 
 ```
 ┌─────────────────────────────────────────────────┐
-│         UI Layer (Presentation)                 │
-│  AIAssistantPage, ChatMessageView               │
+│          Presentation Layer (UI)                │
+│  AIAssistantPage (View)                         │
+│  - Only handles UI rendering                    │
+│  - Delegates to ViewModel/Presenter             │
 └────────────────────┬────────────────────────────┘
                      │ Uses
 ┌────────────────────▼────────────────────────────┐
-│      Service Layer (Business Logic)             │
+│    Application Layer (Use Cases/Services)       │
 │  ConversationService, AIService                 │
+│  - Business logic                               │
+│  - Orchestrates operations                      │
 └────────────────────┬────────────────────────────┘
                      │ Uses
 ┌────────────────────▼────────────────────────────┐
@@ -82,316 +91,249 @@ com.noteflix.pcm/
 │
 └── ui/
     └── pages/
-        ├── AIAssistantPage.java           # Main UI (refactored)
-        ├── components/
-        │   ├── ChatSidebarView.java       # Sidebar component
-        │   ├── ChatMessageView.java       # Message bubble
-        │   └── ChatInputView.java         # Input area
-        └── model/
-            └── ChatUIState.java            # UI state model
+        └── AIAssistantPage.java           # UI only
 ```
 
 ---
 
-## 🎨 SOLID Principles Applied
+## 🎨 Design Patterns to Apply
 
-### 1. Single Responsibility Principle (SRP)
+### 1. **Repository Pattern**
+- Abstract data access from business logic
+- `ConversationRepository` interface
+- `ConversationRepositoryImpl` for SQLite
 
-```java
-// ❌ Before: One class does everything
-public class AIAssistantPage {
-    // UI rendering
-    // Data storage
-    // Business logic
-    // LLM calls
-}
+### 2. **Service Layer Pattern**
+- `ConversationService` - manages conversations
+- `AIService` - integrates with LLM
 
-// ✅ After: Each class has one job
-public class AIAssistantPage {
-    // Only UI rendering & user interaction
-}
+### 3. **Builder Pattern**
+- `Conversation.builder()`
+- `Message.builder()`
 
-public class ConversationService {
-    // Only business logic
-}
+### 4. **Observer Pattern**
+- Notify UI when new messages arrive
+- Streaming LLM responses
 
-public class ConversationRepository {
-    // Only data access
-}
+### 5. **Strategy Pattern**
+- Different LLM providers (OpenAI, Claude, Ollama)
 
-public class AIService {
-    // Only LLM communication
-}
-```
-
-### 2. Open/Closed Principle (OCP)
-
-```java
-// ✅ Open for extension (new LLM providers)
-public interface LLMClient {
-    LLMResponse sendMessage(LLMRequest request);
-}
-
-// Add new provider without modifying existing code
-public class OpenAIClient implements LLMClient { }
-public class ClaudeClient implements LLMClient { }
-```
-
-### 3. Liskov Substitution Principle (LSP)
-
-```java
-// ✅ Any Repository implementation works
-ConversationRepository repo = new ConversationRepositoryImpl();
-// Can be replaced with mock for testing
-ConversationRepository mockRepo = new MockConversationRepository();
-```
-
-### 4. Interface Segregation Principle (ISP)
-
-```java
-// ✅ Specific interfaces
-public interface Readable<T, ID> {
-    Optional<T> findById(ID id);
-}
-
-public interface Writable<T, ID> {
-    T save(T entity);
-}
-```
-
-### 5. Dependency Inversion Principle (DIP)
-
-```java
-// ✅ Depend on abstractions
-public class ConversationService {
-    private final ConversationRepository repository; // Interface
-    private final AIService aiService; // Interface
-    
-    // Dependencies injected
-    public ConversationService(ConversationRepository repository, AIService aiService) {
-        this.repository = repository;
-        this.aiService = aiService;
-    }
-}
-```
+### 6. **Dependency Injection**
+- Constructor injection for services
+- Easy testing with mocks
 
 ---
 
-## 🎨 Design Patterns
+## 📋 Implementation Plan
 
-### 1. Repository Pattern
+### Phase 1: Domain Layer ✅ (Create Entities)
+
+**Files to Create:**
+- `domain/chat/Conversation.java`
+- `domain/chat/Message.java`
+- `domain/chat/MessageRole.java`
+
+**Features:**
+- Immutable entities with Builder pattern
+- Validation
+- Business logic (if any)
+
+### Phase 2: Repository Layer ✅ (Data Access)
+
+**Files to Create:**
+- `infrastructure/repository/chat/ConversationRepository.java` (interface)
+- `infrastructure/repository/chat/ConversationRepositoryImpl.java`
+- `infrastructure/dao/ConversationDAO.java`
+- `infrastructure/dao/MessageDAO.java`
+
+**Features:**
+- CRUD operations for Conversation
+- CRUD operations for Message
+- Queries: findByUserId, findRecent, search
+
+### Phase 3: Service Layer ✅ (Business Logic)
+
+**Files to Create:**
+- `application/service/chat/ConversationService.java`
+- `application/service/chat/AIService.java`
+
+**Features:**
+- ConversationService:
+  - Create/update/delete conversations
+  - Add messages to conversation
+  - Search conversations
+  
+- AIService:
+  - Integrate with LLMService
+  - Generate AI responses
+  - Stream responses
+  - Function calling support
+
+### Phase 4: Refactor UI ✅ (Presentation Layer)
+
+**Files to Refactor:**
+- `ui/pages/AIAssistantPage.java`
+
+**Changes:**
+- **Remove** inner classes (ChatSession, ChatMessage)
+- **Inject** ConversationService and AIService
+- **Separate** UI components into smaller methods
+- **Use** reactive patterns (Observable, LiveData) for updates
+- **Delegate** business logic to services
+
+**New UI Components:**
+- `ui/components/chat/ChatSidebarView.java`
+- `ui/components/chat/ChatMessageView.java`
+- `ui/components/chat/ChatInputView.java`
+
+---
+
+## 🔧 Refactoring Steps
+
+### Step 1: Extract Domain Entities
 
 ```java
-public interface ConversationRepository {
-    Conversation save(Conversation conversation);
-    Optional<Conversation> findById(Long id);
-    List<Conversation> findAll();
+// Before (Inner class)
+public static class ChatSession {
+    private String title;
+    private List<ChatMessage> messages;
+    // ...
+}
+
+// After (Domain entity)
+@Data
+@Builder
+public class Conversation extends BaseEntity {
+    private Long id;
+    private String title;
+    private String userId;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+    private List<Message> messages;
+}
+```
+
+### Step 2: Create Repository
+
+```java
+public interface ConversationRepository extends Repository<Conversation, Long> {
+    List<Conversation> findByUserId(String userId);
     List<Conversation> findRecent(int limit);
+    List<Conversation> search(String query);
 }
 ```
 
-### 2. Service Pattern
+### Step 3: Create Services
 
 ```java
+@Slf4j
 public class ConversationService {
-    public Conversation createConversation(String title);
-    public Message sendMessage(Long conversationId, String content);
-    public List<Conversation> getRecentConversations();
-}
-```
-
-### 3. Observer Pattern (for streaming)
-
-```java
-public interface MessageStreamObserver {
-    void onMessageChunk(String chunk);
-    void onComplete();
-    void onError(Throwable error);
-}
-```
-
-### 4. Factory Pattern
-
-```java
-public class AIServiceFactory {
-    public static AIService create(LLMProviderConfig config) {
-        return new AIServiceImpl(LLMClientFactory.createClient(config));
-    }
-}
-```
-
-### 5. Dependency Injection
-
-```java
-// Service container
-public class ServiceContainer {
-    private static ServiceContainer instance;
-    
-    private final ConversationRepository conversationRepository;
+    private final ConversationRepository repository;
     private final AIService aiService;
-    private final ConversationService conversationService;
     
-    private ServiceContainer() {
-        // Initialize dependencies
-        ConnectionManager connectionManager = ConnectionManager.INSTANCE;
-        ConversationDAO conversationDAO = new ConversationDAOImpl(connectionManager);
-        this.conversationRepository = new ConversationRepositoryImpl(conversationDAO);
-        
-        LLMProviderConfig llmConfig = loadLLMConfig();
-        this.aiService = new AIServiceImpl(LLMClientFactory.createClient(llmConfig));
-        
-        this.conversationService = new ConversationService(conversationRepository, aiService);
+    public Conversation createConversation(String title, String userId) {
+        // Business logic
     }
     
-    public static ServiceContainer getInstance() {
-        if (instance == null) {
-            instance = new ServiceContainer();
-        }
-        return instance;
+    public Message sendMessage(Long conversationId, String content) {
+        // Business logic + AI integration
+    }
+}
+```
+
+### Step 4: Refactor UI
+
+```java
+public class AIAssistantPage extends BasePage {
+    // Inject dependencies
+    private final ConversationService conversationService;
+    private final AIService aiService;
+    
+    // UI components only
+    private VBox chatSidebar;
+    private VBox chatMessages;
+    private TextArea chatInput;
+    
+    public AIAssistantPage(ConversationService conversationService, AIService aiService) {
+        this.conversationService = conversationService;
+        this.aiService = aiService;
+        // UI setup only
+    }
+    
+    private void handleSendMessage() {
+        String message = chatInput.getText();
+        // Delegate to service
+        conversationService.sendMessage(currentConversationId, message)
+            .thenAccept(this::displayMessage);
     }
 }
 ```
 
 ---
 
-## 🎨 Dark Theme (from image)
+## ✅ Benefits After Refactoring
 
-### Color Palette
+### SOLID Principles ✅
+- **SRP**: Each class has one responsibility
+- **OCP**: Easy to extend (new LLM providers, new UI themes)
+- **LSP**: Repository implementations interchangeable
+- **ISP**: Focused interfaces
+- **DIP**: Depend on abstractions
 
-```css
-/* Background colors */
---color-bg-primary: #1a1d2e;
---color-bg-secondary: #16192a;
---color-bg-tertiary: #12151f;
+### Clean Code ✅
+- **Testable**: Services can be tested with mock repositories
+- **Maintainable**: Clear separation of concerns
+- **Reusable**: Services can be used elsewhere
+- **Scalable**: Easy to add features
 
-/* Accent colors */
---color-accent-primary: #6366f1;    /* Indigo */
---color-accent-secondary: #8b5cf6;  /* Purple */
-
-/* Text colors */
---color-text-primary: #f8fafc;
---color-text-secondary: #cbd5e1;
---color-text-muted: #64748b;
-
-/* Border colors */
---color-border: #2d3142;
-
-/* Message bubbles */
---color-user-bubble: #2563eb;
---color-ai-bubble: #1f2937;
-```
+### Features ✅
+- **Database Persistence**: Conversations saved to SQLite
+- **LLM Integration**: Real AI responses (OpenAI, Claude, Ollama)
+- **Streaming**: Real-time AI responses
+- **Search**: Find conversations
+- **History**: View past conversations
+- **Multi-user**: Support multiple users
 
 ---
 
-## 📝 Implementation Steps
+## 📊 Metrics
 
-### Step 1: Create Domain Models ✅
+### Before Refactoring
+- **Lines in AIAssistantPage**: 1,100+
+- **Classes**: 1 (with 2 inner classes)
+- **Responsibilities**: 10+ (UI, data, logic, animation, etc.)
+- **Testability**: ❌ Hard to test
+- **SOLID**: ❌ Violations everywhere
 
-```java
-// Conversation.java
-// Message.java
-// MessageRole.java
-```
-
-### Step 2: Create Database Schema & DAO ✅
-
-```sql
-CREATE TABLE conversations (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    title TEXT NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
-CREATE TABLE messages (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    conversation_id INTEGER NOT NULL,
-    role TEXT NOT NULL, -- 'user', 'assistant', 'system'
-    content TEXT NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (conversation_id) REFERENCES conversations(id) ON DELETE CASCADE
-);
-```
-
-### Step 3: Create Repository ✅
-
-```java
-// ConversationRepository interface
-// ConversationRepositoryImpl
-```
-
-### Step 4: Create Services ✅
-
-```java
-// ConversationService
-// AIService (wraps LLMClient)
-```
-
-### Step 5: Create UI Components ✅
-
-```java
-// ChatSidebarView
-// ChatMessageView
-// ChatInputView
-```
-
-### Step 6: Refactor AIAssistantPage ✅
-
-```java
-// Remove inner classes
-// Inject dependencies
-// Use services instead of direct logic
-// Apply dark theme
-```
-
-### Step 7: Apply Dark Theme CSS ✅
-
-```css
-/* ai-assistant-dark.css */
-```
+### After Refactoring
+- **Lines in AIAssistantPage**: ~300 (UI only)
+- **Classes**: 10+ (separated by responsibility)
+- **Responsibilities**: 1 per class
+- **Testability**: ✅ Easy to test
+- **SOLID**: ✅ Fully compliant
 
 ---
 
-## 📊 Before vs After
+## 🚀 Implementation Priority
 
-### Before
+### High Priority (Do Now)
+1. Create domain entities (Conversation, Message)
+2. Create repository interfaces
+3. Create ConversationService
+4. Create AIService (integrate LLMService)
+5. Refactor AIAssistantPage to use services
 
-| Aspect | Status |
-|--------|--------|
-| Lines of code | 1104 lines |
-| Classes in file | 3 (Page + 2 inner classes) |
-| Dependencies | Tightly coupled |
-| Data persistence | None (in-memory) |
-| AI responses | Hardcoded/fake |
-| Testability | Difficult |
-| Maintainability | Poor |
+### Medium Priority (Next)
+6. Add database persistence (ConversationDAO)
+7. Add search functionality
+8. Add streaming support
 
-### After
-
-| Aspect | Status |
-|--------|--------|
-| Lines of code | ~300 lines (UI only) |
-| Classes in file | 1 (UI only) |
-| Dependencies | Loosely coupled (DI) |
-| Data persistence | SQLite database |
-| AI responses | Real LLM integration |
-| Testability | Easy (mocking) |
-| Maintainability | Excellent |
+### Low Priority (Later)
+9. Extract UI components
+10. Add tests
+11. Add caching
+12. Add export/import
 
 ---
 
-## ✅ Benefits
-
-1. **Maintainability** - Small, focused classes
-2. **Testability** - Easy to mock dependencies
-3. **Scalability** - Easy to add features
-4. **Reusability** - Components can be reused
-5. **Flexibility** - Easy to swap implementations
-6. **Clean Code** - Follow best practices
-
----
-
-**Status**: Ready for Implementation  
-**Estimated Time**: 4-6 hours  
-**Priority**: High
-
+*This plan follows Clean Architecture, SOLID principles, and best practices.*

@@ -3,6 +3,8 @@ package com.noteflix.pcm;
 import atlantafx.base.theme.PrimerLight;
 import com.noteflix.pcm.core.constants.AppConstants;
 import com.noteflix.pcm.core.theme.ThemeManager;
+import com.noteflix.pcm.infrastructure.database.ConnectionManager;
+import com.noteflix.pcm.infrastructure.database.DatabaseMigrationManager;
 import com.noteflix.pcm.ui.MainController;
 import com.noteflix.pcm.ui.MainView;
 import javafx.application.Application;
@@ -40,6 +42,15 @@ public class PCMApplication extends Application {
     public static void main(String[] args) {
         log.info("🚀 Starting PCM Desktop Application - AI-Powered System Analysis Tool...");
         launch(args);
+    }
+    
+    @Override
+    public void init() throws Exception {
+        super.init();
+        
+        // Run database migrations BEFORE UI initialization
+        log.info("🔄 Running database migrations...");
+        runDatabaseMigrations();
     }
 
     @Override
@@ -94,6 +105,24 @@ public class PCMApplication extends Application {
         }
     }
 
+    /**
+     * Run database migrations
+     */
+    private void runDatabaseMigrations() {
+        try {
+            DatabaseMigrationManager migrationManager = 
+                new DatabaseMigrationManager(ConnectionManager.INSTANCE);
+            
+            migrationManager.migrate();
+            
+            log.info("✅ Database migrations completed");
+            
+        } catch (Exception e) {
+            log.error("❌ Database migration failed", e);
+            throw new RuntimeException("Failed to run database migrations", e);
+        }
+    }
+    
     @Override
     public void stop() {
         log.info("Shutting down PCM Desktop Application...");

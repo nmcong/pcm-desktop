@@ -9,9 +9,12 @@ PCM Desktop là ứng dụng desktop AI-powered sử dụng Large Language Model
 ## ✨ Core Features
 
 ### 🤖 AI-Powered Analysis
-- **LLM Integration** - Tích hợp AI models để phân tích và trả lời câu hỏi
+- **Multi-LLM Support** - Tích hợp OpenAI GPT, Anthropic Claude, Ollama
+- **Streaming Responses** - Real-time AI responses với streaming support
+- **Function Calling** - AI có thể gọi functions để thực hiện tasks
 - **Natural Language Queries** - Đặt câu hỏi bằng ngôn ngữ tự nhiên
 - **Intelligent Responses** - Phân tích sâu và đưa ra insights
+- **Conversation Memory** - Multi-turn conversations với context
 
 ### 📊 System Management
 - **Subsystems & Projects** - Quản lý cấu trúc hệ thống phân cấp
@@ -464,6 +467,105 @@ Noteflix Team
 - Get overview of system complexity
 - Understand subsystem boundaries
 - Track workflow implementations
+
+## 🔌 API Integration
+
+PCM Desktop cung cấp hệ thống tích hợp API mạnh mẽ để gọi các dịch vụ LLM:
+
+### Quick Start
+```java
+// Initialize LLM service
+LLMService llmService = new LLMService();
+
+// Configure provider (OpenAI example)
+LLMProviderConfig config = LLMProviderConfig.builder()
+    .provider(LLMProviderConfig.Provider.OPENAI)
+    .url("https://api.openai.com/v1/chat/completions")
+    .token(System.getenv("OPENAI_API_KEY"))
+    .model("gpt-4")
+    .build();
+
+llmService.initialize(config);
+
+// Simple chat
+String response = llmService.chat("Explain Java Streams");
+```
+
+### Supported Providers
+- ✅ **OpenAI** - GPT-4, GPT-3.5-turbo với streaming và function calling
+- ✅ **Anthropic** - Claude 3.5 Sonnet với advanced reasoning  
+- ✅ **Ollama** - Local models như Llama 3, Mistral
+- ✅ **Custom** - Bất kỳ API tương thích nào
+
+### Features
+- 🌊 **Streaming Responses** - Real-time response streaming
+- 🔧 **Function Calling** - AI có thể gọi external functions
+- 💬 **Multi-turn Conversations** - Context-aware conversations
+- 🔄 **Provider Switching** - Dễ dàng chuyển đổi giữa providers
+- ⚡ **Async Support** - Non-blocking operations
+- 🔒 **Error Handling** - Robust error handling và retry logic
+
+### Demo & Documentation
+- 📖 **[API Integration Guide](docs/API_INTEGRATION_GUIDE.md)** - Hướng dẫn chi tiết
+- 🚀 **[Quick Reference](docs/API_QUICK_REFERENCE.md)** - Tham khảo nhanh
+- 🎮 **Interactive Demo**: `./scripts/run-api-demo.sh` (macOS/Linux) hoặc `scripts\run-api-demo.bat` (Windows)
+
+### Environment Setup
+```bash
+# Set API keys
+export OPENAI_API_KEY=your-openai-key
+export ANTHROPIC_API_KEY=your-anthropic-key
+
+# Run API demo
+./scripts/run-api-demo.sh
+
+# Run SSO integration demo
+./scripts/run-sso-demo.sh
+```
+
+## 🔐 Single Sign-On (SSO) Integration
+
+PCM Desktop hỗ trợ tích hợp với hệ thống SSO tự động để sử dụng tokens từ enterprise login systems:
+
+### Supported Token Sources
+- 🍪 **Browser Cookies** - Chrome, Edge, Firefox cookies
+- 💾 **Browser localStorage** - Tokens stored in browser storage  
+- 🏢 **Windows Registry** - Enterprise registry-based SSO
+- 📁 **Shared Files** - JSON, properties, text files
+- 🔄 **Auto-refresh** - Automatic token renewal
+
+### Quick SSO Setup
+```java
+// Initialize SSO token manager
+SSOTokenManager ssoManager = SSOTokenManager.getInstance();
+
+// Configure LLM with SSO
+SSOLLMProviderConfig config = SSOLLMProviderConfig.builder()
+    .provider(LLMProviderConfig.Provider.OPENAI)
+    .url("https://api.openai.com/v1/chat/completions")
+    .ssoServiceName("company-portal")
+    .useSSOToken(true)
+    .fallbackToken(System.getenv("OPENAI_API_KEY"))
+    .model("gpt-4")
+    .build();
+
+LLMService llmService = new LLMService();
+llmService.initialize(config);
+
+// Use automatically with SSO tokens
+String response = llmService.chat("Hello from SSO user!");
+```
+
+### Features
+- 🔍 **Multi-source Extraction** - Automatically finds tokens from multiple sources
+- 🔒 **Secure Storage** - Encrypted token caching with expiration
+- 📊 **Audit Logging** - Complete security audit trail
+- ⚡ **Auto-refresh** - Handles token expiration gracefully
+- 🌐 **Cross-platform** - Windows, macOS, Linux support
+
+### Documentation & Demo
+- 📖 **[SSO Integration Guide](docs/SSO_INTEGRATION_GUIDE.md)** - Complete implementation guide
+- 🎮 **Interactive Demo**: `./scripts/run-sso-demo.sh` (macOS/Linux) hoặc `scripts\run-sso-demo.bat` (Windows)
 
 ---
 
