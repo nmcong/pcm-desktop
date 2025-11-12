@@ -4,8 +4,7 @@ import com.noteflix.pcm.core.constants.AppConstants;
 import com.noteflix.pcm.core.navigation.DefaultPageNavigator;
 import com.noteflix.pcm.core.navigation.PageNavigator;
 import com.noteflix.pcm.ui.components.SidebarView;
-import com.noteflix.pcm.ui.pages.AIAssistantPageRefactored;
-import javafx.scene.control.Label;
+import com.noteflix.pcm.ui.pages.AIAssistantPage;
 import javafx.scene.layout.*;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -71,8 +70,8 @@ public class MainLayer extends BorderPane {
         // Inject navigator into sidebar
         sidebar.setPageNavigator(pageNavigator);
         
-        // Navigate to default page (AI Assistant - Refactored with Clean Architecture)
-        pageNavigator.navigateToPage(AIAssistantPageRefactored.class);
+        // Navigate to default page (AI Assistant - Clean Architecture Implementation)
+        pageNavigator.navigateToPage(AIAssistantPage.class);
         
         log.info("Navigation system initialized");
     }
