@@ -37,7 +37,6 @@ import java.util.Objects;
 @Slf4j
 public class PCMApplication extends Application {
 
-
     public static void main(String[] args) {
         log.info("🚀 Starting PCM Desktop Application - AI-Powered System Analysis Tool...");
         launch(args);
@@ -128,4 +127,3 @@ public class PCMApplication extends Application {
         // Cleanup resources here
     }
 }
-
