@@ -564,25 +564,36 @@ Noteflix Team
 
 ---
 
-**✅ No Maven Required - Pure JAR Import!**
+**✅ No Build Tools Required - Pure JAR Import with Automated Scripts!**
 
 **🚀 Ready to Start:**
 
 ```bash
-# macOS/Linux - Quick Start
-./download-libs.sh
-# Download JavaFX 21.0.9 for your platform
-# Build and run: 
-./scripts/build.sh && ./scripts/run.sh
+# 🎯 One-Line Start (Recommended)
+# macOS/Linux
+./scripts/setup.sh && ./scripts/build.sh && ./scripts/run.sh
 
-# Windows - Quick Start
-.\download-libs.ps1
-# JavaFX 21.0.9 will be downloaded automatically
-# Build and run:
-.\scripts\build.bat && .\scripts\run.bat
+# Windows  
+.\scripts\setup.bat && .\scripts\build.bat && .\scripts\run.bat
 
-# Or open in IntelliJ IDEA and configure libraries
+# 📝 Step by Step (Alternative)
+# macOS/Linux
+./scripts/setup.sh    # Auto-download all dependencies + JavaFX
+./scripts/build.sh    # Compile application  
+./scripts/run.sh      # Launch PCM Desktop
+
+# Windows
+.\scripts\setup.bat   # Auto-download all dependencies + JavaFX
+.\scripts\build.bat   # Compile application
+.\scripts\run.bat     # Launch PCM Desktop
 ```
+
+**✨ What makes this special:**
+- 🚫 **No Maven/Gradle** - Simple JAR imports
+- 🤖 **Auto-Setup Scripts** - Downloads everything automatically
+- 🎯 **Cross-Platform** - Works on macOS, Linux, Windows
+- 📦 **28 JARs Total** - JavaFX (8) + Core libs (14) + Text components (6)
+- ⚡ **Fast Development** - Pure Java, no complex build configs
 
 ---
 
