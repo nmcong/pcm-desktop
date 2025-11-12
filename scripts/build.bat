@@ -120,7 +120,7 @@ if not exist "out" mkdir out
 
 REM Build classpath
 echo [INFO] Building classpath...
-set CLASSPATH=lib\javafx\*;lib\others\*
+set CLASSPATH=lib\javafx\*;lib\others\*;lib\rag\*
 
 if %WITH_TEXT_COMPONENT%==1 (
     echo [INFO] Including Universal Text Component libraries...
