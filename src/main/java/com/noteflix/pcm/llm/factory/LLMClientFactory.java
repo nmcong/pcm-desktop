@@ -42,7 +42,7 @@ public class LLMClientFactory {
   }
 
   /** Create or get cached LLM client for the given configuration */
-  public LLMClient getClient(LLMProviderConfig config) {
+  public LLMClient getClient(LLMProviderConfig config) throws com.noteflix.pcm.llm.exception.LLMException {
     config.validate();
 
     String cacheKey = config.getProvider().name();
@@ -62,7 +62,7 @@ public class LLMClientFactory {
   }
 
   /** Create a new LLM client (not cached) */
-  public LLMClient createClient(LLMProviderConfig config) {
+  public LLMClient createClient(LLMProviderConfig config) throws com.noteflix.pcm.llm.exception.LLMException {
     config.validate();
 
     switch (config.getProvider()) {
@@ -76,11 +76,11 @@ public class LLMClientFactory {
         return new OllamaClient(config);
 
       case CUSTOM:
-        throw new LLMException(
+        throw new com.noteflix.pcm.llm.exception.LLMException(
             "Custom client not yet implemented. Please implement your own LLMClient.");
 
       default:
-        throw new LLMException("Unknown provider: " + config.getProvider());
+        throw new com.noteflix.pcm.llm.exception.LLMException("Unknown provider: " + config.getProvider());
     }
   }
 

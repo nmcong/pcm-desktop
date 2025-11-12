@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.noteflix.pcm.llm.api.LLMClient;
 import com.noteflix.pcm.llm.api.StreamingCapable;
-import com.noteflix.pcm.llm.exception.LLMProviderException;
+import com.noteflix.pcm.llm.exception.ProviderException;
 import com.noteflix.pcm.llm.model.*;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -48,7 +48,7 @@ public class AnthropicClient implements LLMClient, StreamingCapable {
   }
 
   @Override
-  public LLMResponse sendMessage(LLMRequest request) {
+  public LLMResponse sendMessage(LLMRequest request) throws ProviderException {
     try {
       request.validate();
 
@@ -63,7 +63,7 @@ public class AnthropicClient implements LLMClient, StreamingCapable {
 
     } catch (IOException e) {
       log.error("Failed to send message to Anthropic", e);
-      throw new LLMProviderException("Failed to communicate with Anthropic", e);
+      throw new ProviderException("anthropic", "Failed to communicate with Anthropic", e);
     }
   }
 
@@ -72,17 +72,22 @@ public class AnthropicClient implements LLMClient, StreamingCapable {
     // Simplified streaming - return single chunk
     // Full SSE implementation can be added later
     log.warn("Streaming not fully implemented for Anthropic, using regular response");
-    LLMResponse response = sendMessage(request);
+    try {
+      LLMResponse response = sendMessage(request);
 
     LLMChunk chunk =
         LLMChunk.builder()
             .id(response.getId())
             .model(response.getModel())
             .content(response.getContent())
-            .finishReason(response.getFinishReason())
-            .build();
+        .finishReason(response.getFinishReason())
+        .build();
 
-    return Stream.of(chunk);
+      return Stream.of(chunk);
+    } catch (ProviderException e) {
+      log.error("Failed to stream message", e);
+      throw new RuntimeException("Failed to stream message", e);
+    }
   }
 
   @Override
@@ -173,7 +178,7 @@ public class AnthropicClient implements LLMClient, StreamingCapable {
     return objectMapper.writeValueAsString(root);
   }
 
-  private String sendHttpRequest(String jsonRequest) throws IOException {
+  private String sendHttpRequest(String jsonRequest) throws IOException, ProviderException {
     URL url = new URL(config.getUrl());
     HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 
@@ -205,7 +210,7 @@ public class AnthropicClient implements LLMClient, StreamingCapable {
         return readResponse(conn);
       } else {
         String errorResponse = readErrorResponse(conn);
-        throw new LLMProviderException("Anthropic API error", statusCode, errorResponse);
+        throw new ProviderException("anthropic", statusCode, "Anthropic API error: " + errorResponse);
       }
 
     } finally {

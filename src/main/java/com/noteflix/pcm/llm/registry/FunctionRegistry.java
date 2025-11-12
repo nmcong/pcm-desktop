@@ -1,6 +1,8 @@
 package com.noteflix.pcm.llm.registry;
 
 import com.noteflix.pcm.llm.api.RegisteredFunction;
+import com.noteflix.pcm.llm.exception.FunctionExecutionException;
+import com.noteflix.pcm.llm.exception.FunctionNotFoundException;
 import com.noteflix.pcm.llm.model.Tool;
 import lombok.extern.slf4j.Slf4j;
 
@@ -181,13 +183,15 @@ public class FunctionRegistry {
      * @param name Function name
      * @param arguments Function arguments
      * @return Function result
-     * @throws Exception if function not found or execution fails
+     * @throws FunctionNotFoundException if function not found
+     * @throws FunctionExecutionException if execution fails
      */
-    public Object execute(String name, Map<String, Object> arguments) throws Exception {
+    public Object execute(String name, Map<String, Object> arguments) 
+            throws FunctionNotFoundException, FunctionExecutionException {
         RegisteredFunction function = functions.get(name);
         
         if (function == null) {
-            throw new IllegalArgumentException("Function not found: " + name);
+            throw new FunctionNotFoundException(name);
         }
         
         log.debug("Executing function: {} with args: {}", name, arguments);
@@ -203,7 +207,7 @@ public class FunctionRegistry {
             
         } catch (Exception e) {
             log.error("Function execution failed: {}", name, e);
-            throw e;
+            throw new FunctionExecutionException(name, arguments, e);
         }
     }
     

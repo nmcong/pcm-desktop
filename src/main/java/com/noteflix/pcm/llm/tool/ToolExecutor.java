@@ -1,5 +1,7 @@
 package com.noteflix.pcm.llm.tool;
 
+import com.noteflix.pcm.llm.exception.FunctionExecutionException;
+import com.noteflix.pcm.llm.exception.FunctionNotFoundException;
 import com.noteflix.pcm.llm.model.ToolCall;
 import com.noteflix.pcm.llm.model.ToolResult;
 import com.noteflix.pcm.llm.registry.FunctionRegistry;
@@ -101,7 +103,20 @@ public class ToolExecutor {
                 duration
             );
             
-        } catch (Exception e) {
+        } catch (FunctionNotFoundException e) {
+            long duration = System.currentTimeMillis() - startTime;
+            
+            log.error("Tool [{}] {} not found after {}ms", 
+                index, toolName, duration, e);
+            
+            return ToolResult.error(
+                call.getId(),
+                toolName,
+                "Function not found: " + toolName,
+                duration
+            );
+            
+        } catch (FunctionExecutionException e) {
             long duration = System.currentTimeMillis() - startTime;
             
             log.error("Tool [{}] {} failed after {}ms: {}", 

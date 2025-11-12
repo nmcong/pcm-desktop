@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.noteflix.pcm.llm.api.LLMClient;
 import com.noteflix.pcm.llm.api.StreamingCapable;
-import com.noteflix.pcm.llm.exception.LLMProviderException;
+import com.noteflix.pcm.llm.exception.ProviderException;
 import com.noteflix.pcm.llm.model.*;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -64,7 +64,7 @@ public class OllamaClient implements LLMClient, StreamingCapable {
 
     } catch (IOException e) {
       log.error("Failed to send message to Ollama", e);
-      throw new LLMProviderException("Failed to communicate with Ollama", e);
+      throw new ProviderException("ollama", "Failed to communicate with Ollama", e);
     }
   }
 
@@ -83,7 +83,7 @@ public class OllamaClient implements LLMClient, StreamingCapable {
 
     } catch (IOException e) {
       log.error("Failed to stream message from Ollama", e);
-      throw new LLMProviderException("Failed to stream from Ollama", e);
+      throw new ProviderException("ollama", "Failed to stream from Ollama", e);
     }
   }
 
@@ -188,7 +188,7 @@ public class OllamaClient implements LLMClient, StreamingCapable {
         return readResponse(conn);
       } else {
         String errorResponse = readErrorResponse(conn);
-        throw new LLMProviderException("Ollama API error", statusCode, errorResponse);
+        throw new ProviderException("Ollama API error", statusCode, errorResponse);
       }
 
     } finally {
@@ -235,7 +235,7 @@ public class OllamaClient implements LLMClient, StreamingCapable {
         }
       } else {
         String errorResponse = readErrorResponse(conn);
-        throw new LLMProviderException("Ollama API error", statusCode, errorResponse);
+        throw new ProviderException("Ollama API error", statusCode, errorResponse);
       }
 
     } finally {
@@ -290,7 +290,7 @@ public class OllamaClient implements LLMClient, StreamingCapable {
         }
       } else {
         String errorResponse = readErrorResponse(conn);
-        observer.onError(new LLMProviderException("Ollama API error", statusCode, errorResponse));
+        observer.onError(new ProviderException("Ollama API error", statusCode, errorResponse));
       }
 
     } catch (Exception e) {

@@ -32,14 +32,14 @@ public class LLMService {
   }
 
   /** Initialize with a specific provider configuration */
-  public void initialize(LLMProviderConfig config) {
+  public void initialize(LLMProviderConfig config) throws com.noteflix.pcm.llm.exception.LLMException {
     this.currentConfig = config;
     this.currentClient = factory.getClient(config);
     log.info("LLMService initialized with provider: {}", config.getProvider());
   }
 
   /** Switch to a different provider */
-  public void switchProvider(LLMProviderConfig config) {
+  public void switchProvider(LLMProviderConfig config) throws com.noteflix.pcm.llm.exception.LLMException {
     log.info(
         "Switching from {} to {}",
         currentConfig != null ? currentConfig.getProvider() : "none",
@@ -61,8 +61,13 @@ public class LLMService {
             .maxTokens(1000)
             .build();
 
-    LLMResponse response = currentClient.sendMessage(request);
-    return response.getContent();
+    try {
+      LLMResponse response = currentClient.sendMessage(request);
+      return response.getContent();
+    } catch (com.noteflix.pcm.llm.exception.LLMException e) {
+      log.error("Failed to send message", e);
+      throw new RuntimeException("Failed to send message", e);
+    }
   }
 
   /** Send a message with full configuration */
@@ -71,7 +76,12 @@ public class LLMService {
       throw new IllegalStateException("LLMService not initialized. Call initialize() first.");
     }
 
-    return currentClient.sendMessage(request);
+    try {
+      return currentClient.sendMessage(request);
+    } catch (com.noteflix.pcm.llm.exception.LLMException e) {
+      log.error("Failed to send message", e);
+      throw new RuntimeException("Failed to send message", e);
+    }
   }
 
   /** Stream a message (if supported) */
@@ -84,17 +94,22 @@ public class LLMService {
       return ((StreamingCapable) currentClient).streamMessage(request);
     } else {
       log.warn("Current provider does not support streaming, falling back to regular response");
-      LLMResponse response = currentClient.sendMessage(request);
+      try {
+        LLMResponse response = currentClient.sendMessage(request);
 
-      LLMChunk chunk =
-          LLMChunk.builder()
-              .id(response.getId())
-              .model(response.getModel())
-              .content(response.getContent())
-              .finishReason(response.getFinishReason())
-              .build();
+        LLMChunk chunk =
+            LLMChunk.builder()
+                .id(response.getId())
+                .model(response.getModel())
+                .content(response.getContent())
+                .finishReason(response.getFinishReason())
+                .build();
 
-      return Stream.of(chunk);
+        return Stream.of(chunk);
+      } catch (com.noteflix.pcm.llm.exception.LLMException e) {
+        log.error("Failed to send message", e);
+        throw new RuntimeException("Failed to send message", e);
+      }
     }
   }
 
@@ -122,7 +137,12 @@ public class LLMService {
       return ((FunctionCallingCapable) currentClient).sendWithFunctions(request, functions);
     } else {
       log.warn("Current provider does not support function calling, sending regular message");
-      return currentClient.sendMessage(request);
+      try {
+        return currentClient.sendMessage(request);
+      } catch (com.noteflix.pcm.llm.exception.LLMException e) {
+        log.error("Failed to send message", e);
+        throw new RuntimeException("Failed to send message", e);
+      }
     }
   }
 

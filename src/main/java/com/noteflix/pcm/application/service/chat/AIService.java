@@ -174,9 +174,13 @@ public class AIService {
             .build();
 
     // Initialize service
-    llmService.initialize(config);
-
-    log.debug("Initialized LLM provider: {} with model: {}", provider, model);
+    try {
+      llmService.initialize(config);
+      log.debug("Initialized LLM provider: {} with model: {}", provider, model);
+    } catch (com.noteflix.pcm.llm.exception.LLMException e) {
+      log.error("Failed to initialize LLM provider: {}", provider, e);
+      throw new RuntimeException("Failed to initialize LLM provider", e);
+    }
   }
 
   /** Get provider URL */

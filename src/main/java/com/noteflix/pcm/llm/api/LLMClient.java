@@ -27,7 +27,7 @@ public interface LLMClient {
    * @return The LLM response with generated content
    * @throws com.noteflix.pcm.llm.exception.LLMException if request fails
    */
-  LLMResponse sendMessage(LLMRequest request);
+  LLMResponse sendMessage(LLMRequest request) throws com.noteflix.pcm.llm.exception.LLMException;
 
   /**
    * Get the provider name
