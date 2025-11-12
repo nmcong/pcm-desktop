@@ -66,31 +66,14 @@ public class LLMClientFactory {
   public LLMClient createClient(LLMProviderConfig config) throws com.noteflix.pcm.llm.exception.LLMException {
     config.validate();
 
-    // TODO: Implement new providers with LLMProvider interface
+    // Note: This factory uses old LLMProviderConfig
+    // For new architecture, use ProviderRegistry directly
+    log.warn("LLMClientFactory is deprecated. Use ProviderRegistry for new providers.");
+    
     throw new com.noteflix.pcm.llm.exception.LLMException(
-        "Old clients removed. Providers will be reimplemented with new architecture. " +
+        "Please use ProviderRegistry.getInstance() for new LLM providers. " +
         "Provider requested: " + config.getProvider()
     );
-    
-    /* OLD CODE - TO BE REPLACED
-    switch (config.getProvider()) {
-      case OPENAI:
-        return new OpenAIProvider(config);
-
-      case ANTHROPIC:
-        return new AnthropicProvider(config);
-
-      case OLLAMA:
-        return new OllamaProvider(config);
-
-      case CUSTOM:
-        throw new com.noteflix.pcm.llm.exception.LLMException(
-            "Custom client not yet implemented. Please implement your own LLMClient.");
-
-      default:
-        throw new com.noteflix.pcm.llm.exception.LLMException("Unknown provider: " + config.getProvider());
-    }
-    */
   }
 
   /** Clear all cached clients */
