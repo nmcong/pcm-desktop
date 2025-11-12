@@ -331,7 +331,7 @@ public class DatabaseMigrationManager {
      * Record migration in schema_version table
      */
     private void recordMigration(Connection conn, String version, String description) throws SQLException {
-        String sql = "INSERT INTO " + SCHEMA_VERSION_TABLE + " (version, description) VALUES (?, ?)";
+        String sql = "INSERT OR IGNORE INTO " + SCHEMA_VERSION_TABLE + " (version, description) VALUES (?, ?)";
         
         try (var stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, version);

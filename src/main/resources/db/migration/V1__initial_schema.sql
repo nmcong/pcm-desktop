@@ -24,9 +24,9 @@ CREATE TABLE IF NOT EXISTS projects (
     updated_by TEXT
 );
 
-CREATE INDEX idx_projects_status ON projects(status);
-CREATE INDEX idx_projects_code ON projects(code);
-CREATE INDEX idx_projects_type ON projects(type);
+CREATE INDEX IF NOT EXISTS idx_projects_status ON projects(status);
+CREATE INDEX IF NOT EXISTS idx_projects_code ON projects(code);
+CREATE INDEX IF NOT EXISTS idx_projects_type ON projects(type);
 
 -- Screens table
 CREATE TABLE IF NOT EXISTS screens (
@@ -48,10 +48,10 @@ CREATE TABLE IF NOT EXISTS screens (
     UNIQUE(project_id, code)
 );
 
-CREATE INDEX idx_screens_project ON screens(project_id);
-CREATE INDEX idx_screens_status ON screens(status);
-CREATE INDEX idx_screens_category ON screens(category);
-CREATE INDEX idx_screens_type ON screens(type);
+CREATE INDEX IF NOT EXISTS idx_screens_project ON screens(project_id);
+CREATE INDEX IF NOT EXISTS idx_screens_status ON screens(status);
+CREATE INDEX IF NOT EXISTS idx_screens_category ON screens(category);
+CREATE INDEX IF NOT EXISTS idx_screens_type ON screens(type);
 
 -- Database objects table
 CREATE TABLE IF NOT EXISTS database_objects (
@@ -69,9 +69,9 @@ CREATE TABLE IF NOT EXISTS database_objects (
     UNIQUE(schema_name, name, type)
 );
 
-CREATE INDEX idx_db_objects_project ON database_objects(project_id);
-CREATE INDEX idx_db_objects_type ON database_objects(type);
-CREATE INDEX idx_db_objects_name ON database_objects(name);
+CREATE INDEX IF NOT EXISTS idx_db_objects_project ON database_objects(project_id);
+CREATE INDEX IF NOT EXISTS idx_db_objects_type ON database_objects(type);
+CREATE INDEX IF NOT EXISTS idx_db_objects_name ON database_objects(name);
 
 -- Batch jobs table
 CREATE TABLE IF NOT EXISTS batch_jobs (
@@ -92,9 +92,9 @@ CREATE TABLE IF NOT EXISTS batch_jobs (
     FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE SET NULL
 );
 
-CREATE INDEX idx_batch_jobs_project ON batch_jobs(project_id);
-CREATE INDEX idx_batch_jobs_status ON batch_jobs(status);
-CREATE INDEX idx_batch_jobs_type ON batch_jobs(job_type);
+CREATE INDEX IF NOT EXISTS idx_batch_jobs_project ON batch_jobs(project_id);
+CREATE INDEX IF NOT EXISTS idx_batch_jobs_status ON batch_jobs(status);
+CREATE INDEX IF NOT EXISTS idx_batch_jobs_type ON batch_jobs(job_type);
 
 -- ============================================================================
 -- WORKFLOW TABLES
@@ -115,8 +115,8 @@ CREATE TABLE IF NOT EXISTS workflows (
     FOREIGN KEY (start_screen_id) REFERENCES screens(id) ON DELETE SET NULL
 );
 
-CREATE INDEX idx_workflows_project ON workflows(project_id);
-CREATE INDEX idx_workflows_status ON workflows(status);
+CREATE INDEX IF NOT EXISTS idx_workflows_project ON workflows(project_id);
+CREATE INDEX IF NOT EXISTS idx_workflows_status ON workflows(status);
 
 -- Workflow steps table
 CREATE TABLE IF NOT EXISTS workflow_steps (
@@ -134,8 +134,8 @@ CREATE TABLE IF NOT EXISTS workflow_steps (
     FOREIGN KEY (next_step_id) REFERENCES workflow_steps(id) ON DELETE SET NULL
 );
 
-CREATE INDEX idx_workflow_steps_workflow ON workflow_steps(workflow_id);
-CREATE INDEX idx_workflow_steps_order ON workflow_steps(workflow_id, step_order);
+CREATE INDEX IF NOT EXISTS idx_workflow_steps_workflow ON workflow_steps(workflow_id);
+CREATE INDEX IF NOT EXISTS idx_workflow_steps_order ON workflow_steps(workflow_id, step_order);
 
 -- ============================================================================
 -- TAGGING & RELATIONS
@@ -150,8 +150,8 @@ CREATE TABLE IF NOT EXISTS tags (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE INDEX idx_tags_category ON tags(category);
-CREATE INDEX idx_tags_name ON tags(name);
+CREATE INDEX IF NOT EXISTS idx_tags_category ON tags(category);
+CREATE INDEX IF NOT EXISTS idx_tags_name ON tags(name);
 
 -- Screen tags (many-to-many)
 CREATE TABLE IF NOT EXISTS screen_tags (
@@ -163,8 +163,8 @@ CREATE TABLE IF NOT EXISTS screen_tags (
     FOREIGN KEY (tag_id) REFERENCES tags(id) ON DELETE CASCADE
 );
 
-CREATE INDEX idx_screen_tags_screen ON screen_tags(screen_id);
-CREATE INDEX idx_screen_tags_tag ON screen_tags(tag_id);
+CREATE INDEX IF NOT EXISTS idx_screen_tags_screen ON screen_tags(screen_id);
+CREATE INDEX IF NOT EXISTS idx_screen_tags_tag ON screen_tags(tag_id);
 
 -- Screen relations (self-referencing many-to-many)
 CREATE TABLE IF NOT EXISTS screen_relations (
@@ -178,8 +178,8 @@ CREATE TABLE IF NOT EXISTS screen_relations (
     FOREIGN KEY (to_screen_id) REFERENCES screens(id) ON DELETE CASCADE
 );
 
-CREATE INDEX idx_screen_relations_from ON screen_relations(from_screen_id);
-CREATE INDEX idx_screen_relations_to ON screen_relations(to_screen_id);
+CREATE INDEX IF NOT EXISTS idx_screen_relations_from ON screen_relations(from_screen_id);
+CREATE INDEX IF NOT EXISTS idx_screen_relations_to ON screen_relations(to_screen_id);
 
 -- ============================================================================
 -- KNOWLEDGE BASE
@@ -202,10 +202,10 @@ CREATE TABLE IF NOT EXISTS knowledge_base (
     FOREIGN KEY (screen_id) REFERENCES screens(id) ON DELETE SET NULL
 );
 
-CREATE INDEX idx_kb_category ON knowledge_base(category);
-CREATE INDEX idx_kb_project ON knowledge_base(project_id);
-CREATE INDEX idx_kb_screen ON knowledge_base(screen_id);
-CREATE INDEX idx_kb_title ON knowledge_base(title);
+CREATE INDEX IF NOT EXISTS idx_kb_category ON knowledge_base(category);
+CREATE INDEX IF NOT EXISTS idx_kb_project ON knowledge_base(project_id);
+CREATE INDEX IF NOT EXISTS idx_kb_screen ON knowledge_base(screen_id);
+CREATE INDEX IF NOT EXISTS idx_kb_title ON knowledge_base(title);
 
 -- ============================================================================
 -- SYSTEM TABLES
@@ -223,9 +223,9 @@ CREATE TABLE IF NOT EXISTS activity_log (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE INDEX idx_activity_entity ON activity_log(entity_type, entity_id);
-CREATE INDEX idx_activity_created ON activity_log(created_at DESC);
-CREATE INDEX idx_activity_action ON activity_log(action);
+CREATE INDEX IF NOT EXISTS idx_activity_entity ON activity_log(entity_type, entity_id);
+CREATE INDEX IF NOT EXISTS idx_activity_created ON activity_log(created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_activity_action ON activity_log(action);
 
 -- Settings table
 CREATE TABLE IF NOT EXISTS settings (
@@ -247,8 +247,8 @@ CREATE TABLE IF NOT EXISTS favorites (
     UNIQUE(user_name, entity_type, entity_id)
 );
 
-CREATE INDEX idx_favorites_user ON favorites(user_name);
-CREATE INDEX idx_favorites_entity ON favorites(entity_type, entity_id);
+CREATE INDEX IF NOT EXISTS idx_favorites_user ON favorites(user_name);
+CREATE INDEX IF NOT EXISTS idx_favorites_entity ON favorites(entity_type, entity_id);
 
 -- Schema version tracking
 CREATE TABLE IF NOT EXISTS schema_version (
@@ -258,21 +258,21 @@ CREATE TABLE IF NOT EXISTS schema_version (
 );
 
 -- Insert initial version
-INSERT INTO schema_version (version, description) VALUES (1, 'Initial schema');
+INSERT OR IGNORE INTO schema_version (version, description) VALUES (1, 'Initial schema');
 
 -- ============================================================================
 -- DEFAULT DATA
 -- ============================================================================
 
 -- Default settings
-INSERT INTO settings (key, value, category, description) VALUES
+INSERT OR IGNORE INTO settings (key, value, category, description) VALUES
     ('theme', 'PrimerLight', 'APPEARANCE', 'Application theme'),
     ('db_version', '1', 'DATABASE', 'Database schema version'),
     ('ai_enabled', 'false', 'AI', 'Enable AI features'),
     ('auto_backup', 'true', 'GENERAL', 'Enable automatic backups');
 
 -- Default tags
-INSERT INTO tags (name, color, category) VALUES
+INSERT OR IGNORE INTO tags (name, color, category) VALUES
     ('High Priority', '#dc2626', 'PRIORITY'),
     ('Authentication', '#2563eb', 'TECHNOLOGY'),
     ('Reporting', '#16a34a', 'TECHNOLOGY'),
@@ -280,7 +280,7 @@ INSERT INTO tags (name, color, category) VALUES
     ('Deprecated', '#6b7280', 'STATUS');
 
 -- Sample project (for testing)
-INSERT INTO projects (name, code, description, type, status, color) VALUES
+INSERT OR IGNORE INTO projects (name, code, description, type, status, color) VALUES
     ('Sample Project', 'SAMPLE', 'Sample project for testing', 'SUBSYSTEM', 'ACTIVE', '#3b82f6');
 
 -- ============================================================================
