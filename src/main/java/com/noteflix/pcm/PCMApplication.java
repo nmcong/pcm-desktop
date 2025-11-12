@@ -1,7 +1,10 @@
 package com.noteflix.pcm;
 
 import com.noteflix.pcm.core.constants.AppConstants;
+import com.noteflix.pcm.core.di.Injector;
+import com.noteflix.pcm.core.i18n.I18n;
 import com.noteflix.pcm.core.theme.ThemeManager;
+import com.noteflix.pcm.core.utils.Asyncs;
 import com.noteflix.pcm.infrastructure.database.ConnectionManager;
 import com.noteflix.pcm.infrastructure.database.DatabaseMigrationManager;
 import com.noteflix.pcm.ui.MainController;
@@ -38,6 +41,16 @@ public class PCMApplication extends Application {
   @Override
   public void init() throws Exception {
     super.init();
+
+    // Initialize DI container
+    log.info("🔧 Initializing Dependency Injection...");
+    Injector injector = Injector.getInstance();
+    log.info("✅ DI Container initialized");
+
+    // Initialize i18n
+    log.info("🌍 Initializing internationalization...");
+    I18n.setLocale("en"); // Default to English
+    log.info("✅ i18n initialized: {}", I18n.getCurrentLocale().getDisplayName());
 
     // Run database migrations BEFORE UI initialization
     log.info("🔄 Running database migrations...");
@@ -115,6 +128,12 @@ public class PCMApplication extends Application {
   @Override
   public void stop() {
     log.info("Shutting down PCM Desktop Application...");
-    // Cleanup resources here
+    
+    // Shutdown async executor
+    Asyncs.shutdown();
+    log.info("✅ Async executor shutdown complete");
+    
+    // Other cleanup
+    log.info("✅ Application shutdown complete");
   }
 }
