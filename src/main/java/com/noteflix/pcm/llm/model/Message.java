@@ -41,8 +41,22 @@ public class Message {
   /**
    * Function call details (only for ASSISTANT role with function call) When LLM wants to call a
    * function
+   * @deprecated Use toolCalls instead for new architecture
    */
+  @Deprecated
   private FunctionCall functionCall;
+  
+  /**
+   * Tool calls (new architecture - supports multiple tool calls)
+   * Used when ASSISTANT wants to call multiple tools in sequence
+   */
+  private java.util.List<ToolCall> toolCalls;
+  
+  /**
+   * Tool call ID (for TOOL role messages)
+   * Links tool result back to the specific tool call
+   */
+  private String toolCallId;
 
   /** Create a system message */
   public static Message system(String content) {
@@ -63,6 +77,32 @@ public class Message {
   public static Message function(String name, String result) {
     return Message.builder().role(Role.FUNCTION).name(name).content(result).build();
   }
+  
+  /** 
+   * Create a tool result message (new architecture)
+   * 
+   * @param toolCallId ID of the tool call this is responding to
+   * @param result Result of tool execution
+   */
+  public static Message tool(String toolCallId, String result) {
+    return Message.builder()
+        .role(Role.TOOL)
+        .toolCallId(toolCallId)
+        .content(result)
+        .build();
+  }
+  
+  /** 
+   * Create an assistant message with tool calls
+   * 
+   * @param toolCalls List of tool calls the assistant wants to make
+   */
+  public static Message assistantWithTools(java.util.List<ToolCall> toolCalls) {
+    return Message.builder()
+        .role(Role.ASSISTANT)
+        .toolCalls(toolCalls)
+        .build();
+  }
 
   /** Message role */
   public enum Role {
@@ -80,7 +120,17 @@ public class Message {
      */
     ASSISTANT,
 
-    /** Function message (result of function execution) Used in function calling flow */
-    FUNCTION
+    /** 
+     * Function message (result of function execution) Used in function calling flow 
+     * @deprecated Use TOOL instead for new architecture
+     */
+    @Deprecated
+    FUNCTION,
+    
+    /**
+     * Tool message (result of tool execution in new architecture)
+     * Links back to a specific tool call via toolCallId
+     */
+    TOOL
   }
 }
