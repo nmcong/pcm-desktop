@@ -1,6 +1,9 @@
 package com.noteflix.pcm.ui.pages;
 
 import atlantafx.base.theme.Styles;
+import com.noteflix.pcm.core.di.Injector;
+import com.noteflix.pcm.core.i18n.I18n;
+import com.noteflix.pcm.ui.viewmodel.KnowledgeBaseViewModel;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -15,20 +18,23 @@ import org.kordamp.ikonli.feather.Feather;
 import org.kordamp.ikonli.javafx.FontIcon;
 
 /**
- * Knowledge Base page - Single Responsibility Principle Manages knowledge base content and search
- * functionality
+ * Knowledge Base page - MVVM Architecture
+ * Uses KnowledgeBaseViewModel for state management and business logic
  */
 @Slf4j
 public class KnowledgeBasePage extends BasePage {
 
+  private final KnowledgeBaseViewModel viewModel;
   private TextField searchField;
   private VBox searchResults;
 
   public KnowledgeBasePage() {
     super(
-        "Knowledge Base",
-        "Browse, search, and manage your organization's knowledge repository",
+        I18n.get("page.kb.title"),
+        I18n.get("page.kb.subtitle"),
         new FontIcon(Feather.BOOK_OPEN));
+    this.viewModel = Injector.getInstance().get(KnowledgeBaseViewModel.class);
+    log.debug("KnowledgeBasePage initialized with ViewModel");
   }
 
   @Override
@@ -54,23 +60,24 @@ public class KnowledgeBasePage extends BasePage {
     section.getStyleClass().add("card");
     section.setPadding(new Insets(24));
 
-    Label searchTitle = new Label("Search Knowledge Base");
+    Label searchTitle = new Label(I18n.get("kb.search.title"));
     searchTitle.getStyleClass().addAll(Styles.TITLE_3);
 
     HBox searchBox = new HBox(12);
     searchBox.setAlignment(Pos.CENTER_LEFT);
 
     searchField = new TextField();
-    searchField.setPromptText("Search for documentation, guides, best practices...");
+    searchField.setPromptText(I18n.get("kb.search.placeholder"));
     searchField.getStyleClass().add("search-field");
+    searchField.textProperty().bindBidirectional(viewModel.searchKeywordProperty());
     HBox.setHgrow(searchField, Priority.ALWAYS);
 
-    Button searchButton = new Button("Search");
+    Button searchButton = new Button(I18n.get("kb.search.button"));
     searchButton.setGraphic(new FontIcon(Feather.SEARCH));
     searchButton.getStyleClass().addAll(Styles.ACCENT);
-    searchButton.setOnAction(e -> handleSearch());
+    searchButton.setOnAction(e -> viewModel.searchArticles());
 
-    searchField.setOnAction(e -> handleSearch());
+    searchField.setOnAction(e -> viewModel.searchArticles());
 
     searchBox.getChildren().addAll(searchField, searchButton);
 
@@ -166,7 +173,10 @@ public class KnowledgeBasePage extends BasePage {
 
     card.getChildren().addAll(header, descriptionLabel, countLabel);
 
-    card.setOnMouseClicked(e -> handleCategoryClick(title));
+    card.setOnMouseClicked(e -> {
+      log.info("Category clicked: {}", title);
+      viewModel.filterByCategory(title);
+    });
 
     return card;
   }
@@ -245,67 +255,12 @@ public class KnowledgeBasePage extends BasePage {
 
     item.getChildren().addAll(iconNode, content, updatedLabel);
 
-    item.setOnMouseClicked(e -> handleArticleClick(title));
+    item.setOnMouseClicked(e -> {
+      log.info("Article clicked: {}", title);
+      // Navigate to article detail view
+    });
 
     return item;
-  }
-
-  private void handleSearch() {
-    String query = searchField.getText().trim();
-    if (!query.isEmpty()) {
-      log.info("Searching knowledge base for: {}", query);
-
-      searchResults.getChildren().clear();
-
-      // Simulate search results
-      searchResults
-          .getChildren()
-          .addAll(
-              createSearchResultItem(
-                  "Database Best Practices",
-                  "Comprehensive guide covering database design and optimization...",
-                  "Development Guidelines"),
-              createSearchResultItem(
-                  "Security Implementation Guide",
-                  "Step-by-step security implementation procedures...",
-                  "Security Policies"),
-              createSearchResultItem(
-                  "Code Review Standards",
-                  "Standards and checklists for effective code reviews...",
-                  "Development Guidelines"));
-    }
-  }
-
-  private VBox createSearchResultItem(String title, String snippet, String category) {
-    VBox item = new VBox(8);
-    item.getStyleClass().addAll("search-result-item", "interactive-item");
-    item.setPadding(new Insets(16));
-
-    Label titleLabel = new Label(title);
-    titleLabel.getStyleClass().addAll(Styles.TEXT_BOLD, "result-title");
-
-    Label snippetLabel = new Label(snippet);
-    snippetLabel.getStyleClass().addAll(Styles.TEXT_SMALL, "text-muted");
-    snippetLabel.setWrapText(true);
-
-    Label categoryLabel = new Label("Category: " + category);
-    categoryLabel.getStyleClass().addAll(Styles.TEXT_SMALL, "accent-text");
-
-    item.getChildren().addAll(titleLabel, snippetLabel, categoryLabel);
-
-    item.setOnMouseClicked(e -> handleArticleClick(title));
-
-    return item;
-  }
-
-  private void handleCategoryClick(String category) {
-    log.info("Category clicked: {}", category);
-    // Navigate to category view or filter articles
-  }
-
-  private void handleArticleClick(String article) {
-    log.info("Article clicked: {}", article);
-    // Navigate to article detail view
   }
 
   @Override

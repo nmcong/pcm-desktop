@@ -7,173 +7,119 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import lombok.extern.slf4j.Slf4j;
 
-/**
- * ViewModel for Settings Page
- *
- * <p>Manages application settings state and actions: - Theme selection - Language/locale - LLM
- * provider configuration - Other preferences
- *
- * @author PCM Team
- * @version 1.0.0
- */
 @Slf4j
 public class SettingsViewModel extends BaseViewModel {
 
-  // Dependencies
   private final ThemeManager themeManager;
 
-  // Properties
-  private final BooleanProperty darkTheme = new SimpleBooleanProperty(false);
-  private final StringProperty selectedLanguage = new SimpleStringProperty("en");
-  private final StringProperty llmProvider = new SimpleStringProperty("openai");
-  private final StringProperty llmModel = new SimpleStringProperty("gpt-3.5-turbo");
-  private final StringProperty apiKey = new SimpleStringProperty("");
+  // Appearance properties
+  private final StringProperty selectedTheme = new SimpleStringProperty("Light");
+  private final StringProperty selectedLanguage = new SimpleStringProperty("English");
+  private final DoubleProperty fontSize = new SimpleDoubleProperty(14.0);
+  private final DoubleProperty sidebarWidth = new SimpleDoubleProperty(280.0);
+
+  // Database properties
+  private final StringProperty databasePath = new SimpleStringProperty("./pcm-desktop.db");
+
+  // Notification properties
+  private final BooleanProperty emailNotificationsEnabled = new SimpleBooleanProperty(false);
 
   // Available options
-  private final ObservableList<String> availableLanguages =
-      FXCollections.observableArrayList("en", "vi");
-  private final ObservableList<String> availableProviders =
-      FXCollections.observableArrayList("openai", "anthropic", "ollama");
+  private final ObservableList<String> availableThemes = FXCollections.observableArrayList("Light", "Dark");
+  private final ObservableList<String> availableLanguages = FXCollections.observableArrayList("English", "Vietnamese");
 
-  /** Constructor with dependency injection */
   public SettingsViewModel(ThemeManager themeManager) {
     this.themeManager = themeManager;
-    loadSettings();
     log.info("SettingsViewModel initialized");
   }
 
-  /** Default constructor */
   public SettingsViewModel() {
     this(ThemeManager.getInstance());
   }
 
-  // ========== Commands ==========
+  public void loadSettings() {
+    selectedTheme.set(themeManager.isDarkTheme() ? "Dark" : "Light");
+    
+    // Listen to theme changes and apply
+    selectedTheme.addListener((obs, oldVal, newVal) -> {
+      if ("Dark".equals(newVal)) {
+        themeManager.setTheme(true);
+      } else {
+        themeManager.setTheme(false);
+      }
+    });
 
-  /** Load current settings */
-  private void loadSettings() {
-    // Load theme setting
-    darkTheme.set(themeManager.isDarkTheme());
+    // Listen to language changes and apply
+    selectedLanguage.addListener((obs, oldVal, newVal) -> {
+      if ("Vietnamese".equals(newVal)) {
+        I18n.setLocale("vi");
+      } else {
+        I18n.setLocale("en");
+      }
+    });
 
-    // TODO: Load other settings from preferences/config file
     log.debug("Settings loaded");
   }
 
-  /** Save settings */
-  public void saveSettings() {
+  public void changeDatabasePath() {
+    log.info("Opening file chooser for database path...");
+    // TODO: Show file chooser dialog
+    // For now, just log
+  }
+
+  public void runMigrations() {
     setBusy(true);
-    clearError();
-
-    try {
-      // Apply theme
-      themeManager.setTheme(darkTheme.get());
-
-      // Apply language
-      I18n.setLocale(selectedLanguage.get());
-
-      // TODO: Save LLM configuration
-      // TODO: Persist settings to file/database
-
-      log.info("Settings saved successfully");
-    } catch (Exception e) {
-      setError("Failed to save settings", e);
-    } finally {
-      setBusy(false);
-    }
+    log.info("Running database migrations...");
+    
+    runAsync(() -> {
+      Thread.sleep(2000); // Simulate migration
+      return true;
+    }, success -> {
+      log.info("Migrations completed successfully");
+    }, error -> {
+      setError("Migration failed", error);
+    }).whenComplete((r, ex) -> setBusy(false));
   }
 
-  /** Toggle theme */
-  public void toggleTheme() {
-    darkTheme.set(!darkTheme.get());
-    themeManager.setTheme(darkTheme.get());
-    log.info("Theme toggled to: {}", darkTheme.get() ? "dark" : "light");
+  public void toggleEmailNotifications() {
+    emailNotificationsEnabled.set(!emailNotificationsEnabled.get());
+    log.info("Email notifications: {}", emailNotificationsEnabled.get());
   }
 
-  /** Reset to defaults */
-  public void resetToDefaults() {
-    darkTheme.set(false);
-    selectedLanguage.set("en");
-    llmProvider.set("openai");
-    llmModel.set("gpt-3.5-turbo");
-    apiKey.set("");
-    saveSettings();
+  public void resetSettings() {
+    selectedTheme.set("Light");
+    selectedLanguage.set("English");
+    fontSize.set(14.0);
+    sidebarWidth.set(280.0);
+    emailNotificationsEnabled.set(false);
     log.info("Settings reset to defaults");
   }
 
-  // ========== Property Accessors ==========
+  // Property accessors
+  public StringProperty selectedThemeProperty() { return selectedTheme; }
+  public String getSelectedTheme() { return selectedTheme.get(); }
+  public void setSelectedTheme(String theme) { selectedTheme.set(theme); }
 
-  public BooleanProperty darkThemeProperty() {
-    return darkTheme;
-  }
+  public StringProperty selectedLanguageProperty() { return selectedLanguage; }
+  public String getSelectedLanguage() { return selectedLanguage.get(); }
+  public void setSelectedLanguage(String language) { selectedLanguage.set(language); }
 
-  public boolean isDarkTheme() {
-    return darkTheme.get();
-  }
+  public DoubleProperty fontSizeProperty() { return fontSize; }
+  public double getFontSize() { return fontSize.get(); }
+  public void setFontSize(double size) { fontSize.set(size); }
 
-  public void setDarkTheme(boolean dark) {
-    darkTheme.set(dark);
-  }
+  public DoubleProperty sidebarWidthProperty() { return sidebarWidth; }
+  public double getSidebarWidth() { return sidebarWidth.get(); }
+  public void setSidebarWidth(double width) { sidebarWidth.set(width); }
 
-  public StringProperty selectedLanguageProperty() {
-    return selectedLanguage;
-  }
+  public StringProperty databasePathProperty() { return databasePath; }
+  public String getDatabasePath() { return databasePath.get(); }
+  public void setDatabasePath(String path) { databasePath.set(path); }
 
-  public String getSelectedLanguage() {
-    return selectedLanguage.get();
-  }
+  public BooleanProperty emailNotificationsEnabledProperty() { return emailNotificationsEnabled; }
+  public boolean isEmailNotificationsEnabled() { return emailNotificationsEnabled.get(); }
+  public void setEmailNotificationsEnabled(boolean enabled) { emailNotificationsEnabled.set(enabled); }
 
-  public void setSelectedLanguage(String language) {
-    selectedLanguage.set(language);
-  }
-
-  public StringProperty llmProviderProperty() {
-    return llmProvider;
-  }
-
-  public String getLlmProvider() {
-    return llmProvider.get();
-  }
-
-  public void setLlmProvider(String provider) {
-    llmProvider.set(provider);
-  }
-
-  public StringProperty llmModelProperty() {
-    return llmModel;
-  }
-
-  public String getLlmModel() {
-    return llmModel.get();
-  }
-
-  public void setLlmModel(String model) {
-    llmModel.set(model);
-  }
-
-  public StringProperty apiKeyProperty() {
-    return apiKey;
-  }
-
-  public String getApiKey() {
-    return apiKey.get();
-  }
-
-  public void setApiKey(String key) {
-    apiKey.set(key);
-  }
-
-  public ObservableList<String> getAvailableLanguages() {
-    return availableLanguages;
-  }
-
-  public ObservableList<String> getAvailableProviders() {
-    return availableProviders;
-  }
-
-  // ========== Lifecycle ==========
-
-  @Override
-  public void onActivate() {
-    super.onActivate();
-    loadSettings();
-  }
+  public ObservableList<String> getAvailableThemes() { return availableThemes; }
+  public ObservableList<String> getAvailableLanguages() { return availableLanguages; }
 }

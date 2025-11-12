@@ -1,31 +1,36 @@
 package com.noteflix.pcm.ui.pages;
 
 import atlantafx.base.theme.Styles;
-import com.noteflix.pcm.core.theme.ThemeManager;
+import com.noteflix.pcm.core.di.Injector;
+import com.noteflix.pcm.core.i18n.I18n;
+import com.noteflix.pcm.ui.viewmodel.SettingsViewModel;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import lombok.extern.slf4j.Slf4j;
 import org.kordamp.ikonli.feather.Feather;
 import org.kordamp.ikonli.javafx.FontIcon;
 
 /**
- * Settings page - Single Responsibility Principle Manages application configuration and preferences
+ * Settings page - MVVM Architecture
+ * Uses SettingsViewModel for state management and business logic
  */
 @Slf4j
 public class SettingsPage extends BasePage {
 
-  private final ThemeManager themeManager;
+  private final SettingsViewModel viewModel;
 
   public SettingsPage() {
     super(
-        "Settings",
-        "Configure your application preferences and system settings",
+        I18n.get("page.settings.title"),
+        I18n.get("page.settings.subtitle"),
         new FontIcon(Feather.SETTINGS));
-    this.themeManager = ThemeManager.getInstance();
+    this.viewModel = Injector.getInstance().get(SettingsViewModel.class);
+    log.debug("SettingsPage initialized with ViewModel");
   }
 
   @Override
@@ -34,19 +39,18 @@ public class SettingsPage extends BasePage {
     mainContent.getStyleClass().add("settings-content");
     VBox.setVgrow(mainContent, Priority.ALWAYS);
 
-    // Appearance settings
     mainContent.getChildren().add(createAppearanceSection());
-
-    // Database settings
     mainContent.getChildren().add(createDatabaseSection());
-
-    // Notification settings
     mainContent.getChildren().add(createNotificationSection());
-
-    // Advanced settings
     mainContent.getChildren().add(createAdvancedSection());
 
     return mainContent;
+  }
+
+  @Override
+  public void onPageActivated() {
+    super.onPageActivated();
+    viewModel.loadSettings();
   }
 
   private VBox createAppearanceSection() {
@@ -54,38 +58,46 @@ public class SettingsPage extends BasePage {
     section.getStyleClass().add("card");
     section.setPadding(new Insets(20));
 
-    Label title = new Label("Appearance");
+    Label title = new Label(I18n.get("settings.appearance.title"));
     title.getStyleClass().addAll(Styles.TITLE_3);
     title.setGraphic(new FontIcon(Feather.MONITOR));
     title.setGraphicTextGap(12);
 
-    // Theme selection
-    HBox themeRow = createSettingRow("Theme", "Choose between light and dark theme");
+    // Theme selection with bidirectional binding
+    HBox themeRow = createSettingRow(I18n.get("settings.appearance.theme"), I18n.get("settings.appearance.theme.desc"));
     ComboBox<String> themeCombo = new ComboBox<>();
-    themeCombo.getItems().addAll("Light", "Dark", "Auto");
-    themeCombo.setValue(themeManager.isDarkTheme() ? "Dark" : "Light");
-    themeCombo.setOnAction(e -> handleThemeChange(themeCombo.getValue()));
+    themeCombo.getItems().addAll(viewModel.getAvailableThemes());
+    themeCombo.valueProperty().bindBidirectional(viewModel.selectedThemeProperty());
     themeRow.getChildren().add(themeCombo);
 
-    // Font size
-    HBox fontRow = createSettingRow("Font Size", "Adjust the application font size");
+    // Language selection with bidirectional binding
+    HBox languageRow = createSettingRow(I18n.get("settings.appearance.language"), I18n.get("settings.appearance.language.desc"));
+    ComboBox<String> languageCombo = new ComboBox<>();
+    languageCombo.getItems().addAll(viewModel.getAvailableLanguages());
+    languageCombo.valueProperty().bindBidirectional(viewModel.selectedLanguageProperty());
+    languageRow.getChildren().add(languageCombo);
+
+    // Font size with bidirectional binding
+    HBox fontRow = createSettingRow(I18n.get("settings.appearance.font.size"), I18n.get("settings.appearance.font.size.desc"));
     Slider fontSlider = new Slider(10, 18, 14);
     fontSlider.setShowTickLabels(true);
     fontSlider.setShowTickMarks(true);
     fontSlider.setMajorTickUnit(2);
     fontSlider.setPrefWidth(200);
+    fontSlider.valueProperty().bindBidirectional(viewModel.fontSizeProperty());
     fontRow.getChildren().add(fontSlider);
 
-    // Sidebar width
-    HBox sidebarRow = createSettingRow("Sidebar Width", "Adjust the sidebar width");
+    // Sidebar width with bidirectional binding
+    HBox sidebarRow = createSettingRow(I18n.get("settings.appearance.sidebar.width"), I18n.get("settings.appearance.sidebar.width.desc"));
     Slider sidebarSlider = new Slider(200, 400, 280);
     sidebarSlider.setShowTickLabels(true);
     sidebarSlider.setShowTickMarks(true);
     sidebarSlider.setMajorTickUnit(50);
     sidebarSlider.setPrefWidth(200);
+    sidebarSlider.valueProperty().bindBidirectional(viewModel.sidebarWidthProperty());
     sidebarRow.getChildren().add(sidebarSlider);
 
-    section.getChildren().addAll(title, themeRow, fontRow, sidebarRow);
+    section.getChildren().addAll(title, themeRow, languageRow, fontRow, sidebarRow);
     return section;
   }
 
@@ -94,49 +106,24 @@ public class SettingsPage extends BasePage {
     section.getStyleClass().add("card");
     section.setPadding(new Insets(20));
 
-    Label title = new Label("Database");
+    Label title = new Label(I18n.get("settings.database.title"));
     title.getStyleClass().addAll(Styles.TITLE_3);
     title.setGraphic(new FontIcon(Feather.DATABASE));
     title.setGraphicTextGap(12);
 
-    // Connection settings
-    HBox hostRow = createSettingRow("Database Host", "Database server hostname or IP address");
-    TextField hostField = new TextField("production-db.company.com");
-    hostField.setPrefWidth(250);
-    hostRow.getChildren().add(hostField);
+    HBox dbPathRow = createSettingRow(I18n.get("settings.database.path"), I18n.get("settings.database.path.desc"));
+    Label dbPathLabel = new Label();
+    dbPathLabel.textProperty().bind(viewModel.databasePathProperty());
+    Button changeDbPathBtn = new Button(I18n.get("settings.database.path.change"));
+    changeDbPathBtn.setOnAction(e -> viewModel.changeDatabasePath());
+    dbPathRow.getChildren().addAll(dbPathLabel, changeDbPathBtn);
 
-    HBox portRow = createSettingRow("Port", "Database server port number");
-    TextField portField = new TextField("1521");
-    portField.setPrefWidth(100);
-    portRow.getChildren().add(portField);
+    HBox migrateRow = createSettingRow(I18n.get("settings.database.migrate"), I18n.get("settings.database.migrate.desc"));
+    Button migrateBtn = new Button(I18n.get("settings.database.migrate.run"));
+    migrateBtn.setOnAction(e -> viewModel.runMigrations());
+    migrateRow.getChildren().add(migrateBtn);
 
-    HBox schemaRow = createSettingRow("Schema", "Default database schema");
-    TextField schemaField = new TextField("PCM_PROD");
-    schemaField.setPrefWidth(150);
-    schemaRow.getChildren().add(schemaField);
-
-    // Connection options
-    HBox timeoutRow = createSettingRow("Connection Timeout", "Connection timeout in seconds");
-    Spinner<Integer> timeoutSpinner = new Spinner<>(5, 60, 30);
-    timeoutSpinner.setPrefWidth(100);
-    timeoutRow.getChildren().add(timeoutSpinner);
-
-    HBox poolRow =
-        createSettingRow("Connection Pool Size", "Maximum number of database connections");
-    Spinner<Integer> poolSpinner = new Spinner<>(5, 50, 20);
-    poolSpinner.setPrefWidth(100);
-    poolRow.getChildren().add(poolSpinner);
-
-    // Test connection button
-    HBox testRow = new HBox(12);
-    testRow.setAlignment(Pos.CENTER_LEFT);
-    Button testButton = new Button("Test Connection");
-    testButton.setGraphic(new FontIcon(Feather.WIFI));
-    testButton.getStyleClass().addAll(Styles.ACCENT);
-    testButton.setOnAction(e -> handleTestConnection());
-    testRow.getChildren().add(testButton);
-
-    section.getChildren().addAll(title, hostRow, portRow, schemaRow, timeoutRow, poolRow, testRow);
+    section.getChildren().addAll(title, dbPathRow, migrateRow);
     return section;
   }
 
@@ -145,42 +132,17 @@ public class SettingsPage extends BasePage {
     section.getStyleClass().add("card");
     section.setPadding(new Insets(20));
 
-    Label title = new Label("Notifications");
+    Label title = new Label(I18n.get("settings.notifications.title"));
     title.getStyleClass().addAll(Styles.TITLE_3);
     title.setGraphic(new FontIcon(Feather.BELL));
     title.setGraphicTextGap(12);
 
-    // Notification preferences
-    HBox emailRow = createSettingRow("Email Notifications", "Receive notifications via email");
+    HBox emailNotifRow = createSettingRow(I18n.get("settings.notifications.email"), I18n.get("settings.notifications.email.desc"));
     CheckBox emailCheck = new CheckBox();
-    emailCheck.setSelected(true);
-    emailRow.getChildren().add(emailCheck);
+    emailCheck.selectedProperty().bindBidirectional(viewModel.emailNotificationsEnabledProperty());
+    emailNotifRow.getChildren().add(emailCheck);
 
-    HBox desktopRow = createSettingRow("Desktop Notifications", "Show desktop notifications");
-    CheckBox desktopCheck = new CheckBox();
-    desktopCheck.setSelected(true);
-    desktopRow.getChildren().add(desktopCheck);
-
-    HBox soundRow = createSettingRow("Sound Alerts", "Play sound for important notifications");
-    CheckBox soundCheck = new CheckBox();
-    soundCheck.setSelected(false);
-    soundRow.getChildren().add(soundCheck);
-
-    // Notification types
-    Label typesTitle = new Label("Notification Types");
-    typesTitle.getStyleClass().addAll(Styles.TEXT_BOLD);
-
-    VBox typesBox = new VBox(8);
-    typesBox
-        .getChildren()
-        .addAll(
-            createNotificationTypeRow("Job Completion", true),
-            createNotificationTypeRow("Job Failures", true),
-            createNotificationTypeRow("System Alerts", true),
-            createNotificationTypeRow("Database Issues", true),
-            createNotificationTypeRow("Performance Warnings", false));
-
-    section.getChildren().addAll(title, emailRow, desktopRow, soundRow, typesTitle, typesBox);
+    section.getChildren().addAll(title, emailNotifRow);
     return section;
   }
 
@@ -189,125 +151,37 @@ public class SettingsPage extends BasePage {
     section.getStyleClass().add("card");
     section.setPadding(new Insets(20));
 
-    Label title = new Label("Advanced");
+    Label title = new Label(I18n.get("settings.advanced.title"));
     title.getStyleClass().addAll(Styles.TITLE_3);
-    title.setGraphic(new FontIcon(Feather.TOOL));
+    title.setGraphic(new FontIcon(Feather.CODE));
     title.setGraphicTextGap(12);
 
-    // Debug settings
-    HBox debugRow = createSettingRow("Debug Mode", "Enable detailed logging for troubleshooting");
-    CheckBox debugCheck = new CheckBox();
-    debugCheck.setSelected(false);
-    debugRow.getChildren().add(debugCheck);
+    HBox resetRow = createSettingRow(I18n.get("settings.advanced.reset"), I18n.get("settings.advanced.reset.desc"));
+    Button resetBtn = new Button(I18n.get("settings.advanced.reset.button"));
+    resetBtn.getStyleClass().add(Styles.DANGER);
+    resetBtn.setOnAction(e -> viewModel.resetSettings());
+    resetRow.getChildren().add(resetBtn);
 
-    // Cache settings
-    HBox cacheRow = createSettingRow("Cache Size", "Application cache size in MB");
-    Spinner<Integer> cacheSpinner = new Spinner<>(50, 1000, 200);
-    cacheSpinner.setPrefWidth(100);
-    cacheRow.getChildren().add(cacheSpinner);
-
-    // Auto-save
-    HBox autoSaveRow =
-        createSettingRow("Auto-save Interval", "Automatically save changes (minutes)");
-    Spinner<Integer> autoSaveSpinner = new Spinner<>(1, 30, 5);
-    autoSaveSpinner.setPrefWidth(100);
-    autoSaveRow.getChildren().add(autoSaveSpinner);
-
-    // Backup settings
-    HBox backupRow =
-        createSettingRow("Automatic Backups", "Create automatic configuration backups");
-    CheckBox backupCheck = new CheckBox();
-    backupCheck.setSelected(true);
-    backupRow.getChildren().add(backupCheck);
-
-    // Reset settings
-    HBox resetRow = new HBox(12);
-    resetRow.setAlignment(Pos.CENTER_LEFT);
-    Button resetButton = new Button("Reset to Defaults");
-    resetButton.setGraphic(new FontIcon(Feather.REFRESH_CW));
-    resetButton.getStyleClass().addAll(Styles.DANGER);
-    resetButton.setOnAction(e -> handleResetSettings());
-    resetRow.getChildren().add(resetButton);
-
-    section.getChildren().addAll(title, debugRow, cacheRow, autoSaveRow, backupRow, resetRow);
+    section.getChildren().addAll(title, resetRow);
     return section;
   }
 
-  private HBox createSettingRow(String label, String description) {
-    HBox row = new HBox(16);
-    row.setAlignment(Pos.CENTER_LEFT);
-
-    VBox labelBox = new VBox(2);
-    labelBox.setPrefWidth(200);
-
-    Label titleLabel = new Label(label);
-    titleLabel.getStyleClass().addAll(Styles.TEXT_BOLD);
-
-    Label descLabel = new Label(description);
-    descLabel.getStyleClass().addAll(Styles.TEXT_SMALL, "text-muted");
-    descLabel.setWrapText(true);
-
-    labelBox.getChildren().addAll(titleLabel, descLabel);
-
-    row.getChildren().add(labelBox);
-
-    return row;
-  }
-
-  private HBox createNotificationTypeRow(String type, boolean enabled) {
+  private HBox createSettingRow(String title, String description) {
     HBox row = new HBox(12);
     row.setAlignment(Pos.CENTER_LEFT);
+    row.getStyleClass().add("setting-row");
 
-    CheckBox checkBox = new CheckBox(type);
-    checkBox.setSelected(enabled);
+    VBox textContent = new VBox(2);
+    Label titleLabel = new Label(title);
+    titleLabel.getStyleClass().add(Styles.TEXT_BOLD);
+    Label descLabel = new Label(description);
+    descLabel.getStyleClass().addAll(Styles.TEXT_SMALL, Styles.TEXT_MUTED);
+    textContent.getChildren().addAll(titleLabel, descLabel);
 
-    row.getChildren().add(checkBox);
+    Region spacer = new Region();
+    HBox.setHgrow(spacer, Priority.ALWAYS);
+
+    row.getChildren().addAll(textContent, spacer);
     return row;
-  }
-
-  private void handleThemeChange(String theme) {
-    log.info("Theme changed to: {}", theme);
-    switch (theme) {
-      case "Light" -> themeManager.setTheme(false);
-      case "Dark" -> themeManager.setTheme(true);
-      case "Auto" -> {
-        // TODO: Implement auto theme based on system preference
-        log.info("Auto theme not implemented yet");
-      }
-    }
-  }
-
-  private void handleTestConnection() {
-    log.info("Testing database connection");
-
-    Alert alert = new Alert(Alert.AlertType.INFORMATION);
-    alert.setTitle("Connection Test");
-    alert.setHeaderText("Database Connection Test");
-    alert.setContentText(
-        "Connection successful!\n\n"
-            + "Server: production-db.company.com:1521\n"
-            + "Schema: PCM_PROD\n"
-            + "Response time: 45ms");
-    alert.showAndWait();
-  }
-
-  private void handleResetSettings() {
-    log.info("Resetting settings to defaults");
-
-    Alert confirmation = new Alert(Alert.AlertType.CONFIRMATION);
-    confirmation.setTitle("Reset Settings");
-    confirmation.setHeaderText("Reset to Default Settings");
-    confirmation.setContentText(
-        "This will reset all settings to their default values. Are you sure?");
-
-    confirmation
-        .showAndWait()
-        .ifPresent(
-            response -> {
-              if (response == ButtonType.OK) {
-                // Reset all settings to defaults
-                log.info("Settings reset to defaults");
-              }
-            });
   }
 }

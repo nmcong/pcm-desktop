@@ -1,159 +1,96 @@
 package com.noteflix.pcm.ui.viewmodel;
 
+import com.noteflix.pcm.core.i18n.I18n;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import lombok.extern.slf4j.Slf4j;
 
-/**
- * ViewModel for Database Objects Page
- *
- * <p>Manages database schema and objects state
- *
- * @author PCM Team
- * @version 1.0.0
- */
 @Slf4j
 public class DatabaseObjectsViewModel extends BaseViewModel {
 
-  // Connection info
-  private final StringProperty connectionString =
-      new SimpleStringProperty("jdbc:sqlite:pcm-desktop.db");
-  private final StringProperty connectionStatus = new SimpleStringProperty("Connected");
-  private final StringProperty databaseType = new SimpleStringProperty("SQLite");
+  public final StringProperty connectionStatus = new SimpleStringProperty(I18n.get("db.status.disconnected"));
+  public final StringProperty databaseName = new SimpleStringProperty("N/A");
+  public final StringProperty schemaVersion = new SimpleStringProperty("N/A");
+  public final ObservableList<String> schemaObjects = FXCollections.observableArrayList();
+  public final StringProperty selectedObjectDetails = new SimpleStringProperty("");
 
-  // Schema objects
-  private final ObservableList<DatabaseObject> tables = FXCollections.observableArrayList();
-  private final ObservableList<DatabaseObject> views = FXCollections.observableArrayList();
-  private final ObservableList<DatabaseObject> procedures = FXCollections.observableArrayList();
-  private final StringProperty selectedObjectInfo = new SimpleStringProperty("");
-
-  /** Constructor */
   public DatabaseObjectsViewModel() {
-    loadDatabaseObjects();
-    log.info("DatabaseObjectsViewModel initialized");
+    log.debug("DatabaseObjectsViewModel initialized");
   }
 
-  /** Load database objects */
-  private void loadDatabaseObjects() {
-    // Load tables (mock data)
-    tables.add(new DatabaseObject("projects", "TABLE", "12 rows"));
-    tables.add(new DatabaseObject("screens", "TABLE", "45 rows"));
-    tables.add(new DatabaseObject("database_objects", "TABLE", "78 rows"));
-    tables.add(new DatabaseObject("batch_jobs", "TABLE", "34 rows"));
-    tables.add(new DatabaseObject("workflows", "TABLE", "23 rows"));
-    tables.add(new DatabaseObject("conversations", "TABLE", "8 rows"));
-    tables.add(new DatabaseObject("messages", "TABLE", "24 rows"));
-
-    // Load views
-    views.add(new DatabaseObject("v_active_projects", "VIEW", "Active projects view"));
-    views.add(new DatabaseObject("v_active_screens", "VIEW", "Active screens view"));
-    views.add(new DatabaseObject("v_recent_activity", "VIEW", "Recent activity view"));
-    views.add(new DatabaseObject("v_recent_conversations", "VIEW", "Recent conversations"));
-
-    // Procedures (SQLite doesn't have stored procedures, but keeping for extensibility)
-    procedures.add(new DatabaseObject("No stored procedures", "INFO", "SQLite limitation"));
-
-    log.debug(
-        "Loaded {} tables, {} views, {} procedures",
-        tables.size(),
-        views.size(),
-        procedures.size());
-  }
-
-  /** Refresh database objects */
-  public void refreshObjects() {
+  public void loadDatabaseInfo() {
     setBusy(true);
     clearError();
-
-    tables.clear();
-    views.clear();
-    procedures.clear();
-
-    // Reload
-    loadDatabaseObjects();
-
-    setBusy(false);
-    log.info("Database objects refreshed");
+    log.info("Loading database information...");
+    
+    runAsync(() -> {
+      Thread.sleep(1500); // Simulate DB connection and info retrieval
+      if (Math.random() < 0.1) { // Simulate occasional failure
+        throw new RuntimeException("Failed to connect to database.");
+      }
+      return "Connected";
+    }, result -> {
+      setConnectionStatus(I18n.get("db.status.connected"));
+      setDatabaseName("pcm-desktop.db");
+      setSchemaVersion("V2");
+      schemaObjects.setAll(
+        "Table: Projects", 
+        "Table: Screens", 
+        "View: v_active_projects", 
+        "Function: calculate_age"
+      );
+      setSelectedObjectDetails(I18n.get("db.details.welcome"));
+      log.info("Database info loaded successfully.");
+    }, error -> {
+      setConnectionStatus(I18n.get("db.status.failed"));
+      setError(I18n.get("error.db.connection.failed") + ": " + error.getMessage(), error);
+      log.error("Error loading database info", error);
+    }).whenComplete((r, ex) -> setBusy(false));
   }
 
-  /** Show object details */
-  public void showObjectDetails(DatabaseObject object) {
-    if (object == null) {
-      selectedObjectInfo.set("");
+  public void refreshSchema() {
+    log.info("Refreshing database schema...");
+    loadDatabaseInfo(); // Simply re-load for this example
+  }
+
+  public void selectSchemaObject(String objectName) {
+    if (objectName == null || objectName.isEmpty()) {
+      setSelectedObjectDetails(I18n.get("db.details.welcome"));
       return;
     }
-
-    String info =
-        String.format(
-            "Object: %s\nType: %s\nInfo: %s",
-            object.name, object.type, object.info);
-    selectedObjectInfo.set(info);
-    log.debug("Showing details for object: {}", object.name);
+    log.info("Selected schema object: {}", objectName);
+    setBusy(true);
+    clearError();
+    
+    runAsync(() -> {
+      Thread.sleep(500); // Simulate loading object details
+      return "Details for " + objectName + ": Columns (ID, Name, Type), Rows (100)";
+    }, details -> {
+      setSelectedObjectDetails(details);
+    }, error -> {
+      setError(I18n.get("error.db.details.failed") + ": " + error.getMessage(), error);
+      log.error("Error loading object details", error);
+    }).whenComplete((r, ex) -> setBusy(false));
   }
 
-  // Property accessors
-  public StringProperty connectionStringProperty() {
-    return connectionString;
-  }
+  // Getters and Property methods
+  public String getConnectionStatus() { return connectionStatus.get(); }
+  public StringProperty connectionStatusProperty() { return connectionStatus; }
+  public void setConnectionStatus(String connectionStatus) { this.connectionStatus.set(connectionStatus); }
 
-  public String getConnectionString() {
-    return connectionString.get();
-  }
+  public String getDatabaseName() { return databaseName.get(); }
+  public StringProperty databaseNameProperty() { return databaseName; }
+  public void setDatabaseName(String databaseName) { this.databaseName.set(databaseName); }
 
-  public StringProperty connectionStatusProperty() {
-    return connectionStatus;
-  }
+  public String getSchemaVersion() { return schemaVersion.get(); }
+  public StringProperty schemaVersionProperty() { return schemaVersion; }
+  public void setSchemaVersion(String schemaVersion) { this.schemaVersion.set(schemaVersion); }
 
-  public String getConnectionStatus() {
-    return connectionStatus.get();
-  }
+  public ObservableList<String> getSchemaObjects() { return schemaObjects; }
 
-  public StringProperty databaseTypeProperty() {
-    return databaseType;
-  }
-
-  public String getDatabaseType() {
-    return databaseType.get();
-  }
-
-  public ObservableList<DatabaseObject> getTables() {
-    return tables;
-  }
-
-  public ObservableList<DatabaseObject> getViews() {
-    return views;
-  }
-
-  public ObservableList<DatabaseObject> getProcedures() {
-    return procedures;
-  }
-
-  public StringProperty selectedObjectInfoProperty() {
-    return selectedObjectInfo;
-  }
-
-  public String getSelectedObjectInfo() {
-    return selectedObjectInfo.get();
-  }
-
-  /** Database Object model */
-  public static class DatabaseObject {
-    public final String name;
-    public final String type;
-    public final String info;
-
-    public DatabaseObject(String name, String type, String info) {
-      this.name = name;
-      this.type = type;
-      this.info = info;
-    }
-
-    @Override
-    public String toString() {
-      return name;
-    }
-  }
+  public String getSelectedObjectDetails() { return selectedObjectDetails.get(); }
+  public StringProperty selectedObjectDetailsProperty() { return selectedObjectDetails; }
+  public void setSelectedObjectDetails(String selectedObjectDetails) { this.selectedObjectDetails.set(selectedObjectDetails); }
 }
-

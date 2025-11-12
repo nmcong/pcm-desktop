@@ -1,10 +1,14 @@
 package com.noteflix.pcm.ui.viewmodel;
 
+import com.noteflix.pcm.core.utils.Asyncs;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import lombok.extern.slf4j.Slf4j;
+import java.util.concurrent.Callable;
+import java.util.concurrent.CompletableFuture;
+import java.util.function.Consumer;
 
 /**
  * Base ViewModel for all ViewModels
@@ -72,7 +76,24 @@ public abstract class BaseViewModel {
     log.error(message, error);
   }
 
+  protected void setErrorMessage(String message) {
+    errorMessage.set(message);
+    if (message != null) {
+      log.error("ViewModel error: {}", message);
+    }
+  }
+
   protected void clearError() {
     errorMessage.set(null);
+  }
+
+  /**
+   * Run async task with success and error handlers
+   */
+  protected <T> CompletableFuture<T> runAsync(
+      Callable<T> task,
+      Consumer<T> onSuccess,
+      Consumer<Throwable> onError) {
+    return Asyncs.runAsync(task, onSuccess, onError);
   }
 }

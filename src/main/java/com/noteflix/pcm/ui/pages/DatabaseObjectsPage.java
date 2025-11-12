@@ -1,6 +1,9 @@
 package com.noteflix.pcm.ui.pages;
 
 import atlantafx.base.theme.Styles;
+import com.noteflix.pcm.core.di.Injector;
+import com.noteflix.pcm.core.i18n.I18n;
+import com.noteflix.pcm.ui.viewmodel.DatabaseObjectsViewModel;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
@@ -13,20 +16,26 @@ import org.kordamp.ikonli.feather.Feather;
 import org.kordamp.ikonli.javafx.FontIcon;
 
 /**
- * Database Objects page - Single Responsibility Principle Manages database schema and object
- * visualization
+ * Database Objects page - MVVM Architecture
+ * Uses DatabaseObjectsViewModel for state management and business logic
  */
 @Slf4j
 public class DatabaseObjectsPage extends BasePage {
 
+  private final DatabaseObjectsViewModel viewModel;
   private TreeView<String> schemaTree;
   private VBox objectDetails;
+  private Label connectionStatusLabel;
+  private Label databaseNameLabel;
+  private Label schemaVersionLabel;
 
   public DatabaseObjectsPage() {
     super(
-        "Database Objects",
-        "Explore and manage your database schema, tables, views, and procedures",
+        I18n.get("page.db.title"),
+        I18n.get("page.db.subtitle"),
         new FontIcon(Feather.DATABASE));
+    this.viewModel = Injector.getInstance().get(DatabaseObjectsViewModel.class);
+    log.debug("DatabaseObjectsPage initialized with ViewModel");
   }
 
   @Override
@@ -49,31 +58,35 @@ public class DatabaseObjectsPage extends BasePage {
     section.getStyleClass().add("card");
     section.setPadding(new Insets(20));
 
-    Label title = new Label("Database Connection");
+    Label title = new Label(I18n.get("db.connection.title"));
     title.getStyleClass().addAll(Styles.TITLE_3);
 
     HBox connectionRow = new HBox(16);
     connectionRow.setAlignment(Pos.CENTER_LEFT);
 
     VBox connectionInfo = new VBox(4);
-    Label serverLabel = new Label("Server: production-db.company.com:1521");
-    serverLabel.getStyleClass().addAll(Styles.TEXT_BOLD);
-    Label schemaLabel = new Label("Schema: PCM_PROD");
-    schemaLabel.getStyleClass().addAll(Styles.TEXT_SMALL, "text-muted");
-    connectionInfo.getChildren().addAll(serverLabel, schemaLabel);
+    databaseNameLabel = new Label();
+    databaseNameLabel.textProperty().bind(viewModel.databaseNameProperty());
+    databaseNameLabel.getStyleClass().addAll(Styles.TEXT_BOLD);
+    
+    schemaVersionLabel = new Label();
+    schemaVersionLabel.textProperty().bind(viewModel.schemaVersionProperty());
+    schemaVersionLabel.getStyleClass().addAll(Styles.TEXT_SMALL, "text-muted");
+    connectionInfo.getChildren().addAll(databaseNameLabel, schemaVersionLabel);
 
     Region spacer = new Region();
     HBox.setHgrow(spacer, Priority.ALWAYS);
 
-    Label statusLabel = new Label("Connected");
-    statusLabel.getStyleClass().addAll(Styles.TEXT_SMALL, "status-connected");
+    connectionStatusLabel = new Label();
+    connectionStatusLabel.textProperty().bind(viewModel.connectionStatusProperty());
+    connectionStatusLabel.getStyleClass().addAll(Styles.TEXT_SMALL, "status-connected");
 
-    Button refreshButton = new Button("Refresh Schema");
+    Button refreshButton = new Button(I18n.get("db.refresh.button"));
     refreshButton.setGraphic(new FontIcon(Feather.REFRESH_CW));
     refreshButton.getStyleClass().addAll(Styles.BUTTON_OUTLINED);
-    refreshButton.setOnAction(e -> handleRefreshSchema());
+    refreshButton.setOnAction(e -> viewModel.refreshSchema());
 
-    connectionRow.getChildren().addAll(connectionInfo, spacer, statusLabel, refreshButton);
+    connectionRow.getChildren().addAll(connectionInfo, spacer, connectionStatusLabel, refreshButton);
 
     section.getChildren().addAll(title, connectionRow);
     return section;
@@ -104,14 +117,14 @@ public class DatabaseObjectsPage extends BasePage {
     HBox headerRow = new HBox();
     headerRow.setAlignment(Pos.CENTER_LEFT);
 
-    Label title = new Label("Schema Objects");
+    Label title = new Label(I18n.get("db.schema.objects"));
     title.getStyleClass().addAll(Styles.TITLE_4);
 
     Region spacer = new Region();
     HBox.setHgrow(spacer, Priority.ALWAYS);
 
     TextField searchField = new TextField();
-    searchField.setPromptText("Search objects...");
+    searchField.setPromptText(I18n.get("db.search.placeholder"));
     searchField.setPrefWidth(120);
 
     headerRow.getChildren().addAll(title, spacer, searchField);
@@ -121,64 +134,35 @@ public class DatabaseObjectsPage extends BasePage {
     schemaTree.getStyleClass().add("schema-tree");
     VBox.setVgrow(schemaTree, Priority.ALWAYS);
 
-    TreeItem<String> root = new TreeItem<>("PCM_PROD");
-    root.setExpanded(true);
+    // Bind schema objects from ViewModel
+    updateSchemaTree();
 
-    // Tables
-    TreeItem<String> tables = new TreeItem<>("Tables (45)");
-    tables.setGraphic(new FontIcon(Feather.GRID));
-    tables.getChildren().add(createTableItem("USERS", "Table"));
-    tables.getChildren().add(createTableItem("PROJECTS", "Table"));
-    tables.getChildren().add(createTableItem("SCREENS", "Table"));
-    tables.getChildren().add(createTableItem("WORKFLOWS", "Table"));
-    tables.getChildren().add(createTableItem("AUDIT_LOG", "Table"));
-
-    // Views
-    TreeItem<String> views = new TreeItem<>("Views (12)");
-    views.setGraphic(new FontIcon(Feather.EYE));
-    views.getChildren().add(createTableItem("V_USER_PROJECTS", "View"));
-    views.getChildren().add(createTableItem("V_ACTIVE_WORKFLOWS", "View"));
-    views.getChildren().add(createTableItem("V_PROJECT_STATS", "View"));
-
-    // Procedures
-    TreeItem<String> procedures = new TreeItem<>("Procedures (28)");
-    procedures.setGraphic(new FontIcon(Feather.SETTINGS));
-    procedures.getChildren().add(createTableItem("SP_CREATE_PROJECT", "Procedure"));
-    procedures.getChildren().add(createTableItem("SP_UPDATE_WORKFLOW", "Procedure"));
-    procedures.getChildren().add(createTableItem("SP_GENERATE_REPORT", "Procedure"));
-
-    // Functions
-    TreeItem<String> functions = new TreeItem<>("Functions (15)");
-    functions.setGraphic(new FontIcon(Feather.ZAP));
-    functions.getChildren().add(createTableItem("FN_CALCULATE_METRICS", "Function"));
-    functions.getChildren().add(createTableItem("FN_VALIDATE_USER", "Function"));
-
-    // Sequences
-    TreeItem<String> sequences = new TreeItem<>("Sequences (8)");
-    sequences.setGraphic(new FontIcon(Feather.HASH));
-    sequences.getChildren().add(createTableItem("SEQ_USER_ID", "Sequence"));
-    sequences.getChildren().add(createTableItem("SEQ_PROJECT_ID", "Sequence"));
-
-    root.getChildren().add(tables);
-    root.getChildren().add(views);
-    root.getChildren().add(procedures);
-    root.getChildren().add(functions);
-    root.getChildren().add(sequences);
-    schemaTree.setRoot(root);
-
-    // Handle selection
+    // Handle selection - notify ViewModel
     schemaTree
         .getSelectionModel()
         .selectedItemProperty()
         .addListener(
             (obs, oldVal, newVal) -> {
               if (newVal != null) {
-                handleObjectSelection(newVal.getValue());
+                viewModel.selectSchemaObject(newVal.getValue());
               }
             });
 
     panel.getChildren().addAll(headerRow, schemaTree);
     return panel;
+  }
+
+  private void updateSchemaTree() {
+    TreeItem<String> root = new TreeItem<>(viewModel.getDatabaseName());
+    root.setExpanded(true);
+
+    // Populate from ViewModel's observable list
+    for (String obj : viewModel.getSchemaObjects()) {
+      TreeItem<String> item = new TreeItem<>(obj);
+      root.getChildren().add(item);
+    }
+
+    schemaTree.setRoot(root);
   }
 
   private TreeItem<String> createTableItem(String name, String type) {
@@ -364,30 +348,10 @@ public class DatabaseObjectsPage extends BasePage {
     return tab;
   }
 
-  private void handleObjectSelection(String selectedObject) {
-    log.info("Selected object: {}", selectedObject);
-
-    // Determine object type and show details
-    if (selectedObject.startsWith("USERS")
-        || selectedObject.startsWith("PROJECTS")
-        || selectedObject.startsWith("SCREENS")
-        || selectedObject.startsWith("WORKFLOWS")
-        || selectedObject.startsWith("AUDIT_LOG")) {
-      showObjectDetails(selectedObject, "Table");
-    } else if (selectedObject.startsWith("V_")) {
-      showObjectDetails(selectedObject, "View");
-    } else if (selectedObject.startsWith("SP_")) {
-      showObjectDetails(selectedObject, "Procedure");
-    } else if (selectedObject.startsWith("FN_")) {
-      showObjectDetails(selectedObject, "Function");
-    } else if (selectedObject.startsWith("SEQ_")) {
-      showObjectDetails(selectedObject, "Sequence");
-    }
-  }
-
-  private void handleRefreshSchema() {
-    log.info("Refreshing database schema");
-    // Refresh schema tree
+  @Override
+  public void onPageActivated() {
+    super.onPageActivated();
+    viewModel.loadDatabaseInfo();
   }
 
   // Inner class for column information
