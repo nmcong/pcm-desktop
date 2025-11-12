@@ -11,7 +11,8 @@ Vector search failed: Error: Vectors must have the same length
 
 ### What Happened?
 
-Bạn đã switch giữa các embedding modes (TensorFlow vs Fallback) nhưng vectors cũ với dimension khác vẫn còn trong IndexedDB.
+Bạn đã switch giữa các embedding modes (TensorFlow vs Fallback) nhưng vectors cũ với dimension khác vẫn còn trong
+IndexedDB.
 
 **Example scenario:**
 
@@ -235,7 +236,7 @@ Object.keys(grouped).forEach((dim) => {
 ### Dimension Table
 
 | Mode              | Dimension | Model                      | Accuracy | When Used                |
-| ----------------- | --------- | -------------------------- | -------- | ------------------------ |
+|-------------------|-----------|----------------------------|----------|--------------------------|
 | **TensorFlow.js** | 512D      | Universal Sentence Encoder | 95%      | After downloading models |
 | **Fallback**      | 64D       | Text-based TF-IDF          | 65%      | No external dependencies |
 | **API**           | Varies    | External service           | Varies   | Not offline              |

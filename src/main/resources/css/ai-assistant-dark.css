@@ -12,26 +12,26 @@
     -fx-bg-secondary: #16192a;
     -fx-bg-tertiary: #12151f;
     -fx-bg-elevated: #1f2335;
-    
+
     /* Accent colors - Indigo/Purple */
     -fx-accent-primary: #6366f1;
     -fx-accent-secondary: #8b5cf6;
     -fx-accent-hover: #7c3aed;
-    
+
     /* Text colors */
     -fx-text-primary: #f8fafc;
     -fx-text-secondary: #cbd5e1;
     -fx-text-muted: #64748b;
     -fx-text-disabled: #475569;
-    
+
     /* Border colors */
     -fx-border-primary: #2d3142;
     -fx-border-secondary: #1f2335;
-    
+
     /* Message bubble colors */
     -fx-user-bubble: #2563eb;
     -fx-ai-bubble: #1f2937;
-    
+
     /* Status colors */
     -fx-success: #10b981;
     -fx-warning: #f59e0b;
@@ -490,7 +490,7 @@
         -fx-min-width: 200px;
         -fx-max-width: 200px;
     }
-    
+
     .chat-messages-area {
         -fx-max-width: 600px;
     }

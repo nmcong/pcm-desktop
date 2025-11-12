@@ -37,36 +37,36 @@ PCM (Project Configuration Management) WebApp is a comprehensive system for mana
 ### Core Features ⭐ NEW
 
 1. **[AI Function Calling System](./AI_FUNCTION_CALLING_SYSTEM.md)** ⭐ UPDATED
-   - Native function calling for OpenAI/Claude
-   - Multi-turn tool execution with feedback loop
-   - Transparent UI for tool calls and results
-   - **Status**: ✅ Implemented
+    - Native function calling for OpenAI/Claude
+    - Multi-turn tool execution with feedback loop
+    - Transparent UI for tool calls and results
+    - **Status**: ✅ Implemented
 
 2. **[Unified Function Calling](./UNIFIED_FUNCTION_CALLING.md)** ⭐ **NEW**
-   - **Add function calling to ANY LLM** (even without native support!)
-   - Text-based adapter for Ollama, Hugging Face, custom APIs
-   - Automatic format conversion and parsing
-   - Works with local models, cloud APIs, proprietary systems
-   - **Status**: ✅ Implemented
+    - **Add function calling to ANY LLM** (even without native support!)
+    - Text-based adapter for Ollama, Hugging Face, custom APIs
+    - Automatic format conversion and parsing
+    - Works with local models, cloud APIs, proprietary systems
+    - **Status**: ✅ Implemented
 
 3. **[Function Calling Quick Start](./FUNCTION_CALLING_QUICK_START.md)** ⭐ **NEW**
-   - 3-minute guide to add function calling
-   - Copy-paste examples
-   - Common issues and fixes
-   - **Status**: ✅ Implemented
+    - 3-minute guide to add function calling
+    - Copy-paste examples
+    - Common issues and fixes
+    - **Status**: ✅ Implemented
 
 4. **[Custom LLM Integration](./CUSTOM_LLM_INTEGRATION.md)**
-   - Integrate ANY LLM (OpenAI-compatible or not)
-   - Step-by-step guides for different API formats
-   - 5+ complete real-world examples
-   - REST, GraphQL, WebSocket support
-   - **Status**: ✅ Implemented
+    - Integrate ANY LLM (OpenAI-compatible or not)
+    - Step-by-step guides for different API formats
+    - 5+ complete real-world examples
+    - REST, GraphQL, WebSocket support
+    - **Status**: ✅ Implemented
 
 5. **[BPMN Workflow System](./BPMN_WORKFLOW_SYSTEM.md)**
-   - Auto-generate workflows from screen relationships
-   - Interactive BPMN diagrams
-   - Export to `.bpmn` files
-   - **Status**: ✅ Implemented
+    - Auto-generate workflows from screen relationships
+    - Interactive BPMN diagrams
+    - Export to `.bpmn` files
+    - **Status**: ✅ Implemented
 
 ---
 
@@ -281,7 +281,7 @@ docs/
 **Supported LLMs:**
 
 | Type              | Examples             | Integration Time |
-| ----------------- | -------------------- | ---------------- |
+|-------------------|----------------------|------------------|
 | OpenAI-compatible | Ollama, LM Studio    | 5 minutes        |
 | Cloud APIs        | Hugging Face, Cohere | 30 minutes       |
 | Custom APIs       | Your proprietary API | 1-2 hours        |
@@ -321,7 +321,7 @@ docs/
 **Integration Types:**
 
 | Type              | Difficulty  | Time    | Example           |
-| ----------------- | ----------- | ------- | ----------------- |
+|-------------------|-------------|---------|-------------------|
 | OpenAI-compatible | 🟢 Easy     | 5 min   | Ollama, LM Studio |
 | Similar format    | 🟡 Medium   | 30 min  | Cohere, AI21      |
 | Different format  | 🔴 Advanced | 1-2 hrs | Custom APIs       |
@@ -618,22 +618,22 @@ class DatabaseQueryTool {
 **Major Features:**
 
 - ✨ **Unified Function Calling System** - Add function calling to ANY LLM!
-  - `FunctionCallingAdapter.js` with base class and two implementations
-  - `NativeFunctionCallingAdapter` for OpenAI/Claude
-  - `TextBasedFunctionCallingAdapter` for all other LLMs
-  - Auto-parsing of JSON, XML, and custom formats
-  - Works with local models (Ollama), cloud APIs, custom endpoints
+    - `FunctionCallingAdapter.js` with base class and two implementations
+    - `NativeFunctionCallingAdapter` for OpenAI/Claude
+    - `TextBasedFunctionCallingAdapter` for all other LLMs
+    - Auto-parsing of JSON, XML, and custom formats
+    - Works with local models (Ollama), cloud APIs, custom endpoints
 
 - 📚 **New Documentation** (3,000+ lines)
-  - `UNIFIED_FUNCTION_CALLING.md` - Complete system guide
-  - `FUNCTION_CALLING_QUICK_START.md` - 3-minute quick start
-  - Updated `CUSTOM_LLM_INTEGRATION.md` with adapter examples
+    - `UNIFIED_FUNCTION_CALLING.md` - Complete system guide
+    - `FUNCTION_CALLING_QUICK_START.md` - 3-minute quick start
+    - Updated `CUSTOM_LLM_INTEGRATION.md` with adapter examples
 
 - 🔧 **BaseProvider Updates**
-  - Added `functionCallingAdapter` property
-  - Added `supportsFunctionCalling()` method
-  - Added `getFunctionCallingType()` method
-  - Added adapter management methods
+    - Added `functionCallingAdapter` property
+    - Added `supportsFunctionCalling()` method
+    - Added `getFunctionCallingType()` method
+    - Added adapter management methods
 
 **Files Added:**
 

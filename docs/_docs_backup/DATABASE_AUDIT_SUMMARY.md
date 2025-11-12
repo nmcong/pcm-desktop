@@ -131,7 +131,7 @@ All function files comply with DATABASE_MANAGER_API.md
 ### Most Used Methods
 
 | Method                 | Usage Count | Category       |
-| ---------------------- | ----------- | -------------- |
+|------------------------|-------------|----------------|
 | `getProjects()`        | 11          | Projects       |
 | `getAllDBObjects()`    | 9           | DB Objects     |
 | `getScreens()`         | 6           | Screens        |
@@ -143,7 +143,7 @@ All function files comply with DATABASE_MANAGER_API.md
 ### Pattern Distribution
 
 | Pattern               | Count | Percentage |
-| --------------------- | ----- | ---------- |
+|-----------------------|-------|------------|
 | `getXxx()` (no "All") | 31    | 33%        |
 | `getAllXxx()`         | 23    | 24%        |
 | `getXxxById(id)`      | 21    | 22%        |
@@ -163,17 +163,17 @@ All function files comply with DATABASE_MANAGER_API.md
 ### ⚠️ Areas for Improvement
 
 1. **Naming inconsistency** in DatabaseManager itself
-   - Some use `getAll` prefix, some don't
-   - Some use `ById` suffix, some don't
-   - **Recommendation**: Standardize in future refactor
+    - Some use `getAll` prefix, some don't
+    - Some use `ById` suffix, some don't
+    - **Recommendation**: Standardize in future refactor
 
 2. **No TypeScript types**
-   - Would catch these errors at compile time
-   - **Recommendation**: Add JSDoc types or migrate to TS
+    - Would catch these errors at compile time
+    - **Recommendation**: Add JSDoc types or migrate to TS
 
 3. **No unit tests**
-   - Functions using DatabaseManager not tested
-   - **Recommendation**: Add unit tests with mocks
+    - Functions using DatabaseManager not tested
+    - **Recommendation**: Add unit tests with mocks
 
 ---
 

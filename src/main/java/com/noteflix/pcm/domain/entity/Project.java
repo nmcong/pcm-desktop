@@ -6,14 +6,14 @@ import lombok.EqualsAndHashCode;
 
 /**
  * Project entity representing a subsystem, module, or service
- * 
+ * <p>
  * Follows Single Responsibility Principle - only represents project data
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Builder
 public class Project extends BaseEntity {
-    
+
     private String name;
     private String code;
     private String description;
@@ -22,45 +22,7 @@ public class Project extends BaseEntity {
     private String color; // Hex color for UI
     private String createdBy;
     private String updatedBy;
-    
-    /**
-     * Project types
-     */
-    public enum ProjectType {
-        SUBSYSTEM("Subsystem"),
-        MODULE("Module"),
-        SERVICE("Service");
-        
-        private final String displayName;
-        
-        ProjectType(String displayName) {
-            this.displayName = displayName;
-        }
-        
-        public String getDisplayName() {
-            return displayName;
-        }
-    }
-    
-    /**
-     * Project status
-     */
-    public enum ProjectStatus {
-        ACTIVE("Active"),
-        ARCHIVED("Archived"),
-        DEPRECATED("Deprecated");
-        
-        private final String displayName;
-        
-        ProjectStatus(String displayName) {
-            this.displayName = displayName;
-        }
-        
-        public String getDisplayName() {
-            return displayName;
-        }
-    }
-    
+
     /**
      * Validation method
      */
@@ -76,6 +38,44 @@ public class Project extends BaseEntity {
         }
         if (status == null) {
             status = ProjectStatus.ACTIVE; // Default status
+        }
+    }
+
+    /**
+     * Project types
+     */
+    public enum ProjectType {
+        SUBSYSTEM("Subsystem"),
+        MODULE("Module"),
+        SERVICE("Service");
+
+        private final String displayName;
+
+        ProjectType(String displayName) {
+            this.displayName = displayName;
+        }
+
+        public String getDisplayName() {
+            return displayName;
+        }
+    }
+
+    /**
+     * Project status
+     */
+    public enum ProjectStatus {
+        ACTIVE("Active"),
+        ARCHIVED("Archived"),
+        DEPRECATED("Deprecated");
+
+        private final String displayName;
+
+        ProjectStatus(String displayName) {
+            this.displayName = displayName;
+        }
+
+        public String getDisplayName() {
+            return displayName;
         }
     }
 }

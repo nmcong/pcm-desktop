@@ -72,7 +72,7 @@
 ### Key Components
 
 | Component                  | File                                  | Responsibility         |
-| -------------------------- | ------------------------------------- | ---------------------- |
+|----------------------------|---------------------------------------|------------------------|
 | **AIPanel**                | `components/AIPanel.js`               | Main UI controller     |
 | **ChatView**               | `components/AIChatView.js`            | Message display        |
 | **ConversationManager**    | `components/AIConversationManager.js` | State management       |
@@ -1115,7 +1115,7 @@ catch (error) {
 ### Common Error Scenarios
 
 | Error Type                   | Location                                   | Handling                                   |
-| ---------------------------- | ------------------------------------------ | ------------------------------------------ |
+|------------------------------|--------------------------------------------|--------------------------------------------|
 | **No provider**              | `AIPanel.getAIResponse()`                  | Show "No AI provider available"            |
 | **Provider unavailable**     | `AIPanel.getAIResponse()`                  | Show "{provider} is not available"         |
 | **API error**                | `Provider.chat()`                          | Parse error response, show message         |
@@ -1533,20 +1533,20 @@ const metrics = {
 ### Optimization Tips
 
 1. **Caching**:
-   - Cache system statistics for prompt building
-   - Cache function definitions
-   - Cache intent detection results for similar queries
+    - Cache system statistics for prompt building
+    - Cache function definitions
+    - Cache intent detection results for similar queries
 
 2. **Parallel Execution**:
-   - Execute independent function calls in parallel
-   - Pre-load provider models
+    - Execute independent function calls in parallel
+    - Pre-load provider models
 
 3. **Streaming**:
-   - Use streaming for better perceived performance
-   - Show progress indicators
+    - Use streaming for better perceived performance
+    - Show progress indicators
 
 4. **Request Batching**:
-   - Batch multiple tool results in single message
+    - Batch multiple tool results in single message
 
 ---
 
@@ -1555,34 +1555,34 @@ const metrics = {
 ### Complete Flow Checklist
 
 - [x] **Phase 1: User Input**
-  - [x] Input validation
-  - [x] UI update
-  - [x] Conversation management
-  - [x] Message persistence
+    - [x] Input validation
+    - [x] UI update
+    - [x] Conversation management
+    - [x] Message persistence
 
 - [x] **Phase 2: Planning & Intent Detection**
-  - [x] Intent detection
-  - [x] Planning decision
-  - [x] Plan generation
-  - [x] System prompt building
+    - [x] Intent detection
+    - [x] Planning decision
+    - [x] Plan generation
+    - [x] System prompt building
 
 - [x] **Phase 3: Provider Communication**
-  - [x] Provider selection
-  - [x] Health check
-  - [x] Function definitions formatting
-  - [x] API call
+    - [x] Provider selection
+    - [x] Health check
+    - [x] Function definitions formatting
+    - [x] API call
 
 - [x] **Phase 4: Function Calling**
-  - [x] Tool call detection
-  - [x] Tool execution
-  - [x] Result validation
-  - [x] Iteration loop
+    - [x] Tool call detection
+    - [x] Tool execution
+    - [x] Result validation
+    - [x] Iteration loop
 
 - [x] **Phase 5: Response Processing**
-  - [x] Response display
-  - [x] History persistence
-  - [x] Error handling
-  - [x] UI cleanup
+    - [x] Response display
+    - [x] History persistence
+    - [x] Error handling
+    - [x] UI cleanup
 
 ---
 

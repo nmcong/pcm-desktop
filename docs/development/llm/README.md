@@ -5,53 +5,58 @@ Tài liệu về tích hợp Large Language Models (LLM) vào PCM Desktop.
 ## 📚 Tài Liệu
 
 ### Bắt Đầu
+
 - **[LLM_README.md](LLM_README.md)** - Tổng quan về LLM integration
-  - What is LLM?
-  - Supported providers
-  - Architecture overview
+    - What is LLM?
+    - Supported providers
+    - Architecture overview
 
 - **[LLM_QUICK_START.md](LLM_QUICK_START.md)** - Bắt đầu nhanh
-  - Setup guide
-  - First API call
-  - Basic examples
+    - Setup guide
+    - First API call
+    - Basic examples
 
 ### Kế Hoạch & Triển Khai
+
 - **[LLM_INTEGRATION_PLAN.md](LLM_INTEGRATION_PLAN.md)** - Kế hoạch tích hợp
-  - Phase breakdown
-  - Timeline
-  - Deliverables
+    - Phase breakdown
+    - Timeline
+    - Deliverables
 
 - **[LLM_IMPLEMENTATION_STATUS.md](LLM_IMPLEMENTATION_STATUS.md)** - Trạng thái triển khai
-  - Current phase
-  - Completed features
-  - Pending tasks
+    - Current phase
+    - Completed features
+    - Pending tasks
 
 - **[LLM_PHASES_COMPLETE.md](LLM_PHASES_COMPLETE.md)** - Các giai đoạn hoàn thành
-  - Phase 1: Basic integration ✅
-  - Phase 2: UI integration ✅
-  - Phase 3: Advanced features 🚧
+    - Phase 1: Basic integration ✅
+    - Phase 2: UI integration ✅
+    - Phase 3: Advanced features 🚧
 
 ### Kết Quả
+
 - **[LLM_INTEGRATION_COMPLETE.md](LLM_INTEGRATION_COMPLETE.md)** - Báo cáo hoàn thành
-  - Completed features
-  - API endpoints
-  - Usage examples
+    - Completed features
+    - API endpoints
+    - Usage examples
 
 - **[LLM_COMPLETE_SUMMARY.md](LLM_COMPLETE_SUMMARY.md)** - Tóm tắt hoàn chỉnh
-  - Full feature list
-  - Architecture details
-  - Performance metrics
+    - Full feature list
+    - Architecture details
+    - Performance metrics
 
 ### RAG (Retrieval-Augmented Generation)
+
 - **[RAG_IMPLEMENTATION_PLAN.md](RAG_IMPLEMENTATION_PLAN.md)** - Kế hoạch RAG
-  - RAG architecture
-  - Vector database
-  - Implementation phases
-  - 8-week roadmap
+    - RAG architecture
+    - Vector database
+    - Implementation phases
+    - 8-week roadmap
 
 ## 🏗️ Architecture
 
 ### Components
+
 ```
 ┌─────────────────────────────────────┐
 │         LLM Service Layer           │
@@ -77,25 +82,28 @@ Tài liệu về tích hợp Large Language Models (LLM) vào PCM Desktop.
 ### Supported Providers
 
 #### ☁️ Cloud Providers
+
 - **OpenAI** (GPT-3.5, GPT-4)
-  - Chat completions
-  - Streaming
-  - Function calling
-  
+    - Chat completions
+    - Streaming
+    - Function calling
+
 - **Anthropic** (Claude 3.5)
-  - Chat completions
-  - Streaming
-  - Function calling
+    - Chat completions
+    - Streaming
+    - Function calling
 
 #### 🏠 Local Providers
+
 - **Ollama**
-  - Llama 3
-  - Mistral
-  - Other open-source models
+    - Llama 3
+    - Mistral
+    - Other open-source models
 
 ## 🚀 Features
 
 ### ✅ Implemented
+
 - ✅ Basic chat completion
 - ✅ Streaming responses
 - ✅ Function calling
@@ -105,12 +113,14 @@ Tài liệu về tích hợp Large Language Models (LLM) vào PCM Desktop.
 - ✅ Error handling & retry logic
 
 ### 🚧 In Progress
+
 - 🚧 RAG implementation
 - 🚧 Vector database integration
 - 🚧 Context management
 - 🚧 Advanced prompt engineering
 
 ### 📋 Planned
+
 - 📋 Multi-modal support (images, audio)
 - 📋 Fine-tuning interface
 - 📋 Cost tracking
@@ -119,6 +129,7 @@ Tài liệu về tích hợp Large Language Models (LLM) vào PCM Desktop.
 ## 💡 Quick Examples
 
 ### Basic Chat
+
 ```java
 LLMService service = new LLMService();
 service.initialize(config);
@@ -126,6 +137,7 @@ String response = service.chat("Hello!");
 ```
 
 ### Streaming
+
 ```java
 service.streamMessage(request, new StreamingObserver() {
     @Override
@@ -136,6 +148,7 @@ service.streamMessage(request, new StreamingObserver() {
 ```
 
 ### Conversation
+
 ```java
 ConversationBuilder conv = service.newConversation()
     .addSystemMessage("You are a helpful assistant")

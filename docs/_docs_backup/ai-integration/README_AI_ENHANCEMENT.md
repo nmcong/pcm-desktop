@@ -94,7 +94,7 @@ modules/ai/components/
 4 functions mới cực mạnh:
 
 | Function               | Mục đích                        | Use Case                                |
-| ---------------------- | ------------------------------- | --------------------------------------- |
+|------------------------|---------------------------------|-----------------------------------------|
 | `semanticSearch`       | Tìm kiếm thông minh với scoring | "Find anything related to auth"         |
 | `analyzeRelationships` | Phân tích mối quan hệ           | "How is Screen X related to DB tables?" |
 | `getSystemInsights`    | Tổng quan và metrics            | "Give me system overview"               |
@@ -331,7 +331,7 @@ Add to `AISettingsModal.js`:
 ## 📈 Performance Impact
 
 | Metric                   | Impact | Notes                          |
-| ------------------------ | ------ | ------------------------------ |
+|--------------------------|--------|--------------------------------|
 | **First Response Time**  | +200ms | One-time cost for system stats |
 | **Subsequent Responses** | +50ms  | Intent detection overhead      |
 | **Accuracy**             | +35%   | Better tool selection          |

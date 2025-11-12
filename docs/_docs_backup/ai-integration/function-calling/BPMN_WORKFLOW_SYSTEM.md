@@ -16,7 +16,9 @@
 
 ## Overview
 
-The BPMN Workflow System automatically generates and visualizes BPMN 2.0 compliant workflow diagrams from screen navigation and event data. It analyzes screen relationships to build comprehensive workflows and displays them using the industry-standard bpmn-js library.
+The BPMN Workflow System automatically generates and visualizes BPMN 2.0 compliant workflow diagrams from screen
+navigation and event data. It analyzes screen relationships to build comprehensive workflows and displays them using the
+industry-standard bpmn-js library.
 
 ### Key Features
 
@@ -384,13 +386,13 @@ analyzeScreenFlows(screens, projectId) {
 The system recognizes two event types:
 
 1. **Navigate Events**
-   - Direct navigation to another screen
-   - Creates a single path in the workflow
+    - Direct navigation to another screen
+    - Creates a single path in the workflow
 
 2. **Branch Events**
-   - Conditional navigation based on user input
-   - Creates multiple possible paths
-   - Each branch option can lead to different screens
+    - Conditional navigation based on user input
+    - Creates multiple possible paths
+    - Each branch option can lead to different screens
 
 ---
 
@@ -429,12 +431,12 @@ The system recognizes two event types:
 ### Toolbar Actions
 
 1. **Zoom to Fit** (🔍)
-   - Automatically adjusts zoom level to fit entire diagram
-   - Keyboard shortcut: N/A
+    - Automatically adjusts zoom level to fit entire diagram
+    - Keyboard shortcut: N/A
 
 2. **Export** (💾)
-   - Downloads workflow as `.bpmn` file
-   - Can be imported into other BPMN tools (Camunda, Signavio, etc.)
+    - Downloads workflow as `.bpmn` file
+    - Can be imported into other BPMN tools (Camunda, Signavio, etc.)
 
 ### Workflow List
 
@@ -572,9 +574,9 @@ Workflows are stored in the project object in IndexedDB:
 2. BPMN diagram renders in the viewer
 3. Use mouse to pan and zoom
 4. See professional BPMN notation:
-   - Circles for Start/End events
-   - Rectangles for Tasks (screens)
-   - Arrows for Sequence Flows
+    - Circles for Start/End events
+    - Rectangles for Tasks (screens)
+    - Arrows for Sequence Flows
 
 ---
 
@@ -584,10 +586,10 @@ Workflows are stored in the project object in IndexedDB:
 2. Click "Export" button in toolbar
 3. Downloads `Workflow_Name.bpmn` file
 4. Can be imported into:
-   - Camunda Modeler
-   - Signavio Process Manager
-   - Bizagi Modeler
-   - Any BPMN 2.0 compliant tool
+    - Camunda Modeler
+    - Signavio Process Manager
+    - Bizagi Modeler
+    - Any BPMN 2.0 compliant tool
 
 ---
 
@@ -902,34 +904,34 @@ visitedPaths.add(pathKey);
 ## Future Enhancements
 
 1. **Advanced BPMN Elements**
-   - Exclusive Gateways for branches
-   - Parallel Gateways for concurrent flows
-   - Intermediate Events
-   - Subprocesses
+    - Exclusive Gateways for branches
+    - Parallel Gateways for concurrent flows
+    - Intermediate Events
+    - Subprocesses
 
 2. **Interactive Editing**
-   - Drag and drop to rearrange
-   - Add/remove screens
-   - Edit event conditions
-   - Save changes back to database
+    - Drag and drop to rearrange
+    - Add/remove screens
+    - Edit event conditions
+    - Save changes back to database
 
 3. **Export Formats**
-   - SVG for presentations
-   - PNG for documentation
-   - PDF for reports
-   - JSON for data exchange
+    - SVG for presentations
+    - PNG for documentation
+    - PDF for reports
+    - JSON for data exchange
 
 4. **Workflow Analytics**
-   - Most used paths
-   - Bottleneck detection
-   - Performance metrics
-   - User journey analysis
+    - Most used paths
+    - Bottleneck detection
+    - Performance metrics
+    - User journey analysis
 
 5. **Collaboration**
-   - Share workflows with team
-   - Comments and annotations
-   - Version history
-   - Approval workflows
+    - Share workflows with team
+    - Comments and annotations
+    - Version history
+    - Approval workflows
 
 ---
 

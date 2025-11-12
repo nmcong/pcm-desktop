@@ -244,6 +244,7 @@ cookieManager.getCookieStore().add(uri, cookie);
 ```
 
 **Nhược điểm:**
+
 - CSRF vulnerability
 - Chỉ hoạt động với same domain
 - Phức tạp cho desktop app
@@ -256,6 +257,7 @@ request.header("Authorization", "Bearer " + token)
 ```
 
 **Ưu điểm:**
+
 - Standard HTTP header
 - Không bị CSRF
 - Dễ test
@@ -311,6 +313,7 @@ Xem: `docs/development/SSO_INTEGRATION_GUIDE.md`
 ---
 
 **Tóm lại:**
+
 1. Portal tạo token và lưu vào file (encrypted)
 2. Apps đọc token từ file
 3. Apps gửi token trong `Authorization` header khi call API

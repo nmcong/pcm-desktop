@@ -399,7 +399,7 @@ await vectorDatabaseService.initialize();
 ### Behavior Changes
 
 | Operation        | v1.1.0 (Fallback)           | v1.2.0 (TensorFlow-Only) |
-| ---------------- | --------------------------- | ------------------------ |
+|------------------|-----------------------------|--------------------------|
 | **Init Success** | Works with either mode      | Works with TensorFlow    |
 | **Init Fail**    | Falls back to 64D           | Gracefully disables      |
 | **Add Vector**   | Always works                | Skips if disabled        |

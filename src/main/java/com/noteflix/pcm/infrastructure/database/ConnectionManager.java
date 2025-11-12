@@ -8,23 +8,21 @@ import java.sql.SQLException;
 
 /**
  * Database connection manager following Singleton Pattern
- * 
+ * <p>
  * Responsibilities:
  * - Manage database connections
  * - Ensure single instance (Singleton)
  * - Handle connection lifecycle
- * 
+ * <p>
  * Thread-safe implementation using enum singleton pattern
  */
 @Slf4j
 public enum ConnectionManager {
     INSTANCE;
-    
+
     private static final String DB_URL = "jdbc:sqlite:pcm-desktop.db";
     private static final String DB_DRIVER = "org.sqlite.JDBC";
-    
-    private Connection connection;
-    
+
     /**
      * Initialize database driver
      */
@@ -37,11 +35,13 @@ public enum ConnectionManager {
             throw new RuntimeException("Database driver not found", e);
         }
     }
-    
+
+    private Connection connection;
+
     /**
      * Get database connection
      * Creates new connection if not exists or closed
-     * 
+     *
      * @return Database connection
      * @throws SQLException if connection fails
      */
@@ -49,15 +49,15 @@ public enum ConnectionManager {
         if (connection == null || connection.isClosed()) {
             log.debug("Creating new database connection...");
             connection = DriverManager.getConnection(DB_URL);
-            
+
             // Enable foreign keys for SQLite
             connection.createStatement().execute("PRAGMA foreign_keys = ON");
-            
+
             log.info("✅ Database connection established: {}", DB_URL);
         }
         return connection;
     }
-    
+
     /**
      * Close database connection
      */
@@ -73,10 +73,10 @@ public enum ConnectionManager {
             }
         }
     }
-    
+
     /**
      * Test database connection
-     * 
+     *
      * @return true if connection is valid
      */
     public boolean testConnection() {
@@ -87,7 +87,7 @@ public enum ConnectionManager {
             return false;
         }
     }
-    
+
     /**
      * Get database URL
      */

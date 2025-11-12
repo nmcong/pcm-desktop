@@ -2,12 +2,14 @@
 
 ## Mục tiêu
 
-- Kích hoạt khả năng **tool calling** để LLM có thể gọi các công cụ nội bộ (truy vấn IndexedDB, sinh báo cáo, tra cứu tài liệu…).
+- Kích hoạt khả năng **tool calling** để LLM có thể gọi các công cụ nội bộ (truy vấn IndexedDB, sinh báo cáo, tra cứu
+  tài liệu…).
 - Hoạt động ổn định trong môi trường **kết nối mạng hạn chế**, ưu tiên sử dụng mô hình/nguồn dữ liệu cục bộ.
 - Sử dụng các phiên bản LangChain mới nhất (thời điểm 2024-11):
-  - `langchain@0.3.x`
-  - `@langchain/core@0.3.x`
-  - Các package theo nhu cầu: `@langchain/community`, `@langchain/openai`, `@langchain/ollama`, `@langchain/google-genai`, …
+    - `langchain@0.3.x`
+    - `@langchain/core@0.3.x`
+    - Các package theo nhu
+      cầu: `@langchain/community`, `@langchain/openai`, `@langchain/ollama`, `@langchain/google-genai`, …
 
 ## 1. Chuẩn bị hạ tầng dự án
 
@@ -56,7 +58,8 @@ apps/pcm-webapp/
 1. UI nhận câu hỏi từ người dùng → gửi tới `pcmAgent`.
 2. Agent dùng `RunnableWithMessageHistory` + `ToolCallingAgent` của LangChain để quyết định gọi tool.
 3. Tool `queryIndexedDb` khai thác dữ liệu cục bộ trong IndexedDB.
-4. Nếu cần embedding (QA), sử dụng `MemoryVectorStore` (in-memory) + lưu snapshot embedding vào IndexedDB để tái sử dụng.
+4. Nếu cần embedding (QA), sử dụng `MemoryVectorStore` (in-memory) + lưu snapshot embedding vào IndexedDB để tái sử
+   dụng.
 5. Kết quả được định dạng bằng `StructuredOutputParser` rồi trả về UI.
 
 ## 3. Tích hợp LLM trong môi trường hạn chế mạng
@@ -80,7 +83,8 @@ apps/pcm-webapp/
 
 ### 3.2 Fallback mạng hạn chế
 
-- Nếu không truy cập được server cục bộ, chuyển sang mô hình cloud (`ChatOpenAI`, `ChatGoogleGenerativeAI`) thông qua cấu hình runtime.
+- Nếu không truy cập được server cục bộ, chuyển sang mô hình cloud (`ChatOpenAI`, `ChatGoogleGenerativeAI`) thông qua
+  cấu hình runtime.
 - Dùng `AbortController` + timeout để fallback tự động.
 
 ### 3.3 Caching & Prefetch
@@ -134,15 +138,15 @@ export const createPcmAgent = (llm, tools, memory) => {
 - Sync embedding xuống IndexedDB → khi reload, load vào memory.
 - Chunk dữ liệu `docs/*.md`, `screens`, `notes` (tận dụng script có sẵn trong repo `docs`).
 - Lựa chọn embedding:
-  - `OllamaEmbeddings` (offline).
-  - Hoặc `OpenAIEmbeddings` (khi có mạng).
+    - `OllamaEmbeddings` (offline).
+    - Hoặc `OpenAIEmbeddings` (khi có mạng).
 
 ## 6. UI/UX
 
 - Tab “AI Assistant” trong `pcm-webapp` với các tính năng:
-  1. Q&A (sử dụng RAG).
-  2. Command mode (giao tool calling: `summarize`, `generate_report`, `list_deadlines`).
-  3. Log hiển thị tool nào đã được agent gọi.
+    1. Q&A (sử dụng RAG).
+    2. Command mode (giao tool calling: `summarize`, `generate_report`, `list_deadlines`).
+    3. Log hiển thị tool nào đã được agent gọi.
 
 - Thêm tùy chọn cấu hình trong UI: chọn mô hình, chế độ offline/online.
 
@@ -170,4 +174,6 @@ export const createPcmAgent = (llm, tools, memory) => {
 
 ---
 
-**Kết luận:** Kế hoạch sử dụng LangChain.js mới nhất kết hợp tool calling, ưu tiên mô hình cục bộ (Ollama) giúp `apps/pcm-webapp` hoạt động tốt trong môi trường mạng hạn chế. Việc modular hoá các provider và tool giúp mở rộng dễ dàng khi điều kiện hạ tầng thay đổi.
+**Kết luận:** Kế hoạch sử dụng LangChain.js mới nhất kết hợp tool calling, ưu tiên mô hình cục bộ (Ollama)
+giúp `apps/pcm-webapp` hoạt động tốt trong môi trường mạng hạn chế. Việc modular hoá các provider và tool giúp mở rộng
+dễ dàng khi điều kiện hạ tầng thay đổi.

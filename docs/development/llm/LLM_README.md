@@ -21,19 +21,19 @@ Hệ thống tích hợp LLM linh hoạt, extensible, tuân thủ SOLID principl
 ### Main Documents
 
 1. **[LLM_INTEGRATION_PLAN.md](./development/LLM_INTEGRATION_PLAN.md)** - Complete Implementation Plan
-   - Architecture design
-   - SOLID principles explained
-   - Design patterns
-   - 6-week implementation phases
-   - Provider examples
-   - Testing strategy
+    - Architecture design
+    - SOLID principles explained
+    - Design patterns
+    - 6-week implementation phases
+    - Provider examples
+    - Testing strategy
 
 2. **[LLM_QUICK_START.md](./development/LLM_QUICK_START.md)** - Quick Start Guide
-   - Core concepts
-   - Usage examples
-   - Adding new providers
-   - Configuration examples
-   - Common issues
+    - Core concepts
+    - Usage examples
+    - Adding new providers
+    - Configuration examples
+    - Common issues
 
 ---
 
@@ -176,6 +176,7 @@ if (client instanceof FunctionCallingCapable funcClient) {
 ## ✅ SOLID Principles
 
 ### Single Responsibility
+
 ```java
 LLMClient        → Send/receive messages
 StreamingCapable → Handle streaming
@@ -183,18 +184,21 @@ FunctionExecutor → Execute functions
 ```
 
 ### Open/Closed
+
 ```java
 // Add new provider WITHOUT modifying existing code
 public class NewProvider implements LLMClient { }
 ```
 
 ### Liskov Substitution
+
 ```java
 // Any LLMClient implementation works
 LLMClient client = new AnyProvider(config);
 ```
 
 ### Interface Segregation
+
 ```java
 // Implement only what you support
 public class SimpleClient implements LLMClient { }
@@ -202,6 +206,7 @@ public class FullClient implements LLMClient, StreamingCapable, FunctionCallingC
 ```
 
 ### Dependency Inversion
+
 ```java
 // Depend on abstraction
 public class Service {
@@ -213,26 +218,28 @@ public class Service {
 
 ## 🎨 Design Patterns
 
-| Pattern | Purpose | Benefit |
-|---------|---------|---------|
-| **Strategy** | Provider selection | Easy provider switching |
-| **Factory** | Client creation | Centralized creation logic |
-| **Builder** | Request construction | Flexible object building |
-| **Observer** | Streaming | Reactive updates |
-| **Adapter** | Format conversion | Uniform interface |
-| **Chain of Responsibility** | Middleware | Extensible processing |
+| Pattern                     | Purpose              | Benefit                    |
+|-----------------------------|----------------------|----------------------------|
+| **Strategy**                | Provider selection   | Easy provider switching    |
+| **Factory**                 | Client creation      | Centralized creation logic |
+| **Builder**                 | Request construction | Flexible object building   |
+| **Observer**                | Streaming            | Reactive updates           |
+| **Adapter**                 | Format conversion    | Uniform interface          |
+| **Chain of Responsibility** | Middleware           | Extensible processing      |
 
 ---
 
 ## 🚀 Implementation Status
 
 ### Phase 1: Foundation ✅ COMPLETE
+
 - [x] Core interfaces (LLMClient, StreamingCapable, FunctionCallingCapable)
 - [x] Model classes (LLMRequest, LLMResponse, Message, etc.)
 - [x] Configuration model
 - [x] Documentation
 
 ### Phase 2: OpenAI Client ⏳ TODO
+
 - [ ] OpenAIClient implementation
 - [ ] Basic chat support
 - [ ] Streaming support
@@ -242,6 +249,7 @@ public class Service {
 - [ ] Unit tests
 
 ### Phase 3: Additional Providers ⏳ TODO
+
 - [ ] AnthropicClient (Claude)
 - [ ] OllamaClient (Local)
 - [ ] CustomClient (Generic)
@@ -249,6 +257,7 @@ public class Service {
 - [ ] Tests
 
 ### Phase 4: Factory & Service ⏳ TODO
+
 - [ ] LLMClientFactory
 - [ ] LLMService
 - [ ] ConversationService
@@ -256,6 +265,7 @@ public class Service {
 - [ ] Middleware chain
 
 ### Phase 5: UI Integration ⏳ TODO
+
 - [ ] AIAssistantPage integration
 - [ ] Streaming UI
 - [ ] Function calling UI
@@ -263,6 +273,7 @@ public class Service {
 - [ ] Configuration UI
 
 ### Phase 6: Advanced Features ⏳ TODO
+
 - [ ] Response caching
 - [ ] Rate limiting
 - [ ] Retry logic
@@ -273,18 +284,19 @@ public class Service {
 
 ## 🔧 Supported Providers
 
-| Provider | Status | Streaming | Function Calling | Config |
-|----------|--------|-----------|-----------------|---------|
-| **OpenAI** | ⏳ Planned | ✅ Yes | ✅ Yes | URL + Token |
-| **Anthropic** | ⏳ Planned | ✅ Yes | ✅ Yes | URL + Token |
-| **Ollama** | ⏳ Planned | ✅ Yes | ❌ No | URL only |
-| **Custom** | ⏳ Planned | ⚠️ Maybe | ⚠️ Maybe | URL + Token |
+| Provider      | Status    | Streaming | Function Calling | Config      |
+|---------------|-----------|-----------|------------------|-------------|
+| **OpenAI**    | ⏳ Planned | ✅ Yes     | ✅ Yes            | URL + Token |
+| **Anthropic** | ⏳ Planned | ✅ Yes     | ✅ Yes            | URL + Token |
+| **Ollama**    | ⏳ Planned | ✅ Yes     | ❌ No             | URL only    |
+| **Custom**    | ⏳ Planned | ⚠️ Maybe  | ⚠️ Maybe         | URL + Token |
 
 ---
 
 ## 📊 Configuration Examples
 
 ### OpenAI
+
 ```java
 LLMProviderConfig.builder()
     .provider(Provider.OPENAI)
@@ -297,6 +309,7 @@ LLMProviderConfig.builder()
 ```
 
 ### Anthropic (Claude)
+
 ```java
 LLMProviderConfig.builder()
     .provider(Provider.ANTHROPIC)
@@ -309,6 +322,7 @@ LLMProviderConfig.builder()
 ```
 
 ### Ollama (Local)
+
 ```java
 LLMProviderConfig.builder()
     .provider(Provider.OLLAMA)
@@ -324,19 +338,20 @@ LLMProviderConfig.builder()
 
 ## 🎯 Success Metrics
 
-| Metric | Target | Status |
-|--------|--------|--------|
+| Metric           | Target    | Status            |
+|------------------|-----------|-------------------|
 | Add new provider | < 2 hours | ✅ Design complete |
-| Response time | < 3s | 🎯 To measure |
-| Test coverage | > 80% | 📊 To achieve |
-| Code quality | A rating | 📈 To achieve |
-| Extensibility | Easy | ✅ SOLID applied |
+| Response time    | < 3s      | 🎯 To measure     |
+| Test coverage    | > 80%     | 📊 To achieve     |
+| Code quality     | A rating  | 📈 To achieve     |
+| Extensibility    | Easy      | ✅ SOLID applied   |
 
 ---
 
 ## 📖 Learn More
 
 ### Core Concepts
+
 - **LLMClient**: Base interface for all providers
 - **StreamingCapable**: Optional streaming support
 - **FunctionCallingCapable**: Optional function calling
@@ -344,6 +359,7 @@ LLMProviderConfig.builder()
 - **LLMProviderConfig**: Provider configuration
 
 ### Best Practices
+
 - Use interfaces for flexibility
 - Implement only what you need (ISP)
 - Depend on abstractions (DIP)
@@ -355,11 +371,13 @@ LLMProviderConfig.builder()
 ## 🆘 Support
 
 ### Get Help
+
 - Read [LLM_INTEGRATION_PLAN.md](./development/LLM_INTEGRATION_PLAN.md) for details
 - Read [LLM_QUICK_START.md](./development/LLM_QUICK_START.md) for examples
 - Check code documentation (JavaDoc)
 
 ### Resources
+
 - [OpenAI API Docs](https://platform.openai.com/docs/api-reference)
 - [Anthropic API Docs](https://docs.anthropic.com/claude/reference/getting-started-with-the-api)
 - [Ollama API](https://github.com/ollama/ollama/blob/main/docs/api.md)

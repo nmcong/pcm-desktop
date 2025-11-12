@@ -1,6 +1,7 @@
 # LLM Integration Plan - PCM Desktop
 
 ## 📋 Table of Contents
+
 1. [Overview](#overview)
 2. [Architecture Design](#architecture-design)
 3. [SOLID Principles Applied](#solid-principles-applied)
@@ -16,6 +17,7 @@
 ## 🎯 Overview
 
 ### Goals
+
 - ✅ Support multiple LLM providers (OpenAI, custom APIs)
 - ✅ Easy to add new providers
 - ✅ Support streaming and non-streaming responses
@@ -25,6 +27,7 @@
 - ✅ Follow SOLID principles and clean code
 
 ### Key Requirements
+
 1. **Multiple Providers**: OpenAI, Anthropic, Custom APIs
 2. **Streaming Support**: Real-time response streaming
 3. **Function Calling**: Tool/function execution
@@ -76,24 +79,28 @@
 ### Layer Responsibilities
 
 #### 1. **UI Layer**
+
 - Display chat interface
 - Handle streaming UI updates
 - Show function calling results
 - User interaction
 
 #### 2. **Service Layer**
+
 - Business logic
 - Conversation management
 - Function execution orchestration
 - Error handling
 
 #### 3. **Client Layer**
+
 - Provider-specific implementations
 - API communication
 - Request/response mapping
 - Streaming handling
 
 #### 4. **HTTP Layer**
+
 - HTTP communication
 - JSON serialization/deserialization
 - Connection management
@@ -727,6 +734,7 @@ public interface StreamingObserver {
 ### **Phase 1: Foundation (Week 1)**
 
 #### Deliverables:
+
 - [x] Create package structure
 - [ ] Define core interfaces (LLMClient, StreamingCapable, FunctionCallingCapable)
 - [ ] Define model classes (LLMRequest, LLMResponse, Message, etc.)
@@ -735,6 +743,7 @@ public interface StreamingObserver {
 - [ ] Write unit tests for models
 
 **Files to Create:**
+
 ```
 src/main/java/com/noteflix/pcm/llm/
 ├── api/LLMClient.java
@@ -753,6 +762,7 @@ src/main/java/com/noteflix/pcm/llm/
 ### **Phase 2: OpenAI Client (Week 2)**
 
 #### Deliverables:
+
 - [ ] Implement OpenAIClient
 - [ ] Support basic chat completion
 - [ ] Support streaming
@@ -763,6 +773,7 @@ src/main/java/com/noteflix/pcm/llm/
 - [ ] Integration tests
 
 **Implementation:**
+
 ```java
 public class OpenAIClient implements LLMClient, StreamingCapable, FunctionCallingCapable {
     
@@ -794,6 +805,7 @@ public class OpenAIClient implements LLMClient, StreamingCapable, FunctionCallin
 ### **Phase 3: Additional Providers (Week 3)**
 
 #### Deliverables:
+
 - [ ] Implement AnthropicClient (Claude)
 - [ ] Implement OllamaClient (local models)
 - [ ] Implement CustomClient (generic OpenAI-compatible)
@@ -805,6 +817,7 @@ public class OpenAIClient implements LLMClient, StreamingCapable, FunctionCallin
 ### **Phase 4: Factory & Service Layer (Week 4)**
 
 #### Deliverables:
+
 - [ ] LLMClientFactory
 - [ ] LLMService
 - [ ] ConversationService
@@ -813,6 +826,7 @@ public class OpenAIClient implements LLMClient, StreamingCapable, FunctionCallin
 - [ ] Configuration management
 
 **LLMService:**
+
 ```java
 public class LLMService {
     
@@ -838,6 +852,7 @@ public class LLMService {
 ### **Phase 5: UI Integration (Week 5)**
 
 #### Deliverables:
+
 - [ ] Update AIAssistantPage with LLM integration
 - [ ] Streaming UI updates
 - [ ] Function calling UI
@@ -850,6 +865,7 @@ public class LLMService {
 ### **Phase 6: Advanced Features (Week 6)**
 
 #### Deliverables:
+
 - [ ] Response caching
 - [ ] Rate limiting
 - [ ] Retry logic with exponential backoff

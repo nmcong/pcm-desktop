@@ -1,45 +1,46 @@
 # PCM WebApp Documentation
 
-Welcome to the PCM (Project Control & Management) WebApp documentation! This directory contains comprehensive guides for all major features and systems.
+Welcome to the PCM (Project Control & Management) WebApp documentation! This directory contains comprehensive guides for
+all major features and systems.
 
 ## 📚 Documentation Index
 
 ### Core Features
 
 1. **[AI Function Calling System](./AI_FUNCTION_CALLING_SYSTEM.md)** ⭐ NEW
-   - OpenAI/Claude native function calling
-   - AI decides when and how to query database
-   - Multi-turn tool execution workflows
-   - Transparent UI showing tool calls
-   - **Status**: ✅ Implemented
+    - OpenAI/Claude native function calling
+    - AI decides when and how to query database
+    - Multi-turn tool execution workflows
+    - Transparent UI showing tool calls
+    - **Status**: ✅ Implemented
 
 2. **[AI Database Query System](./AI_DATABASE_QUERY_SYSTEM.md)**
-   - Enable AI to query IndexedDB without backend
-   - Auto context injection for smart responses
-   - 7 query functions for comprehensive data access
-   - Privacy-first, client-side only
-   - **Status**: ✅ Implemented
+    - Enable AI to query IndexedDB without backend
+    - Auto context injection for smart responses
+    - 7 query functions for comprehensive data access
+    - Privacy-first, client-side only
+    - **Status**: ✅ Implemented
 
 3. **[BPMN Workflow System](./BPMN_WORKFLOW_SYSTEM.md)**
-   - Auto-generate BPMN 2.0 compliant diagrams
-   - Analyze screen relationships and events
-   - Interactive viewer with zoom/pan
-   - Export to `.bpmn` files
-   - **Status**: ✅ Implemented
+    - Auto-generate BPMN 2.0 compliant diagrams
+    - Analyze screen relationships and events
+    - Interactive viewer with zoom/pan
+    - Export to `.bpmn` files
+    - **Status**: ✅ Implemented
 
 4. **[Custom LLM Integration](./CUSTOM_LLM_INTEGRATION.md)** ⭐ NEW
-   - Integrate ANY LLM (OpenAI-compatible or not)
-   - Step-by-step guides for different API formats
-   - 5+ complete real-world examples
-   - Function calling for custom LLMs
-   - **Status**: ✅ Implemented
+    - Integrate ANY LLM (OpenAI-compatible or not)
+    - Step-by-step guides for different API formats
+    - 5+ complete real-world examples
+    - Function calling for custom LLMs
+    - **Status**: ✅ Implemented
 
 5. **[API Development Standards](../../../docs/vibytes-framework/API-STANDARD.md)**
-   - Response format guidelines
-   - Controller standards
-   - Exception handling
-   - Validation patterns
-   - **Status**: 📘 Reference
+    - Response format guidelines
+    - Controller standards
+    - Exception handling
+    - Validation patterns
+    - **Status**: 📘 Reference
 
 ---
 
@@ -155,7 +156,7 @@ docs/
 **Comparison with Context Injection:**
 
 | Feature          | Function Calling   | Context Injection         |
-| ---------------- | ------------------ | ------------------------- |
+|------------------|--------------------|---------------------------|
 | Provider Support | OpenAI, Claude     | All providers             |
 | Precision        | High (AI decides)  | Medium (keyword matching) |
 | Token Efficiency | Excellent          | Good                      |
@@ -243,7 +244,7 @@ docs/
 **Integration Types:**
 
 | Type              | Difficulty  | Time    | Example           |
-| ----------------- | ----------- | ------- | ----------------- |
+|-------------------|-------------|---------|-------------------|
 | OpenAI-compatible | 🟢 Easy     | 5 min   | Ollama, LM Studio |
 | Similar format    | 🟡 Medium   | 30 min  | Cohere, AI21      |
 | Different format  | 🔴 Advanced | 1-2 hrs | Custom APIs       |
@@ -342,36 +343,36 @@ User interacts with visualization
 ### For New Users
 
 1. **Start Here**
-   - Read this README
-   - Explore the application UI
-   - Try asking AI simple questions
+    - Read this README
+    - Explore the application UI
+    - Try asking AI simple questions
 
 2. **Deep Dive**
-   - [AI Database Query System](./AI_DATABASE_QUERY_SYSTEM.md)
-   - Understand how AI accesses data
-   - Learn about available query functions
+    - [AI Database Query System](./AI_DATABASE_QUERY_SYSTEM.md)
+    - Understand how AI accesses data
+    - Learn about available query functions
 
 3. **Advanced Features**
-   - [BPMN Workflow System](./BPMN_WORKFLOW_SYSTEM.md)
-   - Learn workflow generation
-   - Master BPMN visualization
+    - [BPMN Workflow System](./BPMN_WORKFLOW_SYSTEM.md)
+    - Learn workflow generation
+    - Master BPMN visualization
 
 ### For Developers
 
 1. **Architecture**
-   - Review technical implementation sections
-   - Study component interactions
-   - Understand data flow
+    - Review technical implementation sections
+    - Study component interactions
+    - Understand data flow
 
 2. **Extension**
-   - Read "Extending the System" sections
-   - Learn how to add new features
-   - Follow best practices
+    - Read "Extending the System" sections
+    - Learn how to add new features
+    - Follow best practices
 
 3. **Integration**
-   - See integration examples
-   - Understand API contracts
-   - Follow coding standards
+    - See integration examples
+    - Understand API contracts
+    - Follow coding standards
 
 ---
 
@@ -511,11 +512,11 @@ AI Panel → Settings → ☑ Enable database access
 1. Create new `.md` file in `docs/`
 2. Follow existing structure
 3. Include:
-   - Overview
-   - Architecture
-   - Usage examples
-   - Troubleshooting
-   - References
+    - Overview
+    - Architecture
+    - Usage examples
+    - Troubleshooting
+    - References
 
 ### Updating Docs
 

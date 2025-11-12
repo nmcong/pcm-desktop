@@ -2,7 +2,9 @@
 
 ## 📋 Tổng Quan
 
-PCM Desktop cung cấp hệ thống tích hợp API mạnh mẽ và linh hoạt để gọi các dịch vụ LLM (Large Language Model) khác nhau như OpenAI GPT, Anthropic Claude, và Ollama. Hệ thống được thiết kế theo mô hình kiến trúc clean architecture với khả năng mở rộng và dễ bảo trì.
+PCM Desktop cung cấp hệ thống tích hợp API mạnh mẽ và linh hoạt để gọi các dịch vụ LLM (Large Language Model) khác nhau
+như OpenAI GPT, Anthropic Claude, và Ollama. Hệ thống được thiết kế theo mô hình kiến trúc clean architecture với khả
+năng mở rộng và dễ bảo trì.
 
 ## 🏗️ Kiến Trúc Hệ Thống
 
@@ -703,24 +705,28 @@ public class LLMIntegrationTest {
 ## 📝 Best Practices
 
 ### 1. API Key Security
+
 - ✅ Luôn lưu API keys trong environment variables
-- ✅ Không commit API keys vào code repository  
+- ✅ Không commit API keys vào code repository
 - ✅ Sử dụng secret management tools trong production
 - ✅ Rotate API keys định kỳ
 
 ### 2. Error Handling
+
 - ✅ Implement retry logic với exponential backoff
 - ✅ Set reasonable timeouts
 - ✅ Log errors với đủ context để debug
 - ✅ Có fallback mechanisms khi API không khả dụng
 
 ### 3. Performance
+
 - ✅ Cache responses khi có thể
 - ✅ Implement connection pooling
 - ✅ Monitor API usage và costs
 - ✅ Sử dụng streaming cho responses dài
 
 ### 4. Cost Optimization
+
 - ✅ Monitor token usage
 - ✅ Sử dụng model phù hợp cho từng use case
 - ✅ Implement usage limits

@@ -72,25 +72,25 @@ export class TextBasedFunctionCallingAdapter extends BaseFunctionCallingAdapter 
 #### Key Features
 
 1. **Automatic Format Detection**
-   - JSON code blocks
-   - XML tags
-   - Custom formats
-   - Function call syntax
+    - JSON code blocks
+    - XML tags
+    - Custom formats
+    - Function call syntax
 
 2. **System Prompt Generation**
-   - Auto-generates tool descriptions
-   - Instructs LLM on output format
-   - Customizable templates
+    - Auto-generates tool descriptions
+    - Instructs LLM on output format
+    - Customizable templates
 
 3. **Robust Parsing**
-   - Multiple parsing strategies
-   - Fallback mechanisms
-   - Error handling
+    - Multiple parsing strategies
+    - Fallback mechanisms
+    - Error handling
 
 4. **Registry System**
-   - Register custom adapters
-   - Automatic adapter selection
-   - Easy extension
+    - Register custom adapters
+    - Automatic adapter selection
+    - Easy extension
 
 ---
 
@@ -178,7 +178,7 @@ export class BaseProvider {
 ### Code Written
 
 | File                        | Lines    | Purpose             |
-| --------------------------- | -------- | ------------------- |
+|-----------------------------|----------|---------------------|
 | `FunctionCallingAdapter.js` | 750+     | Core adapter system |
 | `BaseProvider.js` (updates) | 50+      | Integration methods |
 | **Total Code**              | **800+** | **Production code** |
@@ -186,7 +186,7 @@ export class BaseProvider {
 ### Documentation Written
 
 | File                                  | Lines      | Purpose           |
-| ------------------------------------- | ---------- | ----------------- |
+|---------------------------------------|------------|-------------------|
 | `UNIFIED_FUNCTION_CALLING.md`         | 1,500+     | Complete guide    |
 | `FUNCTION_CALLING_QUICK_START.md`     | 400+       | Quick reference   |
 | `README.md` (updates)                 | 300+       | Index & overview  |
@@ -482,29 +482,29 @@ export class CustomAPIProvider extends BaseProvider {
 ### Potential Improvements
 
 1. **Streaming Support**
-   - Parse tool calls during streaming
-   - Real-time tool execution
-   - Progressive responses
+    - Parse tool calls during streaming
+    - Real-time tool execution
+    - Progressive responses
 
 2. **Multi-Modal Tools**
-   - Tools that accept images
-   - Tools that return images
-   - Vision + function calling
+    - Tools that accept images
+    - Tools that return images
+    - Vision + function calling
 
 3. **Adaptive Learning**
-   - Learn which format works best
-   - Auto-adjust based on success rate
-   - Model-specific optimizations
+    - Learn which format works best
+    - Auto-adjust based on success rate
+    - Model-specific optimizations
 
 4. **Advanced Parsing**
-   - Natural language tool calls
-   - Fuzzy matching
-   - Intent detection
+    - Natural language tool calls
+    - Fuzzy matching
+    - Intent detection
 
 5. **Performance Metrics**
-   - Track success rate
-   - Measure latency
-   - Compare providers
+    - Track success rate
+    - Measure latency
+    - Compare providers
 
 ---
 

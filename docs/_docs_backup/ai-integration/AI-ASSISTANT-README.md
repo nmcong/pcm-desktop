@@ -2,7 +2,8 @@
 
 ## Architecture Overview
 
-The AI Assistant system implements a **RAG (Retrieval Augmented Generation)** pattern with **Function Calling** to provide intelligent assistance for project analysis and code understanding.
+The AI Assistant system implements a **RAG (Retrieval Augmented Generation)** pattern with **Function Calling** to
+provide intelligent assistance for project analysis and code understanding.
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
@@ -131,38 +132,38 @@ The AI Assistant system implements a **RAG (Retrieval Augmented Generation)** pa
 These tools provide access to the IndexedDB database:
 
 1. **search_projects** - Find projects by keyword
-   - Use case: "Find all e-commerce projects"
+    - Use case: "Find all e-commerce projects"
 
 2. **get_project_details** - Get full project information
-   - Use case: "Show me project 1 with all screens"
+    - Use case: "Show me project 1 with all screens"
 
 3. **search_screens** - Find screens by keyword
-   - Use case: "Find all login screens"
+    - Use case: "Find all login screens"
 
 4. **get_screen_details** - Get screen details with events, notes, source files
-   - Use case: "Show me everything about screen 5"
+    - Use case: "Show me everything about screen 5"
 
 5. **search_knowledge_base** - Search KB articles
-   - Use case: "Find solutions for database errors"
+    - Use case: "Find solutions for database errors"
 
 6. **find_related_screens** - Find connected screens via navigation
-   - Use case: "What screens are related to the checkout?"
+    - Use case: "What screens are related to the checkout?"
 
 7. **get_screen_flow** - Get navigation flow from a screen
-   - Use case: "Show me the user flow from login"
+    - Use case: "Show me the user flow from login"
 
 ### GitHub Tools (3 tools)
 
 These tools interact with GitHub API to fetch source code:
 
 1. **get_file_content** - Fetch file content from repository
-   - Use case: "Show me Login.tsx from project 1"
+    - Use case: "Show me Login.tsx from project 1"
 
 2. **list_repository_files** - List files in a directory
-   - Use case: "List all files in src/components"
+    - Use case: "List all files in src/components"
 
 3. **analyze_source_files** - Analyze all source files linked to a screen
-   - Use case: "Analyze the frontend code for screen 3"
+    - Use case: "Analyze the frontend code for screen 3"
 
 ## Data Flow
 
@@ -256,18 +257,18 @@ const response = await provider.chat({
 ### Required Setup
 
 1. **AI Provider**
-   - Configure in Settings → AI Provider tab
-   - Supported: Claude, OpenAI, Gemini, Hugging Face, ViByte
-   - Requires API key for chosen provider
+    - Configure in Settings → AI Provider tab
+    - Supported: Claude, OpenAI, Gemini, Hugging Face, ViByte
+    - Requires API key for chosen provider
 
 2. **GitHub (Optional)**
-   - Configure in Settings → GitHub Integration
-   - Requires Personal Access Token
-   - Enables source code analysis tools
+    - Configure in Settings → GitHub Integration
+    - Requires Personal Access Token
+    - Enables source code analysis tools
 
 3. **Database**
-   - Automatically initialized on first run
-   - No configuration needed
+    - Automatically initialized on first run
+    - No configuration needed
 
 ## Security Considerations
 

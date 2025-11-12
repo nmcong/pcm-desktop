@@ -9,13 +9,13 @@
 ## 📊 Quick Decision Table
 
 | If Query Is...         | Use Planning? | Reason                   | Example               |
-| ---------------------- | ------------- | ------------------------ | --------------------- |
-| Simple lookup (1 step) | ❌ **NO**     | Overhead không cần thiết | "Get project #5"      |
-| Direct search          | ❌ **NO**     | 1 function call là đủ    | "Find auth projects"  |
-| Analysis (multi-step)  | ✅ **YES**    | Cần coordination         | "Analyze impact of X" |
-| Traceability           | ✅ **YES**    | Nhiều dependencies       | "How X affects Y"     |
-| Comparison             | ✅ **YES**    | Multi-entity             | "Compare X vs Y"      |
-| Troubleshooting        | ✅ **YES**    | Root cause analysis      | "Why X doesn't work"  |
+|------------------------|---------------|--------------------------|-----------------------|
+| Simple lookup (1 step) | ❌ **NO**      | Overhead không cần thiết | "Get project #5"      |
+| Direct search          | ❌ **NO**      | 1 function call là đủ    | "Find auth projects"  |
+| Analysis (multi-step)  | ✅ **YES**     | Cần coordination         | "Analyze impact of X" |
+| Traceability           | ✅ **YES**     | Nhiều dependencies       | "How X affects Y"     |
+| Comparison             | ✅ **YES**     | Multi-entity             | "Compare X vs Y"      |
+| Troubleshooting        | ✅ **YES**     | Root cause analysis      | "Why X doesn't work"  |
 
 ---
 
@@ -64,11 +64,11 @@ if (shouldPlan) {
 
 ### Test Results (100 Real Queries)
 
-| Approach        | Accuracy   | Response Time | User Satisfaction       |
-| --------------- | ---------- | ------------- | ----------------------- |
-| **No Planning** | 72%        | 3.2s          | 3.1/5 ⭐⭐⭐            |
-| **Always Plan** | 91%        | 5.8s 🐌       | 4.2/5 ⭐⭐⭐⭐          |
-| **Hybrid** 🏆   | **94%** ✅ | **3.8s** ✅   | **4.6/5** ✅ ⭐⭐⭐⭐⭐ |
+| Approach        | Accuracy  | Response Time | User Satisfaction |
+|-----------------|-----------|---------------|-------------------|
+| **No Planning** | 72%       | 3.2s          | 3.1/5 ⭐⭐⭐         |
+| **Always Plan** | 91%       | 5.8s 🐌       | 4.2/5 ⭐⭐⭐⭐        |
+| **Hybrid** 🏆   | **94%** ✅ | **3.8s** ✅    | **4.6/5** ✅ ⭐⭐⭐⭐⭐ |
 
 **Conclusion**: Hybrid = Best of both worlds! 🎉
 
@@ -125,20 +125,20 @@ Result: Complete, accurate analysis
 ### `needsPlanning()` Returns TRUE if:
 
 1. **Intent Category** is:
-   - ANALYSIS
-   - COMPARISON
-   - TROUBLESHOOTING
+    - ANALYSIS
+    - COMPARISON
+    - TROUBLESHOOTING
 
 2. **Query Keywords** include:
-   - "analyze", "impact", "trace"
-   - "how", "why", "what if"
-   - "compare", "relationship"
+    - "analyze", "impact", "trace"
+    - "how", "why", "what if"
+    - "compare", "relationship"
 
 3. **Multiple Entities** (>2):
-   - Query mentions projects AND screens AND database
+    - Query mentions projects AND screens AND database
 
 4. **Multiple Tools** needed (>2):
-   - Intent suggests 3+ function calls
+    - Intent suggests 3+ function calls
 
 ### Otherwise: Direct Execution
 
@@ -147,7 +147,7 @@ Result: Complete, accurate analysis
 ## 🔧 Files Created
 
 | File                            | Purpose        | Lines |
-| ------------------------------- | -------------- | ----- |
+|---------------------------------|----------------|-------|
 | `PlanningService.js`            | Planning logic | ~450  |
 | `AI_PLANNING_STRATEGY_GUIDE.md` | Complete guide | ~600  |
 | `PLANNING_DECISION_SUMMARY.md`  | This file      | ~150  |

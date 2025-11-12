@@ -306,6 +306,7 @@ public class ChatController {
 ## 🏗️ SOLID Principles Applied
 
 ### 1. Single Responsibility
+
 ```java
 // ✅ Each class has ONE job
 LLMClient        → Send/receive messages
@@ -314,6 +315,7 @@ FunctionExecutor → Execute functions
 ```
 
 ### 2. Open/Closed
+
 ```java
 // ✅ Add new provider WITHOUT modifying existing code
 public class CustomProvider implements LLMClient {
@@ -322,6 +324,7 @@ public class CustomProvider implements LLMClient {
 ```
 
 ### 3. Liskov Substitution
+
 ```java
 // ✅ Any LLMClient works the same
 LLMClient client1 = new OpenAIClient(config);
@@ -333,6 +336,7 @@ LLMResponse response = client1.sendMessage(request);
 ```
 
 ### 4. Interface Segregation
+
 ```java
 // ✅ Implement only what you need
 public class SimpleClient implements LLMClient {
@@ -345,6 +349,7 @@ public class AdvancedClient implements LLMClient, StreamingCapable, FunctionCall
 ```
 
 ### 5. Dependency Inversion
+
 ```java
 // ✅ Depend on abstraction
 public class ChatService {
@@ -360,13 +365,13 @@ public class ChatService {
 
 ## 🎨 Design Patterns
 
-| Pattern | Usage | Benefit |
-|---------|-------|---------|
-| **Strategy** | Different providers | Easy to switch providers |
-| **Factory** | Create clients | Centralized creation |
-| **Builder** | Build requests | Flexible construction |
-| **Observer** | Streaming | Reactive updates |
-| **Adapter** | API format conversion | Uniform interface |
+| Pattern      | Usage                 | Benefit                  |
+|--------------|-----------------------|--------------------------|
+| **Strategy** | Different providers   | Easy to switch providers |
+| **Factory**  | Create clients        | Centralized creation     |
+| **Builder**  | Build requests        | Flexible construction    |
+| **Observer** | Streaming             | Reactive updates         |
+| **Adapter**  | API format conversion | Uniform interface        |
 
 ---
 

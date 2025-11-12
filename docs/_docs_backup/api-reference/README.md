@@ -9,7 +9,7 @@ Complete reference for PCM WebApp APIs and services.
 ### 🗄️ Database Manager
 
 | Document                                                         | Purpose                | When to Use                      |
-| ---------------------------------------------------------------- | ---------------------- | -------------------------------- |
+|------------------------------------------------------------------|------------------------|----------------------------------|
 | **[DATABASE_MANAGER_API.md](./DATABASE_MANAGER_API.md)**         | Complete API reference | When coding with DatabaseManager |
 | **[DATABASE_QUICK_REFERENCE.md](./DATABASE_QUICK_REFERENCE.md)** | Quick cheat sheet      | Keep open while coding           |
 | **[DATABASE_METHOD_AUDIT.md](./DATABASE_METHOD_AUDIT.md)**       | Audit report           | Review compliance status         |

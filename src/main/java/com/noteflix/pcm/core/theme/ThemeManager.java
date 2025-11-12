@@ -16,21 +16,22 @@ import java.util.List;
  */
 @Slf4j
 public class ThemeManager {
-    
+
     private static ThemeManager instance;
-    private boolean isDarkTheme = false;
     private final List<ThemeChangeListener> listeners = new ArrayList<>();
+    private boolean isDarkTheme = false;
     private Scene mainScene; // Reference to main scene for CSS management
-    
-    private ThemeManager() {}
-    
+
+    private ThemeManager() {
+    }
+
     public static ThemeManager getInstance() {
         if (instance == null) {
             instance = new ThemeManager();
         }
         return instance;
     }
-    
+
     /**
      * Switches between light and dark themes
      */
@@ -38,7 +39,7 @@ public class ThemeManager {
         isDarkTheme = !isDarkTheme;
         applyTheme();
     }
-    
+
     /**
      * Sets a specific theme
      */
@@ -46,7 +47,7 @@ public class ThemeManager {
         isDarkTheme = darkTheme;
         applyTheme();
     }
-    
+
     /**
      * Adds a theme change listener
      */
@@ -55,14 +56,14 @@ public class ThemeManager {
             listeners.add(listener);
         }
     }
-    
+
     /**
      * Removes a theme change listener
      */
     public void removeThemeChangeListener(ThemeChangeListener listener) {
         listeners.remove(listener);
     }
-    
+
     /**
      * Sets the main scene reference for CSS management
      */
@@ -71,7 +72,7 @@ public class ThemeManager {
         // Apply theme to the scene immediately
         applyThemeToScene();
     }
-    
+
     /**
      * Applies the current theme to the application
      */
@@ -84,10 +85,10 @@ public class ThemeManager {
                 log.info("Applying light theme");
                 Application.setUserAgentStylesheet(new NordLight().getUserAgentStylesheet());
             }
-            
+
             // Apply theme-specific CSS to scene
             applyThemeToScene();
-            
+
             // Notify all listeners about theme change
             notifyListeners();
         } catch (Exception e) {
@@ -95,7 +96,7 @@ public class ThemeManager {
             throw new RuntimeException("Failed to apply theme", e);
         }
     }
-    
+
     /**
      * Applies theme-specific CSS files to the main scene
      */
@@ -104,11 +105,11 @@ public class ThemeManager {
             log.warn("Main scene not set, cannot apply custom CSS");
             return;
         }
-        
+
         try {
             // Clear existing stylesheets (except user agent stylesheet)
             mainScene.getStylesheets().clear();
-            
+
             // Always add the main styles
             if (getClass().getResource("/css/styles.css") != null) {
                 String mainCssUrl = getClass().getResource("/css/styles.css").toExternalForm();
@@ -117,7 +118,7 @@ public class ThemeManager {
             } else {
                 log.warn("Main CSS file not found: /css/styles.css");
             }
-            
+
             // Add theme-specific CSS
             if (isDarkTheme) {
                 if (getClass().getResource("/css/ai-assistant-dark.css") != null) {
@@ -136,12 +137,12 @@ public class ThemeManager {
             //         log.info("Applied light theme CSS: {}", lightCssUrl);
             //     }
             // }
-            
+
         } catch (Exception e) {
             log.error("Failed to apply theme CSS to scene", e);
         }
     }
-    
+
     /**
      * Notifies all registered listeners about theme change
      */
@@ -154,28 +155,28 @@ public class ThemeManager {
             }
         }
     }
-    
+
     /**
      * Gets the appropriate icon path based on current theme
      */
     public String getThemedIcon(String lightIcon, String darkIcon) {
         return isDarkTheme ? darkIcon : lightIcon;
     }
-    
+
     /**
      * Gets the brain-circuit icon path for current theme
      */
     public String getBrainCircuitIcon() {
         return getThemedIcon("/images/icons/brain-circuit.png", "/images/icons/brain-circuit_dark.png");
     }
-    
+
     /**
      * Gets the bot icon path for current theme
      */
     public String getBotIcon() {
         return getThemedIcon("/images/icons/bot.png", "/images/icons/bot_dark.png");
     }
-    
+
     public boolean isDarkTheme() {
         return isDarkTheme;
     }

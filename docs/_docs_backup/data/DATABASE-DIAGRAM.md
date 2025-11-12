@@ -345,7 +345,7 @@ Application Starts
 ## 📊 Storage Estimation
 
 | Store              | Average Record Size | Max Records | Est. Storage |
-| ------------------ | ------------------- | ----------- | ------------ |
+|--------------------|---------------------|-------------|--------------|
 | Settings           | 100 bytes           | 50          | 5 KB         |
 | Subsystems         | 500 bytes           | 100         | 50 KB        |
 | Projects           | 2 KB                | 500         | 1 MB         |

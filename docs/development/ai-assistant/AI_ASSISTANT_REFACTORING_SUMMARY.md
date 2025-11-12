@@ -5,6 +5,7 @@
 ### Current State Analysis
 
 #### ✅ What's Good
+
 - Clean UI structure
 - Good use of JavaFX components
 - Animated loading indicators
@@ -13,22 +14,22 @@
 #### ❌ What Needs Improvement
 
 1. **Violates Single Responsibility Principle (1104 lines)**
-   - UI rendering
-   - Data models (ChatSession, ChatMessage)
-   - Business logic (message handling)
-   - Fake AI responses
+    - UI rendering
+    - Data models (ChatSession, ChatMessage)
+    - Business logic (message handling)
+    - Fake AI responses
 
 2. **No Database Integration**
-   - Data lost on app restart
-   - No persistence layer
+    - Data lost on app restart
+    - No persistence layer
 
 3. **No Real LLM Integration**
-   - Hardcoded responses
-   - No streaming support
+    - Hardcoded responses
+    - No streaming support
 
 4. **Tight Coupling**
-   - Cannot test independently
-   - Cannot swap implementations
+    - Cannot test independently
+    - Cannot swap implementations
 
 ---
 
@@ -65,6 +66,7 @@
 ## 📦 File Structure
 
 ### Before (Current)
+
 ```
 src/main/java/com/noteflix/pcm/ui/pages/
 └── AIAssistantPage.java (1104 lines) ❌
@@ -72,6 +74,7 @@ src/main/java/com/noteflix/pcm/ui/pages/
 ```
 
 ### After (Recommended)
+
 ```
 src/main/java/com/noteflix/pcm/
 ├── domain/chat/
@@ -100,6 +103,7 @@ src/main/java/com/noteflix/pcm/
 ### Step 1: Extract Domain Models
 
 **Before:**
+
 ```java
 // Inside AIAssistantPage.java
 public static class ChatSession {
@@ -110,6 +114,7 @@ public static class ChatSession {
 ```
 
 **After:**
+
 ```java
 // domain/chat/Conversation.java
 @Data
@@ -192,6 +197,7 @@ public class ConversationService {
 ### Step 4: Refactor UI Layer
 
 **Before (1104 lines):**
+
 ```java
 public class AIAssistantPage extends BasePage {
     private List<ChatSession> chatSessions = new ArrayList<>();
@@ -208,6 +214,7 @@ public class AIAssistantPage extends BasePage {
 ```
 
 **After (300 lines):**
+
 ```java
 public class AIAssistantPage extends BasePage {
     // Inject dependencies
@@ -418,56 +425,62 @@ public class AIServiceImpl implements AIService {
 
 ### Code Quality
 
-| Metric | Before | After | Improvement |
-|--------|--------|-------|-------------|
-| Lines of code | 1104 | 300 | 73% reduction |
-| Cyclomatic complexity | High | Low | Much better |
-| Number of classes | 3 (nested) | 1 (UI only) | Separated |
-| Testability | Hard | Easy | Mockable |
-| Coupling | Tight | Loose | DI |
-| Cohesion | Low | High | Focused |
+| Metric                | Before     | After       | Improvement   |
+|-----------------------|------------|-------------|---------------|
+| Lines of code         | 1104       | 300         | 73% reduction |
+| Cyclomatic complexity | High       | Low         | Much better   |
+| Number of classes     | 3 (nested) | 1 (UI only) | Separated     |
+| Testability           | Hard       | Easy        | Mockable      |
+| Coupling              | Tight      | Loose       | DI            |
+| Cohesion              | Low        | High        | Focused       |
 
 ### SOLID Compliance
 
-| Principle | Before | After |
-|-----------|--------|-------|
-| Single Responsibility | ❌ | ✅ |
-| Open/Closed | ❌ | ✅ |
-| Liskov Substitution | ⚠️ | ✅ |
-| Interface Segregation | ❌ | ✅ |
-| Dependency Inversion | ❌ | ✅ |
+| Principle             | Before | After |
+|-----------------------|--------|-------|
+| Single Responsibility | ❌      | ✅     |
+| Open/Closed           | ❌      | ✅     |
+| Liskov Substitution   | ⚠️     | ✅     |
+| Interface Segregation | ❌      | ✅     |
+| Dependency Inversion  | ❌      | ✅     |
 
 ---
 
 ## 🔧 Implementation Guide
 
 ### Phase 1: Setup (30 min)
+
 1. Create package structure
 2. Create domain models
 3. Create interfaces
 
 ### Phase 2: Infrastructure (1 hour)
+
 1. Create DAO layer
 2. Create repository implementation
 3. Add database migrations
 
 ### Phase 3: Application Services (1 hour)
+
 1. Create ConversationService
 2. Create AIService
 3. Add unit tests
 
 ### Phase 4: Dependency Injection (30 min)
+
 1. Create ServiceContainer
 2. Wire dependencies
 3. Test injection
 
 ### Phase 5: UI Refactoring (1.5 hours)
+
 1. Simplify AIAssistantPage
 2. Remove inner classes
 3. Use injected services
 4. Update UI logic
 
 ### Phase 6: Dark Theme (30 min)
+
 1. Create CSS file
 2. Apply color variables
 3. Test dark mode
@@ -525,29 +538,29 @@ void testSendMessageWithRealDatabase() {
 ## 🎯 Benefits Summary
 
 1. **Maintainability** ⬆️⬆️⬆️
-   - Small, focused classes
-   - Easy to understand
-   - Easy to modify
+    - Small, focused classes
+    - Easy to understand
+    - Easy to modify
 
 2. **Testability** ⬆️⬆️⬆️
-   - Mock dependencies
-   - Unit testable
-   - Integration testable
+    - Mock dependencies
+    - Unit testable
+    - Integration testable
 
 3. **Reusability** ⬆️⬆️
-   - Services can be reused
-   - Models are portable
-   - Repositories interchangeable
+    - Services can be reused
+    - Models are portable
+    - Repositories interchangeable
 
 4. **Flexibility** ⬆️⬆️⬆️
-   - Swap implementations
-   - Add features easily
-   - Multiple UI variations
+    - Swap implementations
+    - Add features easily
+    - Multiple UI variations
 
 5. **Performance** ⬆️
-   - Database persistence
-   - Real LLM responses
-   - Efficient queries
+    - Database persistence
+    - Real LLM responses
+    - Efficient queries
 
 ---
 

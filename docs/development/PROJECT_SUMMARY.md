@@ -117,7 +117,7 @@ java -jar target/pcm-desktop-1.0.0.jar
 ✅ **Maven Build:** SUCCESS (4.693s)  
 ✅ **Compilation:** 2 source files compiled  
 ✅ **Dependencies:** All downloaded successfully  
-✅ **Resources:** FXML, CSS, XML copied to target  
+✅ **Resources:** FXML, CSS, XML copied to target
 
 ---
 
@@ -131,16 +131,16 @@ java -jar target/pcm-desktop-1.0.0.jar
    ```
 
 2. **Verify UI opens correctly:**
-   - Main window appears
-   - Navigation tree visible
-   - Welcome tab displays
+    - Main window appears
+    - Navigation tree visible
+    - Welcome tab displays
 
 ### Development Tasks
 
 3. **Add Business Logic:**
-   - Create domain models in `domain/` package
-   - Create services in `application/` package
-   - Create repositories in `infrastructure/` package
+    - Create domain models in `domain/` package
+    - Create services in `application/` package
+    - Create repositories in `infrastructure/` package
 
 4. **Add Database:**
    ```java
@@ -155,10 +155,10 @@ java -jar target/pcm-desktop-1.0.0.jar
    ```
 
 5. **Add New Features:**
-   - Projects management
-   - Notes taking
-   - Task tracking
-   - Settings page
+    - Projects management
+    - Notes taking
+    - Task tracking
+    - Settings page
 
 ### Testing Tasks
 
@@ -182,6 +182,7 @@ java -jar target/pcm-desktop-1.0.0.jar
 ### Change App Title
 
 Edit `PCMApplication.java`:
+
 ```java
 private static final String APP_TITLE = "Your App Name";
 ```
@@ -195,6 +196,7 @@ private static final String APP_TITLE = "Your App Name";
 ### Change Colors
 
 Edit `resources/css/styles.css`:
+
 ```css
 .root {
     -fx-base: #yourcolor;
@@ -220,14 +222,14 @@ Edit `resources/css/styles.css`:
 
 ## 🔧 Build Commands Reference
 
-| Command | Description |
-|---------|-------------|
-| `mvn clean` | Clean build artifacts |
-| `mvn compile` | Compile source code |
-| `mvn test` | Run all tests |
-| `mvn package` | Create JAR file |
-| `mvn javafx:run` | Run application |
-| `mvn javafx:jlink` | Create native image |
+| Command             | Description               |
+|---------------------|---------------------------|
+| `mvn clean`         | Clean build artifacts     |
+| `mvn compile`       | Compile source code       |
+| `mvn test`          | Run all tests             |
+| `mvn package`       | Create JAR file           |
+| `mvn javafx:run`    | Run application           |
+| `mvn javafx:jlink`  | Create native image       |
 | `mvn clean install` | Clean + compile + package |
 
 ---
@@ -265,7 +267,7 @@ None - Fresh project, no issues yet!
 ✅ **Dependencies Resolved** - All libs downloaded  
 ✅ **Structure Correct** - Clean architecture layers  
 ✅ **Documentation Complete** - README + guides  
-✅ **Ready to Run** - Can execute immediately  
+✅ **Ready to Run** - Can execute immediately
 
 ---
 
@@ -295,6 +297,7 @@ For issues or questions:
 **🎉 Project successfully created and ready to use!**
 
 **Next Command:**
+
 ```bash
 mvn javafx:run
 ```

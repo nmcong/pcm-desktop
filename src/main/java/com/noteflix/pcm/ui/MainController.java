@@ -5,10 +5,10 @@ import lombok.extern.slf4j.Slf4j;
 
 /**
  * Main Controller for PCM Desktop WebApp
- * 
+ * <p>
  * This controller manages the main PCM interface for project code management.
  * Now using pure Java code (no FXML) following AtlantaFX Sampler patterns.
- * 
+ *
  * @author Noteflix Team
  * @version 4.0.0 - Pure Java UI Architecture
  */
@@ -28,14 +28,14 @@ public class MainController {
      */
     public void handleFileNew() {
         log.info("📄 File -> New");
-        showInfo("New Screen", 
-            "Create New Screen\n\n" +
-            "Choose template:\n" +
-            "• Blank screen\n" +
-            "• List view\n" +
-            "• Detail view\n" +
-            "• Form\n" +
-            "• Dashboard");
+        showInfo("New Screen",
+                "Create New Screen\n\n" +
+                        "Choose template:\n" +
+                        "• Blank screen\n" +
+                        "• List view\n" +
+                        "• Detail view\n" +
+                        "• Form\n" +
+                        "• Dashboard");
     }
 
     /**
@@ -68,26 +68,26 @@ public class MainController {
      */
     public void handleHelpAbout() {
         log.info("ℹ️ Help -> About");
-        
+
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("About PCM Desktop");
         alert.setHeaderText("PCM Desktop - Project Code Management");
         alert.setContentText(
-            "Version 3.0.0 - Modular Component Architecture\n\n" +
-            "AI-Powered System Analysis & Business Management\n\n" +
-            "Features:\n" +
-            "• Screen and form tracking\n" +
-            "• Workflow visualization\n" +
-            "• Database object management\n" +
-            "• Source code analysis\n" +
-            "• AI-powered natural language queries\n" +
-            "• Knowledge base integration\n\n" +
-            "Architecture:\n" +
-            "• Modular component-based design\n" +
-            "• Self-contained component controllers\n" +
-            "• Reusable UI components\n\n" +
-            "Built with JavaFX 21 and Java 21\n" +
-            "© 2025 Noteflix Team"
+                "Version 3.0.0 - Modular Component Architecture\n\n" +
+                        "AI-Powered System Analysis & Business Management\n\n" +
+                        "Features:\n" +
+                        "• Screen and form tracking\n" +
+                        "• Workflow visualization\n" +
+                        "• Database object management\n" +
+                        "• Source code analysis\n" +
+                        "• AI-powered natural language queries\n" +
+                        "• Knowledge base integration\n\n" +
+                        "Architecture:\n" +
+                        "• Modular component-based design\n" +
+                        "• Self-contained component controllers\n" +
+                        "• Reusable UI components\n\n" +
+                        "Built with JavaFX 21 and Java 21\n" +
+                        "© 2025 Noteflix Team"
         );
         alert.showAndWait();
     }

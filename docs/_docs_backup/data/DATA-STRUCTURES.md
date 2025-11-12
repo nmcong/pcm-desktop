@@ -2,7 +2,8 @@
 
 ## 📚 Overview
 
-PCM WebApp sử dụng **IndexedDB** làm database client-side để lưu trữ toàn bộ dữ liệu ứng dụng. Database được thiết kế theo mô hình quan hệ với các object stores (tương đương tables) và indexes để tối ưu query performance.
+PCM WebApp sử dụng **IndexedDB** làm database client-side để lưu trữ toàn bộ dữ liệu ứng dụng. Database được thiết kế
+theo mô hình quan hệ với các object stores (tương đương tables) và indexes để tối ưu query performance.
 
 **Database Information:**
 
@@ -530,9 +531,9 @@ await databaseManager.getAllByIndex("batchJobs", "isActive", true);
 
 1. **Foreign Keys:** Enforced at application level (IndexedDB doesn't support native FKs)
 2. **Cascading Deletes:**
-   - Deleting a Subsystem deletes all related Projects
-   - Deleting a Project deletes all related Screens
-   - Deleting a Category prevents deletion if KB Items exist
+    - Deleting a Subsystem deletes all related Projects
+    - Deleting a Project deletes all related Screens
+    - Deleting a Category prevents deletion if KB Items exist
 3. **Auto-increment IDs:** Managed by IndexedDB
 4. **Timestamps:** Automatically managed by application
 5. **Validation:** Client-side validation before database operations

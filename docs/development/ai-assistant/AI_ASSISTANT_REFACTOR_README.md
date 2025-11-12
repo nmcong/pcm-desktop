@@ -2,7 +2,8 @@
 
 ## 📋 Overview
 
-Complete refactoring plan for AIAssistantPage to integrate **database**, **LLM**, apply **SOLID principles**, **design patterns**, **clean code**, and **dark theme**.
+Complete refactoring plan for AIAssistantPage to integrate **database**, **LLM**, apply **SOLID principles**, **design
+patterns**, **clean code**, and **dark theme**.
 
 ---
 
@@ -11,28 +12,29 @@ Complete refactoring plan for AIAssistantPage to integrate **database**, **LLM**
 ### Main Documents
 
 1. **[AI_ASSISTANT_REFACTOR_PLAN.md](./development/AI_ASSISTANT_REFACTOR_PLAN.md)**
-   - Complete architecture design
-   - SOLID principles explained
-   - Design patterns
-   - Package structure
+    - Complete architecture design
+    - SOLID principles explained
+    - Design patterns
+    - Package structure
 
 2. **[AI_ASSISTANT_REFACTORING_SUMMARY.md](./development/AI_ASSISTANT_REFACTORING_SUMMARY.md)**
-   - Before vs After comparison
-   - Code examples
-   - Integration points
-   - Testing strategy
-   - Metrics
+    - Before vs After comparison
+    - Code examples
+    - Integration points
+    - Testing strategy
+    - Metrics
 
 3. **[ai-assistant-dark.css](../src/main/resources/css/ai-assistant-dark.css)**
-   - Complete dark theme
-   - Based on reference image
-   - Modern design
+    - Complete dark theme
+    - Based on reference image
+    - Modern design
 
 ---
 
 ## 🏗️ Architecture
 
 ### Current State (Before)
+
 ```
 AIAssistantPage.java (1104 lines) ❌
 ├── UI rendering
@@ -43,6 +45,7 @@ AIAssistantPage.java (1104 lines) ❌
 ```
 
 ### Target State (After)
+
 ```
 Domain Layer
 ├── Conversation.java
@@ -70,6 +73,7 @@ Presentation Layer
 ## ✅ SOLID Principles
 
 ### Single Responsibility
+
 ```java
 // ✅ Each class has ONE job
 AIAssistantPage        → UI rendering
@@ -79,6 +83,7 @@ LLMClient              → LLM communication
 ```
 
 ### Dependency Inversion
+
 ```java
 // ✅ Depend on abstractions
 public class AIAssistantPage {
@@ -91,6 +96,7 @@ public class AIAssistantPage {
 ```
 
 ### Open/Closed
+
 ```java
 // ✅ Open for extension (new providers), closed for modification
 public interface LLMClient { }
@@ -104,19 +110,20 @@ public class ClaudeClient implements LLMClient { }
 
 ### Colors (from reference image)
 
-| Color | Value | Usage |
-|-------|-------|-------|
-| **Background Primary** | `#1a1d2e` | Main background |
-| **Background Secondary** | `#16192a` | Sidebar, panels |
-| **Background Tertiary** | `#12151f` | Input, cards |
-| **Accent Primary** | `#6366f1` | Buttons, highlights |
-| **Accent Secondary** | `#8b5cf6` | Hover states |
-| **Text Primary** | `#f8fafc` | Main text |
-| **Text Secondary** | `#cbd5e1` | Secondary text |
-| **Text Muted** | `#64748b` | Placeholders |
-| **Border** | `#2d3142` | Borders |
+| Color                    | Value     | Usage               |
+|--------------------------|-----------|---------------------|
+| **Background Primary**   | `#1a1d2e` | Main background     |
+| **Background Secondary** | `#16192a` | Sidebar, panels     |
+| **Background Tertiary**  | `#12151f` | Input, cards        |
+| **Accent Primary**       | `#6366f1` | Buttons, highlights |
+| **Accent Secondary**     | `#8b5cf6` | Hover states        |
+| **Text Primary**         | `#f8fafc` | Main text           |
+| **Text Secondary**       | `#cbd5e1` | Secondary text      |
+| **Text Muted**           | `#64748b` | Placeholders        |
+| **Border**               | `#2d3142` | Borders             |
 
 ### CSS File
+
 - ✅ Created: `src/main/resources/css/ai-assistant-dark.css`
 - ✅ Complete styling for all components
 - ✅ Responsive design
@@ -399,23 +406,23 @@ if (scene != null) {
 
 ### Code Quality
 
-| Metric | Before | After | Improvement |
-|--------|--------|-------|-------------|
-| Lines of code | 1104 | 300 | **73% reduction** |
-| Number of classes | 3 (nested) | 1 (UI only) | **Separated** |
-| Testability | Hard | Easy | **Mockable** |
-| Coupling | Tight | Loose | **DI** |
-| SOLID compliance | ❌ | ✅ | **100%** |
+| Metric            | Before     | After       | Improvement       |
+|-------------------|------------|-------------|-------------------|
+| Lines of code     | 1104       | 300         | **73% reduction** |
+| Number of classes | 3 (nested) | 1 (UI only) | **Separated**     |
+| Testability       | Hard       | Easy        | **Mockable**      |
+| Coupling          | Tight      | Loose       | **DI**            |
+| SOLID compliance  | ❌          | ✅           | **100%**          |
 
 ### Features
 
-| Feature | Before | After |
-|---------|--------|-------|
-| **Persistence** | ❌ In-memory | ✅ SQLite database |
-| **Real LLM** | ❌ Fake responses | ✅ OpenAI/Claude/etc |
-| **Streaming** | ❌ No | ✅ Real-time chunks |
-| **Dark Theme** | ⚠️ Basic | ✅ Beautiful dark UI |
-| **Testing** | ❌ Hard | ✅ Easy with mocks |
+| Feature         | Before           | After               |
+|-----------------|------------------|---------------------|
+| **Persistence** | ❌ In-memory      | ✅ SQLite database   |
+| **Real LLM**    | ❌ Fake responses | ✅ OpenAI/Claude/etc |
+| **Streaming**   | ❌ No             | ✅ Real-time chunks  |
+| **Dark Theme**  | ⚠️ Basic         | ✅ Beautiful dark UI |
+| **Testing**     | ❌ Hard           | ✅ Easy with mocks   |
 
 ---
 
@@ -452,29 +459,34 @@ void testCreateConversation() {
 ## 🎯 Checklist
 
 ### Foundation
+
 - [ ] Create domain models (Conversation, Message)
 - [ ] Create MessageRole enum
 - [ ] Create database schema
 - [ ] Create DAO interfaces and implementations
 
 ### Infrastructure
+
 - [ ] Create ConversationRepository interface
 - [ ] Implement ConversationRepositoryImpl
 - [ ] Add database migrations
 - [ ] Test repository with real database
 
 ### Application Services
+
 - [ ] Create ConversationService
 - [ ] Create AIService interface
 - [ ] Implement AIServiceImpl with LLM integration
 - [ ] Add unit tests for services
 
 ### Dependency Injection
+
 - [ ] Create ServiceContainer
 - [ ] Wire all dependencies
 - [ ] Test injection works correctly
 
 ### UI Refactoring
+
 - [ ] Simplify AIAssistantPage
 - [ ] Remove inner classes
 - [ ] Inject services via constructor
@@ -482,12 +494,14 @@ void testCreateConversation() {
 - [ ] Remove hardcoded logic
 
 ### Dark Theme
+
 - [ ] Apply ai-assistant-dark.css
 - [ ] Test all UI states (welcome, chat, loading)
 - [ ] Verify colors match reference image
 - [ ] Test responsive design
 
 ### Testing
+
 - [ ] Write unit tests for services
 - [ ] Write integration tests
 - [ ] Test with real LLM provider
@@ -498,6 +512,7 @@ void testCreateConversation() {
 ## 📚 Resources
 
 ### Already Created
+
 - ✅ [LLM_INTEGRATION_PLAN.md](./development/LLM_INTEGRATION_PLAN.md)
 - ✅ [LLM_QUICK_START.md](./development/LLM_QUICK_START.md)
 - ✅ [SQLITE_IMPLEMENTATION_PLAN.md](./development/SQLITE_IMPLEMENTATION_PLAN.md)
@@ -505,11 +520,13 @@ void testCreateConversation() {
 - ✅ [ai-assistant-dark.css](../src/main/resources/css/ai-assistant-dark.css)
 
 ### LLM Integration
+
 - All interfaces and models already created
 - See `src/main/java/com/noteflix/pcm/llm/`
 - Ready to use with OpenAI, Anthropic, Ollama
 
 ### Database
+
 - Connection manager already exists
 - Base entities and repositories defined
 - See `src/main/java/com/noteflix/pcm/domain/` and `infrastructure/`
@@ -527,35 +544,35 @@ void testCreateConversation() {
    ```
 
 2. **Review architecture**
-   - Understand Clean Architecture layers
-   - Review SOLID principles
-   - Check design patterns
+    - Understand Clean Architecture layers
+    - Review SOLID principles
+    - Check design patterns
 
 3. **Start implementation**
-   - Follow steps 1-7
-   - Test each component
-   - Apply dark theme
+    - Follow steps 1-7
+    - Test each component
+    - Apply dark theme
 
 4. **Test everything**
-   - Unit tests
-   - Integration tests
-   - UI testing
+    - Unit tests
+    - Integration tests
+    - UI testing
 
 ---
 
 ## 🎯 Timeline
 
-| Phase | Duration | Description |
-|-------|----------|-------------|
-| **Planning** | ✅ Complete | Architecture, design, CSS |
-| **Foundation** | 30 min | Models, enums |
-| **Infrastructure** | 1.5 hours | DAO, Repository |
-| **Services** | 1 hour | Business logic |
-| **DI Setup** | 30 min | Wire dependencies |
-| **UI Refactor** | 1.5 hours | Simplify page |
-| **Dark Theme** | 30 min | Apply CSS |
-| **Testing** | 1 hour | Write tests |
-| **Total** | **~6-7 hours** | Complete refactor |
+| Phase              | Duration       | Description               |
+|--------------------|----------------|---------------------------|
+| **Planning**       | ✅ Complete     | Architecture, design, CSS |
+| **Foundation**     | 30 min         | Models, enums             |
+| **Infrastructure** | 1.5 hours      | DAO, Repository           |
+| **Services**       | 1 hour         | Business logic            |
+| **DI Setup**       | 30 min         | Wire dependencies         |
+| **UI Refactor**    | 1.5 hours      | Simplify page             |
+| **Dark Theme**     | 30 min         | Apply CSS                 |
+| **Testing**        | 1 hour         | Write tests               |
+| **Total**          | **~6-7 hours** | Complete refactor         |
 
 ---
 

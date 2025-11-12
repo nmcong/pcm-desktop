@@ -64,7 +64,8 @@ open test-offline-vector.html
 
 ### 6️⃣ Tôi Cần Technical Specs (20 phút)
 
-**👉 Đọc:** [VECTOR_DATABASE_DOCUMENTATION.md](../public/js/modules/ai/docs-intergration/VECTOR_DATABASE_DOCUMENTATION.md)
+**👉 Đọc:
+** [VECTOR_DATABASE_DOCUMENTATION.md](../public/js/modules/ai/docs-intergration/VECTOR_DATABASE_DOCUMENTATION.md)
 
 - 📋 Complete API reference
 - 🔍 Implementation details
@@ -120,7 +121,8 @@ apps/pcm-webapp/
 
 1. [VECTOR_DB_SUMMARY.md](../VECTOR_DB_SUMMARY.md) - Overview
 2. [OFFLINE_VECTOR_DATABASE_GUIDE.md](./OFFLINE_VECTOR_DATABASE_GUIDE.md) - Deep dive
-3. [VECTOR_DATABASE_DOCUMENTATION.md](../public/js/modules/ai/docs-intergration/VECTOR_DATABASE_DOCUMENTATION.md) - Technical specs
+3. [VECTOR_DATABASE_DOCUMENTATION.md](../public/js/modules/ai/docs-intergration/VECTOR_DATABASE_DOCUMENTATION.md) -
+   Technical specs
 
 **Time:** 1 hour
 
@@ -155,7 +157,7 @@ apps/pcm-webapp/
 ### Documentation
 
 | Document                                                                                                       | Purpose     | Time  | Audience        |
-| -------------------------------------------------------------------------------------------------------------- | ----------- | ----- | --------------- |
+|----------------------------------------------------------------------------------------------------------------|-------------|-------|-----------------|
 | [VECTOR_DB_SUMMARY.md](../VECTOR_DB_SUMMARY.md)                                                                | Overview    | 5min  | Everyone        |
 | [QUICK_START_VECTOR_DB.md](../QUICK_START_VECTOR_DB.md)                                                        | Integration | 10min | Developers      |
 | [OFFLINE_VECTOR_DATABASE_GUIDE.md](./OFFLINE_VECTOR_DATABASE_GUIDE.md)                                         | Deep dive   | 30min | Advanced        |
@@ -165,14 +167,14 @@ apps/pcm-webapp/
 ### Demo & Testing
 
 | File                                                                                           | Description                     |
-| ---------------------------------------------------------------------------------------------- | ------------------------------- |
+|------------------------------------------------------------------------------------------------|---------------------------------|
 | [test-offline-vector.html](../test-offline-vector.html)                                        | Interactive demo với UI đẹp     |
 | [offline-vector-demo.html](../public/js/modules/ai/docs-intergration/offline-vector-demo.html) | Advanced demo với more features |
 
 ### Source Code
 
 | File                                                                                    | Purpose                    |
-| --------------------------------------------------------------------------------------- | -------------------------- |
+|-----------------------------------------------------------------------------------------|----------------------------|
 | [VectorEmbeddingService.js](../public/js/modules/ai/services/VectorEmbeddingService.js) | Generate vector embeddings |
 | [VectorDatabaseService.js](../public/js/modules/ai/services/VectorDatabaseService.js)   | Vector CRUD + Search       |
 | [OfflineVectorSetup.js](../public/js/modules/ai/services/OfflineVectorSetup.js)         | Offline initialization     |
@@ -216,7 +218,8 @@ apps/pcm-webapp/
 1. [VECTOR_DB_SUMMARY.md](../VECTOR_DB_SUMMARY.md) - Quick overview
 2. [OFFLINE_VECTOR_DATABASE_GUIDE.md](./OFFLINE_VECTOR_DATABASE_GUIDE.md) - Architecture
 3. [BROWSER_VECTOR_DB_OPTIONS.md](./BROWSER_VECTOR_DB_OPTIONS.md) - Alternatives
-4. [VECTOR_DATABASE_DOCUMENTATION.md](../public/js/modules/ai/docs-intergration/VECTOR_DATABASE_DOCUMENTATION.md) - Technical specs
+4. [VECTOR_DATABASE_DOCUMENTATION.md](../public/js/modules/ai/docs-intergration/VECTOR_DATABASE_DOCUMENTATION.md) -
+   Technical specs
 
 **Review:** Source code
 
@@ -356,7 +359,8 @@ Step 5: Experiment với modifications (30min)
 - [ ] **Integrate into my code** → [QUICK_START_VECTOR_DB.md](../QUICK_START_VECTOR_DB.md)
 - [ ] **Learn deeply** → [OFFLINE_VECTOR_DATABASE_GUIDE.md](./OFFLINE_VECTOR_DATABASE_GUIDE.md)
 - [ ] **Compare alternatives** → [BROWSER_VECTOR_DB_OPTIONS.md](./BROWSER_VECTOR_DB_OPTIONS.md)
-- [ ] **Read technical specs** → [VECTOR_DATABASE_DOCUMENTATION.md](../public/js/modules/ai/docs-intergration/VECTOR_DATABASE_DOCUMENTATION.md)
+- [ ] **Read technical specs
+  ** → [VECTOR_DATABASE_DOCUMENTATION.md](../public/js/modules/ai/docs-intergration/VECTOR_DATABASE_DOCUMENTATION.md)
 - [ ] **Debug an issue** → Troubleshooting sections
 - [ ] **Modify the code** → Review source files
 

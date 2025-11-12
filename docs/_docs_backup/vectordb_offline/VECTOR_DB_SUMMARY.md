@@ -2,7 +2,8 @@
 
 ## 🎯 Câu Hỏi Của Bạn
 
-> "Trong module AI của dự án pcm-webapp; hãy tìm cách để tôi có thể chạy vector db trên trình duyệt và lưu vector db vào indexed db! quan trọng là tất cả phải làm việc offline!"
+> "Trong module AI của dự án pcm-webapp; hãy tìm cách để tôi có thể chạy vector db trên trình duyệt và lưu vector db vào
+> indexed db! quan trọng là tất cả phải làm việc offline!"
 
 ## ✅ Câu Trả Lời Ngắn Gọn
 
@@ -142,8 +143,8 @@ console.log(results);
 
 ### 1. Dual-Mode Operation
 
-| Mode              | Accuracy | Offline            | Size  | Use Case        |
-| ----------------- | -------- | ------------------ | ----- | --------------- |
+| Mode              | Accuracy | Offline           | Size  | Use Case        |
+|-------------------|----------|-------------------|-------|-----------------|
 | **TensorFlow.js** | 95%      | ✅ (Cần pre-cache) | ~20MB | Production      |
 | **Fallback**      | 65%      | ✅ (Zero deps)     | 0     | Always works    |
 | **Hybrid**        | Auto     | ✅                 | Auto  | **Khuyến nghị** |
@@ -196,14 +197,14 @@ const results = await vectorDatabaseService.search("greeting");
 ### Embedding Generation
 
 | Mode          | First Time       | Subsequent | Vector Size |
-| ------------- | ---------------- | ---------- | ----------- |
+|---------------|------------------|------------|-------------|
 | TensorFlow.js | ~3s (load model) | ~50ms      | 512D        |
 | Fallback      | 0s               | ~5ms       | 64D         |
 
 ### Search Performance
 
 | Vectors | Search Time | Notes      |
-| ------- | ----------- | ---------- |
+|---------|-------------|------------|
 | 100     | ~20ms       | Very fast  |
 | 1,000   | ~80ms       | Fast       |
 | 10,000  | ~800ms      | Acceptable |

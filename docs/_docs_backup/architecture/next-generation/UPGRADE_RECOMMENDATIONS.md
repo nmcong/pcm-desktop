@@ -709,7 +709,7 @@ Tạo hệ thống phân loại intent tự động để chọn tool phù hợp
 **Các loại intent:**
 
 | Intent Category | Example Queries                                               | Primary Tools                                                      |
-| --------------- | ------------------------------------------------------------- | ------------------------------------------------------------------ |
+|-----------------|---------------------------------------------------------------|--------------------------------------------------------------------|
 | **Search**      | "Tìm dự án liên quan payment", "Screen nào xử lý risk?"       | `search_projects`, `search_screens`, `fuzzy_search`                |
 | **Details**     | "Chi tiết project Refund", "Screen 45 làm gì?"                | `get_project_details`, `get_screen_events`                         |
 | **Analysis**    | "Workflow hoàn tiền như thế nào?", "Impact khi sửa screen X?" | `trace_user_journey`, `get_change_impact`, `analyze_relationships` |
@@ -2085,7 +2085,7 @@ contentEl.appendChild(advancedSection);
 ### Lợi Ích Mong Đợi
 
 | Cải Thiện                  | Trước                   | Sau                       | Tăng      |
-| -------------------------- | ----------------------- | ------------------------- | --------- |
+|----------------------------|-------------------------|---------------------------|-----------|
 | **Độ chính xác tìm kiếm**  | ~60% (exact match only) | ~85% (fuzzy + semantic)   | +25%      |
 | **Phạm vi câu hỏi hỗ trợ** | 7 loại câu hỏi cơ bản   | 20+ loại câu hỏi          | +13 types |
 | **Tỷ lệ hallucination**    | ~30%                    | ~5% (với grounding check) | -25%      |

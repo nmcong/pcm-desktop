@@ -16,7 +16,8 @@
 
 ## Overview
 
-The AI Database Query System enables AI assistants to directly query and retrieve data from IndexedDB without requiring a backend server. This provides intelligent, context-aware responses based on real application data.
+The AI Database Query System enables AI assistants to directly query and retrieve data from IndexedDB without requiring
+a backend server. This provides intelligent, context-aware responses based on real application data.
 
 ### Key Features
 
@@ -120,7 +121,7 @@ When a user sends a message, the system:
 The system detects the following patterns:
 
 | Keyword Pattern             | Action          | Example                           |
-| --------------------------- | --------------- | --------------------------------- |
+|-----------------------------|-----------------|-----------------------------------|
 | `project`, `dự án`          | Search projects | "Tell me about project X"         |
 | `screen`, `màn hình`        | Search screens  | "What screens are in the system?" |
 | `subsystem`, `hệ thống con` | List subsystems | "Show all subsystems"             |
@@ -1139,40 +1140,42 @@ this.enableDatabaseAccess = saved ? JSON.parse(saved) : true;
 ### Planned Features
 
 1. **Function Calling Support**
-   - Direct integration with OpenAI/Claude function calling
-   - More precise query execution
-   - Better parameter validation
+    - Direct integration with OpenAI/Claude function calling
+    - More precise query execution
+    - Better parameter validation
 
 2. **Semantic Search**
-   - Vector embeddings for better search
-   - Similarity-based retrieval
-   - Natural language understanding
+    - Vector embeddings for better search
+    - Similarity-based retrieval
+    - Natural language understanding
 
 3. **Query History**
-   - Track what AI queries
-   - Analytics and insights
-   - Optimize common queries
+    - Track what AI queries
+    - Analytics and insights
+    - Optimize common queries
 
 4. **Advanced Filters**
-   - Date ranges
-   - Multiple criteria
-   - Complex boolean logic
+    - Date ranges
+    - Multiple criteria
+    - Complex boolean logic
 
 5. **Caching Layer**
-   - Cache frequent queries
-   - Invalidation on data changes
-   - Performance optimization
+    - Cache frequent queries
+    - Invalidation on data changes
+    - Performance optimization
 
 6. **Export Capabilities**
-   - Export query results
-   - CSV/JSON/Excel formats
-   - Share with team
+    - Export query results
+    - CSV/JSON/Excel formats
+    - Share with team
 
 ---
 
 ## Conclusion
 
-The AI Database Query System provides a powerful, privacy-first approach to enabling AI assistants to work with real application data. By keeping everything client-side and using intelligent context injection, users get accurate, data-driven responses without compromising security or requiring backend infrastructure.
+The AI Database Query System provides a powerful, privacy-first approach to enabling AI assistants to work with real
+application data. By keeping everything client-side and using intelligent context injection, users get accurate,
+data-driven responses without compromising security or requiring backend infrastructure.
 
 ### Key Takeaways
 

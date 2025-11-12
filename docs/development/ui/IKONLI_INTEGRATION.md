@@ -2,20 +2,22 @@
 
 ## 📦 Overview
 
-PCM Desktop now uses **Ikonli** - a comprehensive icon library for Java applications, replacing emoji icons with professional vector icons from Material Design 2 and Feather icon sets.
+PCM Desktop now uses **Ikonli** - a comprehensive icon library for Java applications, replacing emoji icons with
+professional vector icons from Material Design 2 and Feather icon sets.
 
 ## 🎨 Installed Icon Packs
 
-| Pack | Version | Icons | Usage Prefix |
-|------|---------|-------|--------------|
-| **ikonli-core** | 12.3.1 | - | Core library |
-| **ikonli-javafx** | 12.3.1 | - | JavaFX integration |
-| **Material Design 2** | 12.3.1 | 6000+ | `mdi2` |
-| **Feather** | 12.3.1 | 280+ | `feather` |
+| Pack                  | Version | Icons | Usage Prefix       |
+|-----------------------|---------|-------|--------------------|
+| **ikonli-core**       | 12.3.1  | -     | Core library       |
+| **ikonli-javafx**     | 12.3.1  | -     | JavaFX integration |
+| **Material Design 2** | 12.3.1  | 6000+ | `mdi2`             |
+| **Feather**           | 12.3.1  | 280+  | `feather`          |
 
 ## 🚀 Usage
 
 ### In FXML
+
 ```xml
 <?import org.kordamp.ikonli.javafx.FontIcon?>
 
@@ -35,6 +37,7 @@ PCM Desktop now uses **Ikonli** - a comprehensive icon library for Java applicat
 ```
 
 ### In Java
+
 ```java
 import org.kordamp.ikonli.javafx.FontIcon;
 import org.kordamp.ikonli.material2.Material2AL;
@@ -54,17 +57,20 @@ icon.setStyle("-fx-icon-color: -color-accent-emphasis;");
 ## 📊 Icons Used in PCM Desktop
 
 ### Navbar
+
 - `mdi2p-plus-circle-outline` - New Screen button
 - `mdi2b-bell-outline` - Notifications
 - `mdi2c-cog-outline` - Settings
 
 ### Sidebar
+
 - `mdi2s-star` - Favorites section
 - `mdi2f-folder-multiple` - Projects section
 - `mdi2p-plus` - New project button
 - `mdi2c-cog-outline` - Settings
 
 ### Content Header
+
 - `mdi2c-circle` - Status indicator
 - `mdi2s-share-variant` - Share button
 - `mdi2d-dots-vertical` - More menu
@@ -74,6 +80,7 @@ icon.setStyle("-fx-icon-color: -color-accent-emphasis;");
 - `mdi2d-delete` - Delete
 
 ### Stats Cards
+
 - `mdi2l-lightning-bolt` - Events
 - `mdi2f-file-code` - Source files
 - `mdi2d-database` - Database tables
@@ -82,15 +89,18 @@ icon.setStyle("-fx-icon-color: -color-accent-emphasis;");
 - `mdi2c-check-circle` - Success indicator
 
 ### Description Card
+
 - `mdi2s-sparkles` - AI Enhance
 
 ### Related Items
+
 - `mdi2m-monitor-screenshot` - Screen icon
 - `mdi2a-arrow-right` - Navigate arrow
 
 ## 🎯 Icon Naming Convention
 
 Material Design 2 icons follow this pattern:
+
 ```
 mdi2[first-letter]-[icon-name]
 
@@ -104,14 +114,17 @@ Examples:
 ## 🔍 Finding Icons
 
 ### Material Design Icons
+
 Browse at: https://materialdesignicons.com/
 
 Search example:
+
 - Home → `mdi2h-home`
 - Settings → `mdi2c-cog` or `mdi2s-settings`
 - Star → `mdi2s-star`
 
 ### In Code
+
 ```java
 // List all Material Design icons
 for (Material2AL icon : Material2AL.values()) {
@@ -122,6 +135,7 @@ for (Material2AL icon : Material2AL.values()) {
 ## 🎨 Styling Icons
 
 ### Color
+
 ```xml
 <!-- Using AtlantaFX color variables -->
 <FontIcon iconLiteral="mdi2h-home" 
@@ -133,6 +147,7 @@ for (Material2AL icon : Material2AL.values()) {
 ```
 
 ### Size
+
 ```xml
 <!-- Set size -->
 <FontIcon iconLiteral="mdi2h-home" iconSize="16"/>  <!-- Small -->
@@ -141,6 +156,7 @@ for (Material2AL icon : Material2AL.values()) {
 ```
 
 ### In CSS
+
 ```css
 .my-icon {
     -fx-icon-color: -color-accent-emphasis;
@@ -151,6 +167,7 @@ for (Material2AL icon : Material2AL.values()) {
 ## 📁 Library Files
 
 Located in `lib/others/`:
+
 - `ikonli-core-12.3.1.jar` (15 KB)
 - `ikonli-javafx-12.3.1.jar` (37 KB)
 - `ikonli-material2-pack-12.3.1.jar` (739 KB)
@@ -161,6 +178,7 @@ Total: ~846 KB
 ## 🔄 Migration from Emoji
 
 ### Before (Emoji)
+
 ```xml
 <Label text="⚙️"/>
 <Label text="📁"/>
@@ -168,6 +186,7 @@ Total: ~846 KB
 ```
 
 ### After (Ikonli)
+
 ```xml
 <FontIcon iconLiteral="mdi2c-cog-outline" iconSize="20"/>
 <FontIcon iconLiteral="mdi2f-folder" iconSize="20"/>
@@ -177,6 +196,7 @@ Total: ~846 KB
 ## 💡 Best Practices
 
 ### 1. **Use Semantic Colors**
+
 ```xml
 <!-- Good: Uses AtlantaFX color variables -->
 <FontIcon style="-fx-icon-color: -color-accent-emphasis;"/>
@@ -186,11 +206,13 @@ Total: ~846 KB
 ```
 
 ### 2. **Consistent Sizing**
+
 - **Small icons**: 14-16px (in small buttons, inline)
 - **Medium icons**: 18-20px (standard buttons, sidebar)
 - **Large icons**: 24px+ (prominent actions)
 
 ### 3. **Button with Icon and Text**
+
 ```xml
 <Button>
     <graphic>
@@ -203,6 +225,7 @@ Total: ~846 KB
 ```
 
 ### 4. **Icon-Only Buttons**
+
 ```xml
 <Button styleClass="flat">
     <graphic>
@@ -219,17 +242,20 @@ Total: ~846 KB
 To add more icon packs (e.g., FontAwesome):
 
 1. Download from Maven Central:
+
 ```bash
 curl -L -o lib/others/ikonli-fontawesome5-pack-12.3.1.jar \
   https://repo1.maven.org/maven2/org/kordamp/ikonli/ikonli-fontawesome5-pack/12.3.1/ikonli-fontawesome5-pack-12.3.1.jar
 ```
 
 2. Import in FXML:
+
 ```xml
 <?import org.kordamp.ikonli.javafx.FontIcon?>
 ```
 
 3. Use icons:
+
 ```xml
 <FontIcon iconLiteral="fas-home" iconSize="20"/>
 ```
@@ -237,6 +263,7 @@ curl -L -o lib/others/ikonli-fontawesome5-pack-12.3.1.jar \
 ## 📊 Icon Coverage
 
 ### Current Coverage
+
 - ✅ Navbar (100%)
 - ✅ Sidebar (100%)
 - ✅ Content Header (100%)
@@ -250,17 +277,19 @@ curl -L -o lib/others/ikonli-fontawesome5-pack-12.3.1.jar \
 ## 🎉 Benefits
 
 ### vs Emoji
+
 ✅ **Professional** - Vector icons, not emoji  
 ✅ **Scalable** - Perfect at any size  
 ✅ **Customizable** - Color, size, style  
 ✅ **Consistent** - Same style across platforms  
-✅ **Semantic** - Named icons, not Unicode  
+✅ **Semantic** - Named icons, not Unicode
 
 ### vs Image Files
+
 ✅ **Lightweight** - Icons bundled in JAR  
 ✅ **No resources** - No separate image files  
 ✅ **Dynamic** - Change color/size in code  
-✅ **Theme-aware** - Use CSS variables  
+✅ **Theme-aware** - Use CSS variables
 
 ## 🔗 Resources
 
@@ -286,6 +315,7 @@ curl -L -o lib/others/ikonli-fontawesome5-pack-12.3.1.jar \
 ## 🎊 Result
 
 PCM Desktop now has:
+
 - 🎨 Professional vector icons
 - 📐 Consistent icon sizing
 - 🎯 Semantic icon names

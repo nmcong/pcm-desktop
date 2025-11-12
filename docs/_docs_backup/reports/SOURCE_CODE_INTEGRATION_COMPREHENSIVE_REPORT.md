@@ -26,7 +26,8 @@
 
 ### 🎯 Vấn Đề Cốt Lõi
 
-PCM WebApp hiện tại chỉ quản lý **metadata nghiệp vụ** (subsystems, projects, screens, events) nhưng **không liên kết với source code thực tế**. Điều này gây ra:
+PCM WebApp hiện tại chỉ quản lý **metadata nghiệp vụ** (subsystems, projects, screens, events) nhưng **không liên kết
+với source code thực tế**. Điều này gây ra:
 
 - ❌ AI Chat không thể trả lời câu hỏi về code: _"File nào implement screen này?"_
 - ❌ Developer phải manually mapping giữa design và code
@@ -45,7 +46,7 @@ PCM WebApp hiện tại chỉ quản lý **metadata nghiệp vụ** (subsystems,
 ### 📊 Impact
 
 | Metric                     | Before             | After (Estimated) |
-| -------------------------- | ------------------ | ----------------- |
+|----------------------------|--------------------|-------------------|
 | Time to find relevant code | 15-30 min          | < 2 min           |
 | AI Chat code accuracy      | 0% (hallucination) | 90%+ (verified)   |
 | Developer onboarding       | 2-3 days           | 4-6 hours         |
@@ -187,7 +188,7 @@ Acceptance Criteria:
 #### Functional Requirements
 
 | ID    | Requirement                          | Priority | Complexity |
-| ----- | ------------------------------------ | -------- | ---------- |
+|-------|--------------------------------------|----------|------------|
 | FR-1  | Index TypeScript/JavaScript files    | P0       | Medium     |
 | FR-2  | Extract React components & props     | P0       | Medium     |
 | FR-3  | Parse API calls (fetch, axios)       | P0       | High       |
@@ -214,14 +215,14 @@ Acceptance Criteria:
 
 ### 4.1 Approach Matrix
 
-| Approach                          | Pros                                                         | Cons                                                                  | Verdict            |
-| --------------------------------- | ------------------------------------------------------------ | --------------------------------------------------------------------- | ------------------ |
+| Approach                          | Pros                                                         | Cons                                                                  | Verdict           |
+|-----------------------------------|--------------------------------------------------------------|-----------------------------------------------------------------------|-------------------|
 | **1. Pure GitHub API**            | - No local tool needed<br>- Always up-to-date                | - Slow (rate-limited)<br>- Network dependent<br>- No semantic parsing | ❌ Not suitable    |
 | **2. AST-based (ts-morph)**       | - Accurate parsing<br>- Understands TS/JS<br>- Extract types | - Heavy (RAM)<br>- Slow for large repos<br>- Complex setup            | ✅ **Recommended** |
-| **3. Regex + Annotations**        | - Fast<br>- Simple<br>- Lightweight                          | - Low accuracy<br>- Requires discipline<br>- Manual effort            | ⚠️ Fallback only   |
-| **4. Tree-sitter**                | - Multi-language<br>- Fast<br>- Battle-tested                | - Native binding<br>- Complex API<br>- Overkill for JS/TS             | ⚠️ Future option   |
+| **3. Regex + Annotations**        | - Fast<br>- Simple<br>- Lightweight                          | - Low accuracy<br>- Requires discipline<br>- Manual effort            | ⚠️ Fallback only  |
+| **4. Tree-sitter**                | - Multi-language<br>- Fast<br>- Battle-tested                | - Native binding<br>- Complex API<br>- Overkill for JS/TS             | ⚠️ Future option  |
 | **5. LSP Integration**            | - IDE-quality<br>- Real-time<br>- Accurate                   | - Requires LSP server<br>- Complex setup<br>- Not portable            | ❌ Too complex     |
-| **6. Vector Search (Embeddings)** | - Semantic search<br>- Fuzzy matching                        | - Expensive (API)<br>- Slow (inference)<br>- Storage overhead         | ⚠️ Phase 2         |
+| **6. Vector Search (Embeddings)** | - Semantic search<br>- Fuzzy matching                        | - Expensive (API)<br>- Slow (inference)<br>- Storage overhead         | ⚠️ Phase 2        |
 
 ### 4.2 Recommended Hybrid Approach
 
@@ -1613,7 +1614,7 @@ export class CodeReferencesTab {
 ### Technical Risks
 
 | Risk                                   | Probability | Impact | Mitigation                                                        |
-| -------------------------------------- | ----------- | ------ | ----------------------------------------------------------------- |
+|----------------------------------------|-------------|--------|-------------------------------------------------------------------|
 | **AST parsing fails on complex code**  | Medium      | High   | - Fallback to regex<br>- Skip problematic files<br>- Log warnings |
 | **Index too large (>10MB)**            | Low         | Medium | - Compression (gzip)<br>- Lazy loading<br>- Split by module       |
 | **Performance issues (slow indexing)** | Medium      | Medium | - Parallel processing<br>- Incremental updates<br>- Cache AST     |
@@ -1624,7 +1625,7 @@ export class CodeReferencesTab {
 ### Operational Risks
 
 | Risk                              | Probability | Impact | Mitigation                                                          |
-| --------------------------------- | ----------- | ------ | ------------------------------------------------------------------- |
+|-----------------------------------|-------------|--------|---------------------------------------------------------------------|
 | **Developers forget to re-index** | High        | Medium | - Git hooks (pre-commit)<br>- CI automation<br>- Stale detection UI |
 | **Index out of sync with code**   | High        | High   | - Timestamp validation<br>- Auto-refresh prompt<br>- Watch mode     |
 | **Multi-team coordination**       | Medium      | Medium | - Clear ownership<br>- Documentation<br>- Training                  |
@@ -2047,7 +2048,8 @@ A: No. Use `--watch` mode during development, or set up pre-commit hooks. In pro
 A: Run the indexer for each repo, then merge the indexes, or use multi-repo config.
 
 **Q: Can it work without annotations?**
-A: Yes, but with lower accuracy. The indexer will use heuristics (file names, folder structure), but annotations ensure correctness.
+A: Yes, but with lower accuracy. The indexer will use heuristics (file names, folder structure), but annotations ensure
+correctness.
 
 **Q: How big is the generated index?**
 A: Typically 1-5MB for 1000-5000 files. Compression can reduce by 70%.
@@ -2068,7 +2070,7 @@ A: Yes, commit `code-index.json` to git. CI regenerates on every merge.
 ### KPIs (3 months after deployment)
 
 | Metric                     | Target                                     | Measurement         |
-| -------------------------- | ------------------------------------------ | ------------------- |
+|----------------------------|--------------------------------------------|---------------------|
 | **Adoption Rate**          | 80% of devs use AI Chat for code questions | Analytics           |
 | **Accuracy**               | 90%+ correct responses                     | User feedback       |
 | **Time Savings**           | 50% reduction in "find code" time          | Before/after survey |
@@ -2119,7 +2121,9 @@ This comprehensive plan provides a **practical, incremental approach** to linkin
 
 ### Final Thoughts
 
-This system will **transform how developers interact with PCM WebApp**, turning it from a business metadata tool into a **comprehensive development companion**. The AI Chat will finally be able to give **accurate, verified answers** about code structure, dependencies, and impact analysis.
+This system will **transform how developers interact with PCM WebApp**, turning it from a business metadata tool into a
+**comprehensive development companion**. The AI Chat will finally be able to give **accurate, verified answers** about
+code structure, dependencies, and impact analysis.
 
 **The key to success is:**
 

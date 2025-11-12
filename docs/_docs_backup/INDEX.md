@@ -184,7 +184,7 @@
 ## 📊 Documentation Stats
 
 | Document            | Size       | Lines      | Content           |
-| ------------------- | ---------- | ---------- | ----------------- |
+|---------------------|------------|------------|-------------------|
 | README.md           | ~70KB      | 2,000+     | Complete guide    |
 | QUICK-REFERENCE.md  | ~15KB      | 500+       | Quick reference   |
 | services/README.md  | ~10KB      | 300+       | Provider guide    |

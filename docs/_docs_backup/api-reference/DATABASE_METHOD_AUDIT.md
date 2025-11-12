@@ -8,16 +8,16 @@
 ## 📊 Audit Summary
 
 | File                      | Methods Used | Issues Found | Status |
-| ------------------------- | ------------ | ------------ | ------ |
-| AdvancedQueryFunctions.js | 21           | ✅ 0         | PASS   |
-| DBObjectFunctions.js      | 15           | ✅ 0         | PASS   |
-| SubsystemFunctions.js     | 10           | ✅ 0         | PASS   |
-| ProjectFunctions.js       | 9            | ✅ 0         | PASS   |
-| KnowledgeBaseFunctions.js | 11           | ✅ 0         | PASS   |
-| BatchJobFunctions.js      | 13           | ✅ 0         | PASS   |
-| DataFunctions.js          | 9            | ✅ 1 FIXED   | PASS   |
-| ScreenFunctions.js        | 0            | ✅ 0         | PASS   |
-| GitHubFunctions.js        | 0            | ✅ 0         | PASS   |
+|---------------------------|--------------|--------------|--------|
+| AdvancedQueryFunctions.js | 21           | ✅ 0          | PASS   |
+| DBObjectFunctions.js      | 15           | ✅ 0          | PASS   |
+| SubsystemFunctions.js     | 10           | ✅ 0          | PASS   |
+| ProjectFunctions.js       | 9            | ✅ 0          | PASS   |
+| KnowledgeBaseFunctions.js | 11           | ✅ 0          | PASS   |
+| BatchJobFunctions.js      | 13           | ✅ 0          | PASS   |
+| DataFunctions.js          | 9            | ✅ 1 FIXED    | PASS   |
+| ScreenFunctions.js        | 0            | ✅ 0          | PASS   |
+| GitHubFunctions.js        | 0            | ✅ 0          | PASS   |
 
 **Total Issues Found**: 1  
 **Total Issues Fixed**: 1  
@@ -118,7 +118,7 @@ const subsystems = await databaseManager.getSubsystems();
 ## 📋 Method Usage Statistics
 
 | Method Pattern           | Count | Examples                                        |
-| ------------------------ | ----- | ----------------------------------------------- |
+|--------------------------|-------|-------------------------------------------------|
 | `getXxx()` (no "All")    | 31    | getProjects, getScreens, getSubsystems          |
 | `getAllXxx()`            | 23    | getAllKBItems, getAllDBObjects, getAllBatchJobs |
 | `getXxxById(id)`         | 21    | getKBItemById, getDBObjectById, getBatchJobById |
@@ -170,8 +170,8 @@ const subsystems = await databaseManager.getSubsystems();
 ### For Future
 
 1. 🔄 **Standardize naming** (breaking change, careful migration needed)
-   - Option A: All use `getAll` prefix
-   - Option B: None use `getAll` prefix
+    - Option A: All use `getAll` prefix
+    - Option B: None use `getAll` prefix
 2. 📝 **Add JSDoc types** to DatabaseManager methods
 
 3. 🧪 **Unit tests** for all functions that use DatabaseManager

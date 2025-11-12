@@ -33,24 +33,24 @@ src/main/resources/
 ### SOLID Principles
 
 1. **Single Responsibility Principle (SRP)**
-   - Each class has ONE reason to change
-   - Example: `ProjectDAO` only handles Project database operations
+    - Each class has ONE reason to change
+    - Example: `ProjectDAO` only handles Project database operations
 
 2. **Open/Closed Principle (OCP)**
-   - Open for extension, closed for modification
-   - Example: `AbstractDAO` can be extended without modification
+    - Open for extension, closed for modification
+    - Example: `AbstractDAO` can be extended without modification
 
 3. **Liskov Substitution Principle (LSP)**
-   - Subtypes can replace parent types
-   - Example: Any `Repository<T, ID>` implementation can replace the interface
+    - Subtypes can replace parent types
+    - Example: Any `Repository<T, ID>` implementation can replace the interface
 
 4. **Interface Segregation Principle (ISP)**
-   - Specific interfaces over fat interfaces
-   - Example: Separate `Readable` and `Writable` interfaces if needed
+    - Specific interfaces over fat interfaces
+    - Example: Separate `Readable` and `Writable` interfaces if needed
 
 5. **Dependency Inversion Principle (DIP)**
-   - Depend on abstractions, not implementations
-   - Example: Services depend on `Repository` interface, not implementation
+    - Depend on abstractions, not implementations
+    - Example: Services depend on `Repository` interface, not implementation
 
 ### Design Patterns
 
@@ -120,31 +120,31 @@ Project project = projectService.createProject("My Project", "MYPROJ");
 
 ### Core Tables
 
-| Table | Purpose | Key Fields |
-|-------|---------|------------|
-| `projects` | Store projects/subsystems | id, name, code, type, status |
-| `screens` | Store UI screens | id, project_id, name, code, type |
-| `database_objects` | Store DB objects | id, name, type, definition |
-| `batch_jobs` | Store batch jobs | id, name, schedule_cron, status |
-| `workflows` | Store workflows | id, name, workflow_data |
-| `knowledge_base` | Store documentation | id, title, content, embedding_vector |
+| Table              | Purpose                   | Key Fields                           |
+|--------------------|---------------------------|--------------------------------------|
+| `projects`         | Store projects/subsystems | id, name, code, type, status         |
+| `screens`          | Store UI screens          | id, project_id, name, code, type     |
+| `database_objects` | Store DB objects          | id, name, type, definition           |
+| `batch_jobs`       | Store batch jobs          | id, name, schedule_cron, status      |
+| `workflows`        | Store workflows           | id, name, workflow_data              |
+| `knowledge_base`   | Store documentation       | id, title, content, embedding_vector |
 
 ### Relationship Tables
 
-| Table | Purpose |
-|-------|---------|
-| `screen_tags` | Many-to-many: Screens ↔ Tags |
+| Table              | Purpose                            |
+|--------------------|------------------------------------|
+| `screen_tags`      | Many-to-many: Screens ↔ Tags       |
 | `screen_relations` | Many-to-many: Screen relationships |
-| `workflow_steps` | One-to-many: Workflow ↔ Steps |
+| `workflow_steps`   | One-to-many: Workflow ↔ Steps      |
 
 ### System Tables
 
-| Table | Purpose |
-|-------|---------|
-| `activity_log` | Audit trail |
-| `favorites` | User favorites |
-| `settings` | Application settings |
-| `schema_version` | Migration tracking |
+| Table            | Purpose              |
+|------------------|----------------------|
+| `activity_log`   | Audit trail          |
+| `favorites`      | User favorites       |
+| `settings`       | Application settings |
+| `schema_version` | Migration tracking   |
 
 ---
 

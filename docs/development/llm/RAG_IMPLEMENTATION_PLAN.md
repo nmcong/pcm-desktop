@@ -3,6 +3,7 @@
 ## 📋 Executive Summary
 
 **Retrieval-Augmented Generation (RAG)** sẽ được tích hợp vào PCM Desktop để:
+
 - Cho phép người dùng query hệ thống bằng ngôn ngữ tự nhiên
 - Cung cấp câu trả lời chính xác dựa trên dữ liệu thực tế của hệ thống
 - Tự động phân tích source code, database schema, và business logic
@@ -12,6 +13,7 @@
 ## 🎯 Objectives
 
 ### Primary Goals
+
 1. ✅ **Natural Language Queries** - Users can ask questions in plain language
 2. ✅ **Accurate Answers** - Responses based on actual system data
 3. ✅ **Context-Aware** - Understand relationships between components
@@ -19,6 +21,7 @@
 5. ✅ **Real-time** - Fast response times (<5 seconds)
 
 ### Success Metrics
+
 - Query accuracy > 90%
 - Response time < 5 seconds
 - User satisfaction > 4.5/5
@@ -81,81 +84,91 @@
 ### Core RAG Framework (Choose One)
 
 #### Option 1: LangChain4j ⭐ (Recommended)
-- **Pros:** 
-  - Native Java implementation
-  - Great documentation
-  - Active community
-  - Easy to integrate with Spring
+
+- **Pros:**
+    - Native Java implementation
+    - Great documentation
+    - Active community
+    - Easy to integrate with Spring
 - **Cons:**
-  - Newer framework
+    - Newer framework
 - **JAR URL:** https://repo1.maven.org/maven2/dev/langchain4j/langchain4j/0.35.0/langchain4j-0.35.0.jar
 
 #### Option 2: Spring AI
+
 - **Pros:**
-  - Official Spring project
-  - Seamless Spring Boot integration
-  - Growing ecosystem
+    - Official Spring project
+    - Seamless Spring Boot integration
+    - Growing ecosystem
 - **Cons:**
-  - Requires Spring Boot migration
-  - Heavier framework
+    - Requires Spring Boot migration
+    - Heavier framework
 
 #### Option 3: Semantic Kernel for Java
+
 - **Pros:**
-  - Microsoft-backed
-  - Multi-model support
+    - Microsoft-backed
+    - Multi-model support
 - **Cons:**
-  - Less Java-focused
+    - Less Java-focused
 
 ### Vector Database Options
 
 #### Option 1: Chroma (Embedded) ⭐ (Recommended)
+
 - **Type:** Embedded / Client-server
 - **Pros:**
-  - Easy to embed in Java app
-  - Open source
-  - Good performance
-  - Python API (can use via REST)
+    - Easy to embed in Java app
+    - Open source
+    - Good performance
+    - Python API (can use via REST)
 - **Setup:** Run Chroma server locally, access via REST API
 
 #### Option 2: Qdrant (Self-hosted)
+
 - **Type:** Client-server
 - **Pros:**
-  - High performance
-  - Rich features
-  - Good Java client
+    - High performance
+    - Rich features
+    - Good Java client
 - **Setup:** Docker container
 
 #### Option 3: PostgreSQL + pgvector
+
 - **Type:** Extension for existing DB
 - **Pros:**
-  - Use existing PostgreSQL knowledge
-  - Mature and stable
+    - Use existing PostgreSQL knowledge
+    - Mature and stable
 - **Cons:**
-  - Need PostgreSQL setup
+    - Need PostgreSQL setup
 
 #### Option 4: Apache Lucene (Java Native)
+
 - **Type:** Embedded
 - **Pros:**
-  - Pure Java
-  - Battle-tested
-  - No external dependencies
+    - Pure Java
+    - Battle-tested
+    - No external dependencies
 - **Cons:**
-  - Not specialized for vectors
-  - More manual setup
+    - Not specialized for vectors
+    - More manual setup
 
 ### Embedding Models
 
 #### Option 1: OpenAI Embeddings ⭐ (Recommended for start)
+
 - **Model:** text-embedding-3-small or text-embedding-3-large
 - **Pros:** High quality, easy to use
 - **Cons:** Cost, API calls
 
 #### Option 2: Local Embeddings (ONNX)
+
 - **Models:** all-MiniLM-L6-v2, BGE-small-en
 - **Pros:** No API costs, privacy
 - **Cons:** Setup complexity
 
 #### Option 3: Sentence Transformers (via API)
+
 - **Models:** Various open-source models
 - **Pros:** Free, customizable
 - **Cons:** Need to host
@@ -163,11 +176,13 @@
 ### LLM Options
 
 #### For Production:
+
 1. **OpenAI GPT-4 Turbo** - Best quality
 2. **Anthropic Claude 3.5 Sonnet** - Great for code
 3. **Azure OpenAI** - Enterprise support
 
 #### For Development/Testing:
+
 1. **Ollama** (Local) - llama3, codellama, phi-3
 2. **GPT-3.5 Turbo** - Cheaper than GPT-4
 
@@ -237,43 +252,47 @@ https://repo1.maven.org/maven2/com/microsoft/onnxruntime/onnxruntime/1.17.1/onnx
 ### Phase 1: Foundation (Weeks 1-2) 🏗️
 
 #### Week 1: Setup & Infrastructure
+
 - [ ] **Day 1-2:** Research & technology selection
-  - Finalize vector database choice
-  - Choose embedding model
-  - Select LLM provider
-  
+    - Finalize vector database choice
+    - Choose embedding model
+    - Select LLM provider
+
 - [ ] **Day 3-4:** Environment setup
-  - Download and configure vector database
-  - Set up LLM API accounts (OpenAI/Anthropic)
-  - Download required JAR files
-  
+    - Download and configure vector database
+    - Set up LLM API accounts (OpenAI/Anthropic)
+    - Download required JAR files
+
 - [ ] **Day 5-7:** Basic integration
-  - Create RAG module structure
-  - Implement embedding generation
-  - Test vector storage and retrieval
+    - Create RAG module structure
+    - Implement embedding generation
+    - Test vector storage and retrieval
 
 **Deliverables:**
+
 - Working vector database
 - Ability to create and store embeddings
 - Basic similarity search working
 
 #### Week 2: Core RAG Pipeline
+
 - [ ] **Day 1-2:** Document ingestion
-  - Create document chunking logic
-  - Implement embedding pipeline
-  - Store embeddings in vector DB
-  
+    - Create document chunking logic
+    - Implement embedding pipeline
+    - Store embeddings in vector DB
+
 - [ ] **Day 3-4:** Retrieval system
-  - Implement semantic search
-  - Build ranking and filtering
-  - Test retrieval accuracy
-  
+    - Implement semantic search
+    - Build ranking and filtering
+    - Test retrieval accuracy
+
 - [ ] **Day 5-7:** LLM integration
-  - Connect to LLM API
-  - Implement prompt templates
-  - Test end-to-end query flow
+    - Connect to LLM API
+    - Implement prompt templates
+    - Test end-to-end query flow
 
 **Deliverables:**
+
 - Documents can be ingested and embedded
 - Relevant documents can be retrieved
 - LLM can generate responses with context
@@ -281,43 +300,47 @@ https://repo1.maven.org/maven2/com/microsoft/onnxruntime/onnxruntime/1.17.1/onnx
 ### Phase 2: PCM Integration (Weeks 3-4) 🔗
 
 #### Week 3: Data Source Integration
+
 - [ ] **Day 1-2:** SQLite metadata indexing
-  - Index screens, subsystems, projects
-  - Index batch jobs information
-  - Index workflow data
-  
+    - Index screens, subsystems, projects
+    - Index batch jobs information
+    - Index workflow data
+
 - [ ] **Day 3-4:** Database schema indexing
-  - Connect to Oracle database
-  - Extract schema information
-  - Index table/view/procedure metadata
-  
+    - Connect to Oracle database
+    - Extract schema information
+    - Index table/view/procedure metadata
+
 - [ ] **Day 5-7:** Code analysis
-  - Parse Java source files
-  - Extract class/method signatures
-  - Index code documentation
+    - Parse Java source files
+    - Extract class/method signatures
+    - Index code documentation
 
 **Deliverables:**
+
 - All PCM metadata indexed
 - Database schema fully searchable
 - Source code indexed and searchable
 
 #### Week 4: Advanced Features
+
 - [ ] **Day 1-2:** Relationship mapping
-  - Map screens to source code
-  - Map screens to database objects
-  - Map workflows to components
-  
+    - Map screens to source code
+    - Map screens to database objects
+    - Map workflows to components
+
 - [ ] **Day 3-4:** Context enhancement
-  - Build context graphs
-  - Implement multi-hop retrieval
-  - Add cross-reference capabilities
-  
+    - Build context graphs
+    - Implement multi-hop retrieval
+    - Add cross-reference capabilities
+
 - [ ] **Day 5-7:** Query optimization
-  - Implement query rewriting
-  - Add caching layer
-  - Optimize response times
+    - Implement query rewriting
+    - Add caching layer
+    - Optimize response times
 
 **Deliverables:**
+
 - Complex relationships can be queried
 - Context-aware responses
 - Fast query performance
@@ -325,21 +348,22 @@ https://repo1.maven.org/maven2/com/microsoft/onnxruntime/onnxruntime/1.17.1/onnx
 ### Phase 3: UI & UX (Week 5) 🎨
 
 - [ ] **Day 1-2:** Query interface
-  - Build chat-like UI in JavaFX
-  - Add query history
-  - Implement streaming responses
-  
+    - Build chat-like UI in JavaFX
+    - Add query history
+    - Implement streaming responses
+
 - [ ] **Day 3-4:** Results presentation
-  - Format code snippets nicely
-  - Add syntax highlighting
-  - Show source references
-  
+    - Format code snippets nicely
+    - Add syntax highlighting
+    - Show source references
+
 - [ ] **Day 5-7:** Advanced UI features
-  - Add filters and options
-  - Implement feedback mechanism
-  - Add keyboard shortcuts
+    - Add filters and options
+    - Implement feedback mechanism
+    - Add keyboard shortcuts
 
 **Deliverables:**
+
 - User-friendly query interface
 - Well-formatted responses
 - Interactive result exploration
@@ -347,21 +371,22 @@ https://repo1.maven.org/maven2/com/microsoft/onnxruntime/onnxruntime/1.17.1/onnx
 ### Phase 4: Testing & Optimization (Week 6) 🧪
 
 - [ ] **Day 1-2:** Unit testing
-  - Test embedding generation
-  - Test retrieval accuracy
-  - Test LLM integration
-  
+    - Test embedding generation
+    - Test retrieval accuracy
+    - Test LLM integration
+
 - [ ] **Day 3-4:** Integration testing
-  - End-to-end query tests
-  - Performance testing
-  - Load testing
-  
+    - End-to-end query tests
+    - Performance testing
+    - Load testing
+
 - [ ] **Day 5-7:** Optimization
-  - Tune retrieval parameters
-  - Optimize prompt templates
-  - Implement caching strategies
+    - Tune retrieval parameters
+    - Optimize prompt templates
+    - Implement caching strategies
 
 **Deliverables:**
+
 - Comprehensive test suite
 - Performance benchmarks
 - Optimized system
@@ -369,18 +394,21 @@ https://repo1.maven.org/maven2/com/microsoft/onnxruntime/onnxruntime/1.17.1/onnx
 ### Phase 5: Production Readiness (Week 7-8) 🚀
 
 #### Week 7: Error Handling & Monitoring
+
 - [ ] Error handling and fallbacks
 - [ ] Logging and monitoring
 - [ ] Rate limiting and quotas
 - [ ] Security measures (API key management)
 
 #### Week 8: Documentation & Training
+
 - [ ] User documentation
 - [ ] Developer documentation
 - [ ] Example queries and use cases
 - [ ] Training materials
 
 **Deliverables:**
+
 - Production-ready system
 - Complete documentation
 - Training materials
@@ -392,6 +420,7 @@ https://repo1.maven.org/maven2/com/microsoft/onnxruntime/onnxruntime/1.17.1/onnx
 ### What to Index
 
 #### 1. System Metadata (Priority: HIGH)
+
 ```
 - Subsystems: name, description, owner, dependencies
 - Projects: name, description, screens, features
@@ -402,6 +431,7 @@ https://repo1.maven.org/maven2/com/microsoft/onnxruntime/onnxruntime/1.17.1/onnx
 ```
 
 #### 2. Source Code (Priority: HIGH)
+
 ```
 - Java classes: full source, methods, fields
 - SQL scripts: DDL, DML, procedures
@@ -410,6 +440,7 @@ https://repo1.maven.org/maven2/com/microsoft/onnxruntime/onnxruntime/1.17.1/onnx
 ```
 
 #### 3. Knowledge Base (Priority: MEDIUM)
+
 ```
 - Business rules
 - Technical specifications
@@ -453,6 +484,7 @@ for chunk in chunks:
 ## 🔍 Example Queries & Expected Behavior
 
 ### Query 1: Screen Analysis
+
 ```
 User: "Màn hình customer registration gọi những stored procedures nào?"
 
@@ -488,6 +520,7 @@ Source files:
 ```
 
 ### Query 2: Batch Job
+
 ```
 User: "Batch job nào chạy lúc 2 giờ sáng?"
 
@@ -514,6 +547,7 @@ Response:
 ```
 
 ### Query 3: Impact Analysis
+
 ```
 User: "Nếu tôi thay đổi cột ADDRESS trong table CUSTOMERS thì ảnh hưởng gì?"
 
@@ -559,6 +593,7 @@ Response:
 ## 🔒 Security Considerations
 
 ### API Key Management
+
 ```java
 // Store in environment variables or encrypted config
 String openaiKey = System.getenv("OPENAI_API_KEY");
@@ -569,11 +604,13 @@ String anthropicKey = System.getenv("ANTHROPIC_API_KEY");
 ```
 
 ### Data Privacy
+
 - Don't send sensitive production data to external LLMs
 - Consider using local/self-hosted LLMs for sensitive code
 - Implement data masking for PII in examples
 
 ### Access Control
+
 - Implement role-based access to RAG queries
 - Log all queries for audit purposes
 - Rate limit queries per user
@@ -615,25 +652,27 @@ String anthropicKey = System.getenv("ANTHROPIC_API_KEY");
 
 **Scenario: 1000 queries/month**
 
-| Provider | Model | Input (1K tokens) | Output (1K tokens) | Est. Monthly Cost |
-|----------|-------|-------------------|---------------------|-------------------|
-| OpenAI | GPT-4 Turbo | $0.01 | $0.03 | ~$50-100 |
-| OpenAI | GPT-3.5 Turbo | $0.0005 | $0.0015 | ~$5-10 |
-| Anthropic | Claude 3.5 Sonnet | $0.003 | $0.015 | ~$25-50 |
+| Provider  | Model             | Input (1K tokens) | Output (1K tokens) | Est. Monthly Cost |
+|-----------|-------------------|-------------------|--------------------|-------------------|
+| OpenAI    | GPT-4 Turbo       | $0.01             | $0.03              | ~$50-100          |
+| OpenAI    | GPT-3.5 Turbo     | $0.0005           | $0.0015            | ~$5-10            |
+| Anthropic | Claude 3.5 Sonnet | $0.003            | $0.015             | ~$25-50           |
 
 **Embedding Costs:**
+
 - OpenAI text-embedding-3-small: $0.00002/1K tokens
 - Monthly for 10,000 documents: ~$5-10
 
 ### Infrastructure Costs
 
-| Component | Option | Monthly Cost |
-|-----------|--------|--------------|
+| Component | Option               | Monthly Cost                 |
+|-----------|----------------------|------------------------------|
 | Vector DB | Chroma (self-hosted) | $0 (local) or $20-50 (cloud) |
-| Vector DB | Qdrant Cloud | $0 (free tier) or $25+ |
-| Compute | Local | $0 |
+| Vector DB | Qdrant Cloud         | $0 (free tier) or $25+       |
+| Compute   | Local                | $0                           |
 
 **Total Estimated Cost:**
+
 - Development: $0-20/month (using free tiers)
 - Production (small scale): $50-150/month
 - Production (medium scale): $200-500/month
@@ -643,18 +682,21 @@ String anthropicKey = System.getenv("ANTHROPIC_API_KEY");
 ## 🎯 Success Criteria
 
 ### Technical Metrics
+
 - [ ] Query response time < 5 seconds (95th percentile)
 - [ ] Retrieval precision > 80%
 - [ ] Retrieval recall > 70%
 - [ ] System uptime > 99%
 
 ### Business Metrics
+
 - [ ] 90% of queries answered correctly
 - [ ] User satisfaction > 4.5/5
 - [ ] 50% reduction in time to find information
 - [ ] 80% adoption rate among target users
 
 ### Quality Metrics
+
 - [ ] LLM responses are factually accurate
 - [ ] Code references are correct
 - [ ] No hallucinations in responses
@@ -665,6 +707,7 @@ String anthropicKey = System.getenv("ANTHROPIC_API_KEY");
 ## 📚 Resources & Learning
 
 ### Documentation
+
 - [LangChain4j Docs](https://docs.langchain4j.dev/)
 - [OpenAI API](https://platform.openai.com/docs)
 - [Anthropic Claude](https://docs.anthropic.com/)
@@ -672,11 +715,13 @@ String anthropicKey = System.getenv("ANTHROPIC_API_KEY");
 - [Qdrant](https://qdrant.tech/documentation/)
 
 ### Tutorials
+
 - Building RAG Applications in Java
 - Vector Database Best Practices
 - Prompt Engineering for Code Analysis
 
 ### Community
+
 - LangChain4j GitHub Issues
 - Stack Overflow: [langchain4j] tag
 - Discord: LangChain community
@@ -697,8 +742,8 @@ String anthropicKey = System.getenv("ANTHROPIC_API_KEY");
    ```
 
 2. **Get API Keys**
-   - OpenAI: https://platform.openai.com/api-keys
-   - Anthropic: https://console.anthropic.com/
+    - OpenAI: https://platform.openai.com/api-keys
+    - Anthropic: https://console.anthropic.com/
 
 3. **Download Libraries**
    ```bash
@@ -707,7 +752,7 @@ String anthropicKey = System.getenv("ANTHROPIC_API_KEY");
    ```
 
 4. **Run First Example**
-   - See: `examples/SimpleRAGExample.java`
+    - See: `examples/SimpleRAGExample.java`
 
 ---
 

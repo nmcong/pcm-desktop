@@ -40,8 +40,8 @@ Vector Database cho phép bạn tìm kiếm theo **ngữ nghĩa** (meaning) thay
 
 **✅ CÓ - 100% Offline!**
 
-| Mode              | Accuracy | Offline                 | Khi Nào Dùng |
-| ----------------- | -------- | ----------------------- | ------------ |
+| Mode              | Accuracy | Offline                | Khi Nào Dùng |
+|-------------------|----------|------------------------|--------------|
 | **TensorFlow.js** | 95%      | ✅ (Cần download trước) | Production   |
 | **Fallback**      | 65%      | ✅ (Không cần gì)       | Quick start  |
 | **Hybrid**        | Auto     | ✅                      | Khuyến nghị  |
@@ -196,12 +196,12 @@ apps/pcm-webapp/public/js/modules/ai/services/
 
 **A:**
 
-| Feature      | pcm-webapp Vector DB | Qdrant/Milvus  |
-| ------------ | -------------------- | -------------- |
-| **Setup**    | Zero config          | Cần server     |
-| **Offline**  | ✅ Hoàn toàn         | ❌ Cần network |
-| **Scale**    | < 10K vectors        | Millions       |
-| **Use Case** | Client-side search   | Production DB  |
+| Feature      | pcm-webapp Vector DB | Qdrant/Milvus |
+|--------------|----------------------|---------------|
+| **Setup**    | Zero config          | Cần server    |
+| **Offline**  | ✅ Hoàn toàn          | ❌ Cần network |
+| **Scale**    | < 10K vectors        | Millions      |
+| **Use Case** | Client-side search   | Production DB |
 
 ---
 
@@ -296,7 +296,8 @@ await offlineVectorSetup.initializeOffline({
 ## 📞 Support
 
 - **Full Guide**: [OFFLINE_VECTOR_DATABASE_GUIDE.md](./docs/OFFLINE_VECTOR_DATABASE_GUIDE.md)
-- **Technical Docs**: [VECTOR_DATABASE_DOCUMENTATION.md](./public/js/modules/ai/docs-intergration/VECTOR_DATABASE_DOCUMENTATION.md)
+- **Technical Docs
+  **: [VECTOR_DATABASE_DOCUMENTATION.md](./public/js/modules/ai/docs-intergration/VECTOR_DATABASE_DOCUMENTATION.md)
 - **Source Code**: `apps/pcm-webapp/public/js/modules/ai/services/`
 
 ---

@@ -265,25 +265,25 @@ export class ViByteProvider extends BaseProvider {
 
 ### Text-Based vs Native Comparison
 
-| Provider          | Type       | Accuracy | Speed       | Cost     |
-| ----------------- | ---------- | -------- | ----------- | -------- |
-| **OpenAI**        | Native     | 99%+     | ⚡ Fast     | $$$ High |
-| **Claude**        | Native     | 99%+     | ⚡ Fast     | $$$ High |
+| Provider          | Type       | Accuracy | Speed     | Cost     |
+|-------------------|------------|----------|-----------|----------|
+| **OpenAI**        | Native     | 99%+     | ⚡ Fast    | $$$ High |
+| **Claude**        | Native     | 99%+     | ⚡ Fast    | $$$ High |
 | **ViByte/Ollama** | Text-Based | 80-95%   | ⚡⚡ Medium | $ Low    |
 
 ### Factors Affecting Accuracy
 
 1. **Model Quality**
-   - Better models = Better accuracy
-   - llama3.2 (90-95%) > llama3.1 (85-90%) > llama2 (75-85%)
+    - Better models = Better accuracy
+    - llama3.2 (90-95%) > llama3.1 (85-90%) > llama2 (75-85%)
 
 2. **Prompt Clarity**
-   - Clear instructions = Better results
-   - "Output ONLY JSON" > "Use JSON format"
+    - Clear instructions = Better results
+    - "Output ONLY JSON" > "Use JSON format"
 
 3. **JSON Formatting**
-   - Model must output valid JSON
-   - Some models better at JSON than others
+    - Model must output valid JSON
+    - Some models better at JSON than others
 
 ### Recommended Models
 
@@ -579,4 +579,5 @@ Even though Ollama doesn't have native function calling, the text-based adapter 
 
 ---
 
-**Key Takeaway**: Text-based function calling enables ANY LLM to have function calling capabilities, even if it wasn't designed for it! 🚀
+**Key Takeaway**: Text-based function calling enables ANY LLM to have function calling capabilities, even if it wasn't
+designed for it! 🚀

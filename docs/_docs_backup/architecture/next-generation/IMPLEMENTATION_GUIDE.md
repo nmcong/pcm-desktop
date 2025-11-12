@@ -1301,28 +1301,28 @@ describe("Intent Detection", () => {
 **Test Cases:**
 
 1. **Fuzzy Search**
-   - [ ] Typo: `"hoan tien"` → finds `"hoàn tiền"`
-   - [ ] Abbreviation: `"refnd"` → finds `"refund"`
-   - [ ] No accent: `"xac thuc"` → finds `"xác thực"`
-   - [ ] Partial match: `"pay"` → finds `"payment systems"`
+    - [ ] Typo: `"hoan tien"` → finds `"hoàn tiền"`
+    - [ ] Abbreviation: `"refnd"` → finds `"refund"`
+    - [ ] No accent: `"xac thuc"` → finds `"xác thực"`
+    - [ ] Partial match: `"pay"` → finds `"payment systems"`
 
 2. **Semantic Search**
-   - [ ] Vietnamese: `"thanh toán"` → finds `"payment"`
-   - [ ] English: `"authentication"` → finds `"xác thực"`
-   - [ ] Synonym: `"approval"` → finds `"phê duyệt"`
-   - [ ] Multi-word: `"risk review"` → finds `"xem xét rủi ro"`
+    - [ ] Vietnamese: `"thanh toán"` → finds `"payment"`
+    - [ ] English: `"authentication"` → finds `"xác thực"`
+    - [ ] Synonym: `"approval"` → finds `"phê duyệt"`
+    - [ ] Multi-word: `"risk review"` → finds `"xem xét rủi ro"`
 
 3. **Intent Detection**
-   - [ ] Search: `"Tìm dự án payment"` → search intent
-   - [ ] Details: `"Chi tiết project 12"` → details intent
-   - [ ] Analysis: `"Workflow hoàn tiền thế nào?"` → analysis intent
-   - [ ] Development: `"File nào xử lý approval?"` → development intent
+    - [ ] Search: `"Tìm dự án payment"` → search intent
+    - [ ] Details: `"Chi tiết project 12"` → details intent
+    - [ ] Analysis: `"Workflow hoàn tiền thế nào?"` → analysis intent
+    - [ ] Development: `"File nào xử lý approval?"` → development intent
 
 4. **Anti-Hallucination**
-   - [ ] With tool data: Response has citations → ✅ grounded
-   - [ ] Without tool data: Response makes claims → ⚠️ warning
-   - [ ] Fake entity: Mentions non-existent project → 🚨 hallucination
-   - [ ] Correct numbers: Matches tool results → ✅ verified
+    - [ ] With tool data: Response has citations → ✅ grounded
+    - [ ] Without tool data: Response makes claims → ⚠️ warning
+    - [ ] Fake entity: Mentions non-existent project → 🚨 hallucination
+    - [ ] Correct numbers: Matches tool results → ✅ verified
 
 ---
 

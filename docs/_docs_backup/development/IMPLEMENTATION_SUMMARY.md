@@ -257,7 +257,7 @@ Robust error handling at every level:
 ### Code Changes
 
 | File              | Lines Added | Lines Modified | Complexity |
-| ----------------- | ----------- | -------------- | ---------- |
+|-------------------|-------------|----------------|------------|
 | ToolExecutor.js   | 140         | 0              | Low        |
 | OpenAIProvider.js | 60          | 30             | Medium     |
 | ClaudeProvider.js | 80          | 40             | Medium     |
@@ -268,7 +268,7 @@ Robust error handling at every level:
 ### Documentation
 
 | Document                      | Size            | Words             | Sections |
-| ----------------------------- | --------------- | ----------------- | -------- |
+|-------------------------------|-----------------|-------------------|----------|
 | AI_FUNCTION_CALLING_SYSTEM.md | 1,500 lines     | 20,000+           | 20+      |
 | README.md updates             | 100 lines       | 1,000+            | 5        |
 | IMPLEMENTATION_SUMMARY.md     | 300 lines       | 2,000+            | 10       |
@@ -343,20 +343,20 @@ Robust error handling at every level:
 ### For Developers
 
 1. **Add New Tools**
-   - Define in `DatabaseQueryTool.js`
-   - Implement handler method
-   - Add display name in `ToolExecutor.js`
+    - Define in `DatabaseQueryTool.js`
+    - Implement handler method
+    - Add display name in `ToolExecutor.js`
 
 2. **Add New Providers**
-   - Extend `BaseProvider`
-   - Set `tools: true` capability
-   - Implement tool format conversion
-   - Register in `ProviderRegistry`
+    - Extend `BaseProvider`
+    - Set `tools: true` capability
+    - Implement tool format conversion
+    - Register in `ProviderRegistry`
 
 3. **Extend UI**
-   - Modify `displayToolCalls()` for custom display
-   - Modify `displayToolResults()` for result formatting
-   - Add new settings if needed
+    - Modify `displayToolCalls()` for custom display
+    - Modify `displayToolResults()` for result formatting
+    - Add new settings if needed
 
 ---
 
@@ -392,38 +392,38 @@ Robust error handling at every level:
 ### Architecture Decisions
 
 1. **Dual Mode**: Support both function calling and context injection
-   - Why: Maintain compatibility with all providers
-   - Trade-off: More complex code, but better UX
+    - Why: Maintain compatibility with all providers
+    - Trade-off: More complex code, but better UX
 
 2. **Format Normalization**: Convert Claude ↔ OpenAI formats
-   - Why: Unified interface for tool execution
-   - Trade-off: Extra conversion layer, but cleaner code
+    - Why: Unified interface for tool execution
+    - Trade-off: Extra conversion layer, but cleaner code
 
 3. **UI Transparency**: Show all tool calls
-   - Why: User trust and debugging
-   - Trade-off: More UI elements, but better UX
+    - Why: User trust and debugging
+    - Trade-off: More UI elements, but better UX
 
 4. **Iteration Limit**: Max 5 tool loops
-   - Why: Prevent infinite loops
-   - Trade-off: May cut off complex workflows
+    - Why: Prevent infinite loops
+    - Trade-off: May cut off complex workflows
 
 ### Implementation Insights
 
 1. **Streaming with Tools**: Most complex part
-   - Challenge: Accumulate tool_calls across chunks
-   - Solution: Maintain state, index by tool index
+    - Challenge: Accumulate tool_calls across chunks
+    - Solution: Maintain state, index by tool index
 
 2. **Error Handling**: Critical for UX
-   - Challenge: Many failure points
-   - Solution: Try-catch at every level, return structured errors
+    - Challenge: Many failure points
+    - Solution: Try-catch at every level, return structured errors
 
 3. **Provider Differences**: OpenAI vs Claude
-   - Challenge: Different API formats
-   - Solution: Adapter pattern with format conversion
+    - Challenge: Different API formats
+    - Solution: Adapter pattern with format conversion
 
 4. **Tool Loop**: Multi-turn execution
-   - Challenge: When to stop?
-   - Solution: Check for tool_calls, limit iterations
+    - Challenge: When to stop?
+    - Solution: Check for tool_calls, limit iterations
 
 ---
 
@@ -534,7 +534,8 @@ Robust error handling at every level:
 
 ## 🎉 Conclusion
 
-The AI Function Calling System represents a significant advancement in how AI assistants can interact with your data. By leveraging native function calling capabilities of OpenAI and Claude, we achieve:
+The AI Function Calling System represents a significant advancement in how AI assistants can interact with your data. By
+leveraging native function calling capabilities of OpenAI and Claude, we achieve:
 
 - **Better Precision**: AI decides exactly what to query
 - **Higher Efficiency**: Only queries necessary data

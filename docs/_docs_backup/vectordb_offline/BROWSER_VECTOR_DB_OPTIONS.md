@@ -2,20 +2,21 @@
 
 ## 📋 Tổng Quan
 
-Có nhiều cách để chạy Vector Database trên trình duyệt và lưu vào IndexedDB. Tài liệu này so sánh các options phổ biến nhất.
+Có nhiều cách để chạy Vector Database trên trình duyệt và lưu vào IndexedDB. Tài liệu này so sánh các options phổ biến
+nhất.
 
 ---
 
 ## ⚖️ So Sánh Nhanh
 
-| Solution            | Offline    | Setup Complexity | Accuracy | Size   | Use Case         |
-| ------------------- | ---------- | ---------------- | -------- | ------ | ---------------- |
-| **🎯 PCM Current**  | ✅ 100%    | ⭐ Easy          | 95%/65%  | ~20MB  | **Khuyến nghị**  |
-| **VectorDB.js**     | ✅         | ⭐⭐ Medium      | 90%      | ~15MB  | Alternative      |
-| **LanceDB**         | ❌ (WASM)  | ⭐⭐⭐ Hard      | 98%      | ~50MB  | High performance |
-| **Chroma.js**       | ❌ Cần API | ⭐ Easy          | 95%      | Small  | API-dependent    |
-| **Transformers.js** | ✅         | ⭐⭐⭐ Hard      | 98%      | ~100MB | Best accuracy    |
-| **Custom TF.js**    | ✅         | ⭐⭐ Medium      | 95%      | ~20MB  | DIY              |
+| Solution            | Offline   | Setup Complexity | Accuracy | Size   | Use Case         |
+|---------------------|-----------|------------------|----------|--------|------------------|
+| **🎯 PCM Current**  | ✅ 100%    | ⭐ Easy           | 95%/65%  | ~20MB  | **Khuyến nghị**  |
+| **VectorDB.js**     | ✅         | ⭐⭐ Medium        | 90%      | ~15MB  | Alternative      |
+| **LanceDB**         | ❌ (WASM)  | ⭐⭐⭐ Hard         | 98%      | ~50MB  | High performance |
+| **Chroma.js**       | ❌ Cần API | ⭐ Easy           | 95%      | Small  | API-dependent    |
+| **Transformers.js** | ✅         | ⭐⭐⭐ Hard         | 98%      | ~100MB | Best accuracy    |
+| **Custom TF.js**    | ✅         | ⭐⭐ Medium        | 95%      | ~20MB  | DIY              |
 
 ---
 
@@ -542,7 +543,7 @@ async embedWithTransformers(text) {
 ### Embedding Generation Speed
 
 | Model                 | First Load | Subsequent | Vector Size |
-| --------------------- | ---------- | ---------- | ----------- |
+|-----------------------|------------|------------|-------------|
 | **TensorFlow.js USE** | ~3s        | ~50ms      | 512D        |
 | **Transformers.js**   | ~5s        | ~30ms      | 384D        |
 | **VectorDB.js**       | ~2s        | ~40ms      | 384D        |
@@ -551,7 +552,7 @@ async embedWithTransformers(text) {
 ### Search Performance (1000 vectors)
 
 | Implementation  | Search Time | Notes              |
-| --------------- | ----------- | ------------------ |
+|-----------------|-------------|--------------------|
 | **PCM Current** | ~80ms       | Brute-force cosine |
 | **VectorDB.js** | ~20ms       | HNSW algorithm     |
 | **LanceDB**     | ~10ms       | Optimized Rust     |
@@ -560,7 +561,7 @@ async embedWithTransformers(text) {
 ### Storage Size (1000 messages)
 
 | Implementation          | Vector Size | Total Size |
-| ----------------------- | ----------- | ---------- |
+|-------------------------|-------------|------------|
 | **TensorFlow (512D)**   | ~2MB        | ~2-3MB     |
 | **Transformers (384D)** | ~1.5MB      | ~2MB       |
 | **Fallback (64D)**      | ~250KB      | ~500KB     |

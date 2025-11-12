@@ -2,7 +2,9 @@
 
 ## Tổng Quan
 
-Tài liệu này mô tả phương án tạo một công cụ Java độc lập để export cấu trúc AST (Abstract Syntax Tree) từ source code Java sang định dạng JSON trung gian, sau đó import vào IndexedDB của browser cho PCM WebApp. Phương án này cho phép xử lý offline và tận dụng sức mạnh của các parser Java chuyên nghiệp.
+Tài liệu này mô tả phương án tạo một công cụ Java độc lập để export cấu trúc AST (Abstract Syntax Tree) từ source code
+Java sang định dạng JSON trung gian, sau đó import vào IndexedDB của browser cho PCM WebApp. Phương án này cho phép xử
+lý offline và tận dụng sức mạnh của các parser Java chuyên nghiệp.
 
 ## 1. Kiến Trúc Tổng Thể
 
@@ -1647,7 +1649,8 @@ fileInput.addEventListener("change", async (e) => {
 
 ## 8. Kết Luận
 
-Phương án Java AST Export Tool cung cấp giải pháp robust và accurate cho việc tích hợp AST analysis vào PCM WebApp. Mặc dù có complexity cao hơn so với tree-sitter approach, nó mang lại:
+Phương án Java AST Export Tool cung cấp giải pháp robust và accurate cho việc tích hợp AST analysis vào PCM WebApp. Mặc
+dù có complexity cao hơn so với tree-sitter approach, nó mang lại:
 
 - **Độ chính xác tối đa** với full semantic analysis
 - **Scalability excellent** cho large codebases

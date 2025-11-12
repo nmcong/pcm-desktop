@@ -2,9 +2,11 @@
 
 ## 📋 Overview
 
-**Problem**: Some LLMs have native function calling support (OpenAI, Claude), but many don't (Ollama local models, Hugging Face, custom APIs).
+**Problem**: Some LLMs have native function calling support (OpenAI, Claude), but many don't (Ollama local models,
+Hugging Face, custom APIs).
 
-**Solution**: A **unified adapter system** that provides function calling for **ALL** LLMs, regardless of native support!
+**Solution**: A **unified adapter system** that provides function calling for **ALL** LLMs, regardless of native
+support!
 
 ---
 
@@ -702,14 +704,14 @@ new TextBasedFunctionCallingAdapter(provider, {
 ## 📊 Comparison: Native vs Text-Based
 
 | Feature          | Native Support   | Text-Based Adapter |
-| ---------------- | ---------------- | ------------------ |
-| **Accuracy**     | ✅ Very High     | ⚠️ Depends on LLM  |
-| **Speed**        | ✅ Fast          | ⚠️ Slightly slower |
-| **Reliability**  | ✅ 99%+          | ⚠️ 80-95%          |
+|------------------|------------------|--------------------|
+| **Accuracy**     | ✅ Very High      | ⚠️ Depends on LLM  |
+| **Speed**        | ✅ Fast           | ⚠️ Slightly slower |
+| **Reliability**  | ✅ 99%+           | ⚠️ 80-95%          |
 | **Setup**        | 🟢 Easy          | 🟡 Moderate        |
-| **Flexibility**  | ⚠️ Limited       | ✅ Very flexible   |
-| **Cost**         | ⚠️ May be higher | ✅ Often cheaper   |
-| **Local Models** | ❌ Rare          | ✅ Yes             |
+| **Flexibility**  | ⚠️ Limited       | ✅ Very flexible    |
+| **Cost**         | ⚠️ May be higher | ✅ Often cheaper    |
+| **Local Models** | ❌ Rare           | ✅ Yes              |
 
 ---
 

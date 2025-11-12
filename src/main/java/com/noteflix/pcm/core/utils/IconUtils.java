@@ -11,14 +11,14 @@ import java.util.Objects;
  */
 @Slf4j
 public class IconUtils {
-    
+
     /**
      * Creates an ImageView from icon path with specified size
      */
     public static ImageView createImageView(String iconPath, double width, double height) {
         try {
             Image image = new Image(Objects.requireNonNull(
-                IconUtils.class.getResourceAsStream(iconPath)
+                    IconUtils.class.getResourceAsStream(iconPath)
             ));
             ImageView imageView = new ImageView(image);
             imageView.setFitWidth(width);
@@ -31,7 +31,7 @@ public class IconUtils {
             return createFallbackImageView(width, height);
         }
     }
-    
+
     /**
      * Creates a fallback ImageView when icon loading fails
      */
@@ -39,7 +39,7 @@ public class IconUtils {
         try {
             // Try to load a fallback icon
             Image fallbackImage = new Image(Objects.requireNonNull(
-                IconUtils.class.getResourceAsStream("/images/icons/app-icon.png")
+                    IconUtils.class.getResourceAsStream("/images/icons/app-icon.png")
             ));
             ImageView imageView = new ImageView(fallbackImage);
             imageView.setFitWidth(width);
@@ -56,14 +56,14 @@ public class IconUtils {
             return emptyView;
         }
     }
-    
+
     /**
      * Updates an existing ImageView with a new icon
      */
     public static void updateImageView(ImageView imageView, String iconPath) {
         try {
             Image image = new Image(Objects.requireNonNull(
-                IconUtils.class.getResourceAsStream(iconPath)
+                    IconUtils.class.getResourceAsStream(iconPath)
             ));
             imageView.setImage(image);
         } catch (Exception e) {

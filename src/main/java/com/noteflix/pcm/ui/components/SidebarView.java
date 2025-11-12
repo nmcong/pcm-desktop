@@ -22,36 +22,36 @@ import org.kordamp.ikonli.javafx.FontIcon;
  */
 @Slf4j
 public class SidebarView extends VBox implements ThemeChangeListener {
-    
+
     private final ThemeManager themeManager;
     private PageNavigator pageNavigator;
     private ImageView appIcon;
     private ImageView botIcon;
     private Button themeButton;
-    
+
     public SidebarView() {
         super(16);
-        
+
         this.themeManager = ThemeManager.getInstance();
-        
+
         getStyleClass().add("sidebar");
         setPadding(new Insets(16, 12, 16, 12));
         setPrefWidth(AppConstants.SIDEBAR_WIDTH);
         setMinWidth(AppConstants.SIDEBAR_WIDTH);
         setMaxWidth(AppConstants.SIDEBAR_WIDTH);
-        
+
         // Register for theme changes
         themeManager.addThemeChangeListener(this);
-        
+
         // Build sidebar components
         getChildren().addAll(
-            createHeader(),
-            createMainMenu(),
-            createFavoritesSection(),
-            createProjectsSection()
+                createHeader(),
+                createMainMenu(),
+                createFavoritesSection(),
+                createProjectsSection()
         );
     }
-    
+
     /**
      * Sets the page navigator for navigation functionality
      * Dependency Injection - follows Dependency Inversion Principle
@@ -59,38 +59,38 @@ public class SidebarView extends VBox implements ThemeChangeListener {
     public void setPageNavigator(PageNavigator pageNavigator) {
         this.pageNavigator = pageNavigator;
     }
-    
+
     /**
      * Creates the header with app title and theme switch (AtlantaFX Sampler pattern)
      */
     private VBox createHeader() {
         VBox headerSection = new VBox(20);
         headerSection.getStyleClass().add("header");
-        
+
         // Logo section with theme-aware brain-circuit icon
         appIcon = IconUtils.createImageView(
-            themeManager.getBrainCircuitIcon(), 
-            AppConstants.ICON_SIZE_LARGE, 
-            AppConstants.ICON_SIZE_LARGE
+                themeManager.getBrainCircuitIcon(),
+                AppConstants.ICON_SIZE_LARGE,
+                AppConstants.ICON_SIZE_LARGE
         );
-        
+
         Label titleLabel = new Label("PCM Desktop");
         titleLabel.getStyleClass().add(Styles.TITLE_3);
-        
+
         themeButton = new Button();
         themeButton.setGraphic(new FontIcon(themeManager.isDarkTheme() ? Feather.MOON : Feather.SUN));
         themeButton.getStyleClass().addAll(Styles.BUTTON_ICON, Styles.FLAT, Styles.SMALL, "icon-btn-bordered");
         themeButton.setTooltip(new Tooltip("Switch Theme"));
         themeButton.setOnAction(e -> themeManager.toggleTheme());
-        
+
         HBox logoSection = new HBox(10, appIcon, titleLabel, createSpacer(), themeButton);
         logoSection.setAlignment(Pos.CENTER_LEFT);
         logoSection.getStyleClass().add("logo");
-        
+
         headerSection.getChildren().addAll(logoSection, createSearchButton());
         return headerSection;
     }
-    
+
     /**
      * Creates search button following AtlantaFX Sampler pattern
      */
@@ -98,21 +98,21 @@ public class SidebarView extends VBox implements ThemeChangeListener {
         // Search label with icon
         FontIcon searchIcon = new FontIcon(Feather.SEARCH);
         searchIcon.setIconSize(14);
-        
+
         Label searchLabel = new Label("Search");
         searchLabel.setGraphic(searchIcon);
         searchLabel.getStyleClass().add("search-label");
         searchLabel.setGraphicTextGap(8);
-        
+
         // Keyboard hint
         Label hintLabel = new Label("Press /");
         hintLabel.getStyleClass().addAll("hint", "text-muted", "text-small");
-        
+
         // Content container
         HBox content = new HBox(12, searchLabel, createSpacer(), hintLabel);
         content.setAlignment(Pos.CENTER_LEFT);
         content.getStyleClass().add("content");
-        
+
         // Search button
         Button searchButton = new Button();
         searchButton.setGraphic(content);
@@ -120,10 +120,10 @@ public class SidebarView extends VBox implements ThemeChangeListener {
         searchButton.setMaxWidth(Double.MAX_VALUE);
         searchButton.setAlignment(Pos.CENTER_LEFT);
         searchButton.setOnAction(e -> openSearchDialog());
-        
+
         return searchButton;
     }
-    
+
     /**
      * Creates main menu with icon buttons
      */
@@ -131,150 +131,150 @@ public class SidebarView extends VBox implements ThemeChangeListener {
         VBox menu = new VBox(4);
         menu.getStyleClass().add("card");
         menu.setPadding(new Insets(8));
-        
+
         menu.getChildren().addAll(
-            createAIAssistantMenuItem(),
-            createMenuItem("Knowledge Base", Feather.BOOK_OPEN, this::handleKnowledgeBase),
-            createMenuItem("Text Component", Feather.FILE_TEXT, this::handleTextComponent),
-            createMenuItem("CSS Theme Test", Feather.SETTINGS, this::handleCSSTest),
-            createMenuItem("Batch Jobs", Feather.CLOCK, this::handleBatchJobs),
-            createMenuItem("DB Objects", Feather.DATABASE, this::handleDBObjects),
-            createMenuItem("Settings", Feather.SLIDERS, this::handleSettingsMenu)
+                createAIAssistantMenuItem(),
+                createMenuItem("Knowledge Base", Feather.BOOK_OPEN, this::handleKnowledgeBase),
+                createMenuItem("Text Component", Feather.FILE_TEXT, this::handleTextComponent),
+                createMenuItem("CSS Theme Test", Feather.SETTINGS, this::handleCSSTest),
+                createMenuItem("Batch Jobs", Feather.CLOCK, this::handleBatchJobs),
+                createMenuItem("DB Objects", Feather.DATABASE, this::handleDBObjects),
+                createMenuItem("Settings", Feather.SLIDERS, this::handleSettingsMenu)
         );
-        
+
         return menu;
     }
-    
+
     /**
      * Creates AI Assistant menu item with theme-aware bot icon
      */
     private Button createAIAssistantMenuItem() {
         // Theme-aware bot icon
         botIcon = IconUtils.createImageView(
-            themeManager.getBotIcon(), 
-            AppConstants.ICON_SIZE_MEDIUM, 
-            AppConstants.ICON_SIZE_MEDIUM
+                themeManager.getBotIcon(),
+                AppConstants.ICON_SIZE_MEDIUM,
+                AppConstants.ICON_SIZE_MEDIUM
         );
-        
+
         Label label = new Label("AI Assistant");
-        
+
         HBox content = new HBox(12, botIcon, label);
         content.setAlignment(Pos.CENTER_LEFT);
-        
+
         Button button = new Button();
         button.setGraphic(content);
         button.setMaxWidth(Double.MAX_VALUE);
         button.getStyleClass().addAll(Styles.FLAT, Styles.LEFT_PILL, "ai-assistant-btn");
         button.setAlignment(Pos.CENTER_LEFT);
         button.setOnAction(e -> handleAIAssistant());
-        
+
         return button;
     }
-    
+
     /**
      * Creates a menu item button
      */
     private Button createMenuItem(String text, Feather icon, Runnable action) {
         FontIcon iconNode = new FontIcon(icon);
         iconNode.setIconSize(16);
-        
+
         Label label = new Label(text);
-        
+
         HBox content = new HBox(12, iconNode, label);
         content.setAlignment(Pos.CENTER_LEFT);
-        
+
         Button button = new Button();
         button.setGraphic(content);
         button.setMaxWidth(Double.MAX_VALUE);
         button.getStyleClass().addAll(Styles.FLAT, Styles.LEFT_PILL);
         button.setAlignment(Pos.CENTER_LEFT);
         button.setOnAction(e -> action.run());
-        
+
         return button;
     }
-    
+
     /**
      * Creates favorites section with header
      */
     private VBox createFavoritesSection() {
         VBox section = new VBox(8);
-        
+
         // Section header
         HBox sectionHeader = createSectionHeader("ƯU THÍCH", Feather.STAR, null);
-        
+
         // Favorites cards
         VBox favoritesCard = new VBox(4);
         favoritesCard.getStyleClass().add("card");
         favoritesCard.setPadding(new Insets(8));
-        
+
         favoritesCard.getChildren().addAll(
-            createProjectItem("CS", "Customer Service", "24 screens • Active", "-color-accent-emphasis"),
-            createProjectItem("OM", "Order Management", "18 screens • Active", "-color-success-emphasis")
+                createProjectItem("CS", "Customer Service", "24 screens • Active", "-color-accent-emphasis"),
+                createProjectItem("OM", "Order Management", "18 screens • Active", "-color-success-emphasis")
         );
-        
+
         section.getChildren().addAll(sectionHeader, favoritesCard);
         return section;
     }
-    
+
     /**
      * Creates projects section with scrollable list
      */
     private VBox createProjectsSection() {
         VBox section = new VBox(8);
         VBox.setVgrow(section, Priority.ALWAYS);
-        
+
         // Section header with add button
         Button addButton = new Button();
         addButton.setGraphic(new FontIcon(Feather.PLUS));
         addButton.getStyleClass().addAll(Styles.BUTTON_ICON, Styles.FLAT, Styles.SMALL, "icon-btn-bordered");
         addButton.setTooltip(new Tooltip("New Project"));
         addButton.setOnAction(e -> handleNewProject());
-        
+
         HBox sectionHeader = createSectionHeader("DỰ ÁN", Feather.FOLDER, addButton);
-        
+
         // Projects list in scrollpane
         VBox projectsList = new VBox(4);
         projectsList.getStyleClass().add("card");
         projectsList.setPadding(new Insets(8));
-        
+
         projectsList.getChildren().addAll(
-            createProjectItem("CS", "Customer Service", "24 screens", "-color-accent-emphasis"),
-            createProjectItem("OM", "Order Management", "18 screens", "-color-success-emphasis"),
-            createProjectItem("PG", "Payment Gateway", "12 screens", "-color-warning-emphasis"),
-            createProjectItem("IA", "Inventory Admin", "15 screens", "-color-accent-emphasis"),
-            createProjectItem("RP", "Reports Portal", "8 screens", "-color-danger-emphasis")
+                createProjectItem("CS", "Customer Service", "24 screens", "-color-accent-emphasis"),
+                createProjectItem("OM", "Order Management", "18 screens", "-color-success-emphasis"),
+                createProjectItem("PG", "Payment Gateway", "12 screens", "-color-warning-emphasis"),
+                createProjectItem("IA", "Inventory Admin", "15 screens", "-color-accent-emphasis"),
+                createProjectItem("RP", "Reports Portal", "8 screens", "-color-danger-emphasis")
         );
-        
+
         ScrollPane scrollPane = new ScrollPane(projectsList);
         scrollPane.setFitToWidth(true);
         scrollPane.getStyleClass().add(Styles.DENSE);
         VBox.setVgrow(scrollPane, Priority.ALWAYS);
-        
+
         section.getChildren().addAll(sectionHeader, scrollPane);
         return section;
     }
-    
+
     /**
      * Creates section header with icon and optional action button
      */
     private HBox createSectionHeader(String title, Feather icon, Button actionButton) {
         FontIcon iconNode = new FontIcon(icon);
         iconNode.setIconSize(16);
-        
+
         Label titleLabel = new Label(title);
         titleLabel.getStyleClass().add(Styles.TITLE_4);
-        
+
         HBox header = new HBox(8, iconNode, titleLabel);
         header.setAlignment(Pos.CENTER_LEFT);
-        
+
         if (actionButton != null) {
             Region spacer = createSpacer();
             header.getChildren().addAll(spacer, actionButton);
         }
-        
+
         return header;
     }
-    
+
     /**
      * Creates a project item with avatar and details
      */
@@ -282,32 +282,32 @@ public class SidebarView extends VBox implements ThemeChangeListener {
         // Avatar with initials
         Label initialsLabel = new Label(initials);
         initialsLabel.setStyle("-fx-text-fill: white; -fx-font-size: 11px; -fx-font-weight: bold;");
-        
+
         StackPane avatar = new StackPane(initialsLabel);
         avatar.setStyle("-fx-background-color: " + colorVar + "; -fx-background-radius: 6px;");
         avatar.setMinSize(32, 32);
         avatar.setMaxSize(32, 32);
-        
+
         // Project details
         Label nameLabel = new Label(name);
         nameLabel.getStyleClass().add(Styles.TEXT_BOLD);
-        
+
         Label detailsLabel = new Label(details);
         detailsLabel.getStyleClass().addAll(Styles.TEXT_SMALL, "text-muted");
-        
+
         VBox textBox = new VBox(2, nameLabel, detailsLabel);
-        
+
         // Project item container
         HBox projectItem = new HBox(12, avatar, textBox);
         projectItem.setAlignment(Pos.CENTER_LEFT);
         projectItem.getStyleClass().add("list-item");
         projectItem.setPadding(new Insets(8));
         projectItem.setOnMouseClicked(e -> handleProjectClick(name));
-        
+
         return projectItem;
     }
-    
-    
+
+
     /**
      * Creates a horizontal spacer
      */
@@ -316,34 +316,34 @@ public class SidebarView extends VBox implements ThemeChangeListener {
         HBox.setHgrow(spacer, Priority.ALWAYS);
         return spacer;
     }
-    
+
     // Event handlers
-    
+
     private void openSearchDialog() {
         log.info("Opening Search Dialog");
-        showInfo("Search", 
-            "Search across your projects:\n\n" +
-            "• Find projects by name\n" +
-            "• Search in descriptions\n" +
-            "• Filter by status\n" +
-            "• Quick navigation\n\n" +
-            "Tip: Use keyboard shortcut '/' to open search quickly");
+        showInfo("Search",
+                "Search across your projects:\n\n" +
+                        "• Find projects by name\n" +
+                        "• Search in descriptions\n" +
+                        "• Filter by status\n" +
+                        "• Quick navigation\n\n" +
+                        "Tip: Use keyboard shortcut '/' to open search quickly");
     }
-    
+
     @Override
     public void onThemeChanged(boolean isDarkTheme) {
         log.debug("Theme changed to: {}", isDarkTheme ? "dark" : "light");
-        
+
         // Update app icon
         if (appIcon != null) {
             IconUtils.updateImageView(appIcon, themeManager.getBrainCircuitIcon());
         }
-        
+
         // Update bot icon
         if (botIcon != null) {
             IconUtils.updateImageView(botIcon, themeManager.getBotIcon());
         }
-        
+
         // Update theme button
         if (themeButton != null) {
             FontIcon newIcon = new FontIcon(isDarkTheme ? Feather.MOON : Feather.SUN);
@@ -351,118 +351,118 @@ public class SidebarView extends VBox implements ThemeChangeListener {
             themeButton.setTooltip(new Tooltip(isDarkTheme ? "Switch to Light Theme" : "Switch to Dark Theme"));
         }
     }
-    
+
     private void handleAIAssistant() {
         if (pageNavigator != null) {
             pageNavigator.navigateToPage(AIAssistantPage.class);
         } else {
             log.warn("PageNavigator not set - showing fallback dialog");
-            showInfo("AI Assistant", 
-                "AI-Powered System Analysis Assistant:\n\n" +
-                "• Natural language queries\n" +
-                "• Code analysis and suggestions\n" +
-                "• Database insights\n" +
-                "• Workflow optimization\n" +
-                "• Business process analysis\n\n" +
-                "Ask me anything about your system!");
+            showInfo("AI Assistant",
+                    "AI-Powered System Analysis Assistant:\n\n" +
+                            "• Natural language queries\n" +
+                            "• Code analysis and suggestions\n" +
+                            "• Database insights\n" +
+                            "• Workflow optimization\n" +
+                            "• Business process analysis\n\n" +
+                            "Ask me anything about your system!");
         }
     }
-    
+
     private void handleKnowledgeBase() {
         if (pageNavigator != null) {
             pageNavigator.navigateToPage(KnowledgeBasePage.class);
         } else {
             log.warn("PageNavigator not set - showing fallback dialog");
-            showInfo("Knowledge Base", 
-                "Browse and search your knowledge base:\n\n" +
-                "• Documentation\n" +
-                "• Best practices\n" +
-                "• Design patterns\n" +
-                "• Technical notes");
+            showInfo("Knowledge Base",
+                    "Browse and search your knowledge base:\n\n" +
+                            "• Documentation\n" +
+                            "• Best practices\n" +
+                            "• Design patterns\n" +
+                            "• Technical notes");
         }
     }
-    
+
     private void handleTextComponent() {
         if (pageNavigator != null) {
             pageNavigator.navigateToPage(UniversalTextDemoPage.class);
         } else {
             log.warn("PageNavigator not set - showing fallback dialog");
-            showInfo("Universal Text Component", 
-                "Demo of Universal Text Component:\n\n" +
-                "• Markdown rendering\n" +
-                "• Syntax highlighting\n" +
-                "• Multiple view modes\n" +
-                "• Live preview\n" +
-                "• Theme support");
+            showInfo("Universal Text Component",
+                    "Demo of Universal Text Component:\n\n" +
+                            "• Markdown rendering\n" +
+                            "• Syntax highlighting\n" +
+                            "• Multiple view modes\n" +
+                            "• Live preview\n" +
+                            "• Theme support");
         }
     }
-    
+
     private void handleCSSTest() {
         if (pageNavigator != null) {
             pageNavigator.navigateToPage(CSSTestPage.class);
         } else {
             log.warn("PageNavigator not set - showing fallback dialog");
-            showInfo("CSS Theme Test", 
-                "Test CSS theme system:\n\n" +
-                "• Light/Dark theme switching\n" +
-                "• ai-assistant-dark.css application\n" +
-                "• Color variables testing\n" +
-                "• Theme-aware components");
+            showInfo("CSS Theme Test",
+                    "Test CSS theme system:\n\n" +
+                            "• Light/Dark theme switching\n" +
+                            "• ai-assistant-dark.css application\n" +
+                            "• Color variables testing\n" +
+                            "• Theme-aware components");
         }
     }
-    
+
     private void handleBatchJobs() {
         if (pageNavigator != null) {
             pageNavigator.navigateToPage(BatchJobsPage.class);
         } else {
             log.warn("PageNavigator not set - showing fallback dialog");
-            showInfo("Batch Jobs", 
-                "Manage scheduled and batch operations:\n\n" +
-                "• View running jobs\n" +
-                "• Schedule new tasks\n" +
-                "• Job history\n" +
-                "• Execution logs");
+            showInfo("Batch Jobs",
+                    "Manage scheduled and batch operations:\n\n" +
+                            "• View running jobs\n" +
+                            "• Schedule new tasks\n" +
+                            "• Job history\n" +
+                            "• Execution logs");
         }
     }
-    
+
     private void handleDBObjects() {
         if (pageNavigator != null) {
             pageNavigator.navigateToPage(DatabaseObjectsPage.class);
         } else {
             log.warn("PageNavigator not set - showing fallback dialog");
-            showInfo("Database Objects", 
-                "Database schema and objects:\n\n" +
-                "• Tables\n" +
-                "• Views\n" +
-                "• Stored procedures\n" +
-                "• Triggers & Functions");
+            showInfo("Database Objects",
+                    "Database schema and objects:\n\n" +
+                            "• Tables\n" +
+                            "• Views\n" +
+                            "• Stored procedures\n" +
+                            "• Triggers & Functions");
         }
     }
-    
+
     private void handleSettingsMenu() {
         if (pageNavigator != null) {
             pageNavigator.navigateToPage(SettingsPage.class);
         } else {
             log.warn("PageNavigator not set - showing fallback dialog");
-            showInfo("Settings", 
-                "Application configuration:\n\n" +
-                "• User preferences\n" +
-                "• Project settings\n" +
-                "• Database connections\n" +
-                "• Theme & appearance");
+            showInfo("Settings",
+                    "Application configuration:\n\n" +
+                            "• User preferences\n" +
+                            "• Project settings\n" +
+                            "• Database connections\n" +
+                            "• Theme & appearance");
         }
     }
-    
+
     private void handleNewProject() {
         log.info("Creating new project");
         showInfo("New Project", "Create a new project");
     }
-    
+
     private void handleProjectClick(String projectName) {
         log.info("Opening project: {}", projectName);
         showInfo("Project", "View details for: " + projectName);
     }
-    
+
     private void showInfo(String title, String content) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(title);
@@ -470,7 +470,7 @@ public class SidebarView extends VBox implements ThemeChangeListener {
         alert.setContentText(content);
         alert.showAndWait();
     }
-    
+
     /**
      * Cleanup method to unregister listeners
      * Should be called when the component is no longer needed

@@ -88,8 +88,8 @@ await databaseManager.deleteBatchJob(id);
 
 ## ❌ Common Mistakes
 
-| ❌ DON'T                   | ✅ DO                           |
-| -------------------------- | ------------------------------- |
+| ❌ DON'T                    | ✅ DO                            |
+|----------------------------|---------------------------------|
 | `getAllProjects()`         | `getProjects()`                 |
 | `getAllScreens()`          | `getScreens()`                  |
 | `getAllSubsystems()`       | `getSubsystems()`               |

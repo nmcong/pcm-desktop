@@ -42,11 +42,11 @@ Our system is designed to work with **ANY** LLM through the `BaseProvider` abstr
 ### Supported Integration Types
 
 | Integration Type      | Difficulty | Function Calling | Streaming | Example           |
-| --------------------- | ---------- | ---------------- | --------- | ----------------- |
-| **OpenAI-Compatible** | 🟢 Easy    | ✅ Yes           | ✅ Yes    | Ollama, LM Studio |
+|-----------------------|------------|------------------|-----------|-------------------|
+| **OpenAI-Compatible** | 🟢 Easy    | ✅ Yes            | ✅ Yes     | Ollama, LM Studio |
 | **Similar Format**    | 🟡 Medium  | ⚠️ Adapt         | ⚠️ Adapt  | Cohere, AI21      |
-| **Different Format**  | 🔴 Hard    | ❌ No\*          | ❌ No\*   | Custom APIs       |
-| **Local Models**      | 🟢 Easy    | ⚠️ Depends       | ✅ Yes    | Ollama, vLLM      |
+| **Different Format**  | 🔴 Hard    | ❌ No\*           | ❌ No\*    | Custom APIs       |
+| **Local Models**      | 🟢 Easy    | ⚠️ Depends       | ✅ Yes     | Ollama, vLLM      |
 
 \*Can be added with custom implementation
 
@@ -90,7 +90,8 @@ Your API Format  →  Adapter  →  Standard Format  →  App
      └──────── Adapter ← ─────────┘
 ```
 
-The adapter handles ALL format conversions, so the rest of your app doesn't need to know about your specific LLM's format!
+The adapter handles ALL format conversions, so the rest of your app doesn't need to know about your specific LLM's
+format!
 
 ---
 
@@ -1251,9 +1252,9 @@ export class WebSocketProvider extends BaseProvider {
 **Answer**: It depends!
 
 | LLM Type                    | Function Calling | How to Add                 |
-| --------------------------- | ---------------- | -------------------------- |
-| **OpenAI-compatible**       | ✅ Yes           | Already works!             |
-| **Has native tool support** | ✅ Yes           | Adapt format (like Claude) |
+|-----------------------------|------------------|----------------------------|
+| **OpenAI-compatible**       | ✅ Yes            | Already works!             |
+| **Has native tool support** | ✅ Yes            | Adapt format (like Claude) |
 | **No native support**       | ⚠️ Manual        | Parse from text response   |
 | **Local models**            | ⚠️ Manual        | Fine-tune or parse text    |
 
@@ -2045,7 +2046,7 @@ export class TogetherAIProvider extends BaseProvider {
 ### Integration Difficulty
 
 | Scenario              | Time      | Difficulty   |
-| --------------------- | --------- | ------------ |
+|-----------------------|-----------|--------------|
 | OpenAI-compatible API | 5 min     | 🟢 Very Easy |
 | Similar format (REST) | 30 min    | 🟡 Easy      |
 | Different format      | 1 hour    | 🟡 Medium    |

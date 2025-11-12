@@ -15,17 +15,18 @@ All compilation errors resolved. Application compiles successfully with 113 clas
 ### 1. Domain Layer (Business Logic) ✅
 
 #### Entities
+
 - **`MessageRole.java`** - Enum for message roles (SYSTEM, USER, ASSISTANT, FUNCTION)
 - **`Message.java`** - Chat message entity with:
-  - `id`, `conversationId`, `role`, `content`, `createdAt`, `updatedAt`
-  - Factory methods: `user()`, `assistant()`, `system()`, `function()`
-  - Validation logic
-  
+    - `id`, `conversationId`, `role`, `content`, `createdAt`, `updatedAt`
+    - Factory methods: `user()`, `assistant()`, `system()`, `function()`
+    - Validation logic
+
 - **`Conversation.java`** - Aggregate root for chat conversations:
-  - `id`, `title`, `userId`, `preview`, `llmProvider`, `llmModel`
-  - `messageCount`, `totalTokens`, `archived`, `pinned`
-  - `createdAt`, `updatedAt`, `messages` (List)
-  - Business methods: `addMessage()`, `isEmpty()`, `getPreview()`, `validate()`
+    - `id`, `title`, `userId`, `preview`, `llmProvider`, `llmModel`
+    - `messageCount`, `totalTokens`, `archived`, `pinned`
+    - `createdAt`, `updatedAt`, `messages` (List)
+    - Business methods: `addMessage()`, `isEmpty()`, `getPreview()`, `validate()`
 
 ```
 src/main/java/com/noteflix/pcm/domain/chat/
@@ -37,22 +38,24 @@ src/main/java/com/noteflix/pcm/domain/chat/
 ### 2. Infrastructure Layer (Data Access) ✅
 
 #### DAOs (Data Access Objects)
+
 - **`ConversationDAO.java`** - CRUD operations for Conversation entity
-  - `create()`, `read()`, `readAll()`, `update()`, `delete()`
-  - `exists()`, `count()`
-  - SQL mapping with PreparedStatements
-  
+    - `create()`, `read()`, `readAll()`, `update()`, `delete()`
+    - `exists()`, `count()`
+    - SQL mapping with PreparedStatements
+
 - **`MessageDAO.java`** - CRUD operations for Message entity
-  - `create()`, `read()`, `readAll()`, `update()`, `delete()`
-  - `findByConversationId()`, `deleteByConversationId()`
-  - `exists()`, `count()`
+    - `create()`, `read()`, `readAll()`, `update()`, `delete()`
+    - `findByConversationId()`, `deleteByConversationId()`
+    - `exists()`, `count()`
 
 #### Repositories
+
 - **`ConversationRepository.java`** (interface) - Domain repository contract
 - **`ConversationRepositoryImpl.java`** - Implementation with:
-  - Transaction management (Unit of Work pattern)
-  - Aggregate persistence (Conversation + Messages)
-  - Uses `ConnectionManager` singleton for DB connections
+    - Transaction management (Unit of Work pattern)
+    - Aggregate persistence (Conversation + Messages)
+    - Uses `ConnectionManager` singleton for DB connections
 
 ```
 src/main/java/com/noteflix/pcm/infrastructure/
@@ -68,19 +71,20 @@ src/main/java/com/noteflix/pcm/infrastructure/
 ### 3. Application Service Layer ✅
 
 #### Services
+
 - **`ConversationService.java`** - Conversation business logic:
-  - `createConversation(title, userId, llmProvider, llmModel)`
-  - `getConversation(id)`, `getConversationWithMessages(id)`
-  - `getUserConversations(userId)`
-  - `searchConversations(userId, query)`
-  - `clearConversation(id)`, `deleteConversation(id)`
-  - Orchestrates repository operations
-  
+    - `createConversation(title, userId, llmProvider, llmModel)`
+    - `getConversation(id)`, `getConversationWithMessages(id)`
+    - `getUserConversations(userId)`
+    - `searchConversations(userId, query)`
+    - `clearConversation(id)`, `deleteConversation(id)`
+    - Orchestrates repository operations
+
 - **`AIService.java`** - AI/LLM integration service:
-  - `streamResponse(conversation, userMessage, observer)`
-  - `sendMessage(conversation, userMessage)`
-  - Bridges `LLMService` and domain layer
-  - Handles message persistence after AI responses
+    - `streamResponse(conversation, userMessage, observer)`
+    - `sendMessage(conversation, userMessage)`
+    - Bridges `LLMService` and domain layer
+    - Handles message persistence after AI responses
 
 ```
 src/main/java/com/noteflix/pcm/application/service/chat/
@@ -134,6 +138,7 @@ CREATE INDEX idx_messages_conversation_id ON messages(conversation_id);
 ## SOLID Principles Applied
 
 ### 1. **Single Responsibility Principle (SRP)**
+
 - ✅ **ConversationService** - Only manages conversation business logic
 - ✅ **AIService** - Only handles AI/LLM integration
 - ✅ **ConversationDAO** - Only handles database operations for Conversation
@@ -141,21 +146,25 @@ CREATE INDEX idx_messages_conversation_id ON messages(conversation_id);
 - ✅ **ConversationRepository** - Only orchestrates aggregate persistence
 
 ### 2. **Open/Closed Principle (OCP)**
+
 - ✅ Uses **interfaces** (`Repository<T, ID>`, `DAO<T, ID>`)
 - ✅ Easy to extend with new repositories/DAOs without modifying existing code
 - ✅ New message types can be added via `MessageRole` enum
 
 ### 3. **Liskov Substitution Principle (LSP)**
+
 - ✅ All DAOs implement `DAO<T, ID>` interface
 - ✅ All repositories implement `Repository<T, ID>` interface
 - ✅ Implementations can be substituted without breaking functionality
 
 ### 4. **Interface Segregation Principle (ISP)**
+
 - ✅ Small, focused interfaces: `Repository`, `DAO`
 - ✅ Services depend only on what they need
 - ✅ No "fat" interfaces with unused methods
 
 ### 5. **Dependency Inversion Principle (DIP)**
+
 - ✅ Services depend on **interfaces**, not concrete implementations
 - ✅ `ConversationService` depends on `ConversationRepository` (interface)
 - ✅ `AIService` depends on `LLMService` (interface)
@@ -166,19 +175,23 @@ CREATE INDEX idx_messages_conversation_id ON messages(conversation_id);
 ## Design Patterns Applied
 
 ### 1. **Repository Pattern** ✅
+
 - Abstracts data access logic
 - Provides domain-centric API
 - `ConversationRepository` hides SQL complexity
 
 ### 2. **Data Access Object (DAO)** ✅
+
 - Separates low-level data access from business logic
 - `ConversationDAO`, `MessageDAO` handle SQL operations
 
 ### 3. **Singleton Pattern** ✅
+
 - `ConnectionManager` enum singleton
 - Thread-safe database connection management
 
 ### 4. **Unit of Work Pattern** ✅
+
 - Transaction management in `ConversationRepositoryImpl`
 - Ensures atomicity when saving aggregates
 - Example: Save Conversation + Messages in single transaction
@@ -198,19 +211,23 @@ try {
 ```
 
 ### 5. **Aggregate Pattern** ✅
+
 - `Conversation` is the aggregate root
 - `Message` entities are part of the aggregate
 - Consistency boundary maintained
 
 ### 6. **Factory Method Pattern** ✅
+
 - `Message.user()`, `Message.assistant()`, `Message.system()`
 - Simplifies entity creation
 
 ### 7. **Observer Pattern** ✅
+
 - `StreamingObserver` for real-time AI responses
 - `onChunk()`, `onComplete()`, `onError()` callbacks
 
 ### 8. **Builder Pattern** ✅
+
 - Lombok `@Builder` for entities
 - Fluent API for object construction
 
@@ -219,30 +236,36 @@ try {
 ## Clean Code Practices
 
 ### ✅ Meaningful Names
+
 - Clear, descriptive method names: `createConversation()`, `getUserConversations()`
 - Domain-specific terminology: `Conversation`, `Message`, `MessageRole`
 
 ### ✅ Small Functions
+
 - Each method does ONE thing
 - Average method length: 10-20 lines
 - Extracted complex logic into helper methods
 
 ### ✅ No Code Duplication (DRY)
+
 - Shared `DAO<T, ID>` interface for all DAOs
 - Reusable `Repository<T, ID>` interface
 - Common patterns in data access
 
 ### ✅ Error Handling
+
 - Custom `DatabaseException` for data layer
 - Proper transaction rollback on errors
 - Logging with SLF4J/Lombok `@Slf4j`
 
 ### ✅ Comprehensive Documentation
+
 - Javadoc for all public methods
 - Class-level documentation with responsibilities
 - Inline comments for complex logic
 
 ### ✅ Type Safety
+
 - Strong typing with generics: `Repository<Conversation, Long>`
 - Enum for `MessageRole` (type-safe, not strings)
 - Avoided primitive obsession
@@ -259,6 +282,7 @@ try {
 ### Files Created (Total: 8 core files)
 
 **Domain Layer:**
+
 ```
 src/main/java/com/noteflix/pcm/domain/chat/
 ├── Conversation.java      ✅ 5.3 KB
@@ -267,6 +291,7 @@ src/main/java/com/noteflix/pcm/domain/chat/
 ```
 
 **Infrastructure Layer:**
+
 ```
 src/main/java/com/noteflix/pcm/infrastructure/
 ├── dao/
@@ -278,6 +303,7 @@ src/main/java/com/noteflix/pcm/infrastructure/
 ```
 
 **Application Service Layer:**
+
 ```
 src/main/java/com/noteflix/pcm/application/service/chat/
 ├── AIService.java              ✅ 9.5 KB
@@ -285,6 +311,7 @@ src/main/java/com/noteflix/pcm/application/service/chat/
 ```
 
 **Database Migration:**
+
 ```
 src/main/resources/db/migration/
 └── V2__chat_tables.sql         ✅
@@ -295,31 +322,37 @@ src/main/resources/db/migration/
 ## Next Steps (Future Enhancements)
 
 ### 1. Complete AIAssistantPage UI Integration
+
 - Wire up `ConversationService` and `AIService` to UI
 - Replace mock data with real service calls
 - Test end-to-end flow
 
 ### 2. Database Migration Execution
+
 - Run `V2__chat_tables.sql` to create tables
 - Verify schema with SQLite browser
 
 ### 3. Unit Testing
+
 - Test `ConversationService` business logic
 - Test `ConversationDAO` with in-memory SQLite
 - Mock `LLMService` for `AIService` tests
 
 ### 4. Integration Testing
+
 - Test full flow: UI → Service → Repository → DAO → DB
 - Test streaming with real LLM provider
 - Test transaction rollback scenarios
 
 ### 5. UI Polish
+
 - Add conversation search/filter
 - Add conversation archiving/pinning
 - Add conversation export/import
 - Add message editing/deletion
 
 ### 6. Performance Optimization
+
 - Add connection pooling
 - Implement lazy loading for large conversations
 - Add pagination for conversation list

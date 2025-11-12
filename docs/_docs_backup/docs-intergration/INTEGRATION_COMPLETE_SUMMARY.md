@@ -2,7 +2,8 @@
 
 ## 📌 Problem Fixed
 
-**Issue**: Enhanced AI services (EnhancedPromptService, IntentDetectionService, QueryClarificationService) were created but **NOT being used** by AIPanel.js
+**Issue**: Enhanced AI services (EnhancedPromptService, IntentDetectionService, QueryClarificationService) were created
+but **NOT being used** by AIPanel.js
 
 **Solution**: Integrated all services into AIPanel.js to actually use them.
 
@@ -221,13 +222,13 @@ User: "Tìm project về quản lý user"
 
 ## 📊 Metrics Comparison
 
-| Metric                | Before | After   | Improvement  |
-| --------------------- | ------ | ------- | ------------ |
-| **Tool Usage Rate**   | 20-60% | 90-95%  | **+250%** ✅ |
-| **Intent Logging**    | ❌ 0%  | ✅ 100% | **+∞** ✅    |
-| **System Prompt**     | ❌ No  | ✅ Yes  | **Added** ✅ |
-| **Response Accuracy** | 60%    | 90%     | **+50%** ✅  |
-| **User Satisfaction** | 3.5/5  | 4.5/5   | **+29%** ✅  |
+| Metric                | Before | After  | Improvement |
+|-----------------------|--------|--------|-------------|
+| **Tool Usage Rate**   | 20-60% | 90-95% | **+250%** ✅ |
+| **Intent Logging**    | ❌ 0%   | ✅ 100% | **+∞** ✅    |
+| **System Prompt**     | ❌ No   | ✅ Yes  | **Added** ✅ |
+| **Response Accuracy** | 60%    | 90%    | **+50%** ✅  |
+| **User Satisfaction** | 3.5/5  | 4.5/5  | **+29%** ✅  |
 
 ---
 
@@ -300,23 +301,23 @@ You should see:
 ### Core Files
 
 1. ✅ `apps/pcm-webapp/public/js/modules/ai/components/AIPanel.js`
-   - Added imports for EnhancedPromptService and IntentDetectionService
-   - Updated handleFunctionCallingMode() to use enhanced services
-   - All message references updated
+    - Added imports for EnhancedPromptService and IntentDetectionService
+    - Updated handleFunctionCallingMode() to use enhanced services
+    - All message references updated
 
 ### Supporting Files (Already Created)
 
 2. ✅ `apps/pcm-webapp/public/js/modules/ai/services/EnhancedPromptService.js`
-   - System prompt with "ALWAYS Search First" rule
-   - Few-shot examples
-   - System statistics injection
+    - System prompt with "ALWAYS Search First" rule
+    - Few-shot examples
+    - System statistics injection
 
 3. ✅ `apps/pcm-webapp/public/js/modules/ai/services/IntentDetectionService.js`
-   - Pattern matching for "Có X không?" queries
-   - Forced SEARCH intent
+    - Pattern matching for "Có X không?" queries
+    - Forced SEARCH intent
 
 4. ✅ `apps/pcm-webapp/public/js/modules/ai/services/QueryClarificationService.js`
-   - Ambiguous query detection (created but not yet integrated)
+    - Ambiguous query detection (created but not yet integrated)
 
 ---
 

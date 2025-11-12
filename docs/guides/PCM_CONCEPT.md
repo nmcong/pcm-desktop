@@ -2,7 +2,8 @@
 
 ## 🎯 Vision
 
-**PCM (Project Code Management)** là một công cụ AI-powered được thiết kế để giúp các team phát triển và vận hành hệ thống phần mềm doanh nghiệp phức tạp có thể:
+**PCM (Project Code Management)** là một công cụ AI-powered được thiết kế để giúp các team phát triển và vận hành hệ
+thống phần mềm doanh nghiệp phức tạp có thể:
 
 1. **Hiểu** - Nhanh chóng nắm bắt kiến trúc và logic nghiệp vụ của hệ thống
 2. **Phân tích** - Sử dụng AI để phân tích code, database, và workflow
@@ -32,6 +33,7 @@ Enterprise System
 ```
 
 **Thông tin được quản lý:**
+
 - Tên và mô tả subsystem/project
 - Owner/Team chịu trách nhiệm
 - Trạng thái (Active, Maintenance, Deprecated)
@@ -43,26 +45,28 @@ Enterprise System
 Theo dõi tất cả màn hình/form trong hệ thống:
 
 **Metadata của mỗi màn hình:**
+
 - Screen ID và tên
 - Subsystem/Project liên quan
 - Screen type (List, Detail, Entry, Search, etc.)
 - Mô tả nghiệp vụ
 - **Events trên màn hình:**
-  - Button clicks (Save, Update, Delete, Search, etc.)
-  - Form submissions
-  - Field validations
-  - Data loading events
-  - Navigation events
+    - Button clicks (Save, Update, Delete, Search, etc.)
+    - Form submissions
+    - Field validations
+    - Data loading events
+    - Navigation events
 - **Source code mapping:**
-  - Frontend code files (Java, JSP, HTML, JavaScript, etc.)
-  - Controller/Action classes
-  - Service classes được gọi
-  - DAO/Repository classes
-  - Configuration files
+    - Frontend code files (Java, JSP, HTML, JavaScript, etc.)
+    - Controller/Action classes
+    - Service classes được gọi
+    - DAO/Repository classes
+    - Configuration files
 - UI mockups/screenshots
 - User roles có quyền truy cập
 
 **Use Case Example:**
+
 ```
 Screen: Customer Registration Form
 Events:
@@ -84,6 +88,7 @@ Source Files:
 Quản lý toàn bộ Oracle database objects:
 
 **Object Types:**
+
 - **Tables** - Structure, columns, constraints, indexes, partitions
 - **Views** - Definition, dependencies
 - **Stored Procedures** - Code, parameters, logic
@@ -96,6 +101,7 @@ Quản lý toàn bộ Oracle database objects:
 - **Materialized Views** - Refresh schedule, query
 
 **Metadata cho mỗi object:**
+
 - Object name và schema
 - Creation/modification date
 - Owner và permissions
@@ -106,6 +112,7 @@ Quản lý toàn bộ Oracle database objects:
 - Related screens/features
 
 **Relationship Tracking:**
+
 ```
 Table: CUSTOMERS
 ├── Referenced by:
@@ -128,34 +135,36 @@ Table: CUSTOMERS
 Quản lý thông tin về batch jobs (không phải instances, mà là metadata):
 
 **Job Configuration:**
+
 - Job ID và tên
 - Mô tả nghiệp vụ
 - **Schedule Information:**
-  - Cron expression hoặc schedule pattern
-  - Run frequency (Daily, Weekly, Monthly, etc.)
-  - Preferred execution time
-  - Time zone
+    - Cron expression hoặc schedule pattern
+    - Run frequency (Daily, Weekly, Monthly, etc.)
+    - Preferred execution time
+    - Time zone
 - **Technical Details:**
-  - Source code files
-  - Main class/entry point
-  - Parameters và configuration
-  - Database connections used
-  - Tables read/written
-  - File I/O operations
+    - Source code files
+    - Main class/entry point
+    - Parameters và configuration
+    - Database connections used
+    - Tables read/written
+    - File I/O operations
 - **Dependencies:**
-  - Predecessor jobs (must run before)
-  - Successor jobs (run after this)
-  - External system dependencies
+    - Predecessor jobs (must run before)
+    - Successor jobs (run after this)
+    - External system dependencies
 - **Error Handling:**
-  - Retry logic
-  - Alert/notification rules
-  - Fallback procedures
+    - Retry logic
+    - Alert/notification rules
+    - Fallback procedures
 - **Performance:**
-  - Expected runtime
-  - Resource requirements
-  - Historical performance metrics
+    - Expected runtime
+    - Resource requirements
+    - Historical performance metrics
 
 **Use Case Example:**
+
 ```
 Job: Daily Customer Data Import
 Schedule: Every day at 2:00 AM (Asia/Tokyo)
@@ -174,6 +183,7 @@ Dependencies:
 Quản lý và visualize quy trình nghiệp vụ:
 
 **Workflow Components:**
+
 - **Process Name** - Tên workflow
 - **Steps** - Các bước trong quy trình
 - **Decision Points** - Điều kiện rẽ nhánh
@@ -182,12 +192,14 @@ Quản lý và visualize quy trình nghiệp vụ:
 - **Data Flow** - Dữ liệu truyền giữa các bước
 
 **Workflow Types:**
+
 - Manual workflows (user-driven)
 - Automated workflows (system-driven)
 - Hybrid workflows
 - Approval workflows
 
 **Example:**
+
 ```
 Workflow: Customer Order Process
 1. Customer submits order (Order Entry Screen)
@@ -209,6 +221,7 @@ Workflow: Customer Order Process
 Tập trung hóa tài liệu và kiến thức về hệ thống:
 
 **Document Categories:**
+
 - **Business Rules** - Nghiệp vụ rules và logic
 - **Technical Specifications** - Spec kỹ thuật
 - **Architecture Documents** - Kiến trúc hệ thống
@@ -221,6 +234,7 @@ Tập trung hóa tài liệu và kiến thức về hệ thống:
 - **Training Materials** - User guides, tutorials
 
 **Features:**
+
 - Full-text search
 - Version control
 - Tags và categories
@@ -273,6 +287,7 @@ A: - Order Entry Screen
 ### LLM Integration
 
 **Supported Models:**
+
 - OpenAI GPT-4
 - Anthropic Claude
 - Google Gemini
@@ -280,6 +295,7 @@ A: - Order Entry Screen
 - Custom/Local LLMs
 
 **AI Capabilities:**
+
 - Code analysis và explanation
 - Dependency tracing
 - Impact analysis
@@ -365,21 +381,25 @@ KNOWLEDGE_LINKS (entry_id, linked_entity_type, linked_entity_id)
 ## 🎯 Use Cases
 
 ### For System Analysts
+
 - **Understand system architecture** - "Show me all subsystems and their relationships"
 - **Analyze business flows** - "What is the workflow for order processing?"
 - **Find functionality** - "Which screens handle customer registration?"
 
 ### For Developers
+
 - **Code navigation** - "Show me all code files for order entry screen"
 - **Dependency analysis** - "What will be impacted if I change table CUSTOMERS?"
 - **Debug assistance** - "Which batch job updates the INVENTORY table?"
 
 ### For DBAs
+
 - **Schema exploration** - "List all tables in CUSTOMER schema"
 - **Dependency tracking** - "What objects depend on table ORDERS?"
 - **Performance analysis** - "Which procedures take longest to execute?"
 
 ### For Project Managers
+
 - **Complexity assessment** - "How many screens are in Customer Management subsystem?"
 - **Resource planning** - "What components need refactoring?"
 - **Impact analysis** - "What will be affected by this new requirement?"
@@ -389,18 +409,21 @@ KNOWLEDGE_LINKS (entry_id, linked_entity_type, linked_entity_id)
 ## 🚀 Future Enhancements
 
 ### Phase 2
+
 - Real-time code parsing và auto-sync
 - Git integration để track changes
 - Visual workflow designer
 - Advanced code metrics và quality analysis
 
 ### Phase 3
+
 - Multi-database support (PostgreSQL, MySQL, SQL Server)
 - API management
 - Test coverage tracking
 - CI/CD integration
 
 ### Phase 4
+
 - Collaborative features (comments, annotations)
 - Version comparison
 - AI-powered code refactoring suggestions
@@ -411,16 +434,19 @@ KNOWLEDGE_LINKS (entry_id, linked_entity_type, linked_entity_id)
 ## 📊 Benefits
 
 ### Time Savings
+
 - **90% faster** system understanding for new team members
 - **70% reduction** in time spent searching for code
 - **50% faster** impact analysis for changes
 
 ### Quality Improvements
+
 - Better code documentation
 - Reduced knowledge silos
 - Improved system maintainability
 
 ### Risk Reduction
+
 - Clear dependency tracking
 - Impact analysis before changes
 - Centralized knowledge retention

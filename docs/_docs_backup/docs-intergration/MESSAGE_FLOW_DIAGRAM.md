@@ -607,7 +607,7 @@ stateDiagram-v2
 ### Diagram Types
 
 | Diagram              | Purpose                              | Best For                          |
-| -------------------- | ------------------------------------ | --------------------------------- |
+|----------------------|--------------------------------------|-----------------------------------|
 | **Sequence Diagram** | Show interactions between components | Understanding communication flow  |
 | **Flowchart**        | Show decision logic                  | Understanding control flow        |
 | **State Machine**    | Show state transitions               | Understanding component lifecycle |

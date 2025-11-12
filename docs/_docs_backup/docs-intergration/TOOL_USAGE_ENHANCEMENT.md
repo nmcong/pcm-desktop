@@ -20,7 +20,8 @@
 ❌ "Có, chúng tôi có dịch vụ chăm sóc khách hàng để hỗ trợ bạn..."
 ```
 
-**Issue**: LLM thinks user is asking about PCM's customer support, NOT searching for "customer service" feature in the database.
+**Issue**: LLM thinks user is asking about PCM's customer support, NOT searching for "customer service" feature in the
+database.
 
 ### Expected Behavior
 
@@ -40,9 +41,9 @@
 
 Câu hỏi có 2 cách hiểu:
 
-| Interpretation                                 | What LLM Does                      | Should Do          |
-| ---------------------------------------------- | ---------------------------------- | ------------------ |
-| **"Does PCM have support?"**                   | ❌ Answer about PCM's support team | Search database    |
+| Interpretation                                 | What LLM Does                     | Should Do         |
+|------------------------------------------------|-----------------------------------|-------------------|
+| **"Does PCM have support?"**                   | ❌ Answer about PCM's support team | Search database   |
 | **"Is there customer service IN the system?"** | ✅ Search database                 | ✅ This is correct |
 
 ### 2. System Prompt Not Clear
@@ -414,31 +415,31 @@ if (
 ### Phase 1: Quick Fix (15 minutes)
 
 1. ✅ **Update system prompt** (Solution 1)
-   - Clarify AI's role
-   - Add "Search First" rule
-   - Add examples
+    - Clarify AI's role
+    - Add "Search First" rule
+    - Add examples
 
 **Impact**: Immediate improvement in tool usage
 
 ### Phase 2: Better Examples (10 minutes)
 
 2. ✅ **Add few-shot examples** (Solution 2)
-   - Add ambiguous query examples
-   - Show correct behavior
+    - Add ambiguous query examples
+    - Show correct behavior
 
 **Impact**: Better learning from examples
 
 ### Phase 3: Advanced (30 minutes)
 
 3. ✅ **Add clarification service** (Solution 3)
-   - Detect ambiguous queries
-   - Ask for clarification
+    - Detect ambiguous queries
+    - Ask for clarification
 
 **Impact**: Better UX, fewer misunderstandings
 
 4. ✅ **Update intent detection** (Solution 4)
-   - Better pattern matching
-   - Force SEARCH intent for certain patterns
+    - Better pattern matching
+    - Force SEARCH intent for certain patterns
 
 **Impact**: More accurate intent detection
 
@@ -487,20 +488,20 @@ After fix: ✅ Search then report "not found"
 ### Before Fix
 
 | Query Type    | Tool Usage | Response Quality     |
-| ------------- | ---------- | -------------------- |
-| "Có X không?" | ❌ 20%     | ❌ Often guesses     |
+|---------------|------------|----------------------|
+| "Có X không?" | ❌ 20%      | ❌ Often guesses      |
 | "Show me X"   | ⚠️ 60%     | ⚠️ Sometimes correct |
-| "Find X"      | ✅ 80%     | ✅ Usually correct   |
+| "Find X"      | ✅ 80%      | ✅ Usually correct    |
 | "Analyze X"   | ⚠️ 50%     | ⚠️ May skip search   |
 
 ### After Fix
 
-| Query Type    | Tool Usage | Response Quality         |
-| ------------- | ---------- | ------------------------ |
-| "Có X không?" | ✅ 90%     | ✅ Searches first        |
-| "Show me X"   | ✅ 95%     | ✅ Searches or clarifies |
-| "Find X"      | ✅ 95%     | ✅ Consistently correct  |
-| "Analyze X"   | ✅ 90%     | ✅ Search then analyze   |
+| Query Type    | Tool Usage | Response Quality        |
+|---------------|------------|-------------------------|
+| "Có X không?" | ✅ 90%      | ✅ Searches first        |
+| "Show me X"   | ✅ 95%      | ✅ Searches or clarifies |
+| "Find X"      | ✅ 95%      | ✅ Consistently correct  |
+| "Analyze X"   | ✅ 90%      | ✅ Search then analyze   |
 
 **Overall improvement**: 20% → 90% tool usage rate
 
@@ -511,17 +512,17 @@ After fix: ✅ Search then report "not found"
 ### Files to Edit
 
 1. **`services/EnhancedPromptService.js`**
-   - Update system prompt (lines 18-64)
-   - Add few-shot examples
+    - Update system prompt (lines 18-64)
+    - Add few-shot examples
 
 2. **`services/IntentDetectionService.js`**
-   - Add database search patterns
+    - Add database search patterns
 
 3. **`services/QueryClarificationService.js`** (new)
-   - Create clarification logic
+    - Create clarification logic
 
 4. **`components/AIPanel.js`**
-   - Integrate clarification check
+    - Integrate clarification check
 
 ### Documentation
 

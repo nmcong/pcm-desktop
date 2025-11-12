@@ -79,6 +79,7 @@ LLMResponse response2 = chat.send();
 ## 📋 Common Configurations
 
 ### OpenAI
+
 ```java
 .provider(Provider.OPENAI)
 .url("https://api.openai.com/v1/chat/completions")
@@ -86,7 +87,8 @@ LLMResponse response2 = chat.send();
 .model("gpt-4") // or "gpt-3.5-turbo"
 ```
 
-### Anthropic Claude  
+### Anthropic Claude
+
 ```java
 .provider(Provider.ANTHROPIC)
 .url("https://api.anthropic.com/v1/messages")
@@ -96,6 +98,7 @@ LLMResponse response2 = chat.send();
 ```
 
 ### Local Ollama
+
 ```java
 .provider(Provider.OLLAMA) 
 .url("http://localhost:11434/api/chat")
@@ -151,9 +154,9 @@ String response2 = llmService.chat("Hello");
 3. **Error Handling**: Always wrap in try-catch
 4. **Token Limits**: Monitor usage with `response.getUsage()`
 5. **Models**: Choose appropriate model for your use case:
-   - `gpt-3.5-turbo`: Fast, cost-effective
-   - `gpt-4`: More capable, slower, expensive
-   - `claude-3-5-sonnet`: Great reasoning, long context
+    - `gpt-3.5-turbo`: Fast, cost-effective
+    - `gpt-4`: More capable, slower, expensive
+    - `claude-3-5-sonnet`: Great reasoning, long context
 
 ## 📁 File Structure
 

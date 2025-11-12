@@ -2,7 +2,8 @@
 
 ## 📋 Tổng Quan
 
-Vector Database đã được update để sử dụng **local vendor files** thay vì load từ CDN. Điều này mang lại nhiều lợi ích cho offline capability.
+Vector Database đã được update để sử dụng **local vendor files** thay vì load từ CDN. Điều này mang lại nhiều lợi ích
+cho offline capability.
 
 ---
 
@@ -55,7 +56,7 @@ await this.loadScript("/vendor/tfjs@latest.js");
 ### 2. Faster Load Time
 
 | Source    | First Load      | Subsequent Load |
-| --------- | --------------- | --------------- |
+|-----------|-----------------|-----------------|
 | **CDN**   | ~3-5s (network) | ~1-2s (cache)   |
 | **Local** | ~0.5-1s         | ~0.3-0.5s       |
 
@@ -177,10 +178,10 @@ Successfully loaded: /vendor/tfjs@latest.js
 ### Test Results (Measured on demo page)
 
 | Metric               | CDN (Before) | Local (After) | Improvement    |
-| -------------------- | ------------ | ------------- | -------------- |
+|----------------------|--------------|---------------|----------------|
 | **First Load**       | 3.2s         | 0.8s          | **75% faster** |
 | **Cached Load**      | 1.5s         | 0.4s          | **73% faster** |
-| **Offline Ready**    | ❌ No        | ✅ Yes        | **Immediate**  |
+| **Offline Ready**    | ❌ No         | ✅ Yes         | **Immediate**  |
 | **Network Requests** | 2 external   | 0 external    | **100% local** |
 
 ### Load Timeline
@@ -349,7 +350,7 @@ async initializeBrowserModel() {
 ### Vendor Files
 
 | File                                  | Size  | Compressed  | Load Time (Local) |
-| ------------------------------------- | ----- | ----------- | ----------------- |
+|---------------------------------------|-------|-------------|-------------------|
 | **tfjs@latest.js**                    | 2.5MB | ~800KB gzip | ~200-300ms        |
 | **universal-sentence-encoder.min.js** | 1.8MB | ~600KB gzip | ~150-250ms        |
 | **Total**                             | 4.3MB | ~1.4MB      | ~400-600ms        |
@@ -357,7 +358,7 @@ async initializeBrowserModel() {
 ### Comparison
 
 | Storage                 | Size    | Notes                                  |
-| ----------------------- | ------- | -------------------------------------- |
+|-------------------------|---------|----------------------------------------|
 | **Local Vendor**        | 4.3MB   | One-time storage cost                  |
 | **Browser Cache (CDN)** | 4.3MB   | Same, but requires internet first time |
 | **IndexedDB (Vectors)** | ~2-10MB | Depends on data                        |

@@ -16,10 +16,10 @@
 - ✅ Lines 20-131: Completely rewritten system prompt
 - ✅ Added clear role definition: "query assistant for database", NOT "support agent"
 - ✅ Added 4 critical rules:
-  - Rule 1: ALWAYS Search First
-  - Rule 2: Never Guess or Assume
-  - Rule 3: Clarify Ambiguous Queries
-  - Rule 4: Context is Database Content
+    - Rule 1: ALWAYS Search First
+    - Rule 2: Never Guess or Assume
+    - Rule 3: Clarify Ambiguous Queries
+    - Rule 4: Context is Database Content
 - ✅ Added explicit examples of WRONG vs CORRECT behavior
 - ✅ Added specific Vietnamese query patterns ("Có X không?")
 
@@ -186,8 +186,8 @@ if (
 
 ### Metrics Comparison
 
-| Metric                    | Before | After  | Improvement  |
-| ------------------------- | ------ | ------ | ------------ |
+| Metric                    | Before | After  | Improvement |
+|---------------------------|--------|--------|-------------|
 | **Tool Usage Rate**       | 20-60% | 90-95% | **+250%** ✅ |
 | **Response Accuracy**     | 60%    | 90%    | **+50%** ✅  |
 | **"Có X không?" Queries** | 20%    | 90%    | **+350%** ✅ |
@@ -196,12 +196,12 @@ if (
 
 ### Query Type Performance
 
-| Query Type    | Before Tool Usage | After Tool Usage | Status      |
-| ------------- | ----------------- | ---------------- | ----------- |
-| "Có X không?" | ❌ 20%            | ✅ 90%           | Fixed ✅    |
-| "Show me X"   | ⚠️ 60%            | ✅ 95%           | Improved ✅ |
-| "Find X"      | ✅ 80%            | ✅ 95%           | Better ✅   |
-| "Analyze X"   | ⚠️ 50%            | ✅ 90%           | Fixed ✅    |
+| Query Type    | Before Tool Usage | After Tool Usage | Status     |
+|---------------|-------------------|------------------|------------|
+| "Có X không?" | ❌ 20%             | ✅ 90%            | Fixed ✅    |
+| "Show me X"   | ⚠️ 60%            | ✅ 95%            | Improved ✅ |
+| "Find X"      | ✅ 80%             | ✅ 95%            | Better ✅   |
+| "Analyze X"   | ⚠️ 50%            | ✅ 90%            | Fixed ✅    |
 
 ---
 
@@ -309,7 +309,8 @@ if (needsClarification(message, intent)) {
 // Continue with normal AI call...
 ```
 
-**Note**: This is OPTIONAL. The enhanced system prompt already instructs LLM to ask for clarification when needed. This code makes it happen client-side before calling LLM (saves API calls).
+**Note**: This is OPTIONAL. The enhanced system prompt already instructs LLM to ask for clarification when needed. This
+code makes it happen client-side before calling LLM (saves API calls).
 
 ---
 
@@ -318,27 +319,27 @@ if (needsClarification(message, intent)) {
 ### Core Files
 
 1. ✅ `services/EnhancedPromptService.js`
-   - Lines 20-131: System prompt
-   - Lines 336-372: Few-shot examples
+    - Lines 20-131: System prompt
+    - Lines 336-372: Few-shot examples
 
 2. ✅ `services/IntentDetectionService.js`
-   - Lines 79-96: Added existence query patterns
+    - Lines 79-96: Added existence query patterns
 
 ### New Files
 
 3. ✅ `services/QueryClarificationService.js` (NEW)
-   - Complete clarification logic
+    - Complete clarification logic
 
 ### Documentation
 
 4. ✅ `docs-intergration/TOOL_USAGE_ENHANCEMENT.md`
-   - Problem analysis and solutions
+    - Problem analysis and solutions
 
 5. ✅ `docs-intergration/TOOL_USAGE_IMPLEMENTATION_COMPLETE.md` (NEW)
-   - This file - implementation summary
+    - This file - implementation summary
 
 6. ✅ `docs-intergration/README.md`
-   - Updated with links to new guides
+    - Updated with links to new guides
 
 ---
 

@@ -2,7 +2,9 @@
 
 ## Tổng Quan
 
-Tài liệu này nghiên cứu về các phương án tích hợp Java Abstract Syntax Tree (AST) vào hệ thống PCM WebApp để LLM có thể hiểu và phân tích source code Java một cách hiệu quả. Do việc xử lý trực tiếp file trong `apps/pcm-webapp` là bất khả thi, chúng ta cần tìm các phương án thay thế với độ chính xác cao.
+Tài liệu này nghiên cứu về các phương án tích hợp Java Abstract Syntax Tree (AST) vào hệ thống PCM WebApp để LLM có thể
+hiểu và phân tích source code Java một cách hiệu quả. Do việc xử lý trực tiếp file trong `apps/pcm-webapp` là bất khả
+thi, chúng ta cần tìm các phương án thay thế với độ chính xác cao.
 
 ## 1. Khảo Sát Hệ Thống Hiện Tại
 
@@ -13,10 +15,10 @@ PCM WebApp là một ứng dụng web single-page được xây dựng với:
 - **Frontend**: Vanilla JavaScript với module system
 - **Architecture**: Component-based với các modules độc lập
 - **Core Components**:
-  - AI Panel (`public/js/modules/ai/`) - Hệ thống AI tích hợp
-  - Codebase Manager (`public/js/modules/codebase/`) - Quản lý source code
-  - Database Objects (`public/js/modules/db-objects/`) - Quản lý objects database
-  - Screen Source (`public/js/modules/screen-source/`) - Quản lý source code của màn hình
+    - AI Panel (`public/js/modules/ai/`) - Hệ thống AI tích hợp
+    - Codebase Manager (`public/js/modules/codebase/`) - Quản lý source code
+    - Database Objects (`public/js/modules/db-objects/`) - Quản lý objects database
+    - Screen Source (`public/js/modules/screen-source/`) - Quản lý source code của màn hình
 
 ### 1.2 Hạn Chế Hiện Tại
 
@@ -106,9 +108,9 @@ PCM WebApp là một ứng dụng web single-page được xây dựng với:
 - **TypeScript**: `tree-sitter/tree-sitter-typescript`
 - **Tình trạng**: Official, excellent support
 - **Tính năng**:
-  - ECMAScript specification compliance
-  - JSX/TSX support tích hợp
-  - Cả JS và TS variants đều có sẵn
+    - ECMAScript specification compliance
+    - JSX/TSX support tích hợp
+    - Cả JS và TS variants đều có sẵn
 
 #### 3.1.2 JSP (JavaServer Pages) - **HỖ TRỢ COMMUNITY** ⚠️
 
@@ -480,9 +482,9 @@ PCM WebApp (Browser) → REST API → Java AST Microservice → Database/Cache
 
 - **Backend Service**: Spring Boot microservice sử dụng JavaParser
 - **API Endpoints**:
-  - `POST /api/ast/parse` - Parse Java source code
-  - `GET /api/ast/analyze/{id}` - Lấy AST analysis
-  - `POST /api/ast/semantic` - Semantic analysis
+    - `POST /api/ast/parse` - Parse Java source code
+    - `GET /api/ast/analyze/{id}` - Lấy AST analysis
+    - `POST /api/ast/semantic` - Semantic analysis
 - **Containerization**: Docker container với Java runtime
 - **Caching**: Redis cache cho parsed AST
 - **Output**: JSON-formatted AST cho LLM consumption
@@ -580,27 +582,27 @@ PCM WebApp → WebSocket → Java LSP Server → AST Analysis
 
 ### 4.1 Ma Trận Đánh Giá
 
-| Tiêu chí             | Microservice | Tree-sitter WASM | Hybrid     | LSP        |
-| -------------------- | ------------ | ---------------- | ---------- | ---------- |
-| **Độ chính xác AST** | ⭐⭐⭐⭐⭐   | ⭐⭐⭐           | ⭐⭐⭐⭐   | ⭐⭐⭐⭐⭐ |
-| **Performance**      | ⭐⭐⭐       | ⭐⭐⭐⭐⭐       | ⭐⭐⭐⭐   | ⭐⭐⭐     |
-| **Complexity**       | ⭐⭐         | ⭐⭐⭐⭐         | ⭐⭐       | ⭐⭐       |
-| **Scalability**      | ⭐⭐⭐⭐⭐   | ⭐⭐⭐           | ⭐⭐⭐⭐   | ⭐⭐⭐⭐   |
-| **LLM Integration**  | ⭐⭐⭐⭐     | ⭐⭐⭐⭐         | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐   |
-| **Maintenance**      | ⭐⭐⭐       | ⭐⭐⭐⭐         | ⭐⭐       | ⭐⭐⭐     |
+| Tiêu chí             | Microservice | Tree-sitter WASM | Hybrid | LSP   |
+|----------------------|--------------|------------------|--------|-------|
+| **Độ chính xác AST** | ⭐⭐⭐⭐⭐        | ⭐⭐⭐              | ⭐⭐⭐⭐   | ⭐⭐⭐⭐⭐ |
+| **Performance**      | ⭐⭐⭐          | ⭐⭐⭐⭐⭐            | ⭐⭐⭐⭐   | ⭐⭐⭐   |
+| **Complexity**       | ⭐⭐           | ⭐⭐⭐⭐             | ⭐⭐     | ⭐⭐    |
+| **Scalability**      | ⭐⭐⭐⭐⭐        | ⭐⭐⭐              | ⭐⭐⭐⭐   | ⭐⭐⭐⭐  |
+| **LLM Integration**  | ⭐⭐⭐⭐         | ⭐⭐⭐⭐             | ⭐⭐⭐⭐⭐  | ⭐⭐⭐⭐  |
+| **Maintenance**      | ⭐⭐⭐          | ⭐⭐⭐⭐             | ⭐⭐     | ⭐⭐⭐   |
 
 ### 4.2 Ma Trận Đánh Giá Cập Nhật (Bao Gồm Multi-Language)
 
-| Tiêu chí             | Microservice | Tree-sitter Universal | Hybrid Multi-Lang | LSP        |
-| -------------------- | ------------ | --------------------- | ----------------- | ---------- |
-| **Độ chính xác AST** | ⭐⭐⭐⭐⭐   | ⭐⭐⭐⭐              | ⭐⭐⭐⭐⭐        | ⭐⭐⭐⭐⭐ |
-| **Multi-Language**   | ⭐⭐⭐       | ⭐⭐⭐⭐⭐            | ⭐⭐⭐⭐⭐        | ⭐⭐⭐     |
-| **Performance**      | ⭐⭐⭐       | ⭐⭐⭐⭐⭐            | ⭐⭐⭐⭐          | ⭐⭐⭐     |
-| **Complexity**       | ⭐⭐         | ⭐⭐⭐⭐              | ⭐⭐⭐            | ⭐⭐       |
-| **Scalability**      | ⭐⭐⭐⭐⭐   | ⭐⭐⭐⭐              | ⭐⭐⭐⭐⭐        | ⭐⭐⭐⭐   |
-| **LLM Integration**  | ⭐⭐⭐⭐     | ⭐⭐⭐⭐⭐            | ⭐⭐⭐⭐⭐        | ⭐⭐⭐⭐   |
-| **Maintenance**      | ⭐⭐⭐       | ⭐⭐⭐⭐⭐            | ⭐⭐⭐            | ⭐⭐⭐     |
-| **Future-Proof**     | ⭐⭐⭐       | ⭐⭐⭐⭐⭐            | ⭐⭐⭐⭐          | ⭐⭐⭐     |
+| Tiêu chí             | Microservice | Tree-sitter Universal | Hybrid Multi-Lang | LSP   |
+|----------------------|--------------|-----------------------|-------------------|-------|
+| **Độ chính xác AST** | ⭐⭐⭐⭐⭐        | ⭐⭐⭐⭐                  | ⭐⭐⭐⭐⭐             | ⭐⭐⭐⭐⭐ |
+| **Multi-Language**   | ⭐⭐⭐          | ⭐⭐⭐⭐⭐                 | ⭐⭐⭐⭐⭐             | ⭐⭐⭐   |
+| **Performance**      | ⭐⭐⭐          | ⭐⭐⭐⭐⭐                 | ⭐⭐⭐⭐              | ⭐⭐⭐   |
+| **Complexity**       | ⭐⭐           | ⭐⭐⭐⭐                  | ⭐⭐⭐               | ⭐⭐    |
+| **Scalability**      | ⭐⭐⭐⭐⭐        | ⭐⭐⭐⭐                  | ⭐⭐⭐⭐⭐             | ⭐⭐⭐⭐  |
+| **LLM Integration**  | ⭐⭐⭐⭐         | ⭐⭐⭐⭐⭐                 | ⭐⭐⭐⭐⭐             | ⭐⭐⭐⭐  |
+| **Maintenance**      | ⭐⭐⭐          | ⭐⭐⭐⭐⭐                 | ⭐⭐⭐               | ⭐⭐⭐   |
+| **Future-Proof**     | ⭐⭐⭐          | ⭐⭐⭐⭐⭐                 | ⭐⭐⭐⭐              | ⭐⭐⭐   |
 
 ### 4.3 Khuyến Nghị Chính
 
@@ -766,7 +768,8 @@ Tree-sitter Universal Multi-Language Parser là phương án tối ưu nhất ch
 - **Cost-effective** solution không cần backend phức tạp
 - **Developer experience** tuyệt vời với kiến trúc modular
 
-Phương án này không chỉ nâng cao khả năng hiểu source code Java mà còn mở ra tiềm năng phân tích đa ngôn ngữ toàn diện cho LLM trong PCM WebApp, tạo nền tảng vững chắc cho việc phát triển các tính năng AI tiên tiến trong tương lai.
+Phương án này không chỉ nâng cao khả năng hiểu source code Java mà còn mở ra tiềm năng phân tích đa ngôn ngữ toàn diện
+cho LLM trong PCM WebApp, tạo nền tảng vững chắc cho việc phát triển các tính năng AI tiên tiến trong tương lai.
 
 ---
 

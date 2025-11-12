@@ -13,7 +13,8 @@
 
 ## 🎯 Tổng Quan
 
-Để AI LLM có thể hiểu và thực hiện yêu cầu đa dạng nhất có thể, chúng ta đã xây dựng một hệ thống **5 lớp** hoạt động cùng nhau:
+Để AI LLM có thể hiểu và thực hiện yêu cầu đa dạng nhất có thể, chúng ta đã xây dựng một hệ thống **5 lớp** hoạt động
+cùng nhau:
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
@@ -421,10 +422,10 @@ Meta-function xử lý complex queries.
 2. Analyze và tìm patterns
 3. Generate insights
 4. Format response với:
-   - Summary (tóm tắt)
-   - Details (chi tiết)
-   - Insights (phát hiện)
-   - Next Steps (gợi ý tiếp theo)
+    - Summary (tóm tắt)
+    - Details (chi tiết)
+    - Insights (phát hiện)
+    - Next Steps (gợi ý tiếp theo)
 
 **Ví dụ Multi-Tool Response**:
 

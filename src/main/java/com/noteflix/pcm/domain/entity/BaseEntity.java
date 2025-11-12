@@ -1,6 +1,7 @@
 package com.noteflix.pcm.domain.entity;
 
 import lombok.Data;
+
 import java.time.LocalDateTime;
 
 /**
@@ -9,11 +10,11 @@ import java.time.LocalDateTime;
  */
 @Data
 public abstract class BaseEntity {
-    
+
     private Long id;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-    
+
     /**
      * Called before entity is persisted
      */
@@ -24,14 +25,14 @@ public abstract class BaseEntity {
         }
         updatedAt = now;
     }
-    
+
     /**
      * Called before entity is updated
      */
     public void preUpdate() {
         updatedAt = LocalDateTime.now();
     }
-    
+
     /**
      * Check if entity is new (not yet persisted)
      */

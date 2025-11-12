@@ -4,11 +4,14 @@
 
 ## 📋 Overview
 
-PCM Desktop là ứng dụng desktop AI-powered sử dụng Large Language Models (LLM) để phân tích và quản lý toàn bộ hệ thống phần mềm doanh nghiệp. Ứng dụng cho phép người dùng đặt câu hỏi và nhận được phân tích chi tiết về source code, nghiệp vụ, database, và các thành phần hệ thống.
+PCM Desktop là ứng dụng desktop AI-powered sử dụng Large Language Models (LLM) để phân tích và quản lý toàn bộ hệ thống
+phần mềm doanh nghiệp. Ứng dụng cho phép người dùng đặt câu hỏi và nhận được phân tích chi tiết về source code, nghiệp
+vụ, database, và các thành phần hệ thống.
 
 ## ✨ Core Features
 
 ### 🤖 AI-Powered Analysis
+
 - **Multi-LLM Support** - Tích hợp OpenAI GPT, Anthropic Claude, Ollama
 - **Streaming Responses** - Real-time AI responses với streaming support
 - **Function Calling** - AI có thể gọi functions để thực hiện tasks
@@ -17,13 +20,15 @@ PCM Desktop là ứng dụng desktop AI-powered sử dụng Large Language Model
 - **Conversation Memory** - Multi-turn conversations với context
 
 ### 📊 System Management
+
 - **Projects & Subsystems** - Quản lý cấu trúc hệ thống phân cấp
-- **Screen/Form Management** - Theo dõi tất cả màn hình trong hệ thống  
+- **Screen/Form Management** - Theo dõi tất cả màn hình trong hệ thống
 - **Event Tracking** - Quản lý events và sự kiện trên từng màn hình
 - **Source Code Mapping** - Liên kết source code với màn hình tương ứng
 - **Activity Logging** - Theo dõi mọi thay đổi trong hệ thống
 
 ### 🗄️ Database Management
+
 - **SQLite Metadata Storage** - Local database để lưu trữ metadata
 - **Database Migration System** - Tự động migrate schema với versioning
 - **Schema Version Control** - Theo dõi và quản lý phiên bản database
@@ -31,24 +36,28 @@ PCM Desktop là ứng dụng desktop AI-powered sử dụng Large Language Model
 - **Index Management** - Tối ưu hóa performance với proper indexing
 
 ### 💬 Chat System
+
 - **Multi-LLM Conversations** - Chat với AI qua nhiều providers
 - **Conversation History** - Lưu trữ và quản lý lịch sử chat
 - **Message Threading** - Organize conversations theo topics
 - **Search & Filter** - Tìm kiếm trong conversation history
 - **Export Conversations** - Export chat history ra nhiều formats
 
-### ⚙️ Batch Job Management  
+### ⚙️ Batch Job Management
+
 - **Job Configuration** - Thông tin cấu hình batch jobs
 - **Schedule Information** - Thời gian chạy và tần suất
 - **Code Analysis** - Source code của batch jobs
 - **Dependencies** - Mối quan hệ giữa các jobs
 
 ### 🔄 Workflow Management
+
 - **Business Process Flows** - Quản lý quy trình nghiệp vụ
 - **Workflow Visualization** - Hiển thị workflow diagram
 - **Process Documentation** - Tài liệu hóa quy trình
 
 ### 📚 Knowledge Base
+
 - **System Documentation** - Tài liệu hệ thống tập trung
 - **Business Rules** - Quản lý nghiệp vụ rules
 - **Technical Specifications** - Spec kỹ thuật
@@ -57,6 +66,7 @@ PCM Desktop là ứng dụng desktop AI-powered sử dụng Large Language Model
 ## 🛠️ Tech Stack
 
 ### Backend & Core
+
 - **Java 21** - Programming language
 - **JavaFX 21.0.9** - Modern UI framework (compatible with Java 21)
 - **Lombok 1.18.34** - Reduce boilerplate code (Latest stable)
@@ -65,13 +75,15 @@ PCM Desktop là ứng dụng desktop AI-powered sử dụng Large Language Model
 - **Logback 1.5.12** - Advanced logging framework (Latest)
 
 ### Database & Migration
+
 - **Database Migration Manager** - Custom migration system with versioning
 - **Transaction Support** - ACID compliance with rollback capability
 - **Schema Version Control** - Track và manage database versions
 - **Idempotent Migrations** - Safe để run multiple times
 - **Index Optimization** - Performance tuning với proper indexing
 
-### UI & User Experience  
+### UI & User Experience
+
 - **AtlantaFX** - Modern JavaFX theme framework
 - **Pure Java UI** - No FXML, code-first approach
 - **Responsive Design** - Adaptive layouts
@@ -79,6 +91,7 @@ PCM Desktop là ứng dụng desktop AI-powered sử dụng Large Language Model
 - **Component Library** - Reusable UI components
 
 ### AI & Analysis
+
 - **Multi-LLM Integration** - OpenAI, Anthropic Claude, Ollama support
 - **Streaming Responses** - Real-time AI conversation
 - **Function Calling** - AI can execute system functions
@@ -86,6 +99,7 @@ PCM Desktop là ứng dụng desktop AI-powered sử dụng Large Language Model
 - **Context Awareness** - Multi-turn conversations
 
 ### Architecture
+
 - **No Build Tool Required** - Direct JAR import for simplicity
 - **Domain-Driven Design** - Clean architecture principles
 - **Repository Pattern** - Data access abstraction layer
@@ -192,7 +206,7 @@ pcm-desktop/
 
 ## 🚀 Quick Start
 
-### Method 1: Fastest Start (Recommended) 
+### Method 1: Fastest Start (Recommended)
 
 ```bash
 # macOS/Linux - One-line setup and run
@@ -207,16 +221,19 @@ pcm-desktop/
 #### Step 1: Setup Dependencies
 
 **macOS/Linux:**
+
 ```bash
 ./scripts/setup.sh
 ```
 
 **Windows:**
+
 ```bash
 .\scripts\setup.bat
 ```
 
 This automatically:
+
 - Downloads all required libraries to `lib/others/`
 - Downloads correct JavaFX 21.0.9 for your platform to `lib/javafx/`
 - Sets up the development environment
@@ -249,12 +266,14 @@ This automatically:
 #### Download Libraries Manually
 
 **macOS/Linux:**
+
 ```bash
 chmod +x download-libs.sh
 ./download-libs.sh
 ```
 
 **Windows:**
+
 ```powershell
 powershell -ExecutionPolicy Bypass -File download-libs.ps1
 ```
@@ -266,12 +285,14 @@ powershell -ExecutionPolicy Bypass -File download-libs.ps1
 **Visit:** https://gluonhq.com/products/javafx/
 
 **Download for your platform:**
+
 - macOS (Apple Silicon): `openjfx-21.0.9_osx-aarch64_bin-sdk.zip`
-- macOS (Intel): `openjfx-21.0.9_osx-x64_bin-sdk.zip`  
+- macOS (Intel): `openjfx-21.0.9_osx-x64_bin-sdk.zip`
 - Windows: `openjfx-21.0.9_windows-x64_bin-sdk.zip`
 - Linux: `openjfx-21.0.9_linux-x64_bin-sdk.zip`
 
 **Extract and install:**
+
 1. Extract the downloaded ZIP file
 2. Navigate to `javafx-sdk-21.0.9/lib/` folder
 3. Copy all `.jar` files to `pcm-desktop/lib/javafx/`
@@ -293,37 +314,38 @@ After running the application successfully with scripts, you can optionally set 
 ### IntelliJ IDEA (Recommended)
 
 1. **Open Project:**
-   - File → Open → Select `pcm-desktop` folder
+    - File → Open → Select `pcm-desktop` folder
 
 2. **Add Libraries:**
-   - File → Project Structure (⌘;) → Libraries
-   - Click `+` → Java → Select `lib/javafx` → Add all JARs
-   - Click `+` → Java → Select `lib/others` → Add all JARs  
-   - Click `+` → Java → Select `lib/text-component` → Add all JARs
-   - Click Apply
+    - File → Project Structure (⌘;) → Libraries
+    - Click `+` → Java → Select `lib/javafx` → Add all JARs
+    - Click `+` → Java → Select `lib/others` → Add all JARs
+    - Click `+` → Java → Select `lib/text-component` → Add all JARs
+    - Click Apply
 
 3. **Configure Lombok:**
-   - Settings (⌘,) → Plugins → Install "Lombok"
-   - Settings → Compiler → Annotation Processors
-   - ✅ Enable annotation processing
-   - Click Apply
+    - Settings (⌘,) → Plugins → Install "Lombok"
+    - Settings → Compiler → Annotation Processors
+    - ✅ Enable annotation processing
+    - Click Apply
 
 4. **Create Run Configuration:**
-   - Run → Edit Configurations → Add New (+) → Application
-   - Name: `PCM Desktop`
-   - Main class: `com.noteflix.pcm.PCMApplication`
-   - VM options:
-     ```
-     --module-path lib/javafx --add-modules javafx.controls,javafx.fxml,javafx.web,javafx.media
-     ```
-   - Click Apply
+    - Run → Edit Configurations → Add New (+) → Application
+    - Name: `PCM Desktop`
+    - Main class: `com.noteflix.pcm.PCMApplication`
+    - VM options:
+      ```
+      --module-path lib/javafx --add-modules javafx.controls,javafx.fxml,javafx.web,javafx.media
+      ```
+    - Click Apply
 
 5. **Run Application:**
-   - Click Run button ▶️ or press ⌃R
+    - Click Run button ▶️ or press ⌃R
 
 ### Other IDEs
 
 For Eclipse, VS Code, and other IDEs, see:
+
 - **[IntelliJ Setup Guide](docs/setup/intellij-setup.md)** - Detailed IntelliJ configuration
 - **[Library Setup Guide](docs/setup/library-setup.md)** - Multi-IDE library setup
 - **[Run Configuration Guide](docs/setup/run-configuration.md)** - Run configuration for all IDEs
@@ -333,29 +355,35 @@ For Eclipse, VS Code, and other IDEs, see:
 Complete documentation is organized in the `docs/` folder:
 
 ### 🚀 Getting Started
+
 - **[Quick Start Guide](docs/getting-started/quick-start.md)** - Get up and running fast
 - **[README](docs/getting-started/README.md)** - Getting started overview
 
-### ⚙️ Setup & Configuration  
+### ⚙️ Setup & Configuration
+
 - **[IntelliJ Setup](docs/setup/intellij-setup.md)** - Complete IntelliJ IDEA configuration
 - **[Library Setup](docs/setup/library-setup.md)** - Multi-IDE library setup guide
 - **[Run Configuration](docs/setup/run-configuration.md)** - Run configurations for all IDEs
 
 ### 🔌 Integrations
+
 - **[API Integration](docs/integrations/api/api-guide.md)** - LLM API integration guide
 - **[API Quick Reference](docs/integrations/api/api-quick-reference.md)** - Quick API reference
 - **[SSO Integration](docs/integrations/sso/sso-integration-guide.md)** - Single Sign-On setup
 - **[Database Integration](docs/integrations/database/README.md)** - Database setup and migration
 
 ### 🏗️ Architecture & Development
+
 - **[Architecture Overview](docs/architecture/system-overview.md)** - System architecture
 - **[Development Guide](docs/development/README.md)** - Development guidelines
 
 ### 🎨 UI Components
+
 - **[AtlantaFX Integration](docs/ui-components/atlantafx-integration.md)** - Theme system
 - **[UI Components](docs/ui-components/README.md)** - Component documentation
 
-### 🔧 Troubleshooting  
+### 🔧 Troubleshooting
+
 - **[Troubleshooting Guide](docs/troubleshooting/README.md)** - Common issues and solutions
 
 ## 🏃 Run from Command Line
@@ -461,13 +489,13 @@ jpackage \
 
 ## 🔧 Library Versions
 
-| Library | Version | Java Compatibility | Download |
-|---------|---------|-------------------|----------|
-| JavaFX | 21.0.9 | Java 21 ✅ | https://gluonhq.com/products/javafx/ |
-| Lombok | 1.18.34 | All Java versions ✅ | https://projectlombok.org/ |
-| Jackson | 2.18.2 | All Java versions ✅ | https://github.com/FasterXML/jackson |
-| SLF4J | 2.0.16 | All Java versions ✅ | https://www.slf4j.org/ |
-| Logback | 1.5.12 | All Java versions ✅ | https://logback.qos.ch/ |
+| Library     | Version  | Java Compatibility  | Download                              |
+|-------------|----------|---------------------|---------------------------------------|
+| JavaFX      | 21.0.9   | Java 21 ✅           | https://gluonhq.com/products/javafx/  |
+| Lombok      | 1.18.34  | All Java versions ✅ | https://projectlombok.org/            |
+| Jackson     | 2.18.2   | All Java versions ✅ | https://github.com/FasterXML/jackson  |
+| SLF4J       | 2.0.16   | All Java versions ✅ | https://www.slf4j.org/                |
+| Logback     | 1.5.12   | All Java versions ✅ | https://logback.qos.ch/               |
 | SQLite JDBC | 3.47.1.0 | All Java versions ✅ | https://github.com/xerial/sqlite-jdbc |
 
 **Note:** This project uses **Java 21** and **JavaFX 21.0.9** (not JavaFX 23/25) for compatibility.
@@ -481,6 +509,7 @@ jpackage \
 **Cause:** Using JavaFX 25 (requires Java 23) with Java 21
 
 **Solution:**
+
 1. Delete all JARs in `lib/javafx/`
 2. Download **JavaFX 21.0.9** (not 23 or 25)
 3. Extract and copy JARs to `lib/javafx/`
@@ -493,6 +522,7 @@ jpackage \
 **Cause:** Using JavaFX JARs from different OS (e.g., macOS JARs on Windows)
 
 **Solution:**
+
 - Download the **correct platform-specific JavaFX 21.0.9**
 - Windows: `openjfx-21.0.9_windows-x64_bin-sdk.zip`
 - macOS (M1/M2/M3): `openjfx-21.0.9_osx-aarch64_bin-sdk.zip`
@@ -503,6 +533,7 @@ jpackage \
 **Error:** `Error: JavaFX runtime components are missing`
 
 **Solution:**
+
 1. Ensure JavaFX JARs are in `lib/javafx/`
 2. Add VM options in run configuration
 3. Check all 8 JavaFX JARs are present
@@ -512,6 +543,7 @@ jpackage \
 **Error:** `Cannot find symbol 'log'`
 
 **Solution:**
+
 1. Install Lombok plugin in IDE
 2. Enable annotation processing
 3. Rebuild project
@@ -521,6 +553,7 @@ jpackage \
 **Error:** `ClassNotFoundException`
 
 **Solution:**
+
 1. Run download script: `./download-libs.sh` or `.\download-libs.ps1`
 2. Download JavaFX manually for your OS
 3. Refresh IDE libraries
@@ -530,20 +563,24 @@ See **[docs/LIBRARY_SETUP.md](docs/LIBRARY_SETUP.md)** for complete troubleshoot
 ## 📚 Learning Resources
 
 ### JavaFX & UI
+
 - [JavaFX Documentation](https://openjfx.io/)
 - [JavaFX Tutorial](https://docs.oracle.com/javafx/2/)
 - [Scene Builder](https://gluonhq.com/products/scene-builder/) - Visual FXML editor
 
 ### Development Tools
+
 - [Lombok Documentation](https://projectlombok.org/)
 - [Jackson Documentation](https://github.com/FasterXML/jackson-docs)
 
 ### AI & LLM Integration
+
 - [OpenAI API](https://platform.openai.com/docs)
 - [Anthropic Claude API](https://docs.anthropic.com/)
 - [LangChain Java](https://github.com/hwchase17/langchain)
 
 ### Database
+
 - [Oracle JDBC Driver](https://www.oracle.com/database/technologies/appdev/jdbc.html)
 - [SQLite JDBC](https://github.com/xerial/sqlite-jdbc)
 
@@ -589,6 +626,7 @@ Noteflix Team
 ```
 
 **✨ What makes this special:**
+
 - 🚫 **No Maven/Gradle** - Simple JAR imports
 - 🤖 **Auto-Setup Scripts** - Downloads everything automatically
 - 🎯 **Cross-Platform** - Works on macOS, Linux, Windows
@@ -600,21 +638,25 @@ Noteflix Team
 ## 🎯 Use Cases
 
 ### For System Analysts
+
 - Query system architecture and component relationships
 - Understand business flows across subsystems
 - Find screens and related code quickly
 
 ### For Developers
+
 - Locate source code for specific features
 - Understand database schema and dependencies
 - Analyze batch job logic and schedules
 
 ### For Database Administrators
+
 - Browse all Oracle database objects
 - Understand table relationships and dependencies
 - Find stored procedures and packages by functionality
 
 ### For Project Managers
+
 - Get overview of system complexity
 - Understand subsystem boundaries
 - Track workflow implementations
@@ -624,31 +666,36 @@ Noteflix Team
 PCM Desktop cung cấp hệ thống tích hợp API mạnh mẽ để gọi các dịch vụ LLM:
 
 ### Quick Start
+
 ```java
 // Initialize LLM service
 LLMService llmService = new LLMService();
 
 // Configure provider (OpenAI example)
 LLMProviderConfig config = LLMProviderConfig.builder()
-    .provider(LLMProviderConfig.Provider.OPENAI)
-    .url("https://api.openai.com/v1/chat/completions")
-    .token(System.getenv("OPENAI_API_KEY"))
-    .model("gpt-4")
-    .build();
+        .provider(LLMProviderConfig.Provider.OPENAI)
+        .url("https://api.openai.com/v1/chat/completions")
+        .token(System.getenv("OPENAI_API_KEY"))
+        .model("gpt-4")
+        .build();
 
-llmService.initialize(config);
+llmService.
+
+initialize(config);
 
 // Simple chat
 String response = llmService.chat("Explain Java Streams");
 ```
 
 ### Supported Providers
+
 - ✅ **OpenAI** - GPT-4, GPT-3.5-turbo với streaming và function calling
-- ✅ **Anthropic** - Claude 3.5 Sonnet với advanced reasoning  
+- ✅ **Anthropic** - Claude 3.5 Sonnet với advanced reasoning
 - ✅ **Ollama** - Local models như Llama 3, Mistral
 - ✅ **Custom** - Bất kỳ API tương thích nào
 
 ### Features
+
 - 🌊 **Streaming Responses** - Real-time response streaming
 - 🔧 **Function Calling** - AI có thể gọi external functions
 - 💬 **Multi-turn Conversations** - Context-aware conversations
@@ -657,11 +704,13 @@ String response = llmService.chat("Explain Java Streams");
 - 🔒 **Error Handling** - Robust error handling và retry logic
 
 ### Demo & Documentation
+
 - 📖 **[API Integration Guide](docs/API_INTEGRATION_GUIDE.md)** - Hướng dẫn chi tiết
 - 🚀 **[Quick Reference](docs/API_QUICK_REFERENCE.md)** - Tham khảo nhanh
 - 🎮 **Interactive Demo**: `./scripts/run-api-demo.sh` (macOS/Linux) hoặc `scripts\run-api-demo.bat` (Windows)
 
 ### Environment Setup
+
 ```bash
 # Set API keys
 export OPENAI_API_KEY=your-openai-key
@@ -679,35 +728,40 @@ export ANTHROPIC_API_KEY=your-anthropic-key
 PCM Desktop hỗ trợ tích hợp với hệ thống SSO tự động để sử dụng tokens từ enterprise login systems:
 
 ### Supported Token Sources
+
 - 🍪 **Browser Cookies** - Chrome, Edge, Firefox cookies
-- 💾 **Browser localStorage** - Tokens stored in browser storage  
+- 💾 **Browser localStorage** - Tokens stored in browser storage
 - 🏢 **Windows Registry** - Enterprise registry-based SSO
 - 📁 **Shared Files** - JSON, properties, text files
 - 🔄 **Auto-refresh** - Automatic token renewal
 
 ### Quick SSO Setup
+
 ```java
 // Initialize SSO token manager
 SSOTokenManager ssoManager = SSOTokenManager.getInstance();
 
 // Configure LLM with SSO
 SSOLLMProviderConfig config = SSOLLMProviderConfig.builder()
-    .provider(LLMProviderConfig.Provider.OPENAI)
-    .url("https://api.openai.com/v1/chat/completions")
-    .ssoServiceName("company-portal")
-    .useSSOToken(true)
-    .fallbackToken(System.getenv("OPENAI_API_KEY"))
-    .model("gpt-4")
-    .build();
+        .provider(LLMProviderConfig.Provider.OPENAI)
+        .url("https://api.openai.com/v1/chat/completions")
+        .ssoServiceName("company-portal")
+        .useSSOToken(true)
+        .fallbackToken(System.getenv("OPENAI_API_KEY"))
+        .model("gpt-4")
+        .build();
 
 LLMService llmService = new LLMService();
-llmService.initialize(config);
+llmService.
+
+initialize(config);
 
 // Use automatically with SSO tokens
 String response = llmService.chat("Hello from SSO user!");
 ```
 
 ### Features
+
 - 🔍 **Multi-source Extraction** - Automatically finds tokens from multiple sources
 - 🔒 **Secure Storage** - Encrypted token caching with expiration
 - 📊 **Audit Logging** - Complete security audit trail
@@ -715,6 +769,7 @@ String response = llmService.chat("Hello from SSO user!");
 - 🌐 **Cross-platform** - Windows, macOS, Linux support
 
 ### Documentation & Demo
+
 - 📖 **[SSO Integration Guide](docs/SSO_INTEGRATION_GUIDE.md)** - Complete implementation guide
 - 🎮 **Interactive Demo**: `./scripts/run-sso-demo.sh` (macOS/Linux) hoặc `scripts\run-sso-demo.bat` (Windows)
 

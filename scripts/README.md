@@ -9,6 +9,7 @@ Thư mục này chứa các script tiện ích để xây dựng, chạy và qu�
 ### 🔧 Setup Scripts
 
 **`setup.sh`** - Tải xuống tất cả thư viện cần thiết (macOS/Linux)
+
 ```bash
 ./scripts/setup.sh              # Tải tất cả thư viện
 ./scripts/setup.sh --core       # Chỉ tải core libraries
@@ -17,6 +18,7 @@ Thư mục này chứa các script tiện ích để xây dựng, chạy và qu�
 ```
 
 **`setup.bat`** - Tải xuống tất cả thư viện cần thiết (Windows)
+
 ```cmd
 scripts\setup.bat               # Tải tất cả thư viện
 scripts\setup.bat --core        # Chỉ tải core libraries
@@ -27,6 +29,7 @@ scripts\setup.bat --javafx      # Xem hướng dẫn tải JavaFX
 ### 🔨 Build Scripts
 
 **`build.sh`** - Biên dịch mã nguồn Java (macOS/Linux)
+
 ```bash
 ./scripts/build.sh              # Build tiêu chuẩn
 ./scripts/build.sh --text       # Build với text component
@@ -36,6 +39,7 @@ scripts\setup.bat --javafx      # Xem hướng dẫn tải JavaFX
 > 🔍 **Tự động kiểm tra thư viện** trước khi build!
 
 **`build.bat`** - Biên dịch mã nguồn Java (Windows)
+
 ```cmd
 scripts\build.bat               # Build tiêu chuẩn
 scripts\build.bat --text        # Build với text component
@@ -47,6 +51,7 @@ scripts\build.bat --clean       # Xóa và build lại
 ### 🚀 Run Scripts
 
 **`run.sh`** - Chạy ứng dụng với nhiều chế độ (macOS/Linux)
+
 ```bash
 ./scripts/run.sh                # Chạy ứng dụng chính
 ./scripts/run.sh --text         # Chạy với text component
@@ -55,6 +60,7 @@ scripts\build.bat --clean       # Xóa và build lại
 ```
 
 **`run.bat`** - Chạy ứng dụng với nhiều chế độ (Windows)
+
 ```cmd
 scripts\run.bat                 # Chạy ứng dụng chính
 scripts\run.bat --text          # Chạy với text component
@@ -99,6 +105,7 @@ scripts\run.bat
 ## 📋 Common Tasks
 
 ### Build và Run (macOS/Linux)
+
 ```bash
 # Build tiêu chuẩn và chạy
 ./scripts/build.sh && ./scripts/run.sh
@@ -111,6 +118,7 @@ scripts\run.bat
 ```
 
 ### Build và Run (Windows)
+
 ```cmd
 REM Build và chạy
 scripts\build.bat && scripts\run.bat
@@ -122,6 +130,7 @@ scripts\build.bat --text && scripts\run.bat --text
 ### Chạy Demos
 
 #### API Integration Demo (macOS/Linux)
+
 ```bash
 # Thiết lập API key
 export OPENAI_API_KEY=your-api-key-here
@@ -131,6 +140,7 @@ export OPENAI_API_KEY=your-api-key-here
 ```
 
 #### API Integration Demo (Windows)
+
 ```cmd
 REM Thiết lập API key
 set OPENAI_API_KEY=your-api-key-here
@@ -140,6 +150,7 @@ scripts\run.bat --api-demo
 ```
 
 #### SSO Integration Demo
+
 ```bash
 # macOS/Linux
 ./scripts/run.sh --sso-demo
@@ -158,37 +169,41 @@ scripts\run.bat --sso-demo
 ## 📝 Script Options Reference
 
 ### setup.sh / setup.bat
-| Option | Mô tả |
-|--------|-------|
-| _(no option)_ | Tải tất cả thư viện |
-| `--core` | Chỉ tải core libraries (Lombok, Jackson, SLF4J, SQLite) |
-| `--ui` | Chỉ tải UI libraries (AtlantaFX, Ikonli) |
-| `--javafx` | Hiển thị hướng dẫn tải JavaFX |
-| `--help` | Hiển thị trợ giúp |
+
+| Option        | Mô tả                                                   |
+|---------------|---------------------------------------------------------|
+| _(no option)_ | Tải tất cả thư viện                                     |
+| `--core`      | Chỉ tải core libraries (Lombok, Jackson, SLF4J, SQLite) |
+| `--ui`        | Chỉ tải UI libraries (AtlantaFX, Ikonli)                |
+| `--javafx`    | Hiển thị hướng dẫn tải JavaFX                           |
+| `--help`      | Hiển thị trợ giúp                                       |
 
 ### build.sh / build.bat
-| Option | Mô tả |
-|--------|-------|
-| _(no option)_ | Build tiêu chuẩn |
-| `--text`, `--text-component` | Build với Universal Text Component |
-| `--clean`, `-c` | Xóa build directory trước khi build |
-| `--help`, `-h` | Hiển thị trợ giúp |
+
+| Option                       | Mô tả                               |
+|------------------------------|-------------------------------------|
+| _(no option)_                | Build tiêu chuẩn                    |
+| `--text`, `--text-component` | Build với Universal Text Component  |
+| `--clean`, `-c`              | Xóa build directory trước khi build |
+| `--help`, `-h`               | Hiển thị trợ giúp                   |
 
 **✨ Tính năng mới:** Tự động kiểm tra thư viện trước khi build!
 
 ### run.sh / run.bat
-| Option | Mô tả |
-|--------|-------|
-| _(no option)_ | Chạy ứng dụng chính |
-| `--text`, `--text-component` | Chạy với Text Component support |
-| `--api-demo` | Chạy API integration demo |
-| `--sso-demo` | Chạy SSO integration demo |
-| `--no-compile` | Bỏ qua kiểm tra auto-compilation |
-| `--help`, `-h` | Hiển thị trợ giúp |
+
+| Option                       | Mô tả                            |
+|------------------------------|----------------------------------|
+| _(no option)_                | Chạy ứng dụng chính              |
+| `--text`, `--text-component` | Chạy với Text Component support  |
+| `--api-demo`                 | Chạy API integration demo        |
+| `--sso-demo`                 | Chạy SSO integration demo        |
+| `--no-compile`               | Bỏ qua kiểm tra auto-compilation |
+| `--help`, `-h`               | Hiển thị trợ giúp                |
 
 ## 📦 Thư Viện Được Tải Xuống
 
 ### Core Libraries
+
 - **Lombok 1.18.34** - Giảm boilerplate code
 - **Jackson 2.18.2** - JSON processing
 - **SLF4J 2.0.16** - Logging API
@@ -196,10 +211,12 @@ scripts\run.bat --sso-demo
 - **SQLite JDBC 3.47.1.0** - Database driver
 
 ### UI Libraries
+
 - **AtlantaFX 2.0.1** - Modern JavaFX themes
 - **Ikonli 12.3.1** - Icon packs (Material Design, Feather)
 
 ### JavaFX (Manual)
+
 - **JavaFX 21.0.9** - JavaFX SDK (cần tải thủ công)
 
 ## 🐛 Troubleshooting
@@ -230,9 +247,11 @@ scripts\setup.bat --javafx
 
 ### Lỗi compilation
 
-Build scripts giờ đây **tự động kiểm tra thư viện** trước khi build. Nếu thiếu thư viện, script sẽ thông báo và dừng lại.
+Build scripts giờ đây **tự động kiểm tra thư viện** trước khi build. Nếu thiếu thư viện, script sẽ thông báo và dừng
+lại.
 
 Nếu cần tải lại thư viện:
+
 ```bash
 # macOS/Linux
 ./scripts/setup.sh
@@ -242,11 +261,13 @@ scripts\setup.bat
 ```
 
 Thử clean build:
+
 ```bash
 ./scripts/build.sh --clean
 ```
 
 Kiểm tra Java version:
+
 ```bash
 java -version    # Should be Java 21
 javac -version   # Should be Java 21
@@ -267,6 +288,7 @@ set OPENAI_API_KEY=your-api-key-here
 ## 📚 Thông Tin Thêm
 
 Xem thêm tài liệu trong thư mục [docs/](../docs/):
+
 - [Quick Start Guide](../docs/guides/QUICK_START.md)
 - [API Integration Guide](../docs/API_INTEGRATION_GUIDE.md)
 - [SSO Integration Guide](../docs/SSO_INTEGRATION_GUIDE.md)
@@ -276,25 +298,28 @@ Xem thêm tài liệu trong thư mục [docs/](../docs/):
 ## 🎯 Cải Tiến So Với Trước
 
 ### Version 1.0: 18 scripts
+
 Quá nhiều scripts riêng lẻ, khó quản lý
 
 ### Version 2.0: 8 scripts (giảm 56%)
+
 Scripts đã được hợp nhất theo chức năng
 
 ### **Version 3.0: 5 scripts (giảm 72%!)** ⭐ **CỰC KỲ TINH GỌN**
 
 Chỉ còn 5 scripts cốt lõi:
 
-| Script | Nền tảng | Mô tả |
-|--------|----------|-------|
-| **setup.sh** | macOS/Linux | Download tất cả libraries |
-| **setup.bat** | Windows | Download tất cả libraries |
-| **build.sh** | macOS/Linux | Build + verify libraries |
-| **build.bat** | Windows | Build + verify libraries |
-| **run.sh** | macOS/Linux | Run với nhiều modes |
-| **run.bat** | Windows | Run với nhiều modes |
+| Script        | Nền tảng    | Mô tả                     |
+|---------------|-------------|---------------------------|
+| **setup.sh**  | macOS/Linux | Download tất cả libraries |
+| **setup.bat** | Windows     | Download tất cả libraries |
+| **build.sh**  | macOS/Linux | Build + verify libraries  |
+| **build.bat** | Windows     | Build + verify libraries  |
+| **run.sh**    | macOS/Linux | Run với nhiều modes       |
+| **run.bat**   | Windows     | Run với nhiều modes       |
 
 ~~**Đã xóa:**~~
+
 - ~~verify-libs.sh~~ → Tích hợp vào build scripts
 - ~~download-lucide-icon.sh~~ → Không cần thiết
 - ~~download-libs.ps1~~ → Thay bằng setup.bat

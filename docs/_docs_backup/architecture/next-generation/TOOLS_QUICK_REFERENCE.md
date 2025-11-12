@@ -256,7 +256,7 @@
 ### Intent Categories & Tools
 
 | User Question Pattern           | Detected Intent | Auto-Selected Tools               |
-| ------------------------------- | --------------- | --------------------------------- |
+|---------------------------------|-----------------|-----------------------------------|
 | "Tìm dự án liên quan X"         | `search`        | `search_projects`, `fuzzy_search` |
 | "Chi tiết project Y"            | `details`       | `get_project_details`             |
 | "Workflow như thế nào?"         | `analysis`      | `trace_user_journey`              |
@@ -394,7 +394,7 @@ pnpm add fuse.js dompurify
 ## 📞 Support & References
 
 | Document                                 | Purpose                         |
-| ---------------------------------------- | ------------------------------- |
+|------------------------------------------|---------------------------------|
 | `UPGRADE_RECOMMENDATIONS.md`             | Chi tiết đầy đủ tất cả nâng cấp |
 | `ai-panel-review.md`                     | Review và issues hiện tại       |
 | `docs/afc/AI_FUNCTION_CALLING_SYSTEM.md` | Hệ thống function calling       |

@@ -130,15 +130,15 @@ Your provider is now fully integrated:
 ### Automatic UI Generation
 
 1. **API Key Input**: Automatically appears in Settings → API Keys section
-   - Label, placeholder, and hint from `apiKeyConfig`
-   - Saved/loaded automatically via `saveApiKey()` / `loadApiKey()`
+    - Label, placeholder, and hint from `apiKeyConfig`
+    - Saved/loaded automatically via `saveApiKey()` / `loadApiKey()`
 
 2. **Provider Selection**: Shows in provider list with capabilities badges
 
 3. **Dynamic Settings**: When user selects your provider:
-   - Max Tokens input adjusts to your min/max/step
-   - Temperature slider adjusts to your range
-   - Thinking mode checkbox shows/hides based on support
+    - Max Tokens input adjusts to your min/max/step
+    - Temperature slider adjusts to your range
+    - Thinking mode checkbox shows/hides based on support
 
 ### Settings Persistence
 

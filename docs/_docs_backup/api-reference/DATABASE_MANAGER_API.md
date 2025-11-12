@@ -111,8 +111,8 @@ databaseManager.getChatConversation(id);
 
 ## 📊 Naming Pattern Summary
 
-| Entity                 | Get All Method              | Get By ID Method          | Pattern      |
-| ---------------------- | --------------------------- | ------------------------- | ------------ |
+| Entity                 | Get All Method              | Get By ID Method          | Pattern     |
+|------------------------|-----------------------------|---------------------------|-------------|
 | **Projects**           | `getProjects()`             | `getProject(id)`          | ❌ No "All"  |
 | **Screens**            | `getScreens()`              | `getScreen(id)`           | ❌ No "All"  |
 | **Subsystems**         | `getSubsystems()`           | `getSubsystem(id)`        | ❌ No "All"  |

@@ -380,7 +380,7 @@ navigator.storage.estimate().then((estimate) => {
 ### Size Limits
 
 | Browser | Typical Limit     | Notes                     |
-| ------- | ----------------- | ------------------------- |
+|---------|-------------------|---------------------------|
 | Chrome  | 60% of disk space | Shared with other origins |
 | Firefox | 50% of disk space | Shared with other origins |
 | Safari  | 1 GB              | Per origin                |

@@ -44,7 +44,7 @@ AI: [Executes plan systematically]
 ### ✅ **NÊN dùng Planning** cho:
 
 | Scenario                 | Lý Do                          | Example                         |
-| ------------------------ | ------------------------------ | ------------------------------- |
+|--------------------------|--------------------------------|---------------------------------|
 | **Complex Analysis**     | Multi-step, nhiều dependencies | "Analyze impact of X"           |
 | **Traceability**         | Cần trace nhiều levels         | "How does X affect Y?"          |
 | **Comparison**           | So sánh nhiều items            | "Compare X vs Y"                |
@@ -54,7 +54,7 @@ AI: [Executes plan systematically]
 ### ❌ **KHÔNG cần Planning** cho:
 
 | Scenario          | Lý Do                 | Example                      |
-| ----------------- | --------------------- | ---------------------------- |
+|-------------------|-----------------------|------------------------------|
 | **Simple lookup** | 1 function call       | "Get project #5"             |
 | **Direct search** | Straightforward query | "Find projects named 'Auth'" |
 | **List all**      | No filtering/analysis | "Show all subsystems"        |
@@ -208,8 +208,8 @@ Time: 12s
 
 ### Metrics: 100 Real User Queries
 
-| Metric                | Without Planning | With Planning (All) | **Hybrid**   |
-| --------------------- | ---------------- | ------------------- | ------------ |
+| Metric                | Without Planning | With Planning (All) | **Hybrid**  |
+|-----------------------|------------------|---------------------|-------------|
 | **Accuracy**          | 72%              | 91%                 | **94%** ✅   |
 | **Completeness**      | 65%              | 95%                 | **93%** ✅   |
 | **Avg Response Time** | 3.2s             | 5.8s                | **3.8s** ✅  |
@@ -523,13 +523,13 @@ function trackQuery(query, usedPlanning, success) {
 ### ✅ Khi Nào Dùng Planning?
 
 | Query Type              | Planning? | Reason              |
-| ----------------------- | --------- | ------------------- |
-| "Get project #5"        | ❌ No     | Simple lookup       |
-| "Find auth projects"    | ❌ No     | Direct search       |
-| "Analyze impact of X"   | ✅ Yes    | Multi-step analysis |
-| "How does X affect Y?"  | ✅ Yes    | Traceability        |
-| "Compare X vs Y"        | ✅ Yes    | Complex comparison  |
-| "Why is X not working?" | ✅ Yes    | Troubleshooting     |
+|-------------------------|-----------|---------------------|
+| "Get project #5"        | ❌ No      | Simple lookup       |
+| "Find auth projects"    | ❌ No      | Direct search       |
+| "Analyze impact of X"   | ✅ Yes     | Multi-step analysis |
+| "How does X affect Y?"  | ✅ Yes     | Traceability        |
+| "Compare X vs Y"        | ✅ Yes     | Complex comparison  |
+| "Why is X not working?" | ✅ Yes     | Troubleshooting     |
 
 ### 🎯 Key Takeaways
 

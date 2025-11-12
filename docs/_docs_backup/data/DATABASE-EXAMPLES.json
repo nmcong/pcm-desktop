@@ -2,7 +2,6 @@
   "description": "PCM WebApp Database - Sample Data Examples",
   "version": "9",
   "lastUpdated": "2025-11-08",
-
   "subsystem": {
     "id": 1,
     "name": "E-Commerce Platform",
@@ -11,7 +10,6 @@
     "createdAt": "2025-01-15T10:00:00.000Z",
     "updatedAt": "2025-11-08T10:00:00.000Z"
   },
-
   "project": {
     "id": 1,
     "subsystemId": 1,
@@ -30,7 +28,6 @@
     "createdAt": "2025-01-20T10:00:00.000Z",
     "updatedAt": "2025-11-08T10:00:00.000Z"
   },
-
   "screen": {
     "id": 1,
     "projectId": 1,
@@ -144,7 +141,6 @@
     "createdAt": "2025-02-01T10:00:00.000Z",
     "updatedAt": "2025-11-08T10:00:00.000Z"
   },
-
   "chatConversation": {
     "id": 1,
     "title": "How to implement OAuth2 authentication?",
@@ -168,7 +164,6 @@
     "createdAt": "2025-11-08T10:00:00.000Z",
     "updatedAt": "2025-11-08T10:05:00.000Z"
   },
-
   "knowledgeBaseCategory": {
     "id": 1,
     "name": "Java",
@@ -178,7 +173,6 @@
     "createdAt": "2025-03-01T10:00:00.000Z",
     "updatedAt": "2025-03-01T10:00:00.000Z"
   },
-
   "knowledgeBaseItem": {
     "id": 1,
     "categoryId": 1,
@@ -187,7 +181,12 @@
     "priority": "high",
     "problem": "Getting NullPointerException when calling getUserById() method in UserService.\n\n```java\n@Service\npublic class UserService {\n    @Autowired\n    private UserRepository userRepository;\n    \n    public User getUserById(Long id) {\n        return userRepository.findById(id).get(); // NPE here\n    }\n}\n```\n\nError occurs when user ID doesn't exist in database.",
     "solution": "Use Optional properly and handle the case when user is not found:\n\n```java\n@Service\npublic class UserService {\n    @Autowired\n    private UserRepository userRepository;\n    \n    public User getUserById(Long id) {\n        return userRepository.findById(id)\n            .orElseThrow(() -> new UserNotFoundException(\"User not found with id: \" + id));\n    }\n}\n```\n\nAlternatively, return Optional:\n\n```java\npublic Optional<User> getUserById(Long id) {\n    return userRepository.findById(id);\n}\n```",
-    "tags": ["java", "spring-boot", "nullpointerexception", "optional"],
+    "tags": [
+      "java",
+      "spring-boot",
+      "nullpointerexception",
+      "optional"
+    ],
     "author": "John Doe",
     "status": "published",
     "views": 156,
@@ -195,7 +194,6 @@
     "createdAt": "2025-04-15T10:00:00.000Z",
     "updatedAt": "2025-11-08T10:00:00.000Z"
   },
-
   "batchJob": {
     "id": 1,
     "name": "Daily Database Backup",
@@ -217,7 +215,6 @@
     "createdAt": "2025-01-01T10:00:00.000Z",
     "updatedAt": "2025-11-08T02:00:00.000Z"
   },
-
   "databaseObject": {
     "id": 1,
     "name": "USER_ACCOUNTS",
@@ -257,7 +254,11 @@
         "comment": "Account status"
       }
     ],
-    "tags": ["authentication", "user-management", "core"],
+    "tags": [
+      "authentication",
+      "user-management",
+      "core"
+    ],
     "version": 3,
     "changeLog": [
       {
@@ -284,7 +285,6 @@
     "createdAt": "2025-01-15T10:00:00.000Z",
     "updatedAt": "2025-06-10T10:00:00.000Z"
   },
-
   "settings": {
     "theme": {
       "key": "theme",
@@ -303,7 +303,6 @@
       "value": "vi"
     }
   },
-
   "notes": {
     "autoIncrement": "All stores (except settings) use auto-increment for IDs",
     "timestamps": "createdAt and updatedAt are ISO 8601 strings",

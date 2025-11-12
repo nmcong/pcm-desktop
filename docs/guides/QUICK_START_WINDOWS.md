@@ -3,11 +3,13 @@
 ## 📥 Bước 1: Cài đặt Java 21
 
 Nếu chưa có Java 21, tải và cài đặt từ:
+
 - **Adoptium (Khuyến nghị):** https://adoptium.net/
 - Chọn version: **JDK 21 (LTS)**
 - Download và cài đặt file `.msi`
 
 Kiểm tra Java đã cài đặt:
+
 ```cmd
 java -version
 javac -version
@@ -28,6 +30,7 @@ Phải hiển thị: `openjdk version "21.x.x"`
    ```
 
 Script sẽ tự động:
+
 - ✅ Tải tất cả thư viện Java (Lombok, Jackson, SLF4J, Logback, SQLite)
 - ✅ Tải JavaFX 21.0.9 cho Windows
 - ✅ Giải nén và cài đặt vào đúng thư mục
@@ -47,19 +50,21 @@ Script sẽ tự động:
    ```
 
 4. **Tải các thư viện khác:**
-   - Xem file `docs\LIBRARY_SETUP.md` để biết link tải
-   - Hoặc chạy: `.\download-libs.ps1`
+    - Xem file `docs\LIBRARY_SETUP.md` để biết link tải
+    - Hoặc chạy: `.\download-libs.ps1`
 
 ---
 
 ## 🔨 Bước 3: Biên dịch
 
 Chạy file batch để biên dịch:
+
 ```cmd
 compile-windows.bat
 ```
 
 Hoặc thủ công:
+
 ```cmd
 javac -cp "lib\javafx\*;lib\others\*" ^
   -d out ^
@@ -72,11 +77,13 @@ javac -cp "lib\javafx\*;lib\others\*" ^
 ## ▶️ Bước 4: Chạy ứng dụng
 
 ### Cách 1: Double-click file batch
+
 ```
 run-windows.bat
 ```
 
 ### Cách 2: Từ Command Prompt
+
 ```cmd
 java --module-path lib\javafx ^
   --add-modules javafx.controls,javafx.fxml,javafx.web,javafx.media ^
@@ -100,32 +107,32 @@ java --module-path lib\javafx ^
 ### IntelliJ IDEA (Khuyến nghị)
 
 1. **Mở project:**
-   - File → Open → Chọn thư mục `pcm-desktop`
+    - File → Open → Chọn thư mục `pcm-desktop`
 
 2. **Cấu hình SDK:**
-   - File → Project Structure → Project
-   - SDK: Java 21
-   - Language Level: 21
+    - File → Project Structure → Project
+    - SDK: Java 21
+    - Language Level: 21
 
 3. **Thêm libraries:**
-   - File → Project Structure → Libraries
-   - Add `lib\javafx` và `lib\others`
+    - File → Project Structure → Libraries
+    - Add `lib\javafx` và `lib\others`
 
 4. **Cài Lombok Plugin:**
-   - File → Settings → Plugins
-   - Tìm "Lombok" → Install → Restart
+    - File → Settings → Plugins
+    - Tìm "Lombok" → Install → Restart
 
 5. **Enable Annotation Processing:**
-   - Settings → Build, Execution, Deployment → Compiler → Annotation Processors
-   - ✅ Enable annotation processing
+    - Settings → Build, Execution, Deployment → Compiler → Annotation Processors
+    - ✅ Enable annotation processing
 
 6. **Tạo Run Configuration:**
-   - Run → Edit Configurations → + → Application
-   - Main class: `com.noteflix.pcm.PCMApplication`
-   - VM options:
-     ```
-     --module-path lib/javafx --add-modules javafx.controls,javafx.fxml,javafx.web,javafx.media
-     ```
+    - Run → Edit Configurations → + → Application
+    - Main class: `com.noteflix.pcm.PCMApplication`
+    - VM options:
+      ```
+      --module-path lib/javafx --add-modules javafx.controls,javafx.fxml,javafx.web,javafx.media
+      ```
 
 7. **Run:** Click nút Run (▶️) hoặc Shift+F10
 
@@ -176,6 +183,7 @@ java --module-path lib\javafx ^
 **Nguyên nhân:** Đang dùng JavaFX 23/25 thay vì JavaFX 21
 
 **Giải pháp:**
+
 - Xóa tất cả file trong `lib\javafx\`
 - Tải JavaFX 21.0.9 từ link trên
 - Copy các JAR mới vào `lib\javafx\`
@@ -183,6 +191,7 @@ java --module-path lib\javafx ^
 ### Lỗi: "Error: JavaFX runtime components are missing"
 
 **Giải pháp:**
+
 - Kiểm tra `lib\javafx\` có đủ 8 file JAR
 - Thêm VM options: `--module-path lib/javafx --add-modules javafx.controls,javafx.fxml`
 
@@ -191,6 +200,7 @@ java --module-path lib\javafx ^
 **Nguyên nhân:** Lombok chưa được cài đặt hoặc annotation processing chưa bật
 
 **Giải pháp:**
+
 - Cài Lombok plugin cho IDE
 - Enable annotation processing trong IDE settings
 - Restart IDE
@@ -198,6 +208,7 @@ java --module-path lib\javafx ^
 ### Lỗi: "Main class not found"
 
 **Giải pháp:**
+
 - Chạy `compile-windows.bat` trước
 - Kiểm tra thư mục `out` đã có file `.class`
 

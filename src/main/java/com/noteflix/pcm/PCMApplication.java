@@ -1,6 +1,5 @@
 package com.noteflix.pcm;
 
-import atlantafx.base.theme.PrimerLight;
 import com.noteflix.pcm.core.constants.AppConstants;
 import com.noteflix.pcm.core.theme.ThemeManager;
 import com.noteflix.pcm.infrastructure.database.ConnectionManager;
@@ -17,10 +16,10 @@ import java.util.Objects;
 
 /**
  * PCM Desktop Application - Main Entry Point
- * 
+ * <p>
  * Project Code Management (PCM)
  * AI-Powered System Analysis & Business Management Tool
- * 
+ * <p>
  * This application provides comprehensive management and analysis capabilities for
  * enterprise software systems, including:
  * - Source code analysis and mapping
@@ -31,7 +30,7 @@ import java.util.Objects;
  * - Workflow visualization
  * - Knowledge base management
  * - AI-powered natural language queries via LLM integration
- * 
+ *
  * @author Noteflix Team
  * @version 1.0.0
  */
@@ -43,11 +42,11 @@ public class PCMApplication extends Application {
         log.info("🚀 Starting PCM Desktop Application - AI-Powered System Analysis Tool...");
         launch(args);
     }
-    
+
     @Override
     public void init() throws Exception {
         super.init();
-        
+
         // Run database migrations BEFORE UI initialization
         log.info("🔄 Running database migrations...");
         runDatabaseMigrations();
@@ -57,7 +56,7 @@ public class PCMApplication extends Application {
     public void start(Stage primaryStage) {
         try {
             log.info("Initializing application window...");
-            
+
             // Initialize ThemeManager with default light theme
             ThemeManager themeManager = ThemeManager.getInstance();
             log.info("✨ ThemeManager initialized");
@@ -84,9 +83,9 @@ public class PCMApplication extends Application {
             // Set application icon (optional)
             try {
                 Image icon = new Image(
-                    Objects.requireNonNull(
-                        getClass().getResourceAsStream(AppConstants.ICON_APP)
-                    )
+                        Objects.requireNonNull(
+                                getClass().getResourceAsStream(AppConstants.ICON_APP)
+                        )
                 );
                 primaryStage.getIcons().add(icon);
             } catch (Exception e) {
@@ -110,19 +109,19 @@ public class PCMApplication extends Application {
      */
     private void runDatabaseMigrations() {
         try {
-            DatabaseMigrationManager migrationManager = 
-                new DatabaseMigrationManager(ConnectionManager.INSTANCE);
-            
+            DatabaseMigrationManager migrationManager =
+                    new DatabaseMigrationManager(ConnectionManager.INSTANCE);
+
             migrationManager.migrate();
-            
+
             log.info("✅ Database migrations completed");
-            
+
         } catch (Exception e) {
             log.error("❌ Database migration failed", e);
             throw new RuntimeException("Failed to run database migrations", e);
         }
     }
-    
+
     @Override
     public void stop() {
         log.info("Shutting down PCM Desktop Application...");

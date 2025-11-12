@@ -5,6 +5,7 @@
 ### Install Java 17
 
 **macOS:**
+
 ```bash
 brew install openjdk@17
 ```
@@ -13,6 +14,7 @@ brew install openjdk@17
 Download from [Adoptium](https://adoptium.net/) hoặc [Oracle](https://www.oracle.com/java/technologies/downloads/)
 
 **Linux:**
+
 ```bash
 sudo apt install openjdk-17-jdk
 ```
@@ -27,6 +29,7 @@ java -version
 ### Install Maven (if not installed)
 
 **macOS:**
+
 ```bash
 brew install maven
 ```
@@ -35,6 +38,7 @@ brew install maven
 Download from [Maven](https://maven.apache.org/download.cgi)
 
 **Linux:**
+
 ```bash
 sudo apt install maven
 ```
@@ -49,6 +53,7 @@ mvn clean install
 ```
 
 **Expected Output:**
+
 ```
 [INFO] BUILD SUCCESS
 [INFO] Total time: 30 s
@@ -140,6 +145,7 @@ Edit `src/main/resources/css/styles.css`
 ### Error: "JavaFX runtime components are missing"
 
 **Solution:**
+
 ```bash
 mvn clean install
 mvn javafx:run
@@ -156,6 +162,7 @@ export JAVA_HOME=$(/usr/libexec/java_home -v 17)
 ### Error: "Cannot resolve symbol 'log'"
 
 **Solution:** Enable annotation processing in IntelliJ:
+
 1. Settings → Build, Execution, Deployment → Compiler → Annotation Processors
 2. Check "Enable annotation processing"
 
@@ -174,16 +181,19 @@ Output: `target/pcm-desktop/` (native app)
 ### Create Installer
 
 **Windows (.exe):**
+
 ```bash
 jpackage --input target/ --name PCM --main-jar pcm-desktop-1.0.0.jar --type exe
 ```
 
 **macOS (.dmg):**
+
 ```bash
 jpackage --input target/ --name PCM --main-jar pcm-desktop-1.0.0.jar --type dmg
 ```
 
 **Linux (.deb):**
+
 ```bash
 jpackage --input target/ --name PCM --main-jar pcm-desktop-1.0.0.jar --type deb
 ```
@@ -202,14 +212,14 @@ jpackage --input target/ --name PCM --main-jar pcm-desktop-1.0.0.jar --type deb
 
 ## 📚 Useful Commands
 
-| Command | Description |
-|---------|-------------|
-| `mvn clean` | Clean build artifacts |
-| `mvn compile` | Compile source code |
-| `mvn test` | Run tests |
-| `mvn package` | Create JAR file |
-| `mvn javafx:run` | Run application |
-| `mvn javafx:jlink` | Create native image |
+| Command            | Description           |
+|--------------------|-----------------------|
+| `mvn clean`        | Clean build artifacts |
+| `mvn compile`      | Compile source code   |
+| `mvn test`         | Run tests             |
+| `mvn package`      | Create JAR file       |
+| `mvn javafx:run`   | Run application       |
+| `mvn javafx:jlink` | Create native image   |
 
 ---
 

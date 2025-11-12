@@ -14,6 +14,7 @@ ls -la
 ```
 
 **Kết quả mong đợi:**
+
 ```
 ✅ pom.xml
 ✅ src/
@@ -33,6 +34,7 @@ java -version
 **Yêu cầu:** Java 17 trở lên
 
 **Nếu chưa có Java 17:**
+
 ```bash
 # macOS
 brew install openjdk@17
@@ -53,6 +55,7 @@ mvn clean install
 **Thời gian:** ~30 giây (lần đầu download dependencies)
 
 **Kết quả mong đợi:**
+
 ```
 [INFO] BUILD SUCCESS
 [INFO] Total time: 30 s
@@ -119,6 +122,7 @@ Khi application chạy, bạn sẽ thấy:
 ```
 
 **Features:**
+
 - ✅ Menu bar (File, Edit, View, Help)
 - ✅ Tool bar với buttons
 - ✅ Navigation tree (left side)
@@ -163,6 +167,7 @@ private static final String APP_TITLE = "My Awesome App";
 ```
 
 **Save và Run lại:**
+
 ```bash
 mvn javafx:run
 ```
@@ -301,6 +306,7 @@ mvn clean package
 **Output:** `target/pcm-desktop-1.0.0.jar`
 
 **Run:**
+
 ```bash
 java -jar target/pcm-desktop-1.0.0.jar
 ```
@@ -316,6 +322,7 @@ mvn javafx:jlink
 ### Create Installer (Optional)
 
 **macOS:**
+
 ```bash
 jpackage --input target/ \
   --name PCM \
@@ -325,6 +332,7 @@ jpackage --input target/ \
 ```
 
 **Windows:**
+
 ```bash
 jpackage --input target/ --name PCM --main-jar pcm-desktop-1.0.0.jar --type exe
 ```
@@ -336,6 +344,7 @@ jpackage --input target/ --name PCM --main-jar pcm-desktop-1.0.0.jar --type exe
 ### Problem 1: "JavaFX runtime components are missing"
 
 **Solution:**
+
 ```bash
 mvn clean install
 mvn javafx:run
@@ -344,6 +353,7 @@ mvn javafx:run
 ### Problem 2: "JAVA_HOME not set"
 
 **Solution:**
+
 ```bash
 # Check current Java
 java -version
@@ -358,6 +368,7 @@ echo 'export JAVA_HOME=$(/usr/libexec/java_home -v 17)' >> ~/.zshrc
 ### Problem 3: "Cannot find symbol 'log'"
 
 **Solution:** Enable annotation processing in IntelliJ:
+
 1. Settings → Build, Execution, Deployment → Compiler → Annotation Processors
 2. ✅ Enable annotation processing
 3. Rebuild project
@@ -369,15 +380,15 @@ echo 'export JAVA_HOME=$(/usr/libexec/java_home -v 17)' >> ~/.zshrc
 ### Tutorials
 
 1. **JavaFX Basics:**
-   - [Official JavaFX Tutorial](https://openjfx.io/openjfx-docs/)
-   - [JavaFX Documentation](https://docs.oracle.com/javafx/2/)
+    - [Official JavaFX Tutorial](https://openjfx.io/openjfx-docs/)
+    - [JavaFX Documentation](https://docs.oracle.com/javafx/2/)
 
 2. **Scene Builder:**
-   - Download: [Scene Builder](https://gluonhq.com/products/scene-builder/)
-   - Visual FXML editor
+    - Download: [Scene Builder](https://gluonhq.com/products/scene-builder/)
+    - Visual FXML editor
 
 3. **CSS Styling:**
-   - [JavaFX CSS Reference](https://openjfx.io/javadoc/21/javafx.graphics/javafx/scene/doc-files/cssref.html)
+    - [JavaFX CSS Reference](https://openjfx.io/javadoc/21/javafx.graphics/javafx/scene/doc-files/cssref.html)
 
 ### Examples
 
@@ -388,7 +399,7 @@ echo 'export JAVA_HOME=$(/usr/libexec/java_home -v 17)' >> ~/.zshrc
    ```
 
 2. **Community Projects:**
-   - [Awesome JavaFX](https://github.com/mhrimaz/AwesomeJavaFX)
+    - [Awesome JavaFX](https://github.com/mhrimaz/AwesomeJavaFX)
 
 ---
 
@@ -411,6 +422,7 @@ Before moving forward:
 Bạn đã tạo xong **Java Desktop Application**!
 
 **Next Steps:**
+
 1. ✅ Run application: `mvn javafx:run`
 2. 📝 Add your business logic
 3. 🎨 Customize UI

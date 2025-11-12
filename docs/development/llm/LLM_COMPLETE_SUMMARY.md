@@ -9,6 +9,7 @@
 ## 📊 Thống Kê
 
 ### Files & Code
+
 - **28 implementation files** (Java)
 - **6 documentation files** (Markdown)
 - **~7,000+ lines of code**
@@ -16,6 +17,7 @@
 - **180KB** source code size
 
 ### Architecture
+
 - **4 Core Interfaces** (LLMClient, StreamingCapable, FunctionCallingCapable, EmbeddingsCapable)
 - **11 Model Classes** (Request, Response, Chunk, Message, Config, etc.)
 - **4 Client Implementations** (OpenAI, SSEParser, Anthropic, Ollama)
@@ -29,18 +31,21 @@
 ## 🚀 Providers Supported
 
 ### 1. OpenAI ✅
+
 - **Models**: GPT-4, GPT-3.5-turbo
 - **Streaming**: Full SSE implementation
 - **Function Calling**: Yes
 - **API**: Chat Completions API
 
 ### 2. Anthropic (Claude) ✅
+
 - **Models**: Claude 3.5 Sonnet, Claude 3 Opus, Claude 3 Haiku
 - **Streaming**: Basic (upgradable to SSE)
 - **Tool Use**: Planned
 - **API**: Messages API
 
 ### 3. Ollama (Local) ✅
+
 - **Models**: Llama 2/3, Mistral, Phi, CodeLlama, etc.
 - **Streaming**: JSON lines
 - **Local**: No API key needed
@@ -51,6 +56,7 @@
 ## 🎯 Features Implemented
 
 ### Core Features ✅
+
 - [x] Multiple LLM providers (3)
 - [x] Multi-turn conversations
 - [x] System prompts
@@ -61,6 +67,7 @@
 - [x] Provider switching
 
 ### Streaming ✅
+
 - [x] Real-time streaming
 - [x] SSE (Server-Sent Events)
 - [x] Observer pattern callbacks
@@ -68,17 +75,20 @@
 - [x] Chunked responses
 
 ### Function Calling ✅
+
 - [x] Function definitions (JSON Schema)
 - [x] OpenAI function calling
 - [x] Auto/manual function selection
 - [x] Function arguments parsing
 
 ### Middleware ✅
+
 - [x] **RateLimiter** - Token Bucket algorithm
 - [x] **RetryPolicy** - Exponential Backoff with Jitter
 - [x] **RequestLogger** - Metrics & Performance tracking
 
 ### Advanced ✅
+
 - [x] Embeddings interface
 - [x] Configuration management
 - [x] Comprehensive error handling
@@ -90,6 +100,7 @@
 ## 💡 Design Highlights
 
 ### SOLID Principles ✅
+
 - **Single Responsibility**: Mỗi class có 1 nhiệm vụ
 - **Open/Closed**: Dễ extend (thêm provider mới)
 - **Liskov Substitution**: Providers interchangeable
@@ -97,6 +108,7 @@
 - **Dependency Inversion**: Depend on abstractions
 
 ### Design Patterns ✅
+
 1. **Builder Pattern** - Request/Response models
 2. **Factory Pattern** - LLMClientFactory
 3. **Singleton Pattern** - Factory instance
@@ -106,6 +118,7 @@
 7. **Template Method** - Base client structure
 
 ### Clean Code ✅
+
 - Clear naming conventions
 - Comprehensive JavaDoc
 - Error handling & validation
@@ -128,6 +141,7 @@
 ## 🔥 Quick Usage
 
 ### Simple Chat
+
 ```java
 LLMService service = new LLMService();
 service.initialize(LLMProviderConfig.builder()
@@ -141,6 +155,7 @@ String response = service.chat("Hello!");
 ```
 
 ### With Middleware
+
 ```java
 RateLimiter rateLimiter = RateLimiter.forOpenAI();
 RetryPolicy retryPolicy = RetryPolicy.defaultPolicy();
@@ -157,6 +172,7 @@ logger.logResponse(requestId, response);
 ```
 
 ### Switch Providers
+
 ```java
 // OpenAI
 service.initialize(openaiConfig);
@@ -176,11 +192,13 @@ String response3 = service.chat("Hello from Llama!");
 ## 📈 Performance & Reliability
 
 ### Rate Limiting
+
 - **OpenAI**: 10 req/min (free tier)
 - **Anthropic**: 5 req/min (free tier)
 - **Ollama**: 1000 req/sec (unlimited)
 
 ### Retry Policy
+
 - Max retries: 3 (configurable)
 - Initial delay: 1 second
 - Max delay: 30 seconds
@@ -188,6 +206,7 @@ String response3 = service.chat("Hello from Llama!");
 - Retry on: 5xx, 429, network errors
 
 ### Metrics Tracking
+
 - Total requests
 - Total tokens
 - Total errors
@@ -200,6 +219,7 @@ String response3 = service.chat("Hello from Llama!");
 ## 🎁 What You Get
 
 ### Interfaces
+
 ```
 ✅ LLMClient           - Base interface
 ✅ StreamingCapable    - Streaming support
@@ -208,6 +228,7 @@ String response3 = service.chat("Hello from Llama!");
 ```
 
 ### Clients
+
 ```
 ✅ OpenAIClient        - GPT-3.5/4
 ✅ AnthropicClient     - Claude 3.5
@@ -216,6 +237,7 @@ String response3 = service.chat("Hello from Llama!");
 ```
 
 ### Middleware
+
 ```
 ✅ RateLimiter         - Token Bucket algorithm
 ✅ RetryPolicy         - Exponential Backoff
@@ -223,6 +245,7 @@ String response3 = service.chat("Hello from Llama!");
 ```
 
 ### Service Layer
+
 ```
 ✅ LLMClientFactory    - Create & cache clients
 ✅ LLMService          - High-level API
@@ -230,6 +253,7 @@ String response3 = service.chat("Hello from Llama!");
 ```
 
 ### Models
+
 ```
 ✅ LLMRequest          - Universal request
 ✅ LLMResponse         - Universal response
@@ -248,6 +272,7 @@ String response3 = service.chat("Hello from Llama!");
 ## ✅ Production Ready
 
 ### Quality Checklist
+
 - [x] Clean architecture
 - [x] SOLID principles
 - [x] Design patterns
@@ -260,6 +285,7 @@ String response3 = service.chat("Hello from Llama!");
 - [x] Configuration management
 
 ### Features Checklist
+
 - [x] Multiple providers (3)
 - [x] Full streaming (SSE)
 - [x] Function calling
@@ -277,6 +303,7 @@ String response3 = service.chat("Hello from Llama!");
 ### Implementation Complete! 🎉
 
 **Bạn có đầy đủ:**
+
 1. ✅ **3 LLM Providers** (OpenAI, Anthropic, Ollama)
 2. ✅ **Full SSE Streaming** với real-time chunks
 3. ✅ **Function Calling** với JSON Schema
@@ -285,6 +312,7 @@ String response3 = service.chat("Hello from Llama!");
 6. ✅ **Production-Ready** architecture
 
 **Architecture:**
+
 - ✅ 28 implementation files
 - ✅ ~7,000+ LOC
 - ✅ SOLID principles
@@ -293,6 +321,7 @@ String response3 = service.chat("Hello from Llama!");
 - ✅ Comprehensive docs
 
 **Next Steps (Tùy chọn):**
+
 - Add unit tests
 - Implement embeddings for OpenAI/Ollama
 - Add async support (CompletableFuture)
@@ -326,6 +355,7 @@ com.noteflix.pcm.llm/
 LLM integration **HOÀN TOÀN SẴN SÀNG** để sử dụng trong production!
 
 **Hãy xem:**
+
 - `docs/development/LLM_QUICK_START.md` - Quick start
 - `src/main/java/com/noteflix/pcm/llm/examples/` - Examples
 

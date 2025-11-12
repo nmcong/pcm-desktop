@@ -22,19 +22,19 @@ Requested: 74,834 tokens (2.5x over limit!)
 When reviewing a PR, the request included:
 
 1. **System Prompt**: ~5,000 tokens
-   - Statistics (~500 tokens)
-   - Few-shot examples (~2,000 tokens)
-   - Guidelines (~2,500 tokens)
+    - Statistics (~500 tokens)
+    - Few-shot examples (~2,000 tokens)
+    - Guidelines (~2,500 tokens)
 
 2. **PR Content**: ~10,000+ tokens
-   - Large diff
-   - Multiple files
+    - Large diff
+    - Multiple files
 
 3. **Function Definitions**: ~3,000 tokens
-   - 50+ available functions
+    - 50+ available functions
 
 4. **Conversation History**: ~2,000 tokens
-   - Previous messages
+    - Previous messages
 
 **Total**: ~20,000 tokens (input)  
 **+ Output**: ~54,000 tokens (estimated max output)  
@@ -119,14 +119,14 @@ if (intent.suggestedTools.length > 0) {
 
 ## 📊 Token Savings
 
-| Component         | Normal Mode | Slim Mode | Savings    |
-| ----------------- | ----------- | --------- | ---------- |
-| **System Prompt** | ~5,000      | ~2,500    | **50%**    |
-| **Conversation**  | ~2,000      | ~500      | **75%**    |
-| **Function Defs** | ~3,000      | ~300      | **90%**    |
-| **User Message**  | ~10,000     | ~10,000   | 0%         |
-| **TOTAL INPUT**   | ~20,000     | ~13,300   | **33%**    |
-| **Max Output**    | ~54,000     | ~16,700   | **69%**    |
+| Component         | Normal Mode | Slim Mode | Savings   |
+|-------------------|-------------|-----------|-----------|
+| **System Prompt** | ~5,000      | ~2,500    | **50%**   |
+| **Conversation**  | ~2,000      | ~500      | **75%**   |
+| **Function Defs** | ~3,000      | ~300      | **90%**   |
+| **User Message**  | ~10,000     | ~10,000   | 0%        |
+| **TOTAL INPUT**   | ~20,000     | ~13,300   | **33%**   |
+| **Max Output**    | ~54,000     | ~16,700   | **69%**   |
 | **GRAND TOTAL**   | ~74,000     | ~30,000   | **60%** ✅ |
 
 **Result**: Fits within 30,000 token/min limit!
@@ -319,11 +319,11 @@ Result: Complete PR review ✅
 ## 🔄 Model Comparison
 
 | Model              | Token Limit   | Slim Mode Needed? | Recommended For |
-| ------------------ | ------------- | ----------------- | --------------- |
-| **GPT-4o**         | 30,000/min    | ✅ Yes            | Small queries   |
-| **GPT-4o-mini**    | 150,000/min   | ❌ No             | Medium queries  |
-| **Claude 3.5**     | 200,000/min   | ❌ No             | Large analysis  |
-| **Gemini 1.5 Pro** | 1,000,000/min | ❌ No             | Massive content |
+|--------------------|---------------|-------------------|-----------------|
+| **GPT-4o**         | 30,000/min    | ✅ Yes             | Small queries   |
+| **GPT-4o-mini**    | 150,000/min   | ❌ No              | Medium queries  |
+| **Claude 3.5**     | 200,000/min   | ❌ No              | Large analysis  |
+| **Gemini 1.5 Pro** | 1,000,000/min | ❌ No              | Massive content |
 
 ---
 
@@ -380,19 +380,19 @@ Result: Complete PR review ✅
 ### Key Files
 
 1. **AIPanel.js** (lines 421-505)
-   - Slim mode detection
-   - System prompt optimization
-   - Conversation history limiting
-   - Function filtering
-   - Token estimation
+    - Slim mode detection
+    - System prompt optimization
+    - Conversation history limiting
+    - Function filtering
+    - Token estimation
 
 2. **EnhancedPromptService.js**
-   - `buildSystemPrompt({ includeExamples: false })` option
-   - Conditional context injection
+    - `buildSystemPrompt({ includeExamples: false })` option
+    - Conditional context injection
 
 3. **IntentDetectionService.js**
-   - Intent detection for analysis
-   - Suggested tools list
+    - Intent detection for analysis
+    - Suggested tools list
 
 ### Key Functions
 
@@ -438,10 +438,10 @@ const estimatedTokens = Math.ceil(
 ### Solution
 
 - **Adaptive slim mode** that automatically:
-  - Reduces system prompt (50% savings)
-  - Limits conversation history (75% savings)
-  - Filters available functions (90% savings)
-  - Total: **60% token reduction**
+    - Reduces system prompt (50% savings)
+    - Limits conversation history (75% savings)
+    - Filters available functions (90% savings)
+    - Total: **60% token reduction**
 
 ### Result
 

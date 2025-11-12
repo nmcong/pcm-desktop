@@ -11,11 +11,11 @@ You can integrate **ANY** LLM into the system, regardless of its API format!
 ### What Works?
 
 | LLM Type                                  | Compatibility | Integration Time |
-| ----------------------------------------- | ------------- | ---------------- |
-| **OpenAI-compatible** (Ollama, LM Studio) | ✅ Perfect    | 5 minutes        |
-| **Similar format** (Cohere, AI21)         | ✅ Good       | 30 minutes       |
-| **Different format** (Custom APIs)        | ✅ Yes        | 1-2 hours        |
-| **WebSocket, GraphQL, gRPC**              | ✅ Yes        | 2-4 hours        |
+|-------------------------------------------|---------------|------------------|
+| **OpenAI-compatible** (Ollama, LM Studio) | ✅ Perfect     | 5 minutes        |
+| **Similar format** (Cohere, AI21)         | ✅ Good        | 30 minutes       |
+| **Different format** (Custom APIs)        | ✅ Yes         | 1-2 hours        |
+| **WebSocket, GraphQL, gRPC**              | ✅ Yes         | 2-4 hours        |
 
 ### How It Works
 
@@ -284,7 +284,8 @@ Includes:
 
 ### Key Point
 
-> **The system uses an adapter pattern. As long as you can convert your LLM's format to our standard format, it will work!**
+> **The system uses an adapter pattern. As long as you can convert your LLM's format to our standard format, it will
+work!**
 
 ### Need Help?
 

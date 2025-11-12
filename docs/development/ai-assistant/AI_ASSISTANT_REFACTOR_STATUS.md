@@ -5,26 +5,27 @@
 ### Created Files
 
 1. **`domain/chat/MessageRole.java`** ✅
-   - Enum for message roles (SYSTEM, USER, ASSISTANT, FUNCTION)
-   - Clean and simple
+    - Enum for message roles (SYSTEM, USER, ASSISTANT, FUNCTION)
+    - Clean and simple
 
 2. **`domain/chat/Message.java`** ✅
-   - Domain entity for chat messages
-   - Builder pattern
-   - Validation
-   - Helper methods (user(), assistant(), system())
-   - Extends BaseEntity
+    - Domain entity for chat messages
+    - Builder pattern
+    - Validation
+    - Helper methods (user(), assistant(), system())
+    - Extends BaseEntity
 
 3. **`domain/chat/Conversation.java`** ✅
-   - Domain entity for conversations
-   - Aggregate root (manages Messages)
-   - Builder pattern
-   - Business logic (addMessage, validate)
-   - Helper methods
+    - Domain entity for conversations
+    - Aggregate root (manages Messages)
+    - Builder pattern
+    - Business logic (addMessage, validate)
+    - Helper methods
 
 ### Benefits
 
 ✅ **SOLID Principles:**
+
 - Single Responsibility: Each entity has ONE job
 - Open/Closed: Easy to extend
 - Liskov Substitution: Entities are interchangeable
@@ -32,6 +33,7 @@
 - Dependency Inversion: No dependencies on infrastructure
 
 ✅ **Clean Code:**
+
 - Immutable (mostly) with Builder
 - Validation
 - Clear naming
@@ -39,6 +41,7 @@
 - Documentation
 
 ✅ **Design Patterns:**
+
 - Builder Pattern
 - Aggregate Root (DDD)
 - Entity Pattern
@@ -52,6 +55,7 @@
 **Files to Create:**
 
 1. **`infrastructure/repository/chat/ConversationRepository.java`** (Interface)
+
 ```java
 public interface ConversationRepository extends Repository<Conversation, Long> {
     List<Conversation> findByUserId(String userId);
@@ -62,20 +66,21 @@ public interface ConversationRepository extends Repository<Conversation, Long> {
 ```
 
 2. **`infrastructure/repository/chat/ConversationRepositoryImpl.java`**
-   - Implement CRUD operations
-   - Use ConversationDAO and MessageDAO
+    - Implement CRUD operations
+    - Use ConversationDAO and MessageDAO
 
 3. **`infrastructure/dao/ConversationDAO.java`**
-   - Direct SQL operations for Conversation
+    - Direct SQL operations for Conversation
 
 4. **`infrastructure/dao/MessageDAO.java`**
-   - Direct SQL operations for Message
+    - Direct SQL operations for Message
 
 ### Phase 3: Service Layer (PENDING)
 
 **Files to Create:**
 
 1. **`application/service/chat/ConversationService.java`**
+
 ```java
 @Slf4j
 public class ConversationService {
@@ -91,6 +96,7 @@ public class ConversationService {
 ```
 
 2. **`application/service/chat/AIService.java`**
+
 ```java
 @Slf4j
 public class AIService {
@@ -186,6 +192,7 @@ public class AIAssistantPage extends BasePage {
 **Create SQL Migration:**
 
 `src/main/resources/db/migration/V2__chat_tables.sql`:
+
 ```sql
 -- Conversations table
 CREATE TABLE conversations (
@@ -245,6 +252,7 @@ END;
 ## 📊 Current Status
 
 ### Completed ✅
+
 - [x] Domain entities (Conversation, Message, MessageRole)
 - [x] Builder pattern implementation
 - [x] Validation logic
@@ -253,6 +261,7 @@ END;
 - [x] Refactoring plan
 
 ### Pending ⏳
+
 - [ ] ConversationRepository interface & implementation
 - [ ] ConversationDAO & MessageDAO
 - [ ] ConversationService
@@ -266,18 +275,21 @@ END;
 ## 🎯 Benefits After Complete Refactoring
 
 ### Architecture
+
 - ✅ Clean Architecture (Domain → Repository → Service → UI)
 - ✅ SOLID Principles throughout
 - ✅ Design Patterns applied correctly
 - ✅ Separation of Concerns
 
 ### Code Quality
+
 - ✅ Testable (services can be mocked)
 - ✅ Maintainable (clear structure)
 - ✅ Reusable (services can be used elsewhere)
 - ✅ Scalable (easy to add features)
 
 ### Features
+
 - ✅ Database persistence (SQLite)
 - ✅ Real LLM integration (OpenAI, Claude, Ollama)
 - ✅ Streaming responses
@@ -286,6 +298,7 @@ END;
 - ✅ Multi-user support
 
 ### Metrics
+
 - **Lines in AIAssistantPage**: 1,100+ → ~300 (70% reduction)
 - **Classes**: 1 → 10+ (proper separation)
 - **Testability**: ❌ → ✅
@@ -296,6 +309,7 @@ END;
 ## 🚀 How to Continue
 
 ### Option 1: Continue with Repository Layer
+
 ```bash
 # Create repository files
 mkdir -p src/main/java/com/noteflix/pcm/infrastructure/repository/chat
@@ -305,6 +319,7 @@ mkdir -p src/main/java/com/noteflix/pcm/infrastructure/dao
 ```
 
 ### Option 2: Continue with Service Layer
+
 ```bash
 # Create service files
 mkdir -p src/main/java/com/noteflix/pcm/application/service/chat
@@ -313,6 +328,7 @@ mkdir -p src/main/java/com/noteflix/pcm/application/service/chat
 ```
 
 ### Option 3: Complete All Phases
+
 Ask me to continue with all remaining phases!
 
 ---

@@ -20,7 +20,8 @@
 
 ## Overview
 
-The AI Function Calling System enables AI providers (OpenAI, Claude) to intelligently decide when and how to query your IndexedDB database. Unlike the simpler context injection approach, function calling allows the AI to:
+The AI Function Calling System enables AI providers (OpenAI, Claude) to intelligently decide when and how to query your
+IndexedDB database. Unlike the simpler context injection approach, function calling allows the AI to:
 
 - **Decide** when database access is needed
 - **Choose** which specific function to call
@@ -40,13 +41,13 @@ The AI Function Calling System enables AI providers (OpenAI, Claude) to intellig
 ### Supported Providers
 
 | Provider               | Support | Notes                      |
-| ---------------------- | ------- | -------------------------- |
-| OpenAI (GPT-4, GPT-4o) | ✅ Full | Native function calling    |
-| Claude (3.5 Sonnet+)   | ✅ Full | Converted to Claude format |
-| Mock Provider          | ❌ No   | No tools capability        |
-| ViByte Cloud           | ❌ No   | No tools capability        |
-| Gemini                 | ❌ No   | Not implemented yet        |
-| Hugging Face           | ❌ No   | Not implemented yet        |
+|------------------------|---------|----------------------------|
+| OpenAI (GPT-4, GPT-4o) | ✅ Full  | Native function calling    |
+| Claude (3.5 Sonnet+)   | ✅ Full  | Converted to Claude format |
+| Mock Provider          | ❌ No    | No tools capability        |
+| ViByte Cloud           | ❌ No    | No tools capability        |
+| Gemini                 | ❌ No    | Not implemented yet        |
+| Hugging Face           | ❌ No    | Not implemented yet        |
 
 ---
 
@@ -348,7 +349,7 @@ Would you like more details about any of these?
 **Key Methods:**
 
 | Method                         | Lines   | Purpose                   |
-| ------------------------------ | ------- | ------------------------- |
+|--------------------------------|---------|---------------------------|
 | `simulateAIResponse()`         | 439-472 | Entry point, decides mode |
 | `handleFunctionCallingMode()`  | 477-587 | Tool execution loop       |
 | `handleContextInjectionMode()` | 592-658 | Legacy context injection  |
@@ -403,7 +404,7 @@ while (iteration < this.maxToolIterations) {
 **Key Methods:**
 
 | Method                         | Lines   | Purpose                |
-| ------------------------------ | ------- | ---------------------- |
+|--------------------------------|---------|------------------------|
 | `executeToolCall()`            | 13-46   | Execute single tool    |
 | `executeToolCalls()`           | 51-60   | Execute multiple tools |
 | `formatToolCallForDisplay()`   | 65-83   | Format for UI          |
@@ -457,7 +458,7 @@ async executeToolCall(toolCall) {
 **Key Changes:**
 
 | Section        | Lines   | Changes                         |
-| -------------- | ------- | ------------------------------- |
+|----------------|---------|---------------------------------|
 | Constructor    | 21-27   | Added `tools: true` capability  |
 | `chat()`       | 84-143  | Added tools to request body     |
 | `streamChat()` | 148-259 | Accumulate tool_calls in stream |
@@ -515,7 +516,7 @@ if (deltaObj?.tool_calls) {
 **Key Changes:**
 
 | Section        | Lines   | Changes                        |
-| -------------- | ------- | ------------------------------ |
+|----------------|---------|--------------------------------|
 | Constructor    | 21-27   | Added `tools: true` capability |
 | `chat()`       | 81-173  | Convert OpenAI → Claude format |
 | `streamChat()` | 178-300 | Stream tool_use blocks         |
@@ -590,7 +591,7 @@ if (
 **Available Functions:**
 
 | Function               | Lines   | Purpose                             |
-| ---------------------- | ------- | ----------------------------------- |
+|------------------------|---------|-------------------------------------|
 | `search_projects`      | 72-124  | Search projects by name/description |
 | `get_project_details`  | 129-192 | Get full project information        |
 | `search_screens`       | 197-249 | Search screens across projects      |
@@ -1340,15 +1341,15 @@ this.register(new YourProvider());
 
 ### Feature Comparison
 
-| Feature              | Function Calling                  | Context Injection            |
-| -------------------- | --------------------------------- | ---------------------------- |
+| Feature              | Function Calling                 | Context Injection           |
+|----------------------|----------------------------------|-----------------------------|
 | **Precision**        | ✅ High - AI decides exactly      | ❌ Low - Keyword matching    |
 | **Token Usage**      | ✅ Efficient - Only what's needed | ❌ High - Injects all data   |
 | **Multi-Turn**       | ✅ Yes - Complex workflows        | ❌ No - Single query         |
-| **Provider Support** | ⚠️ OpenAI, Claude only            | ✅ All providers             |
-| **Complexity**       | ⚠️ Higher - Tool loop             | ✅ Simple - Direct injection |
+| **Provider Support** | ⚠️ OpenAI, Claude only           | ✅ All providers             |
+| **Complexity**       | ⚠️ Higher - Tool loop            | ✅ Simple - Direct injection |
 | **Transparency**     | ✅ Shows tool calls in UI         | ❌ Hidden from user          |
-| **Performance**      | ✅ Fast - Targeted queries        | ⚠️ Slower - Large context    |
+| **Performance**      | ✅ Fast - Targeted queries        | ⚠️ Slower - Large context   |
 
 ### Example: Same Query, Different Approaches
 
@@ -1875,7 +1876,8 @@ Result: {
 
 ## Conclusion
 
-The AI Function Calling System provides a powerful, efficient, and transparent way for AI assistants to access your database. By letting the AI decide when and how to query, it:
+The AI Function Calling System provides a powerful, efficient, and transparent way for AI assistants to access your
+database. By letting the AI decide when and how to query, it:
 
 - ✅ Reduces token waste
 - ✅ Improves response accuracy
@@ -1886,23 +1888,23 @@ The AI Function Calling System provides a powerful, efficient, and transparent w
 ### Key Takeaways
 
 1. **Two Modes Available**:
-   - Function Calling (OpenAI/Claude)
-   - Context Injection (All providers)
+    - Function Calling (OpenAI/Claude)
+    - Context Injection (All providers)
 
 2. **Smart Decision Making**:
-   - AI chooses when to query
-   - AI selects appropriate tools
-   - AI provides precise parameters
+    - AI chooses when to query
+    - AI selects appropriate tools
+    - AI provides precise parameters
 
 3. **Transparent Execution**:
-   - Tool calls shown in UI
-   - Results displayed clearly
-   - Logs for debugging
+    - Tool calls shown in UI
+    - Results displayed clearly
+    - Logs for debugging
 
 4. **Extensible Architecture**:
-   - Easy to add new tools
-   - Simple provider integration
-   - Modular design
+    - Easy to add new tools
+    - Simple provider integration
+    - Modular design
 
 ### Next Steps
 

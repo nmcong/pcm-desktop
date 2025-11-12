@@ -5,18 +5,18 @@
 ### Violations of SOLID Principles
 
 1. **Single Responsibility Principle (SRP) ❌**
-   - `AIAssistantPage` does EVERYTHING: UI, data management, business logic, animations
-   - Inner classes `ChatSession` and `ChatMessage` should be separate entities
-   - Hard-coded AI responses (no LLM integration)
-   - No database persistence
+    - `AIAssistantPage` does EVERYTHING: UI, data management, business logic, animations
+    - Inner classes `ChatSession` and `ChatMessage` should be separate entities
+    - Hard-coded AI responses (no LLM integration)
+    - No database persistence
 
 2. **Open/Closed Principle (OCP) ❌**
-   - Hard to extend without modifying the page
-   - Hard-coded message generation logic
+    - Hard to extend without modifying the page
+    - Hard-coded message generation logic
 
 3. **Dependency Inversion Principle (DIP) ❌**
-   - Depends on concrete implementations, not abstractions
-   - No interfaces for services
+    - Depends on concrete implementations, not abstractions
+    - No interfaces for services
 
 ### Code Smells
 
@@ -99,26 +99,32 @@ com.noteflix.pcm/
 ## 🎨 Design Patterns to Apply
 
 ### 1. **Repository Pattern**
+
 - Abstract data access from business logic
 - `ConversationRepository` interface
 - `ConversationRepositoryImpl` for SQLite
 
 ### 2. **Service Layer Pattern**
+
 - `ConversationService` - manages conversations
 - `AIService` - integrates with LLM
 
 ### 3. **Builder Pattern**
+
 - `Conversation.builder()`
 - `Message.builder()`
 
 ### 4. **Observer Pattern**
+
 - Notify UI when new messages arrive
 - Streaming LLM responses
 
 ### 5. **Strategy Pattern**
+
 - Different LLM providers (OpenAI, Claude, Ollama)
 
 ### 6. **Dependency Injection**
+
 - Constructor injection for services
 - Easy testing with mocks
 
@@ -129,11 +135,13 @@ com.noteflix.pcm/
 ### Phase 1: Domain Layer ✅ (Create Entities)
 
 **Files to Create:**
+
 - `domain/chat/Conversation.java`
 - `domain/chat/Message.java`
 - `domain/chat/MessageRole.java`
 
 **Features:**
+
 - Immutable entities with Builder pattern
 - Validation
 - Business logic (if any)
@@ -141,12 +149,14 @@ com.noteflix.pcm/
 ### Phase 2: Repository Layer ✅ (Data Access)
 
 **Files to Create:**
+
 - `infrastructure/repository/chat/ConversationRepository.java` (interface)
 - `infrastructure/repository/chat/ConversationRepositoryImpl.java`
 - `infrastructure/dao/ConversationDAO.java`
 - `infrastructure/dao/MessageDAO.java`
 
 **Features:**
+
 - CRUD operations for Conversation
 - CRUD operations for Message
 - Queries: findByUserId, findRecent, search
@@ -154,27 +164,31 @@ com.noteflix.pcm/
 ### Phase 3: Service Layer ✅ (Business Logic)
 
 **Files to Create:**
+
 - `application/service/chat/ConversationService.java`
 - `application/service/chat/AIService.java`
 
 **Features:**
+
 - ConversationService:
-  - Create/update/delete conversations
-  - Add messages to conversation
-  - Search conversations
-  
+    - Create/update/delete conversations
+    - Add messages to conversation
+    - Search conversations
+
 - AIService:
-  - Integrate with LLMService
-  - Generate AI responses
-  - Stream responses
-  - Function calling support
+    - Integrate with LLMService
+    - Generate AI responses
+    - Stream responses
+    - Function calling support
 
 ### Phase 4: Refactor UI ✅ (Presentation Layer)
 
 **Files to Refactor:**
+
 - `ui/pages/AIAssistantPage.java`
 
 **Changes:**
+
 - **Remove** inner classes (ChatSession, ChatMessage)
 - **Inject** ConversationService and AIService
 - **Separate** UI components into smaller methods
@@ -182,6 +196,7 @@ com.noteflix.pcm/
 - **Delegate** business logic to services
 
 **New UI Components:**
+
 - `ui/components/chat/ChatSidebarView.java`
 - `ui/components/chat/ChatMessageView.java`
 - `ui/components/chat/ChatInputView.java`
@@ -274,6 +289,7 @@ public class AIAssistantPage extends BasePage {
 ## ✅ Benefits After Refactoring
 
 ### SOLID Principles ✅
+
 - **SRP**: Each class has one responsibility
 - **OCP**: Easy to extend (new LLM providers, new UI themes)
 - **LSP**: Repository implementations interchangeable
@@ -281,12 +297,14 @@ public class AIAssistantPage extends BasePage {
 - **DIP**: Depend on abstractions
 
 ### Clean Code ✅
+
 - **Testable**: Services can be tested with mock repositories
 - **Maintainable**: Clear separation of concerns
 - **Reusable**: Services can be used elsewhere
 - **Scalable**: Easy to add features
 
 ### Features ✅
+
 - **Database Persistence**: Conversations saved to SQLite
 - **LLM Integration**: Real AI responses (OpenAI, Claude, Ollama)
 - **Streaming**: Real-time AI responses
@@ -299,6 +317,7 @@ public class AIAssistantPage extends BasePage {
 ## 📊 Metrics
 
 ### Before Refactoring
+
 - **Lines in AIAssistantPage**: 1,100+
 - **Classes**: 1 (with 2 inner classes)
 - **Responsibilities**: 10+ (UI, data, logic, animation, etc.)
@@ -306,6 +325,7 @@ public class AIAssistantPage extends BasePage {
 - **SOLID**: ❌ Violations everywhere
 
 ### After Refactoring
+
 - **Lines in AIAssistantPage**: ~300 (UI only)
 - **Classes**: 10+ (separated by responsibility)
 - **Responsibilities**: 1 per class
@@ -317,6 +337,7 @@ public class AIAssistantPage extends BasePage {
 ## 🚀 Implementation Priority
 
 ### High Priority (Do Now)
+
 1. Create domain entities (Conversation, Message)
 2. Create repository interfaces
 3. Create ConversationService
@@ -324,11 +345,13 @@ public class AIAssistantPage extends BasePage {
 5. Refactor AIAssistantPage to use services
 
 ### Medium Priority (Next)
+
 6. Add database persistence (ConversationDAO)
 7. Add search functionality
 8. Add streaming support
 
 ### Low Priority (Later)
+
 9. Extract UI components
 10. Add tests
 11. Add caching

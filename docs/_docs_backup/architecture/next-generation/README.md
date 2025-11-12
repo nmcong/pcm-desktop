@@ -1,6 +1,7 @@
 # PCM WebApp - Next Generation AI Features
 
-Tài liệu hướng dẫn nâng cấp hệ thống AI cho PCM WebApp với focus vào việc tăng khả năng tìm kiếm và trả lời chính xác từ nhiều dạng câu hỏi người dùng.
+Tài liệu hướng dẫn nâng cấp hệ thống AI cho PCM WebApp với focus vào việc tăng khả năng tìm kiếm và trả lời chính xác từ
+nhiều dạng câu hỏi người dùng.
 
 ---
 
@@ -219,7 +220,7 @@ pnpm dev
 ## 📊 Tổng Quan Features
 
 | Feature               | Priority  | Complexity   | Impact    | Status     |
-| --------------------- | --------- | ------------ | --------- | ---------- |
+|-----------------------|-----------|--------------|-----------|------------|
 | Fuzzy Search          | 🔴 HIGH   | 🟢 Low       | 🔥 High   | 📝 Planned |
 | Semantic Search       | 🔴 HIGH   | 🟡 Medium    | 🔥 High   | 📝 Planned |
 | Intent Detection      | 🔴 HIGH   | 🟡 Medium    | 🔥 High   | 📝 Planned |
@@ -252,7 +253,8 @@ pnpm dev
 
 ### Q: Tại sao cần fuzzy search?
 
-**A:** Người dùng thường nhập sai chính tả, viết tắt, hoặc không nhớ chính xác tên. Fuzzy search giúp tìm ra kết quả đúng ngay cả khi query không chính xác 100%.
+**A:** Người dùng thường nhập sai chính tả, viết tắt, hoặc không nhớ chính xác tên. Fuzzy search giúp tìm ra kết quả
+đúng ngay cả khi query không chính xác 100%.
 
 ### Q: Semantic search khác gì với fuzzy search?
 
@@ -374,7 +376,7 @@ Total: ~200-300ms overhead, acceptable cho AI chat.
 ## 📞 Support & Contact
 
 | Role          | Contact        | Responsibility          |
-| ------------- | -------------- | ----------------------- |
+|---------------|----------------|-------------------------|
 | Tech Lead     | @tech-lead     | Architecture decisions  |
 | Frontend Lead | @frontend-lead | Implementation guidance |
 | AI/ML Lead    | @ai-lead       | Algorithm optimization  |

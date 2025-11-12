@@ -2,7 +2,9 @@
 
 ## 📋 Tổng quan
 
-Vector Database được tích hợp vào PCM-WebApp để cung cấp khả năng semantic search cho AI chat logs. Hệ thống hoạt động hoàn toàn trên trình duyệt sử dụng IndexedDB để storage và TensorFlow.js (hoặc fallback text-based similarity) cho embedding generation.
+Vector Database được tích hợp vào PCM-WebApp để cung cấp khả năng semantic search cho AI chat logs. Hệ thống hoạt động
+hoàn toàn trên trình duyệt sử dụng IndexedDB để storage và TensorFlow.js (hoặc fallback text-based similarity) cho
+embedding generation.
 
 ---
 
@@ -465,9 +467,9 @@ await vectorEmbeddingService.initialize({ modelType: "fallback" });
 ### 🎯 **Offline Performance**
 
 | Mode              | Quality | Offline Ready    | Dependencies |
-| ----------------- | ------- | ---------------- | ------------ |
+|-------------------|---------|------------------|--------------|
 | **TensorFlow.js** | 95%     | ⚠️ Cần pre-cache | External CDN |
-| **Fallback**      | 65%     | ✅ Hoàn toàn     | Không        |
+| **Fallback**      | 65%     | ✅ Hoàn toàn      | Không        |
 
 ### 📱 **Storage Requirements (Offline)**
 
@@ -512,4 +514,5 @@ async function initOfflineVectorDB() {
 3. **Use hybrid approach**: TensorFlow.js + fallback
 4. **Monitor storage usage** và implement cleanup strategies
 
-Vector Database trong PCM-WebApp được thiết kế để hoạt động robust trong mọi môi trường, từ online high-performance đến offline basic functionality.
+Vector Database trong PCM-WebApp được thiết kế để hoạt động robust trong mọi môi trường, từ online high-performance đến
+offline basic functionality.

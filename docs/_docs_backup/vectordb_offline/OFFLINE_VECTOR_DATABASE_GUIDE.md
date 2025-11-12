@@ -28,8 +28,8 @@ Vector Database trong PCM-WebApp cung cấp khả năng **semantic search hoàn 
 
 ### 📊 So Sánh Các Chế Độ Hoạt Động
 
-| Mode              | Quality | Offline            | Dependencies | Dimension | Use Case                     |
-| ----------------- | ------- | ------------------ | ------------ | --------- | ---------------------------- |
+| Mode              | Quality | Offline           | Dependencies | Dimension | Use Case                     |
+|-------------------|---------|-------------------|--------------|-----------|------------------------------|
 | **TensorFlow.js** | 95%     | ✅ (Cần pre-cache) | External CDN | 512D      | Production với pre-download  |
 | **Fallback**      | 65%     | ✅ Hoàn toàn       | Không        | 64D       | Offline-first, low bandwidth |
 | **Hybrid**        | Auto    | ✅                 | Linh hoạt    | Auto      | Khuyến nghị mặc định         |

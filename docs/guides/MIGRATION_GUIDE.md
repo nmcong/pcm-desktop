@@ -97,11 +97,13 @@ chmod +x download-libs.sh
 ### Step 6: Configure IDE
 
 **IntelliJ IDEA:**
+
 1. File → Project Structure → Libraries
 2. Add `lib/javafx` as library
 3. Add `lib/others` as library
 
 **Eclipse:**
+
 1. Properties → Java Build Path → Libraries
 2. Add External JARs from `lib/javafx`
 3. Add External JARs from `lib/others`
@@ -114,21 +116,21 @@ chmod +x download-libs.sh
 
 ### Maven Dependencies → Direct JARs
 
-| Maven Dependency | Direct JAR | Version |
-|-----------------|------------|---------|
-| `javafx-controls:21.0.1` | `lib/javafx/javafx.controls.jar` | 23 |
-| `javafx-fxml:21.0.1` | `lib/javafx/javafx.fxml.jar` | 23 |
-| `javafx-web:21.0.1` | `lib/javafx/javafx.web.jar` | 23 |
-| `javafx-media:21.0.1` | `lib/javafx/javafx.media.jar` | 23 |
-| `lombok:1.18.30` | `lib/others/lombok-1.18.34.jar` | 1.18.34 |
-| `jackson-databind:2.16.0` | `lib/others/jackson-databind-2.17.2.jar` | 2.17.2 |
-| `jackson-core:2.16.0` | `lib/others/jackson-core-2.17.2.jar` | 2.17.2 |
-| `jackson-annotations:2.16.0` | `lib/others/jackson-annotations-2.17.2.jar` | 2.17.2 |
-| `jackson-datatype-jsr310:2.16.0` | `lib/others/jackson-datatype-jsr310-2.17.2.jar` | 2.17.2 |
-| `slf4j-api:1.7.x` | `lib/others/slf4j-api-2.0.13.jar` | 2.0.13 |
-| `logback-classic:1.4.11` | `lib/others/logback-classic-1.5.6.jar` | 1.5.6 |
-| `logback-core:1.4.11` | `lib/others/logback-core-1.5.6.jar` | 1.5.6 |
-| `sqlite-jdbc:3.44.1.0` | `lib/others/sqlite-jdbc-3.46.1.0.jar` | 3.46.1.0 |
+| Maven Dependency                 | Direct JAR                                      | Version  |
+|----------------------------------|-------------------------------------------------|----------|
+| `javafx-controls:21.0.1`         | `lib/javafx/javafx.controls.jar`                | 23       |
+| `javafx-fxml:21.0.1`             | `lib/javafx/javafx.fxml.jar`                    | 23       |
+| `javafx-web:21.0.1`              | `lib/javafx/javafx.web.jar`                     | 23       |
+| `javafx-media:21.0.1`            | `lib/javafx/javafx.media.jar`                   | 23       |
+| `lombok:1.18.30`                 | `lib/others/lombok-1.18.34.jar`                 | 1.18.34  |
+| `jackson-databind:2.16.0`        | `lib/others/jackson-databind-2.17.2.jar`        | 2.17.2   |
+| `jackson-core:2.16.0`            | `lib/others/jackson-core-2.17.2.jar`            | 2.17.2   |
+| `jackson-annotations:2.16.0`     | `lib/others/jackson-annotations-2.17.2.jar`     | 2.17.2   |
+| `jackson-datatype-jsr310:2.16.0` | `lib/others/jackson-datatype-jsr310-2.17.2.jar` | 2.17.2   |
+| `slf4j-api:1.7.x`                | `lib/others/slf4j-api-2.0.13.jar`               | 2.0.13   |
+| `logback-classic:1.4.11`         | `lib/others/logback-classic-1.5.6.jar`          | 1.5.6    |
+| `logback-core:1.4.11`            | `lib/others/logback-core-1.5.6.jar`             | 1.5.6    |
+| `sqlite-jdbc:3.44.1.0`           | `lib/others/sqlite-jdbc-3.46.1.0.jar`           | 3.46.1.0 |
 
 **Note:** All versions upgraded to latest (Nov 2025)
 
@@ -138,13 +140,13 @@ chmod +x download-libs.sh
 
 ### Maven → Direct Commands
 
-| Task | Maven | Direct Java |
-|------|-------|-------------|
-| **Clean** | `mvn clean` | `rm -rf out/` |
-| **Compile** | `mvn compile` | `javac -cp "lib/javafx/*:lib/others/*" -d out $(find src/main/java -name "*.java")` |
-| **Package** | `mvn package` | `jar cfm app.jar manifest.txt -C out .` |
-| **Run** | `mvn javafx:run` | `java --module-path lib/javafx --add-modules javafx.controls,javafx.fxml -cp "out:lib/others/*" com.noteflix.pcm.PCMApplication` |
-| **Test** | `mvn test` | `java -cp "out:out-test:lib/*" org.junit.runner.JUnitCore TestClass` |
+| Task        | Maven            | Direct Java                                                                                                                      |
+|-------------|------------------|----------------------------------------------------------------------------------------------------------------------------------|
+| **Clean**   | `mvn clean`      | `rm -rf out/`                                                                                                                    |
+| **Compile** | `mvn compile`    | `javac -cp "lib/javafx/*:lib/others/*" -d out $(find src/main/java -name "*.java")`                                              |
+| **Package** | `mvn package`    | `jar cfm app.jar manifest.txt -C out .`                                                                                          |
+| **Run**     | `mvn javafx:run` | `java --module-path lib/javafx --add-modules javafx.controls,javafx.fxml -cp "out:lib/others/*" com.noteflix.pcm.PCMApplication` |
+| **Test**    | `mvn test`       | `java -cp "out:out-test:lib/*" org.junit.runner.JUnitCore TestClass`                                                             |
 
 ---
 
@@ -162,6 +164,7 @@ chmod +x download-libs.sh
 ### Direct Java Configuration
 
 **IntelliJ IDEA:**
+
 - **Main class:** `com.noteflix.pcm.PCMApplication`
 - **VM options:**
   ```
@@ -171,6 +174,7 @@ chmod +x download-libs.sh
 - **Classpath:** Project + `lib/javafx/*` + `lib/others/*`
 
 **Eclipse:**
+
 - **Main class:** `com.noteflix.pcm.PCMApplication`
 - **VM arguments:**
   ```
@@ -222,6 +226,7 @@ After migration, verify:
 ### Adding New Library
 
 **Before (Maven):**
+
 ```xml
 <dependency>
   <groupId>org.example</groupId>
@@ -231,6 +236,7 @@ After migration, verify:
 ```
 
 **After (Direct JAR):**
+
 1. Download JAR from Maven Central or project site
 2. Place in `lib/others/`
 3. Refresh IDE libraries
@@ -239,6 +245,7 @@ After migration, verify:
 ### Updating Existing Library
 
 **Before (Maven):**
+
 ```xml
 <!-- Change version in pom.xml -->
 <version>1.0.0</version> → <version>2.0.0</version>
@@ -246,6 +253,7 @@ After migration, verify:
 ```
 
 **After (Direct JAR):**
+
 1. Download new version JAR
 2. Replace old JAR in `lib/`
 3. Refresh IDE libraries
@@ -266,6 +274,7 @@ After migration, verify:
 ### Issue: "Cannot find JavaFX"
 
 **Solution:**
+
 1. Download from https://gluonhq.com/products/javafx/
 2. Extract and copy JARs to `lib/javafx/`
 3. Add to IDE libraries
@@ -273,6 +282,7 @@ After migration, verify:
 ### Issue: "Lombok not working"
 
 **Solution:**
+
 1. Install Lombok plugin
 2. Enable annotation processing
 3. Add `lib/others/lombok-1.18.34.jar` to classpath
@@ -297,12 +307,14 @@ All documentation moved to `docs/`:
 ## 🎉 Migration Complete!
 
 Your project is now:
+
 - ✅ Maven-free
 - ✅ Using latest libraries (Nov 2025)
 - ✅ Documentation organized
 - ✅ Ready to run with direct JARs
 
 **Next Steps:**
+
 1. Run `./download-libs.sh`
 2. Download JavaFX from https://gluonhq.com/products/javafx/
 3. Configure IDE

@@ -120,8 +120,8 @@ Intent Detection
 
 ### When to Plan?
 
-| Query Type          | Planning?  | Example               |
-| ------------------- | ---------- | --------------------- |
+| Query Type          | Planning? | Example               |
+|---------------------|-----------|-----------------------|
 | Simple lookup       | ❌ NO      | "Get project #5"      |
 | Direct search       | ❌ NO      | "Find auth projects"  |
 | **Analysis**        | ✅ **YES** | "Analyze impact of X" |
@@ -134,10 +134,10 @@ Intent Detection
 ## 📊 Expected Benefits
 
 | Metric                | Before | After | Improvement        |
-| --------------------- | ------ | ----- | ------------------ |
-| **Accuracy**          | 72%    | 94%   | +22% ✅            |
-| **Completeness**      | 65%    | 93%   | +28% ✅            |
-| **User Satisfaction** | 3.1/5  | 4.6/5 | +48% ✅            |
+|-----------------------|--------|-------|--------------------|
+| **Accuracy**          | 72%    | 94%   | +22% ✅             |
+| **Completeness**      | 65%    | 93%   | +28% ✅             |
+| **User Satisfaction** | 3.1/5  | 4.6/5 | +48% ✅             |
 | **Response Time**     | 3.2s   | 3.8s  | +19% ⚠️ acceptable |
 
 **Conclusion**: Significant improvements in quality with minimal time increase!
@@ -265,47 +265,47 @@ User: "Analyze impact of adding phone to register"
 ### Immediate (Required)
 
 1. **Copy planning code to AIPanel.js**
-   - Use `AIPanel.planning-integration.example.js` as reference
-   - Follow Step 1-5 in Integration Steps above
+    - Use `AIPanel.planning-integration.example.js` as reference
+    - Follow Step 1-5 in Integration Steps above
 
 2. **Test with sample queries**
-   - Simple: "Get project #5"
-   - Complex: "Analyze impact of X"
-   - Verify planning triggers correctly
+    - Simple: "Get project #5"
+    - Complex: "Analyze impact of X"
+    - Verify planning triggers correctly
 
 3. **Add UI elements**
-   - Processing indicator
-   - Plan display (collapsible)
-   - Optional: Planning toggle
+    - Processing indicator
+    - Plan display (collapsible)
+    - Optional: Planning toggle
 
 ### Short-term (Recommended)
 
 1. **Collect metrics**
-   - Track planning accuracy
-   - Measure user satisfaction
-   - Monitor response times
+    - Track planning accuracy
+    - Measure user satisfaction
+    - Monitor response times
 
 2. **Refine detection logic**
-   - Adjust `needsPlanning()` thresholds
-   - Fine-tune complexity assessment
-   - Add more intent patterns
+    - Adjust `needsPlanning()` thresholds
+    - Fine-tune complexity assessment
+    - Add more intent patterns
 
 3. **Enhance plan generation**
-   - Add more domain-specific plans
-   - Improve step descriptions
-   - Add optional steps
+    - Add more domain-specific plans
+    - Improve step descriptions
+    - Add optional steps
 
 ### Long-term (Optional)
 
 1. **Adaptive planning**
-   - Dynamic plan adjustment
-   - Learn from user feedback
-   - Optimize step sequences
+    - Dynamic plan adjustment
+    - Learn from user feedback
+    - Optimize step sequences
 
 2. **Advanced features**
-   - Parallel step execution
-   - Plan caching
-   - Historical plan analytics
+    - Parallel step execution
+    - Plan caching
+    - Historical plan analytics
 
 ---
 
@@ -473,7 +473,8 @@ Expected: No results message, suggest alternatives
 
 ### What You Asked
 
-> "Tôi muốn khi bắt đầu trả lời câu prompt của người dùng sẽ tiến lên kế hoạch và thực hiện từng bước một để nhận được câu trả lời => có nên hay không?"
+> "Tôi muốn khi bắt đầu trả lời câu prompt của người dùng sẽ tiến lên kế hoạch và thực hiện từng bước một để nhận được
+> câu trả lời => có nên hay không?"
 
 ### What We Delivered
 
@@ -495,7 +496,8 @@ Expected: No results message, suggest alternatives
 
 **Status**: ✅ **READY TO INTEGRATE**
 
-**Next Action**: Integrate into AIPanel.js following [integration example](../examples/AIPanel.planning-integration.example.js)
+**Next Action**: Integrate into AIPanel.js
+following [integration example](../examples/AIPanel.planning-integration.example.js)
 
 **Expected Impact**: +22% accuracy, +28% completeness, +48% satisfaction
 

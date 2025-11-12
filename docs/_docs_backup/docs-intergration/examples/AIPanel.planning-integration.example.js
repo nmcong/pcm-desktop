@@ -5,225 +5,220 @@
  *
  * Copy relevant parts to your AIPanel.js implementation.
  */
-import { buildSystemPrompt } from "../services/EnhancedPromptService.js";
-import { detectIntent } from "../services/IntentDetectionService.js";
-import {
-  needsPlanning,
-  generatePlan,
-  formatPlan,
-  validateStepResult,
-} from "../services/PlanningService.js";
+import {buildSystemPrompt} from "../services/EnhancedPromptService.js";
+import {detectIntent} from "../services/IntentDetectionService.js";
+import {formatPlan, generatePlan, needsPlanning, validateStepResult,} from "../services/PlanningService.js";
 
 /**
  * STEP 1: Update handleSendMessage to include planning
  */
 async function handleSendMessage_WithPlanning(e) {
-  e.preventDefault();
+    e.preventDefault();
 
-  const message = this.messageInput.value.trim();
-  if (!message) return;
+    const message = this.messageInput.value.trim();
+    if (!message) return;
 
-  // Clear input and add user message to chat
-  this.messageInput.value = "";
-  this.chatView.addMessage("user", message);
+    // Clear input and add user message to chat
+    this.messageInput.value = "";
+    this.chatView.addMessage("user", message);
 
-  try {
-    // === PLANNING INTEGRATION START ===
+    try {
+        // === PLANNING INTEGRATION START ===
 
-    // 1. Detect intent
-    console.log("[AIPanel] Detecting intent...");
-    const intent = detectIntent(message);
-    console.log("[AIPanel] Intent detected:", {
-      category: intent.category,
-      confidence: intent.confidence,
-      entities: intent.entities,
-    });
+        // 1. Detect intent
+        console.log("[AIPanel] Detecting intent...");
+        const intent = detectIntent(message);
+        console.log("[AIPanel] Intent detected:", {
+            category: intent.category,
+            confidence: intent.confidence,
+            entities: intent.entities,
+        });
 
-    // 2. Check if planning is needed
-    const shouldPlan = needsPlanning(message, intent);
-    console.log("[AIPanel] Needs planning:", shouldPlan);
+        // 2. Check if planning is needed
+        const shouldPlan = needsPlanning(message, intent);
+        console.log("[AIPanel] Needs planning:", shouldPlan);
 
-    // 3. Generate plan if needed
-    let plan = null;
-    if (shouldPlan) {
-      plan = generatePlan(message, intent);
-      console.log("[AIPanel] Execution plan generated:", plan);
+        // 3. Generate plan if needed
+        let plan = null;
+        if (shouldPlan) {
+            plan = generatePlan(message, intent);
+            console.log("[AIPanel] Execution plan generated:", plan);
 
-      // 4. Show plan to user (optional but recommended)
-      const planMessage = `📋 **Execution Plan** (${plan.complexity})\n\n${formatPlan(plan)}`;
-      this.chatView.addMessage("system", planMessage, {
-        type: "plan",
-        collapsible: true,
-        metadata: { plan },
-      });
+            // 4. Show plan to user (optional but recommended)
+            const planMessage = `📋 **Execution Plan** (${plan.complexity})\n\n${formatPlan(plan)}`;
+            this.chatView.addMessage("system", planMessage, {
+                type: "plan",
+                collapsible: true,
+                metadata: {plan},
+            });
 
-      // Optional: Show progress indicator
-      this.showProcessingIndicator(
-        `Processing ${plan.steps.length} steps (~${plan.estimatedTime}s)...`,
-      );
+            // Optional: Show progress indicator
+            this.showProcessingIndicator(
+                `Processing ${plan.steps.length} steps (~${plan.estimatedTime}s)...`,
+            );
+        }
+
+        // === PLANNING INTEGRATION END ===
+
+        // 5. Get AI response with planning context
+        await this.getAIResponseWithPlanning(message, intent, plan);
+    } catch (error) {
+        console.error("[AIPanel] Error:", error);
+        this.chatView.addMessage("error", `Error: ${error.message}`);
     }
-
-    // === PLANNING INTEGRATION END ===
-
-    // 5. Get AI response with planning context
-    await this.getAIResponseWithPlanning(message, intent, plan);
-  } catch (error) {
-    console.error("[AIPanel] Error:", error);
-    this.chatView.addMessage("error", `Error: ${error.message}`);
-  }
 }
 
 /**
  * STEP 2: Create new method to handle AI response with planning
  */
 async function getAIResponseWithPlanning(message, intent, plan) {
-  try {
-    // Build enhanced system prompt with planning context
-    const systemPrompt = await buildSystemPrompt({
-      includeStatistics: true,
-      includeExamples: true,
-      includeGuidelines: true,
-      includePlanning: plan !== null, // Enable planning mode
-      plan: plan, // Pass the plan
-      userContext: this.getCurrentUserContext(), // Your existing method
-    });
+    try {
+        // Build enhanced system prompt with planning context
+        const systemPrompt = await buildSystemPrompt({
+            includeStatistics: true,
+            includeExamples: true,
+            includeGuidelines: true,
+            includePlanning: plan !== null, // Enable planning mode
+            plan: plan, // Pass the plan
+            userContext: this.getCurrentUserContext(), // Your existing method
+        });
 
-    // Prepare messages for AI
-    const messages = [
-      { role: "system", content: systemPrompt },
-      ...this.conversationHistory, // Your existing conversation history
-      { role: "user", content: message },
-    ];
+        // Prepare messages for AI
+        const messages = [
+            {role: "system", content: systemPrompt},
+            ...this.conversationHistory, // Your existing conversation history
+            {role: "user", content: message},
+        ];
 
-    // Call AI service
-    const response = await this.aiService.chat({
-      messages,
-      tools: this.availableTools, // Your existing tools
-      temperature: 0.3, // Lower temperature for more consistent planning
-    });
+        // Call AI service
+        const response = await this.aiService.chat({
+            messages,
+            tools: this.availableTools, // Your existing tools
+            temperature: 0.3, // Lower temperature for more consistent planning
+        });
 
-    // Process response
-    await this.processAIResponse(response, plan);
-  } catch (error) {
-    console.error("[AIPanel] AI response error:", error);
-    throw error;
-  }
+        // Process response
+        await this.processAIResponse(response, plan);
+    } catch (error) {
+        console.error("[AIPanel] AI response error:", error);
+        throw error;
+    }
 }
 
 /**
  * STEP 3: Update processAIResponse to handle planning validation
  */
 async function processAIResponse(response, plan) {
-  // Handle tool calls
-  if (response.tool_calls && response.tool_calls.length > 0) {
-    console.log(
-      `[AIPanel] Processing ${response.tool_calls.length} tool calls`,
-    );
+    // Handle tool calls
+    if (response.tool_calls && response.tool_calls.length > 0) {
+        console.log(
+            `[AIPanel] Processing ${response.tool_calls.length} tool calls`,
+        );
 
-    const results = [];
+        const results = [];
 
-    // If we have a plan, validate against it
-    if (plan) {
-      // Track which steps have been executed
-      const executedSteps = new Set();
+        // If we have a plan, validate against it
+        if (plan) {
+            // Track which steps have been executed
+            const executedSteps = new Set();
 
-      for (const toolCall of response.tool_calls) {
-        // Find corresponding step in plan
-        const step = plan.steps.find((s) => s.tool === toolCall.function.name);
+            for (const toolCall of response.tool_calls) {
+                // Find corresponding step in plan
+                const step = plan.steps.find((s) => s.tool === toolCall.function.name);
 
-        if (step) {
-          console.log(`[AIPanel] Executing planned step ${step.stepNumber}...`);
+                if (step) {
+                    console.log(`[AIPanel] Executing planned step ${step.stepNumber}...`);
 
-          // Check dependencies
-          if (step.dependsOn && step.dependsOn.length > 0) {
-            const depsReady = step.dependsOn.every((depStep) =>
-              executedSteps.has(depStep),
-            );
+                    // Check dependencies
+                    if (step.dependsOn && step.dependsOn.length > 0) {
+                        const depsReady = step.dependsOn.every((depStep) =>
+                            executedSteps.has(depStep),
+                        );
 
-            if (!depsReady) {
-              console.warn(
-                `[AIPanel] Skipping step ${step.stepNumber} - dependencies not ready`,
-              );
-              results.push({
-                tool: toolCall.function.name,
-                success: false,
-                error: "Dependencies not met",
-              });
-              continue;
+                        if (!depsReady) {
+                            console.warn(
+                                `[AIPanel] Skipping step ${step.stepNumber} - dependencies not ready`,
+                            );
+                            results.push({
+                                tool: toolCall.function.name,
+                                success: false,
+                                error: "Dependencies not met",
+                            });
+                            continue;
+                        }
+                    }
+
+                    // Execute tool
+                    const result = await this.executeTool(
+                        toolCall.function.name,
+                        toolCall.function.arguments,
+                    );
+
+                    // Validate result
+                    const validation = validateStepResult(step, result);
+
+                    if (!validation.success) {
+                        console.warn(
+                            `[AIPanel] Step ${step.stepNumber} validation failed:`,
+                            validation.message,
+                        );
+                    } else {
+                        console.log(
+                            `[AIPanel] Step ${step.stepNumber} completed:`,
+                            validation.message,
+                        );
+                        executedSteps.add(step.stepNumber);
+                    }
+
+                    results.push({
+                        ...result,
+                        stepNumber: step.stepNumber,
+                        validation,
+                    });
+                } else {
+                    // Tool call not in plan (AI deviated)
+                    console.warn(
+                        `[AIPanel] Tool '${toolCall.function.name}' not in plan, executing anyway...`,
+                    );
+                    const result = await this.executeTool(
+                        toolCall.function.name,
+                        toolCall.function.arguments,
+                    );
+                    results.push(result);
+                }
             }
-          }
 
-          // Execute tool
-          const result = await this.executeTool(
-            toolCall.function.name,
-            toolCall.function.arguments,
-          );
+            // Check if all critical steps were executed
+            const criticalStepsCompleted = plan.steps
+                .filter((s) => !s.optional)
+                .every((s) => executedSteps.has(s.stepNumber));
 
-          // Validate result
-          const validation = validateStepResult(step, result);
-
-          if (!validation.success) {
-            console.warn(
-              `[AIPanel] Step ${step.stepNumber} validation failed:`,
-              validation.message,
-            );
-          } else {
-            console.log(
-              `[AIPanel] Step ${step.stepNumber} completed:`,
-              validation.message,
-            );
-            executedSteps.add(step.stepNumber);
-          }
-
-          results.push({
-            ...result,
-            stepNumber: step.stepNumber,
-            validation,
-          });
+            if (!criticalStepsCompleted) {
+                console.warn(
+                    "[AIPanel] Not all critical steps completed:",
+                    plan.steps.filter(
+                        (s) => !s.optional && !executedSteps.has(s.stepNumber),
+                    ),
+                );
+            }
         } else {
-          // Tool call not in plan (AI deviated)
-          console.warn(
-            `[AIPanel] Tool '${toolCall.function.name}' not in plan, executing anyway...`,
-          );
-          const result = await this.executeTool(
-            toolCall.function.name,
-            toolCall.function.arguments,
-          );
-          results.push(result);
+            // No plan - execute normally
+            for (const toolCall of response.tool_calls) {
+                const result = await this.executeTool(
+                    toolCall.function.name,
+                    toolCall.function.arguments,
+                );
+                results.push(result);
+            }
         }
-      }
 
-      // Check if all critical steps were executed
-      const criticalStepsCompleted = plan.steps
-        .filter((s) => !s.optional)
-        .every((s) => executedSteps.has(s.stepNumber));
-
-      if (!criticalStepsCompleted) {
-        console.warn(
-          "[AIPanel] Not all critical steps completed:",
-          plan.steps.filter(
-            (s) => !s.optional && !executedSteps.has(s.stepNumber),
-          ),
-        );
-      }
-    } else {
-      // No plan - execute normally
-      for (const toolCall of response.tool_calls) {
-        const result = await this.executeTool(
-          toolCall.function.name,
-          toolCall.function.arguments,
-        );
-        results.push(result);
-      }
+        // Continue conversation with results
+        await this.continueConversationWithResults(results);
+    } else if (response.content) {
+        // Final response
+        this.chatView.addMessage("assistant", response.content);
+        this.hideProcessingIndicator();
     }
-
-    // Continue conversation with results
-    await this.continueConversationWithResults(results);
-  } else if (response.content) {
-    // Final response
-    this.chatView.addMessage("assistant", response.content);
-    this.hideProcessingIndicator();
-  }
 }
 
 /**
@@ -231,31 +226,31 @@ async function processAIResponse(response, plan) {
  */
 
 function showProcessingIndicator(message) {
-  // Your implementation - show loading/progress UI
-  const indicator = document.createElement("div");
-  indicator.className = "processing-indicator";
-  indicator.id = "ai-processing-indicator";
-  indicator.innerHTML = `
+    // Your implementation - show loading/progress UI
+    const indicator = document.createElement("div");
+    indicator.className = "processing-indicator";
+    indicator.id = "ai-processing-indicator";
+    indicator.innerHTML = `
     <div class="spinner"></div>
     <span>${message}</span>
   `;
-  this.chatView.container.appendChild(indicator);
+    this.chatView.container.appendChild(indicator);
 }
 
 function hideProcessingIndicator() {
-  const indicator = document.getElementById("ai-processing-indicator");
-  if (indicator) {
-    indicator.remove();
-  }
+    const indicator = document.getElementById("ai-processing-indicator");
+    if (indicator) {
+        indicator.remove();
+    }
 }
 
 function getCurrentUserContext() {
-  // Your implementation - get current project/screen context
-  return {
-    currentProject: this.currentProject || null,
-    currentScreen: this.currentScreen || null,
-    recentActivity: this.recentActivity || [],
-  };
+    // Your implementation - get current project/screen context
+    return {
+        currentProject: this.currentProject || null,
+        currentScreen: this.currentScreen || null,
+        recentActivity: this.recentActivity || [],
+    };
 }
 
 /**
@@ -264,38 +259,38 @@ function getCurrentUserContext() {
 
 // Example complete integration:
 class AIPanel_WithPlanning {
-  constructor() {
-    // ... existing constructor code ...
+    constructor() {
+        // ... existing constructor code ...
 
-    // Add planning flag
-    this.planningEnabled = true; // Can be toggled by user
-  }
+        // Add planning flag
+        this.planningEnabled = true; // Can be toggled by user
+    }
 
-  async handleSendMessage(e) {
-    // Use the planning-enabled version
-    return handleSendMessage_WithPlanning.call(this, e);
-  }
+    async handleSendMessage(e) {
+        // Use the planning-enabled version
+        return handleSendMessage_WithPlanning.call(this, e);
+    }
 
-  async getAIResponseWithPlanning(message, intent, plan) {
-    return getAIResponseWithPlanning.call(this, message, intent, plan);
-  }
+    async getAIResponseWithPlanning(message, intent, plan) {
+        return getAIResponseWithPlanning.call(this, message, intent, plan);
+    }
 
-  async processAIResponse(response, plan) {
-    return processAIResponse.call(this, response, plan);
-  }
+    async processAIResponse(response, plan) {
+        return processAIResponse.call(this, response, plan);
+    }
 
-  // Helper methods
-  showProcessingIndicator(message) {
-    return showProcessingIndicator.call(this, message);
-  }
+    // Helper methods
+    showProcessingIndicator(message) {
+        return showProcessingIndicator.call(this, message);
+    }
 
-  hideProcessingIndicator() {
-    return hideProcessingIndicator.call(this);
-  }
+    hideProcessingIndicator() {
+        return hideProcessingIndicator.call(this);
+    }
 
-  getCurrentUserContext() {
-    return getCurrentUserContext.call(this);
-  }
+    getCurrentUserContext() {
+        return getCurrentUserContext.call(this);
+    }
 }
 
 /**
@@ -303,9 +298,9 @@ class AIPanel_WithPlanning {
  */
 
 function addPlanningToggle() {
-  const toggle = document.createElement("label");
-  toggle.className = "planning-toggle";
-  toggle.innerHTML = `
+    const toggle = document.createElement("label");
+    toggle.className = "planning-toggle";
+    toggle.innerHTML = `
     <input type="checkbox" id="planning-toggle" checked>
     <span>Enable AI Planning</span>
     <div class="tooltip">
@@ -314,13 +309,13 @@ function addPlanningToggle() {
     </div>
   `;
 
-  toggle.querySelector("input").addEventListener("change", (e) => {
-    this.planningEnabled = e.target.checked;
-    console.log("[AIPanel] Planning enabled:", this.planningEnabled);
-  });
+    toggle.querySelector("input").addEventListener("change", (e) => {
+        this.planningEnabled = e.target.checked;
+        console.log("[AIPanel] Planning enabled:", this.planningEnabled);
+    });
 
-  // Add to your AI panel header
-  this.header.appendChild(toggle);
+    // Add to your AI panel header
+    this.header.appendChild(toggle);
 }
 
 /**

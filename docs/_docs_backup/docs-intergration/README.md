@@ -16,7 +16,8 @@
 
 ## 🎯 Tổng Quan
 
-AI Assistant Module cung cấp khả năng tương tác với các Large Language Models (LLMs) thông qua một interface thống nhất. Module hỗ trợ nhiều providers và tích hợp function calling để truy vấn dữ liệu hệ thống.
+AI Assistant Module cung cấp khả năng tương tác với các Large Language Models (LLMs) thông qua một interface thống nhất.
+Module hỗ trợ nhiều providers và tích hợp function calling để truy vấn dữ liệu hệ thống.
 
 ### ✨ Tính Năng Chính
 

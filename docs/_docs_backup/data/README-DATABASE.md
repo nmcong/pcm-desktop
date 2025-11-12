@@ -11,7 +11,7 @@ PCM WebApp sử dụng **IndexedDB** (browser native database) để lưu trữ 
 ## 📋 Stores (Tables)
 
 | Store Name                | Purpose           | Key Fields                                   |
-| ------------------------- | ----------------- | -------------------------------------------- |
+|---------------------------|-------------------|----------------------------------------------|
 | `settings`                | App configuration | `key`, `value`                               |
 | `subsystems`              | Hệ thống con      | `id`, `name`, `isFavorite`                   |
 | `projects`                | Dự án             | `id`, `subsystemId`, `name`, `repositoryUrl` |

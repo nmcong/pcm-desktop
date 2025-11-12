@@ -372,7 +372,7 @@ AI Response
 ## 📊 Performance Characteristics
 
 | Component            | Operation             | Time      | Caching              |
-| -------------------- | --------------------- | --------- | -------------------- |
+|----------------------|-----------------------|-----------|----------------------|
 | **Fuzzy Search**     | Index build           | 100-200ms | Once on init         |
 |                      | Search query          | 10-50ms   | In-memory index      |
 | **Semantic Search**  | Load dictionary       | 50ms      | Once on init         |
@@ -476,24 +476,24 @@ async init() {
 **Scaling strategies:**
 
 1. **Search Indexes**
-   - Partition by subsystem
-   - Lazy load indexes on demand
-   - Use IndexedDB for persistent cache
+    - Partition by subsystem
+    - Lazy load indexes on demand
+    - Use IndexedDB for persistent cache
 
 2. **Synonyms Dictionary**
-   - Keep in memory (small: ~50KB)
-   - Update via CDN or API
-   - Version control for updates
+    - Keep in memory (small: ~50KB)
+    - Update via CDN or API
+    - Version control for updates
 
 3. **Grounding Verification**
-   - Batch entity verification
-   - Cache verified entities (TTL: 1 hour)
-   - Use Bloom filter for quick existence check
+    - Batch entity verification
+    - Cache verified entities (TTL: 1 hour)
+    - Use Bloom filter for quick existence check
 
 4. **Tool Results**
-   - Implement pagination
-   - Limit context injection to top-N results
-   - Stream large results
+    - Implement pagination
+    - Limit context injection to top-N results
+    - Stream large results
 
 ---
 

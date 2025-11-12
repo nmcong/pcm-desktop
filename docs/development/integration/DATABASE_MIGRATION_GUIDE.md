@@ -15,6 +15,7 @@
 Located at: `src/main/java/com/noteflix/pcm/infrastructure/database/DatabaseMigrationManager.java`
 
 **Features:**
+
 - ✅ Tracks applied migrations in `schema_version` table
 - ✅ Runs pending migrations automatically
 - ✅ Transaction support (rollback on error)
@@ -61,12 +62,14 @@ cp src/main/resources/db/migration/*.sql out/db/migration/
 Located in: `src/main/resources/db/migration/`
 
 ### V1__initial_schema.sql
+
 - Creates initial 13 core tables
 - Indexes
 - Triggers
 - Sample data
 
 ### V2__chat_tables.sql
+
 - Creates `conversations` table
 - Creates `messages` table
 - Foreign keys
@@ -129,10 +132,10 @@ CREATE TABLE schema_version (
 
 **Example Data:**
 
-| version | description | applied_at |
-|---------|-------------|------------|
-| V1 | initial schema | 2024-11-12 06:25:00 |
-| V2 | chat tables | 2024-11-12 06:25:01 |
+| version | description    | applied_at          |
+|---------|----------------|---------------------|
+| V1      | initial schema | 2024-11-12 06:25:00 |
+| V2      | chat tables    | 2024-11-12 06:25:01 |
 
 ---
 
@@ -229,12 +232,14 @@ org.sqlite.SQLiteException: syntax error near "TALBE"
 ```
 
 **What Happens:**
+
 1. Transaction is rolled back
 2. No changes applied to database
 3. Migration NOT recorded in schema_version
 4. Application startup fails with exception
 
 **How to Fix:**
+
 1. Fix the SQL syntax error in `V3__add_users_table.sql`
 2. Recompile
 3. Run again
@@ -246,6 +251,7 @@ org.sqlite.SQLiteException: [SQLITE_BUSY] database is locked
 ```
 
 **Solution:**
+
 - Close any other connections to the database
 - Kill any hanging processes
 - Delete `pcm-desktop.db-journal` file
@@ -257,11 +263,13 @@ org.sqlite.SQLiteException: [SQLITE_BUSY] database is locked
 ### Issue 1: Migration File Not Found
 
 **Error:**
+
 ```
 IllegalArgumentException: Migration file not found: /db/migration/V2__chat_tables.sql
 ```
 
 **Solution:**
+
 ```bash
 # Check file exists
 ls src/main/resources/db/migration/V2__chat_tables.sql
@@ -295,6 +303,7 @@ sqlite> .quit
 **Problem:** V3 created before V2
 
 **Solution:** Migrations run in alphabetical order. Always name with incrementing numbers:
+
 - ✅ V1, V2, V3, V4...
 - ❌ VA, VB, VC...
 
@@ -305,6 +314,7 @@ sqlite> .quit
 ### 1. **Never Modify Existing Migrations**
 
 ❌ **Bad:**
+
 ```sql
 -- V2__chat_tables.sql (modified after applied)
 CREATE TABLE conversations (
@@ -315,6 +325,7 @@ CREATE TABLE conversations (
 ```
 
 ✅ **Good:**
+
 ```sql
 -- V3__add_conversation_columns.sql (new migration)
 ALTER TABLE conversations ADD COLUMN new_column TEXT;
@@ -323,12 +334,14 @@ ALTER TABLE conversations ADD COLUMN new_column TEXT;
 ### 2. **Use Descriptive Names**
 
 ❌ **Bad:**
+
 ```
 V3__update.sql
 V4__changes.sql
 ```
 
 ✅ **Good:**
+
 ```
 V3__add_users_table.sql
 V4__add_conversation_tags.sql
@@ -337,6 +350,7 @@ V4__add_conversation_tags.sql
 ### 3. **Test Migrations Locally**
 
 Before committing:
+
 1. Delete `pcm-desktop.db`
 2. Run application
 3. Verify all migrations apply successfully
@@ -409,30 +423,31 @@ private List<String> getAvailableMigrations() throws Exception {
 ### ✅ What You Get
 
 1. **Automatic Database Setup**
-   - No manual SQL execution needed
-   - Tables created on first run
-   - Always up-to-date schema
+    - No manual SQL execution needed
+    - Tables created on first run
+    - Always up-to-date schema
 
 2. **Version Control for Database**
-   - Track changes over time
-   - Easy rollback (delete from schema_version + manual cleanup)
-   - Team collaboration friendly
+    - Track changes over time
+    - Easy rollback (delete from schema_version + manual cleanup)
+    - Team collaboration friendly
 
 3. **Safe Migrations**
-   - Transaction support
-   - Rollback on error
-   - Idempotent
+    - Transaction support
+    - Rollback on error
+    - Idempotent
 
 4. **Development Workflow**
-   - Add SQL file → Recompile → Run
-   - Migration happens automatically
-   - No extra steps needed
+    - Add SQL file → Recompile → Run
+    - Migration happens automatically
+    - No extra steps needed
 
 ---
 
 **Status**: ✅ **Database Migration System Complete**
 
 **Next Steps:**
+
 1. Test with existing app
 2. Verify conversations and messages tables work
 3. Add more migrations as needed (V3, V4, etc.)

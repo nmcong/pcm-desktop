@@ -408,10 +408,10 @@ I'm getting a database error on the checkout screen. Can you help me find:
 ### Complex Queries
 
 - "I need to understand the complete checkout flow. Show me:
-  - All screens involved
-  - Their navigation paths
-  - Related source code
-  - Any known issues from KB"
+    - All screens involved
+    - Their navigation paths
+    - Related source code
+    - Any known issues from KB"
 
 - "Compare how authentication is implemented in project 1 vs project 2"
 

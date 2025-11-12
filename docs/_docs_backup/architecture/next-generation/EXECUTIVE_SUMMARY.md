@@ -22,7 +22,7 @@ Nâng cấp hệ thống AI của PCM WebApp để **tăng 85% độ chính xác
 ## 📊 Current Problems
 
 | Problem                  | Impact                      | Frequency     |
-| ------------------------ | --------------------------- | ------------- |
+|--------------------------|-----------------------------|---------------|
 | **Typo in search**       | User không tìm thấy kết quả | 30% queries   |
 | **Synonym confusion**    | "payment" ≠ "thanh toán"    | 25% queries   |
 | **Hallucination**        | AI đưa ra thông tin sai     | 30% responses |
@@ -58,7 +58,7 @@ User: "authentication" → Finds: "xác thực", "login", "auth" ✅
 Tự động nhận diện ý định người dùng và chọn tools phù hợp:
 
 | User Query             | Detected Intent | Auto-Selected Tools           |
-| ---------------------- | --------------- | ----------------------------- |
+|------------------------|-----------------|-------------------------------|
 | "Tìm dự án payment"    | Search          | search_projects, fuzzy_search |
 | "Chi tiết project 12"  | Details         | get_project_details           |
 | "File nào xử lý risk?" | Development     | find_source_by_feature        |
@@ -86,7 +86,7 @@ Kiểm tra và cảnh báo khi AI đưa ra thông tin không có trong dữ li�
 ### 4. New Tools (Week 3-8)
 
 | Category        | New Tools                                                        | Use Cases              |
-| --------------- | ---------------------------------------------------------------- | ---------------------- |
+|-----------------|------------------------------------------------------------------|------------------------|
 | **Search**      | fuzzy_search, semantic_search, search_by_multiple_criteria       | Tìm kiếm linh hoạt hơn |
 | **Analysis**    | analyze_relationships, trace_user_journey, find_similar_entities | Phân tích hệ thống     |
 | **Development** | find_source_by_feature, get_change_impact                        | Hỗ trợ developers      |
@@ -101,7 +101,7 @@ Kiểm tra và cảnh báo khi AI đưa ra thông tin không có trong dữ li�
 ### Metrics Improvement
 
 | Metric                 | Before | After | Improvement |
-| ---------------------- | ------ | ----- | ----------- |
+|------------------------|--------|-------|-------------|
 | **Search accuracy**    | 60%    | 85%   | +25% ↑      |
 | **Hallucination rate** | 30%    | 5%    | -25% ↓      |
 | **Query success rate** | 65%    | 91%   | +26% ↑      |
@@ -123,7 +123,7 @@ Kiểm tra và cảnh báo khi AI đưa ra thông tin không có trong dữ li�
 ### Development Effort
 
 | Phase                       | Duration    | Team Size    | Effort        |
-| --------------------------- | ----------- | ------------ | ------------- |
+|-----------------------------|-------------|--------------|---------------|
 | Phase 1: Core Search        | 2 weeks     | 2 devs       | 160 hours     |
 | Phase 2: Analysis Tools     | 2 weeks     | 2 devs       | 160 hours     |
 | Phase 3: Anti-Hallucination | 1 week      | 2 devs       | 80 hours      |
@@ -217,7 +217,7 @@ Week 7-8: Quality & Testing ██████████████ 100%
 ## ⚠️ Risks & Mitigation
 
 | Risk                                | Probability | Impact | Mitigation                                       |
-| ----------------------------------- | ----------- | ------ | ------------------------------------------------ |
+|-------------------------------------|-------------|--------|--------------------------------------------------|
 | **False positives in fuzzy search** | Medium      | Medium | Tunable threshold (default: 0.6)                 |
 | **Synonym dictionary incomplete**   | High        | Low    | Log missing keywords, monthly updates            |
 | **Intent detection errors**         | Medium      | Medium | Fallback to general intent, confidence threshold |
@@ -256,29 +256,29 @@ Week 7-8: Quality & Testing ██████████████ 100%
 Comprehensive documentation created:
 
 1. **[UPGRADE_RECOMMENDATIONS.md](./UPGRADE_RECOMMENDATIONS.md)** (47 pages)
-   - Detailed specifications for all 14+ new tools
-   - Anti-hallucination framework
-   - Performance optimization strategies
+    - Detailed specifications for all 14+ new tools
+    - Anti-hallucination framework
+    - Performance optimization strategies
 
 2. **[TOOLS_QUICK_REFERENCE.md](./TOOLS_QUICK_REFERENCE.md)** (14 pages)
-   - Quick reference for all tools
-   - Usage examples
-   - Intent detection mapping
+    - Quick reference for all tools
+    - Usage examples
+    - Intent detection mapping
 
 3. **[IMPLEMENTATION_GUIDE.md](./IMPLEMENTATION_GUIDE.md)** (28 pages)
-   - Step-by-step implementation
-   - Code examples
-   - Testing checklist
+    - Step-by-step implementation
+    - Code examples
+    - Testing checklist
 
 4. **[ARCHITECTURE_OVERVIEW.md](./ARCHITECTURE_OVERVIEW.md)** (18 pages)
-   - System architecture diagrams
-   - Data flow diagrams
-   - Performance characteristics
+    - System architecture diagrams
+    - Data flow diagrams
+    - Performance characteristics
 
 5. **[README.md](./README.md)** (12 pages)
-   - Navigation guide
-   - Quick start
-   - FAQ
+    - Navigation guide
+    - Quick start
+    - FAQ
 
 **Total:** 119 pages of comprehensive documentation ✅
 
@@ -286,8 +286,8 @@ Comprehensive documentation created:
 
 ## 🤝 Stakeholder Sign-off
 
-| Stakeholder             | Role                   | Status     | Date |
-| ----------------------- | ---------------------- | ---------- | ---- |
+| Stakeholder             | Role                   | Status    | Date |
+|-------------------------|------------------------|-----------|------|
 | **Tech Lead**           | Architecture review    | ⏳ Pending | -    |
 | **Product Manager**     | Business case approval | ⏳ Pending | -    |
 | **Engineering Manager** | Resource allocation    | ⏳ Pending | -    |

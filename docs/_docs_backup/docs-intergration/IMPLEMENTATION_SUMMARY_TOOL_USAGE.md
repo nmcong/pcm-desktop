@@ -109,8 +109,8 @@ Có thể nó được đặt tên khác? Bạn có thể mô tả thêm không?
 
 ### Metrics
 
-| Metric            | Before | After | Improvement  |
-| ----------------- | ------ | ----- | ------------ |
+| Metric            | Before | After | Improvement |
+|-------------------|--------|-------|-------------|
 | Tool Usage        | 20%    | 90%   | **+350%** ✅ |
 | Accuracy          | 60%    | 90%   | **+50%** ✅  |
 | User Satisfaction | 3.5/5  | 4.5/5 | **+29%** ✅  |
@@ -172,11 +172,11 @@ Có thể nó được đặt tên khác? Bạn có thể mô tả thêm không?
 ### Modified Files
 
 1. ✅ `apps/pcm-webapp/public/js/modules/ai/services/EnhancedPromptService.js`
-   - Lines 20-131: System prompt
-   - Lines 336-372: Few-shot examples
+    - Lines 20-131: System prompt
+    - Lines 336-372: Few-shot examples
 
 2. ✅ `apps/pcm-webapp/public/js/modules/ai/services/IntentDetectionService.js`
-   - Lines 79-96: Pattern detection
+    - Lines 79-96: Pattern detection
 
 ### New Files
 
@@ -233,13 +233,17 @@ git push
 
 ### Main Guides
 
-- [TOOL_USAGE_ENHANCEMENT.md](apps/pcm-webapp/public/js/modules/ai/docs-intergration/TOOL_USAGE_ENHANCEMENT.md) - Problem analysis and solutions
-- [TOOL_USAGE_IMPLEMENTATION_COMPLETE.md](apps/pcm-webapp/public/js/modules/ai/docs-intergration/TOOL_USAGE_IMPLEMENTATION_COMPLETE.md) - Implementation details
+- [TOOL_USAGE_ENHANCEMENT.md](apps/pcm-webapp/public/js/modules/ai/docs-intergration/TOOL_USAGE_ENHANCEMENT.md) -
+  Problem analysis and solutions
+- [TOOL_USAGE_IMPLEMENTATION_COMPLETE.md](apps/pcm-webapp/public/js/modules/ai/docs-intergration/TOOL_USAGE_IMPLEMENTATION_COMPLETE.md) -
+  Implementation details
 
 ### Related
 
-- [MESSAGE_FLOW_ARCHITECTURE.md](apps/pcm-webapp/public/js/modules/ai/docs-intergration/MESSAGE_FLOW_ARCHITECTURE.md) - How messages are processed
-- [AI_PLANNING_STRATEGY_GUIDE.md](apps/pcm-webapp/public/js/modules/ai/docs-intergration/AI_PLANNING_STRATEGY_GUIDE.md) - Planning strategy
+- [MESSAGE_FLOW_ARCHITECTURE.md](apps/pcm-webapp/public/js/modules/ai/docs-intergration/MESSAGE_FLOW_ARCHITECTURE.md) -
+  How messages are processed
+- [AI_PLANNING_STRATEGY_GUIDE.md](apps/pcm-webapp/public/js/modules/ai/docs-intergration/AI_PLANNING_STRATEGY_GUIDE.md) -
+  Planning strategy
 
 ---
 

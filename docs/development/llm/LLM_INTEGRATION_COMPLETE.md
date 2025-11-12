@@ -9,21 +9,25 @@ Phần LLM integration đã được **implement xong Phase 1 & 2**! Bạn có t
 ## 📦 Đã Implement
 
 ### ✅ Phase 1: Foundation
+
 - **Core Interfaces**: `LLMClient`, `StreamingCapable`, `FunctionCallingCapable`
-- **Models**: `LLMRequest`, `LLMResponse`, `Message`, `LLMChunk`, `FunctionDefinition`, `FunctionCall`, `StreamingObserver`, `LLMProviderConfig`
+- **Models
+  **: `LLMRequest`, `LLMResponse`, `Message`, `LLMChunk`, `FunctionDefinition`, `FunctionCall`, `StreamingObserver`, `LLMProviderConfig`
 - **Exceptions**: `LLMException`, `LLMProviderException`, `StreamingException`
 
 ### ✅ Phase 2: OpenAI Client
+
 - **OpenAIClient**: Full implementation với HTTP client
 - **Features**:
-  - ✅ Basic chat completion
-  - ✅ Multi-turn conversations
-  - ✅ Streaming (simplified)
-  - ✅ Function calling
-  - ✅ Error handling
-  - ✅ JSON parsing (Jackson)
+    - ✅ Basic chat completion
+    - ✅ Multi-turn conversations
+    - ✅ Streaming (simplified)
+    - ✅ Function calling
+    - ✅ Error handling
+    - ✅ JSON parsing (Jackson)
 
 ### ✅ Service Layer
+
 - **LLMClientFactory**: Factory pattern để tạo clients
 - **LLMService**: High-level API, easy to use
 - **ConversationBuilder**: Builder pattern cho conversations
@@ -58,12 +62,14 @@ service.initialize(LLMProviderConfig.builder()
 ### 3. Sử dụng
 
 #### Chat đơn giản
+
 ```java
 String response = service.chat("Xin chào, bạn có thể giúp tôi code Java không?");
 System.out.println(response);
 ```
 
 #### Multi-turn conversation
+
 ```java
 service.newConversation()
     .addSystemMessage("Bạn là một trợ lý lập trình Java chuyên nghiệp")
@@ -74,6 +80,7 @@ service.newConversation()
 ```
 
 #### Streaming
+
 ```java
 import com.noteflix.pcm.llm.model.*;
 
@@ -102,6 +109,7 @@ service.streamMessage(request, new StreamingObserver() {
 ```
 
 #### Function Calling
+
 ```java
 FunctionDefinition weatherFunc = FunctionDefinition.builder()
     .name("get_weather")
@@ -184,16 +192,19 @@ docs/
 ## 🔮 Next Steps (Optional)
 
 ### Phase 3: Full Streaming
+
 - Implement proper SSE (Server-Sent Events)
 - Chunked response parsing
 - Stream cancellation
 
 ### Phase 4: More Providers
+
 - Anthropic (Claude)
 - Ollama (Local models)
 - Custom providers
 
 ### Phase 5: Middleware
+
 - Rate limiting
 - Retry policy
 - Request logging
@@ -201,6 +212,7 @@ docs/
 - Cost tracking
 
 ### Phase 6: Advanced
+
 - Embeddings
 - Multimodal (images)
 - Batch processing
@@ -231,6 +243,7 @@ java -cp "out:lib/javafx/*:lib/others/*" \
 ## 💡 Design Highlights
 
 ### SOLID Principles ✅
+
 - **Single Responsibility**: Mỗi class có 1 nhiệm vụ rõ ràng
 - **Open/Closed**: Dễ extend (thêm provider mới)
 - **Liskov Substitution**: Các provider interchangeable
@@ -238,6 +251,7 @@ java -cp "out:lib/javafx/*:lib/others/*" \
 - **Dependency Inversion**: Depend on abstractions (interfaces)
 
 ### Design Patterns ✅
+
 - **Builder Pattern**: LLMRequest, LLMResponse, LLMProviderConfig
 - **Factory Pattern**: LLMClientFactory
 - **Singleton Pattern**: Factory instance
@@ -245,6 +259,7 @@ java -cp "out:lib/javafx/*:lib/others/*" \
 - **Strategy Pattern**: Provider switching
 
 ### Clean Code ✅
+
 - Clear naming conventions
 - Comprehensive documentation
 - Error handling
@@ -292,6 +307,7 @@ java -cp "out:lib/javafx/*:lib/others/*" \
 LLM integration hoàn chỉnh và sẵn sàng để sử dụng trong ứng dụng của bạn!
 
 **Hãy xem:**
+
 - `docs/development/LLM_QUICK_START.md` - Để bắt đầu nhanh
 - `src/main/java/com/noteflix/pcm/llm/examples/LLMUsageExample.java` - Để xem examples
 

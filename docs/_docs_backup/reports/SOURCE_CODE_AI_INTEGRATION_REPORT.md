@@ -2,7 +2,9 @@
 
 ## Tóm Tắt Executive Summary
 
-Dự án PCM WebApp hiện tại đã có cơ sở hạ tầng tốt để tích hợp phân tích source code với AI Chat. Báo cáo này phân tích các phương pháp khả thi để liên kết thông tin source code với AI Assistant nhằm hỗ trợ người dùng trả lời câu hỏi và giải quyết yêu cầu liên quan đến code.
+Dự án PCM WebApp hiện tại đã có cơ sở hạ tầng tốt để tích hợp phân tích source code với AI Chat. Báo cáo này phân tích
+các phương pháp khả thi để liên kết thông tin source code với AI Assistant nhằm hỗ trợ người dùng trả lời câu hỏi và
+giải quyết yêu cầu liên quan đến code.
 
 ## 1. Phân Tích Hiện Trạng
 

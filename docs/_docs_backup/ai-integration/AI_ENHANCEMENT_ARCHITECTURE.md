@@ -490,7 +490,7 @@ graph LR
 ## 🎯 Success Metrics
 
 | Metric                       | Before | After | Improvement |
-| ---------------------------- | ------ | ----- | ----------- |
+|------------------------------|--------|-------|-------------|
 | **Query Understanding**      | 60%    | 90%   | +50%        |
 | **Tool Selection Accuracy**  | 70%    | 95%   | +36%        |
 | **Result Relevance**         | 65%    | 88%   | +35%        |

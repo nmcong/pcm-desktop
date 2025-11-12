@@ -1,6 +1,7 @@
 # SQLite Implementation Plan - PCM Desktop
 
 ## 📋 Table of Contents
+
 1. [Overview](#overview)
 2. [Database Schema Design](#database-schema-design)
 3. [Architecture & Design Patterns](#architecture--design-patterns)
@@ -14,6 +15,7 @@
 ## 🎯 Overview
 
 ### Goals
+
 - Implement a robust, scalable SQLite database layer
 - Follow SOLID principles and clean architecture
 - Support AI-powered system analysis and code management
@@ -21,6 +23,7 @@
 - Maintain data integrity and consistency
 
 ### Technology Stack
+
 - **Database**: SQLite (via `sqlite-jdbc-3.47.1.0.jar`)
 - **ORM/Data Access**: Custom DAO pattern (Repository + DAO)
 - **Migrations**: Flyway or custom migration system
@@ -33,6 +36,7 @@
 ### Core Tables
 
 #### 1. **projects**
+
 ```sql
 CREATE TABLE projects (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -53,6 +57,7 @@ CREATE INDEX idx_projects_code ON projects(code);
 ```
 
 #### 2. **screens**
+
 ```sql
 CREATE TABLE screens (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -79,6 +84,7 @@ CREATE INDEX idx_screens_category ON screens(category);
 ```
 
 #### 3. **database_objects**
+
 ```sql
 CREATE TABLE database_objects (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -101,6 +107,7 @@ CREATE INDEX idx_db_objects_name ON database_objects(name);
 ```
 
 #### 4. **batch_jobs**
+
 ```sql
 CREATE TABLE batch_jobs (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -125,6 +132,7 @@ CREATE INDEX idx_batch_jobs_status ON batch_jobs(status);
 ```
 
 #### 5. **workflows**
+
 ```sql
 CREATE TABLE workflows (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -144,6 +152,7 @@ CREATE INDEX idx_workflows_project ON workflows(project_id);
 ```
 
 #### 6. **workflow_steps**
+
 ```sql
 CREATE TABLE workflow_steps (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -165,6 +174,7 @@ CREATE INDEX idx_workflow_steps_order ON workflow_steps(workflow_id, step_order)
 ```
 
 #### 7. **tags**
+
 ```sql
 CREATE TABLE tags (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -178,6 +188,7 @@ CREATE INDEX idx_tags_category ON tags(category);
 ```
 
 #### 8. **screen_tags** (Many-to-Many)
+
 ```sql
 CREATE TABLE screen_tags (
     screen_id INTEGER NOT NULL,
@@ -190,6 +201,7 @@ CREATE TABLE screen_tags (
 ```
 
 #### 9. **screen_relations** (Self-referencing Many-to-Many)
+
 ```sql
 CREATE TABLE screen_relations (
     from_screen_id INTEGER NOT NULL,
@@ -207,6 +219,7 @@ CREATE INDEX idx_screen_relations_to ON screen_relations(to_screen_id);
 ```
 
 #### 10. **knowledge_base**
+
 ```sql
 CREATE TABLE knowledge_base (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -231,6 +244,7 @@ CREATE INDEX idx_kb_title ON knowledge_base(title);
 ```
 
 #### 11. **activity_log**
+
 ```sql
 CREATE TABLE activity_log (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -248,6 +262,7 @@ CREATE INDEX idx_activity_created ON activity_log(created_at DESC);
 ```
 
 #### 12. **settings**
+
 ```sql
 CREATE TABLE settings (
     key TEXT PRIMARY KEY,
@@ -259,6 +274,7 @@ CREATE TABLE settings (
 ```
 
 #### 13. **favorites**
+
 ```sql
 CREATE TABLE favorites (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -314,6 +330,7 @@ CREATE INDEX idx_favorites_user ON favorites(user_name);
 ### Design Patterns to Implement
 
 #### 1. **Repository Pattern**
+
 ```java
 public interface Repository<T, ID> {
     T save(T entity);
@@ -325,6 +342,7 @@ public interface Repository<T, ID> {
 ```
 
 #### 2. **DAO Pattern**
+
 ```java
 public interface DAO<T, ID> {
     T create(T entity) throws SQLException;
@@ -336,23 +354,28 @@ public interface DAO<T, ID> {
 ```
 
 #### 3. **Unit of Work Pattern**
+
 - Transaction management
 - Batch operations
 - Rollback support
 
 #### 4. **Specification Pattern**
+
 - Dynamic query building
 - Reusable query conditions
 
 #### 5. **Factory Pattern**
+
 - DAO factories
 - Entity builders
 
 #### 6. **Singleton Pattern**
+
 - Database connection manager
 - Configuration manager
 
 #### 7. **Observer Pattern**
+
 - Data change notifications
 - UI updates on data changes
 
@@ -432,6 +455,7 @@ com.noteflix.pcm/
 ## 🚀 Implementation Phases
 
 ### **Phase 1: Foundation (Week 1)**
+
 - [ ] Set up database connection manager
 - [ ] Implement migration system
 - [ ] Create base entity classes
@@ -440,6 +464,7 @@ com.noteflix.pcm/
 - [ ] Write connection and migration tests
 
 **Deliverables:**
+
 - `ConnectionManager.java`
 - `DatabaseInitializer.java`
 - `MigrationManager.java`
@@ -450,6 +475,7 @@ com.noteflix.pcm/
 ---
 
 ### **Phase 2: Core Domain Entities (Week 2)**
+
 - [ ] Implement Project entity and repository
 - [ ] Implement Screen entity and repository
 - [ ] Implement Tag entity and many-to-many relations
@@ -458,6 +484,7 @@ com.noteflix.pcm/
 - [ ] Write unit tests for entities and repositories
 
 **Deliverables:**
+
 - `Project.java`, `ProjectDAO.java`, `ProjectRepository.java`
 - `Screen.java`, `ScreenDAO.java`, `ScreenRepository.java`
 - `Tag.java`, `TagDAO.java`
@@ -467,6 +494,7 @@ com.noteflix.pcm/
 ---
 
 ### **Phase 3: Advanced Features (Week 3)**
+
 - [ ] Implement DatabaseObject repository
 - [ ] Implement BatchJob repository
 - [ ] Implement Workflow and WorkflowStep
@@ -476,6 +504,7 @@ com.noteflix.pcm/
 - [ ] Write integration tests
 
 **Deliverables:**
+
 - Advanced entity repositories
 - Activity logging system
 - Favorites management
@@ -484,6 +513,7 @@ com.noteflix.pcm/
 ---
 
 ### **Phase 4: Knowledge Base & AI Integration (Week 4)**
+
 - [ ] Implement KnowledgeBase repository
 - [ ] Add full-text search (FTS5)
 - [ ] Implement vector embeddings storage
@@ -492,6 +522,7 @@ com.noteflix.pcm/
 - [ ] Write performance tests
 
 **Deliverables:**
+
 - `KnowledgeBase.java`, `KnowledgeBaseDAO.java`
 - Search service with FTS5
 - Vector storage for RAG
@@ -500,6 +531,7 @@ com.noteflix.pcm/
 ---
 
 ### **Phase 5: UI Integration (Week 5)**
+
 - [ ] Integrate ProjectService with UI
 - [ ] Implement project list and detail views
 - [ ] Add screen management UI
@@ -509,6 +541,7 @@ com.noteflix.pcm/
 - [ ] Write UI integration tests
 
 **Deliverables:**
+
 - Updated UI components with real data
 - CRUD operations in UI
 - Search and filter UI
@@ -517,6 +550,7 @@ com.noteflix.pcm/
 ---
 
 ### **Phase 6: Optimization & Polish (Week 6)**
+
 - [ ] Add connection pooling
 - [ ] Implement query caching
 - [ ] Add batch operations
@@ -526,6 +560,7 @@ com.noteflix.pcm/
 - [ ] Write comprehensive documentation
 
 **Deliverables:**
+
 - Performance optimizations
 - Export/import features
 - Complete documentation
@@ -538,6 +573,7 @@ com.noteflix.pcm/
 ### SOLID Principles
 
 #### **S - Single Responsibility Principle**
+
 ```java
 // ✅ Good: Each class has one responsibility
 public class ProjectDAO {
@@ -554,6 +590,7 @@ public class ProjectValidator {
 ```
 
 #### **O - Open/Closed Principle**
+
 ```java
 // ✅ Good: Open for extension, closed for modification
 public interface Repository<T, ID> {
@@ -570,6 +607,7 @@ public class ProjectRepository extends AbstractRepository<Project, Long> {
 ```
 
 #### **L - Liskov Substitution Principle**
+
 ```java
 // ✅ Good: Subtypes can replace parent types
 Repository<Project, Long> repo = new ProjectRepository();
@@ -577,6 +615,7 @@ Repository<Project, Long> repo = new ProjectRepository();
 ```
 
 #### **I - Interface Segregation Principle**
+
 ```java
 // ✅ Good: Specific interfaces
 public interface Readable<T, ID> {
@@ -596,6 +635,7 @@ public class ReadOnlyProjectRepository implements Readable<Project, Long> {
 ```
 
 #### **D - Dependency Inversion Principle**
+
 ```java
 // ✅ Good: Depend on abstractions
 public class ProjectService {
@@ -610,6 +650,7 @@ public class ProjectService {
 ### Clean Code Practices
 
 #### 1. **Meaningful Names**
+
 ```java
 // ❌ Bad
 public List<Screen> get() { ... }
@@ -619,6 +660,7 @@ public List<Screen> findActiveScreensByProject(Long projectId) { ... }
 ```
 
 #### 2. **Small Functions**
+
 ```java
 // ✅ Good: One level of abstraction
 public void saveScreen(Screen screen) {
@@ -630,6 +672,7 @@ public void saveScreen(Screen screen) {
 ```
 
 #### 3. **Error Handling**
+
 ```java
 // ✅ Good: Specific exceptions
 public class DatabaseException extends RuntimeException {
@@ -646,6 +689,7 @@ public class EntityNotFoundException extends RuntimeException {
 ```
 
 #### 4. **DRY (Don't Repeat Yourself)**
+
 ```java
 // ✅ Good: Reusable base class
 public abstract class AbstractDAO<T extends BaseEntity, ID> {
@@ -660,6 +704,7 @@ public abstract class AbstractDAO<T extends BaseEntity, ID> {
 ```
 
 #### 5. **Composition Over Inheritance**
+
 ```java
 // ✅ Good: Use composition
 public class ScreenService {
@@ -674,6 +719,7 @@ public class ScreenService {
 ### Database Best Practices
 
 #### 1. **Use Prepared Statements**
+
 ```java
 // ✅ Always use prepared statements to prevent SQL injection
 String sql = "SELECT * FROM screens WHERE project_id = ?";
@@ -684,6 +730,7 @@ try (PreparedStatement stmt = conn.prepareStatement(sql)) {
 ```
 
 #### 2. **Connection Management**
+
 ```java
 // ✅ Use try-with-resources
 public List<Project> findAll() {
@@ -698,6 +745,7 @@ public List<Project> findAll() {
 ```
 
 #### 3. **Transaction Management**
+
 ```java
 // ✅ Use transactions for multiple operations
 public void saveScreenWithTags(Screen screen, List<Tag> tags) {
@@ -733,12 +781,14 @@ public void saveScreenWithTags(Screen screen, List<Tag> tags) {
 ```
 
 #### 4. **Indexing Strategy**
+
 - Index foreign keys
 - Index columns used in WHERE, JOIN, ORDER BY
 - Use composite indexes for multi-column queries
 - Monitor query performance
 
 #### 5. **Data Validation**
+
 ```java
 // ✅ Validate before persistence
 public class ProjectValidator {
@@ -762,6 +812,7 @@ public class ProjectValidator {
 ## 🧪 Testing Strategy
 
 ### Unit Tests
+
 ```java
 @Test
 void testSaveProject() {
@@ -781,6 +832,7 @@ void testSaveProject() {
 ```
 
 ### Integration Tests
+
 ```java
 @Test
 void testScreenWithTagsIntegration() {
@@ -796,6 +848,7 @@ void testScreenWithTagsIntegration() {
 ```
 
 ### Performance Tests
+
 ```java
 @Test
 void testBulkInsertPerformance() {
@@ -815,6 +868,7 @@ void testBulkInsertPerformance() {
 ## 📊 Migration & Versioning
 
 ### Migration Structure
+
 ```
 resources/db/migration/
 ├── V1__initial_schema.sql
@@ -825,6 +879,7 @@ resources/db/migration/
 ```
 
 ### Migration Manager
+
 ```java
 public class MigrationManager {
     public void migrate() {
@@ -840,6 +895,7 @@ public class MigrationManager {
 ```
 
 ### Version Tracking Table
+
 ```sql
 CREATE TABLE schema_version (
     version INTEGER PRIMARY KEY,
@@ -876,6 +932,7 @@ CREATE TABLE schema_version (
 ## 📚 Additional Features
 
 ### Future Enhancements
+
 - [ ] Data versioning/history tracking
 - [ ] Soft delete functionality
 - [ ] Multi-tenant support

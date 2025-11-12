@@ -2,7 +2,9 @@
 
 ## 📋 Tổng Quan
 
-Tài liệu này hướng dẫn cách tích hợp PCM Desktop với hệ thống Single Sign-On (SSO) tự động, cho phép ứng dụng sử dụng token/cookie được sinh ra bởi hệ thống login portal để thực hiện API calls mà không cần người dùng nhập lại thông tin đăng nhập.
+Tài liệu này hướng dẫn cách tích hợp PCM Desktop với hệ thống Single Sign-On (SSO) tự động, cho phép ứng dụng sử dụng
+token/cookie được sinh ra bởi hệ thống login portal để thực hiện API calls mà không cần người dùng nhập lại thông tin
+đăng nhập.
 
 ## 🏗️ Kiến Trúc SSO Integration
 
@@ -1662,27 +1664,28 @@ grep "SECURITY_ALERT" /var/log/pcm-desktop/security.log |
 ## 📚 Best Practices Summary
 
 1. **Security**:
-   - ✅ Encrypt tokens in memory and storage
-   - ✅ Use secure file permissions
-   - ✅ Implement audit logging
-   - ✅ Clear sensitive data from memory
+    - ✅ Encrypt tokens in memory and storage
+    - ✅ Use secure file permissions
+    - ✅ Implement audit logging
+    - ✅ Clear sensitive data from memory
 
 2. **Reliability**:
-   - ✅ Implement token refresh logic
-   - ✅ Provide fallback authentication
-   - ✅ Handle token expiration gracefully
-   - ✅ Monitor authentication status
+    - ✅ Implement token refresh logic
+    - ✅ Provide fallback authentication
+    - ✅ Handle token expiration gracefully
+    - ✅ Monitor authentication status
 
 3. **Performance**:
-   - ✅ Cache tokens with expiration
-   - ✅ Minimize token extraction overhead
-   - ✅ Use connection pooling
-   - ✅ Implement async token refresh
+    - ✅ Cache tokens with expiration
+    - ✅ Minimize token extraction overhead
+    - ✅ Use connection pooling
+    - ✅ Implement async token refresh
 
 4. **Maintainability**:
-   - ✅ Use configuration files
-   - ✅ Support multiple token sources
-   - ✅ Provide clear error messages
-   - ✅ Implement comprehensive logging
+    - ✅ Use configuration files
+    - ✅ Support multiple token sources
+    - ✅ Provide clear error messages
+    - ✅ Implement comprehensive logging
 
-Với hệ thống SSO integration này, PCM Desktop có thể seamlessly tích hợp với bất kỳ enterprise SSO system nào và tự động sử dụng tokens để gọi APIs mà không cần user intervention!
+Với hệ thống SSO integration này, PCM Desktop có thể seamlessly tích hợp với bất kỳ enterprise SSO system nào và tự động
+sử dụng tokens để gọi APIs mà không cần user intervention!

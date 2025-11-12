@@ -5,20 +5,21 @@ Tài liệu về database implementation và quản lý trong PCM Desktop.
 ## 📚 Tài Liệu
 
 - **[DATABASE_QUICK_START.md](DATABASE_QUICK_START.md)** - Bắt đầu nhanh với Database
-  - Setup database
-  - Connection management
-  - Basic CRUD operations
-  - Examples
+    - Setup database
+    - Connection management
+    - Basic CRUD operations
+    - Examples
 
 - **[SQLITE_IMPLEMENTATION_PLAN.md](SQLITE_IMPLEMENTATION_PLAN.md)** - Kế hoạch SQLite
-  - Architecture design
-  - Schema design
-  - Migration strategy
-  - Performance optimization
+    - Architecture design
+    - Schema design
+    - Migration strategy
+    - Performance optimization
 
 ## 🏗️ Architecture
 
 ### Database Stack
+
 ```
 ┌─────────────────────────────────────┐
 │     Application Layer               │
@@ -51,6 +52,7 @@ Tài liệu về database implementation và quản lý trong PCM Desktop.
 ## 📊 Database Schema
 
 ### Main Tables
+
 - **conversations** - Chat conversations
 - **messages** - Chat messages
 - **users** - User information
@@ -58,6 +60,7 @@ Tài liệu về database implementation và quản lý trong PCM Desktop.
 - **embeddings** - Vector embeddings (for RAG)
 
 ### Relationships
+
 ```
 conversations (1) ──── (*) messages
 users (1) ──── (*) conversations
@@ -67,6 +70,7 @@ conversations (1) ──── (*) embeddings
 ## 🚀 Features
 
 ### ✅ Implemented
+
 - ✅ SQLite database
 - ✅ Connection pooling
 - ✅ Transaction management
@@ -76,12 +80,14 @@ conversations (1) ──── (*) embeddings
 - ✅ Error handling
 
 ### 🚧 In Progress
+
 - 🚧 Vector database integration
 - 🚧 Full-text search
 - 🚧 Database encryption
 - 🚧 Backup/restore
 
 ### 📋 Planned
+
 - 📋 Cloud sync
 - 📋 Multi-user support
 - 📋 Advanced indexing
@@ -90,6 +96,7 @@ conversations (1) ──── (*) embeddings
 ## 💡 Quick Examples
 
 ### Get Connection
+
 ```java
 ConnectionManager cm = ConnectionManager.INSTANCE;
 try (Connection conn = cm.getConnection()) {
@@ -98,6 +105,7 @@ try (Connection conn = cm.getConnection()) {
 ```
 
 ### Using Repository
+
 ```java
 ConversationRepository repo = new ConversationRepositoryImpl();
 Conversation conv = repo.save(newConversation);
@@ -105,6 +113,7 @@ List<Conversation> recent = repo.findRecent(10);
 ```
 
 ### Using DAO
+
 ```java
 ConversationDAO dao = new ConversationDAOImpl(connectionManager);
 dao.insert(conversation);
@@ -114,10 +123,12 @@ Optional<Conversation> found = dao.findById(id);
 ## 🔧 Database Location
 
 ### Default Paths
+
 - **macOS/Linux**: `~/.pcm/pcm-desktop.db`
 - **Windows**: `%USERPROFILE%\.pcm\pcm-desktop.db`
 
 ### Custom Path
+
 ```java
 System.setProperty("pcm.db.path", "/custom/path/db.sqlite");
 ```
@@ -125,6 +136,7 @@ System.setProperty("pcm.db.path", "/custom/path/db.sqlite");
 ## 📝 Migration
 
 ### Creating Migration
+
 ```sql
 -- V3__add_user_preferences.sql
 CREATE TABLE user_preferences (
@@ -137,6 +149,7 @@ CREATE TABLE user_preferences (
 ```
 
 ### Running Migrations
+
 ```java
 MigrationManager migrationManager = new MigrationManager();
 migrationManager.runMigrations();

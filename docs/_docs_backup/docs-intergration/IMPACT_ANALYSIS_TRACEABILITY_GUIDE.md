@@ -51,12 +51,12 @@ Báo cáo Impact Analysis
 1. ✅ Xác định màn hình: "Register Screen"
 2. ✅ Tìm source code: `RegisterForm.jsx`
 3. ✅ Phân tích impact:
-   - Database: `users` table cần thêm column `phone`
-   - API: `/api/register` cần update
-   - Validation: Thêm phone validation
+    - Database: `users` table cần thêm column `phone`
+    - API: `/api/register` cần update
+    - Validation: Thêm phone validation
 4. ✅ Trace màn hình khác:
-   - "Profile Screen" (hiển thị phone)
-   - "Admin User List" (show phone)
+    - "Profile Screen" (hiển thị phone)
+    - "Admin User List" (show phone)
 5. ✅ Báo cáo: "3 màn hình, 1 table, 2 APIs cần update"
 
 ---
@@ -565,21 +565,21 @@ Extract reusable <LoginForm> component
 
 3. REFACTORING STEPS
    Step 1: Create LoginForm.jsx component (2h)
-   - Extract form logic
-   - Add props for customization
-   - Add unit tests
+    - Extract form logic
+    - Add props for customization
+    - Add unit tests
 
    Step 2: Update Login Screen (1h)
-   - Replace with <LoginForm>
-   - Keep redirect logic
+    - Replace with <LoginForm>
+    - Keep redirect logic
 
    Step 3: Update Cart Modal (1h)
-   - Replace with <LoginForm style="modal">
-   - Update onSuccess handler
+    - Replace with <LoginForm style="modal">
+    - Update onSuccess handler
 
    Step 4: Update Admin Login (2h)
-   - Use <LoginForm style="admin">
-   - Keep extra security checks
+    - Use <LoginForm style="admin">
+    - Keep extra security checks
 
 4. TESTING NEEDED
    ✓ Login Screen: Full flow

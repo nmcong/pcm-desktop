@@ -99,38 +99,38 @@
 **Diagrams**:
 
 1. **📊 Complete Message Flow Diagram** (Sequence Diagram)
-   - Shows full interaction between all components
-   - 5 phases with detailed steps
-   - User → AIPanel → ConversationMgr → PlanningService → ProviderRegistry → Provider → FunctionService → DatabaseMgr
+    - Shows full interaction between all components
+    - 5 phases with detailed steps
+    - User → AIPanel → ConversationMgr → PlanningService → ProviderRegistry → Provider → FunctionService → DatabaseMgr
 
 2. **🔀 Simple Flow (No Planning)** (Flowchart)
-   - Decision tree for simple queries
-   - Input → Validate → Provider → Tool Calls? → Display
+    - Decision tree for simple queries
+    - Input → Validate → Provider → Tool Calls? → Display
 
 3. **🧠 Planning Flow (Complex Queries)** (Flowchart)
-   - Intent detection → Planning decision → Plan generation
-   - Enhanced prompt building → Tool execution with validation
+    - Intent detection → Planning decision → Plan generation
+    - Enhanced prompt building → Tool execution with validation
 
 4. **🔄 Function Calling Iteration Loop** (Flowchart)
-   - Iteration 1 → Iteration 2 → ... → Final Response
-   - Max 10 iterations
+    - Iteration 1 → Iteration 2 → ... → Final Response
+    - Max 10 iterations
 
 5. **🎯 Intent Detection Flow** (Flowchart)
-   - Analyze → Keywords/Entities/Patterns → Category → Output
+    - Analyze → Keywords/Entities/Patterns → Category → Output
 
 6. **🛠️ Function Execution Flow** (State Diagram)
-   - Received → Validating → Parsing → Executing → Success/Failed
+    - Received → Validating → Parsing → Executing → Success/Failed
 
 7. **📦 Provider Architecture** (Class Diagram)
-   - BaseProvider hierarchy
-   - OpenAI, Claude, ViByte implementations
-   - ProviderRegistry management
+    - BaseProvider hierarchy
+    - OpenAI, Claude, ViByte implementations
+    - ProviderRegistry management
 
 8. **🗂️ Component Relationships** (Graph)
-   - UI Layer → State Management → AI Services → Providers → Data Layer
+    - UI Layer → State Management → AI Services → Providers → Data Layer
 
 9. **🔐 Error Handling Flow** (Flowchart)
-   - Try → Success/Error → Error Type → Display/Throw/Continue
+    - Try → Success/Error → Error Type → Display/Throw/Continue
 
 10. **📊 Data Flow Diagram** (Flowchart)
     - User Input → Processing → AI Communication → Tool Execution → Storage → Display
@@ -244,7 +244,7 @@ architects understanding system flow
 ### Documentation Size
 
 | File                                    | Lines      | Purpose                    |
-| --------------------------------------- | ---------- | -------------------------- |
+|-----------------------------------------|------------|----------------------------|
 | `MESSAGE_FLOW_ARCHITECTURE.md`          | ~2,500     | Main documentation         |
 | `MESSAGE_FLOW_DIAGRAM.md`               | ~1,000     | Visual diagrams            |
 | `MESSAGE_FLOW_QUICK_REFERENCE.md`       | ~800       | Quick lookup               |
@@ -319,19 +319,19 @@ architects understanding system flow
 **3 complete integration examples**:
 
 1. **Basic Flow** (No Planning)
-   - Simple queries: "Get project #5"
-   - Direct function calling
-   - ~50 lines of code
+    - Simple queries: "Get project #5"
+    - Direct function calling
+    - ~50 lines of code
 
 2. **With Planning** (Complex Queries)
-   - Complex queries: "Analyze impact of X"
-   - Intent detection + planning + validation
-   - ~150 lines of code
+    - Complex queries: "Analyze impact of X"
+    - Intent detection + planning + validation
+    - ~150 lines of code
 
 3. **Streaming** (Real-time Feedback)
-   - Streaming response with tools
-   - Progress indicators
-   - ~80 lines of code
+    - Streaming response with tools
+    - Progress indicators
+    - ~80 lines of code
 
 ### 4. Developer Tasks
 
@@ -505,29 +505,29 @@ docs-intergration/
 ### Key Strengths
 
 1. **Reference to Real Code**
-   - Every step links to actual source code
-   - File paths and line numbers provided
-   - Code snippets from real implementation
+    - Every step links to actual source code
+    - File paths and line numbers provided
+    - Code snippets from real implementation
 
 2. **Visual Understanding**
-   - 12 different diagram types
-   - Multiple perspectives (sequence, flow, state, architecture)
-   - Interactive and renderable
+    - 12 different diagram types
+    - Multiple perspectives (sequence, flow, state, architecture)
+    - Interactive and renderable
 
 3. **Practical Application**
-   - Working integration examples
-   - Common task guides
-   - Debugging solutions
+    - Working integration examples
+    - Common task guides
+    - Debugging solutions
 
 4. **Developer-Friendly**
-   - Quick reference for fast lookup
-   - Learning path for progressive understanding
-   - Code snippets ready to copy
+    - Quick reference for fast lookup
+    - Learning path for progressive understanding
+    - Code snippets ready to copy
 
 5. **Comprehensive Coverage**
-   - All 10 phases documented
-   - Error handling included
-   - Performance considerations
+    - All 10 phases documented
+    - Error handling included
+    - Performance considerations
 
 ---
 

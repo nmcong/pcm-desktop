@@ -354,7 +354,7 @@ const toolCalls = adapter.extractToolCalls({ content: accumulated }); // ✅ Com
 ### Overhead
 
 | Operation          | Time      | Impact            |
-| ------------------ | --------- | ----------------- |
+|--------------------|-----------|-------------------|
 | Tool Injection     | <1ms      | Negligible        |
 | Streaming          | Variable  | Network dependent |
 | Accumulation       | <1ms      | Per chunk         |

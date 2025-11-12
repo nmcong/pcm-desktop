@@ -17,14 +17,15 @@
 
 ### What is SSO?
 
-**Single Sign-On (SSO)** là cơ chế xác thực cho phép người dùng đăng nhập một lần vào một **Portal trung tâm** và tự động được xác thực cho tất cả các ứng dụng liên kết mà không cần đăng nhập lại.
+**Single Sign-On (SSO)** là cơ chế xác thực cho phép người dùng đăng nhập một lần vào một **Portal trung tâm** và tự
+động được xác thực cho tất cả các ứng dụng liên kết mà không cần đăng nhập lại.
 
 ### Benefits
 
 ✅ **User Experience**: Đăng nhập một lần, sử dụng mọi ứng dụng  
 ✅ **Security**: Quản lý xác thực tập trung  
 ✅ **Productivity**: Giảm thời gian đăng nhập lặp lại  
-✅ **Management**: Dễ dàng thu hồi quyền truy cập  
+✅ **Management**: Dễ dàng thu hồi quyền truy cập
 
 ### Use Case (Your System)
 
@@ -97,22 +98,26 @@
 ### Components
 
 #### 1. **SSO Portal** (Identity Provider)
+
 - Xử lý đăng nhập người dùng
 - Sinh token (JWT/OAuth token)
 - Quản lý session
 - Làm mới token (refresh)
 
 #### 2. **Token Storage** (Central Storage)
+
 - Lưu trữ token trên máy người dùng
 - Chia sẻ token giữa các ứng dụng
 - Bảo mật token
 
 #### 3. **Desktop Applications** (Service Providers)
+
 - Đọc token từ Token Storage
 - Gửi token khi call API
 - Tự động làm mới token khi hết hạn
 
 #### 4. **Backend API Server**
+
 - Xác thực token
 - Cung cấp dịch vụ cho apps
 - Quản lý permissions
@@ -242,11 +247,13 @@
 ```
 
 **Format:**
+
 ```
 eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c2VyMTIzIiwibmFtZSI6IkpvaG4gRG9lIiwiZW1haWwiOiJqb2huQGV4YW1wbGUuY29tIiwicm9sZXMiOlsidXNlciIsImFkbWluIl0sImlhdCI6MTY5OTg3NjU0MywiZXhwIjoxNjk5ODgwMTQzfQ.signature
 ```
 
 **Benefits:**
+
 - ✅ Self-contained (chứa user info)
 - ✅ Stateless (không cần lưu trên server)
 - ✅ Secure (signed với private key)
@@ -294,11 +301,13 @@ Encryption:
 ```
 
 **Pros:**
+
 - ✅ Simple to implement
 - ✅ Works across all apps on the machine
 - ✅ Persistent storage
 
 **Cons:**
+
 - ❌ Requires proper file permissions
 - ❌ Need to implement encryption/decryption
 
@@ -311,11 +320,13 @@ Linux:   libsecret / gnome-keyring
 ```
 
 **Pros:**
+
 - ✅ OS-level encryption
 - ✅ Most secure
 - ✅ Native OS integration
 
 **Cons:**
+
 - ❌ Platform-specific implementation
 - ❌ More complex
 
@@ -329,11 +340,13 @@ Apps connect to this server to get token.
 ```
 
 **Pros:**
+
 - ✅ Real-time token updates
 - ✅ Centralized control
 - ✅ Easy token revocation
 
 **Cons:**
+
 - ❌ Requires SSO Portal to always run
 - ❌ Port conflicts
 - ❌ Network overhead
@@ -346,10 +359,12 @@ export SSO_REFRESH_TOKEN="tGzv3JOkF0XG..."
 ```
 
 **Pros:**
+
 - ✅ Very simple
 - ✅ Works across processes
 
 **Cons:**
+
 - ❌ Less secure (visible in process list)
 - ❌ Not persistent across reboots
 - ❌ Can be accessed by any process
@@ -391,6 +406,7 @@ Content-Type: application/json
 ```
 
 **Pros:**
+
 - ✅ Standard HTTP header
 - ✅ Works with REST APIs
 - ✅ Not cached by browsers
@@ -419,11 +435,13 @@ Cookie: session_token=eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9...
 ```
 
 **Pros:**
+
 - ✅ Automatic browser handling
 - ✅ HTTP-only flag for security
 - ✅ Automatic expiration
 
 **Cons:**
+
 - ❌ CSRF vulnerability
 - ❌ Limited to same domain
 - ❌ More complex for desktop apps
@@ -435,6 +453,7 @@ GET /api/conversations?token=eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9...
 ```
 
 **Cons:**
+
 - ❌ Token visible in URL
 - ❌ Logged in server logs
 - ❌ Cached by proxies
@@ -1070,16 +1089,19 @@ public class ConversationService {
 #### Issue 1: Token Not Found
 
 **Symptom:**
+
 ```
 Token file not found: ~/.pcm/auth/token.enc
 ```
 
 **Possible Causes:**
+
 - User hasn't logged in to SSO Portal
 - Token file was deleted
 - File permissions issue
 
 **Solution:**
+
 ```java
 // Check if token exists
 if (!tokenService.isAuthenticated()) {
@@ -1094,17 +1116,20 @@ if (!tokenService.isAuthenticated()) {
 #### Issue 2: Token Expired
 
 **Symptom:**
+
 ```
 HTTP 401 Unauthorized
 Token expired
 ```
 
 **Possible Causes:**
+
 - Access token expired
 - Refresh token expired
 - Server time mismatch
 
 **Solution:**
+
 ```java
 // Automatic token refresh
 if (response.statusCode() == 401) {
@@ -1124,17 +1149,20 @@ if (response.statusCode() == 401) {
 #### Issue 3: Token Validation Failed
 
 **Symptom:**
+
 ```
 Invalid JWT signature
 Token validation failed
 ```
 
 **Possible Causes:**
+
 - Token was tampered with
 - Wrong public key on server
 - Token format incorrect
 
 **Solution:**
+
 ```java
 // Verify token locally before sending
 try {
@@ -1156,12 +1184,14 @@ try {
 #### Issue 4: Multiple Apps Conflicting
 
 **Symptom:**
+
 ```
 Token file locked
 Another process is using the token
 ```
 
 **Solution:**
+
 ```java
 // Use file locking
 try (FileChannel channel = FileChannel.open(tokenPath, 
@@ -1188,30 +1218,30 @@ try (FileChannel channel = FileChannel.open(tokenPath,
 ## Next Steps
 
 1. **Design SSO Portal UI**
-   - Login form
-   - Token management dashboard
-   - Connected apps list
+    - Login form
+    - Token management dashboard
+    - Connected apps list
 
 2. **Implement Token Service**
-   - SecureTokenStorage
-   - TokenService
-   - AuthenticatedHttpClient
+    - SecureTokenStorage
+    - TokenService
+    - AuthenticatedHttpClient
 
 3. **Integrate with Existing Services**
-   - ConversationService
-   - AIService
-   - Database sync
+    - ConversationService
+    - AIService
+    - Database sync
 
 4. **Add Authentication UI**
-   - Login dialog
-   - "Not authenticated" message
-   - Re-login prompt
+    - Login dialog
+    - "Not authenticated" message
+    - Re-login prompt
 
 5. **Testing**
-   - Test token storage/retrieval
-   - Test token refresh
-   - Test API calls with token
-   - Test multi-app scenarios
+    - Test token storage/retrieval
+    - Test token refresh
+    - Test API calls with token
+    - Test multi-app scenarios
 
 ---
 
@@ -1220,29 +1250,29 @@ try (FileChannel channel = FileChannel.open(tokenPath,
 ### Key Takeaways
 
 1. **SSO = One Login, Many Apps** ✅
-   - User logs into Portal once
-   - All apps automatically authenticated
+    - User logs into Portal once
+    - All apps automatically authenticated
 
 2. **Token Storage Options** ✅
-   - File System (encrypted) - Simple
-   - System Keychain - Most secure
-   - Local HTTP Server - Dynamic
+    - File System (encrypted) - Simple
+    - System Keychain - Most secure
+    - Local HTTP Server - Dynamic
 
 3. **API Authentication** ✅
-   - Use `Authorization: Bearer <token>` header
-   - Auto-refresh expired tokens
-   - Handle 401 errors gracefully
+    - Use `Authorization: Bearer <token>` header
+    - Auto-refresh expired tokens
+    - Handle 401 errors gracefully
 
 4. **Security Best Practices** ✅
-   - Always use HTTPS
-   - Encrypt tokens at rest
-   - Short expiration times
-   - Secure file permissions
+    - Always use HTTPS
+    - Encrypt tokens at rest
+    - Short expiration times
+    - Secure file permissions
 
 5. **Implementation Patterns** ✅
-   - TokenService for centralized management
-   - AuthenticatedHttpClient for automatic token injection
-   - Integration with existing services
+    - TokenService for centralized management
+    - AuthenticatedHttpClient for automatic token injection
+    - Integration with existing services
 
 ---
 
