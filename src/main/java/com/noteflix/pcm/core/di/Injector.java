@@ -7,6 +7,9 @@ import com.noteflix.pcm.core.theme.ThemeManager;
 import com.noteflix.pcm.infrastructure.repository.chat.ConversationRepository;
 import com.noteflix.pcm.infrastructure.repository.chat.ConversationRepositoryImpl;
 import com.noteflix.pcm.ui.viewmodel.AIAssistantViewModel;
+import com.noteflix.pcm.ui.viewmodel.BatchJobsViewModel;
+import com.noteflix.pcm.ui.viewmodel.DatabaseObjectsViewModel;
+import com.noteflix.pcm.ui.viewmodel.KnowledgeBaseViewModel;
 import com.noteflix.pcm.ui.viewmodel.SettingsViewModel;
 import java.util.HashMap;
 import java.util.Map;
@@ -93,6 +96,11 @@ public class Injector {
           ThemeManager tm = get(ThemeManager.class);
           return new SettingsViewModel(tm);
         });
+
+    // Register other ViewModels
+    registerFactory(KnowledgeBaseViewModel.class, KnowledgeBaseViewModel::new);
+    registerFactory(DatabaseObjectsViewModel.class, DatabaseObjectsViewModel::new);
+    registerFactory(BatchJobsViewModel.class, BatchJobsViewModel::new);
 
     log.debug("Default services and ViewModels registered");
   }
