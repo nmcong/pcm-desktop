@@ -1,9 +1,10 @@
 package com.noteflix.pcm.llm.factory;
 
 import com.noteflix.pcm.llm.api.LLMClient;
-import com.noteflix.pcm.llm.client.anthropic.AnthropicClient;
-import com.noteflix.pcm.llm.client.ollama.OllamaClient;
-import com.noteflix.pcm.llm.client.openai.OpenAIClient;
+// Old clients removed - will be reimplemented with new architecture
+// import com.noteflix.pcm.llm.client.anthropic.AnthropicClient;
+// import com.noteflix.pcm.llm.client.ollama.OllamaClient;
+// import com.noteflix.pcm.llm.client.openai.OpenAIClient;
 import com.noteflix.pcm.llm.exception.LLMException;
 import com.noteflix.pcm.llm.model.LLMProviderConfig;
 import java.util.HashMap;
@@ -65,15 +66,22 @@ public class LLMClientFactory {
   public LLMClient createClient(LLMProviderConfig config) throws com.noteflix.pcm.llm.exception.LLMException {
     config.validate();
 
+    // TODO: Implement new providers with LLMProvider interface
+    throw new com.noteflix.pcm.llm.exception.LLMException(
+        "Old clients removed. Providers will be reimplemented with new architecture. " +
+        "Provider requested: " + config.getProvider()
+    );
+    
+    /* OLD CODE - TO BE REPLACED
     switch (config.getProvider()) {
       case OPENAI:
-        return new OpenAIClient(config);
+        return new OpenAIProvider(config);
 
       case ANTHROPIC:
-        return new AnthropicClient(config);
+        return new AnthropicProvider(config);
 
       case OLLAMA:
-        return new OllamaClient(config);
+        return new OllamaProvider(config);
 
       case CUSTOM:
         throw new com.noteflix.pcm.llm.exception.LLMException(
@@ -82,6 +90,7 @@ public class LLMClientFactory {
       default:
         throw new com.noteflix.pcm.llm.exception.LLMException("Unknown provider: " + config.getProvider());
     }
+    */
   }
 
   /** Clear all cached clients */
