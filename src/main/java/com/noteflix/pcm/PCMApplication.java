@@ -128,11 +128,11 @@ public class PCMApplication extends Application {
   @Override
   public void stop() {
     log.info("Shutting down PCM Desktop Application...");
-    
+
     // Shutdown async executor
     Asyncs.shutdown();
     log.info("✅ Async executor shutdown complete");
-    
+
     // Other cleanup
     log.info("✅ Application shutdown complete");
   }

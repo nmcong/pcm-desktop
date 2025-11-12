@@ -10,8 +10,8 @@ import lombok.extern.slf4j.Slf4j;
  * Async utilities for JavaFX applications
  *
  * <p>Provides convenient methods for running background tasks and updating UI. Follows best
- * practices: - All IO/long-running operations run on background threads - UI updates only on
- * JavaFX Application Thread - Proper error handling and cancellation support
+ * practices: - All IO/long-running operations run on background threads - UI updates only on JavaFX
+ * Application Thread - Proper error handling and cancellation support
  *
  * <p>Usage: <code>
  *   Asyncs.runAsync(() -> {
@@ -70,13 +70,16 @@ public class Asyncs {
   public static <T> CompletableFuture<T> runAsync(
       Callable<T> backgroundTask, Consumer<T> onSuccess, Consumer<Throwable> onError) {
 
-    CompletableFuture<T> future = CompletableFuture.supplyAsync(() -> {
-      try {
-        return backgroundTask.call();
-      } catch (Exception e) {
-        throw new CompletionException(e);
-      }
-    }, executor);
+    CompletableFuture<T> future =
+        CompletableFuture.supplyAsync(
+            () -> {
+              try {
+                return backgroundTask.call();
+              } catch (Exception e) {
+                throw new CompletionException(e);
+              }
+            },
+            executor);
 
     future.whenComplete(
         (result, error) -> {
@@ -107,10 +110,7 @@ public class Asyncs {
    */
   public static <T> CompletableFuture<T> runAsync(
       Callable<T> backgroundTask, Consumer<T> onSuccess) {
-    return runAsync(
-        backgroundTask,
-        onSuccess,
-        error -> log.error("Async task failed", error));
+    return runAsync(backgroundTask, onSuccess, error -> log.error("Async task failed", error));
   }
 
   /**
@@ -249,4 +249,3 @@ public class Asyncs {
     }
   }
 }
-

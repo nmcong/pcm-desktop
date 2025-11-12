@@ -9,8 +9,8 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * Base ViewModel for all ViewModels
  *
- * <p>Provides common state and behavior for all ViewModels: - Busy/loading state - Error handling
- * - Lifecycle methods
+ * <p>Provides common state and behavior for all ViewModels: - Busy/loading state - Error handling -
+ * Lifecycle methods
  *
  * <p>Follows: - Template Method Pattern (lifecycle hooks) - DRY principle (common properties)
  *
@@ -76,4 +76,3 @@ public abstract class BaseViewModel {
     errorMessage.set(null);
   }
 }
-

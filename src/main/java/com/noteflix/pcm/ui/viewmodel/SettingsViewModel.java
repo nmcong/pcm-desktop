@@ -177,4 +177,3 @@ public class SettingsViewModel extends BaseViewModel {
     loadSettings();
   }
 }
-

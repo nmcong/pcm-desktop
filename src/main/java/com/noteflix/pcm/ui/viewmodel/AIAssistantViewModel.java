@@ -68,10 +68,11 @@ public class AIAssistantViewModel {
   public void loadConversations() {
     try {
       var loadedConversations = conversationService.getUserConversations(currentUserId);
-      Platform.runLater(() -> {
-        conversations.clear();
-        conversations.addAll(loadedConversations);
-      });
+      Platform.runLater(
+          () -> {
+            conversations.clear();
+            conversations.addAll(loadedConversations);
+          });
       log.debug("Loaded {} conversations", loadedConversations.size());
     } catch (Exception e) {
       log.error("Failed to load conversations", e);
@@ -89,10 +90,11 @@ public class AIAssistantViewModel {
 
     try {
       var results = conversationService.searchConversations(currentUserId, query);
-      Platform.runLater(() -> {
-        conversations.clear();
-        conversations.addAll(results);
-      });
+      Platform.runLater(
+          () -> {
+            conversations.clear();
+            conversations.addAll(results);
+          });
       log.debug("Found {} conversations matching '{}'", results.size(), query);
     } catch (Exception e) {
       log.error("Failed to search conversations", e);
@@ -135,11 +137,13 @@ public class AIAssistantViewModel {
 
       if (convOpt.isPresent()) {
         Conversation conv = convOpt.get();
-        Platform.runLater(() -> {
-          messages.clear();
-          messages.addAll(conv.getMessages());
-        });
-        log.debug("Loaded {} messages for conversation {}", conv.getMessages().size(), conversationId);
+        Platform.runLater(
+            () -> {
+              messages.clear();
+              messages.addAll(conv.getMessages());
+            });
+        log.debug(
+            "Loaded {} messages for conversation {}", conv.getMessages().size(), conversationId);
       }
     } catch (Exception e) {
       log.error("Failed to load messages", e);
@@ -204,35 +208,38 @@ public class AIAssistantViewModel {
 
           @Override
           public void onChunk(LLMChunk chunk) {
-            Platform.runLater(() -> {
-              fullResponse.append(chunk.getContent());
-              streamingContent.set(fullResponse.toString());
-            });
+            Platform.runLater(
+                () -> {
+                  fullResponse.append(chunk.getContent());
+                  streamingContent.set(fullResponse.toString());
+                });
           }
 
           @Override
           public void onComplete() {
-            Platform.runLater(() -> {
-              // Reload messages to get the persisted AI response
-              loadMessages(currentConversationId.get());
-              streamingContent.set("");
-              isBusy.set(false);
-              isStreaming.set(false);
-              loadConversations(); // Refresh sidebar
-              if (onComplete != null) {
-                onComplete.run();
-              }
-            });
+            Platform.runLater(
+                () -> {
+                  // Reload messages to get the persisted AI response
+                  loadMessages(currentConversationId.get());
+                  streamingContent.set("");
+                  isBusy.set(false);
+                  isStreaming.set(false);
+                  loadConversations(); // Refresh sidebar
+                  if (onComplete != null) {
+                    onComplete.run();
+                  }
+                });
           }
 
           @Override
           public void onError(Throwable error) {
-            Platform.runLater(() -> {
-              setError("AI response failed: " + error.getMessage());
-              streamingContent.set("");
-              isBusy.set(false);
-              isStreaming.set(false);
-            });
+            Platform.runLater(
+                () -> {
+                  setError("AI response failed: " + error.getMessage());
+                  streamingContent.set("");
+                  isBusy.set(false);
+                  isStreaming.set(false);
+                });
           }
         });
 
@@ -374,4 +381,3 @@ public class AIAssistantViewModel {
     log.debug("AIAssistantViewModel deactivated");
   }
 }
-

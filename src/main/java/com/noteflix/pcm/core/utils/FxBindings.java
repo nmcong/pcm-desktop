@@ -239,4 +239,3 @@ public class FxBindings {
     return isNull(property).not();
   }
 }
-

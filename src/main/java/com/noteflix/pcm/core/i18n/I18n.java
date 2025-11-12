@@ -178,4 +178,3 @@ public class I18n {
     return get("message.error.generic");
   }
 }
-

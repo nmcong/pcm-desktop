@@ -3,11 +3,9 @@ package com.noteflix.pcm.core.navigation;
 /**
  * Route enumeration for application navigation
  *
- * <p>Defines all possible routes/pages in the application. This enum-based approach provides:
- * - Type safety (no magic strings)
- * - Compile-time validation
- * - Easy refactoring
- * - Clear overview of all application routes
+ * <p>Defines all possible routes/pages in the application. This enum-based approach provides: -
+ * Type safety (no magic strings) - Compile-time validation - Easy refactoring - Clear overview of
+ * all application routes
  *
  * <p>Follows: Open/Closed Principle - easy to extend by adding new enum values
  *
@@ -44,4 +42,3 @@ public enum Route {
     return displayName;
   }
 }
-
