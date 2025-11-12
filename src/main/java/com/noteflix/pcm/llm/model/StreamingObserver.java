@@ -2,10 +2,11 @@ package com.noteflix.pcm.llm.model;
 
 /**
  * Observer interface for streaming responses
- * <p>
- * Follows Observer Pattern for reactive streaming
- * <p>
- * Example usage:
+ *
+ * <p>Follows Observer Pattern for reactive streaming
+ *
+ * <p>Example usage:
+ *
  * <pre>
  * streamingClient.streamMessage(request, new StreamingObserver() {
  *     private StringBuilder fullResponse = new StringBuilder();
@@ -29,8 +30,9 @@ package com.noteflix.pcm.llm.model;
  *     }
  * });
  * </pre>
- * <p>
- * For JavaFX UI integration:
+ *
+ * <p>For JavaFX UI integration:
+ *
  * <pre>
  * streamingClient.streamMessage(request, new StreamingObserver() {
  *     @Override
@@ -63,32 +65,30 @@ package com.noteflix.pcm.llm.model;
  */
 public interface StreamingObserver {
 
-    /**
-     * Called when a new chunk arrives
-     * <p>
-     * This method is called multiple times as chunks stream in.
-     * Process each chunk immediately for real-time display.
-     *
-     * @param chunk The received chunk
-     */
-    void onChunk(LLMChunk chunk);
+  /**
+   * Called when a new chunk arrives
+   *
+   * <p>This method is called multiple times as chunks stream in. Process each chunk immediately for
+   * real-time display.
+   *
+   * @param chunk The received chunk
+   */
+  void onChunk(LLMChunk chunk);
 
-    /**
-     * Called when streaming completes successfully
-     * <p>
-     * No more chunks will arrive after this.
-     * This is the place to do cleanup or final processing.
-     */
-    void onComplete();
+  /**
+   * Called when streaming completes successfully
+   *
+   * <p>No more chunks will arrive after this. This is the place to do cleanup or final processing.
+   */
+  void onComplete();
 
-    /**
-     * Called when an error occurs during streaming
-     * <p>
-     * No more chunks will arrive after this.
-     * Handle the error appropriately (log, show to user, retry, etc.)
-     *
-     * @param error The error that occurred
-     */
-    void onError(Throwable error);
+  /**
+   * Called when an error occurs during streaming
+   *
+   * <p>No more chunks will arrive after this. Handle the error appropriately (log, show to user,
+   * retry, etc.)
+   *
+   * @param error The error that occurred
+   */
+  void onError(Throwable error);
 }
-

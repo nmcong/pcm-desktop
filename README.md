@@ -428,6 +428,38 @@ java --module-path lib/javafx ^
   com.noteflix.pcm.PCMApplication
 ```
 
+## 🎨 Code Formatting
+
+PCM Desktop sử dụng **[Google Java Format](https://github.com/google/google-java-format)** để đảm bảo code style nhất quán.
+
+### Format All Files
+
+```bash
+# macOS/Linux
+./scripts/format.sh
+
+# Windows
+.\scripts\format.bat
+```
+
+### Check Formatting
+
+```bash
+# macOS/Linux
+./scripts/format.sh --check
+
+# Windows
+.\scripts\format.bat --check
+```
+
+### More Information
+
+Xem **[Code Formatting Guide](docs/guides/CODE_FORMATTING_GUIDE.md)** để biết thêm chi tiết về:
+- IDE integration (IntelliJ, Eclipse, VS Code)
+- Pre-commit hooks
+- CI/CD integration
+- Style guidelines
+
 ## 🧪 Testing
 
 ```bash
@@ -489,14 +521,15 @@ jpackage \
 
 ## 🔧 Library Versions
 
-| Library     | Version  | Java Compatibility  | Download                              |
-|-------------|----------|---------------------|---------------------------------------|
-| JavaFX      | 21.0.9   | Java 21 ✅           | https://gluonhq.com/products/javafx/  |
-| Lombok      | 1.18.34  | All Java versions ✅ | https://projectlombok.org/            |
-| Jackson     | 2.18.2   | All Java versions ✅ | https://github.com/FasterXML/jackson  |
-| SLF4J       | 2.0.16   | All Java versions ✅ | https://www.slf4j.org/                |
-| Logback     | 1.5.12   | All Java versions ✅ | https://logback.qos.ch/               |
-| SQLite JDBC | 3.47.1.0 | All Java versions ✅ | https://github.com/xerial/sqlite-jdbc |
+| Library            | Version  | Java Compatibility  | Download                                      |
+|--------------------|----------|---------------------|-----------------------------------------------|
+| JavaFX             | 21.0.9   | Java 21 ✅           | https://gluonhq.com/products/javafx/          |
+| Lombok             | 1.18.34  | All Java versions ✅ | https://projectlombok.org/                    |
+| Jackson            | 2.18.2   | All Java versions ✅ | https://github.com/FasterXML/jackson          |
+| SLF4J              | 2.0.16   | All Java versions ✅ | https://www.slf4j.org/                        |
+| Logback            | 1.5.12   | All Java versions ✅ | https://logback.qos.ch/                       |
+| SQLite JDBC        | 3.47.1.0 | All Java versions ✅ | https://github.com/xerial/sqlite-jdbc         |
+| Google Java Format | 1.32.0   | Java 21+ ✅          | https://github.com/google/google-java-format  |
 
 **Note:** This project uses **Java 21** and **JavaFX 21.0.9** (not JavaFX 23/25) for compatibility.
 
@@ -572,6 +605,8 @@ See **[docs/LIBRARY_SETUP.md](docs/LIBRARY_SETUP.md)** for complete troubleshoot
 
 - [Lombok Documentation](https://projectlombok.org/)
 - [Jackson Documentation](https://github.com/FasterXML/jackson-docs)
+- [Google Java Format](https://github.com/google/google-java-format)
+- [Google Java Style Guide](https://google.github.io/styleguide/javaguide.html)
 
 ### AI & LLM Integration
 
@@ -588,8 +623,11 @@ See **[docs/LIBRARY_SETUP.md](docs/LIBRARY_SETUP.md)** for complete troubleshoot
 
 1. Create feature branch
 2. Make changes
-3. Test thoroughly
-4. Submit pull request
+3. **Format code**: `./scripts/format.sh`
+4. Test thoroughly
+5. Submit pull request
+
+**Note**: All code must be formatted with Google Java Format before submitting. See [Code Formatting Guide](docs/guides/CODE_FORMATTING_GUIDE.md).
 
 ## 📄 License
 

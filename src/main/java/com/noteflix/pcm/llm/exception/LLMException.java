@@ -8,16 +8,15 @@ package com.noteflix.pcm.llm.exception;
  */
 public class LLMException extends RuntimeException {
 
-    public LLMException(String message) {
-        super(message);
-    }
+  public LLMException(String message) {
+    super(message);
+  }
 
-    public LLMException(String message, Throwable cause) {
-        super(message, cause);
-    }
+  public LLMException(String message, Throwable cause) {
+    super(message, cause);
+  }
 
-    public LLMException(Throwable cause) {
-        super(cause);
-    }
+  public LLMException(Throwable cause) {
+    super(cause);
+  }
 }
-
