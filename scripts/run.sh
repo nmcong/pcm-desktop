@@ -103,7 +103,10 @@ fi
 
 # Copy resources to output directory
 echo -e "${BLUE}📦 Copying resources...${NC}"
-mkdir -p out/fxml/components out/css out/images/icons out/db/migration
+mkdir -p out/fxml/components out/css out/images/icons out/db/migration out/i18n
+
+# Copy i18n files
+cp src/main/resources/i18n/*.properties out/i18n/ 2>/dev/null || true
 
 # Copy FXML files
 find src/main/resources/fxml -name "*.fxml" -exec sh -c '

@@ -165,6 +165,11 @@ if not exist "out\fxml\components" mkdir out\fxml\components
 if not exist "out\css" mkdir out\css
 if not exist "out\images\icons" mkdir out\images\icons
 if not exist "out\db\migration" mkdir out\db\migration
+if not exist "out\i18n" mkdir out\i18n
+
+REM Copy i18n files
+xcopy /Y src\main\resources\i18n\*.properties out\i18n\ >nul 2>&1
+echo [INFO] i18n files copied
 
 REM Copy FXML files including subdirectories
 xcopy /Y /E /I src\main\resources\fxml\*.fxml out\fxml\ >nul 2>&1

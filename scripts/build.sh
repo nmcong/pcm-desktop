@@ -212,7 +212,13 @@ if [ $? -eq 0 ]; then
     echo -e "${BLUE}📦 Copying resources...${NC}"
     
     # Create resource directories
-    mkdir -p out/fxml/components out/css out/images/icons out/db/migration
+    mkdir -p out/fxml/components out/css out/images/icons out/db/migration out/i18n
+    
+    # Copy i18n files
+    if [ -d "src/main/resources/i18n" ]; then
+        cp src/main/resources/i18n/*.properties out/i18n/ 2>/dev/null || true
+        echo -e "${GREEN}✅ i18n files copied${NC}"
+    fi
     
     # Copy FXML files
     if [ -d "src/main/resources/fxml" ]; then
