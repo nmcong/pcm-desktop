@@ -153,6 +153,13 @@ for jar in lib/others/*.jar; do
     fi
 done
 
+# Add RAG libraries (Lucene, etc.)
+for jar in lib/rag/*.jar; do
+    if [ -f "$jar" ]; then
+        CLASSPATH="$CLASSPATH:$jar"
+    fi
+done
+
 # Add text component libraries if requested
 if [ "$WITH_TEXT_COMPONENT" = true ]; then
     echo -e "${YELLOW}📚 Including Universal Text Component libraries...${NC}"
