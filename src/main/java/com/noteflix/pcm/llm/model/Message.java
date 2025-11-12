@@ -35,16 +35,8 @@ public class Message {
    */
   private String content;
 
-  /** Function name (only for FUNCTION role) Name of the function that was executed */
+  /** Function name (only for TOOL role) Name of the function that was executed */
   private String name;
-
-  /**
-   * Function call details (only for ASSISTANT role with function call) When LLM wants to call a
-   * function
-   * @deprecated Use toolCalls instead for new architecture
-   */
-  @Deprecated
-  private FunctionCall functionCall;
   
   /**
    * Tool calls (new architecture - supports multiple tool calls)
@@ -72,14 +64,9 @@ public class Message {
   public static Message assistant(String content) {
     return Message.builder().role(Role.ASSISTANT).content(content).build();
   }
-
-  /** Create a function result message */
-  public static Message function(String name, String result) {
-    return Message.builder().role(Role.FUNCTION).name(name).content(result).build();
-  }
   
   /** 
-   * Create a tool result message (new architecture)
+   * Create a tool result message
    * 
    * @param toolCallId ID of the tool call this is responding to
    * @param result Result of tool execution
@@ -119,16 +106,9 @@ public class Message {
      * Assistant message (from the LLM) Example: "To create a Java class, use the class keyword..."
      */
     ASSISTANT,
-
-    /** 
-     * Function message (result of function execution) Used in function calling flow 
-     * @deprecated Use TOOL instead for new architecture
-     */
-    @Deprecated
-    FUNCTION,
     
     /**
-     * Tool message (result of tool execution in new architecture)
+     * Tool message (result of tool execution)
      * Links back to a specific tool call via toolCallId
      */
     TOOL
