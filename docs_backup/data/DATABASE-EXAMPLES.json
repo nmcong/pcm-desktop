@@ -1,0 +1,315 @@
+{
+  "description": "PCM WebApp Database - Sample Data Examples",
+  "version": "9",
+  "lastUpdated": "2025-11-08",
+
+  "subsystem": {
+    "id": 1,
+    "name": "E-Commerce Platform",
+    "description": "Core e-commerce system with product catalog, cart, and checkout",
+    "isFavorite": true,
+    "createdAt": "2025-01-15T10:00:00.000Z",
+    "updatedAt": "2025-11-08T10:00:00.000Z"
+  },
+
+  "project": {
+    "id": 1,
+    "subsystemId": 1,
+    "name": "Customer Portal",
+    "shortName": "CPT",
+    "description": "Customer-facing web application for browsing and purchasing products",
+    "repositoryUrl": "https://github.com/company/customer-portal",
+    "repositoryBranch": "main",
+    "devAccessLink": "https://dev.customer.example.com",
+    "devDevOpsLink": "https://jenkins.example.com/job/customer-portal-dev",
+    "qaAccessLink": "https://qa.customer.example.com",
+    "qaDevOpsLink": "https://jenkins.example.com/job/customer-portal-qa",
+    "prodAccessLink": "https://customer.example.com",
+    "prodDevOpsLink": "https://jenkins.example.com/job/customer-portal-prod",
+    "isFavorite": true,
+    "createdAt": "2025-01-20T10:00:00.000Z",
+    "updatedAt": "2025-11-08T10:00:00.000Z"
+  },
+
+  "screen": {
+    "id": 1,
+    "projectId": 1,
+    "name": "Product Detail Page",
+    "description": "Displays detailed product information including images, specifications, and reviews",
+    "wireframe": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgA...",
+    "inputs": [
+      {
+        "name": "productId",
+        "type": "number",
+        "required": true,
+        "validation": "Must be a positive integer",
+        "defaultValue": null
+      },
+      {
+        "name": "quantity",
+        "type": "number",
+        "required": false,
+        "validation": "Min: 1, Max: 99",
+        "defaultValue": 1
+      }
+    ],
+    "outputs": [
+      {
+        "name": "productDetails",
+        "type": "object",
+        "format": "JSON"
+      },
+      {
+        "name": "totalPrice",
+        "type": "currency",
+        "format": "$0,0.00"
+      }
+    ],
+    "events": [
+      {
+        "type": "click",
+        "trigger": "Add to Cart button",
+        "action": "api_call",
+        "apiEndpoint": "/api/cart/add",
+        "validation": "Validate quantity > 0",
+        "branchOptions": []
+      },
+      {
+        "type": "submit",
+        "trigger": "Review form",
+        "action": "api_call",
+        "apiEndpoint": "/api/reviews/create",
+        "validation": "Required: rating, comment",
+        "branchOptions": []
+      },
+      {
+        "type": "click",
+        "trigger": "Related product",
+        "action": "navigate",
+        "targetScreen": "Product Detail Page",
+        "branchOptions": []
+      },
+      {
+        "type": "click",
+        "trigger": "Checkout button",
+        "action": "navigate",
+        "targetScreen": "Shopping Cart",
+        "branchOptions": [
+          {
+            "condition": "cart.isEmpty()",
+            "targetScreen": "Shopping Cart (Empty)",
+            "description": "Show empty cart message"
+          },
+          {
+            "condition": "!user.isLoggedIn()",
+            "targetScreen": "Login Page",
+            "description": "Require login before checkout"
+          },
+          {
+            "condition": "default",
+            "targetScreen": "Shopping Cart",
+            "description": "Normal checkout flow"
+          }
+        ]
+      }
+    ],
+    "sourceFiles": [
+      {
+        "id": 1,
+        "type": "frontend",
+        "source": "github",
+        "path": "src/pages/ProductDetail.tsx",
+        "description": "Main React component for product detail page",
+        "githubRepo": "https://github.com/company/customer-portal",
+        "githubBranch": "main"
+      },
+      {
+        "id": 2,
+        "type": "backend",
+        "source": "github",
+        "path": "src/api/controllers/ProductController.java",
+        "description": "Product API endpoints",
+        "githubRepo": "https://github.com/company/backend-api",
+        "githubBranch": "develop"
+      },
+      {
+        "id": 3,
+        "type": "test",
+        "source": "manual",
+        "path": "tests/e2e/product-detail.spec.ts",
+        "description": "E2E tests for product detail page"
+      }
+    ],
+    "isFavorite": false,
+    "createdAt": "2025-02-01T10:00:00.000Z",
+    "updatedAt": "2025-11-08T10:00:00.000Z"
+  },
+
+  "chatConversation": {
+    "id": 1,
+    "title": "How to implement OAuth2 authentication?",
+    "messages": [
+      {
+        "role": "user",
+        "content": "I need to implement OAuth2 authentication for our API. Can you guide me?",
+        "timestamp": "2025-11-08T10:00:00.000Z"
+      },
+      {
+        "role": "assistant",
+        "content": "I'll help you implement OAuth2. Here's a step-by-step guide:\n\n1. First, add Spring Security OAuth2 dependencies...",
+        "timestamp": "2025-11-08T10:00:05.000Z"
+      }
+    ],
+    "context": {
+      "projectId": 1,
+      "screenId": null,
+      "subsystemId": 1
+    },
+    "createdAt": "2025-11-08T10:00:00.000Z",
+    "updatedAt": "2025-11-08T10:05:00.000Z"
+  },
+
+  "knowledgeBaseCategory": {
+    "id": 1,
+    "name": "Java",
+    "description": "Java programming language, frameworks, and best practices",
+    "icon": "Coffee",
+    "color": "#f89820",
+    "createdAt": "2025-03-01T10:00:00.000Z",
+    "updatedAt": "2025-03-01T10:00:00.000Z"
+  },
+
+  "knowledgeBaseItem": {
+    "id": 1,
+    "categoryId": 1,
+    "title": "Fix NullPointerException in Spring Boot Service Layer",
+    "type": "bug",
+    "priority": "high",
+    "problem": "Getting NullPointerException when calling getUserById() method in UserService.\n\n```java\n@Service\npublic class UserService {\n    @Autowired\n    private UserRepository userRepository;\n    \n    public User getUserById(Long id) {\n        return userRepository.findById(id).get(); // NPE here\n    }\n}\n```\n\nError occurs when user ID doesn't exist in database.",
+    "solution": "Use Optional properly and handle the case when user is not found:\n\n```java\n@Service\npublic class UserService {\n    @Autowired\n    private UserRepository userRepository;\n    \n    public User getUserById(Long id) {\n        return userRepository.findById(id)\n            .orElseThrow(() -> new UserNotFoundException(\"User not found with id: \" + id));\n    }\n}\n```\n\nAlternatively, return Optional:\n\n```java\npublic Optional<User> getUserById(Long id) {\n    return userRepository.findById(id);\n}\n```",
+    "tags": ["java", "spring-boot", "nullpointerexception", "optional"],
+    "author": "John Doe",
+    "status": "published",
+    "views": 156,
+    "upvotes": 23,
+    "createdAt": "2025-04-15T10:00:00.000Z",
+    "updatedAt": "2025-11-08T10:00:00.000Z"
+  },
+
+  "batchJob": {
+    "id": 1,
+    "name": "Daily Database Backup",
+    "description": "Backs up all database tables to S3 storage",
+    "type": "backup",
+    "schedule": "0 2 * * *",
+    "command": "node scripts/backup-database.js",
+    "parameters": {
+      "destination": "s3://backups/database",
+      "compression": true,
+      "retention": 30
+    },
+    "status": "active",
+    "isActive": true,
+    "lastRun": "2025-11-08T02:00:00.000Z",
+    "lastResult": "Success - Backed up 15 tables, 2.5GB total",
+    "nextRun": "2025-11-09T02:00:00.000Z",
+    "runCount": 245,
+    "createdAt": "2025-01-01T10:00:00.000Z",
+    "updatedAt": "2025-11-08T02:00:00.000Z"
+  },
+
+  "databaseObject": {
+    "id": 1,
+    "name": "USER_ACCOUNTS",
+    "type": "TABLE",
+    "schema": "APP_SCHEMA",
+    "projectId": 1,
+    "sqlScript": "CREATE TABLE APP_SCHEMA.USER_ACCOUNTS (\n  ID NUMBER(19) NOT NULL PRIMARY KEY,\n  USERNAME VARCHAR2(50) NOT NULL UNIQUE,\n  EMAIL VARCHAR2(100) NOT NULL UNIQUE,\n  PASSWORD_HASH VARCHAR2(255) NOT NULL,\n  FIRST_NAME VARCHAR2(50),\n  LAST_NAME VARCHAR2(50),\n  STATUS VARCHAR2(20) DEFAULT 'ACTIVE',\n  CREATED_AT TIMESTAMP DEFAULT CURRENT_TIMESTAMP,\n  UPDATED_AT TIMESTAMP DEFAULT CURRENT_TIMESTAMP,\n  CONSTRAINT CHK_STATUS CHECK (STATUS IN ('ACTIVE', 'INACTIVE', 'SUSPENDED'))\n);",
+    "description": "Main user accounts table storing authentication and profile information",
+    "dependencies": [],
+    "columns": [
+      {
+        "name": "ID",
+        "dataType": "NUMBER(19)",
+        "nullable": false,
+        "defaultValue": null,
+        "comment": "Primary key"
+      },
+      {
+        "name": "USERNAME",
+        "dataType": "VARCHAR2(50)",
+        "nullable": false,
+        "defaultValue": null,
+        "comment": "Unique username"
+      },
+      {
+        "name": "EMAIL",
+        "dataType": "VARCHAR2(100)",
+        "nullable": false,
+        "defaultValue": null,
+        "comment": "User email address"
+      },
+      {
+        "name": "STATUS",
+        "dataType": "VARCHAR2(20)",
+        "nullable": true,
+        "defaultValue": "'ACTIVE'",
+        "comment": "Account status"
+      }
+    ],
+    "tags": ["authentication", "user-management", "core"],
+    "version": 3,
+    "changeLog": [
+      {
+        "version": 1,
+        "date": "2025-01-15T10:00:00.000Z",
+        "author": "John Doe",
+        "description": "Initial table creation"
+      },
+      {
+        "version": 2,
+        "date": "2025-03-20T10:00:00.000Z",
+        "author": "Jane Smith",
+        "description": "Added STATUS column with check constraint"
+      },
+      {
+        "version": 3,
+        "date": "2025-06-10T10:00:00.000Z",
+        "author": "John Doe",
+        "description": "Added CREATED_AT and UPDATED_AT timestamps"
+      }
+    ],
+    "isValid": true,
+    "validationErrors": [],
+    "createdAt": "2025-01-15T10:00:00.000Z",
+    "updatedAt": "2025-06-10T10:00:00.000Z"
+  },
+
+  "settings": {
+    "theme": {
+      "key": "theme",
+      "value": "dark"
+    },
+    "githubToken": {
+      "key": "github_pat",
+      "value": "ghp_xxxxxxxxxxxxxxxxxxxx"
+    },
+    "aiProvider": {
+      "key": "ai_provider",
+      "value": "openai"
+    },
+    "language": {
+      "key": "language",
+      "value": "vi"
+    }
+  },
+
+  "notes": {
+    "autoIncrement": "All stores (except settings) use auto-increment for IDs",
+    "timestamps": "createdAt and updatedAt are ISO 8601 strings",
+    "foreignKeys": "Enforced at application level, not database level",
+    "cascadeDelete": "Handled in DatabaseManager methods",
+    "indexes": "Used for query optimization on frequently filtered fields",
+    "validation": "Client-side validation before database operations"
+  }
+}
