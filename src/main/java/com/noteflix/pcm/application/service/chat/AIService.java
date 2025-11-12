@@ -379,8 +379,20 @@ public class AIService {
   private LLMProvider initializeProvider(Conversation conversation) throws Exception {
     String providerName = conversation.getLlmProvider();
     
+    // If no provider specified, use first available
     if (providerName == null || providerName.trim().isEmpty()) {
-      providerName = "openai"; // Default
+      List<String> available = providerRegistry.getAvailableProviders();
+      
+      if (available.isEmpty()) {
+        throw new IllegalStateException(
+          "No LLM providers available. " +
+          "Please configure at least one provider (OpenAI, Anthropic, Ollama, or Custom API). " +
+          "Set environment variables: OPENAI_API_KEY, ANTHROPIC_API_KEY, or CUSTOM_LLM_URL"
+        );
+      }
+      
+      providerName = available.get(0);
+      log.info("No provider specified, using first available: {}", providerName);
     }
     
     providerName = providerName.toLowerCase();
@@ -389,8 +401,32 @@ public class AIService {
     LLMProvider provider = providerRegistry.get(providerName);
     
     if (provider == null) {
-      throw new IllegalStateException("Provider not available: " + providerName);
+      // Provider not available, try to fallback
+      List<String> available = providerRegistry.getAvailableProviders();
+      
+      if (available.isEmpty()) {
+        throw new IllegalStateException(
+          "No LLM providers available. " +
+          "Requested provider '" + providerName + "' not found. " +
+          "Please configure at least one provider (OpenAI, Anthropic, Ollama, or Custom API). " +
+          "Set environment variables: OPENAI_API_KEY, ANTHROPIC_API_KEY, or CUSTOM_LLM_URL"
+        );
+      }
+      
+      // Fallback to first available
+      providerName = available.get(0);
+      provider = providerRegistry.get(providerName);
+      
+      log.warn("Requested provider not available, falling back to: {}", providerName);
     }
+    
+    // Configure provider
+    ProviderConfig config = ProviderConfig.builder()
+        .model(conversation.getLlmModel())
+        .apiKey(getProviderToken(providerName))
+        .baseUrl(getProviderUrl(providerName))
+        .build();
+    provider.configure(config);
     
     // Set as active
     providerRegistry.setActive(providerName);
@@ -525,5 +561,46 @@ public class AIService {
    */
   public void setOnError(Consumer<String> callback) {
     this.onError = callback;
+  }
+  
+  // ========== Provider Configuration Helpers ==========
+  
+  /**
+   * Get provider API key/token from environment.
+   */
+  private String getProviderToken(String providerName) {
+    switch (providerName.toLowerCase()) {
+      case "openai":
+        return System.getenv("OPENAI_API_KEY");
+      case "anthropic":
+        return System.getenv("ANTHROPIC_API_KEY");
+      case "ollama":
+        return null; // Ollama typically doesn't need a token
+      case "custom":
+        return System.getenv("CUSTOM_LLM_KEY");
+      default:
+        return null;
+    }
+  }
+  
+  /**
+   * Get provider base URL from environment or use default.
+   */
+  private String getProviderUrl(String providerName) {
+    switch (providerName.toLowerCase()) {
+      case "openai":
+        String openaiUrl = System.getenv("OPENAI_API_URL");
+        return openaiUrl != null ? openaiUrl : "https://api.openai.com/v1";
+      case "anthropic":
+        String anthropicUrl = System.getenv("ANTHROPIC_API_URL");
+        return anthropicUrl != null ? anthropicUrl : "https://api.anthropic.com/v1";
+      case "ollama":
+        String ollamaUrl = System.getenv("OLLAMA_API_URL");
+        return ollamaUrl != null ? ollamaUrl : "http://localhost:11434";
+      case "custom":
+        return System.getenv("CUSTOM_LLM_URL");
+      default:
+        return null;
+    }
   }
 }
