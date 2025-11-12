@@ -80,6 +80,61 @@ fi
 # Create output directory
 mkdir -p out
 
+# Verify libraries function
+verify_libraries() {
+    echo -e "${BLUE}🔍 Verifying required libraries...${NC}"
+    local errors=0
+    
+    # Check JavaFX libraries
+    local javafx_libs=(
+        "javafx.base.jar"
+        "javafx.controls.jar"
+        "javafx.fxml.jar"
+        "javafx.graphics.jar"
+        "javafx.media.jar"
+        "javafx.web.jar"
+    )
+    
+    for lib in "${javafx_libs[@]}"; do
+        if [ ! -f "lib/javafx/$lib" ]; then
+            echo -e "  ${RED}✗${NC} $lib - MISSING"
+            ((errors++))
+        fi
+    done
+    
+    # Check other libraries
+    local other_libs=(
+        "lombok-1.18.34.jar"
+        "jackson-databind-2.18.2.jar"
+        "jackson-core-2.18.2.jar"
+        "slf4j-api-2.0.16.jar"
+        "logback-classic-1.5.12.jar"
+        "sqlite-jdbc-3.47.1.0.jar"
+    )
+    
+    for lib in "${other_libs[@]}"; do
+        if [ ! -f "lib/others/$lib" ]; then
+            echo -e "  ${RED}✗${NC} $lib - MISSING"
+            ((errors++))
+        fi
+    done
+    
+    if [ $errors -gt 0 ]; then
+        echo -e "${RED}❌ $errors library/libraries missing!${NC}"
+        echo ""
+        echo "Run the setup script to download libraries:"
+        echo -e "  ${GREEN}./scripts/setup.sh${NC}"
+        echo ""
+        exit 1
+    fi
+    
+    echo -e "${GREEN}✅ All required libraries present${NC}"
+    echo ""
+}
+
+# Verify libraries before building
+verify_libraries
+
 # Build classpath
 echo -e "${BLUE}🔗 Building classpath...${NC}"
 CLASSPATH=""

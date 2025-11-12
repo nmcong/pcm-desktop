@@ -69,20 +69,41 @@ echo [INFO] Java compiler found!
 javac -version
 echo.
 
-REM Check if libraries exist
-if not exist "lib\javafx\javafx.base.jar" (
-    echo [ERROR] JavaFX libraries not found!
-    echo Please run: scripts\setup.bat
+REM Verify libraries
+echo [INFO] Verifying required libraries...
+set LIB_ERRORS=0
+
+REM Check JavaFX libraries
+set JAVAFX_LIBS=javafx.base.jar javafx.controls.jar javafx.fxml.jar javafx.graphics.jar javafx.media.jar javafx.web.jar
+for %%L in (%JAVAFX_LIBS%) do (
+    if not exist "lib\javafx\%%L" (
+        echo [ERROR] Missing: %%L
+        set /a LIB_ERRORS+=1
+    )
+)
+
+REM Check other libraries
+set OTHER_LIBS=lombok-1.18.34.jar jackson-databind-2.18.2.jar jackson-core-2.18.2.jar slf4j-api-2.0.16.jar logback-classic-1.5.12.jar sqlite-jdbc-3.47.1.0.jar
+for %%L in (%OTHER_LIBS%) do (
+    if not exist "lib\others\%%L" (
+        echo [ERROR] Missing: %%L
+        set /a LIB_ERRORS+=1
+    )
+)
+
+if %LIB_ERRORS% GTR 0 (
+    echo.
+    echo [ERROR] %LIB_ERRORS% library/libraries missing!
+    echo.
+    echo Run the setup script to download libraries:
+    echo   scripts\setup.bat
+    echo.
     pause
     exit /b 1
 )
 
-if not exist "lib\others\lombok-1.18.34.jar" (
-    echo [ERROR] Other libraries not found!
-    echo Please run: scripts\setup.bat
-    pause
-    exit /b 1
-)
+echo [OK] All required libraries present
+echo.
 
 REM Clean build directory if requested
 if %CLEAN_BUILD%==1 (
