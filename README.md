@@ -17,21 +17,30 @@ PCM Desktop là ứng dụng desktop AI-powered sử dụng Large Language Model
 - **Conversation Memory** - Multi-turn conversations với context
 
 ### 📊 System Management
-- **Subsystems & Projects** - Quản lý cấu trúc hệ thống phân cấp
-- **Screen/Form Management** - Theo dõi tất cả màn hình trong hệ thống
+- **Projects & Subsystems** - Quản lý cấu trúc hệ thống phân cấp
+- **Screen/Form Management** - Theo dõi tất cả màn hình trong hệ thống  
 - **Event Tracking** - Quản lý events và sự kiện trên từng màn hình
 - **Source Code Mapping** - Liên kết source code với màn hình tương ứng
+- **Activity Logging** - Theo dõi mọi thay đổi trong hệ thống
 
 ### 🗄️ Database Management
-- **Oracle DB Objects** - Quản lý toàn bộ database objects (Tables, Views, Procedures, Functions, Packages, Triggers, etc.)
-- **Schema Analysis** - Phân tích cấu trúc database
-- **Relationship Mapping** - Theo dõi mối quan hệ giữa các objects
+- **SQLite Metadata Storage** - Local database để lưu trữ metadata
+- **Database Migration System** - Tự động migrate schema với versioning
+- **Schema Version Control** - Theo dõi và quản lý phiên bản database
+- **Transaction Support** - Rollback khi migration thất bại
+- **Index Management** - Tối ưu hóa performance với proper indexing
 
-### ⚙️ Batch Job Management
+### 💬 Chat System
+- **Multi-LLM Conversations** - Chat với AI qua nhiều providers
+- **Conversation History** - Lưu trữ và quản lý lịch sử chat
+- **Message Threading** - Organize conversations theo topics
+- **Search & Filter** - Tìm kiếm trong conversation history
+- **Export Conversations** - Export chat history ra nhiều formats
+
+### ⚙️ Batch Job Management  
 - **Job Configuration** - Thông tin cấu hình batch jobs
 - **Schedule Information** - Thời gian chạy và tần suất
 - **Code Analysis** - Source code của batch jobs
-- **Database Connections** - Theo dõi database connections của jobs
 - **Dependencies** - Mối quan hệ giữa các jobs
 
 ### 🔄 Workflow Management
@@ -49,23 +58,40 @@ PCM Desktop là ứng dụng desktop AI-powered sử dụng Large Language Model
 
 ### Backend & Core
 - **Java 21** - Programming language
-- **JavaFX 21.0.9** - UI framework (compatible with Java 21)
-- **Lombok 1.18.34** - Reduce boilerplate (Latest)
+- **JavaFX 21.0.9** - Modern UI framework (compatible with Java 21)
+- **Lombok 1.18.34** - Reduce boilerplate code (Latest stable)
 - **Jackson 2.18.2** - JSON processing for data serialization (Latest)
-- **SQLite 3.47.1.0** - Local metadata database (Latest)
-- **Logback 1.5.12** - Logging framework (Latest)
+- **SQLite 3.47.1.0** - Local metadata database với JDBC driver (Latest)
+- **Logback 1.5.12** - Advanced logging framework (Latest)
+
+### Database & Migration
+- **Database Migration Manager** - Custom migration system with versioning
+- **Transaction Support** - ACID compliance with rollback capability
+- **Schema Version Control** - Track và manage database versions
+- **Idempotent Migrations** - Safe để run multiple times
+- **Index Optimization** - Performance tuning với proper indexing
+
+### UI & User Experience  
+- **AtlantaFX** - Modern JavaFX theme framework
+- **Pure Java UI** - No FXML, code-first approach
+- **Responsive Design** - Adaptive layouts
+- **Theme System** - Light/dark mode support
+- **Component Library** - Reusable UI components
 
 ### AI & Analysis
-- **LLM Integration** - Large Language Model APIs
-- **Oracle JDBC** - Connection to Oracle databases
-- **Source Code Parser** - Java/SQL code analysis
-- **AST Analysis** - Abstract Syntax Tree parsing
+- **Multi-LLM Integration** - OpenAI, Anthropic Claude, Ollama support
+- **Streaming Responses** - Real-time AI conversation
+- **Function Calling** - AI can execute system functions
+- **Conversation Management** - Persistent chat history
+- **Context Awareness** - Multi-turn conversations
 
 ### Architecture
-- **No Build Tool** - Direct JAR import for simplicity
-- **Domain-Driven Design** - Clean architecture
-- **Repository Pattern** - Data access abstraction
+- **No Build Tool Required** - Direct JAR import for simplicity
+- **Domain-Driven Design** - Clean architecture principles
+- **Repository Pattern** - Data access abstraction layer
 - **Service Layer** - Business logic separation
+- **Event-Driven** - Loosely coupled components
+- **Dependency Injection** - Manual DI for lightweight design
 
 ## 📦 Project Structure
 
@@ -73,83 +99,167 @@ PCM Desktop là ứng dụng desktop AI-powered sử dụng Large Language Model
 pcm-desktop/
 ├── lib/                           # External Libraries
 │   ├── javafx/                    # JavaFX 21.0.9 JARs (platform-specific)
-│   └── others/                    # Other library JARs (platform-independent)
-├── src/
-│   ├── main/
-│   │   ├── java/
-│   │   │   └── com/noteflix/pcm/
-│   │   │       ├── PCMApplication.java      # Main entry point
-│   │   │       ├── ui/                      # UI Controllers & Views
-│   │   │       │   ├── MainController.java  # Main window controller
-│   │   │       │   ├── dashboard/           # Dashboard views
-│   │   │       │   ├── subsystem/           # Subsystem management
-│   │   │       │   ├── screen/              # Screen/Form management
-│   │   │       │   ├── database/            # DB objects management
-│   │   │       │   ├── batch/               # Batch job management
-│   │   │       │   ├── workflow/            # Workflow visualization
-│   │   │       │   ├── knowledge/           # Knowledge base
-│   │   │       │   └── query/               # AI Query interface
-│   │   │       ├── domain/                  # Domain models
-│   │   │       │   ├── model/               # Entity models
-│   │   │       │   │   ├── Subsystem.java
-│   │   │       │   │   ├── Screen.java
-│   │   │       │   │   ├── Event.java
-│   │   │       │   │   ├── SourceFile.java
-│   │   │       │   │   ├── DatabaseObject.java
-│   │   │       │   │   ├── BatchJob.java
-│   │   │       │   │   ├── Workflow.java
-│   │   │       │   │   └── KnowledgeEntry.java
-│   │   │       │   └── repository/          # Repository interfaces
-│   │   │       ├── application/             # Application services
-│   │   │       │   ├── service/
-│   │   │       │   │   ├── LLMService.java        # LLM integration
-│   │   │       │   │   ├── CodeAnalyzer.java      # Source code analysis
-│   │   │       │   │   ├── DatabaseAnalyzer.java  # DB analysis
-│   │   │       │   │   ├── BatchJobService.java   # Batch job management
-│   │   │       │   │   ├── WorkflowService.java   # Workflow management
-│   │   │       │   │   └── QueryService.java      # Query processing
-│   │   │       │   └── dto/                 # Data Transfer Objects
-│   │   │       └── infrastructure/          # Infrastructure layer
-│   │   │           ├── persistence/         # Data access implementations
-│   │   │           ├── oracle/              # Oracle DB integration
-│   │   │           ├── ai/                  # AI/LLM integration
-│   │   │           └── parser/              # Code parsers
-│   │   └── resources/
-│   │       ├── fxml/                        # UI layouts (FXML files)
-│   │       ├── css/                         # Stylesheets
-│   │       ├── images/                      # Icons & assets
-│   │       └── logback.xml                  # Logging configuration
-│   └── test/java/                           # Unit & integration tests
-├── docs/                                    # Documentation
-│   ├── README.md                            # Full documentation
-│   ├── LIBRARY_SETUP.md                     # Library setup guide
-│   ├── ARCHITECTURE.md                      # System architecture
-│   └── API_GUIDE.md                         # LLM API integration guide
-├── download-libs.sh                         # Download script (Unix/macOS)
-├── download-libs.ps1                        # Download script (Windows)
-├── compile-windows.bat                      # Compile script (Windows)
-├── run-windows.bat                          # Run script (Windows)
-└── README.md                                # This file
+│   ├── others/                    # Core library JARs (platform-independent)
+│   └── text-component/            # Rich text editing components
+├── src/main/
+│   ├── java/com/noteflix/pcm/
+│   │   ├── PCMApplication.java         # Main entry point
+│   │   ├── core/                       # Core system components
+│   │   │   ├── auth/                   # SSO & authentication
+│   │   │   │   ├── SSOTokenManager.java         # SSO token management
+│   │   │   │   ├── BrowserCookieExtractor.java  # Extract browser tokens
+│   │   │   │   └── SecurityAuditLogger.java     # Security audit trail
+│   │   │   ├── navigation/             # Page navigation system
+│   │   │   ├── theme/                  # Theme management (AtlantaFX)
+│   │   │   └── utils/                  # Common utilities
+│   │   ├── ui/                         # User Interface Layer
+│   │   │   ├── MainController.java     # Main window controller
+│   │   │   ├── MainView.java          # Main view layout
+│   │   │   ├── components/             # Reusable UI components
+│   │   │   │   ├── SidebarView.java    # Navigation sidebar
+│   │   │   │   └── text/               # Universal text component
+│   │   │   ├── layout/                 # Layout managers
+│   │   │   └── pages/                  # Application pages
+│   │   │       ├── AIAssistantPage.java        # AI chat interface
+│   │   │       ├── DatabaseObjectsPage.java    # Database management
+│   │   │       ├── BatchJobsPage.java          # Batch job management
+│   │   │       ├── KnowledgeBasePage.java      # Knowledge base
+│   │   │       └── SettingsPage.java           # Application settings
+│   │   ├── domain/                     # Domain Models
+│   │   │   ├── entity/                 # Core business entities
+│   │   │   │   ├── Project.java        # Project management
+│   │   │   │   └── BaseEntity.java     # Base entity class
+│   │   │   ├── chat/                   # Chat domain models
+│   │   │   │   ├── Conversation.java   # Chat conversation
+│   │   │   │   ├── Message.java        # Chat message
+│   │   │   │   └── MessageRole.java    # Message roles (user/assistant)
+│   │   │   └── repository/             # Repository interfaces
+│   │   ├── application/                # Application Services
+│   │   │   └── service/chat/           # Chat services
+│   │   │       ├── AIService.java      # AI interaction service
+│   │   │       └── ConversationService.java # Conversation management
+│   │   ├── infrastructure/             # Infrastructure Layer
+│   │   │   ├── database/               # Database infrastructure
+│   │   │   │   ├── ConnectionManager.java      # Database connections
+│   │   │   │   └── DatabaseMigrationManager.java # Schema migrations
+│   │   │   ├── dao/                    # Data Access Objects
+│   │   │   │   ├── ConversationDAO.java        # Conversation data access
+│   │   │   │   └── MessageDAO.java             # Message data access
+│   │   │   ├── repository/chat/        # Chat repository implementations
+│   │   │   └── exception/              # Custom exceptions
+│   │   ├── llm/                        # LLM Integration Layer
+│   │   │   ├── api/                    # LLM API interfaces
+│   │   │   ├── client/                 # LLM provider clients
+│   │   │   │   ├── openai/             # OpenAI integration
+│   │   │   │   ├── anthropic/          # Anthropic Claude integration
+│   │   │   │   └── ollama/             # Ollama local LLM integration
+│   │   │   ├── model/                  # LLM data models
+│   │   │   ├── service/                # LLM services
+│   │   │   ├── factory/                # LLM client factory
+│   │   │   ├── middleware/             # Request middleware (retry, rate limiting)
+│   │   │   ├── exception/              # LLM-specific exceptions
+│   │   │   └── examples/               # Usage examples and demos
+│   │   └── examples/                   # Integration examples
+│   │       └── SSOIntegrationDemo.java # SSO demo application
+│   └── resources/
+│       ├── db/migration/               # Database migration scripts
+│       │   ├── V1__initial_schema.sql  # Initial database schema
+│       │   └── V2__chat_tables.sql     # Chat functionality tables
+│       ├── css/                        # Application stylesheets
+│       │   ├── styles.css              # Main application styles
+│       │   └── ai-assistant-dark.css   # Dark theme for AI assistant
+│       ├── images/                     # Application assets
+│       │   └── icons/                  # Application icons
+│       └── logback.xml                 # Logging configuration
+├── scripts/                            # Build & run scripts
+│   ├── build.sh / build.bat            # Cross-platform build scripts
+│   ├── run.sh / run.bat               # Cross-platform run scripts
+│   └── setup.sh / setup.bat           # Environment setup scripts
+├── out/                               # Compiled output
+│   ├── com/noteflix/pcm/              # Compiled Java classes
+│   ├── css/                           # Copied CSS files
+│   ├── db/migration/                  # Copied migration files
+│   └── images/                        # Copied image assets
+├── docs/                              # Documentation
+│   ├── setup/                         # Setup guides
+│   ├── integrations/                  # Integration documentation
+│   ├── troubleshooting/               # Troubleshooting guides
+│   └── ui-components/                 # UI component documentation
+├── logs/                              # Application logs
+├── pcm-desktop.db                     # SQLite database file
+└── README.md                          # This file
 ```
 
 ## 🚀 Quick Start
 
-### Step 1: Download Libraries
+### Method 1: Fastest Start (Recommended) 
 
-#### macOS/Linux
+```bash
+# macOS/Linux - One-line setup and run
+./scripts/setup.sh && ./scripts/build.sh && ./scripts/run.sh
 
+# Windows - One-line setup and run  
+.\scripts\setup.bat && .\scripts\build.bat && .\scripts\run.bat
+```
+
+### Method 2: Step by Step
+
+#### Step 1: Setup Dependencies
+
+**macOS/Linux:**
+```bash
+./scripts/setup.sh
+```
+
+**Windows:**
+```bash
+.\scripts\setup.bat
+```
+
+This automatically:
+- Downloads all required libraries to `lib/others/`
+- Downloads correct JavaFX 21.0.9 for your platform to `lib/javafx/`
+- Sets up the development environment
+
+#### Step 2: Build Application
+
+```bash
+# macOS/Linux
+./scripts/build.sh
+
+# Windows  
+.\scripts\build.bat
+```
+
+#### Step 3: Run Application
+
+```bash
+# macOS/Linux
+./scripts/run.sh
+
+# Windows
+.\scripts\run.bat
+```
+
+### Method 3: Manual Setup (Advanced Users)
+
+<details>
+<summary>Click to expand manual setup instructions</summary>
+
+#### Download Libraries Manually
+
+**macOS/Linux:**
 ```bash
 chmod +x download-libs.sh
 ./download-libs.sh
 ```
 
-#### Windows
-
+**Windows:**
 ```powershell
 powershell -ExecutionPolicy Bypass -File download-libs.ps1
 ```
 
-### Step 2: Download JavaFX 21.0.9 Manually
+#### Download JavaFX 21.0.9 Manually
 
 **⚠️ Important:** JavaFX contains platform-specific native libraries. You MUST download the correct version for your OS.
 
@@ -161,29 +271,26 @@ powershell -ExecutionPolicy Bypass -File download-libs.ps1
 - Windows: `openjfx-21.0.9_windows-x64_bin-sdk.zip`
 - Linux: `openjfx-21.0.9_linux-x64_bin-sdk.zip`
 
-**Direct download links:**
-- macOS (Apple Silicon): https://download2.gluonhq.com/openjfx/21.0.9/openjfx-21.0.9_osx-aarch64_bin-sdk.zip
-- macOS (Intel): https://download2.gluonhq.com/openjfx/21.0.9/openjfx-21.0.9_osx-x64_bin-sdk.zip
-- Windows: https://download2.gluonhq.com/openjfx/21.0.9/openjfx-21.0.9_windows-x64_bin-sdk.zip
-- Linux: https://download2.gluonhq.com/openjfx/21.0.9/openjfx-21.0.9_linux-x64_bin-sdk.zip
-
 **Extract and install:**
 1. Extract the downloaded ZIP file
 2. Navigate to `javafx-sdk-21.0.9/lib/` folder
 3. Copy all `.jar` files to `pcm-desktop/lib/javafx/`
 
-**Why platform-specific?** JavaFX JARs contain native libraries (.dll for Windows, .dylib for macOS, .so for Linux) that are OS-specific and cannot be shared between platforms.
-
-### Step 3: Verify Libraries
+#### Verify Libraries
 
 ```bash
-ls -l lib/javafx/    # Should have 8 JAR files
-ls -l lib/others/    # Should have 9 JAR files
+ls -l lib/javafx/    # Should have 8 JAR files + native libraries
+ls -l lib/others/    # Should have 14 JAR files
+ls -l lib/text-component/    # Should have 6 JAR files for rich text
 ```
 
-### Step 4: Open in IDE
+</details>
 
-#### IntelliJ IDEA (Recommended)
+## 🔧 IDE Setup (Optional)
+
+After running the application successfully with scripts, you can optionally set up your IDE for development:
+
+### IntelliJ IDEA (Recommended)
 
 1. **Open Project:**
    - File → Open → Select `pcm-desktop` folder
@@ -191,7 +298,8 @@ ls -l lib/others/    # Should have 9 JAR files
 2. **Add Libraries:**
    - File → Project Structure (⌘;) → Libraries
    - Click `+` → Java → Select `lib/javafx` → Add all JARs
-   - Click `+` → Java → Select `lib/others` → Add all JARs
+   - Click `+` → Java → Select `lib/others` → Add all JARs  
+   - Click `+` → Java → Select `lib/text-component` → Add all JARs
    - Click Apply
 
 3. **Configure Lombok:**
@@ -213,27 +321,56 @@ ls -l lib/others/    # Should have 9 JAR files
 5. **Run Application:**
    - Click Run button ▶️ or press ⌃R
 
-#### Eclipse
+### Other IDEs
 
-See `docs/LIBRARY_SETUP.md` for Eclipse setup.
-
-#### VS Code
-
-See `docs/LIBRARY_SETUP.md` for VS Code setup.
+For Eclipse, VS Code, and other IDEs, see:
+- **[IntelliJ Setup Guide](docs/setup/intellij-setup.md)** - Detailed IntelliJ configuration
+- **[Library Setup Guide](docs/setup/library-setup.md)** - Multi-IDE library setup
+- **[Run Configuration Guide](docs/setup/run-configuration.md)** - Run configuration for all IDEs
 
 ## 📖 Documentation
 
-All documentation is in `docs/` folder:
+Complete documentation is organized in the `docs/` folder:
 
-- **[LIBRARY_SETUP.md](docs/LIBRARY_SETUP.md)** - Complete library setup guide
-- **[README.md](docs/README.md)** - Full documentation (moved)
-- **[QUICK_START.md](docs/QUICK_START.md)** - Quick start guide (moved)
-- **[STEP_BY_STEP_GUIDE.md](docs/STEP_BY_STEP_GUIDE.md)** - Detailed tutorial (moved)
-- **[PROJECT_SUMMARY.md](docs/PROJECT_SUMMARY.md)** - Project overview (moved)
+### 🚀 Getting Started
+- **[Quick Start Guide](docs/getting-started/quick-start.md)** - Get up and running fast
+- **[README](docs/getting-started/README.md)** - Getting started overview
+
+### ⚙️ Setup & Configuration  
+- **[IntelliJ Setup](docs/setup/intellij-setup.md)** - Complete IntelliJ IDEA configuration
+- **[Library Setup](docs/setup/library-setup.md)** - Multi-IDE library setup guide
+- **[Run Configuration](docs/setup/run-configuration.md)** - Run configurations for all IDEs
+
+### 🔌 Integrations
+- **[API Integration](docs/integrations/api/api-guide.md)** - LLM API integration guide
+- **[API Quick Reference](docs/integrations/api/api-quick-reference.md)** - Quick API reference
+- **[SSO Integration](docs/integrations/sso/sso-integration-guide.md)** - Single Sign-On setup
+- **[Database Integration](docs/integrations/database/README.md)** - Database setup and migration
+
+### 🏗️ Architecture & Development
+- **[Architecture Overview](docs/architecture/system-overview.md)** - System architecture
+- **[Development Guide](docs/development/README.md)** - Development guidelines
+
+### 🎨 UI Components
+- **[AtlantaFX Integration](docs/ui-components/atlantafx-integration.md)** - Theme system
+- **[UI Components](docs/ui-components/README.md)** - Component documentation
+
+### 🔧 Troubleshooting  
+- **[Troubleshooting Guide](docs/troubleshooting/README.md)** - Common issues and solutions
 
 ## 🏃 Run from Command Line
 
-### Compile
+### Simple Scripts (Recommended)
+
+```bash
+# Build the application
+./scripts/build.sh
+
+# Run the application  
+./scripts/run.sh
+```
+
+### Manual Compilation
 
 ```bash
 # macOS/Linux
@@ -247,7 +384,7 @@ javac -cp "lib/javafx/*;lib/others/*" ^
   src/main/java/com/noteflix/pcm/**/*.java
 ```
 
-### Run
+### Manual Run
 
 ```bash
 # macOS/Linux
@@ -432,16 +569,19 @@ Noteflix Team
 **🚀 Ready to Start:**
 
 ```bash
-# macOS/Linux
+# macOS/Linux - Quick Start
 ./download-libs.sh
 # Download JavaFX 21.0.9 for your platform
-# Open in IntelliJ IDEA
-# Configure libraries and run PCMApplication
+# Build and run: 
+./scripts/build.sh && ./scripts/run.sh
 
-# Windows
+# Windows - Quick Start
 .\download-libs.ps1
 # JavaFX 21.0.9 will be downloaded automatically
-# Or run: .\compile-windows.bat && .\run-windows.bat
+# Build and run:
+.\scripts\build.bat && .\scripts\run.bat
+
+# Or open in IntelliJ IDEA and configure libraries
 ```
 
 ---
