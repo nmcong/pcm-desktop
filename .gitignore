@@ -76,3 +76,4 @@ sampler/
 .claude/
 
 data/qdrant-storage
+.qdrant-initialized
