@@ -18,8 +18,8 @@ import org.kordamp.ikonli.feather.Feather;
 import org.kordamp.ikonli.javafx.FontIcon;
 
 /**
- * Knowledge Base page - MVVM Architecture
- * Uses KnowledgeBaseViewModel for state management and business logic
+ * Knowledge Base page - MVVM Architecture Uses KnowledgeBaseViewModel for state management and
+ * business logic
  */
 @Slf4j
 public class KnowledgeBasePage extends BasePage {
@@ -29,10 +29,7 @@ public class KnowledgeBasePage extends BasePage {
   private VBox searchResults;
 
   public KnowledgeBasePage() {
-    super(
-        I18n.get("page.kb.title"),
-        I18n.get("page.kb.subtitle"),
-        new FontIcon(Feather.BOOK_OPEN));
+    super(I18n.get("page.kb.title"), I18n.get("page.kb.subtitle"), new FontIcon(Feather.BOOK_OPEN));
     this.viewModel = Injector.getInstance().get(KnowledgeBaseViewModel.class);
     log.debug("KnowledgeBasePage initialized with ViewModel");
   }
@@ -173,10 +170,11 @@ public class KnowledgeBasePage extends BasePage {
 
     card.getChildren().addAll(header, descriptionLabel, countLabel);
 
-    card.setOnMouseClicked(e -> {
-      log.info("Category clicked: {}", title);
-      viewModel.filterByCategory(title);
-    });
+    card.setOnMouseClicked(
+        e -> {
+          log.info("Category clicked: {}", title);
+          viewModel.filterByCategory(title);
+        });
 
     return card;
   }
@@ -255,10 +253,11 @@ public class KnowledgeBasePage extends BasePage {
 
     item.getChildren().addAll(iconNode, content, updatedLabel);
 
-    item.setOnMouseClicked(e -> {
-      log.info("Article clicked: {}", title);
-      // Navigate to article detail view
-    });
+    item.setOnMouseClicked(
+        e -> {
+          log.info("Article clicked: {}", title);
+          // Navigate to article detail view
+        });
 
     return item;
   }

@@ -15,9 +15,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.kordamp.ikonli.feather.Feather;
 import org.kordamp.ikonli.javafx.FontIcon;
 
-/** 
- * Batch Jobs page - MVVM Architecture
- * Uses BatchJobsViewModel for state management and business logic
+/**
+ * Batch Jobs page - MVVM Architecture Uses BatchJobsViewModel for state management and business
+ * logic
  */
 @Slf4j
 public class BatchJobsPage extends BasePage {
@@ -30,10 +30,7 @@ public class BatchJobsPage extends BasePage {
   private Label lastRefreshLabel;
 
   public BatchJobsPage() {
-    super(
-        I18n.get("page.jobs.title"),
-        I18n.get("page.jobs.subtitle"),
-        new FontIcon(Feather.CLOCK));
+    super(I18n.get("page.jobs.title"), I18n.get("page.jobs.subtitle"), new FontIcon(Feather.CLOCK));
     this.viewModel = Injector.getInstance().get(BatchJobsViewModel.class);
     log.debug("BatchJobsPage initialized with ViewModel");
   }
@@ -65,7 +62,8 @@ public class BatchJobsPage extends BasePage {
     totalJobsLabel.textProperty().bind(viewModel.totalJobsProperty().asString());
 
     // Running jobs stat
-    VBox runningCard = createStatCard(I18n.get("jobs.stat.running"), Feather.PLAY_CIRCLE, "success");
+    VBox runningCard =
+        createStatCard(I18n.get("jobs.stat.running"), Feather.PLAY_CIRCLE, "success");
     runningJobsLabel = (Label) ((VBox) runningCard.getChildren().get(1)).getChildren().get(0);
     runningJobsLabel.textProperty().bind(viewModel.runningJobsProperty().asString());
 
@@ -145,28 +143,33 @@ public class BatchJobsPage extends BasePage {
     jobsTable = new TableView<>();
     jobsTable.getStyleClass().add("jobs-table");
     VBox.setVgrow(jobsTable, Priority.ALWAYS);
-    
+
     // Bind to ViewModel's observable list
     jobsTable.setItems(viewModel.getJobList());
 
     // Create columns with property bindings
-    TableColumn<BatchJobsViewModel.JobEntry, String> nameColumn = new TableColumn<>(I18n.get("jobs.col.name"));
+    TableColumn<BatchJobsViewModel.JobEntry, String> nameColumn =
+        new TableColumn<>(I18n.get("jobs.col.name"));
     nameColumn.setCellValueFactory(data -> data.getValue().nameProperty());
     nameColumn.setPrefWidth(200);
 
-    TableColumn<BatchJobsViewModel.JobEntry, String> statusColumn = new TableColumn<>(I18n.get("jobs.col.status"));
+    TableColumn<BatchJobsViewModel.JobEntry, String> statusColumn =
+        new TableColumn<>(I18n.get("jobs.col.status"));
     statusColumn.setCellValueFactory(data -> data.getValue().statusProperty());
     statusColumn.setPrefWidth(100);
 
-    TableColumn<BatchJobsViewModel.JobEntry, String> lastRunColumn = new TableColumn<>(I18n.get("jobs.col.lastrun"));
+    TableColumn<BatchJobsViewModel.JobEntry, String> lastRunColumn =
+        new TableColumn<>(I18n.get("jobs.col.lastrun"));
     lastRunColumn.setCellValueFactory(data -> data.getValue().lastRunProperty());
     lastRunColumn.setPrefWidth(150);
 
-    TableColumn<BatchJobsViewModel.JobEntry, String> descColumn = new TableColumn<>(I18n.get("jobs.col.description"));
+    TableColumn<BatchJobsViewModel.JobEntry, String> descColumn =
+        new TableColumn<>(I18n.get("jobs.col.description"));
     descColumn.setCellValueFactory(data -> data.getValue().descriptionProperty());
     descColumn.setPrefWidth(250);
 
-    TableColumn<BatchJobsViewModel.JobEntry, Void> actionsColumn = new TableColumn<>(I18n.get("jobs.col.actions"));
+    TableColumn<BatchJobsViewModel.JobEntry, Void> actionsColumn =
+        new TableColumn<>(I18n.get("jobs.col.actions"));
     actionsColumn.setPrefWidth(150);
     actionsColumn.setCellFactory(
         column ->

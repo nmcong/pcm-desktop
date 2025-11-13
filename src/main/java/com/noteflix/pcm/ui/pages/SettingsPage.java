@@ -16,8 +16,7 @@ import org.kordamp.ikonli.feather.Feather;
 import org.kordamp.ikonli.javafx.FontIcon;
 
 /**
- * Settings page - MVVM Architecture
- * Uses SettingsViewModel for state management and business logic
+ * Settings page - MVVM Architecture Uses SettingsViewModel for state management and business logic
  */
 @Slf4j
 public class SettingsPage extends BasePage {
@@ -64,21 +63,29 @@ public class SettingsPage extends BasePage {
     title.setGraphicTextGap(12);
 
     // Theme selection with bidirectional binding
-    HBox themeRow = createSettingRow(I18n.get("settings.appearance.theme"), I18n.get("settings.appearance.theme.desc"));
+    HBox themeRow =
+        createSettingRow(
+            I18n.get("settings.appearance.theme"), I18n.get("settings.appearance.theme.desc"));
     ComboBox<String> themeCombo = new ComboBox<>();
     themeCombo.getItems().addAll(viewModel.getAvailableThemes());
     themeCombo.valueProperty().bindBidirectional(viewModel.selectedThemeProperty());
     themeRow.getChildren().add(themeCombo);
 
     // Language selection with bidirectional binding
-    HBox languageRow = createSettingRow(I18n.get("settings.appearance.language"), I18n.get("settings.appearance.language.desc"));
+    HBox languageRow =
+        createSettingRow(
+            I18n.get("settings.appearance.language"),
+            I18n.get("settings.appearance.language.desc"));
     ComboBox<String> languageCombo = new ComboBox<>();
     languageCombo.getItems().addAll(viewModel.getAvailableLanguages());
     languageCombo.valueProperty().bindBidirectional(viewModel.selectedLanguageProperty());
     languageRow.getChildren().add(languageCombo);
 
     // Font size with bidirectional binding
-    HBox fontRow = createSettingRow(I18n.get("settings.appearance.font.size"), I18n.get("settings.appearance.font.size.desc"));
+    HBox fontRow =
+        createSettingRow(
+            I18n.get("settings.appearance.font.size"),
+            I18n.get("settings.appearance.font.size.desc"));
     Slider fontSlider = new Slider(10, 18, 14);
     fontSlider.setShowTickLabels(true);
     fontSlider.setShowTickMarks(true);
@@ -88,7 +95,10 @@ public class SettingsPage extends BasePage {
     fontRow.getChildren().add(fontSlider);
 
     // Sidebar width with bidirectional binding
-    HBox sidebarRow = createSettingRow(I18n.get("settings.appearance.sidebar.width"), I18n.get("settings.appearance.sidebar.width.desc"));
+    HBox sidebarRow =
+        createSettingRow(
+            I18n.get("settings.appearance.sidebar.width"),
+            I18n.get("settings.appearance.sidebar.width.desc"));
     Slider sidebarSlider = new Slider(200, 400, 280);
     sidebarSlider.setShowTickLabels(true);
     sidebarSlider.setShowTickMarks(true);
@@ -111,14 +121,18 @@ public class SettingsPage extends BasePage {
     title.setGraphic(new FontIcon(Feather.DATABASE));
     title.setGraphicTextGap(12);
 
-    HBox dbPathRow = createSettingRow(I18n.get("settings.database.path"), I18n.get("settings.database.path.desc"));
+    HBox dbPathRow =
+        createSettingRow(
+            I18n.get("settings.database.path"), I18n.get("settings.database.path.desc"));
     Label dbPathLabel = new Label();
     dbPathLabel.textProperty().bind(viewModel.databasePathProperty());
     Button changeDbPathBtn = new Button(I18n.get("settings.database.path.change"));
     changeDbPathBtn.setOnAction(e -> viewModel.changeDatabasePath());
     dbPathRow.getChildren().addAll(dbPathLabel, changeDbPathBtn);
 
-    HBox migrateRow = createSettingRow(I18n.get("settings.database.migrate"), I18n.get("settings.database.migrate.desc"));
+    HBox migrateRow =
+        createSettingRow(
+            I18n.get("settings.database.migrate"), I18n.get("settings.database.migrate.desc"));
     Button migrateBtn = new Button(I18n.get("settings.database.migrate.run"));
     migrateBtn.setOnAction(e -> viewModel.runMigrations());
     migrateRow.getChildren().add(migrateBtn);
@@ -137,7 +151,10 @@ public class SettingsPage extends BasePage {
     title.setGraphic(new FontIcon(Feather.BELL));
     title.setGraphicTextGap(12);
 
-    HBox emailNotifRow = createSettingRow(I18n.get("settings.notifications.email"), I18n.get("settings.notifications.email.desc"));
+    HBox emailNotifRow =
+        createSettingRow(
+            I18n.get("settings.notifications.email"),
+            I18n.get("settings.notifications.email.desc"));
     CheckBox emailCheck = new CheckBox();
     emailCheck.selectedProperty().bindBidirectional(viewModel.emailNotificationsEnabledProperty());
     emailNotifRow.getChildren().add(emailCheck);
@@ -156,7 +173,9 @@ public class SettingsPage extends BasePage {
     title.setGraphic(new FontIcon(Feather.CODE));
     title.setGraphicTextGap(12);
 
-    HBox resetRow = createSettingRow(I18n.get("settings.advanced.reset"), I18n.get("settings.advanced.reset.desc"));
+    HBox resetRow =
+        createSettingRow(
+            I18n.get("settings.advanced.reset"), I18n.get("settings.advanced.reset.desc"));
     Button resetBtn = new Button(I18n.get("settings.advanced.reset.button"));
     resetBtn.getStyleClass().add(Styles.DANGER);
     resetBtn.setOnAction(e -> viewModel.resetSettings());

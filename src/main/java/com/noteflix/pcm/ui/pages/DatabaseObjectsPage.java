@@ -16,8 +16,8 @@ import org.kordamp.ikonli.feather.Feather;
 import org.kordamp.ikonli.javafx.FontIcon;
 
 /**
- * Database Objects page - MVVM Architecture
- * Uses DatabaseObjectsViewModel for state management and business logic
+ * Database Objects page - MVVM Architecture Uses DatabaseObjectsViewModel for state management and
+ * business logic
  */
 @Slf4j
 public class DatabaseObjectsPage extends BasePage {
@@ -30,10 +30,7 @@ public class DatabaseObjectsPage extends BasePage {
   private Label schemaVersionLabel;
 
   public DatabaseObjectsPage() {
-    super(
-        I18n.get("page.db.title"),
-        I18n.get("page.db.subtitle"),
-        new FontIcon(Feather.DATABASE));
+    super(I18n.get("page.db.title"), I18n.get("page.db.subtitle"), new FontIcon(Feather.DATABASE));
     this.viewModel = Injector.getInstance().get(DatabaseObjectsViewModel.class);
     log.debug("DatabaseObjectsPage initialized with ViewModel");
   }
@@ -68,7 +65,7 @@ public class DatabaseObjectsPage extends BasePage {
     databaseNameLabel = new Label();
     databaseNameLabel.textProperty().bind(viewModel.databaseNameProperty());
     databaseNameLabel.getStyleClass().addAll(Styles.TEXT_BOLD);
-    
+
     schemaVersionLabel = new Label();
     schemaVersionLabel.textProperty().bind(viewModel.schemaVersionProperty());
     schemaVersionLabel.getStyleClass().addAll(Styles.TEXT_SMALL, "text-muted");
@@ -86,7 +83,9 @@ public class DatabaseObjectsPage extends BasePage {
     refreshButton.getStyleClass().addAll(Styles.BUTTON_OUTLINED);
     refreshButton.setOnAction(e -> viewModel.refreshSchema());
 
-    connectionRow.getChildren().addAll(connectionInfo, spacer, connectionStatusLabel, refreshButton);
+    connectionRow
+        .getChildren()
+        .addAll(connectionInfo, spacer, connectionStatusLabel, refreshButton);
 
     section.getChildren().addAll(title, connectionRow);
     return section;

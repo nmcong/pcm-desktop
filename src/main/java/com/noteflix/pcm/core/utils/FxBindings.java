@@ -107,6 +107,7 @@ public class FxBindings {
    * @param conditions Boolean observables to check
    * @return BooleanBinding that is true when all conditions are true
    */
+  @SafeVarargs
   public static BooleanBinding allTrue(ObservableValue<Boolean>... conditions) {
     return Bindings.createBooleanBinding(
         () -> {
@@ -126,6 +127,7 @@ public class FxBindings {
    * @param conditions Boolean observables to check
    * @return BooleanBinding that is true when any condition is true
    */
+  @SafeVarargs
   public static BooleanBinding anyTrue(ObservableValue<Boolean>... conditions) {
     return Bindings.createBooleanBinding(
         () -> {

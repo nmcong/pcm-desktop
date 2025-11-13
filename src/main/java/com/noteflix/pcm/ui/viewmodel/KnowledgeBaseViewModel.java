@@ -9,7 +9,8 @@ import lombok.extern.slf4j.Slf4j;
 public class KnowledgeBaseViewModel extends BaseViewModel {
 
   public final StringProperty searchKeyword = new SimpleStringProperty("");
-  public final StringProperty selectedCategory = new SimpleStringProperty(I18n.get("kb.category.all"));
+  public final StringProperty selectedCategory =
+      new SimpleStringProperty(I18n.get("kb.category.all"));
 
   public KnowledgeBaseViewModel() {
     log.debug("KnowledgeBaseViewModel initialized");
@@ -18,21 +19,28 @@ public class KnowledgeBaseViewModel extends BaseViewModel {
   public void searchArticles() {
     setBusy(true);
     clearError();
-    log.info("Searching knowledge base for: '{}' in category: '{}'", searchKeyword.get(), selectedCategory.get());
-    
-    runAsync(() -> {
-      Thread.sleep(1000); // Simulate network/DB call
-      if (searchKeyword.get().contains("error")) {
-        throw new RuntimeException("Failed to search articles.");
-      }
-      return "Search results for " + searchKeyword.get();
-    }, result -> {
-      log.info("Search completed: {}", result);
-      // Update observable list of articles (not implemented in this simple VM)
-    }, error -> {
-      setError("Search failed: " + error.getMessage(), error);
-      log.error("Error during knowledge base search", error);
-    }).whenComplete((r, ex) -> setBusy(false));
+    log.info(
+        "Searching knowledge base for: '{}' in category: '{}'",
+        searchKeyword.get(),
+        selectedCategory.get());
+
+    runAsync(
+            () -> {
+              Thread.sleep(1000); // Simulate network/DB call
+              if (searchKeyword.get().contains("error")) {
+                throw new RuntimeException("Failed to search articles.");
+              }
+              return "Search results for " + searchKeyword.get();
+            },
+            result -> {
+              log.info("Search completed: {}", result);
+              // Update observable list of articles (not implemented in this simple VM)
+            },
+            error -> {
+              setError("Search failed: " + error.getMessage(), error);
+              log.error("Error during knowledge base search", error);
+            })
+        .whenComplete((r, ex) -> setBusy(false));
   }
 
   public void filterByCategory(String category) {
@@ -40,11 +48,27 @@ public class KnowledgeBaseViewModel extends BaseViewModel {
     searchArticles(); // Re-run search with new filter
   }
 
-  public String getSearchKeyword() { return searchKeyword.get(); }
-  public StringProperty searchKeywordProperty() { return searchKeyword; }
-  public void setSearchKeyword(String searchKeyword) { this.searchKeyword.set(searchKeyword); }
+  public String getSearchKeyword() {
+    return searchKeyword.get();
+  }
 
-  public String getSelectedCategory() { return selectedCategory.get(); }
-  public StringProperty selectedCategoryProperty() { return selectedCategory; }
-  public void setSelectedCategory(String selectedCategory) { this.selectedCategory.set(selectedCategory); }
+  public StringProperty searchKeywordProperty() {
+    return searchKeyword;
+  }
+
+  public void setSearchKeyword(String searchKeyword) {
+    this.searchKeyword.set(searchKeyword);
+  }
+
+  public String getSelectedCategory() {
+    return selectedCategory.get();
+  }
+
+  public StringProperty selectedCategoryProperty() {
+    return selectedCategory;
+  }
+
+  public void setSelectedCategory(String selectedCategory) {
+    this.selectedCategory.set(selectedCategory);
+  }
 }
