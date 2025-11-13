@@ -1,6 +1,5 @@
 package com.noteflix.pcm.rag.vectorstore.api;
 
-import com.noteflix.pcm.rag.vectorstore.core.InMemoryVectorStore;
 import com.noteflix.pcm.rag.vectorstore.core.LuceneVectorStore;
 import com.noteflix.pcm.rag.vectorstore.core.QdrantVectorStore;
 import lombok.extern.slf4j.Slf4j;
@@ -62,8 +61,9 @@ public class VectorStoreFactory {
       case QDRANT:
         return createQdrant(config);
 
-      case IN_MEMORY:
-        return new InMemoryVectorStore();
+      // case IN_MEMORY:
+      //   return new InMemoryVectorStore();
+      // NOTE: InMemoryVectorStore has been removed. Use Lucene for local storage instead.
 
       default:
         throw new IllegalArgumentException("Unsupported vector store type: " + config.getType());

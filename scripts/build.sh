@@ -203,6 +203,13 @@ for jar in lib/rag/*.jar; do
     fi
 done
 
+# Add LangChain4j libraries
+for jar in lib/langchain4j/*.jar; do
+    if [ -f "$jar" ]; then
+        CLASSPATH="$CLASSPATH:$jar"
+    fi
+done
+
 # Add text component libraries if requested
 if [ "$WITH_TEXT_COMPONENT" = true ]; then
     echo -e "${YELLOW}📚 Including Universal Text Component libraries...${NC}"

@@ -8,6 +8,8 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -37,7 +39,14 @@ public class QdrantEmbeddedManager {
   private Thread outputReaderThread;
   private final String binaryPath;
   private final String storagePath;
-  private final int port;
+    /**
+     * -- GETTER --
+     *  Get port.
+     *
+     * @return port number
+     */
+    @Getter
+    private final int port;
   private volatile boolean isShuttingDown = false;
 
   /** Create manager with default settings. */
@@ -193,15 +202,6 @@ public class QdrantEmbeddedManager {
    */
   public String getUrl() {
     return "http://localhost:" + port;
-  }
-
-  /**
-   * Get port.
-   *
-   * @return port number
-   */
-  public int getPort() {
-    return port;
   }
 
   // ========== Private Methods ==========

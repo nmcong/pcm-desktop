@@ -13,10 +13,24 @@ import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.*;
 import org.apache.lucene.index.*;
+import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.search.*;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
+
+/**
+ * Custom exception for VectorStore operations.
+ */
+class VectorStoreException extends RuntimeException {
+  public VectorStoreException(String message) {
+    super(message);
+  }
+  
+  public VectorStoreException(String message, Throwable cause) {
+    super(message, cause);
+  }
+}
 
 /**
  * Lucene-based vector store (100% offline).
@@ -25,7 +39,7 @@ import org.apache.lucene.store.FSDirectory;
  * completely offline.
  *
  * @author PCM Team
- * @version 1.0.0
+ * @version 1.1.0
  */
 @Slf4j
 public class LuceneVectorStore implements VectorStore {
@@ -35,6 +49,7 @@ public class LuceneVectorStore implements VectorStore {
   private final IndexWriterConfig config;
   private IndexWriter writer;
   private SearcherManager searcherManager;
+  private volatile double maxScoreSeen = 1.0; // For dynamic score normalization
 
   // Field names
   private static final String FIELD_ID = "id";
@@ -45,18 +60,26 @@ public class LuceneVectorStore implements VectorStore {
   private static final String FIELD_INDEXED_AT = "indexedAt";
   private static final String FIELD_METADATA_PREFIX = "meta_";
 
-  public LuceneVectorStore(String indexPath) throws IOException {
-    Path path = Paths.get(indexPath);
-    Files.createDirectories(path);
+  public LuceneVectorStore(String indexPath) throws VectorStoreException {
+    if (indexPath == null || indexPath.trim().isEmpty()) {
+      throw new VectorStoreException("Index path cannot be null or empty");
+    }
+    
+    try {
+      Path path = Paths.get(indexPath);
+      Files.createDirectories(path);
 
-    this.directory = FSDirectory.open(path);
-    this.analyzer = new StandardAnalyzer();
-    this.config = new IndexWriterConfig(analyzer);
-    this.config.setOpenMode(IndexWriterConfig.OpenMode.CREATE_OR_APPEND);
+      this.directory = FSDirectory.open(path);
+      this.analyzer = new StandardAnalyzer();
+      this.config = new IndexWriterConfig(analyzer);
+      this.config.setOpenMode(IndexWriterConfig.OpenMode.CREATE_OR_APPEND);
 
-    initializeWriter();
+      initializeWriter();
 
-    log.info("Lucene vector store initialized at: {}", indexPath);
+      log.info("Lucene vector store initialized at: {}", indexPath);
+    } catch (IOException e) {
+      throw new VectorStoreException("Failed to initialize Lucene vector store at: " + indexPath, e);
+    }
   }
 
   private void initializeWriter() throws IOException {
@@ -66,6 +89,16 @@ public class LuceneVectorStore implements VectorStore {
 
   @Override
   public void indexDocument(RAGDocument document) {
+    if (document == null) {
+      throw new VectorStoreException("Document cannot be null");
+    }
+    if (document.getId() == null || document.getId().trim().isEmpty()) {
+      throw new VectorStoreException("Document ID cannot be null or empty");
+    }
+    if (document.getContent() == null) {
+      throw new VectorStoreException("Document content cannot be null");
+    }
+    
     try {
       Document luceneDoc = convertToLuceneDocument(document);
 
@@ -80,14 +113,32 @@ public class LuceneVectorStore implements VectorStore {
 
     } catch (IOException e) {
       log.error("Failed to index document: {}", document.getId(), e);
-      throw new RuntimeException("Failed to index document", e);
+      throw new VectorStoreException("Failed to index document: " + document.getId(), e);
     }
   }
 
   @Override
   public void indexDocuments(List<RAGDocument> documents) {
+    if (documents == null) {
+      throw new VectorStoreException("Documents list cannot be null");
+    }
+    if (documents.isEmpty()) {
+      log.debug("Empty documents list provided, skipping indexing");
+      return;
+    }
+    
     try {
       for (RAGDocument doc : documents) {
+        if (doc == null) {
+          throw new VectorStoreException("Document in list cannot be null");
+        }
+        if (doc.getId() == null || doc.getId().trim().isEmpty()) {
+          throw new VectorStoreException("Document ID cannot be null or empty");
+        }
+        if (doc.getContent() == null) {
+          throw new VectorStoreException("Document content cannot be null");
+        }
+        
         Document luceneDoc = convertToLuceneDocument(doc);
         Term idTerm = new Term(FIELD_ID, doc.getId());
         writer.updateDocument(idTerm, luceneDoc);
@@ -100,66 +151,95 @@ public class LuceneVectorStore implements VectorStore {
 
     } catch (IOException e) {
       log.error("Failed to batch index documents", e);
-      throw new RuntimeException("Failed to batch index", e);
+      throw new VectorStoreException("Failed to batch index documents", e);
     }
   }
 
   @Override
   public List<ScoredDocument> search(String query, RetrievalOptions options) {
+    if (query == null || query.trim().isEmpty()) {
+      throw new VectorStoreException("Query cannot be null or empty");
+    }
+    if (options == null) {
+      throw new VectorStoreException("RetrievalOptions cannot be null");
+    }
+    
+    IndexSearcher searcher = null;
     try {
-      IndexSearcher searcher = searcherManager.acquire();
+      searcher = searcherManager.acquire();
 
-      try {
-        // Build query
-        Query luceneQuery = buildQuery(query, options);
+      // Build query
+      Query luceneQuery = buildQuery(query, options);
 
-        // Search
-        TopDocs topDocs = searcher.search(luceneQuery, options.getMaxResults());
+      // Search
+      TopDocs topDocs = searcher.search(luceneQuery, options.getMaxResults());
 
-        // Convert results
-        List<ScoredDocument> results = new ArrayList<>();
-        int rank = 1;
-
-        for (ScoreDoc scoreDoc : topDocs.scoreDocs) {
-          // Normalize score to 0-1 range
-          double normalizedScore = normalizeScore(scoreDoc.score);
-
-          if (normalizedScore < options.getMinScore()) {
-            continue;
-          }
-
-          Document doc = searcher.doc(scoreDoc.doc);
-          RAGDocument ragDoc = convertFromLuceneDocument(doc);
-
-          String snippet =
-              options.isIncludeSnippets() ? extractSnippet(ragDoc.getContent(), query) : null;
-
-          ScoredDocument scoredDoc =
-              ScoredDocument.builder()
-                  .document(ragDoc)
-                  .score(normalizedScore)
-                  .rank(rank++)
-                  .snippet(snippet)
-                  .build();
-
-          results.add(scoredDoc);
+      // Update max score for dynamic normalization
+      if (topDocs.scoreDocs.length > 0) {
+        float currentMaxScore = topDocs.scoreDocs[0].score;
+        if (currentMaxScore > maxScoreSeen) {
+          maxScoreSeen = currentMaxScore;
         }
-
-        log.debug("Search for '{}' returned {} results", query, results.size());
-        return results;
-
-      } finally {
-        searcherManager.release(searcher);
       }
 
-    } catch (Exception e) {
+      // Convert results
+      List<ScoredDocument> results = new ArrayList<>();
+      int rank = 1;
+
+      for (ScoreDoc scoreDoc : topDocs.scoreDocs) {
+        // Normalize score to 0-1 range
+        double normalizedScore = normalizeScore(scoreDoc.score);
+
+        if (normalizedScore < options.getMinScore()) {
+          continue;
+        }
+
+        Document doc = searcher.doc(scoreDoc.doc);
+        RAGDocument ragDoc = convertFromLuceneDocument(doc);
+
+        String snippet =
+            options.isIncludeSnippets() ? extractSnippet(ragDoc.getContent(), query) : null;
+
+        ScoredDocument scoredDoc =
+            ScoredDocument.builder()
+                .document(ragDoc)
+                .score(normalizedScore)
+                .rank(rank++)
+                .snippet(snippet)
+                .build();
+
+        results.add(scoredDoc);
+      }
+
+      log.debug("Search for '{}' returned {} results", query, results.size());
+      return results;
+
+    } catch (ParseException e) {
+      log.error("Query parsing failed for: {}", query, e);
+      throw new VectorStoreException("Invalid query syntax: " + query, e);
+    } catch (IOException e) {
       log.error("Search failed for query: {}", query, e);
-      throw new RuntimeException("Search failed", e);
+      throw new VectorStoreException("Search operation failed", e);
+    } catch (Exception e) {
+      log.error("Unexpected error during search: {}", query, e);
+      throw new VectorStoreException("Search failed unexpectedly", e);
+    } finally {
+      if (searcher != null) {
+        try {
+          searcherManager.release(searcher);
+        } catch (IOException e) {
+          log.warn("Failed to release searcher", e);
+        }
+      }
     }
   }
 
   @Override
   public void deleteDocument(String documentId) {
+    if (documentId == null || documentId.trim().isEmpty()) {
+      throw new VectorStoreException("Document ID cannot be null or empty");
+    }
+    
     try {
       Term idTerm = new Term(FIELD_ID, documentId);
       writer.deleteDocuments(idTerm);
@@ -170,12 +250,26 @@ public class LuceneVectorStore implements VectorStore {
 
     } catch (IOException e) {
       log.error("Failed to delete document: {}", documentId, e);
-      throw new RuntimeException("Failed to delete document", e);
+      throw new VectorStoreException("Failed to delete document: " + documentId, e);
     }
   }
 
   @Override
   public void deleteDocuments(List<String> documentIds) {
+    if (documentIds == null) {
+      throw new VectorStoreException("Document IDs list cannot be null");
+    }
+    if (documentIds.isEmpty()) {
+      log.debug("Empty document IDs list provided, skipping deletion");
+      return;
+    }
+    
+    for (String id : documentIds) {
+      if (id == null || id.trim().isEmpty()) {
+        throw new VectorStoreException("Document ID in list cannot be null or empty");
+      }
+    }
+    
     try {
       Term[] terms = documentIds.stream().map(id -> new Term(FIELD_ID, id)).toArray(Term[]::new);
 
@@ -187,7 +281,7 @@ public class LuceneVectorStore implements VectorStore {
 
     } catch (IOException e) {
       log.error("Failed to delete documents", e);
-      throw new RuntimeException("Failed to delete documents", e);
+      throw new VectorStoreException("Failed to delete documents", e);
     }
   }
 
@@ -197,27 +291,34 @@ public class LuceneVectorStore implements VectorStore {
       writer.deleteAll();
       writer.commit();
       searcherManager.maybeRefresh();
+      // Reset score normalization
+      maxScoreSeen = 1.0;
 
       log.info("Cleared all documents");
 
     } catch (IOException e) {
       log.error("Failed to clear index", e);
-      throw new RuntimeException("Failed to clear index", e);
+      throw new VectorStoreException("Failed to clear index", e);
     }
   }
 
   @Override
   public long getDocumentCount() {
+    IndexSearcher searcher = null;
     try {
-      IndexSearcher searcher = searcherManager.acquire();
-      try {
-        return searcher.getIndexReader().numDocs();
-      } finally {
-        searcherManager.release(searcher);
-      }
+      searcher = searcherManager.acquire();
+      return searcher.getIndexReader().numDocs();
     } catch (IOException e) {
       log.error("Failed to get document count", e);
       return 0;
+    } finally {
+      if (searcher != null) {
+        try {
+          searcherManager.release(searcher);
+        } catch (IOException e) {
+          log.warn("Failed to release searcher", e);
+        }
+      }
     }
   }
 
@@ -228,27 +329,35 @@ public class LuceneVectorStore implements VectorStore {
 
   @Override
   public RAGDocument getDocument(String documentId) {
+    if (documentId == null || documentId.trim().isEmpty()) {
+      throw new VectorStoreException("Document ID cannot be null or empty");
+    }
+    
+    IndexSearcher searcher = null;
     try {
-      IndexSearcher searcher = searcherManager.acquire();
+      searcher = searcherManager.acquire();
 
-      try {
-        TermQuery query = new TermQuery(new Term(FIELD_ID, documentId));
-        TopDocs topDocs = searcher.search(query, 1);
+      TermQuery query = new TermQuery(new Term(FIELD_ID, documentId));
+      TopDocs topDocs = searcher.search(query, 1);
 
-        if (topDocs.totalHits.value > 0) {
-          Document doc = searcher.doc(topDocs.scoreDocs[0].doc);
-          return convertFromLuceneDocument(doc);
-        }
-
-        return null;
-
-      } finally {
-        searcherManager.release(searcher);
+      if (topDocs.totalHits.value > 0) {
+        Document doc = searcher.doc(topDocs.scoreDocs[0].doc);
+        return convertFromLuceneDocument(doc);
       }
+
+      return null;
 
     } catch (IOException e) {
       log.error("Failed to get document: {}", documentId, e);
-      return null;
+      throw new VectorStoreException("Failed to retrieve document: " + documentId, e);
+    } finally {
+      if (searcher != null) {
+        try {
+          searcherManager.release(searcher);
+        } catch (IOException e) {
+          log.warn("Failed to release searcher", e);
+        }
+      }
     }
   }
 
@@ -344,13 +453,39 @@ public class LuceneVectorStore implements VectorStore {
         .build();
   }
 
-  private Query buildQuery(String queryString, RetrievalOptions options) throws Exception {
+  private Query buildQuery(String queryString, RetrievalOptions options) throws ParseException {
     BooleanQuery.Builder builder = new BooleanQuery.Builder();
 
-    // Main content query
+    // Main content query with improved parsing
     QueryParser parser = new QueryParser(FIELD_CONTENT, analyzer);
-    Query contentQuery = parser.parse(QueryParser.escape(queryString));
+    parser.setDefaultOperator(QueryParser.Operator.OR); // More flexible search
+    
+    Query contentQuery;
+    try {
+      // Try parsing as-is first for advanced queries
+      contentQuery = parser.parse(queryString);
+    } catch (ParseException e) {
+      // Fallback to escaped query for simple searches
+      try {
+        contentQuery = parser.parse(QueryParser.escape(queryString));
+      } catch (ParseException fallbackException) {
+        // Last resort: simple term query
+        contentQuery = new TermQuery(new Term(FIELD_CONTENT, queryString.toLowerCase()));
+        log.warn("Query parsing failed, using simple term query for: {}", queryString);
+      }
+    }
+    
     builder.add(contentQuery, BooleanClause.Occur.MUST);
+
+    // Also search in title field for better relevance
+    try {
+      QueryParser titleParser = new QueryParser(FIELD_TITLE, analyzer);
+      Query titleQuery = titleParser.parse(QueryParser.escape(queryString));
+      builder.add(titleQuery, BooleanClause.Occur.SHOULD);
+    } catch (ParseException e) {
+      // Ignore title search if parsing fails
+      log.debug("Title query parsing failed for: {}", queryString);
+    }
 
     // Type filters
     if (options.getTypes() != null && !options.getTypes().isEmpty()) {
@@ -375,8 +510,11 @@ public class LuceneVectorStore implements VectorStore {
   }
 
   private double normalizeScore(float score) {
-    // Simple normalization (can be improved)
-    return Math.min(1.0, score / 10.0);
+    // Dynamic normalization based on observed maximum score
+    if (maxScoreSeen <= 0) {
+      return 0.0;
+    }
+    return Math.min(1.0, score / maxScoreSeen);
   }
 
   private String extractSnippet(String content, String query) {
