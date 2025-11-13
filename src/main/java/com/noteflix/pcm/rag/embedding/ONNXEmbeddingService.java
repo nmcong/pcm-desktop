@@ -1,5 +1,7 @@
 package com.noteflix.pcm.rag.embedding;
 
+import ai.djl.huggingface.tokenizers.Encoding;
+import ai.djl.huggingface.tokenizers.HuggingFaceTokenizer;
 import ai.onnxruntime.OnnxTensor;
 import ai.onnxruntime.OrtEnvironment;
 import ai.onnxruntime.OrtException;
@@ -55,8 +57,9 @@ public class ONNXEmbeddingService implements EmbeddingService {
   // ONNX Runtime components
   private OrtEnvironment env;
   private OrtSession session;
-  private SimpleTokenizer tokenizer;
+  private HuggingFaceTokenizer tokenizer;
   private final int maxLength = 512;
+  private static final int MAX_INPUT_LENGTH = 10000; // Max characters per input
 
   /**
    * Create ONNX embedding service.
@@ -108,11 +111,21 @@ public class ONNXEmbeddingService implements EmbeddingService {
         text = "[EMPTY]";
       }
 
-      // 1. Tokenize
-      Map<String, long[]> encoded = tokenizer.encode(text, maxLength);
-      long[] inputIds = encoded.get("input_ids");
-      long[] attentionMask = encoded.get("attention_mask");
-      long[] tokenTypeIds = encoded.get("token_type_ids");
+      // Validate input length
+      if (text.length() > MAX_INPUT_LENGTH) {
+        text = text.substring(0, MAX_INPUT_LENGTH);
+      }
+
+      // 1. Tokenize using proper HuggingFace tokenizer
+      Encoding encoding = tokenizer.encode(text);
+      long[] inputIds = encoding.getIds();
+      long[] attentionMask = encoding.getAttentionMask();
+      long[] tokenTypeIds = encoding.getTypeIds();
+      
+      // Pad or truncate to maxLength
+      inputIds = padOrTruncate(inputIds, maxLength);
+      attentionMask = padOrTruncate(attentionMask, maxLength);
+      tokenTypeIds = padOrTruncate(tokenTypeIds, maxLength);
 
       // 2. Convert to 2D arrays for ONNX
       long[][] inputIds2D = new long[][] {inputIds};
@@ -168,13 +181,95 @@ public class ONNXEmbeddingService implements EmbeddingService {
 
   @Override
   public float[][] embedBatch(String[] texts) {
-    float[][] embeddings = new float[texts.length][];
-
-    for (int i = 0; i < texts.length; i++) {
-      embeddings[i] = embed(texts[i]);
+    if (texts == null) {
+      throw new IllegalArgumentException("Input texts array cannot be null");
+    }
+    if (texts.length == 0) {
+      return new float[0][];
     }
 
-    return embeddings;
+    // Use true batch processing for better performance
+    OnnxTensor inputIdsTensor = null;
+    OnnxTensor attentionMaskTensor = null;
+    OnnxTensor tokenTypeIdsTensor = null;
+    OrtSession.Result result = null;
+
+    synchronized (this) { // Thread safety
+      try {
+        // Prepare batch inputs
+        int batchSize = texts.length;
+        long[][] batchInputIds = new long[batchSize][];
+        long[][] batchAttentionMask = new long[batchSize][];
+        long[][] batchTokenTypeIds = new long[batchSize][];
+
+        // Tokenize all texts
+        for (int i = 0; i < batchSize; i++) {
+          String text = texts[i];
+          if (text == null || text.trim().isEmpty()) {
+            text = "[EMPTY]";
+          }
+
+          // Validate input length
+          if (text.length() > MAX_INPUT_LENGTH) {
+            text = text.substring(0, MAX_INPUT_LENGTH);
+          }
+
+          // Use proper HuggingFace tokenizer
+          Encoding encoding = tokenizer.encode(text);
+          batchInputIds[i] = padOrTruncate(encoding.getIds(), maxLength);
+          batchAttentionMask[i] = padOrTruncate(encoding.getAttentionMask(), maxLength);
+          batchTokenTypeIds[i] = padOrTruncate(encoding.getTypeIds(), maxLength);
+        }
+
+        // Create ONNX tensors for batch processing
+        inputIdsTensor = OnnxTensor.createTensor(env, batchInputIds);
+        attentionMaskTensor = OnnxTensor.createTensor(env, batchAttentionMask);
+        tokenTypeIdsTensor = OnnxTensor.createTensor(env, batchTokenTypeIds);
+
+        // Prepare inputs map
+        Map<String, OnnxTensor> inputs = new HashMap<>();
+        inputs.put("input_ids", inputIdsTensor);
+        inputs.put("attention_mask", attentionMaskTensor);
+        inputs.put("token_type_ids", tokenTypeIdsTensor);
+
+        // Run batch inference
+        result = session.run(inputs);
+
+        // Get batch output embeddings
+        float[][][] outputTensor = (float[][][]) result.get(0).getValue(); // [batch_size, seq_len, hidden_size]
+
+        // Process each item in batch
+        float[][] embeddings = new float[batchSize][];
+        for (int i = 0; i < batchSize; i++) {
+          // Mean pooling for each item
+          float[] embedding = meanPooling(outputTensor[i], batchAttentionMask[i]);
+          // Normalize
+          normalize(embedding);
+          embeddings[i] = embedding;
+        }
+
+        return embeddings;
+
+      } catch (OrtException e) {
+        throw new RuntimeException("ONNX Runtime batch inference failed", e);
+      } catch (Exception e) {
+        throw new RuntimeException("Batch embedding generation failed", e);
+      } finally {
+        // Cleanup tensors
+        if (inputIdsTensor != null) {
+          inputIdsTensor.close();
+        }
+        if (attentionMaskTensor != null) {
+          attentionMaskTensor.close();
+        }
+        if (tokenTypeIdsTensor != null) {
+          tokenTypeIdsTensor.close();
+        }
+        if (result != null) {
+          result.close();
+        }
+      }
+    }
   }
 
   @Override
@@ -190,6 +285,9 @@ public class ONNXEmbeddingService implements EmbeddingService {
   /** Close resources and cleanup. */
   public void close() {
     try {
+      if (tokenizer != null) {
+        tokenizer.close();
+      }
       if (session != null) {
         session.close();
       }
@@ -221,14 +319,15 @@ public class ONNXEmbeddingService implements EmbeddingService {
 
     log.info("✅ ONNX model loaded: {}", modelFile);
 
-    // Load tokenizer
+    // Load proper HuggingFace tokenizer
     Path tokenizerFile = Paths.get(modelPath, "tokenizer.json");
     if (!Files.exists(tokenizerFile)) {
       throw new IOException("Tokenizer file not found: " + tokenizerFile);
     }
 
-    tokenizer = new SimpleTokenizer();
-    log.info("✅ Tokenizer initialized");
+    // Use DJL HuggingFace tokenizer for production-grade tokenization
+    tokenizer = HuggingFaceTokenizer.newInstance(tokenizerFile);
+    log.info("✅ HuggingFace tokenizer loaded: {}", tokenizerFile);
   }
 
   private void checkRequiredFiles(Path modelDir) throws IOException {
@@ -327,52 +426,16 @@ public class ONNXEmbeddingService implements EmbeddingService {
     }
   }
 
-  /**
-   * Simple tokenizer for BERT-like models.
-   *
-   * <p>NOTE: This is a simplified implementation. For production, consider using proper HuggingFace
-   * tokenizers library.
-   */
-  private static class SimpleTokenizer {
-    private final int padTokenId = 0;
-    private final int clsTokenId = 101;
-    private final int sepTokenId = 102;
-
-    public Map<String, long[]> encode(String text, int maxLength) {
-      // Simple word-based tokenization
-      String[] words = text.toLowerCase().split("\\s+");
-      int numTokens = Math.min(words.length + 2, maxLength); // +2 for [CLS] and [SEP]
-
-      long[] inputIds = new long[numTokens];
-      long[] attentionMask = new long[numTokens];
-      long[] tokenTypeIds = new long[numTokens];
-
-      inputIds[0] = clsTokenId; // [CLS]
-      attentionMask[0] = 1;
-      tokenTypeIds[0] = 0;
-
-      for (int i = 1; i < numTokens - 1 && i - 1 < words.length; i++) {
-        inputIds[i] = Math.abs(words[i - 1].hashCode()) % 30000; // Simple hash-based ID
-        attentionMask[i] = 1;
-        tokenTypeIds[i] = 0;
-      }
-
-      inputIds[numTokens - 1] = sepTokenId; // [SEP]
-      attentionMask[numTokens - 1] = 1;
-      tokenTypeIds[numTokens - 1] = 0;
-
-      // Pad to maxLength
-      if (numTokens < maxLength) {
-        inputIds = Arrays.copyOf(inputIds, maxLength);
-        attentionMask = Arrays.copyOf(attentionMask, maxLength);
-        tokenTypeIds = Arrays.copyOf(tokenTypeIds, maxLength);
-      }
-
-      Map<String, long[]> result = new HashMap<>();
-      result.put("input_ids", inputIds);
-      result.put("attention_mask", attentionMask);
-      result.put("token_type_ids", tokenTypeIds);
-      return result;
+  /** Pad or truncate array to target length. */
+  private long[] padOrTruncate(long[] array, int targetLength) {
+    if (array.length == targetLength) {
+      return array;
+    } else if (array.length < targetLength) {
+      // Pad with zeros
+      return Arrays.copyOf(array, targetLength);
+    } else {
+      // Truncate
+      return Arrays.copyOfRange(array, 0, targetLength);
     }
   }
 
