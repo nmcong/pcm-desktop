@@ -1,11 +1,11 @@
 package com.noteflix.pcm.rag.examples.pipeline;
 
 import com.noteflix.pcm.rag.api.RAGService;
-import com.noteflix.pcm.rag.api.VectorStore;
-import com.noteflix.pcm.rag.api.VectorStoreConfig;
-import com.noteflix.pcm.rag.api.VectorStoreFactory;
-import com.noteflix.pcm.rag.core.DefaultRAGService;
-import com.noteflix.pcm.rag.indexer.DocumentIndexer;
+import com.noteflix.pcm.rag.vectorstore.api.VectorStore;
+import com.noteflix.pcm.rag.vectorstore.api.VectorStoreConfig;
+import com.noteflix.pcm.rag.vectorstore.api.VectorStoreFactory;
+import com.noteflix.pcm.rag.pipeline.core.DefaultRAGService;
+import com.noteflix.pcm.rag.pipeline.indexer.DocumentIndexer;
 import com.noteflix.pcm.rag.model.RAGResponse;
 import com.noteflix.pcm.rag.model.RetrievalOptions;
 import java.nio.file.Paths;

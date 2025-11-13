@@ -1,4 +1,4 @@
-package com.noteflix.pcm.rag.api;
+package com.noteflix.pcm.rag.vectorstore.api;
 
 /**
  * Supported vector store types.

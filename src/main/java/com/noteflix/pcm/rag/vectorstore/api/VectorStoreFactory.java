@@ -1,8 +1,8 @@
-package com.noteflix.pcm.rag.api;
+package com.noteflix.pcm.rag.vectorstore.api;
 
-import com.noteflix.pcm.rag.core.InMemoryVectorStore;
-import com.noteflix.pcm.rag.core.LuceneVectorStore;
-import com.noteflix.pcm.rag.core.QdrantVectorStore;
+import com.noteflix.pcm.rag.vectorstore.core.InMemoryVectorStore;
+import com.noteflix.pcm.rag.vectorstore.core.LuceneVectorStore;
+import com.noteflix.pcm.rag.vectorstore.core.QdrantVectorStore;
 import lombok.extern.slf4j.Slf4j;
 
 /**

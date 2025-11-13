@@ -1,4 +1,4 @@
-package com.noteflix.pcm.rag.indexer;
+package com.noteflix.pcm.rag.pipeline.indexer;
 
 import com.noteflix.pcm.rag.api.RAGService;
 import com.noteflix.pcm.rag.model.RAGDocument;

@@ -1,4 +1,4 @@
-package com.noteflix.pcm.rag.api;
+package com.noteflix.pcm.rag.vectorstore.api;
 
 import com.noteflix.pcm.rag.model.RAGDocument;
 import com.noteflix.pcm.rag.model.RetrievalOptions;

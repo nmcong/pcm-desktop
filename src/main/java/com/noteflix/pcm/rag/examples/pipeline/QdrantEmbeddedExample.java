@@ -1,9 +1,9 @@
 package com.noteflix.pcm.rag.examples.pipeline;
 
-import com.noteflix.pcm.rag.api.VectorStore;
-import com.noteflix.pcm.rag.api.VectorStoreConfig;
-import com.noteflix.pcm.rag.api.VectorStoreFactory;
-import com.noteflix.pcm.rag.embedded.QdrantEmbeddedManager;
+import com.noteflix.pcm.rag.vectorstore.api.VectorStore;
+import com.noteflix.pcm.rag.vectorstore.api.VectorStoreConfig;
+import com.noteflix.pcm.rag.vectorstore.api.VectorStoreFactory;
+import com.noteflix.pcm.rag.vectorstore.embedded.QdrantEmbeddedManager;
 
 /**
  * Example: Running Qdrant embedded with JavaFX.

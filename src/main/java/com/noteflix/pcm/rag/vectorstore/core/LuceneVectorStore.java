@@ -1,6 +1,6 @@
-package com.noteflix.pcm.rag.core;
+package com.noteflix.pcm.rag.vectorstore.core;
 
-import com.noteflix.pcm.rag.api.VectorStore;
+import com.noteflix.pcm.rag.vectorstore.api.VectorStore;
 import com.noteflix.pcm.rag.model.*;
 import java.io.IOException;
 import java.nio.file.Files;

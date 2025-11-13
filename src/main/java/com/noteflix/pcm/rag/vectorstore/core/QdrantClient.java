@@ -1,4 +1,4 @@
-package com.noteflix.pcm.rag.core;
+package com.noteflix.pcm.rag.vectorstore.core;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;

@@ -1,6 +1,6 @@
-package com.noteflix.pcm.rag.retrieval;
+package com.noteflix.pcm.rag.pipeline.retrieval;
 
-import com.noteflix.pcm.rag.api.VectorStore;
+import com.noteflix.pcm.rag.vectorstore.api.VectorStore;
 import com.noteflix.pcm.rag.model.RetrievalOptions;
 import com.noteflix.pcm.rag.model.ScoredDocument;
 import java.util.*;

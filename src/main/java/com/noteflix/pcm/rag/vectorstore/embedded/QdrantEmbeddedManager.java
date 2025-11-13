@@ -1,4 +1,4 @@
-package com.noteflix.pcm.rag.embedded;
+package com.noteflix.pcm.rag.vectorstore.embedded;
 
 import java.io.BufferedReader;
 import java.io.IOException;
