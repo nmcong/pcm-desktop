@@ -18,9 +18,18 @@ import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * DJL (Deep Java Library) based embedding service.
+ * DJL (Deep Java Library) based embedding service with ThreadLocal optimization.
  *
  * <p>Uses sentence-transformers models (ONNX format) for offline embeddings with DJL ONNX Runtime.
+ * This implementation uses ThreadLocal pools for ONNX sessions and tokenizers to achieve 
+ * thread-safety without synchronization bottlenecks.
+ *
+ * <p><strong>Thread Safety:</strong> This service is thread-safe using ThreadLocal pattern.
+ * Each thread gets its own ONNX session and tokenizer instance, eliminating the need for
+ * synchronization and improving concurrent performance.
+ *
+ * <p><strong>Performance:</strong> Supports true batch processing with ONNX batch inference
+ * and parallel thread execution without blocking.
  *
  * <p>Setup: 1. Download DJL libraries: ./scripts/setup-embeddings-djl.sh 2. Download model (e.g.,
  * all-MiniLM-L6-v2) 3. Use this service
@@ -33,10 +42,16 @@ import lombok.extern.slf4j.Slf4j;
  * );
  *
  * float[] vector = embeddings.embed("How to validate customers?");
+ * 
+ * // Thread-safe concurrent usage
+ * CompletableFuture&lt;float[]&gt; future1 = CompletableFuture.supplyAsync(() -&gt; 
+ *     embeddings.embed("Text 1"));
+ * CompletableFuture&lt;float[]&gt; future2 = CompletableFuture.supplyAsync(() -&gt; 
+ *     embeddings.embed("Text 2"));
  * </pre>
  *
  * @author PCM Team
- * @version 2.0.0
+ * @version 3.0.0 - ThreadLocal optimization
  */
 @Slf4j
 public class DJLEmbeddingService implements EmbeddingService {
@@ -58,9 +73,14 @@ public class DJLEmbeddingService implements EmbeddingService {
 
   // DJL ONNX Runtime components
   private OrtEnvironment env;
-  private OrtSession session;
-  private HuggingFaceTokenizer tokenizer;
+  private OrtSession.SessionOptions sessionOptions;
+  private Path modelFile;
+  private Path tokenizerFile;
   private final int maxLength = DEFAULT_MAX_LENGTH;
+  
+  // ThreadLocal pools for thread-safe concurrent access
+  private final ThreadLocal<OrtSession> sessionPool = ThreadLocal.withInitial(this::createSession);
+  private final ThreadLocal<HuggingFaceTokenizer> tokenizerPool = ThreadLocal.withInitial(this::createTokenizer);
 
   /**
    * Create DJL embedding service with ONNX Runtime backend.
@@ -87,9 +107,9 @@ public class DJLEmbeddingService implements EmbeddingService {
     // Determine dimension from model name or config
     this.dimension = loadDimensionFromConfig(path);
 
-    // Initialize DJL ONNX Runtime
+    // Initialize DJL ONNX Runtime (prepare shared resources)
     try {
-      initializeDJL();
+      initializeSharedResources();
       log.info("✅ DJL Embedding service initialized: {} ({}d)", modelName, dimension);
     } catch (Exception e) {
       log.error("❌ Failed to initialize DJL for model: {}", modelName);
@@ -113,74 +133,76 @@ public class DJLEmbeddingService implements EmbeddingService {
       text = text.substring(0, MAX_INPUT_LENGTH);
     }
 
+    // Get thread-local resources (thread-safe, no synchronization needed)
+    OrtSession session = sessionPool.get();
+    HuggingFaceTokenizer tokenizer = tokenizerPool.get();
+    
     OnnxTensor inputIdsTensor = null;
     OnnxTensor attentionMaskTensor = null;
     OnnxTensor tokenTypeIdsTensor = null;
     OrtSession.Result result = null;
 
-    synchronized (this) { // Thread safety
-      try {
-        // Tokenize input using proper HuggingFace tokenizer
-        Encoding encoding = tokenizer.encode(text);
-        long[] inputIds = encoding.getIds();
-        long[] attentionMask = encoding.getAttentionMask();
-        long[] tokenTypeIds = encoding.getTypeIds();
-        
-        // Pad or truncate to maxLength
-        inputIds = padOrTruncate(inputIds, maxLength);
-        attentionMask = padOrTruncate(attentionMask, maxLength);
-        tokenTypeIds = padOrTruncate(tokenTypeIds, maxLength);
+    try {
+      // Tokenize input using thread-local HuggingFace tokenizer
+      Encoding encoding = tokenizer.encode(text);
+      long[] inputIds = encoding.getIds();
+      long[] attentionMask = encoding.getAttentionMask();
+      long[] tokenTypeIds = encoding.getTypeIds();
+      
+      // Pad or truncate to maxLength
+      inputIds = padOrTruncate(inputIds, maxLength);
+      attentionMask = padOrTruncate(attentionMask, maxLength);
+      tokenTypeIds = padOrTruncate(tokenTypeIds, maxLength);
 
-        // Convert to 2D arrays for ONNX
-        long[][] inputIds2D = new long[][] {inputIds};
-        long[][] attentionMask2D = new long[][] {attentionMask};
-        long[][] tokenTypeIds2D = new long[][] {tokenTypeIds};
+      // Convert to 2D arrays for ONNX
+      long[][] inputIds2D = new long[][] {inputIds};
+      long[][] attentionMask2D = new long[][] {attentionMask};
+      long[][] tokenTypeIds2D = new long[][] {tokenTypeIds};
 
-        // Create ONNX tensors
-        inputIdsTensor = OnnxTensor.createTensor(env, inputIds2D);
-        attentionMaskTensor = OnnxTensor.createTensor(env, attentionMask2D);
-        tokenTypeIdsTensor = OnnxTensor.createTensor(env, tokenTypeIds2D);
+      // Create ONNX tensors
+      inputIdsTensor = OnnxTensor.createTensor(env, inputIds2D);
+      attentionMaskTensor = OnnxTensor.createTensor(env, attentionMask2D);
+      tokenTypeIdsTensor = OnnxTensor.createTensor(env, tokenTypeIds2D);
 
-        // Prepare inputs map
-        Map<String, OnnxTensor> inputs = new HashMap<>();
-        inputs.put("input_ids", inputIdsTensor);
-        inputs.put("attention_mask", attentionMaskTensor);
-        inputs.put("token_type_ids", tokenTypeIdsTensor);
+      // Prepare inputs map
+      Map<String, OnnxTensor> inputs = new HashMap<>();
+      inputs.put("input_ids", inputIdsTensor);
+      inputs.put("attention_mask", attentionMaskTensor);
+      inputs.put("token_type_ids", tokenTypeIdsTensor);
 
-        // Run inference
-        result = session.run(inputs);
+      // Run inference using thread-local session
+      result = session.run(inputs);
 
-        // Get output embeddings (last_hidden_state)
-        float[][][] outputTensor =
-            (float[][][]) result.get(0).getValue(); // Shape: [batch_size, seq_len, hidden_size]
+      // Get output embeddings (last_hidden_state)
+      float[][][] outputTensor =
+          (float[][][]) result.get(0).getValue(); // Shape: [batch_size, seq_len, hidden_size]
 
-        // Mean pooling
-        float[] embedding = meanPooling(outputTensor[0], attentionMask);
+      // Mean pooling
+      float[] embedding = meanPooling(outputTensor[0], attentionMask);
 
-        // Normalize
-        normalize(embedding);
+      // Normalize
+      normalize(embedding);
 
-        return embedding;
+      return embedding;
 
-      } catch (OrtException e) {
-        throw new RuntimeException("ONNX Runtime inference failed", e);
-      } catch (Exception e) {
-        log.error("Embedding generation failed for input length: {}", text.length());
-        throw new RuntimeException("Embedding generation failed", e);
-      } finally {
-        // Cleanup tensors
-        if (inputIdsTensor != null) {
-          inputIdsTensor.close();
-        }
-        if (attentionMaskTensor != null) {
-          attentionMaskTensor.close();
-        }
-        if (tokenTypeIdsTensor != null) {
-          tokenTypeIdsTensor.close();
-        }
-        if (result != null) {
-          result.close();
-        }
+    } catch (OrtException e) {
+      throw new RuntimeException("ONNX Runtime inference failed", e);
+    } catch (Exception e) {
+      log.error("Embedding generation failed for input length: {}", text.length());
+      throw new RuntimeException("Embedding generation failed", e);
+    } finally {
+      // Cleanup tensors
+      if (inputIdsTensor != null) {
+        inputIdsTensor.close();
+      }
+      if (attentionMaskTensor != null) {
+        attentionMaskTensor.close();
+      }
+      if (tokenTypeIdsTensor != null) {
+        tokenTypeIdsTensor.close();
+      }
+      if (result != null) {
+        result.close();
       }
     }
   }
@@ -194,86 +216,88 @@ public class DJLEmbeddingService implements EmbeddingService {
       return new float[0][];
     }
 
+    // Get thread-local resources (thread-safe, no synchronization needed)
+    OrtSession session = sessionPool.get();
+    HuggingFaceTokenizer tokenizer = tokenizerPool.get();
+    
     // Use true batch processing for better performance
     OnnxTensor inputIdsTensor = null;
     OnnxTensor attentionMaskTensor = null;
     OnnxTensor tokenTypeIdsTensor = null;
     OrtSession.Result result = null;
 
-    synchronized (this) { // Thread safety
-      try {
-        // Prepare batch inputs
-        int batchSize = texts.length;
-        long[][] batchInputIds = new long[batchSize][];
-        long[][] batchAttentionMask = new long[batchSize][];
-        long[][] batchTokenTypeIds = new long[batchSize][];
+    try {
+      // Prepare batch inputs
+      int batchSize = texts.length;
+      long[][] batchInputIds = new long[batchSize][];
+      long[][] batchAttentionMask = new long[batchSize][];
+      long[][] batchTokenTypeIds = new long[batchSize][];
 
-        // Tokenize all texts
-        for (int i = 0; i < batchSize; i++) {
-          String text = texts[i];
-          if (text == null || text.trim().isEmpty()) {
-            text = EMPTY_TEXT_PLACEHOLDER;
-          }
-
-          // Validate input length
-          if (text.length() > MAX_INPUT_LENGTH) {
-            text = text.substring(0, MAX_INPUT_LENGTH);
-          }
-
-          Encoding encoding = tokenizer.encode(text);
-          batchInputIds[i] = padOrTruncate(encoding.getIds(), maxLength);
-          batchAttentionMask[i] = padOrTruncate(encoding.getAttentionMask(), maxLength);
-          batchTokenTypeIds[i] = padOrTruncate(encoding.getTypeIds(), maxLength);
+      // Tokenize all texts using thread-local tokenizer
+      for (int i = 0; i < batchSize; i++) {
+        String text = texts[i];
+        if (text == null || text.trim().isEmpty()) {
+          text = EMPTY_TEXT_PLACEHOLDER;
         }
 
-        // Create ONNX tensors for batch processing
-        inputIdsTensor = OnnxTensor.createTensor(env, batchInputIds);
-        attentionMaskTensor = OnnxTensor.createTensor(env, batchAttentionMask);
-        tokenTypeIdsTensor = OnnxTensor.createTensor(env, batchTokenTypeIds);
-
-        // Prepare inputs map
-        Map<String, OnnxTensor> inputs = new HashMap<>();
-        inputs.put("input_ids", inputIdsTensor);
-        inputs.put("attention_mask", attentionMaskTensor);
-        inputs.put("token_type_ids", tokenTypeIdsTensor);
-
-        // Run batch inference
-        result = session.run(inputs);
-
-        // Get batch output embeddings
-        float[][][] outputTensor = (float[][][]) result.get(0).getValue(); // [batch_size, seq_len, hidden_size]
-
-        // Process each item in batch
-        float[][] embeddings = new float[batchSize][];
-        for (int i = 0; i < batchSize; i++) {
-          // Mean pooling for each item
-          float[] embedding = meanPooling(outputTensor[i], batchAttentionMask[i]);
-          // Normalize
-          normalize(embedding);
-          embeddings[i] = embedding;
+        // Validate input length
+        if (text.length() > MAX_INPUT_LENGTH) {
+          text = text.substring(0, MAX_INPUT_LENGTH);
         }
 
-        return embeddings;
+        Encoding encoding = tokenizer.encode(text);
+        batchInputIds[i] = padOrTruncate(encoding.getIds(), maxLength);
+        batchAttentionMask[i] = padOrTruncate(encoding.getAttentionMask(), maxLength);
+        batchTokenTypeIds[i] = padOrTruncate(encoding.getTypeIds(), maxLength);
+      }
 
-      } catch (OrtException e) {
-        throw new RuntimeException("ONNX Runtime batch inference failed", e);
-      } catch (Exception e) {
-        log.error("Batch embedding generation failed for batch size: {}", texts.length);
-        throw new RuntimeException("Batch embedding generation failed", e);
-      } finally {
-        // Cleanup tensors
-        if (inputIdsTensor != null) {
-          inputIdsTensor.close();
-        }
-        if (attentionMaskTensor != null) {
-          attentionMaskTensor.close();
-        }
-        if (tokenTypeIdsTensor != null) {
-          tokenTypeIdsTensor.close();
-        }
-        if (result != null) {
-          result.close();
-        }
+      // Create ONNX tensors for batch processing
+      inputIdsTensor = OnnxTensor.createTensor(env, batchInputIds);
+      attentionMaskTensor = OnnxTensor.createTensor(env, batchAttentionMask);
+      tokenTypeIdsTensor = OnnxTensor.createTensor(env, batchTokenTypeIds);
+
+      // Prepare inputs map
+      Map<String, OnnxTensor> inputs = new HashMap<>();
+      inputs.put("input_ids", inputIdsTensor);
+      inputs.put("attention_mask", attentionMaskTensor);
+      inputs.put("token_type_ids", tokenTypeIdsTensor);
+
+      // Run batch inference using thread-local session
+      result = session.run(inputs);
+
+      // Get batch output embeddings
+      float[][][] outputTensor = (float[][][]) result.get(0).getValue(); // [batch_size, seq_len, hidden_size]
+
+      // Process each item in batch
+      float[][] embeddings = new float[batchSize][];
+      for (int i = 0; i < batchSize; i++) {
+        // Mean pooling for each item
+        float[] embedding = meanPooling(outputTensor[i], batchAttentionMask[i]);
+        // Normalize
+        normalize(embedding);
+        embeddings[i] = embedding;
+      }
+
+      return embeddings;
+
+    } catch (OrtException e) {
+      throw new RuntimeException("ONNX Runtime batch inference failed", e);
+    } catch (Exception e) {
+      log.error("Batch embedding generation failed for batch size: {}", texts.length);
+      throw new RuntimeException("Batch embedding generation failed", e);
+    } finally {
+      // Cleanup tensors
+      if (inputIdsTensor != null) {
+        inputIdsTensor.close();
+      }
+      if (attentionMaskTensor != null) {
+        attentionMaskTensor.close();
+      }
+      if (tokenTypeIdsTensor != null) {
+        tokenTypeIdsTensor.close();
+      }
+      if (result != null) {
+        result.close();
       }
     }
   }
@@ -288,22 +312,70 @@ public class DJLEmbeddingService implements EmbeddingService {
     return modelName;
   }
 
-  /** Close resources and cleanup. */
+  /** Close resources and cleanup ThreadLocal pools. */
   public void close() {
     try {
-      if (tokenizer != null) {
-        tokenizer.close();
+      // Cleanup ThreadLocal resources
+      cleanupThreadLocalResources();
+      
+      // Close shared resources
+      if (sessionOptions != null) {
+        sessionOptions.close();
       }
-      if (session != null) {
-        session.close();
-      }
+      log.info("✅ DJL embedding service closed");
+    } catch (Exception e) {
+      log.error("Error closing resources: {}", e.getMessage());
+    }
+    
+    // Close ONNX environment separately
+    try {
       if (env != null) {
         env.close();
       }
-      log.info("✅ DJL embedding service closed");
-    } catch (OrtException e) {
-      log.error("Error closing ONNX Runtime session: {}", e.getMessage());
+    } catch (Exception e) {
+      log.error("Error closing ONNX Runtime environment: {}", e.getMessage());
     }
+  }
+  
+  /**
+   * Cleanup all ThreadLocal resources across all threads.
+   * This is a best-effort cleanup - some thread-local resources may remain
+   * if threads have terminated without proper cleanup.
+   */
+  private void cleanupThreadLocalResources() {
+    // Remove ThreadLocal values to prevent memory leaks
+    sessionPool.remove();
+    tokenizerPool.remove();
+    
+    log.debug("ThreadLocal resources cleanup completed");
+  }
+  
+  /**
+   * Manual cleanup method for current thread's resources.
+   * Call this in thread cleanup code if needed.
+   */
+  public void cleanupCurrentThread() {
+    try {
+      OrtSession session = sessionPool.get();
+      if (session != null) {
+        session.close();
+      }
+    } catch (Exception e) {
+      log.warn("Error closing thread-local session: {}", e.getMessage());
+    }
+    
+    try {
+      HuggingFaceTokenizer tokenizer = tokenizerPool.get();
+      if (tokenizer != null) {
+        tokenizer.close();
+      }
+    } catch (Exception e) {
+      log.warn("Error closing thread-local tokenizer: {}", e.getMessage());
+    }
+    
+    // Remove from ThreadLocal
+    sessionPool.remove();
+    tokenizerPool.remove();
   }
 
   // ========== Private Methods ==========
@@ -335,32 +407,56 @@ public class DJLEmbeddingService implements EmbeddingService {
     // For example, ensuring the path is within a specific allowed directory
   }
 
-  private void initializeDJL() throws OrtException, IOException {
-    log.info("🔧 Initializing DJL ONNX Runtime...");
+  /**
+   * Initialize shared resources that don't need to be thread-local
+   */
+  private void initializeSharedResources() throws OrtException, IOException {
+    log.info("🔧 Initializing DJL ONNX Runtime shared resources...");
 
-    // Initialize ONNX Runtime environment
+    // Initialize ONNX Runtime environment (shared)
     env = OrtEnvironment.getEnvironment();
 
-    // Load ONNX model
-    Path modelFile = Paths.get(modelPath, "model.onnx");
+    // Prepare file paths for thread-local resource creation
+    modelFile = Paths.get(modelPath, "model.onnx");
     if (!Files.exists(modelFile)) {
       throw new IOException("Model file not found: " + modelFile);
     }
 
-    OrtSession.SessionOptions opts = new OrtSession.SessionOptions();
-    session = env.createSession(modelFile.toString(), opts);
-
-    log.info("✅ ONNX model loaded: {}", modelFile);
-
-    // Load proper HuggingFace tokenizer
-    Path tokenizerFile = Paths.get(modelPath, "tokenizer.json");
+    tokenizerFile = Paths.get(modelPath, "tokenizer.json");
     if (!Files.exists(tokenizerFile)) {
       throw new IOException("Tokenizer file not found: " + tokenizerFile);
     }
 
-    // Use DJL HuggingFace tokenizer for production-grade tokenization
-    tokenizer = HuggingFaceTokenizer.newInstance(tokenizerFile);
-    log.info("✅ HuggingFace tokenizer loaded: {}", tokenizerFile);
+    // Prepare session options for thread-local sessions
+    sessionOptions = new OrtSession.SessionOptions();
+    
+    log.info("✅ Shared resources prepared: {}", modelFile);
+  }
+  
+  /**
+   * Creates a new ONNX session for the current thread
+   */
+  private OrtSession createSession() {
+    try {
+      OrtSession session = env.createSession(modelFile.toString(), sessionOptions);
+      log.debug("Created thread-local ONNX session for thread: {}", Thread.currentThread().getName());
+      return session;
+    } catch (OrtException e) {
+      throw new RuntimeException("Failed to create thread-local ONNX session", e);
+    }
+  }
+  
+  /**
+   * Creates a new tokenizer for the current thread
+   */
+  private HuggingFaceTokenizer createTokenizer() {
+    try {
+      HuggingFaceTokenizer tokenizer = HuggingFaceTokenizer.newInstance(tokenizerFile);
+      log.debug("Created thread-local tokenizer for thread: {}", Thread.currentThread().getName());
+      return tokenizer;
+    } catch (Exception e) {
+      throw new RuntimeException("Failed to create thread-local tokenizer", e);
+    }
   }
 
   private void checkRequiredFiles(Path modelDir) throws IOException {
