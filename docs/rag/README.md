@@ -17,9 +17,8 @@ This directory contains comprehensive documentation for:
 rag/
 ├── README.md                          # This file
 │
-├── embedding/                         # 🔤 Embedding Services
-│   ├── DJL_OVERVIEW.md                #    DJL implementation guide
-│   ├── ONNX_OVERVIEW.md               #    ONNX implementation guide  
+├── embedding/                         # 🔤 Embedding Service
+│   ├── DJL_OVERVIEW.md                #    Complete embedding guide
 │   ├── MODEL_SELECTION_GUIDE.md       #    Model selection guide
 │   └── MODEL_COMPARISON.md            #    Benchmarks & comparison
 │
@@ -49,25 +48,7 @@ java -cp "out:lib/javafx/*:lib/others/*:lib/rag/*" \
 
 ---
 
-### Option 2: Embeddings Only (ONNX)
-
-```bash
-# 1. Setup
-./scripts/setup-embeddings-onnx.sh
-
-# 2. Build
-./scripts/build.sh
-
-# 3. Run example
-java -cp "out:lib/javafx/*:lib/others/*:lib/rag/*" \
-  com.noteflix.pcm.rag.examples.embedding.ONNXEmbeddingExample
-```
-
-**Result:** Lightweight embeddings (~300MB memory)
-
----
-
-### Option 3: Full RAG System
+### Option 2: Full RAG System
 
 ```bash
 # 1. Start Qdrant
@@ -105,9 +86,8 @@ java -cp "out:lib/javafx/*:lib/others/*:lib/rag/*" \
 
 **Recommended path:**
 1. [Model Comparison](./embedding/MODEL_COMPARISON.md) - Compare performance
-2. [ONNX Overview](./embedding/ONNX_OVERVIEW.md) - Lightweight alternative
-3. [Qdrant Implementation](./vectorstore/QDRANT_IMPLEMENTATION.md) - Vector database
-4. Build your RAG application
+2. [Qdrant Implementation](./vectorstore/QDRANT_IMPLEMENTATION.md) - Vector database
+3. Build your RAG application
 
 **Time:** ~1 hour
 
@@ -132,10 +112,8 @@ java -cp "out:lib/javafx/*:lib/others/*:lib/rag/*" \
 
 **What:** Convert text to vector representations
 
-**Implementations:**
-- **DJLEmbeddingService** - Comprehensive (DJL + ONNX Runtime)
-- **ONNXEmbeddingService** - Lightweight (ONNX Runtime only)
-- **SimpleEmbeddingService** - Placeholder for testing
+**Production Implementation:**
+- **DJLEmbeddingService** - The ONLY embedding service (DJL + ONNX Runtime + HuggingFace Tokenizer)
 
 **When to use:**
 - Semantic search
@@ -170,11 +148,9 @@ java -cp "out:lib/javafx/*:lib/others/*:lib/rag/*" \
 
 ### Embedding Services
 
-| Service | Memory | Speed | Dependencies | Best For |
-|---------|--------|-------|--------------|----------|
-| **DJL** | ~400MB | ~70-90ms | 4 JARs | ✅ Default choice |
-| **ONNX** | ~300MB | ~70-90ms | 1 JAR | Lightweight |
-| **Simple** | ~1MB | Instant | None | Testing only |
+| Service | Memory | Speed | Quality | Status |
+|---------|--------|-------|---------|--------|
+| **DJLEmbeddingService** | ~400MB | ~70-90ms (single)<br>~500ms (batch 100) | Production-grade | ✅ **USE THIS** |
 
 ### Vector Stores
 
@@ -207,8 +183,8 @@ for (ScoredDocument doc : results) {
 ```
 
 **Recommended:**
-- **Embeddings:** DJL (all-MiniLM-L6-v2)
-- **Vector Store:** Lucene (offline) or Qdrant (large scale)
+- **Embeddings:** DJLEmbeddingService with all-MiniLM-L6-v2
+- **Vector Store:** Lucene (offline) or Qdrant (scalable)
 
 ---
 
@@ -229,7 +205,7 @@ List<ScoredDocument> results = ragService.search(query, options);
 ```
 
 **Recommended:**
-- **Embeddings:** DJL (all-mpnet-base-v2) for best quality
+- **Embeddings:** DJLEmbeddingService with all-mpnet-base-v2 (best quality)
 - **Vector Store:** Qdrant (scalable)
 
 ---
@@ -249,7 +225,7 @@ FAQ bestMatch = findMostSimilar(queryEmb, faqs);
 ```
 
 **Recommended:**
-- **Embeddings:** ONNX (lightweight, fast)
+- **Embeddings:** DJLEmbeddingService (fast with batch processing)
 - **Vector Store:** In-memory (small dataset)
 
 ---
@@ -270,16 +246,11 @@ FAQ bestMatch = findMostSimilar(queryEmb, faqs);
 
 ### Dependencies
 
-**For DJL Embeddings:**
+**For Embeddings (DJLEmbeddingService):**
 ```
 ✅ ai.djl:api:0.35.0
 ✅ ai.djl.onnxruntime:onnxruntime-engine:0.35.0
 ✅ ai.djl.huggingface:tokenizers:0.35.0
-✅ com.microsoft.onnxruntime:onnxruntime:1.19.0
-```
-
-**For ONNX Embeddings:**
-```
 ✅ com.microsoft.onnxruntime:onnxruntime:1.19.0
 ```
 
@@ -335,9 +306,8 @@ See individual docs for detailed troubleshooting.
 
 ### Recommended (Most Users)
 
-3. [ONNX Overview](./embedding/ONNX_OVERVIEW.md) - 15 min
-4. [Model Comparison](./embedding/MODEL_COMPARISON.md) - 20 min
-5. [Qdrant Implementation](./vectorstore/QDRANT_IMPLEMENTATION.md) - 20 min
+3. [Model Comparison](./embedding/MODEL_COMPARISON.md) - 20 min
+4. [Qdrant Implementation](./vectorstore/QDRANT_IMPLEMENTATION.md) - 20 min
 
 ### Optional (Advanced Users)
 
@@ -412,9 +382,9 @@ Before deploying to production:
 ### Official Documentation
 
 - **[DJL Website](https://djl.ai/)** - Deep Java Library
-- **[ONNX Runtime](https://onnxruntime.ai/)** - ONNX Runtime docs
 - **[Qdrant](https://qdrant.tech/)** - Vector database
 - **[Sentence Transformers](https://www.sbert.net/)** - Model documentation
+- **[HuggingFace](https://huggingface.co/)** - Model hub
 
 ### Community
 

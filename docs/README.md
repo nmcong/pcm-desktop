@@ -11,9 +11,8 @@ docs/
 └── rag/                   # 🤖 RAG System Documentation
     ├── README.md          #    RAG system overview
     │
-    ├── embedding/         # 🔤 Embedding Services
+    ├── embedding/         # 🔤 Embedding Service
     │   ├── DJL_OVERVIEW.md
-    │   ├── ONNX_OVERVIEW.md
     │   ├── MODEL_SELECTION_GUIDE.md
     │   ├── MODEL_COMPARISON.md
     │   └── EMBEDDING_SERVICES_COMPLETE.md
@@ -91,17 +90,14 @@ Complete RAG system documentation including:
 
 Convert text to vector representations for semantic search.
 
-**Available Implementations:**
-- **DJLEmbeddingService** - Production-ready (DJL + ONNX Runtime)
-- **ONNXEmbeddingService** - Lightweight (ONNX Runtime only)
-- **SimpleEmbeddingService** - Testing placeholder
+**Production-Ready Implementation:**
+- **DJLEmbeddingService** - The ONLY embedding service you need
 
 **Key Documents:**
 
 | Document | Purpose | Read Time |
 |----------|---------|-----------|
-| [DJL Overview](./rag/embedding/DJL_OVERVIEW.md) | Complete DJL guide | 20 min |
-| [ONNX Overview](./rag/embedding/ONNX_OVERVIEW.md) | Lightweight alternative | 15 min |
+| [DJL Overview](./rag/embedding/DJL_OVERVIEW.md) | Complete embedding guide | 20 min |
 | [Model Selection](./rag/embedding/MODEL_SELECTION_GUIDE.md) | Choose right model | 15 min |
 | [Model Comparison](./rag/embedding/MODEL_COMPARISON.md) | Benchmarks & analysis | 20 min |
 
@@ -178,13 +174,13 @@ docker run -p 6333:6333 qdrant/qdrant
 **Goal:** Match user questions to FAQ database
 
 **What you need:**
-- Embeddings: `ONNXEmbeddingService` (lightweight)
+- Embeddings: `DJLEmbeddingService` (fast with batch processing)
 - Vector Store: In-memory (small dataset)
 
 **Docs to read:**
-1. [ONNX Overview](./rag/embedding/ONNX_OVERVIEW.md)
+1. [DJL Overview](./rag/embedding/DJL_OVERVIEW.md)
 
-**Example:** `src/main/java/com/noteflix/pcm/rag/examples/embedding/ONNXEmbeddingExample.java`
+**Example:** `src/main/java/com/noteflix/pcm/rag/examples/embedding/DJLEmbeddingExample.java`
 
 ---
 
@@ -192,13 +188,11 @@ docker run -p 6333:6333 qdrant/qdrant
 
 ### Embedding Services
 
-| Service | Memory | Speed | Quality | Best For |
-|---------|--------|-------|---------|----------|
-| **DJL** | ~400MB | ~70-90ms | High | ✅ Default choice |
-| **ONNX** | ~300MB | ~70-90ms | High | Lightweight |
-| **Simple** | ~1MB | Instant | Low | Testing only |
+| Service | Memory | Speed | Quality | Status |
+|---------|--------|-------|---------|--------|
+| **DJLEmbeddingService** | ~400MB | ~70-90ms (single)<br>~500ms (batch 100) | Production-grade | ✅ **USE THIS** |
 
-**Recommendation:** Use DJL for most cases, ONNX for lightweight deployments.
+**This is the ONLY embedding service you need!**
 
 ---
 
@@ -372,8 +366,7 @@ for (int i = 0; i < 20; i++) {
 
 ### Embeddings
 
-- [DJL Overview](./rag/embedding/DJL_OVERVIEW.md) - DJL embedding guide
-- [ONNX Overview](./rag/embedding/ONNX_OVERVIEW.md) - ONNX embedding guide
+- [DJL Overview](./rag/embedding/DJL_OVERVIEW.md) - Complete embedding guide
 - [Model Selection](./rag/embedding/MODEL_SELECTION_GUIDE.md) - Choose model
 - [Model Comparison](./rag/embedding/MODEL_COMPARISON.md) - Benchmarks
 
