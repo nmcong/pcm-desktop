@@ -51,13 +51,13 @@ else
     echo -e "${YELLOW}  ✓ DJL API already exists${NC}"
 fi
 
-# DJL ONNX Engine
-if [ ! -f "onnx-engine-0.35.0.jar" ]; then
-    echo "  - Downloading DJL ONNX Engine..."
-    curl -L -O --progress-bar https://repo1.maven.org/maven2/ai/djl/onnx/onnx-engine/0.35.0/onnx-engine-0.35.0.jar
-    echo -e "${GREEN}  ✓ DJL ONNX Engine downloaded${NC}"
+# DJL ONNX Runtime Engine
+if [ ! -f "onnxruntime-engine-0.35.0.jar" ]; then
+    echo "  - Downloading DJL ONNX Runtime Engine..."
+    curl -L -O --progress-bar https://repo1.maven.org/maven2/ai/djl/onnxruntime/onnxruntime-engine/0.35.0/onnxruntime-engine-0.35.0.jar
+    echo -e "${GREEN}  ✓ DJL ONNX Runtime Engine downloaded${NC}"
 else
-    echo -e "${YELLOW}  ✓ DJL ONNX Engine already exists${NC}"
+    echo -e "${YELLOW}  ✓ DJL ONNX Runtime Engine already exists${NC}"
 fi
 
 # DJL Tokenizers
