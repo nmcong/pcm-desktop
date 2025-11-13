@@ -21,6 +21,49 @@ YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
+# ============================================================
+# Ensure Java 21 is used
+# ============================================================
+ensure_java_21() {
+    # Check if running on macOS
+    if [[ "$OSTYPE" == "darwin"* ]]; then
+        # Use java_home to find Java 21
+        if command -v /usr/libexec/java_home &> /dev/null; then
+            JAVA_21_HOME=$(/usr/libexec/java_home -v 21 2>/dev/null)
+            if [ -n "$JAVA_21_HOME" ]; then
+                export JAVA_HOME="$JAVA_21_HOME"
+                export PATH="$JAVA_HOME/bin:$PATH"
+                echo -e "${GREEN}☕ Using Java 21: $JAVA_HOME${NC}"
+                return 0
+            fi
+        fi
+    fi
+    
+    # Check current java version
+    if command -v java &> /dev/null; then
+        JAVA_VERSION=$(java -version 2>&1 | head -n 1 | cut -d'"' -f2 | cut -d'.' -f1)
+        if [ "$JAVA_VERSION" = "21" ]; then
+            echo -e "${GREEN}☕ Java 21 is already active${NC}"
+            return 0
+        fi
+    fi
+    
+    # Java 21 not found
+    echo -e "${RED}❌ Java 21 not found!${NC}"
+    echo ""
+    echo "This project requires Java 21."
+    echo ""
+    echo "On macOS, install with:"
+    echo "  brew install --cask temurin21"
+    echo ""
+    echo "Or download from: https://adoptium.net/"
+    exit 1
+}
+
+# Ensure Java 21 before proceeding
+ensure_java_21
+echo ""
+
 # Change to project root directory
 cd "$(dirname "$0")/.."
 PROJECT_ROOT="$(pwd)"

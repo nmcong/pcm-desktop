@@ -62,6 +62,48 @@ echo  PCM Desktop - Code Formatter
 echo ========================================
 echo.
 
+REM ============================================================
+REM Ensure Java 21 is used
+REM ============================================================
+echo [INFO] Checking Java version...
+
+REM Check if Java is installed
+java -version >nul 2>&1
+if %ERRORLEVEL% NEQ 0 (
+    echo [ERROR] Java not found!
+    echo.
+    echo This project requires Java 21.
+    echo Download from: https://adoptium.net/
+    echo.
+    pause
+    exit /b 1
+)
+
+REM Get Java version
+for /f "tokens=3" %%v in ('java -version 2^>^&1 ^| findstr /i "version"') do set JAVA_VERSION=%%v
+
+REM Remove quotes
+set JAVA_VERSION=%JAVA_VERSION:"=%
+
+REM Extract major version
+for /f "tokens=1 delims=." %%m in ("%JAVA_VERSION%") do set JAVA_MAJOR=%%m
+
+REM Check if Java 21
+if not "%JAVA_MAJOR%"=="21" (
+    echo [ERROR] Java 21 required, but found Java %JAVA_MAJOR%!
+    echo.
+    echo This project requires Java 21.
+    echo Download from: https://adoptium.net/
+    echo.
+    echo Set JAVA_HOME to Java 21 installation.
+    echo.
+    pause
+    exit /b 1
+)
+
+echo [OK] Using Java 21
+echo.
+
 REM Check if formatter JAR exists
 if not exist "%FORMATTER_JAR%" (
     echo [ERROR] Google Java Format JAR not found!

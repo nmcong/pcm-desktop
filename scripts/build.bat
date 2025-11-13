@@ -56,16 +56,43 @@ echo    PCM Desktop - Build Script
 echo ========================================
 echo.
 
+REM ============================================================
+REM Ensure Java 21 is used
+REM ============================================================
+echo [INFO] Checking Java version...
+
 REM Check if Java is installed
 javac -version >nul 2>&1
 if %ERRORLEVEL% NEQ 0 (
     echo [ERROR] Java compiler (javac) not found!
-    echo Please install JDK 21.
+    echo.
+    echo This project requires Java 21.
+    echo Download from: https://adoptium.net/
+    echo.
     pause
     exit /b 1
 )
 
-echo [INFO] Java compiler found!
+REM Get Java version
+for /f "tokens=2 delims= " %%v in ('javac -version 2^>^&1') do set JAVA_VERSION=%%v
+
+REM Extract major version
+for /f "tokens=1 delims=." %%m in ("%JAVA_VERSION%") do set JAVA_MAJOR=%%m
+
+REM Check if Java 21
+if not "%JAVA_MAJOR%"=="21" (
+    echo [ERROR] Java 21 required, but found Java %JAVA_MAJOR%!
+    echo.
+    echo This project requires Java 21.
+    echo Download from: https://adoptium.net/
+    echo.
+    echo Set JAVA_HOME to Java 21 installation.
+    echo.
+    pause
+    exit /b 1
+)
+
+echo [OK] Using Java 21
 javac -version
 echo.
 
