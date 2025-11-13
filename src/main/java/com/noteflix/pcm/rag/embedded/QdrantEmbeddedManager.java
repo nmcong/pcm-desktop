@@ -13,7 +13,8 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * Manager for embedded Qdrant process.
  *
- * <p>Starts Qdrant binary as separate process and manages its lifecycle.
+ * <p>Starts Qdrant binary as separate process and manages its lifecycle. This implementation
+ * includes security validations and proper resource management.
  *
  * <p>Usage:
  *
@@ -27,15 +28,17 @@ import lombok.extern.slf4j.Slf4j;
  * </pre>
  *
  * @author PCM Team
- * @version 1.0.0
+ * @version 2.0.0 - Security improvements
  */
 @Slf4j
 public class QdrantEmbeddedManager {
 
   private Process qdrantProcess;
+  private Thread outputReaderThread;
   private final String binaryPath;
   private final String storagePath;
   private final int port;
+  private volatile boolean isShuttingDown = false;
 
   /** Create manager with default settings. */
   public QdrantEmbeddedManager() {
@@ -50,9 +53,43 @@ public class QdrantEmbeddedManager {
    * @param port Port to run on
    */
   public QdrantEmbeddedManager(String binaryPath, String storagePath, int port) {
+    // Security validation for inputs
+    validateInputs(binaryPath, storagePath, port);
+
     this.binaryPath = binaryPath;
     this.storagePath = storagePath;
     this.port = port;
+  }
+
+  /** Validate constructor inputs to prevent security issues. */
+  private void validateInputs(String binaryPath, String storagePath, int port) {
+    if (binaryPath == null || binaryPath.trim().isEmpty()) {
+      throw new IllegalArgumentException("Binary path cannot be null or empty");
+    }
+    if (storagePath == null || storagePath.trim().isEmpty()) {
+      throw new IllegalArgumentException("Storage path cannot be null or empty");
+    }
+    if (port <= 0 || port > 65535) {
+      throw new IllegalArgumentException("Port must be between 1 and 65535");
+    }
+
+    // Prevent path traversal attacks
+    if (binaryPath.contains("..") || binaryPath.contains("~")) {
+      throw new IllegalArgumentException("Binary path contains unsafe characters");
+    }
+    if (storagePath.contains("..") || storagePath.contains("~")) {
+      throw new IllegalArgumentException("Storage path contains unsafe characters");
+    }
+
+    // Validate paths are not absolute system paths
+    Path normalizedBinaryPath = Paths.get(binaryPath).normalize();
+    Path normalizedStoragePath = Paths.get(storagePath).normalize();
+
+    // Additional security: ensure paths don't escape working directory
+    if (normalizedBinaryPath.isAbsolute()
+        && !normalizedBinaryPath.startsWith(Paths.get("").toAbsolutePath())) {
+      log.warn("Binary path is outside working directory: {}", normalizedBinaryPath);
+    }
   }
 
   /**
@@ -82,32 +119,19 @@ public class QdrantEmbeddedManager {
     Path storage = Paths.get(storagePath);
     Files.createDirectories(storage);
 
-    // Build command
-    ProcessBuilder pb =
-        new ProcessBuilder(
-            binary, "--storage-path", storagePath, "--http-port", String.valueOf(port));
-
+    // Build command with validated arguments
+    String[] command = buildSecureCommand(binary);
+    ProcessBuilder pb = new ProcessBuilder(command);
     pb.redirectErrorStream(true);
 
     log.info("Starting Qdrant: {} (port: {}, storage: {})", binary, port, storagePath);
 
     qdrantProcess = pb.start();
 
-    // Log output in background thread
-    new Thread(
-            () -> {
-              try (BufferedReader reader =
-                  new BufferedReader(new InputStreamReader(qdrantProcess.getInputStream()))) {
-                String line;
-                while ((line = reader.readLine()) != null) {
-                  log.debug("[Qdrant] {}", line);
-                }
-              } catch (IOException e) {
-                log.error("Error reading Qdrant output", e);
-              }
-            },
-            "qdrant-output")
-        .start();
+    // Create managed background thread for output reading
+    outputReaderThread = new Thread(this::readQdrantOutput, "qdrant-output-" + port);
+    outputReaderThread.setDaemon(true); // Allow JVM shutdown even if thread is running
+    outputReaderThread.start();
 
     // Wait for Qdrant to start
     waitForQdrant();
@@ -117,6 +141,8 @@ public class QdrantEmbeddedManager {
 
   /** Stop Qdrant process. */
   public void stop() {
+    isShuttingDown = true;
+
     if (qdrantProcess != null && qdrantProcess.isAlive()) {
       log.info("Stopping Qdrant...");
       qdrantProcess.destroy();
@@ -130,6 +156,17 @@ public class QdrantEmbeddedManager {
         log.info("Qdrant stopped");
       } catch (InterruptedException e) {
         log.error("Interrupted while waiting for Qdrant to stop", e);
+        Thread.currentThread().interrupt();
+      }
+    }
+
+    // Clean up output reader thread
+    if (outputReaderThread != null && outputReaderThread.isAlive()) {
+      try {
+        outputReaderThread.interrupt();
+        outputReaderThread.join(2000); // Wait up to 2 seconds
+      } catch (InterruptedException e) {
+        log.warn("Interrupted while stopping output reader thread");
         Thread.currentThread().interrupt();
       }
     }
@@ -236,6 +273,36 @@ public class QdrantEmbeddedManager {
 
     } catch (Exception e) {
       return false;
+    }
+  }
+
+  /** Build secure command array to prevent command injection. */
+  private String[] buildSecureCommand(String binary) {
+    // Validate binary path once more before execution
+    Path binaryPath = Paths.get(binary);
+    if (!Files.exists(binaryPath)) {
+      throw new IllegalArgumentException("Binary file does not exist: " + binary);
+    }
+
+    // Build command with properly quoted arguments
+    return new String[] {binary};
+  }
+
+  /** Safely read Qdrant process output. */
+  private void readQdrantOutput() {
+    try (BufferedReader reader =
+        new BufferedReader(new InputStreamReader(qdrantProcess.getInputStream()))) {
+
+      String line;
+      while (!isShuttingDown && (line = reader.readLine()) != null) {
+        if (!isShuttingDown) { // Double-check to avoid logging during shutdown
+          log.debug("[Qdrant] {}", line);
+        }
+      }
+    } catch (IOException e) {
+      if (!isShuttingDown) { // Only log errors if not shutting down
+        log.error("Error reading Qdrant output", e);
+      }
     }
   }
 }

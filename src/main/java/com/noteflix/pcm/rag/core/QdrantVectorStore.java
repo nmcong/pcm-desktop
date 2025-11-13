@@ -21,16 +21,12 @@ import lombok.extern.slf4j.Slf4j;
  *
  * <p>Production-ready implementation using Qdrant REST API.
  *
- * <p>Features:
- * - Fast vector similarity search
- * - Scalable (handles millions of documents)
- * - Can run locally or remote
- * - No external Java client required (uses REST API)
+ * <p>Features: - Fast vector similarity search - Scalable (handles millions of documents) - Can run
+ * locally or remote - No external Java client required (uses REST API)
  *
- * <p>Setup:
- * 1. Run Qdrant: docker run -p 6333:6333 qdrant/qdrant
- * 2. Or use embedded: new QdrantEmbeddedManager().start()
- * 3. Create store: VectorStoreFactory.create(VectorStoreConfig.qdrantLocal())
+ * <p>Setup: 1. Run Qdrant: docker run -p 6333:6333 qdrant/qdrant 2. Or use embedded: new
+ * QdrantEmbeddedManager().start() 3. Create store:
+ * VectorStoreFactory.create(VectorStoreConfig.qdrantLocal())
  *
  * @author PCM Team
  * @version 2.0.0
@@ -78,13 +74,27 @@ public class QdrantVectorStore implements VectorStore {
     this.embeddingService = embeddingService;
     this.vectorDimension = vectorDimension;
 
-    log.info("🚀 QdrantVectorStore initialized: {}:{}, collection: {}", host, port, this.collectionName);
+    log.info(
+        "🚀 QdrantVectorStore initialized: {}:{}, collection: {}", host, port, this.collectionName);
 
-    // Create collection if not exists
+    // Create collection if not exists with proper error handling
     try {
       client.createCollectionIfNotExists(this.collectionName, vectorDimension);
+      log.info("✅ Collection '{}' is ready", this.collectionName);
     } catch (IOException e) {
-      log.error("⚠️ Failed to create collection (may already exist): {}", e.getMessage());
+      log.error("❌ Failed to initialize collection: {}", e.getMessage());
+      // Verify collection exists and is accessible
+      try {
+        if (client.collectionExists(this.collectionName)) {
+          log.info("Collection '{}' already exists and is accessible", this.collectionName);
+        } else {
+          throw new RuntimeException(
+              "Collection does not exist and cannot be created: " + e.getMessage(), e);
+        }
+      } catch (Exception verifyError) {
+        throw new RuntimeException(
+            "Cannot access Qdrant server or collection: " + verifyError.getMessage(), verifyError);
+      }
     }
   }
 
@@ -96,8 +106,8 @@ public class QdrantVectorStore implements VectorStore {
 
     if (embeddingService == null) {
       throw new IllegalStateException(
-          "Embedding service not configured. "
-              + "Use constructor with EmbeddingService parameter or call indexDocuments() with pre-computed vectors.");
+          "Embedding service not configured. Use constructor with EmbeddingService parameter or"
+              + " call indexDocuments() with pre-computed vectors.");
     }
 
     log.debug("Indexing document: {}", document.getId());
@@ -134,30 +144,16 @@ public class QdrantVectorStore implements VectorStore {
     }
 
     try {
-      // Batch process for efficiency
-      List<QdrantPoint> points = new ArrayList<>();
+      // Process in chunks for memory efficiency
+      int chunkSize = calculateOptimalChunkSize(documents);
 
-      for (RAGDocument doc : documents) {
-        // Generate embedding
-        float[] vector = embeddingService.embed(doc.getContent());
+      for (int i = 0; i < documents.size(); i += chunkSize) {
+        int endIndex = Math.min(i + chunkSize, documents.size());
+        List<RAGDocument> chunk = documents.subList(i, endIndex);
 
-        // Create point
-        Map<String, String> payload = createPayload(doc);
-        QdrantPoint point = new QdrantPoint(doc.getId(), vector, payload);
+        processDocumentChunk(chunk);
 
-        points.add(point);
-
-        // Batch upsert every 100 documents
-        if (points.size() >= 100) {
-          client.upsertPoints(collectionName, points);
-          points.clear();
-          log.debug("Progress: {} documents indexed", documents.indexOf(doc) + 1);
-        }
-      }
-
-      // Upsert remaining
-      if (!points.isEmpty()) {
-        client.upsertPoints(collectionName, points);
+        log.info("Progress: {}/{} documents indexed", endIndex, documents.size());
       }
 
       log.info("✅ {} documents indexed successfully", documents.size());
@@ -166,6 +162,60 @@ public class QdrantVectorStore implements VectorStore {
       log.error("❌ Failed to index documents", e);
       throw new RuntimeException("Failed to index documents", e);
     }
+  }
+
+  /** Process a chunk of documents using batch embeddings for optimal performance. */
+  private void processDocumentChunk(List<RAGDocument> documents) throws IOException {
+    // Extract texts for batch embedding
+    String[] texts = documents.stream().map(RAGDocument::getContent).toArray(String[]::new);
+
+    // Generate embeddings in batch - much faster than individual calls
+    float[][] embeddings = embeddingService.embedBatch(texts);
+
+    // Create points with pre-computed embeddings
+    List<QdrantPoint> points = new ArrayList<>();
+    for (int i = 0; i < documents.size(); i++) {
+      RAGDocument doc = documents.get(i);
+      float[] vector = embeddings[i];
+      Map<String, String> payload = createPayload(doc);
+      QdrantPoint point = new QdrantPoint(doc.getId(), vector, payload);
+      points.add(point);
+    }
+
+    // Batch upsert to Qdrant
+    client.upsertPoints(collectionName, points);
+  }
+
+  /** Calculate optimal chunk size based on estimated memory usage. */
+  private int calculateOptimalChunkSize(List<RAGDocument> documents) {
+    if (documents.isEmpty()) {
+      return 100;
+    }
+
+    // Estimate average document size
+    long totalSize =
+        documents.stream()
+            .limit(Math.min(10, documents.size())) // Sample first 10 docs
+            .mapToLong(doc -> doc.getContent() != null ? doc.getContent().length() : 0)
+            .sum();
+
+    double avgDocSize = (double) totalSize / Math.min(10, documents.size());
+
+    // Estimate memory usage: text + embeddings (4 bytes per float * dimension)
+    double avgEmbeddingSize = vectorDimension * 4; // 4 bytes per float
+    double estimatedMemoryPerDoc =
+        (avgDocSize * 2) + avgEmbeddingSize; // 2x for tokenization overhead
+
+    // Target max 100MB per chunk
+    long targetMemoryMB = 100 * 1024 * 1024;
+    int chunkSize = (int) Math.max(1, targetMemoryMB / estimatedMemoryPerDoc);
+
+    // Clamp between reasonable bounds
+    chunkSize = Math.max(10, Math.min(chunkSize, 1000));
+
+    log.debug(
+        "Calculated optimal chunk size: {} (avg doc size: {:.0f} bytes)", chunkSize, avgDocSize);
+    return chunkSize;
   }
 
   @Override
@@ -199,12 +249,13 @@ public class QdrantVectorStore implements VectorStore {
       for (QdrantSearchResult result : results) {
         RAGDocument doc = payloadToDocument(result.getId(), result.getPayload());
         // Use builder pattern for ScoredDocument
-        ScoredDocument scoredDoc = ScoredDocument.builder()
-            .document(doc)
-            .score(result.getScore())
-            .rank(rank++)
-            .snippet(truncateContent(doc.getContent(), 200))
-            .build();
+        ScoredDocument scoredDoc =
+            ScoredDocument.builder()
+                .document(doc)
+                .score(result.getScore())
+                .rank(rank++)
+                .snippet(truncateContent(doc.getContent(), 200))
+                .build();
         scoredDocs.add(scoredDoc);
       }
 
@@ -358,7 +409,8 @@ public class QdrantVectorStore implements VectorStore {
     }
 
     if (document.getIndexedAt() != null) {
-      payload.put("indexedAt", document.getIndexedAt().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
+      payload.put(
+          "indexedAt", document.getIndexedAt().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
     }
 
     // Add all metadata
@@ -394,7 +446,8 @@ public class QdrantVectorStore implements VectorStore {
 
     if (payload.containsKey("indexedAt")) {
       try {
-        builder.indexedAt(LocalDateTime.parse(payload.get("indexedAt"), DateTimeFormatter.ISO_LOCAL_DATE_TIME));
+        builder.indexedAt(
+            LocalDateTime.parse(payload.get("indexedAt"), DateTimeFormatter.ISO_LOCAL_DATE_TIME));
       } catch (Exception e) {
         log.debug("Invalid date format: {}", payload.get("indexedAt"));
       }

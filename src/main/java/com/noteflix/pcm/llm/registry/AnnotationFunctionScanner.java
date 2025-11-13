@@ -9,6 +9,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.*;
 import lombok.extern.slf4j.Slf4j;
+
 // Reflections library not available - using manual scanning
 // To enable automatic package scanning, add dependency:
 // org.reflections:reflections:0.10.2

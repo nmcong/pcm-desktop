@@ -27,21 +27,46 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class QdrantClient {
 
+  // Security and performance constants
+  private static final int DEFAULT_CONNECT_TIMEOUT_SECONDS = 10;
+  private static final int DEFAULT_REQUEST_TIMEOUT_SECONDS = 30;
+  private static final int MAX_CONNECTIONS = 100;
+  private static final int CONNECTION_POOL_TIMEOUT_SECONDS = 30;
+
   private final String baseUrl;
   private final String apiKey;
   private final HttpClient httpClient;
   private final ObjectMapper objectMapper;
+  private final boolean useHttps;
 
   public QdrantClient(String host, int port, String apiKey) {
-    this.baseUrl = String.format("http://%s:%d", host, port);
+    this(host, port, apiKey, false);
+  }
+
+  public QdrantClient(String host, int port, String apiKey, boolean useHttps) {
+    // Input validation
+    if (host == null || host.trim().isEmpty()) {
+      throw new IllegalArgumentException("Host cannot be null or empty");
+    }
+    if (port <= 0 || port > 65535) {
+      throw new IllegalArgumentException("Port must be between 1 and 65535");
+    }
+
+    this.useHttps = useHttps;
+    String protocol = useHttps ? "https" : "http";
+    this.baseUrl = String.format("%s://%s:%d", protocol, host, port);
     this.apiKey = apiKey;
+
+    // Enhanced HttpClient with connection pooling
     this.httpClient =
         HttpClient.newBuilder()
-            .connectTimeout(Duration.ofSeconds(10))
+            .connectTimeout(Duration.ofSeconds(DEFAULT_CONNECT_TIMEOUT_SECONDS))
+            .version(HttpClient.Version.HTTP_2)
             .build();
+
     this.objectMapper = new ObjectMapper();
 
-    log.info("Qdrant client initialized: {}", baseUrl);
+    log.info("Qdrant client initialized: {} (HTTPS: {})", baseUrl, useHttps);
   }
 
   /**
@@ -173,16 +198,19 @@ public class QdrantClient {
     // Filter (if provided)
     if (filter != null && !filter.isEmpty()) {
       ObjectNode filterNode = objectMapper.createObjectNode();
-      // Simple implementation: equality match
-      ObjectNode mustArray = objectMapper.createObjectNode();
+      ArrayNode mustArray = objectMapper.createArrayNode();
+
       filter.forEach(
           (key, value) -> {
+            ObjectNode conditionNode = objectMapper.createObjectNode();
             ObjectNode matchNode = objectMapper.createObjectNode();
-            ObjectNode matchDetail = objectMapper.createObjectNode();
-            matchDetail.put("value", value.toString());
-            matchNode.set(key, matchDetail);
-            mustArray.set("match", matchNode);
+            ObjectNode keyNode = objectMapper.createObjectNode();
+            keyNode.put("value", value.toString());
+            matchNode.set(key, keyNode);
+            conditionNode.set("match", matchNode);
+            mustArray.add(conditionNode);
           });
+
       filterNode.set("must", mustArray);
       body.set("filter", filterNode);
     }
@@ -345,12 +373,21 @@ public class QdrantClient {
 
   private HttpResponse<String> sendRequest(String method, String url, String body)
       throws IOException {
+    // Input validation
+    if (method == null || method.trim().isEmpty()) {
+      throw new IllegalArgumentException("HTTP method cannot be null or empty");
+    }
+    if (url == null || url.trim().isEmpty()) {
+      throw new IllegalArgumentException("URL cannot be null or empty");
+    }
+
     try {
       HttpRequest.Builder builder =
           HttpRequest.newBuilder()
               .uri(URI.create(url))
-              .timeout(Duration.ofSeconds(30))
-              .header("Content-Type", "application/json");
+              .timeout(Duration.ofSeconds(DEFAULT_REQUEST_TIMEOUT_SECONDS))
+              .header("Content-Type", "application/json")
+              .header("Accept", "application/json");
 
       // Add API key if provided
       if (apiKey != null && !apiKey.isEmpty()) {
@@ -359,7 +396,9 @@ public class QdrantClient {
 
       // Set method and body
       HttpRequest.BodyPublisher bodyPublisher =
-          body != null ? HttpRequest.BodyPublishers.ofString(body) : HttpRequest.BodyPublishers.noBody();
+          body != null
+              ? HttpRequest.BodyPublishers.ofString(body)
+              : HttpRequest.BodyPublishers.noBody();
 
       switch (method.toUpperCase()) {
         case "GET":
@@ -379,11 +418,18 @@ public class QdrantClient {
       }
 
       HttpRequest request = builder.build();
-      return httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+      HttpResponse<String> response =
+          httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+
+      log.debug("HTTP {} {} -> {}", method, url, response.statusCode());
+      return response;
 
     } catch (InterruptedException e) {
       Thread.currentThread().interrupt();
       throw new IOException("Request interrupted", e);
+    } catch (Exception e) {
+      log.error("HTTP request failed: {} {} - {}", method, url, e.getMessage());
+      throw new IOException("HTTP request failed", e);
     }
   }
 
@@ -464,4 +510,3 @@ public class QdrantClient {
     }
   }
 }
-

@@ -21,15 +21,15 @@ import lombok.extern.slf4j.Slf4j;
  * DJL (Deep Java Library) based embedding service with ThreadLocal optimization.
  *
  * <p>Uses sentence-transformers models (ONNX format) for offline embeddings with DJL ONNX Runtime.
- * This implementation uses ThreadLocal pools for ONNX sessions and tokenizers to achieve 
+ * This implementation uses ThreadLocal pools for ONNX sessions and tokenizers to achieve
  * thread-safety without synchronization bottlenecks.
  *
- * <p><strong>Thread Safety:</strong> This service is thread-safe using ThreadLocal pattern.
- * Each thread gets its own ONNX session and tokenizer instance, eliminating the need for
- * synchronization and improving concurrent performance.
+ * <p><strong>Thread Safety:</strong> This service is thread-safe using ThreadLocal pattern. Each
+ * thread gets its own ONNX session and tokenizer instance, eliminating the need for synchronization
+ * and improving concurrent performance.
  *
- * <p><strong>Performance:</strong> Supports true batch processing with ONNX batch inference
- * and parallel thread execution without blocking.
+ * <p><strong>Performance:</strong> Supports true batch processing with ONNX batch inference and
+ * parallel thread execution without blocking.
  *
  * <p>Setup: 1. Download DJL libraries: ./scripts/setup-embeddings-djl.sh 2. Download model (e.g.,
  * all-MiniLM-L6-v2) 3. Use this service
@@ -42,11 +42,11 @@ import lombok.extern.slf4j.Slf4j;
  * );
  *
  * float[] vector = embeddings.embed("How to validate customers?");
- * 
+ *
  * // Thread-safe concurrent usage
- * CompletableFuture&lt;float[]&gt; future1 = CompletableFuture.supplyAsync(() -&gt; 
+ * CompletableFuture&lt;float[]&gt; future1 = CompletableFuture.supplyAsync(() -&gt;
  *     embeddings.embed("Text 1"));
- * CompletableFuture&lt;float[]&gt; future2 = CompletableFuture.supplyAsync(() -&gt; 
+ * CompletableFuture&lt;float[]&gt; future2 = CompletableFuture.supplyAsync(() -&gt;
  *     embeddings.embed("Text 2"));
  * </pre>
  *
@@ -58,10 +58,10 @@ public class DJLEmbeddingService implements EmbeddingService {
 
   // Constants
   private static final int MAX_INPUT_LENGTH = 100_000; // Maximum input text length
-  private static final int DEFAULT_MAX_LENGTH = 512;   // Default token sequence length
-  private static final int DEFAULT_DIMENSION = 384;    // Default embedding dimension
+  private static final int DEFAULT_MAX_LENGTH = 512; // Default token sequence length
+  private static final int DEFAULT_DIMENSION = 384; // Default embedding dimension
   private static final String EMPTY_TEXT_PLACEHOLDER = "[EMPTY]";
-  
+
   // Token IDs for BERT-style models
   private static final int PAD_TOKEN_ID = 0;
   private static final int CLS_TOKEN_ID = 101;
@@ -77,10 +77,11 @@ public class DJLEmbeddingService implements EmbeddingService {
   private Path modelFile;
   private Path tokenizerFile;
   private final int maxLength = DEFAULT_MAX_LENGTH;
-  
+
   // ThreadLocal pools for thread-safe concurrent access
   private final ThreadLocal<OrtSession> sessionPool = ThreadLocal.withInitial(this::createSession);
-  private final ThreadLocal<HuggingFaceTokenizer> tokenizerPool = ThreadLocal.withInitial(this::createTokenizer);
+  private final ThreadLocal<HuggingFaceTokenizer> tokenizerPool =
+      ThreadLocal.withInitial(this::createTokenizer);
 
   /**
    * Create DJL embedding service with ONNX Runtime backend.
@@ -91,7 +92,7 @@ public class DJLEmbeddingService implements EmbeddingService {
   public DJLEmbeddingService(String modelPath) throws IOException {
     // Security validation for model paths
     validateModelPath(modelPath);
-    
+
     this.modelPath = modelPath;
     this.modelName = Paths.get(modelPath).getFileName().toString();
 
@@ -123,11 +124,11 @@ public class DJLEmbeddingService implements EmbeddingService {
     if (text == null) {
       throw new IllegalArgumentException("Input text cannot be null");
     }
-    
+
     if (text.trim().isEmpty()) {
       text = EMPTY_TEXT_PLACEHOLDER; // Avoid empty inputs
     }
-    
+
     // Validate input length
     if (text.length() > MAX_INPUT_LENGTH) {
       text = text.substring(0, MAX_INPUT_LENGTH);
@@ -136,7 +137,7 @@ public class DJLEmbeddingService implements EmbeddingService {
     // Get thread-local resources (thread-safe, no synchronization needed)
     OrtSession session = sessionPool.get();
     HuggingFaceTokenizer tokenizer = tokenizerPool.get();
-    
+
     OnnxTensor inputIdsTensor = null;
     OnnxTensor attentionMaskTensor = null;
     OnnxTensor tokenTypeIdsTensor = null;
@@ -148,7 +149,7 @@ public class DJLEmbeddingService implements EmbeddingService {
       long[] inputIds = encoding.getIds();
       long[] attentionMask = encoding.getAttentionMask();
       long[] tokenTypeIds = encoding.getTypeIds();
-      
+
       // Pad or truncate to maxLength
       inputIds = padOrTruncate(inputIds, maxLength);
       attentionMask = padOrTruncate(attentionMask, maxLength);
@@ -219,7 +220,7 @@ public class DJLEmbeddingService implements EmbeddingService {
     // Get thread-local resources (thread-safe, no synchronization needed)
     OrtSession session = sessionPool.get();
     HuggingFaceTokenizer tokenizer = tokenizerPool.get();
-    
+
     // Use true batch processing for better performance
     OnnxTensor inputIdsTensor = null;
     OnnxTensor attentionMaskTensor = null;
@@ -266,7 +267,8 @@ public class DJLEmbeddingService implements EmbeddingService {
       result = session.run(inputs);
 
       // Get batch output embeddings
-      float[][][] outputTensor = (float[][][]) result.get(0).getValue(); // [batch_size, seq_len, hidden_size]
+      float[][][] outputTensor =
+          (float[][][]) result.get(0).getValue(); // [batch_size, seq_len, hidden_size]
 
       // Process each item in batch
       float[][] embeddings = new float[batchSize][];
@@ -317,7 +319,7 @@ public class DJLEmbeddingService implements EmbeddingService {
     try {
       // Cleanup ThreadLocal resources
       cleanupThreadLocalResources();
-      
+
       // Close shared resources
       if (sessionOptions != null) {
         sessionOptions.close();
@@ -326,7 +328,7 @@ public class DJLEmbeddingService implements EmbeddingService {
     } catch (Exception e) {
       log.error("Error closing resources: {}", e.getMessage());
     }
-    
+
     // Close ONNX environment separately
     try {
       if (env != null) {
@@ -336,23 +338,22 @@ public class DJLEmbeddingService implements EmbeddingService {
       log.error("Error closing ONNX Runtime environment: {}", e.getMessage());
     }
   }
-  
+
   /**
-   * Cleanup all ThreadLocal resources across all threads.
-   * This is a best-effort cleanup - some thread-local resources may remain
-   * if threads have terminated without proper cleanup.
+   * Cleanup all ThreadLocal resources across all threads. This is a best-effort cleanup - some
+   * thread-local resources may remain if threads have terminated without proper cleanup.
    */
   private void cleanupThreadLocalResources() {
     // Remove ThreadLocal values to prevent memory leaks
     sessionPool.remove();
     tokenizerPool.remove();
-    
+
     log.debug("ThreadLocal resources cleanup completed");
   }
-  
+
   /**
-   * Manual cleanup method for current thread's resources.
-   * Call this in thread cleanup code if needed.
+   * Manual cleanup method for current thread's resources. Call this in thread cleanup code if
+   * needed.
    */
   public void cleanupCurrentThread() {
     try {
@@ -363,7 +364,7 @@ public class DJLEmbeddingService implements EmbeddingService {
     } catch (Exception e) {
       log.warn("Error closing thread-local session: {}", e.getMessage());
     }
-    
+
     try {
       HuggingFaceTokenizer tokenizer = tokenizerPool.get();
       if (tokenizer != null) {
@@ -372,7 +373,7 @@ public class DJLEmbeddingService implements EmbeddingService {
     } catch (Exception e) {
       log.warn("Error closing thread-local tokenizer: {}", e.getMessage());
     }
-    
+
     // Remove from ThreadLocal
     sessionPool.remove();
     tokenizerPool.remove();
@@ -382,7 +383,7 @@ public class DJLEmbeddingService implements EmbeddingService {
 
   /**
    * Validates model path to prevent security vulnerabilities like path traversal.
-   * 
+   *
    * @param modelPath the model path to validate
    * @throws IOException if path is invalid or unsafe
    */
@@ -390,26 +391,24 @@ public class DJLEmbeddingService implements EmbeddingService {
     if (modelPath == null || modelPath.trim().isEmpty()) {
       throw new IOException("Model path cannot be null or empty");
     }
-    
+
     // Prevent path traversal attacks
     if (modelPath.contains("..") || modelPath.contains("~")) {
       throw new IOException("Invalid model path: path traversal not allowed");
     }
-    
+
     // Ensure path is within allowed directories (customize as needed)
     Path normalizedPath = Paths.get(modelPath).normalize();
     if (!normalizedPath.isAbsolute()) {
       // Convert to absolute path for security check
       normalizedPath = normalizedPath.toAbsolutePath();
     }
-    
+
     // Additional security checks can be added here based on your requirements
     // For example, ensuring the path is within a specific allowed directory
   }
 
-  /**
-   * Initialize shared resources that don't need to be thread-local
-   */
+  /** Initialize shared resources that don't need to be thread-local */
   private void initializeSharedResources() throws OrtException, IOException {
     log.info("🔧 Initializing DJL ONNX Runtime shared resources...");
 
@@ -429,26 +428,23 @@ public class DJLEmbeddingService implements EmbeddingService {
 
     // Prepare session options for thread-local sessions
     sessionOptions = new OrtSession.SessionOptions();
-    
+
     log.info("✅ Shared resources prepared: {}", modelFile);
   }
-  
-  /**
-   * Creates a new ONNX session for the current thread
-   */
+
+  /** Creates a new ONNX session for the current thread */
   private OrtSession createSession() {
     try {
       OrtSession session = env.createSession(modelFile.toString(), sessionOptions);
-      log.debug("Created thread-local ONNX session for thread: {}", Thread.currentThread().getName());
+      log.debug(
+          "Created thread-local ONNX session for thread: {}", Thread.currentThread().getName());
       return session;
     } catch (OrtException e) {
       throw new RuntimeException("Failed to create thread-local ONNX session", e);
     }
   }
-  
-  /**
-   * Creates a new tokenizer for the current thread
-   */
+
+  /** Creates a new tokenizer for the current thread */
   private HuggingFaceTokenizer createTokenizer() {
     try {
       HuggingFaceTokenizer tokenizer = HuggingFaceTokenizer.newInstance(tokenizerFile);
