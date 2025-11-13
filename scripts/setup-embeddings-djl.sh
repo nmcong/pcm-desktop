@@ -77,7 +77,7 @@ cd "$PROJECT_ROOT/data/models/$MODEL_NAME"
 # Model ONNX file
 if [ ! -f "model.onnx" ]; then
     echo "  - Downloading model.onnx..."
-    curl -L -O --progress-bar "https://huggingface.co/sentence-transformers/$MODEL_NAME/resolve/main/model.onnx"
+    curl -L -o model.onnx --progress-bar "https://huggingface.co/sentence-transformers/$MODEL_NAME/resolve/main/onnx/model.onnx"
     echo -e "${GREEN}  ✓ model.onnx downloaded${NC}"
 else
     echo -e "${YELLOW}  ✓ model.onnx already exists${NC}"

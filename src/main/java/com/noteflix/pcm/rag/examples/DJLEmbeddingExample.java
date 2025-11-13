@@ -57,9 +57,10 @@ public class DJLEmbeddingExample {
       // 3. Semantic similarity
       System.out.println("=== Semantic Similarity ===\n");
 
-      float[] query = embeddings.embed(texts[0]);
+      String question = "How to get customer email correct?";
+      float[] query = embeddings.embed(question);
 
-      System.out.println("Query: \"" + texts[0] + "\"\n");
+      System.out.println("Query: \"" + question + "\"\n");
       System.out.println("Similarities:");
 
       for (String text : texts) {
