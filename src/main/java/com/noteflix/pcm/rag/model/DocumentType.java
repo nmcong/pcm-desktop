@@ -34,6 +34,9 @@ public enum DocumentType {
   API_DOC,
   COMMENT,
   TEXT,
+  TECHNICAL_MANUAL,
+  RESEARCH_PAPER,
+  ARTICLE,
 
   // Generic
   OTHER,

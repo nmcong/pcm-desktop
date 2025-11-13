@@ -664,7 +664,7 @@ public class ChunkingExamples {
         );
     }
 
-    private double calculateAverageQuality(List<DocumentChunk> chunks) {
+    private static double calculateAverageQuality(List<DocumentChunk> chunks) {
         return chunks.stream()
             .mapToDouble(chunk -> chunk.getQualityScore() != null ? chunk.getQualityScore() : 0.0)
             .average()
@@ -673,12 +673,12 @@ public class ChunkingExamples {
 
     private void printSampleChunk(DocumentChunk chunk) {
         log.info("Sample chunk: {}", chunk.getChunkId());
-        log.info("  Content preview: {}", chunk.getContentPreview());
+        log.info("  Content preview: {}", chunk.getContentPreview(100));
         log.info("  Size: {} chars", chunk.getChunkSizeChars());
         log.info("  Quality: {:.3f}", chunk.getQualityScore() != null ? chunk.getQualityScore() : 0.0);
         
-        if (!chunk.getCustomMetadata().isEmpty()) {
-            log.info("  Metadata: {}", chunk.getCustomMetadata());
+        if (chunk.getMetadata() != null && !chunk.getMetadata().isEmpty()) {
+            log.info("  Metadata: {}", chunk.getMetadata());
         }
     }
 
@@ -719,6 +719,11 @@ public class ChunkingExamples {
                 embeddings[i] = embed(texts[i]);
             }
             return embeddings;
+        }
+
+        @Override
+        public String getModelName() {
+            return "mock-embedding-model";
         }
 
         @Override
