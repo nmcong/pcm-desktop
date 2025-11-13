@@ -75,3 +75,4 @@ sampler/
 # Claude AI directory
 .claude/
 
+data/qdrant-storage

@@ -138,7 +138,17 @@ public class QdrantClient {
 
     for (QdrantPoint point : points) {
       ObjectNode pointNode = objectMapper.createObjectNode();
-      pointNode.put("id", point.getId());
+      
+      // Convert string ID to integer if possible, otherwise use hash
+      try {
+        int id = Integer.parseInt(point.getId());
+        pointNode.put("id", id);
+      } catch (NumberFormatException e) {
+        // Use hash of the ID as an integer
+        int id = Math.abs(point.getId().hashCode());
+        pointNode.put("id", id);
+        log.debug("Converted string ID '{}' to integer ID: {}", point.getId(), id);
+      }
 
       // Vector
       ArrayNode vectorArray = objectMapper.createArrayNode();
@@ -150,6 +160,8 @@ public class QdrantClient {
       // Payload
       ObjectNode payloadNode = objectMapper.createObjectNode();
       point.getPayload().forEach(payloadNode::put);
+      // Store original ID in payload for retrieval
+      payloadNode.put("original_id", point.getId());
       pointNode.set("payload", payloadNode);
 
       pointsArray.add(pointNode);
@@ -229,18 +241,25 @@ public class QdrantClient {
 
     if (resultArray != null && resultArray.isArray()) {
       for (JsonNode resultNode : resultArray) {
-        String id = resultNode.get("id").asText();
+        String qdrantId = resultNode.get("id").asText();
         double score = resultNode.get("score").asDouble();
         JsonNode payloadNode = resultNode.get("payload");
 
         Map<String, String> payload = new HashMap<>();
+        String originalId = qdrantId; // Default to Qdrant ID
+        
         if (payloadNode != null) {
           payloadNode
               .fields()
               .forEachRemaining(entry -> payload.put(entry.getKey(), entry.getValue().asText()));
+          
+          // Use original ID if available
+          if (payload.containsKey("original_id")) {
+            originalId = payload.get("original_id");
+          }
         }
 
-        results.add(new QdrantSearchResult(id, score, payload));
+        results.add(new QdrantSearchResult(originalId, score, payload));
       }
     }
 
@@ -281,12 +300,20 @@ public class QdrantClient {
    * Get point by ID.
    *
    * @param collectionName Collection name
-   * @param id Point ID
+   * @param id Point ID (original string ID)
    * @return Point or null if not found
    * @throws IOException if request fails
    */
   public QdrantPoint getPoint(String collectionName, String id) throws IOException {
-    String url = String.format("%s/collections/%s/points/%s", baseUrl, collectionName, id);
+    // Convert string ID to Qdrant's integer ID format
+    String qdrantId;
+    try {
+      qdrantId = String.valueOf(Integer.parseInt(id));
+    } catch (NumberFormatException e) {
+      qdrantId = String.valueOf(Math.abs(id.hashCode()));
+    }
+    
+    String url = String.format("%s/collections/%s/points/%s", baseUrl, collectionName, qdrantId);
     HttpResponse<String> response = sendRequest("GET", url, null);
 
     if (response.statusCode() == 404) {
@@ -305,7 +332,6 @@ public class QdrantClient {
       return null;
     }
 
-    String pointId = resultNode.get("id").asText();
     JsonNode vectorNode = resultNode.get("vector");
     JsonNode payloadNode = resultNode.get("payload");
 
@@ -317,13 +343,20 @@ public class QdrantClient {
 
     // Parse payload
     Map<String, String> payload = new HashMap<>();
+    String originalId = id; // Default to input ID
+    
     if (payloadNode != null) {
       payloadNode
           .fields()
           .forEachRemaining(entry -> payload.put(entry.getKey(), entry.getValue().asText()));
+      
+      // Use original ID if available
+      if (payload.containsKey("original_id")) {
+        originalId = payload.get("original_id");
+      }
     }
 
-    return new QdrantPoint(pointId, vector, payload);
+    return new QdrantPoint(originalId, vector, payload);
   }
 
   /**

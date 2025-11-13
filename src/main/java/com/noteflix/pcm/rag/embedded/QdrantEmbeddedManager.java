@@ -262,14 +262,32 @@ public class QdrantEmbeddedManager {
   /** Check Qdrant health. */
   private boolean checkHealth() {
     try {
-      URL url = new URL(getUrl() + "/health");
-      HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-      conn.setRequestMethod("GET");
-      conn.setConnectTimeout(1000);
-      conn.setReadTimeout(1000);
+      // Try the correct health endpoint first, then fallback to collections endpoint
+      String[] healthUrls = {
+        getUrl() + "/", // Qdrant root endpoint returns 200 when healthy
+        getUrl() + "/collections", // Collections endpoint also indicates if service is ready
+        getUrl() + "/metrics" // Alternative endpoint
+      };
+      
+      for (String healthUrl : healthUrls) {
+        try {
+          URL url = new URL(healthUrl);
+          HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+          conn.setRequestMethod("GET");
+          conn.setConnectTimeout(1000);
+          conn.setReadTimeout(1000);
 
-      int responseCode = conn.getResponseCode();
-      return responseCode == 200;
+          int responseCode = conn.getResponseCode();
+          if (responseCode == 200) {
+            log.debug("Qdrant health check successful via: {}", healthUrl);
+            return true;
+          }
+        } catch (Exception e) {
+          // Continue to next endpoint
+        }
+      }
+      
+      return false;
 
     } catch (Exception e) {
       return false;
@@ -285,7 +303,36 @@ public class QdrantEmbeddedManager {
     }
 
     // Build command with properly quoted arguments
-    return new String[] {binary};
+    // Create a simple config file path in storage directory 
+    String configDir = storagePath + "/config";
+    try {
+      Files.createDirectories(Paths.get(configDir));
+      
+      // Create minimal config file
+      Path configFile = Paths.get(configDir, "config.yaml");
+      if (!Files.exists(configFile)) {
+        String config = String.format("""
+            service:
+              host: 127.0.0.1
+              http_port: %d
+              grpc_port: %d
+            storage:
+              storage_path: %s
+            log_level: INFO
+            """, port, port + 1, storagePath);
+        Files.writeString(configFile, config);
+        log.debug("Created Qdrant config: {}", configFile);
+      }
+      
+      return new String[] {
+        binary,
+        "--config-path", configFile.toString()
+      };
+    } catch (IOException e) {
+      log.warn("Failed to create config file, using basic command: {}", e.getMessage());
+      // Fallback to basic command without config file
+      return new String[] {binary};
+    }
   }
 
   /** Safely read Qdrant process output. */
