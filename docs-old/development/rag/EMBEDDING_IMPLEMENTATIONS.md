@@ -52,7 +52,7 @@ normalize(embedding); // L2 normalization
 ### Example
 ```bash
 java -cp "out:lib/javafx/*:lib/others/*:lib/rag/*" \
-  com.noteflix.pcm.rag.examples.EmbeddingExample
+  com.noteflix.pcm.rag.examples.embedding.SimpleEmbeddingExample
 ```
 
 **Output:**
@@ -132,7 +132,7 @@ float[][] vectors = embeddings.embedBatch(texts);
 ### Example
 ```bash
 java -cp "out:lib/javafx/*:lib/others/*:lib/rag/*" \
-  com.noteflix.pcm.rag.examples.DJLEmbeddingExample
+  com.noteflix.pcm.rag.examples.embedding.DJLEmbeddingExample
 ```
 
 ### Other Models
@@ -211,7 +211,7 @@ float[][] batch = embeddings.embedBatch(texts);
 ### Example
 ```bash
 java -cp "out:lib/javafx/*:lib/others/*:lib/rag/*" \
-  com.noteflix.pcm.rag.examples.ONNXEmbeddingExample
+  com.noteflix.pcm.rag.examples.embedding.ONNXEmbeddingExample
 ```
 
 ---
@@ -406,7 +406,7 @@ EmbeddingService embeddings = new ONNXEmbeddingService(
 
 # Test
 java -cp "out:lib/javafx/*:lib/others/*:lib/rag/*" \
-  com.noteflix.pcm.rag.examples.DJLEmbeddingExample
+  com.noteflix.pcm.rag.examples.embedding.DJLEmbeddingExample
 ```
 
 ### Files Created

@@ -1,4 +1,4 @@
-package com.noteflix.pcm.rag.examples;
+package com.noteflix.pcm.rag.examples.embedding;
 
 import com.noteflix.pcm.rag.embedding.EmbeddingService;
 import com.noteflix.pcm.rag.embedding.SimpleEmbeddingService;
@@ -12,7 +12,7 @@ import com.noteflix.pcm.rag.embedding.SimpleEmbeddingService;
  * @author PCM Team
  * @version 1.0.0
  */
-public class EmbeddingExample {
+public class SimpleEmbeddingExample {
 
   public static void main(String[] args) {
     System.out.println("=== Embedding Example ===\n");

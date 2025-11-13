@@ -1,27 +1,27 @@
-package com.noteflix.pcm.rag.examples;
+package com.noteflix.pcm.rag.examples.embedding;
 
+import com.noteflix.pcm.rag.embedding.DJLEmbeddingService;
 import com.noteflix.pcm.rag.embedding.EmbeddingService;
-import com.noteflix.pcm.rag.embedding.ONNXEmbeddingService;
 
 /**
- * Example: Using ONNX Runtime for embeddings.
+ * Example: Using DJL for embeddings.
  *
- * <p>Setup: 1. Run: ./scripts/setup-embeddings-onnx.sh 2. Rebuild: ./scripts/build.sh 3. Run this
+ * <p>Setup: 1. Run: ./scripts/setup-embeddings-djl.sh 2. Rebuild: ./scripts/build.sh 3. Run this
  * example
  *
  * @author PCM Team
  * @version 1.0.0
  */
-public class ONNXEmbeddingExample {
+public class DJLEmbeddingExample {
 
   public static void main(String[] args) {
-    System.out.println("=== ONNX Runtime Embedding Example ===\n");
+    System.out.println("=== DJL Embedding Example ===\n");
 
     try {
-      // 1. Create ONNX embedding service
-      System.out.println("📦 Loading ONNX embedding model...");
+      // 1. Create DJL embedding service
+      System.out.println("📦 Loading DJL embedding model...");
 
-      EmbeddingService embeddings = new ONNXEmbeddingService("data/models/all-MiniLM-L6-v2");
+      EmbeddingService embeddings = new DJLEmbeddingService("data/models/all-MiniLM-L6-v2");
 
       System.out.println("✅ Model loaded!");
       System.out.println("   Model: " + embeddings.getModelName());
@@ -54,34 +54,26 @@ public class ONNXEmbeddingExample {
         System.out.printf("Time: %dms%n%n", time);
       }
 
-      // 3. Batch processing
-      System.out.println("=== Batch Processing ===\n");
-
-      long start = System.currentTimeMillis();
-      float[][] batch = embeddings.embedBatch(texts);
-      long time = System.currentTimeMillis() - start;
-
-      System.out.printf("Processed %d texts in %dms%n", texts.length, time);
-      System.out.printf("Average: %.1fms per text%n%n", (double) time / texts.length);
-
-      // 4. Semantic similarity
+      // 3. Semantic similarity
       System.out.println("=== Semantic Similarity ===\n");
 
-      float[] query = batch[0];
+      String question = "How to get customer email correct?";
+      float[] query = embeddings.embed(question);
 
-      System.out.println("Query: \"" + texts[0] + "\"\n");
+      System.out.println("Query: \"" + question + "\"\n");
       System.out.println("Similarities:");
 
-      for (int i = 0; i < texts.length; i++) {
-        double similarity = cosineSimilarity(query, batch[i]);
-        System.out.printf("  %.3f - \"%s\"%n", similarity, texts[i]);
+      for (String text : texts) {
+        float[] embedding = embeddings.embed(text);
+        double similarity = cosineSimilarity(query, embedding);
+        System.out.printf("  %.3f - \"%s\"%n", similarity, text);
       }
 
       System.out.println();
       System.out.println("✅ Example completed!");
 
     } catch (UnsupportedOperationException e) {
-      System.err.println("\n❌ ONNX Runtime libraries not yet installed\n");
+      System.err.println("\n❌ DJL libraries not yet installed\n");
       System.err.println(e.getMessage());
       System.err.println();
 

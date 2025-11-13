@@ -1,4 +1,4 @@
-package com.noteflix.pcm.rag.examples;
+package com.noteflix.pcm.rag.examples.pipeline;
 
 import com.noteflix.pcm.rag.api.RAGService;
 import com.noteflix.pcm.rag.api.VectorStore;
