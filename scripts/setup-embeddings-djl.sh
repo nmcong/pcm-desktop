@@ -43,27 +43,27 @@ echo -e "${BLUE}📦 Downloading DJL libraries...${NC}"
 cd lib/rag
 
 # DJL API
-if [ ! -f "api-0.25.0.jar" ]; then
+if [ ! -f "api-0.35.0.jar" ]; then
     echo "  - Downloading DJL API..."
-    wget -q --show-progress https://repo1.maven.org/maven2/ai/djl/api/0.25.0/api-0.25.0.jar
+    curl -L -O --progress-bar https://repo1.maven.org/maven2/ai/djl/api/0.35.0/api-0.35.0.jar
     echo -e "${GREEN}  ✓ DJL API downloaded${NC}"
 else
     echo -e "${YELLOW}  ✓ DJL API already exists${NC}"
 fi
 
 # DJL ONNX Engine
-if [ ! -f "onnx-engine-0.25.0.jar" ]; then
+if [ ! -f "onnx-engine-0.35.0.jar" ]; then
     echo "  - Downloading DJL ONNX Engine..."
-    wget -q --show-progress https://repo1.maven.org/maven2/ai/djl/onnx/onnx-engine/0.25.0/onnx-engine-0.25.0.jar
+    curl -L -O --progress-bar https://repo1.maven.org/maven2/ai/djl/onnx/onnx-engine/0.35.0/onnx-engine-0.35.0.jar
     echo -e "${GREEN}  ✓ DJL ONNX Engine downloaded${NC}"
 else
     echo -e "${YELLOW}  ✓ DJL ONNX Engine already exists${NC}"
 fi
 
 # DJL Tokenizers
-if [ ! -f "tokenizers-0.25.0.jar" ]; then
+if [ ! -f "tokenizers-0.35.0.jar" ]; then
     echo "  - Downloading DJL Tokenizers..."
-    wget -q --show-progress https://repo1.maven.org/maven2/ai/djl/huggingface/tokenizers/0.25.0/tokenizers-0.25.0.jar
+    curl -L -O --progress-bar https://repo1.maven.org/maven2/ai/djl/huggingface/tokenizers/0.35.0/tokenizers-0.35.0.jar
     echo -e "${GREEN}  ✓ DJL Tokenizers downloaded${NC}"
 else
     echo -e "${YELLOW}  ✓ DJL Tokenizers already exists${NC}"
@@ -77,7 +77,7 @@ cd "$PROJECT_ROOT/data/models/$MODEL_NAME"
 # Model ONNX file
 if [ ! -f "model.onnx" ]; then
     echo "  - Downloading model.onnx..."
-    wget -q --show-progress "https://huggingface.co/sentence-transformers/$MODEL_NAME/resolve/main/model.onnx"
+    curl -L -O --progress-bar "https://huggingface.co/sentence-transformers/$MODEL_NAME/resolve/main/model.onnx"
     echo -e "${GREEN}  ✓ model.onnx downloaded${NC}"
 else
     echo -e "${YELLOW}  ✓ model.onnx already exists${NC}"
@@ -86,7 +86,7 @@ fi
 # Tokenizer
 if [ ! -f "tokenizer.json" ]; then
     echo "  - Downloading tokenizer.json..."
-    wget -q --show-progress "https://huggingface.co/sentence-transformers/$MODEL_NAME/resolve/main/tokenizer.json"
+    curl -L -O --progress-bar "https://huggingface.co/sentence-transformers/$MODEL_NAME/resolve/main/tokenizer.json"
     echo -e "${GREEN}  ✓ tokenizer.json downloaded${NC}"
 else
     echo -e "${YELLOW}  ✓ tokenizer.json already exists${NC}"
@@ -95,7 +95,7 @@ fi
 # Config
 if [ ! -f "config.json" ]; then
     echo "  - Downloading config.json..."
-    wget -q --show-progress "https://huggingface.co/sentence-transformers/$MODEL_NAME/resolve/main/config.json"
+    curl -L -O --progress-bar "https://huggingface.co/sentence-transformers/$MODEL_NAME/resolve/main/config.json"
     echo -e "${GREEN}  ✓ config.json downloaded${NC}"
 else
     echo -e "${YELLOW}  ✓ config.json already exists${NC}"

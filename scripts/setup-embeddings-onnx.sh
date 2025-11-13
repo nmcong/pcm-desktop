@@ -42,18 +42,18 @@ echo ""
 echo -e "${BLUE}📦 Downloading ONNX Runtime...${NC}"
 cd lib/rag
 
-if [ ! -f "onnxruntime-1.16.3.jar" ]; then
+if [ ! -f "onnxruntime-1.19.0.jar" ]; then
     echo "  - Downloading ONNX Runtime..."
-    wget -q --show-progress https://repo1.maven.org/maven2/com/microsoft/onnxruntime/onnxruntime/1.16.3/onnxruntime-1.16.3.jar
+    curl -L -O --progress-bar https://repo1.maven.org/maven2/com/microsoft/onnxruntime/onnxruntime/1.19.0/onnxruntime-1.19.0.jar
     echo -e "${GREEN}  ✓ ONNX Runtime downloaded${NC}"
 else
     echo -e "${YELLOW}  ✓ ONNX Runtime already exists${NC}"
 fi
 
 # Download tokenizer library (reuse DJL tokenizers)
-if [ ! -f "tokenizers-0.25.0.jar" ]; then
+if [ ! -f "tokenizers-0.35.0.jar" ]; then
     echo "  - Downloading Tokenizers..."
-    wget -q --show-progress https://repo1.maven.org/maven2/ai/djl/huggingface/tokenizers/0.25.0/tokenizers-0.25.0.jar
+    curl -L -O --progress-bar https://repo1.maven.org/maven2/ai/djl/huggingface/tokenizers/0.35.0/tokenizers-0.35.0.jar
     echo -e "${GREEN}  ✓ Tokenizers downloaded${NC}"
 else
     echo -e "${YELLOW}  ✓ Tokenizers already exists${NC}"
@@ -67,7 +67,7 @@ cd "$PROJECT_ROOT/data/models/$MODEL_NAME"
 # Model ONNX file
 if [ ! -f "model.onnx" ]; then
     echo "  - Downloading model.onnx..."
-    wget -q --show-progress "https://huggingface.co/sentence-transformers/$MODEL_NAME/resolve/main/model.onnx"
+    curl -L -O --progress-bar "https://huggingface.co/sentence-transformers/$MODEL_NAME/resolve/main/model.onnx"
     echo -e "${GREEN}  ✓ model.onnx downloaded${NC}"
 else
     echo -e "${YELLOW}  ✓ model.onnx already exists${NC}"
@@ -76,7 +76,7 @@ fi
 # Tokenizer
 if [ ! -f "tokenizer.json" ]; then
     echo "  - Downloading tokenizer.json..."
-    wget -q --show-progress "https://huggingface.co/sentence-transformers/$MODEL_NAME/resolve/main/tokenizer.json"
+    curl -L -O --progress-bar "https://huggingface.co/sentence-transformers/$MODEL_NAME/resolve/main/tokenizer.json"
     echo -e "${GREEN}  ✓ tokenizer.json downloaded${NC}"
 else
     echo -e "${YELLOW}  ✓ tokenizer.json already exists${NC}"
@@ -85,7 +85,7 @@ fi
 # Config
 if [ ! -f "config.json" ]; then
     echo "  - Downloading config.json..."
-    wget -q --show-progress "https://huggingface.co/sentence-transformers/$MODEL_NAME/resolve/main/config.json"
+    curl -L -O --progress-bar "https://huggingface.co/sentence-transformers/$MODEL_NAME/resolve/main/config.json"
     echo -e "${GREEN}  ✓ config.json downloaded${NC}"
 else
     echo -e "${YELLOW}  ✓ config.json already exists${NC}"
