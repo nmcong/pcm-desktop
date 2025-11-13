@@ -8,11 +8,13 @@ package com.noteflix.pcm.rag.model;
  */
 public enum DocumentType {
     // Source code
+    SOURCE_CODE,
     JAVA_CLASS,
     JAVA_INTERFACE,
     JAVA_METHOD,
     
     // Database objects
+    DATABASE_SCHEMA,
     TABLE,
     VIEW,
     PROCEDURE,
@@ -34,6 +36,7 @@ public enum DocumentType {
     TEXT,
     
     // Generic
+    OTHER,
     UNKNOWN
 }
 
