@@ -1,6 +1,7 @@
 package com.noteflix.pcm.rag.chunking.examples;
 
 import com.noteflix.pcm.rag.chunking.*;
+import com.noteflix.pcm.rag.chunking.strategies.*;
 import com.noteflix.pcm.rag.embedding.EmbeddingService;
 import com.noteflix.pcm.rag.model.DocumentType;
 import com.noteflix.pcm.rag.model.RAGDocument;

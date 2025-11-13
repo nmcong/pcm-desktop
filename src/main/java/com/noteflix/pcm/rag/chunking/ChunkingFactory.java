@@ -1,5 +1,10 @@
 package com.noteflix.pcm.rag.chunking;
 
+import com.noteflix.pcm.rag.chunking.strategies.FixedSizeChunking;
+import com.noteflix.pcm.rag.chunking.strategies.MarkdownAwareChunking;
+import com.noteflix.pcm.rag.chunking.strategies.RecursiveCharacterTextSplitter;
+import com.noteflix.pcm.rag.chunking.strategies.SemanticChunking;
+import com.noteflix.pcm.rag.chunking.strategies.SentenceAwareChunking;
 import com.noteflix.pcm.rag.embedding.EmbeddingService;
 import com.noteflix.pcm.rag.model.RAGDocument;
 import java.util.Arrays;
