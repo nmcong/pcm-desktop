@@ -1,5 +1,7 @@
 package com.noteflix.pcm.rag.embedding;
 
+import ai.djl.huggingface.tokenizers.Encoding;
+import ai.djl.huggingface.tokenizers.HuggingFaceTokenizer;
 import ai.onnxruntime.OnnxTensor;
 import ai.onnxruntime.OrtEnvironment;
 import ai.onnxruntime.OrtException;
@@ -47,6 +49,7 @@ public class DJLEmbeddingService implements EmbeddingService {
   private OrtEnvironment env;
   private OrtSession session;
   private HuggingFaceTokenizer tokenizer;
+  private final int maxLength = 512;
 
   /**
    * Create DJL embedding service with ONNX Runtime backend.
@@ -90,6 +93,7 @@ public class DJLEmbeddingService implements EmbeddingService {
   public float[] embed(String text) {
     OnnxTensor inputIdsTensor = null;
     OnnxTensor attentionMaskTensor = null;
+    OnnxTensor tokenTypeIdsTensor = null;
     OrtSession.Result result = null;
 
     try {
@@ -97,12 +101,16 @@ public class DJLEmbeddingService implements EmbeddingService {
         text = "[EMPTY]"; // Avoid empty inputs
       }
 
-      // Tokenize input
-      int maxLength = 512;
-      Map<String, long[]> encoded = tokenizer.encode(text, maxLength);
-      long[] inputIds = encoded.get("input_ids");
-      long[] attentionMask = encoded.get("attention_mask");
-      long[] tokenTypeIds = encoded.get("token_type_ids");
+      // Tokenize input using proper HuggingFace tokenizer
+      Encoding encoding = tokenizer.encode(text);
+      long[] inputIds = encoding.getIds();
+      long[] attentionMask = encoding.getAttentionMask();
+      long[] tokenTypeIds = encoding.getTypeIds();
+      
+      // Pad or truncate to maxLength
+      inputIds = padOrTruncate(inputIds, maxLength);
+      attentionMask = padOrTruncate(attentionMask, maxLength);
+      tokenTypeIds = padOrTruncate(tokenTypeIds, maxLength);
 
       // Convert to 2D arrays for ONNX
       long[][] inputIds2D = new long[][] {inputIds};
@@ -112,7 +120,7 @@ public class DJLEmbeddingService implements EmbeddingService {
       // Create ONNX tensors
       inputIdsTensor = OnnxTensor.createTensor(env, inputIds2D);
       attentionMaskTensor = OnnxTensor.createTensor(env, attentionMask2D);
-      OnnxTensor tokenTypeIdsTensor = OnnxTensor.createTensor(env, tokenTypeIds2D);
+      tokenTypeIdsTensor = OnnxTensor.createTensor(env, tokenTypeIds2D);
 
       // Prepare inputs map
       Map<String, OnnxTensor> inputs = new HashMap<>();
@@ -147,6 +155,9 @@ public class DJLEmbeddingService implements EmbeddingService {
       if (attentionMaskTensor != null) {
         attentionMaskTensor.close();
       }
+      if (tokenTypeIdsTensor != null) {
+        tokenTypeIdsTensor.close();
+      }
       if (result != null) {
         result.close();
       }
@@ -177,6 +188,9 @@ public class DJLEmbeddingService implements EmbeddingService {
   /** Close resources and cleanup. */
   public void close() {
     try {
+      if (tokenizer != null) {
+        tokenizer.close();
+      }
       if (session != null) {
         session.close();
       }
@@ -208,14 +222,15 @@ public class DJLEmbeddingService implements EmbeddingService {
 
     log.info("✅ ONNX model loaded: {}", modelFile);
 
-    // Load tokenizer
+    // Load proper HuggingFace tokenizer
     Path tokenizerFile = Paths.get(modelPath, "tokenizer.json");
     if (!Files.exists(tokenizerFile)) {
       throw new IOException("Tokenizer file not found: " + tokenizerFile);
     }
 
-    tokenizer = new HuggingFaceTokenizer(tokenizerFile.toString());
-    log.info("✅ Tokenizer loaded");
+    // Use DJL HuggingFace tokenizer for production-grade tokenization
+    tokenizer = HuggingFaceTokenizer.newInstance(tokenizerFile);
+    log.info("✅ HuggingFace tokenizer loaded: {}", tokenizerFile);
   }
 
   private void checkRequiredFiles(Path modelDir) throws IOException {
@@ -313,61 +328,16 @@ public class DJLEmbeddingService implements EmbeddingService {
     }
   }
 
-  /**
-   * Simple HuggingFace tokenizer wrapper. In production, use
-   * ai.djl.huggingface.tokenizers.HuggingFaceTokenizer from DJL.
-   */
-  private static class HuggingFaceTokenizer {
-    private final String tokenizerPath;
-    private final int padTokenId = 0;
-    private final int clsTokenId = 101;
-    private final int sepTokenId = 102;
-
-    public HuggingFaceTokenizer(String path) {
-      this.tokenizerPath = path;
-      // TODO: Load actual tokenizer with DJL HuggingFace tokenizers
-      // For now, this is a simplified implementation
-    }
-
-    public Map<String, long[]> encode(String text, int maxLength) {
-      // TODO: Implement proper tokenization using DJL tokenizers library
-      // This is a placeholder that returns dummy tokens
-      // In production, use: ai.djl.huggingface.tokenizers.HuggingFaceTokenizer
-
-      // For now, return a simple tokenization (word splitting)
-      String[] words = text.toLowerCase().split("\\s+");
-      int numTokens = Math.min(words.length + 2, maxLength); // +2 for [CLS] and [SEP]
-
-      long[] inputIds = new long[numTokens];
-      long[] attentionMask = new long[numTokens];
-      long[] tokenTypeIds = new long[numTokens]; // All zeros for single sentence
-
-      inputIds[0] = clsTokenId; // [CLS]
-      attentionMask[0] = 1;
-      tokenTypeIds[0] = 0;
-
-      for (int i = 1; i < numTokens - 1 && i - 1 < words.length; i++) {
-        inputIds[i] = words[i - 1].hashCode() & 0x7FFFFFFF % 30000; // Simple hash-based ID
-        attentionMask[i] = 1;
-        tokenTypeIds[i] = 0; // All sentence A
-      }
-
-      inputIds[numTokens - 1] = sepTokenId; // [SEP]
-      attentionMask[numTokens - 1] = 1;
-      tokenTypeIds[numTokens - 1] = 0;
-
-      // Pad to maxLength
-      if (numTokens < maxLength) {
-        inputIds = Arrays.copyOf(inputIds, maxLength);
-        attentionMask = Arrays.copyOf(attentionMask, maxLength);
-        tokenTypeIds = Arrays.copyOf(tokenTypeIds, maxLength);
-      }
-
-      Map<String, long[]> result = new HashMap<>();
-      result.put("input_ids", inputIds);
-      result.put("attention_mask", attentionMask);
-      result.put("token_type_ids", tokenTypeIds);
-      return result;
+  /** Pad or truncate array to target length. */
+  private long[] padOrTruncate(long[] array, int targetLength) {
+    if (array.length == targetLength) {
+      return array;
+    } else if (array.length < targetLength) {
+      // Pad with zeros
+      return Arrays.copyOf(array, targetLength);
+    } else {
+      // Truncate
+      return Arrays.copyOfRange(array, 0, targetLength);
     }
   }
 
