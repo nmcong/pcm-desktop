@@ -1,8 +1,14 @@
 package com.noteflix.pcm.rag.pipeline.indexer;
 
 import com.noteflix.pcm.rag.api.RAGService;
+import com.noteflix.pcm.rag.chunking.api.ChunkingStrategy;
+import com.noteflix.pcm.rag.chunking.core.ChunkingFactory;
+import com.noteflix.pcm.rag.chunking.core.DocumentChunk;
+import com.noteflix.pcm.rag.embedding.api.EmbeddingService;
 import com.noteflix.pcm.rag.model.RAGDocument;
-import com.noteflix.pcm.rag.parser.*;
+import com.noteflix.pcm.rag.parser.api.DocumentParser;
+import com.noteflix.pcm.rag.parser.core.*;
+import com.noteflix.pcm.rag.vectorstore.api.VectorStore;
 import java.io.IOException;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;

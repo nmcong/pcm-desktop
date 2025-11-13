@@ -1,8 +1,8 @@
 package com.noteflix.pcm.rag.examples.embedding;
 
+import com.noteflix.pcm.rag.embedding.api.EmbeddingService;
+import com.noteflix.pcm.rag.embedding.core.DJLEmbeddingService;
 import com.noteflix.pcm.rag.vectorstore.core.QdrantVectorStore;
-import com.noteflix.pcm.rag.embedding.DJLEmbeddingService;
-import com.noteflix.pcm.rag.embedding.EmbeddingService;
 import com.noteflix.pcm.rag.vectorstore.embedded.QdrantEmbeddedManager;
 import com.noteflix.pcm.rag.model.DocumentType;
 import com.noteflix.pcm.rag.model.RAGDocument;

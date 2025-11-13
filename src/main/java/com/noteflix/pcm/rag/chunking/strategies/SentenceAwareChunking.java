@@ -1,8 +1,8 @@
 package com.noteflix.pcm.rag.chunking.strategies;
 
-import com.noteflix.pcm.rag.chunking.ChunkingStrategy;
-import com.noteflix.pcm.rag.chunking.ChunkingConfig;
-import com.noteflix.pcm.rag.chunking.DocumentChunk;
+import com.noteflix.pcm.rag.chunking.api.ChunkingStrategy;
+import com.noteflix.pcm.rag.chunking.core.ChunkingConfig;
+import com.noteflix.pcm.rag.chunking.core.DocumentChunk;
 import com.noteflix.pcm.rag.model.RAGDocument;
 import java.util.ArrayList;
 import java.util.List;

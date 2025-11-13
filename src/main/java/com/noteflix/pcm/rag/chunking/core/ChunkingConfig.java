@@ -1,6 +1,6 @@
-package com.noteflix.pcm.rag.chunking;
+package com.noteflix.pcm.rag.chunking.core;
 
-import com.noteflix.pcm.rag.embedding.EmbeddingService;
+import com.noteflix.pcm.rag.embedding.api.EmbeddingService;
 import com.noteflix.pcm.rag.model.DocumentType;
 import java.util.HashMap;
 import java.util.Map;

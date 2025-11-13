@@ -1,4 +1,4 @@
-package com.noteflix.pcm.rag.parser;
+package com.noteflix.pcm.rag.parser.api;
 
 import com.noteflix.pcm.rag.model.RAGDocument;
 import java.io.IOException;

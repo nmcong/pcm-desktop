@@ -1,9 +1,9 @@
 package com.noteflix.pcm.rag.vectorstore.core;
 
+import com.noteflix.pcm.rag.embedding.api.EmbeddingService;
 import com.noteflix.pcm.rag.vectorstore.api.VectorStore;
 import com.noteflix.pcm.rag.vectorstore.core.QdrantClient.QdrantPoint;
 import com.noteflix.pcm.rag.vectorstore.core.QdrantClient.QdrantSearchResult;
-import com.noteflix.pcm.rag.embedding.EmbeddingService;
 import com.noteflix.pcm.rag.model.RAGDocument;
 import com.noteflix.pcm.rag.model.RetrievalOptions;
 import com.noteflix.pcm.rag.model.ScoredDocument;

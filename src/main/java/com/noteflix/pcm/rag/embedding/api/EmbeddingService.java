@@ -1,4 +1,4 @@
-package com.noteflix.pcm.rag.embedding;
+package com.noteflix.pcm.rag.embedding.api;
 
 /**
  * Service for generating text embeddings (vectors).

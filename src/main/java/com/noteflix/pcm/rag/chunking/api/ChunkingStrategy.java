@@ -1,5 +1,6 @@
-package com.noteflix.pcm.rag.chunking;
+package com.noteflix.pcm.rag.chunking.api;
 
+import com.noteflix.pcm.rag.chunking.core.DocumentChunk;
 import com.noteflix.pcm.rag.model.RAGDocument;
 import java.util.List;
 import java.util.Map;

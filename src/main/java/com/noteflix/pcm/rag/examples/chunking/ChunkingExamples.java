@@ -1,8 +1,9 @@
-package com.noteflix.pcm.rag.chunking.examples;
+package com.noteflix.pcm.rag.examples.chunking;
 
-import com.noteflix.pcm.rag.chunking.*;
+import com.noteflix.pcm.rag.chunking.api.*;
+import com.noteflix.pcm.rag.chunking.core.*;
 import com.noteflix.pcm.rag.chunking.strategies.*;
-import com.noteflix.pcm.rag.embedding.EmbeddingService;
+import com.noteflix.pcm.rag.embedding.api.EmbeddingService;
 import com.noteflix.pcm.rag.model.DocumentType;
 import com.noteflix.pcm.rag.model.RAGDocument;
 import lombok.extern.slf4j.Slf4j;

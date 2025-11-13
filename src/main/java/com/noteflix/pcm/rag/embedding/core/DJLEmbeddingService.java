@@ -1,5 +1,6 @@
-package com.noteflix.pcm.rag.embedding;
+package com.noteflix.pcm.rag.embedding.core;
 
+import com.noteflix.pcm.rag.embedding.api.EmbeddingService;
 import ai.djl.huggingface.tokenizers.Encoding;
 import ai.djl.huggingface.tokenizers.HuggingFaceTokenizer;
 import ai.onnxruntime.OnnxTensor;

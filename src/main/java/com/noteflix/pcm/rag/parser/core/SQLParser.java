@@ -1,4 +1,6 @@
-package com.noteflix.pcm.rag.parser;
+package com.noteflix.pcm.rag.parser.core;
+
+import com.noteflix.pcm.rag.parser.api.DocumentParser;
 
 import com.noteflix.pcm.rag.model.DocumentType;
 import com.noteflix.pcm.rag.model.RAGDocument;
