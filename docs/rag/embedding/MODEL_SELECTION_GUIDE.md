@@ -459,7 +459,7 @@ MODEL="all-MiniLM-L6-v2"  # hoặc model khác
 
 # 4. Test
 java -cp "out:lib/javafx/*:lib/others/*:lib/rag/*" \
-  com.noteflix.pcm.rag.examples.embedding.DJLEmbeddingExample
+  com.noteflix.pcm.rag.examples.DJLEmbeddingExample
 ```
 
 ### Multiple Models

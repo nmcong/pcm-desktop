@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.noteflix.ems.mapper.EmployeeMapper">
+
+    <resultMap id="EmployeeResultMap" type="Employee">
+        <id property="id" column="id"/>
+        <result property="employeeCode" column="employee_code"/>
+        <result property="firstName" column="first_name"/>
+        <result property="lastName" column="last_name"/>
+        <result property="email" column="email"/>
+        <result property="phone" column="phone"/>
+        <result property="dateOfBirth" column="date_of_birth"/>
+        <result property="hireDate" column="hire_date"/>
+        <result property="salary" column="salary"/>
+        <result property="departmentId" column="department_id"/>
+        <result property="position" column="position"/>
+        <result property="status" column="status"/>
+        <result property="address" column="address"/>
+        <result property="city" column="city"/>
+        <result property="country" column="country"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+    </resultMap>
+
+    <resultMap id="EmployeeWithDepartmentResultMap" type="Employee" extends="EmployeeResultMap">
+        <association property="department" javaType="Department">
+            <id property="id" column="dept_id"/>
+            <result property="name" column="dept_name"/>
+            <result property="description" column="dept_description"/>
+        </association>
+    </resultMap>
+
+    <sql id="employeeColumns">
+        e.id, e.employee_code, e.first_name, e.last_name, e.email, e.phone,
+        e.date_of_birth, e.hire_date, e.salary, e.department_id, e.position,
+        e.status, e.address, e.city, e.country, e.created_at, e.updated_at
+    </sql>
+
+    <sql id="employeeWithDepartmentColumns">
+        <include refid="employeeColumns"/>,
+        d.id as dept_id, d.name as dept_name, d.description as dept_description
+    </sql>
+
+    <select id="findAll" resultMap="EmployeeResultMap">
+        SELECT <include refid="employeeColumns"/>
+        FROM employees e
+        ORDER BY e.employee_code
+    </select>
+
+    <select id="findAllWithDepartment" resultMap="EmployeeWithDepartmentResultMap">
+        SELECT <include refid="employeeWithDepartmentColumns"/>
+        FROM employees e
+        LEFT JOIN departments d ON e.department_id = d.id
+        ORDER BY e.employee_code
+    </select>
+
+    <select id="findById" resultMap="EmployeeResultMap">
+        SELECT <include refid="employeeColumns"/>
+        FROM employees e
+        WHERE e.id = #{id}
+    </select>
+
+    <select id="findByIdWithDepartment" resultMap="EmployeeWithDepartmentResultMap">
+        SELECT <include refid="employeeWithDepartmentColumns"/>
+        FROM employees e
+        LEFT JOIN departments d ON e.department_id = d.id
+        WHERE e.id = #{id}
+    </select>
+
+    <select id="findByEmployeeCode" resultMap="EmployeeResultMap">
+        SELECT <include refid="employeeColumns"/>
+        FROM employees e
+        WHERE e.employee_code = #{employeeCode}
+    </select>
+
+    <select id="findByEmail" resultMap="EmployeeResultMap">
+        SELECT <include refid="employeeColumns"/>
+        FROM employees e
+        WHERE e.email = #{email}
+    </select>
+
+    <select id="findByDepartmentId" resultMap="EmployeeResultMap">
+        SELECT <include refid="employeeColumns"/>
+        FROM employees e
+        WHERE e.department_id = #{departmentId}
+        ORDER BY e.employee_code
+    </select>
+
+    <select id="findByStatus" resultMap="EmployeeResultMap">
+        SELECT <include refid="employeeColumns"/>
+        FROM employees e
+        WHERE e.status = #{status}
+        ORDER BY e.employee_code
+    </select>
+
+    <select id="search" resultMap="EmployeeResultMap">
+        SELECT <include refid="employeeColumns"/>
+        FROM employees e
+        WHERE LOWER(e.first_name) LIKE LOWER(CONCAT('%', #{keyword}, '%'))
+           OR LOWER(e.last_name) LIKE LOWER(CONCAT('%', #{keyword}, '%'))
+           OR LOWER(e.email) LIKE LOWER(CONCAT('%', #{keyword}, '%'))
+           OR LOWER(e.employee_code) LIKE LOWER(CONCAT('%', #{keyword}, '%'))
+        ORDER BY e.employee_code
+    </select>
+
+    <select id="searchWithDepartment" resultMap="EmployeeWithDepartmentResultMap">
+        SELECT <include refid="employeeWithDepartmentColumns"/>
+        FROM employees e
+        LEFT JOIN departments d ON e.department_id = d.id
+        WHERE LOWER(e.first_name) LIKE LOWER(CONCAT('%', #{keyword}, '%'))
+           OR LOWER(e.last_name) LIKE LOWER(CONCAT('%', #{keyword}, '%'))
+           OR LOWER(e.email) LIKE LOWER(CONCAT('%', #{keyword}, '%'))
+           OR LOWER(e.employee_code) LIKE LOWER(CONCAT('%', #{keyword}, '%'))
+        ORDER BY e.employee_code
+    </select>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+        INSERT INTO employees (
+            employee_code, first_name, last_name, email, phone,
+            date_of_birth, hire_date, salary, department_id, position,
+            status, address, city, country, created_at, updated_at
+        ) VALUES (
+            #{employeeCode}, #{firstName}, #{lastName}, #{email}, #{phone},
+            #{dateOfBirth}, #{hireDate}, #{salary}, #{departmentId}, #{position},
+            #{status}, #{address}, #{city}, #{country}, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
+        )
+    </insert>
+
+    <update id="update">
+        UPDATE employees
+        SET employee_code = #{employeeCode},
+            first_name = #{firstName},
+            last_name = #{lastName},
+            email = #{email},
+            phone = #{phone},
+            date_of_birth = #{dateOfBirth},
+            hire_date = #{hireDate},
+            salary = #{salary},
+            department_id = #{departmentId},
+            position = #{position},
+            status = #{status},
+            address = #{address},
+            city = #{city},
+            country = #{country},
+            updated_at = CURRENT_TIMESTAMP
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteById">
+        DELETE FROM employees
+        WHERE id = #{id}
+    </delete>
+
+    <select id="count" resultType="long">
+        SELECT COUNT(*)
+        FROM employees
+    </select>
+
+    <select id="countByStatus" resultType="long">
+        SELECT COUNT(*)
+        FROM employees
+        WHERE status = #{status}
+    </select>
+
+    <select id="countByDepartment" resultType="long">
+        SELECT COUNT(*)
+        FROM employees
+        WHERE department_id = #{departmentId}
+    </select>
+
+</mapper>
+

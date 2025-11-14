@@ -33,7 +33,7 @@ docs/
 1. Read [RAG Overview](./rag/README.md) (10 min)
 2. Read [DJL Overview](./rag/embedding/DJL_OVERVIEW.md) (20 min)
 3. Run setup: `./scripts/setup-embeddings-djl.sh`
-4. Run example: `java -cp "..." com.noteflix.pcm.rag.examples.embedding.DJLEmbeddingExample`
+4. Run example: `java -cp "..." com.noteflix.pcm.rag.examples.DJLEmbeddingExample`
 
 **Time:** ~30 minutes  
 **Goal:** Generate your first embeddings

@@ -41,7 +41,7 @@ rag/
 
 # 3. Run example
 java -cp "out:lib/javafx/*:lib/others/*:lib/rag/*" \
-  com.noteflix.pcm.rag.examples.embedding.DJLEmbeddingExample
+  com.noteflix.pcm.rag.examples.DJLEmbeddingExample
 ```
 
 **Result:** Generate embeddings (~70-90ms per text)
