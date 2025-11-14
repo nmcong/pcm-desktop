@@ -246,8 +246,8 @@ curl -O https://repo1.maven.org/maven2/com/zaxxer/HikariCP/5.1.0/HikariCP-5.1.0.
 echo -e "${GREEN}✅ HikariCP downloaded${NC}"
 echo ""
 
-echo -e "${YELLOW}8️⃣ Downloading Oracle UCP 23.3.0...${NC}"
-curl -L -o ucp-23.3.0.jar https://repo1.maven.org/maven2/com/oracle/database/ucp/ucp/23.3.0.23.09/ucp-23.3.0.23.09.jar
+echo -e "${YELLOW}8️⃣ Downloading Oracle UCP 23.26.0...${NC}"
+curl -L -o ucp-23.26.0.jar https://repo1.maven.org/maven2/com/oracle/database/jdbc/ucp/23.26.0.0.0/ucp-23.26.0.0.0.jar
 echo -e "${GREEN}✅ Oracle UCP downloaded${NC}"
 echo ""
 

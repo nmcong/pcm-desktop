@@ -61,10 +61,10 @@ if %ERRORLEVEL%==0 (
 echo.
 
 echo [INFO] 2. Downloading Jackson 2.18.2...
-curl -O https://repo1.maven.org/maven2/com/fasterxml/jackson/core/jackson-databind/2.18.2/jackson-databind-2.18.2.jar
-curl -O https://repo1.maven.org/maven2/com/fasterxml/jackson/core/jackson-core/2.18.2/jackson-core-2.18.2.jar
-curl -O https://repo1.maven.org/maven2/com/fasterxml/jackson/core/jackson-annotations/2.18.2/jackson-annotations-2.18.2.jar
-curl -O https://repo1.maven.org/maven2/com/fasterxml/jackson/datatype/jackson-datatype-jsr310/2.18.2/jackson-datatype-jsr310-2.18.2.jar
+curl -O https://repo1.maven.org/maven2/com/fasterxml/jackson/core/jackson-databind/2.20.1/jackson-databind-2.20.1.jar
+curl -O https://repo1.maven.org/maven2/com/fasterxml/jackson/core/jackson-core/2.20.1/jackson-core-2.20.1.jar
+curl -O https://repo1.maven.org/maven2/com/fasterxml/jackson/core/jackson-annotations/2.20/jackson-annotations-2.20.jar
+curl -O https://repo1.maven.org/maven2/com/fasterxml/jackson/datatype/jackson-datatype-jsr310/2.20.1/jackson-datatype-jsr310-2.20.1.jar
 if %ERRORLEVEL%==0 (
     echo [OK] Jackson downloaded
 ) else (
@@ -72,8 +72,8 @@ if %ERRORLEVEL%==0 (
 )
 echo.
 
-echo [INFO] 3. Downloading SLF4J 2.0.16...
-curl -O https://repo1.maven.org/maven2/org/slf4j/slf4j-api/2.0.16/slf4j-api-2.0.16.jar
+echo [INFO] 3. Downloading SLF4J
+curl -O https://repo1.maven.org/maven2/org/slf4j/slf4j-api/2.0.17/slf4j-api-2.0.17.jar
 if %ERRORLEVEL%==0 (
     echo [OK] SLF4J downloaded
 ) else (
@@ -81,9 +81,9 @@ if %ERRORLEVEL%==0 (
 )
 echo.
 
-echo [INFO] 4. Downloading Logback 1.5.12...
-curl -O https://repo1.maven.org/maven2/ch/qos/logback/logback-classic/1.5.12/logback-classic-1.5.12.jar
-curl -O https://repo1.maven.org/maven2/ch/qos/logback/logback-core/1.5.12/logback-core-1.5.12.jar
+echo [INFO] 4. Downloading Logback
+curl -O https://repo1.maven.org/maven2/ch/qos/logback/logback-classic/1.5.21/logback-classic-1.5.21.jar
+curl -O https://repo1.maven.org/maven2/ch/qos/logback/logback-core/1.5.21/logback-core-1.5.21.jar
 if %ERRORLEVEL%==0 (
     echo [OK] Logback downloaded
 ) else (
@@ -91,8 +91,8 @@ if %ERRORLEVEL%==0 (
 )
 echo.
 
-echo [INFO] 5. Downloading SQLite JDBC 3.47.1.0...
-curl -O https://repo1.maven.org/maven2/org/xerial/sqlite-jdbc/3.47.1.0/sqlite-jdbc-3.47.1.0.jar
+echo [INFO] 5. Downloading SQLite JDBC
+curl -O https://repo1.maven.org/maven2/org/xerial/sqlite-jdbc/3.51.0.0/sqlite-jdbc-3.51.0.0.jar
 if %ERRORLEVEL%==0 (
     echo [OK] SQLite JDBC downloaded
 ) else (
@@ -100,8 +100,8 @@ if %ERRORLEVEL%==0 (
 )
 echo.
 
-echo [INFO] 6. Downloading Oracle OJDBC 23.3.0...
-curl -L -o ojdbc11-23.3.0.jar https://repo1.maven.org/maven2/com/oracle/database/jdbc/ojdbc11/23.3.0.23.09/ojdbc11-23.3.0.23.09.jar
+echo [INFO] 6. Downloading Oracle OJDBC
+curl -L -o ojdbc11-23.26.0.0.0.jar https://repo1.maven.org/maven2/com/oracle/database/jdbc/ojdbc11/23.26.0.0.0/ojdbc11-23.26.0.0.0.jar
 if %ERRORLEVEL%==0 (
     echo [OK] Oracle OJDBC downloaded
 ) else (
@@ -109,8 +109,8 @@ if %ERRORLEVEL%==0 (
 )
 echo.
 
-echo [INFO] 7. Downloading HikariCP 5.1.0...
-curl -O https://repo1.maven.org/maven2/com/zaxxer/HikariCP/5.1.0/HikariCP-5.1.0.jar
+echo [INFO] 7. Downloading HikariCP
+curl -O https://repo1.maven.org/maven2/com/zaxxer/HikariCP/7.0.2/HikariCP-7.0.2.jar
 if %ERRORLEVEL%==0 (
     echo [OK] HikariCP downloaded
 ) else (
@@ -118,8 +118,8 @@ if %ERRORLEVEL%==0 (
 )
 echo.
 
-echo [INFO] 8. Downloading Oracle UCP 23.3.0...
-curl -L -o ucp-23.3.0.jar https://repo1.maven.org/maven2/com/oracle/database/ucp/ucp/23.3.0.23.09/ucp-23.3.0.23.09.jar
+echo [INFO] 8. Downloading Oracle UCP 23.26.0...
+curl -L -o ucp-23.26.0.jar https://repo1.maven.org/maven2/com/oracle/database/jdbc/ucp/23.26.0.0.0/ucp-23.26.0.0.0.jar
 if %ERRORLEVEL%==0 (
     echo [OK] Oracle UCP downloaded
 ) else (
@@ -128,8 +128,8 @@ if %ERRORLEVEL%==0 (
 echo.
 
 REM Download AtlantaFX
-echo [INFO] 9. Downloading AtlantaFX 2.0.1...
-curl -L -o atlantafx-base-2.0.1.jar https://repo1.maven.org/maven2/io/github/mkpaz/atlantafx-base/2.0.1/atlantafx-base-2.0.1.jar
+echo [INFO] 9. Downloading AtlantaFX
+curl -L -o atlantafx-base-2.1.0.jar https://repo1.maven.org/maven2/io/github/mkpaz/atlantafx-base/2.1.0/atlantafx-base-2.1.0.jar
 if %ERRORLEVEL%==0 (
     echo [OK] AtlantaFX downloaded
 ) else (
@@ -138,11 +138,10 @@ if %ERRORLEVEL%==0 (
 echo.
 
 REM Download Ikonli
-echo [INFO] 10. Downloading Ikonli 12.3.1...
-curl -L -o ikonli-core-12.3.1.jar https://repo1.maven.org/maven2/org/kordamp/ikonli/ikonli-core/12.3.1/ikonli-core-12.3.1.jar
-curl -L -o ikonli-javafx-12.3.1.jar https://repo1.maven.org/maven2/org/kordamp/ikonli/ikonli-javafx/12.3.1/ikonli-javafx-12.3.1.jar
-curl -L -o ikonli-material2-pack-12.3.1.jar https://repo1.maven.org/maven2/org/kordamp/ikonli/ikonli-material2-pack/12.3.1/ikonli-material2-pack-12.3.1.jar
-curl -L -o ikonli-feather-pack-12.3.1.jar https://repo1.maven.org/maven2/org/kordamp/ikonli/ikonli-feather-pack/12.3.1/ikonli-feather-pack-12.3.1.jar
+echo [INFO] 10. Downloading Ikonli
+curl -L -o ikonli-core-12.4.0.jar https://repo1.maven.org/maven2/org/kordamp/ikonli/ikonli-core/12.4.0/ikonli-core-12.4.0.jar
+curl -L -o ikonli-javafx-12.4.0.jar https://repo1.maven.org/maven2/org/kordamp/ikonli/ikonli-javafx/12.4.0/ikonli-javafx-12.4.0.jar
+curl -L -o ikonli-feather-pack-12.4.0.jar https://repo1.maven.org/maven2/org/kordamp/ikonli/ikonli-feather-pack/12.4.0/ikonli-feather-pack-12.4.0.jar
 if %ERRORLEVEL%==0 (
     echo [OK] Ikonli downloaded
 ) else (
@@ -163,13 +162,13 @@ echo.
 
 cd lib\rag
 
-echo [INFO] 1. Downloading Apache Lucene 9.11.1...
-curl -O https://repo1.maven.org/maven2/org/apache/lucene/lucene-core/9.11.1/lucene-core-9.11.1.jar
-curl -O https://repo1.maven.org/maven2/org/apache/lucene/lucene-analysis-common/9.11.1/lucene-analysis-common-9.11.1.jar
-curl -O https://repo1.maven.org/maven2/org/apache/lucene/lucene-analyzers-common/9.11.1/lucene-analyzers-common-9.11.1.jar
-curl -O https://repo1.maven.org/maven2/org/apache/lucene/lucene-queryparser/9.11.1/lucene-queryparser-9.11.1.jar
-curl -O https://repo1.maven.org/maven2/org/apache/lucene/lucene-queries/9.11.1/lucene-queries-9.11.1.jar
-curl -O https://repo1.maven.org/maven2/org/apache/lucene/lucene-highlighter/9.11.1/lucene-highlighter-9.11.1.jar
+echo [INFO] 1. Downloading Apache Lucene
+curl -O https://repo1.maven.org/maven2/org/apache/lucene/lucene-core/10.3.1/lucene-core-10.3.1.jar
+curl -O https://repo1.maven.org/maven2/org/apache/lucene/lucene-analysis-common/10.3.1/lucene-analysis-common-10.3.1.jar
+curl -O https://repo1.maven.org/maven2/org/apache/lucene/lucene-analyzers-common/8.11.4/lucene-analyzers-common-8.11.4.jar
+curl -O https://repo1.maven.org/maven2/org/apache/lucene/lucene-queryparser/10.3.1/lucene-queryparser-10.3.1.jar
+curl -O https://repo1.maven.org/maven2/org/apache/lucene/lucene-queries/10.3.1/lucene-queries-10.3.1.jar
+curl -O https://repo1.maven.org/maven2/org/apache/lucene/lucene-highlighter/10.3.1/lucene-highlighter-10.3.1.jar
 if %ERRORLEVEL%==0 (
     echo [OK] Apache Lucene downloaded
 ) else (
@@ -180,7 +179,7 @@ echo.
 echo [INFO] 2. Downloading DJL ONNX Runtime 0.35.0...
 curl -O https://repo1.maven.org/maven2/ai/djl/onnxruntime/onnxruntime-engine/0.35.0/onnxruntime-engine-0.35.0.jar
 curl -O https://repo1.maven.org/maven2/ai/djl/api/0.35.0/api-0.35.0.jar
-curl -O https://repo1.maven.org/maven2/ai/djl/tokenizers/0.35.0/tokenizers-0.35.0.jar
+curl -O https://repo1.maven.org/maven2/ai/djl/huggingface/tokenizers/0.35.0/tokenizers-0.35.0.jar
 if %ERRORLEVEL%==0 (
     echo [OK] DJL ONNX Runtime downloaded
 ) else (
