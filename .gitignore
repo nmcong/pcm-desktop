@@ -2,9 +2,7 @@
 out/
 out-test/
 dist/
-*.jar
 manifest.txt
-lib
 
 # IDE - IntelliJ IDEA
 .idea/
@@ -46,7 +44,6 @@ Thumbs.db
 *.class
 
 # Package Files
-*.jar
 *.war
 *.ear
 *.zip
