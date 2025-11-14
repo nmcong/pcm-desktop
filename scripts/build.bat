@@ -1,26 +1,18 @@
 @echo off
 REM =================================================================
-REM PCM Desktop - Unified Build Script (Windows)
-REM =================================================================
-REM Compiles Java source code with optional text component support
-REM
-REM Usage:
-REM   build.bat              - Standard build
-REM   build.bat --text       - Build with text component
-REM   build.bat --clean      - Clean and build
-REM   build.bat --help       - Show help
+REM PCM Desktop - Build Script (Windows)
 REM =================================================================
 
 setlocal enabledelayedexpansion
 
-REM Change to project root directory
+REM Change to project root
 cd /d "%~dp0\.."
 
 REM Default options
 set WITH_TEXT_COMPONENT=0
 set CLEAN_BUILD=0
 
-REM Parse command line arguments
+REM Parse arguments
 :parse_args
 if "%~1"=="" goto start_build
 if /i "%~1"=="--text" set WITH_TEXT_COMPONENT=1
@@ -38,15 +30,10 @@ echo.
 echo Usage: %~nx0 [OPTIONS]
 echo.
 echo Options:
-echo   --text, --text-component    Build with Universal Text Component support
-echo   --clean, -c                 Clean build directory before compilation
-echo   --help, -h                  Show this help message
+echo   --text              Build with Universal Text Component
+echo   --clean, -c         Clean build directory first
+echo   --help, -h          Show this help
 echo.
-echo Examples:
-echo   %~nx0                       # Standard build
-echo   %~nx0 --text                # Build with text component
-echo   %~nx0 --clean               # Clean and build
-echo   %~nx0 --clean --text        # Clean build with text component
 exit /b 0
 
 :start_build
@@ -56,38 +43,26 @@ echo    PCM Desktop - Build Script
 echo ========================================
 echo.
 
-REM ============================================================
-REM Ensure Java 21 is used
-REM ============================================================
+REM Check Java
 echo [INFO] Checking Java version...
-
-REM Check if Java is installed
 javac -version >nul 2>&1
-if %ERRORLEVEL% NEQ 0 (
-    echo [ERROR] Java compiler (javac) not found!
-    echo.
-    echo This project requires Java 21.
-    echo Download from: https://adoptium.net/
-    echo.
+if errorlevel 1 (
+    echo [ERROR] Java compiler not found!
+    echo Download Java 21 from: https://adoptium.net/
     pause
     exit /b 1
 )
 
 REM Get Java version
-for /f "tokens=2 delims= " %%v in ('javac -version 2^>^&1') do set JAVA_VERSION=%%v
+set JAVA_MAJOR=0
+for /f "tokens=2" %%v in ('javac -version 2^>^&1') do (
+    for /f "tokens=1 delims=." %%m in ("%%v") do set JAVA_MAJOR=%%m
+)
 
-REM Extract major version
-for /f "tokens=1 delims=." %%m in ("%JAVA_VERSION%") do set JAVA_MAJOR=%%m
-
-REM Check if Java 21
-if not "%JAVA_MAJOR%"=="21" (
-    echo [ERROR] Java 21 required, but found Java %JAVA_MAJOR%!
-    echo.
-    echo This project requires Java 21.
+REM Validate Java version
+if %JAVA_MAJOR% NEQ 21 (
+    echo [ERROR] Java 21 required, found Java %JAVA_MAJOR%
     echo Download from: https://adoptium.net/
-    echo.
-    echo Set JAVA_HOME to Java 21 installation.
-    echo.
     pause
     exit /b 1
 )
@@ -101,8 +76,7 @@ echo [INFO] Verifying required libraries...
 set LIB_ERRORS=0
 
 REM Check JavaFX libraries
-set JAVAFX_LIBS=javafx.base.jar javafx.controls.jar javafx.fxml.jar javafx.graphics.jar javafx.media.jar javafx.web.jar
-for %%L in (%JAVAFX_LIBS%) do (
+for %%L in (javafx.base.jar javafx.controls.jar javafx.fxml.jar javafx.graphics.jar javafx.media.jar javafx.web.jar) do (
     if not exist "lib\javafx\%%L" (
         echo [ERROR] Missing: %%L
         set /a LIB_ERRORS+=1
@@ -110,8 +84,7 @@ for %%L in (%JAVAFX_LIBS%) do (
 )
 
 REM Check other libraries
-set OTHER_LIBS=lombok-1.18.34.jar jackson-databind-2.18.2.jar jackson-core-2.18.2.jar slf4j-api-2.0.16.jar logback-classic-1.5.12.jar sqlite-jdbc-3.47.1.0.jar
-for %%L in (%OTHER_LIBS%) do (
+for %%L in (lombok-1.18.34.jar jackson-databind-2.18.2.jar jackson-core-2.18.2.jar slf4j-api-2.0.16.jar logback-classic-1.5.12.jar sqlite-jdbc-3.47.1.0.jar) do (
     if not exist "lib\others\%%L" (
         echo [ERROR] Missing: %%L
         set /a LIB_ERRORS+=1
@@ -121,10 +94,7 @@ for %%L in (%OTHER_LIBS%) do (
 if %LIB_ERRORS% GTR 0 (
     echo.
     echo [ERROR] %LIB_ERRORS% library/libraries missing!
-    echo.
-    echo Run the setup script to download libraries:
-    echo   scripts\setup.bat
-    echo.
+    echo Run: scripts\setup.bat
     pause
     exit /b 1
 )
@@ -132,48 +102,40 @@ if %LIB_ERRORS% GTR 0 (
 echo [OK] All required libraries present
 echo.
 
-REM Clean build directory if requested
-if %CLEAN_BUILD%==1 (
+REM Clean if requested
+if %CLEAN_BUILD% EQU 1 (
     echo [INFO] Cleaning build directory...
-    if exist "out" (
-        rmdir /s /q out
-        echo [INFO] Build directory cleaned
-    )
+    if exist "out" rmdir /s /q out
+    echo [OK] Cleaned
     echo.
 )
 
 REM Create output directory
-if not exist "out" mkdir out
+if not exist "out" mkdir "out"
 
 REM Build classpath
 echo [INFO] Building classpath...
 set CLASSPATH=lib\javafx\*;lib\others\*;lib\rag\*
 
-if %WITH_TEXT_COMPONENT%==1 (
-    echo [INFO] Including Universal Text Component libraries...
+if %WITH_TEXT_COMPONENT% EQU 1 (
+    echo [INFO] Including Universal Text Component...
     set CLASSPATH=!CLASSPATH!;lib\text-component\*
 )
 
-echo [INFO] Classpath configured
+echo [OK] Classpath configured
 echo.
 
-REM Compile Java source files
+REM Compile
 echo [INFO] Compiling Java source files...
 echo.
 
-REM Find all Java files recursively and compile
 dir /s /b src\main\java\*.java > sources.txt
 
-REM Compile
-javac -cp "%CLASSPATH%" ^
-  -d out ^
-  -encoding UTF-8 ^
-  -Xlint:unchecked ^
-  @sources.txt
+javac -cp "%CLASSPATH%" -d out -encoding UTF-8 -Xlint:unchecked @sources.txt
 
 del sources.txt
 
-if %ERRORLEVEL% NEQ 0 (
+if errorlevel 1 (
     echo.
     echo [ERROR] Compilation failed!
     pause
@@ -181,42 +143,31 @@ if %ERRORLEVEL% NEQ 0 (
 )
 
 echo.
-echo [INFO] Compilation successful!
+echo [OK] Compilation successful!
 echo.
 
 REM Copy resources
 echo [INFO] Copying resources...
 
 REM Create resource directories
-if not exist "out\fxml\components" mkdir out\fxml\components
-if not exist "out\css" mkdir out\css
-if not exist "out\images\icons" mkdir out\images\icons
-if not exist "out\db\migration" mkdir out\db\migration
-if not exist "out\i18n" mkdir out\i18n
+if not exist "out\fxml\components" mkdir "out\fxml\components"
+if not exist "out\css" mkdir "out\css"
+if not exist "out\images\icons" mkdir "out\images\icons"
+if not exist "out\db\migration" mkdir "out\db\migration"
+if not exist "out\i18n" mkdir "out\i18n"
 
-REM Copy i18n files
-xcopy /Y src\main\resources\i18n\*.properties out\i18n\ >nul 2>&1
-echo [INFO] i18n files copied
+REM Copy files
+if exist "src\main\resources\i18n\*.properties" xcopy /Y src\main\resources\i18n\*.properties out\i18n\ >nul 2>&1
+if exist "src\main\resources\fxml\*.fxml" xcopy /Y /E /I src\main\resources\fxml\*.fxml out\fxml\ >nul 2>&1
+if exist "src\main\resources\fxml\components\*.fxml" xcopy /Y /E /I src\main\resources\fxml\components\*.fxml out\fxml\components\ >nul 2>&1
+if exist "src\main\resources\css\*.css" xcopy /Y src\main\resources\css\*.css out\css\ >nul 2>&1
+if exist "src\main\resources\images\icons\*.png" xcopy /Y src\main\resources\images\icons\*.png out\images\icons\ >nul 2>&1
+if exist "src\main\resources\images\icons\*.svg" xcopy /Y src\main\resources\images\icons\*.svg out\images\icons\ >nul 2>&1
+if exist "src\main\resources\images\*.png" xcopy /Y src\main\resources\images\*.png out\images\ >nul 2>&1
+if exist "src\main\resources\db\migration\*.sql" xcopy /Y src\main\resources\db\migration\*.sql out\db\migration\ >nul 2>&1
+if exist "src\main\resources\logback.xml" xcopy /Y src\main\resources\logback.xml out\ >nul 2>&1
 
-REM Copy FXML files including subdirectories
-xcopy /Y /E /I src\main\resources\fxml\*.fxml out\fxml\ >nul 2>&1
-xcopy /Y /E /I src\main\resources\fxml\components\*.fxml out\fxml\components\ >nul 2>&1
-
-REM Copy CSS files
-xcopy /Y src\main\resources\css\*.css out\css\ >nul 2>&1
-
-REM Copy image files
-xcopy /Y src\main\resources\images\icons\*.png out\images\icons\ >nul 2>&1
-xcopy /Y src\main\resources\images\icons\*.svg out\images\icons\ >nul 2>&1
-xcopy /Y src\main\resources\images\*.png out\images\ >nul 2>&1
-
-REM Copy database migration files
-xcopy /Y src\main\resources\db\migration\*.sql out\db\migration\ >nul 2>&1
-
-REM Copy other resources
-xcopy /Y src\main\resources\logback.xml out\ >nul 2>&1
-
-echo [INFO] Resources copied
+echo [OK] Resources copied
 echo.
 
 echo ========================================
@@ -224,14 +175,11 @@ echo    Build Completed Successfully!
 echo ========================================
 echo.
 
-if %WITH_TEXT_COMPONENT%==1 (
-    echo To run with text component support:
-    echo   scripts\run.bat --text
+if %WITH_TEXT_COMPONENT% EQU 1 (
+    echo To run: scripts\run.bat --text
 ) else (
-    echo To run the application:
-    echo   scripts\run.bat
+    echo To run: scripts\run.bat
 )
 
 echo.
 pause
-
