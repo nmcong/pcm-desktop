@@ -34,6 +34,12 @@
     <onnxruntime.version>1.23.2</onnxruntime.version>
     <javaparser.version>3.26.3</javaparser.version>
     <richtextfx.version>0.11.6</richtextfx.version>
+    <flowless.version>0.7.4</flowless.version>
+    <reactfx.version>2.0-M6</reactfx.version>
+    <undofx.version>2.1.1</undofx.version>
+    <wellbehavedfx.version>0.3.3</wellbehavedfx.version>
+    <ucp.version>23.26.0.0.0</ucp.version>
+    <jackson.annotations.version>2.20</jackson.annotations.version>
   </properties>
 
   <dependencies>
@@ -96,7 +102,7 @@
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-annotations</artifactId>
-      <version>2.20</version>
+      <version>${jackson.annotations.version}</version>
     </dependency>
     <dependency>
       <groupId>com.fasterxml.jackson.datatype</groupId>
@@ -140,7 +146,7 @@
     <dependency>
       <groupId>com.oracle.database.jdbc</groupId>
       <artifactId>ucp</artifactId>
-      <version>23.26.0.0.0</version>
+      <version>${ucp.version}</version>
     </dependency>
 
     <!-- UI Libraries -->
@@ -235,22 +241,22 @@
     <dependency>
       <groupId>org.fxmisc.flowless</groupId>
       <artifactId>flowless</artifactId>
-      <version>0.7.4</version>
+      <version>${flowless.version}</version>
     </dependency>
     <dependency>
       <groupId>org.reactfx</groupId>
       <artifactId>reactfx</artifactId>
-      <version>2.0-M6</version>
+      <version>${reactfx.version}</version>
     </dependency>
     <dependency>
       <groupId>org.fxmisc.undo</groupId>
       <artifactId>undofx</artifactId>
-      <version>2.1.1</version>
+      <version>${undofx.version}</version>
     </dependency>
     <dependency>
       <groupId>org.fxmisc.wellbehaved</groupId>
       <artifactId>wellbehavedfx</artifactId>
-      <version>0.3.3</version>
+      <version>${wellbehavedfx.version}</version>
     </dependency>
   </dependencies>
 

@@ -125,7 +125,7 @@ if %ERRORLEVEL%==0 (
 echo.
 
 echo [INFO] 8. Downloading Oracle UCP
-curl -L -o ucp-23.26.0.jar https://repo1.maven.org/maven2/com/oracle/database/jdbc/ucp/23.26.0.0.0/ucp-23.26.0.0.0.jar
+curl -L -o ucp-23.26.0.0.0.jar https://repo1.maven.org/maven2/com/oracle/database/jdbc/ucp/23.26.0.0.0/ucp-23.26.0.0.0.jar
 if %ERRORLEVEL%==0 (
     echo [OK] Oracle UCP downloaded
 ) else (
@@ -290,38 +290,6 @@ REM Summary
 echo ========================================
 echo    Setup Completed Successfully!
 echo ========================================
-echo.
-
-echo [INFO] Downloaded ALL Libraries:
-echo.
-echo   Core Libraries:
-echo   - Lombok 1.18.34
-echo   - Jackson 2.18.2 (Core, Databind, Annotations, JSR310)
-echo   - SLF4J 2.0.16
-echo   - Logback 1.5.12 (Classic, Core)
-echo   - SQLite JDBC 3.47.1.0
-echo.
-echo   Oracle Libraries:
-echo   - Oracle OJDBC 23.3.0.23.09
-echo   - HikariCP 5.1.0
-echo   - Oracle UCP 23.3.0.23.09
-echo.
-echo   UI Libraries:
-echo   - AtlantaFX 2.0.1
-echo   - Ikonli 12.3.1 (Core, JavaFX, Material2, Feather)
-echo.
-echo   RAG Libraries:
-echo   - Apache Lucene 9.11.1 (Core, Analysis, QueryParser, Highlighter)
-echo   - DJL ONNX Runtime 0.35.0 (API, Engine, Tokenizers)
-echo   - ONNX Runtime 1.23.2
-echo   - JavaParser 3.26.3 (Core, Symbol Solver)
-echo.
-echo   JavaFX Libraries:
-echo   - JavaFX 21.0.9 (automatically downloaded and extracted)
-echo.
-echo   Text Component Libraries:
-echo   - RichTextFX 0.11.6 and dependencies
-echo   - JavaFX Markdown Preview 1.0.3
 echo.
 
 echo [SUCCESS] All libraries downloaded and ready to use!
