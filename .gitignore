@@ -5,6 +5,7 @@ dist/
 *.jar
 !lib/**/*.jar
 manifest.txt
+lib
 
 # IDE - IntelliJ IDEA
 .idea/
