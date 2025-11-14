@@ -547,11 +547,11 @@ Performance:
 
 | Document | Purpose |
 |----------|---------|
-| [QUICK_START_MULTILINGUAL.md](docs/rag/embedding/QUICK_START_MULTILINGUAL.md) | Start here |
-| [ALTERNATIVE_SOLUTIONS.md](docs/rag/embedding/ALTERNATIVE_SOLUTIONS.md) | 6 solutions |
-| [PYTORCH_ENGINE_GUIDE.md](docs/rag/embedding/PYTORCH_ENGINE_GUIDE.md) | PyTorch guide |
-| [EXAMPLES_GUIDE.md](docs/rag/embedding/EXAMPLES_GUIDE.md) | Usage examples |
-| [TROUBLESHOOTING.md](docs/rag/embedding/TROUBLESHOOTING.md) | Problem solving |
+| [QUICK_START_MULTILINGUAL.md](QUICK_START_MULTILINGUAL.md) | Start here |
+| [ALTERNATIVE_SOLUTIONS.md](ALTERNATIVE_SOLUTIONS.md) | 6 solutions |
+| [PYTORCH_ENGINE_GUIDE.md](PYTORCH_ENGINE_GUIDE.md) | PyTorch guide |
+| [EXAMPLES_GUIDE.md](EXAMPLES_GUIDE.md) | Usage examples |
+| [TROUBLESHOOTING.md](TROUBLESHOOTING.md) | Problem solving |
 
 ### Scripts Index
 
