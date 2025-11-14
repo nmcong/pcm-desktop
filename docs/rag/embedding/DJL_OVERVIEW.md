@@ -142,7 +142,7 @@ curl -LO https://repo1.maven.org/maven2/ai/djl/onnxruntime/onnxruntime-engine/0.
 curl -LO https://repo1.maven.org/maven2/ai/djl/huggingface/tokenizers/0.35.0/tokenizers-0.35.0.jar
 
 # ONNX Runtime (Backend)
-curl -LO https://repo1.maven.org/maven2/com/microsoft/onnxruntime/onnxruntime/1.19.0/onnxruntime-1.19.0.jar
+curl -LO https://repo1.maven.org/maven2/com/microsoft/onnxruntime/onnxruntime/1.23.2/onnxruntime-1.23.2.jar
 ```
 
 #### Bước 2: Download Model
@@ -174,7 +174,7 @@ ls -lh lib/rag/*.jar
 # api-0.35.0.jar              (~900 KB)
 # onnxruntime-engine-0.35.0.jar  (~56 KB)
 # tokenizers-0.35.0.jar         (~18 MB)
-# onnxruntime-1.19.0.jar        (~89 MB)
+# onnxruntime-1.23.2.jar        (~72 MB)
 ```
 
 ---
@@ -581,6 +581,11 @@ try {
 ---
 
 ## 📝 Changelog
+
+### Version 2.1.0 (2025-11-14)
+- ✅ Updated to ONNX Runtime 1.23.2 (latest stable version)
+- ✅ Enhanced security with official Microsoft build
+- ✅ Smaller file size (72MB vs 89MB)
 
 ### Version 2.0.0 (2024-11-13)
 - ✅ Full DJL ONNX Runtime implementation

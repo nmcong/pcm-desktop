@@ -251,7 +251,7 @@ FAQ bestMatch = findMostSimilar(queryEmb, faqs);
 ✅ ai.djl:api:0.35.0
 ✅ ai.djl.onnxruntime:onnxruntime-engine:0.35.0
 ✅ ai.djl.huggingface:tokenizers:0.35.0
-✅ com.microsoft.onnxruntime:onnxruntime:1.19.0
+✅ com.microsoft.onnxruntime:onnxruntime:1.23.2
 ```
 
 **For Qdrant Vector Store:**

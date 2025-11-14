@@ -42,12 +42,12 @@ echo ""
 echo -e "${BLUE}📦 Downloading ONNX Runtime...${NC}"
 cd lib/rag
 
-if [ ! -f "onnxruntime-1.19.0.jar" ]; then
-    echo "  - Downloading ONNX Runtime..."
-    curl -L -O --progress-bar https://repo1.maven.org/maven2/com/microsoft/onnxruntime/onnxruntime/1.19.0/onnxruntime-1.19.0.jar
-    echo -e "${GREEN}  ✓ ONNX Runtime downloaded${NC}"
+if [ ! -f "onnxruntime-1.23.2.jar" ]; then
+    echo "  - Downloading ONNX Runtime 1.23.2 (latest stable)..."
+    curl -L -O --progress-bar https://repo1.maven.org/maven2/com/microsoft/onnxruntime/onnxruntime/1.23.2/onnxruntime-1.23.2.jar
+    echo -e "${GREEN}  ✓ ONNX Runtime 1.23.2 downloaded${NC}"
 else
-    echo -e "${YELLOW}  ✓ ONNX Runtime already exists${NC}"
+    echo -e "${YELLOW}  ✓ ONNX Runtime 1.23.2 already exists${NC}"
 fi
 
 # Download tokenizer library (reuse DJL tokenizers)

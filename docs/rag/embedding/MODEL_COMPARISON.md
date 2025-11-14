@@ -25,7 +25,7 @@ Hardware:
 Software:
   Java: OpenJDK 21
   DJL: 0.35.0
-  ONNX Runtime: 1.19.0
+  ONNX Runtime: 1.23.2
 
 Test Data:
   Sentences: 1000 diverse texts

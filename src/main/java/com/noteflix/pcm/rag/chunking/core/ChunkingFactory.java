@@ -165,11 +165,20 @@ public class ChunkingFactory {
       case HIGH_VOLUME_PROCESSING -> ChunkingConfig.forHighVolume();
       case GENERAL_PURPOSE -> ChunkingConfig.defaults();
       
-      // LangChain use cases
+      // LangChain use cases (custom implementation)
       case LANGCHAIN_COMPATIBLE -> ChunkingConfig.forLangChainRecursive();
       case TOKEN_OPTIMIZED -> ChunkingConfig.forLangChainToken("gpt-3.5-turbo");
       case CODE_DOCUMENTS -> ChunkingConfig.forLangChainCode("python");
       case HIERARCHICAL_CONTENT -> ChunkingConfig.forLangChainRecursive();
+      
+      // LangChain4j use cases (real library)
+      case LANGCHAIN4J_PARAGRAPH_FOCUSED -> ChunkingConfig.forLangChain4jParagraph();
+      case LANGCHAIN4J_SENTENCE_PRECISE -> ChunkingConfig.forLangChain4jSentence();
+      case LANGCHAIN4J_WORD_GRANULAR -> ChunkingConfig.forLangChain4jWord();
+      case LANGCHAIN4J_LINE_STRUCTURED -> ChunkingConfig.forLangChain4jLine();
+      case LANGCHAIN4J_CHARACTER_EXACT -> ChunkingConfig.forLangChain4jCharacter();
+      case LANGCHAIN4J_REGEX_PATTERN -> ChunkingConfig.forLangChain4jRegex("\\n\\n");
+      case LANGCHAIN4J_HIERARCHICAL_SMART -> ChunkingConfig.forLangChain4jHierarchical();
     };
     
     return createStrategy(config);
@@ -406,11 +415,20 @@ public class ChunkingFactory {
     ACADEMIC_PAPERS("Research papers and academic content"),
     HIGH_VOLUME_PROCESSING("High-volume batch processing"),
     
-    // LangChain specific use cases
+    // LangChain specific use cases (custom implementation)
     LANGCHAIN_COMPATIBLE("LangChain compatible text splitting"),
     TOKEN_OPTIMIZED("Token-optimized splitting for LLMs"),
     CODE_DOCUMENTS("Code and programming documents"),
-    HIERARCHICAL_CONTENT("Hierarchical structured content");
+    HIERARCHICAL_CONTENT("Hierarchical structured content"),
+    
+    // LangChain4j specific use cases (real library)
+    LANGCHAIN4J_PARAGRAPH_FOCUSED("LangChain4j paragraph-focused document processing"),
+    LANGCHAIN4J_SENTENCE_PRECISE("LangChain4j precise sentence boundary splitting"),
+    LANGCHAIN4J_WORD_GRANULAR("LangChain4j fine-grained word-level splitting"),
+    LANGCHAIN4J_LINE_STRUCTURED("LangChain4j line-by-line structured splitting"),
+    LANGCHAIN4J_CHARACTER_EXACT("LangChain4j character-level exact splitting"),
+    LANGCHAIN4J_REGEX_PATTERN("LangChain4j pattern-based regex splitting"),
+    LANGCHAIN4J_HIERARCHICAL_SMART("LangChain4j intelligent hierarchical splitting");
 
     private final String description;
 
