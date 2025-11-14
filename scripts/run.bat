@@ -157,7 +157,7 @@ echo [INFO] Resources copied
 echo.
 
 REM Build classpath
-set CLASSPATH=out;lib\others\*
+set CLASSPATH=out;lib\javafx\*;lib\others\*;lib\rag\*
 
 if %WITH_TEXT_COMPONENT%==1 (
     set CLASSPATH=!CLASSPATH!;lib\text-component\*
@@ -218,7 +218,8 @@ if %WITH_TEXT_COMPONENT%==1 (
     echo.
     
     REM Run with text component support
-    java --module-path lib\javafx ^
+    java -Djava.library.path=lib\javafx ^
+        --module-path lib\javafx ^
         --add-modules javafx.controls,javafx.fxml,javafx.web,javafx.media ^
         --add-exports javafx.base/com.sun.javafx.event=ALL-UNNAMED ^
         --add-exports javafx.controls/com.sun.javafx.scene.control=ALL-UNNAMED ^
@@ -233,7 +234,8 @@ if %WITH_TEXT_COMPONENT%==1 (
     echo.
     
     REM Standard run
-    java --module-path lib\javafx ^
+    java -Djava.library.path=lib\javafx ^
+        --module-path lib\javafx ^
         --add-modules javafx.controls,javafx.fxml,javafx.web,javafx.media ^
         -cp "%CLASSPATH%" ^
         com.noteflix.pcm.PCMApplication
