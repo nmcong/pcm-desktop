@@ -1,0 +1,61 @@
+# PCM Desktop - Library Inventory
+# Generated on Sat Nov 15 00:23:23 +07 2025
+
+## JavaFX Libraries (lib/javafx/)
+- javafx-swt.jar
+- javafx.base.jar
+- javafx.controls.jar
+- javafx.fxml.jar
+- javafx.graphics.jar
+- javafx.media.jar
+- javafx.swing.jar
+- javafx.web.jar
+
+## Core and Oracle Libraries (lib/others/)
+- HikariCP-5.1.0.jar
+- atlantafx-base-2.0.1.jar
+- google-java-format-1.32.0-all-deps.jar
+- ikonli-core-12.3.1.jar
+- ikonli-feather-pack-12.3.1.jar
+- ikonli-javafx-12.3.1.jar
+- ikonli-material2-pack-12.3.1.jar
+- jackson-annotations-2.18.2.jar
+- jackson-core-2.18.2.jar
+- jackson-databind-2.18.2.jar
+- jackson-datatype-jsr310-2.18.2.jar
+- javaparser-core-3.27.1.jar
+- javaparser-symbol-solver-core-3.27.1.jar
+- javassist-3.29.2-GA.jar
+- logback-classic-1.5.12.jar
+- logback-core-1.5.12.jar
+- lombok-1.18.34.jar
+- ojdbc11-23.3.0.jar
+- slf4j-api-2.0.16.jar
+- sqlite-jdbc-3.47.1.0.jar
+- ucp-23.26.0.jar
+- ucp-23.3.0.jar
+
+## RAG Libraries (lib/rag/)
+- api-0.35.0.jar
+- lucene-analysis-common-9.11.1.jar
+- lucene-analyzers-common-9.11.1.jar
+- lucene-core-9.11.1.jar
+- lucene-highlighter-9.11.1.jar
+- lucene-queries-9.11.1.jar
+- lucene-queryparser-9.11.1.jar
+- onnxruntime-1.23.2.jar
+- onnxruntime-engine-0.35.0.jar
+- tokenizers-0.35.0.jar
+
+## LLM Libraries (lib/langchain4j/)
+- langchain4j-1.8.0.jar
+- langchain4j-core-1.8.0.jar
+
+## Text Component Libraries (lib/text-component/)
+- flowless-0.7.4.jar
+- javafx-markdown-preview-all-1.0.3.jar
+- reactfx-2.0-M5.jar
+- richtextfx-0.11.6.jar
+- undofx-2.1.1.jar
+- wellbehavedfx-0.3.3.jar
+
