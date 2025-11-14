@@ -4,6 +4,7 @@ out-test/
 dist/
 *.jar
 manifest.txt
+lib
 
 # IDE - IntelliJ IDEA
 .idea/
