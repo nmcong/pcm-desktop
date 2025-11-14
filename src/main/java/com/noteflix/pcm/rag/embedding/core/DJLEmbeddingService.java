@@ -114,7 +114,7 @@ public class DJLEmbeddingService implements EmbeddingService {
       initializeSharedResources();
       log.info("✅ DJL Embedding service initialized: {} ({}d)", modelName, dimension);
     } catch (Exception e) {
-      log.error("❌ Failed to initialize DJL for model: {}", modelName);
+      log.error("❌ Failed to initialize DJL for model: {}", modelName, e);
       throw new IOException("Failed to initialize DJL ONNX Runtime", e);
     }
   }
@@ -422,9 +422,14 @@ public class DJLEmbeddingService implements EmbeddingService {
       throw new IOException("Model file not found: " + modelFile);
     }
 
+    // Try tokenizer.json first (newer models), then vocab.txt (older models)
     tokenizerFile = Paths.get(modelPath, "tokenizer.json");
     if (!Files.exists(tokenizerFile)) {
-      throw new IOException("Tokenizer file not found: " + tokenizerFile);
+      tokenizerFile = Paths.get(modelPath, "vocab.txt");
+      if (!Files.exists(tokenizerFile)) {
+        throw new IOException(
+            "No tokenizer found. Need either 'tokenizer.json' or 'vocab.txt'");
+      }
     }
 
     // Prepare session options for thread-local sessions
@@ -457,13 +462,24 @@ public class DJLEmbeddingService implements EmbeddingService {
   }
 
   private void checkRequiredFiles(Path modelDir) throws IOException {
-    String[] requiredFiles = {"model.onnx", "tokenizer.json"};
+    // Check model.onnx (required for all)
+    Path modelFile = modelDir.resolve("model.onnx");
+    if (!Files.exists(modelFile)) {
+      throw new IOException("Missing required model file: model.onnx");
+    }
 
-    for (String file : requiredFiles) {
-      Path filePath = modelDir.resolve(file);
-      if (!Files.exists(filePath)) {
-        throw new IOException("Missing required model file: " + file);
-      }
+    // Check tokenizer files: either tokenizer.json OR vocab.txt
+    // Different models use different tokenizer formats:
+    // - Newer models: tokenizer.json
+    // - Older models: vocab.txt + bpe.codes (or other vocab files)
+    Path tokenizerJson = modelDir.resolve("tokenizer.json");
+    Path vocabTxt = modelDir.resolve("vocab.txt");
+
+    boolean hasTokenizer = Files.exists(tokenizerJson) || Files.exists(vocabTxt);
+
+    if (!hasTokenizer) {
+      throw new IOException(
+          "Missing tokenizer files. Need either 'tokenizer.json' or 'vocab.txt'");
     }
   }
 

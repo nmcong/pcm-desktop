@@ -1,6 +1,7 @@
 package com.noteflix.pcm.rag.embedding.core;
 
 import com.noteflix.pcm.rag.embedding.api.EmbeddingService;
+import com.noteflix.pcm.rag.embedding.config.EngineConfig;
 import com.noteflix.pcm.rag.embedding.config.MultiModelConfig;
 import com.noteflix.pcm.rag.embedding.model.Language;
 import java.io.IOException;
@@ -124,12 +125,16 @@ public class EmbeddingServiceRegistry implements AutoCloseable {
 
     // Initialize Vietnamese model
     try {
-      log.info("📥 Loading Vietnamese model (PhoBERT-based)...");
-      EmbeddingService viService =
-          new VietnameseEmbeddingService(MultiModelConfig.VIETNAMESE_MODEL_PATH);
+      String engine =
+          EngineConfig.VIETNAMESE_ENGINE == EngineConfig.EngineType.PYTORCH ? "PyTorch" : "ONNX";
+      log.info("📥 Loading Vietnamese model (PhoBERT-based, {} engine)...", engine);
+
+      EmbeddingService viService = createVietnameseService();
       services.put(Language.VIETNAMESE, viService);
+
       log.info("✅ Vietnamese model loaded successfully");
-      log.info("   Path: {}", MultiModelConfig.VIETNAMESE_MODEL_PATH);
+      log.info("   Path: {}", EngineConfig.getVietnameseModelPath());
+      log.info("   Engine: {}", engine);
       log.info("   Dimension: {}", viService.getDimension());
       log.info("");
       successfulLoads++;
@@ -143,11 +148,16 @@ public class EmbeddingServiceRegistry implements AutoCloseable {
 
     // Initialize English model
     try {
-      log.info("📥 Loading English model (BGE-M3)...");
-      EmbeddingService enService = new BgeEmbeddingService(MultiModelConfig.ENGLISH_MODEL_PATH);
+      String engine =
+          EngineConfig.ENGLISH_ENGINE == EngineConfig.EngineType.PYTORCH ? "PyTorch" : "ONNX";
+      log.info("📥 Loading English model (BGE-M3, {} engine)...", engine);
+
+      EmbeddingService enService = createEnglishService();
       services.put(Language.ENGLISH, enService);
+
       log.info("✅ English model loaded successfully");
-      log.info("   Path: {}", MultiModelConfig.ENGLISH_MODEL_PATH);
+      log.info("   Path: {}", EngineConfig.getEnglishModelPath());
+      log.info("   Engine: {}", engine);
       log.info("   Dimension: {}", enService.getDimension());
       log.info("   MTEB Score: 75.4 (State-of-the-art)");
       log.info("");
@@ -308,6 +318,34 @@ public class EmbeddingServiceRegistry implements AutoCloseable {
         fallbackService.getDimension()));
 
     return sb.toString();
+  }
+
+  /**
+   * Create Vietnamese embedding service based on configured engine.
+   *
+   * @return Vietnamese embedding service
+   * @throws Exception if service creation fails
+   */
+  private EmbeddingService createVietnameseService() throws Exception {
+    if (EngineConfig.VIETNAMESE_ENGINE == EngineConfig.EngineType.PYTORCH) {
+      return new VietnamesePyTorchService(EngineConfig.getVietnameseModelPath());
+    } else {
+      return new VietnameseEmbeddingService(EngineConfig.getVietnameseModelPath());
+    }
+  }
+
+  /**
+   * Create English embedding service based on configured engine.
+   *
+   * @return English embedding service
+   * @throws Exception if service creation fails
+   */
+  private EmbeddingService createEnglishService() throws Exception {
+    if (EngineConfig.ENGLISH_ENGINE == EngineConfig.EngineType.PYTORCH) {
+      return new BgePyTorchService(EngineConfig.getEnglishModelPath());
+    } else {
+      return new BgeEmbeddingService(EngineConfig.getEnglishModelPath());
+    }
   }
 
   @Override

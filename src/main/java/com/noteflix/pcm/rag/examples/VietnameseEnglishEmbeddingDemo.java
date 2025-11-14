@@ -33,27 +33,27 @@ public class VietnameseEnglishEmbeddingDemo {
       // ═══════════════════════════════════════════════════════
       // Demo 2: English Technical Documentation
       // ═══════════════════════════════════════════════════════
-//      demo2_EnglishTechnicalDocs(registry);
+      //demo2_EnglishTechnicalDocs(registry);
 
       // ═══════════════════════════════════════════════════════
       // Demo 3: Vietnamese Customer Support Q&A
       // ═══════════════════════════════════════════════════════
-//      demo3_VietnameseCustomerSupport(registry);
+      //demo3_VietnameseCustomerSupport(registry);
 
       // ═══════════════════════════════════════════════════════
       // Demo 4: English Stack Overflow Style Q&A
       // ═══════════════════════════════════════════════════════
-//      demo4_EnglishStackOverflowQA(registry);
+      //demo4_EnglishStackOverflowQA(registry);
 
       // ═══════════════════════════════════════════════════════
       // Demo 5: Mixed Language Project
       // ═══════════════════════════════════════════════════════
-//      demo5_MixedLanguageProject(registry);
+      //demo5_MixedLanguageProject(registry);
 
       // ═══════════════════════════════════════════════════════
       // Demo 6: Performance Comparison
       // ═══════════════════════════════════════════════════════
-//      demo6_PerformanceComparison(registry);
+      //demo6_PerformanceComparison(registry);
 
       printSuccess("All demos completed successfully!");
 
