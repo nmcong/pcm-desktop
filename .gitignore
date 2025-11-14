@@ -3,7 +3,7 @@ out/
 out-test/
 dist/
 *.jar
-!lib/**/*.jar
+lib
 manifest.txt
 
 # IDE - IntelliJ IDEA

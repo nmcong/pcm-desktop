@@ -95,11 +95,6 @@ public class ChunkingConfig {
   @Builder.Default
   private LangChainConfig langChainConfig = LangChainConfig.defaults();
   
-  /** Configuration for LangChain4j splitters (real library) */
-  @Builder.Default
-  private com.noteflix.pcm.rag.chunking.langchain4j.LangChain4jConfig langChain4jConfig = 
-      com.noteflix.pcm.rag.chunking.langchain4j.LangChain4jConfig.defaults();
-
   // === Document-Type Specific Settings ===
   
   /** Document-type specific configurations */
@@ -225,96 +220,6 @@ public class ChunkingConfig {
         .build();
   }
   
-  // === LangChain4j Factory Methods ===
-  
-  /** Create configuration for LangChain4j paragraph splitter. */
-  public static ChunkingConfig forLangChain4jParagraph() {
-    return ChunkingConfig.builder()
-        .primaryStrategy(ChunkingStrategyType.LANGCHAIN4J_PARAGRAPH)
-        .fallbackStrategy(ChunkingStrategyType.SENTENCE_AWARE)
-        .langChain4jConfig(com.noteflix.pcm.rag.chunking.langchain4j.LangChain4jConfig.forCharacterParagraphSplitter(1000, 200))
-        .targetChunkSize(1000)
-        .overlapSize(200)
-        .build();
-  }
-  
-  /** Create configuration for LangChain4j sentence splitter. */
-  public static ChunkingConfig forLangChain4jSentence() {
-    return ChunkingConfig.builder()
-        .primaryStrategy(ChunkingStrategyType.LANGCHAIN4J_SENTENCE)
-        .fallbackStrategy(ChunkingStrategyType.SENTENCE_AWARE)
-        .langChain4jConfig(com.noteflix.pcm.rag.chunking.langchain4j.LangChain4jConfig.forSentenceSplitter(800, 100))
-        .targetChunkSize(800)
-        .overlapSize(100)
-        .build();
-  }
-  
-  /** Create configuration for LangChain4j word splitter. */
-  public static ChunkingConfig forLangChain4jWord() {
-    return ChunkingConfig.builder()
-        .primaryStrategy(ChunkingStrategyType.LANGCHAIN4J_WORD)
-        .fallbackStrategy(ChunkingStrategyType.FIXED_SIZE)
-        .langChain4jConfig(com.noteflix.pcm.rag.chunking.langchain4j.LangChain4jConfig.forWordSplitter(600, 80))
-        .targetChunkSize(600)
-        .overlapSize(80)
-        .build();
-  }
-  
-  /** Create configuration for LangChain4j line splitter. */
-  public static ChunkingConfig forLangChain4jLine() {
-    return ChunkingConfig.builder()
-        .primaryStrategy(ChunkingStrategyType.LANGCHAIN4J_LINE)
-        .fallbackStrategy(ChunkingStrategyType.FIXED_SIZE)
-        .langChain4jConfig(com.noteflix.pcm.rag.chunking.langchain4j.LangChain4jConfig.forLineSplitter(500, 50))
-        .targetChunkSize(500)
-        .overlapSize(50)
-        .build();
-  }
-  
-  /** Create configuration for LangChain4j character splitter. */
-  public static ChunkingConfig forLangChain4jCharacter() {
-    return ChunkingConfig.builder()
-        .primaryStrategy(ChunkingStrategyType.LANGCHAIN4J_CHARACTER)
-        .fallbackStrategy(ChunkingStrategyType.FIXED_SIZE)
-        .langChain4jConfig(com.noteflix.pcm.rag.chunking.langchain4j.LangChain4jConfig.forCharacterSplitter(400, 40))
-        .targetChunkSize(400)
-        .overlapSize(40)
-        .build();
-  }
-  
-  /** Create configuration for LangChain4j regex splitter. */
-  public static ChunkingConfig forLangChain4jRegex(String regex) {
-    return ChunkingConfig.builder()
-        .primaryStrategy(ChunkingStrategyType.LANGCHAIN4J_REGEX)
-        .fallbackStrategy(ChunkingStrategyType.FIXED_SIZE)
-        .langChain4jConfig(com.noteflix.pcm.rag.chunking.langchain4j.LangChain4jConfig.forRegexSplitter(regex, 1000, 100))
-        .targetChunkSize(1000)
-        .overlapSize(100)
-        .build();
-  }
-  
-  /** Create configuration for LangChain4j hierarchical splitter. */
-  public static ChunkingConfig forLangChain4jHierarchical() {
-    return ChunkingConfig.builder()
-        .primaryStrategy(ChunkingStrategyType.LANGCHAIN4J_HIERARCHICAL)
-        .fallbackStrategy(ChunkingStrategyType.SENTENCE_AWARE)
-        .langChain4jConfig(com.noteflix.pcm.rag.chunking.langchain4j.LangChain4jConfig.forHierarchicalSplitter(1200, 200))
-        .targetChunkSize(1200)
-        .overlapSize(200)
-        .build();
-  }
-  
-  /** Create configuration for LangChain4j token-based paragraph splitter. */
-  public static ChunkingConfig forLangChain4jTokenParagraph(String model) {
-    return ChunkingConfig.builder()
-        .primaryStrategy(ChunkingStrategyType.LANGCHAIN4J_PARAGRAPH)
-        .fallbackStrategy(ChunkingStrategyType.SENTENCE_AWARE)
-        .langChain4jConfig(com.noteflix.pcm.rag.chunking.langchain4j.LangChain4jConfig.forTokenParagraphSplitter(250, 50, model))
-        .targetChunkSize(1000) // Approximate character equivalent
-        .overlapSize(200)
-        .build();
-  }
-
   // === Validation Methods ===
 
   /**
@@ -504,16 +409,7 @@ public class ChunkingConfig {
     LANGCHAIN_CHARACTER("LangChain character-based text splitter"),
     LANGCHAIN_RECURSIVE("LangChain recursive character text splitter"),
     LANGCHAIN_TOKEN("LangChain token-based text splitter"),
-    LANGCHAIN_CODE("LangChain code-aware text splitter"),
-    
-    // LangChain4j real splitters
-    LANGCHAIN4J_PARAGRAPH("LangChain4j paragraph-based document splitter"),
-    LANGCHAIN4J_SENTENCE("LangChain4j sentence-based document splitter"),
-    LANGCHAIN4J_WORD("LangChain4j word-based document splitter"),
-    LANGCHAIN4J_LINE("LangChain4j line-based document splitter"),
-    LANGCHAIN4J_CHARACTER("LangChain4j character-based document splitter"),
-    LANGCHAIN4J_REGEX("LangChain4j regex-based document splitter"),
-    LANGCHAIN4J_HIERARCHICAL("LangChain4j hierarchical document splitter");
+    LANGCHAIN_CODE("LangChain code-aware text splitter");
 
     private final String description;
 

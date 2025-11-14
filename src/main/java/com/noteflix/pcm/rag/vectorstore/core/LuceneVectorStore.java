@@ -194,7 +194,7 @@ public class LuceneVectorStore implements VectorStore {
           continue;
         }
 
-        Document doc = searcher.doc(scoreDoc.doc);
+        Document doc = searcher.storedFields().document(scoreDoc.doc);
         RAGDocument ragDoc = convertFromLuceneDocument(doc);
 
         String snippet =
@@ -340,8 +340,8 @@ public class LuceneVectorStore implements VectorStore {
       TermQuery query = new TermQuery(new Term(FIELD_ID, documentId));
       TopDocs topDocs = searcher.search(query, 1);
 
-      if (topDocs.totalHits.value > 0) {
-        Document doc = searcher.doc(topDocs.scoreDocs[0].doc);
+      if (topDocs.scoreDocs.length > 0) {
+        Document doc = searcher.storedFields().document(topDocs.scoreDocs[0].doc);
         return convertFromLuceneDocument(doc);
       }
 

@@ -76,16 +76,20 @@ echo [INFO] Verifying required libraries...
 set LIB_ERRORS=0
 
 REM Check JavaFX libraries
-for %%L in (javafx.base.jar javafx.controls.jar javafx.fxml.jar javafx.graphics.jar javafx.media.jar javafx.web.jar) do (
-    if not exist "lib\javafx\%%L" (
+for %%L in (javafx.base javafx.controls javafx.fxml javafx.graphics javafx.media javafx.web) do (
+    set FOUND=0
+    for %%F in (lib\javafx\%%L*.jar) do set FOUND=1
+    if !FOUND!==0 (
         echo [ERROR] Missing: %%L
         set /a LIB_ERRORS+=1
     )
 )
 
 REM Check other libraries
-for %%L in (lombok-1.18.34.jar jackson-databind-2.18.2.jar jackson-core-2.18.2.jar slf4j-api-2.0.16.jar logback-classic-1.5.12.jar sqlite-jdbc-3.47.1.0.jar) do (
-    if not exist "lib\others\%%L" (
+for %%L in (lombok jackson-databind jackson-core slf4j-api logback-classic sqlite-jdbc) do (
+    set FOUND=0
+    for %%F in (lib\others\%%L*.jar) do set FOUND=1
+    if !FOUND!==0 (
         echo [ERROR] Missing: %%L
         set /a LIB_ERRORS+=1
     )
@@ -132,10 +136,11 @@ echo.
 dir /s /b src\main\java\*.java > sources.txt
 
 javac -cp "%CLASSPATH%" -d out -encoding UTF-8 -Xlint:unchecked @sources.txt
+set COMPILE_RESULT=%ERRORLEVEL%
 
 del sources.txt
 
-if errorlevel 1 (
+if %COMPILE_RESULT% NEQ 0 (
     echo.
     echo [ERROR] Compilation failed!
     pause

@@ -97,7 +97,7 @@ public class ChunkingFactory {
   public static List<StrategyRecommendation> getAllRecommendations(RAGDocument document,
                                                                   ChunkingConfig config,
                                                                   EmbeddingService embeddingService) {
-    StrategyRecommendation[] recommendations = new StrategyRecommendation[15]; // Updated to include LangChain4j
+    StrategyRecommendation[] recommendations = new StrategyRecommendation[8]; // PCM + LangChain strategies
     
     // Evaluate PCM strategies
     recommendations[0] = evaluateStrategy(ChunkingConfig.ChunkingStrategyType.FIXED_SIZE, 
@@ -118,22 +118,6 @@ public class ChunkingFactory {
                                         document, config, embeddingService);
     recommendations[7] = evaluateStrategy(ChunkingConfig.ChunkingStrategyType.LANGCHAIN_CODE, 
                                         document, config, embeddingService);
-    
-    // Evaluate LangChain4j strategies (real library)
-    recommendations[8] = evaluateStrategy(ChunkingConfig.ChunkingStrategyType.LANGCHAIN4J_PARAGRAPH, 
-                                        document, config, embeddingService);
-    recommendations[9] = evaluateStrategy(ChunkingConfig.ChunkingStrategyType.LANGCHAIN4J_SENTENCE, 
-                                        document, config, embeddingService);
-    recommendations[10] = evaluateStrategy(ChunkingConfig.ChunkingStrategyType.LANGCHAIN4J_WORD, 
-                                         document, config, embeddingService);
-    recommendations[11] = evaluateStrategy(ChunkingConfig.ChunkingStrategyType.LANGCHAIN4J_LINE, 
-                                         document, config, embeddingService);
-    recommendations[12] = evaluateStrategy(ChunkingConfig.ChunkingStrategyType.LANGCHAIN4J_CHARACTER, 
-                                         document, config, embeddingService);
-    recommendations[13] = evaluateStrategy(ChunkingConfig.ChunkingStrategyType.LANGCHAIN4J_REGEX, 
-                                         document, config, embeddingService);
-    recommendations[14] = evaluateStrategy(ChunkingConfig.ChunkingStrategyType.LANGCHAIN4J_HIERARCHICAL, 
-                                         document, config, embeddingService);
 
     // Sort by quality (descending)
     Arrays.sort(recommendations, (a, b) -> Double.compare(b.expectedQuality, a.expectedQuality));
@@ -170,15 +154,6 @@ public class ChunkingFactory {
       case TOKEN_OPTIMIZED -> ChunkingConfig.forLangChainToken("gpt-3.5-turbo");
       case CODE_DOCUMENTS -> ChunkingConfig.forLangChainCode("python");
       case HIERARCHICAL_CONTENT -> ChunkingConfig.forLangChainRecursive();
-      
-      // LangChain4j use cases (real library)
-      case LANGCHAIN4J_PARAGRAPH_FOCUSED -> ChunkingConfig.forLangChain4jParagraph();
-      case LANGCHAIN4J_SENTENCE_PRECISE -> ChunkingConfig.forLangChain4jSentence();
-      case LANGCHAIN4J_WORD_GRANULAR -> ChunkingConfig.forLangChain4jWord();
-      case LANGCHAIN4J_LINE_STRUCTURED -> ChunkingConfig.forLangChain4jLine();
-      case LANGCHAIN4J_CHARACTER_EXACT -> ChunkingConfig.forLangChain4jCharacter();
-      case LANGCHAIN4J_REGEX_PATTERN -> ChunkingConfig.forLangChain4jRegex("\\n\\n");
-      case LANGCHAIN4J_HIERARCHICAL_SMART -> ChunkingConfig.forLangChain4jHierarchical();
     };
     
     return createStrategy(config);
@@ -241,73 +216,6 @@ public class ChunkingFactory {
             com.noteflix.pcm.rag.chunking.langchain.splitters.RecursiveCharacterTextSplitter.forCode(
                 config.getTargetChunkSize(), config.getOverlapSize());
         yield new com.noteflix.pcm.rag.chunking.langchain.LangChainAdapter(langChainSplitter, config.getLangChainConfig());
-      }
-      
-      // LangChain4j strategies (real library)
-      case LANGCHAIN4J_PARAGRAPH -> {
-        dev.langchain4j.data.document.DocumentSplitter splitter = 
-            com.noteflix.pcm.rag.chunking.langchain4j.LangChain4jSplitterFactory.createSplitter(config.getLangChain4jConfig());
-        yield new com.noteflix.pcm.rag.chunking.langchain4j.LangChain4jAdapter(splitter, config.getLangChain4jConfig());
-      }
-      
-      case LANGCHAIN4J_SENTENCE -> {
-        com.noteflix.pcm.rag.chunking.langchain4j.LangChain4jConfig sentenceConfig = 
-            config.getLangChain4jConfig().toBuilder()
-                .splitterType(com.noteflix.pcm.rag.chunking.langchain4j.LangChain4jConfig.SplitterType.BY_SENTENCE)
-                .build();
-        dev.langchain4j.data.document.DocumentSplitter splitter = 
-            com.noteflix.pcm.rag.chunking.langchain4j.LangChain4jSplitterFactory.createSplitter(sentenceConfig);
-        yield new com.noteflix.pcm.rag.chunking.langchain4j.LangChain4jAdapter(splitter, sentenceConfig);
-      }
-      
-      case LANGCHAIN4J_WORD -> {
-        com.noteflix.pcm.rag.chunking.langchain4j.LangChain4jConfig wordConfig = 
-            config.getLangChain4jConfig().toBuilder()
-                .splitterType(com.noteflix.pcm.rag.chunking.langchain4j.LangChain4jConfig.SplitterType.BY_WORD)
-                .build();
-        dev.langchain4j.data.document.DocumentSplitter splitter = 
-            com.noteflix.pcm.rag.chunking.langchain4j.LangChain4jSplitterFactory.createSplitter(wordConfig);
-        yield new com.noteflix.pcm.rag.chunking.langchain4j.LangChain4jAdapter(splitter, wordConfig);
-      }
-      
-      case LANGCHAIN4J_LINE -> {
-        com.noteflix.pcm.rag.chunking.langchain4j.LangChain4jConfig lineConfig = 
-            config.getLangChain4jConfig().toBuilder()
-                .splitterType(com.noteflix.pcm.rag.chunking.langchain4j.LangChain4jConfig.SplitterType.BY_LINE)
-                .build();
-        dev.langchain4j.data.document.DocumentSplitter splitter = 
-            com.noteflix.pcm.rag.chunking.langchain4j.LangChain4jSplitterFactory.createSplitter(lineConfig);
-        yield new com.noteflix.pcm.rag.chunking.langchain4j.LangChain4jAdapter(splitter, lineConfig);
-      }
-      
-      case LANGCHAIN4J_CHARACTER -> {
-        com.noteflix.pcm.rag.chunking.langchain4j.LangChain4jConfig charConfig = 
-            config.getLangChain4jConfig().toBuilder()
-                .splitterType(com.noteflix.pcm.rag.chunking.langchain4j.LangChain4jConfig.SplitterType.BY_CHARACTER)
-                .build();
-        dev.langchain4j.data.document.DocumentSplitter splitter = 
-            com.noteflix.pcm.rag.chunking.langchain4j.LangChain4jSplitterFactory.createSplitter(charConfig);
-        yield new com.noteflix.pcm.rag.chunking.langchain4j.LangChain4jAdapter(splitter, charConfig);
-      }
-      
-      case LANGCHAIN4J_REGEX -> {
-        com.noteflix.pcm.rag.chunking.langchain4j.LangChain4jConfig regexConfig = 
-            config.getLangChain4jConfig().toBuilder()
-                .splitterType(com.noteflix.pcm.rag.chunking.langchain4j.LangChain4jConfig.SplitterType.BY_REGEX)
-                .build();
-        dev.langchain4j.data.document.DocumentSplitter splitter = 
-            com.noteflix.pcm.rag.chunking.langchain4j.LangChain4jSplitterFactory.createSplitter(regexConfig);
-        yield new com.noteflix.pcm.rag.chunking.langchain4j.LangChain4jAdapter(splitter, regexConfig);
-      }
-      
-      case LANGCHAIN4J_HIERARCHICAL -> {
-        com.noteflix.pcm.rag.chunking.langchain4j.LangChain4jConfig hierarchicalConfig = 
-            config.getLangChain4jConfig().toBuilder()
-                .splitterType(com.noteflix.pcm.rag.chunking.langchain4j.LangChain4jConfig.SplitterType.HIERARCHICAL)
-                .build();
-        dev.langchain4j.data.document.DocumentSplitter splitter = 
-            com.noteflix.pcm.rag.chunking.langchain4j.LangChain4jSplitterFactory.createSplitter(hierarchicalConfig);
-        yield new com.noteflix.pcm.rag.chunking.langchain4j.LangChain4jAdapter(splitter, hierarchicalConfig);
       }
     };
   }
@@ -419,16 +327,7 @@ public class ChunkingFactory {
     LANGCHAIN_COMPATIBLE("LangChain compatible text splitting"),
     TOKEN_OPTIMIZED("Token-optimized splitting for LLMs"),
     CODE_DOCUMENTS("Code and programming documents"),
-    HIERARCHICAL_CONTENT("Hierarchical structured content"),
-    
-    // LangChain4j specific use cases (real library)
-    LANGCHAIN4J_PARAGRAPH_FOCUSED("LangChain4j paragraph-focused document processing"),
-    LANGCHAIN4J_SENTENCE_PRECISE("LangChain4j precise sentence boundary splitting"),
-    LANGCHAIN4J_WORD_GRANULAR("LangChain4j fine-grained word-level splitting"),
-    LANGCHAIN4J_LINE_STRUCTURED("LangChain4j line-by-line structured splitting"),
-    LANGCHAIN4J_CHARACTER_EXACT("LangChain4j character-level exact splitting"),
-    LANGCHAIN4J_REGEX_PATTERN("LangChain4j pattern-based regex splitting"),
-    LANGCHAIN4J_HIERARCHICAL_SMART("LangChain4j intelligent hierarchical splitting");
+    HIERARCHICAL_CONTENT("Hierarchical structured content");
 
     private final String description;
 
