@@ -100,7 +100,26 @@ echo ""
 
 echo "Installing: optimum, onnxruntime, transformers, torch..."
 pip3 install -q --upgrade pip
-pip3 install -q optimum[exporters] onnxruntime transformers torch sentencepiece
+
+# Install packages separately (optimum 2.0+ changed structure)
+echo "  - optimum (with onnxruntime support)"
+pip3 install -q optimum
+pip3 install -q optimum[onnxruntime]
+
+echo "  - onnxruntime"
+pip3 install -q onnxruntime
+
+echo "  - transformers"
+pip3 install -q transformers
+
+echo "  - torch (v2.6+ for security)"
+pip3 install -q "torch>=2.6.0"
+
+echo "  - sentencepiece"
+pip3 install -q sentencepiece
+
+echo "  - safetensors"
+pip3 install -q safetensors
 
 if [ $? -eq 0 ]; then
     echo "✅ Python dependencies installed successfully"

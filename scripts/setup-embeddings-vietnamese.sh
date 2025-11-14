@@ -48,7 +48,19 @@ echo "Step 1: Installing Python dependencies..."
 echo "────────────────────────────────────────────────────────"
 
 pip3 install -q --upgrade pip
-pip3 install -q optimum[exporters] onnxruntime transformers torch sentencepiece
+
+# Install packages separately (optimum 2.0+ changed structure)
+pip3 install -q optimum
+pip3 install -q optimum[onnxruntime]
+pip3 install -q onnxruntime
+pip3 install -q transformers
+
+# Install torch 2.6+ (security fix for CVE-2025-32434)
+echo "  Installing torch 2.6+ (security update)..."
+pip3 install -q "torch>=2.6.0"
+
+pip3 install -q sentencepiece
+pip3 install -q safetensors
 
 echo "✅ Dependencies installed"
 

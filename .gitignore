@@ -76,5 +76,6 @@ sampler/
 .claude/
 
 data/qdrant-storage
+data/models
 data/rag
 .qdrant-initialized
