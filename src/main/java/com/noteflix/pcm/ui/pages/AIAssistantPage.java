@@ -14,10 +14,7 @@ import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.Region;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import lombok.extern.slf4j.Slf4j;
 import org.kordamp.ikonli.feather.Feather;
 import org.kordamp.ikonli.javafx.FontIcon;
@@ -201,13 +198,13 @@ public class AIAssistantPage extends BasePage {
   }
 
   private HBox createChatHeader() {
-    HBox header = new HBox(16);
+    HBox header = new HBox(12);
     header.setAlignment(Pos.CENTER_LEFT);
     header.getStyleClass().add("chat-header");
-    header.setPadding(new Insets(16, 20, 16, 20));
+    header.setPadding(new Insets(12, 16, 12, 16));
 
     FontIcon chatIcon = new FontIcon(Feather.MESSAGE_CIRCLE);
-    chatIcon.setIconSize(20);
+    chatIcon.setIconSize(16);
 
     VBox titleBox = new VBox(2);
     Label titleLabel = new Label(getCurrentTitle());
@@ -268,7 +265,7 @@ public class AIAssistantPage extends BasePage {
       messagesContainer.setAlignment(Pos.TOP_CENTER);
       messagesContainer.setPadding(new Insets(20));
 
-      chatMessagesArea = new VBox(16);
+      chatMessagesArea = new VBox(12);
       chatMessagesArea.getStyleClass().add("chat-messages-area");
       chatMessagesArea.setMaxWidth(768);
       chatMessagesArea.setAlignment(Pos.TOP_LEFT);
@@ -292,16 +289,16 @@ public class AIAssistantPage extends BasePage {
   }
 
   private VBox createWelcomeContent() {
-    VBox welcome = new VBox(40);
+    VBox welcome = new VBox(24);
     welcome.setAlignment(Pos.CENTER);
     welcome.getStyleClass().add("welcome-content");
-    welcome.setPadding(new Insets(60, 40, 60, 40));
+    welcome.setPadding(new Insets(40, 40, 40, 40));
 
     // Bot icon
     com.noteflix.pcm.core.theme.ThemeManager themeManager =
         com.noteflix.pcm.core.theme.ThemeManager.getInstance();
     javafx.scene.image.ImageView botIcon =
-        com.noteflix.pcm.core.utils.IconUtils.createImageView(themeManager.getBotIcon(), 64, 64);
+        com.noteflix.pcm.core.utils.IconUtils.createImageView(themeManager.getBotIcon(), 40, 40);
 
     Label title = new Label("AI Assistant");
     title.getStyleClass().addAll(Styles.TITLE_2);
@@ -310,31 +307,95 @@ public class AIAssistantPage extends BasePage {
     subtitle.getStyleClass().addAll(Styles.TEXT_MUTED);
 
     // Quick suggestions
-    HBox suggestions = createQuickSuggestions();
+    javafx.scene.layout.GridPane suggestions = createQuickSuggestions();
 
     welcome.getChildren().addAll(botIcon, title, subtitle, suggestions);
     return welcome;
   }
 
-  private HBox createQuickSuggestions() {
-    HBox suggestions = new HBox(12);
-    suggestions.setAlignment(Pos.CENTER);
-    suggestions.getStyleClass().add("quick-suggestions");
+  private GridPane createQuickSuggestions() {
+    javafx.scene.layout.GridPane grid = new javafx.scene.layout.GridPane();
+    grid.setAlignment(Pos.CENTER);
+    grid.setHgap(16);
+    grid.setVgap(16);
+    grid.getStyleClass().add("quick-suggestions");
+    grid.setMaxWidth(600);
 
-    String[] suggestionTexts = {"Analyze my database schema", "Review code quality"};
+    // Define 4 suggestion themes with icons
+    SuggestionCard[] suggestions = {
+      new SuggestionCard(
+          Feather.SEARCH, "Search Knowledge", "Explore database schema and structure"),
+      new SuggestionCard(Feather.TOOL, "Find Solutions", "Review code quality and best practices"),
+      new SuggestionCard(Feather.EDIT_3, "Create Content", "Generate documentation and reports"),
+      new SuggestionCard(
+          Feather.ACTIVITY, "Analyze System", "Get insights on performance and metrics")
+    };
 
-    for (String text : suggestionTexts) {
-      Button suggestionBtn = new Button(text);
-      suggestionBtn.getStyleClass().add("suggestion-btn");
-      suggestionBtn.setOnAction(
-          e -> {
-            chatInput.setText(text);
-            handleSendMessage();
-          });
-      suggestions.getChildren().add(suggestionBtn);
+    // Add cards to grid (2x2 layout)
+    int row = 0, col = 0;
+    for (SuggestionCard suggestion : suggestions) {
+      VBox card = createSuggestionCard(suggestion);
+      grid.add(card, col, row);
+
+      col++;
+      if (col > 1) {
+        col = 0;
+        row++;
+      }
     }
 
-    return suggestions;
+    return grid;
+  }
+
+  private VBox createSuggestionCard(SuggestionCard suggestion) {
+    VBox card = new VBox(8);
+    card.setAlignment(Pos.CENTER);
+    card.getStyleClass().add("suggestion-card");
+    card.setPrefWidth(280);
+    card.setPrefHeight(120);
+
+    // Icon
+    FontIcon icon = new FontIcon(suggestion.icon);
+    icon.setIconSize(28);
+    icon.getStyleClass().add("suggestion-icon");
+
+    // Title
+    Label titleLabel = new Label(suggestion.title);
+    titleLabel.getStyleClass().addAll(Styles.TEXT_BOLD, "suggestion-title");
+    titleLabel.setWrapText(true);
+    titleLabel.setAlignment(Pos.CENTER);
+    titleLabel.setMaxWidth(250);
+
+    // Description
+    Label descLabel = new Label(suggestion.description);
+    descLabel.getStyleClass().addAll(Styles.TEXT_SMALL, "suggestion-desc", "text-muted");
+    descLabel.setWrapText(true);
+    descLabel.setAlignment(Pos.CENTER);
+    descLabel.setMaxWidth(250);
+
+    card.getChildren().addAll(icon, titleLabel, descLabel);
+
+    // Click handler
+    card.setOnMouseClicked(
+        e -> {
+          chatInput.setText(suggestion.description);
+          handleSendMessage();
+        });
+
+    return card;
+  }
+
+  // Helper class for suggestion data
+  private static class SuggestionCard {
+    final Feather icon;
+    final String title;
+    final String description;
+
+    SuggestionCard(Feather icon, String title, String description) {
+      this.icon = icon;
+      this.title = title;
+      this.description = description;
+    }
   }
 
   private VBox createChatInputArea() {
