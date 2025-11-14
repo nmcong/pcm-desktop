@@ -3,7 +3,6 @@ out/
 out-test/
 dist/
 *.jar
-!lib/**/*.jar
 manifest.txt
 
 # IDE - IntelliJ IDEA
@@ -79,3 +78,4 @@ data/qdrant-storage
 data/models
 data/rag
 .qdrant-initialized
+lib/javafx
