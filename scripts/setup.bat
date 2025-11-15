@@ -58,104 +58,168 @@ echo.
 cd lib\others
 
 echo [INFO] 1. Downloading Lombok
-curl -L -o lombok-1.18.34.jar https://projectlombok.org/downloads/lombok.jar
-if %ERRORLEVEL%==0 (
-    echo [OK] Lombok downloaded
+if exist lombok-1.18.34.jar (
+    echo [SKIP] Lombok already exists
 ) else (
-    echo [ERROR] Failed to download Lombok
+    curl -L -o lombok-1.18.34.jar https://projectlombok.org/downloads/lombok.jar
+    if %ERRORLEVEL%==0 (
+        echo [OK] Lombok downloaded
+    ) else (
+        echo [ERROR] Failed to download Lombok
+    )
 )
 echo.
 
 echo [INFO] 2. Downloading Jackson
-curl -O https://repo1.maven.org/maven2/com/fasterxml/jackson/core/jackson-databind/2.20.1/jackson-databind-2.20.1.jar
-curl -O https://repo1.maven.org/maven2/com/fasterxml/jackson/core/jackson-core/2.20.1/jackson-core-2.20.1.jar
-curl -O https://repo1.maven.org/maven2/com/fasterxml/jackson/core/jackson-annotations/2.20/jackson-annotations-2.20.jar
-curl -O https://repo1.maven.org/maven2/com/fasterxml/jackson/datatype/jackson-datatype-jsr310/2.20.1/jackson-datatype-jsr310-2.20.1.jar
-if %ERRORLEVEL%==0 (
-    echo [OK] Jackson downloaded
+if exist jackson-databind-2.20.1.jar (
+    echo [SKIP] Jackson databind already exists
 ) else (
-    echo [ERROR] Failed to download Jackson
+    curl -O https://repo1.maven.org/maven2/com/fasterxml/jackson/core/jackson-databind/2.20.1/jackson-databind-2.20.1.jar
 )
+if exist jackson-core-2.20.1.jar (
+    echo [SKIP] Jackson core already exists
+) else (
+    curl -O https://repo1.maven.org/maven2/com/fasterxml/jackson/core/jackson-core/2.20.1/jackson-core-2.20.1.jar
+)
+if exist jackson-annotations-2.20.jar (
+    echo [SKIP] Jackson annotations already exists
+) else (
+    curl -O https://repo1.maven.org/maven2/com/fasterxml/jackson/core/jackson-annotations/2.20/jackson-annotations-2.20.jar
+)
+if exist jackson-datatype-jsr310-2.20.1.jar (
+    echo [SKIP] Jackson JSR310 already exists
+) else (
+    curl -O https://repo1.maven.org/maven2/com/fasterxml/jackson/datatype/jackson-datatype-jsr310/2.20.1/jackson-datatype-jsr310-2.20.1.jar
+)
+echo [OK] Jackson libraries checked
 echo.
 
 echo [INFO] 3. Downloading SLF4J
-curl -O https://repo1.maven.org/maven2/org/slf4j/slf4j-api/2.0.17/slf4j-api-2.0.17.jar
-if %ERRORLEVEL%==0 (
-    echo [OK] SLF4J downloaded
+if exist slf4j-api-2.0.17.jar (
+    echo [SKIP] SLF4J already exists
 ) else (
-    echo [ERROR] Failed to download SLF4J
+    curl -O https://repo1.maven.org/maven2/org/slf4j/slf4j-api/2.0.17/slf4j-api-2.0.17.jar
+    if %ERRORLEVEL%==0 (
+        echo [OK] SLF4J downloaded
+    ) else (
+        echo [ERROR] Failed to download SLF4J
+    )
 )
 echo.
 
 echo [INFO] 4. Downloading Logback
-curl -O https://repo1.maven.org/maven2/ch/qos/logback/logback-classic/1.5.21/logback-classic-1.5.21.jar
-curl -O https://repo1.maven.org/maven2/ch/qos/logback/logback-core/1.5.21/logback-core-1.5.21.jar
-if %ERRORLEVEL%==0 (
-    echo [OK] Logback downloaded
+if exist logback-classic-1.5.21.jar (
+    echo [SKIP] Logback classic already exists
 ) else (
-    echo [ERROR] Failed to download Logback
+    curl -O https://repo1.maven.org/maven2/ch/qos/logback/logback-classic/1.5.21/logback-classic-1.5.21.jar
 )
+if exist logback-core-1.5.21.jar (
+    echo [SKIP] Logback core already exists
+) else (
+    curl -O https://repo1.maven.org/maven2/ch/qos/logback/logback-core/1.5.21/logback-core-1.5.21.jar
+)
+echo [OK] Logback libraries checked
 echo.
 
 echo [INFO] 5. Downloading SQLite JDBC
-curl -O https://repo1.maven.org/maven2/org/xerial/sqlite-jdbc/3.51.0.0/sqlite-jdbc-3.51.0.0.jar
-if %ERRORLEVEL%==0 (
-    echo [OK] SQLite JDBC downloaded
+if exist sqlite-jdbc-3.51.0.0.jar (
+    echo [SKIP] SQLite JDBC already exists
 ) else (
-    echo [ERROR] Failed to download SQLite JDBC
+    curl -O https://repo1.maven.org/maven2/org/xerial/sqlite-jdbc/3.51.0.0/sqlite-jdbc-3.51.0.0.jar
+    if %ERRORLEVEL%==0 (
+        echo [OK] SQLite JDBC downloaded
+    ) else (
+        echo [ERROR] Failed to download SQLite JDBC
+    )
 )
 echo.
 
 echo [INFO] 6. Downloading Oracle OJDBC
-curl -L -o ojdbc11-23.26.0.0.0.jar https://repo1.maven.org/maven2/com/oracle/database/jdbc/ojdbc11/23.26.0.0.0/ojdbc11-23.26.0.0.0.jar
-if %ERRORLEVEL%==0 (
-    echo [OK] Oracle OJDBC downloaded
+if exist ojdbc11-23.26.0.0.0.jar (
+    echo [SKIP] Oracle OJDBC already exists
 ) else (
-    echo [ERROR] Failed to download Oracle OJDBC
+    curl -L -o ojdbc11-23.26.0.0.0.jar https://repo1.maven.org/maven2/com/oracle/database/jdbc/ojdbc11/23.26.0.0.0/ojdbc11-23.26.0.0.0.jar
+    if %ERRORLEVEL%==0 (
+        echo [OK] Oracle OJDBC downloaded
+    ) else (
+        echo [ERROR] Failed to download Oracle OJDBC
+    )
 )
 echo.
 
 echo [INFO] 7. Downloading HikariCP
-curl -O https://repo1.maven.org/maven2/com/zaxxer/HikariCP/7.0.2/HikariCP-7.0.2.jar
-if %ERRORLEVEL%==0 (
-    echo [OK] HikariCP downloaded
+if exist HikariCP-7.0.2.jar (
+    echo [SKIP] HikariCP already exists
 ) else (
-    echo [ERROR] Failed to download HikariCP
+    curl -O https://repo1.maven.org/maven2/com/zaxxer/HikariCP/7.0.2/HikariCP-7.0.2.jar
+    if %ERRORLEVEL%==0 (
+        echo [OK] HikariCP downloaded
+    ) else (
+        echo [ERROR] Failed to download HikariCP
+    )
 )
 echo.
 
 echo [INFO] 8. Downloading Oracle UCP
-curl -L -o ucp-23.26.0.0.0.jar https://repo1.maven.org/maven2/com/oracle/database/jdbc/ucp/23.26.0.0.0/ucp-23.26.0.0.0.jar
-if %ERRORLEVEL%==0 (
-    echo [OK] Oracle UCP downloaded
+if exist ucp-23.26.0.0.0.jar (
+    echo [SKIP] Oracle UCP already exists
 ) else (
-    echo [ERROR] Failed to download Oracle UCP
+    curl -L -o ucp-23.26.0.0.0.jar https://repo1.maven.org/maven2/com/oracle/database/jdbc/ucp/23.26.0.0.0/ucp-23.26.0.0.0.jar
+    if %ERRORLEVEL%==0 (
+        echo [OK] Oracle UCP downloaded
+    ) else (
+        echo [ERROR] Failed to download Oracle UCP
+    )
 )
 echo.
 
 REM Download AtlantaFX
 echo [INFO] 9. Downloading AtlantaFX
-curl -L -o atlantafx-base-2.1.0.jar https://repo1.maven.org/maven2/io/github/mkpaz/atlantafx-base/2.1.0/atlantafx-base-2.1.0.jar
-if %ERRORLEVEL%==0 (
-    echo [OK] AtlantaFX downloaded
+if exist atlantafx-base-2.1.0.jar (
+    echo [SKIP] AtlantaFX already exists
 ) else (
-    echo [ERROR] Failed to download AtlantaFX
+    curl -L -o atlantafx-base-2.1.0.jar https://repo1.maven.org/maven2/io/github/mkpaz/atlantafx-base/2.1.0/atlantafx-base-2.1.0.jar
+    if %ERRORLEVEL%==0 (
+        echo [OK] AtlantaFX downloaded
+    ) else (
+        echo [ERROR] Failed to download AtlantaFX
+    )
 )
 echo.
 
 REM Download Ikonli
 echo [INFO] 10. Downloading Ikonli
-curl -L -o ikonli-core-12.4.0.jar https://repo1.maven.org/maven2/org/kordamp/ikonli/ikonli-core/12.4.0/ikonli-core-12.4.0.jar
-curl -L -o ikonli-javafx-12.4.0.jar https://repo1.maven.org/maven2/org/kordamp/ikonli/ikonli-javafx/12.4.0/ikonli-javafx-12.4.0.jar
-curl -L -o ikonli-feather-pack-12.4.0.jar https://repo1.maven.org/maven2/org/kordamp/ikonli/ikonli-feather-pack/12.4.0/ikonli-feather-pack-12.4.0.jar
-curl -L -o ikonli-antdesignicons-pack-12.4.0.jar https://repo1.maven.org/maven2/org/kordamp/ikonli/ikonli-antdesignicons-pack/12.4.0/ikonli-antdesignicons-pack-12.4.0.jar
-curl -L -o ikonli-bpmn-pack-12.4.0.jar https://repo1.maven.org/maven2/org/kordamp/ikonli/ikonli-bpmn-pack/12.4.0/ikonli-bpmn-pack-12.4.0.jar
-curl -L -o ikonli-octicons-pack-12.4.0.jar https://repo1.maven.org/maven2/org/kordamp/ikonli/ikonli-octicons-pack/12.4.0/ikonli-octicons-pack-12.4.0.jar
-if %ERRORLEVEL%==0 (
-    echo [OK] Ikonli downloaded
+if exist ikonli-core-12.4.0.jar (
+    echo [SKIP] Ikonli core already exists
 ) else (
-    echo [ERROR] Failed to download Ikonli
+    curl -L -o ikonli-core-12.4.0.jar https://repo1.maven.org/maven2/org/kordamp/ikonli/ikonli-core/12.4.0/ikonli-core-12.4.0.jar
 )
+if exist ikonli-javafx-12.4.0.jar (
+    echo [SKIP] Ikonli JavaFX already exists
+) else (
+    curl -L -o ikonli-javafx-12.4.0.jar https://repo1.maven.org/maven2/org/kordamp/ikonli/ikonli-javafx/12.4.0/ikonli-javafx-12.4.0.jar
+)
+if exist ikonli-feather-pack-12.4.0.jar (
+    echo [SKIP] Ikonli Feather pack already exists
+) else (
+    curl -L -o ikonli-feather-pack-12.4.0.jar https://repo1.maven.org/maven2/org/kordamp/ikonli/ikonli-feather-pack/12.4.0/ikonli-feather-pack-12.4.0.jar
+)
+if exist ikonli-antdesignicons-pack-12.4.0.jar (
+    echo [SKIP] Ikonli AntDesign pack already exists
+) else (
+    curl -L -o ikonli-antdesignicons-pack-12.4.0.jar https://repo1.maven.org/maven2/org/kordamp/ikonli/ikonli-antdesignicons-pack/12.4.0/ikonli-antdesignicons-pack-12.4.0.jar
+)
+if exist ikonli-bpmn-pack-12.4.0.jar (
+    echo [SKIP] Ikonli BPMN pack already exists
+) else (
+    curl -L -o ikonli-bpmn-pack-12.4.0.jar https://repo1.maven.org/maven2/org/kordamp/ikonli/ikonli-bpmn-pack/12.4.0/ikonli-bpmn-pack-12.4.0.jar
+)
+if exist ikonli-octicons-pack-12.4.0.jar (
+    echo [SKIP] Ikonli Octicons pack already exists
+) else (
+    curl -L -o ikonli-octicons-pack-12.4.0.jar https://repo1.maven.org/maven2/org/kordamp/ikonli/ikonli-octicons-pack/12.4.0/ikonli-octicons-pack-12.4.0.jar
+)
+echo [OK] Ikonli libraries checked
 echo.
 
 cd ..\..
@@ -172,46 +236,34 @@ echo.
 cd lib\rag
 
 echo [INFO] 1. Downloading Apache Lucene
-curl -O https://repo1.maven.org/maven2/org/apache/lucene/lucene-core/10.3.1/lucene-core-10.3.1.jar
-curl -O https://repo1.maven.org/maven2/org/apache/lucene/lucene-analysis-common/10.3.1/lucene-analysis-common-10.3.1.jar
-curl -O https://repo1.maven.org/maven2/org/apache/lucene/lucene-queryparser/10.3.1/lucene-queryparser-10.3.1.jar
-curl -O https://repo1.maven.org/maven2/org/apache/lucene/lucene-queries/10.3.1/lucene-queries-10.3.1.jar
-curl -O https://repo1.maven.org/maven2/org/apache/lucene/lucene-highlighter/10.3.1/lucene-highlighter-10.3.1.jar
-if %ERRORLEVEL%==0 (
-    echo [OK] Apache Lucene downloaded
-) else (
-    echo [ERROR] Failed to download Apache Lucene
-)
+if not exist lucene-core-10.3.1.jar curl -O https://repo1.maven.org/maven2/org/apache/lucene/lucene-core/10.3.1/lucene-core-10.3.1.jar
+if not exist lucene-analysis-common-10.3.1.jar curl -O https://repo1.maven.org/maven2/org/apache/lucene/lucene-analysis-common/10.3.1/lucene-analysis-common-10.3.1.jar
+if not exist lucene-queryparser-10.3.1.jar curl -O https://repo1.maven.org/maven2/org/apache/lucene/lucene-queryparser/10.3.1/lucene-queryparser-10.3.1.jar
+if not exist lucene-queries-10.3.1.jar curl -O https://repo1.maven.org/maven2/org/apache/lucene/lucene-queries/10.3.1/lucene-queries-10.3.1.jar
+if not exist lucene-highlighter-10.3.1.jar curl -O https://repo1.maven.org/maven2/org/apache/lucene/lucene-highlighter/10.3.1/lucene-highlighter-10.3.1.jar
+echo [OK] Apache Lucene libraries checked
 echo.
 
 echo [INFO] 2. Downloading DJL ONNX Runtime
-curl -O https://repo1.maven.org/maven2/ai/djl/onnxruntime/onnxruntime-engine/0.35.0/onnxruntime-engine-0.35.0.jar
-curl -O https://repo1.maven.org/maven2/ai/djl/api/0.35.0/api-0.35.0.jar
-curl -O https://repo1.maven.org/maven2/ai/djl/huggingface/tokenizers/0.35.0/tokenizers-0.35.0.jar
-if %ERRORLEVEL%==0 (
-    echo [OK] DJL ONNX Runtime downloaded
-) else (
-    echo [ERROR] Failed to download DJL ONNX Runtime
-)
+if not exist onnxruntime-engine-0.35.0.jar curl -O https://repo1.maven.org/maven2/ai/djl/onnxruntime/onnxruntime-engine/0.35.0/onnxruntime-engine-0.35.0.jar
+if not exist api-0.35.0.jar curl -O https://repo1.maven.org/maven2/ai/djl/api/0.35.0/api-0.35.0.jar
+if not exist tokenizers-0.35.0.jar curl -O https://repo1.maven.org/maven2/ai/djl/huggingface/tokenizers/0.35.0/tokenizers-0.35.0.jar
+echo [OK] DJL ONNX Runtime libraries checked
 echo.
 
 echo [INFO] 3. Downloading ONNX Runtime
-curl -L -o onnxruntime-1.23.2.jar https://repo1.maven.org/maven2/com/microsoft/onnxruntime/onnxruntime/1.23.2/onnxruntime-1.23.2.jar
-if %ERRORLEVEL%==0 (
-    echo [OK] ONNX Runtime downloaded
+if exist onnxruntime-1.23.2.jar (
+    echo [SKIP] ONNX Runtime already exists
 ) else (
-    echo [ERROR] Failed to download ONNX Runtime
+    curl -L -o onnxruntime-1.23.2.jar https://repo1.maven.org/maven2/com/microsoft/onnxruntime/onnxruntime/1.23.2/onnxruntime-1.23.2.jar
+    echo [OK] ONNX Runtime downloaded
 )
 echo.
 
 echo [INFO] 4. Downloading JavaParser
-curl -O https://repo1.maven.org/maven2/com/github/javaparser/javaparser-core/3.27.1/javaparser-core-3.27.1.jar
-curl -O https://repo1.maven.org/maven2/com/github/javaparser/javaparser-symbol-solver-core/3.27.1/javaparser-symbol-solver-core-3.27.1.jar
-if %ERRORLEVEL%==0 (
-    echo [OK] JavaParser downloaded
-) else (
-    echo [ERROR] Failed to download JavaParser
-)
+if not exist javaparser-core-3.27.1.jar curl -O https://repo1.maven.org/maven2/com/github/javaparser/javaparser-core/3.27.1/javaparser-core-3.27.1.jar
+if not exist javaparser-symbol-solver-core-3.27.1.jar curl -O https://repo1.maven.org/maven2/com/github/javaparser/javaparser-symbol-solver-core/3.27.1/javaparser-symbol-solver-core-3.27.1.jar
+echo [OK] JavaParser libraries checked
 echo.
 
 cd ..\..
@@ -226,13 +278,24 @@ echo    Downloading and Extracting JavaFX
 echo ========================================
 echo.
 
-echo [INFO] 1. Downloading JavaFX 21.0.9...
-curl -L -o javafx-21.0.9.zip https://download2.gluonhq.com/openjfx/21.0.9/openjfx-21.0.9_windows-x64_bin-sdk.zip
+REM Check if JavaFX already exists by checking for jar files in lib\javafx
+dir /b lib\javafx\*.jar >nul 2>&1
 if %ERRORLEVEL%==0 (
-    echo [OK] JavaFX downloaded
-) else (
-    echo [ERROR] Failed to download JavaFX
+    echo [SKIP] JavaFX already exists in lib\javafx
     goto skip_javafx
+)
+
+echo [INFO] 1. Downloading JavaFX 21.0.9...
+if exist javafx-21.0.9.zip (
+    echo [SKIP] JavaFX zip already downloaded
+) else (
+    curl -L -o javafx-21.0.9.zip https://download2.gluonhq.com/openjfx/21.0.9/openjfx-21.0.9_windows-x64_bin-sdk.zip
+    if %ERRORLEVEL%==0 (
+        echo [OK] JavaFX downloaded
+    ) else (
+        echo [ERROR] Failed to download JavaFX
+        goto skip_javafx
+    )
 )
 
 echo [INFO] 2. Extracting JavaFX...
@@ -272,16 +335,12 @@ echo.
 cd lib\text-component
 
 echo [INFO] 1. Downloading RichTextFX
-curl -O https://repo1.maven.org/maven2/org/fxmisc/richtext/richtextfx/0.11.6/richtextfx-0.11.6.jar
-curl -O https://repo1.maven.org/maven2/org/fxmisc/flowless/flowless/0.7.4/flowless-0.7.4.jar
-curl -O https://repo1.maven.org/maven2/org/reactfx/reactfx/2.0-M6/reactfx-2.0-M6.jar
-curl -O https://repo1.maven.org/maven2/org/fxmisc/undo/undofx/2.1.1/undofx-2.1.1.jar
-curl -O https://repo1.maven.org/maven2/org/fxmisc/wellbehaved/wellbehavedfx/0.3.3/wellbehavedfx-0.3.3.jar
-if %ERRORLEVEL%==0 (
-    echo [OK] RichTextFX and dependencies downloaded
-) else (
-    echo [ERROR] Failed to download RichTextFX
-)
+if not exist richtextfx-0.11.6.jar curl -O https://repo1.maven.org/maven2/org/fxmisc/richtext/richtextfx/0.11.6/richtextfx-0.11.6.jar
+if not exist flowless-0.7.4.jar curl -O https://repo1.maven.org/maven2/org/fxmisc/flowless/flowless/0.7.4/flowless-0.7.4.jar
+if not exist reactfx-2.0-M6.jar curl -O https://repo1.maven.org/maven2/org/reactfx/reactfx/2.0-M6/reactfx-2.0-M6.jar
+if not exist undofx-2.1.1.jar curl -O https://repo1.maven.org/maven2/org/fxmisc/undo/undofx/2.1.1/undofx-2.1.1.jar
+if not exist wellbehavedfx-0.3.3.jar curl -O https://repo1.maven.org/maven2/org/fxmisc/wellbehaved/wellbehavedfx/0.3.3/wellbehavedfx-0.3.3.jar
+echo [OK] RichTextFX and dependencies checked
 echo.
 
 cd ..\..

@@ -16,6 +16,7 @@ import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import lombok.extern.slf4j.Slf4j;
+import org.kordamp.ikonli.antdesignicons.AntDesignIconsOutlined;
 import org.kordamp.ikonli.feather.Feather;
 import org.kordamp.ikonli.javafx.FontIcon;
 
@@ -294,11 +295,8 @@ public class AIAssistantPage extends BasePage {
     welcome.getStyleClass().add("welcome-content");
     welcome.setPadding(new Insets(40, 40, 40, 40));
 
-    // Bot icon
-    com.noteflix.pcm.core.theme.ThemeManager themeManager =
-        com.noteflix.pcm.core.theme.ThemeManager.getInstance();
-    javafx.scene.image.ImageView botIcon =
-        com.noteflix.pcm.core.utils.IconUtils.createImageView(themeManager.getBotIcon(), 40, 40);
+    // AI icon with gradient background
+    VBox iconContainer = createWelcomeIcon();
 
     Label title = new Label("AI Assistant");
     title.getStyleClass().addAll(Styles.TITLE_2);
@@ -309,8 +307,25 @@ public class AIAssistantPage extends BasePage {
     // Quick suggestions
     javafx.scene.layout.GridPane suggestions = createQuickSuggestions();
 
-    welcome.getChildren().addAll(botIcon, title, subtitle, suggestions);
+    welcome.getChildren().addAll(iconContainer, title, subtitle, suggestions);
     return welcome;
+  }
+
+  private VBox createWelcomeIcon() {
+    VBox container = new VBox();
+    container.setAlignment(Pos.CENTER);
+    container.getStyleClass().add("welcome-icon-container");
+    container.setPrefSize(90, 90);
+    container.setMinSize(90, 90);
+    container.setMaxSize(90, 90);
+
+    // Main AI icon - using CommentOutlined from Ant Design
+    FontIcon mainIcon = new FontIcon(AntDesignIconsOutlined.COMMENT);
+    mainIcon.setIconSize(40);
+    mainIcon.getStyleClass().add("welcome-ai-icon");
+
+    container.getChildren().add(mainIcon);
+    return container;
   }
 
   private GridPane createQuickSuggestions() {

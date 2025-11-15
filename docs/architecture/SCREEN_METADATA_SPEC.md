@@ -370,3 +370,260 @@ Khi mọi màn hình quan trọng đều có file metadata theo spec này, LLM +
 - Biết cột nào được ghi/đọc, và những màn hình/báo cáo/job nào bị ảnh hưởng khi cột thay đổi.
 - Trả lời câu hỏi nghiệp vụ một cách mạch lạc, có dẫn chiếu đến bảng/cột/method/screen cụ thể.
 
+---
+
+## 10. Storage Schema (SQLite) for Screen & System Metadata
+
+Đây là schema gợi ý để lưu trữ metadata đã parse từ YAML/KB vào SQLite (hoặc bất kỳ DB quan hệ nào). Mục tiêu:
+- Dễ query theo screen, table, column, rule, batch, report.
+- Dễ dùng cho tools của LLM (function calling).
+
+### 10.1. Screens & Components
+
+```sql
+CREATE TABLE screens (
+    screen_id          TEXT PRIMARY KEY,
+    name               TEXT NOT NULL,
+    module             TEXT,
+    route              TEXT,
+    business_purpose   TEXT,
+    tags               TEXT            -- JSON array hoặc chuỗi phân tách bằng dấu phẩy
+);
+
+CREATE TABLE screen_components (
+    id                 INTEGER PRIMARY KEY AUTOINCREMENT,
+    screen_id          TEXT NOT NULL REFERENCES screens(screen_id) ON DELETE CASCADE,
+    component_id       TEXT NOT NULL,  -- vd: btnApprove, txtExpiryDate
+    label              TEXT,
+    type               TEXT,           -- button, textfield, datepicker...
+    description        TEXT,
+    handler_class      TEXT,
+    handler_method     TEXT,
+    model_class        TEXT,
+    model_field        TEXT
+);
+```
+
+### 10.2. Backend Entry Points & Workflows
+
+```sql
+CREATE TABLE backend_entry_points (
+    id                 INTEGER PRIMARY KEY AUTOINCREMENT,
+    name               TEXT NOT NULL,  -- approveOrder, rejectOrder...
+    description        TEXT,
+    type               TEXT,           -- service, controller, job...
+    class              TEXT NOT NULL,
+    method             TEXT NOT NULL,
+    screen_id          TEXT            -- optional: màn hình chính gọi entry point này
+        REFERENCES screens(screen_id) ON DELETE SET NULL
+);
+
+CREATE TABLE workflows (
+    workflow_id        TEXT PRIMARY KEY,  -- ORDER-APPROVAL-FLOW
+    name               TEXT NOT NULL,
+    description        TEXT,
+    module             TEXT,
+    primary_screen_id  TEXT REFERENCES screens(screen_id) ON DELETE SET NULL
+);
+
+CREATE TABLE workflow_steps (
+    id                 INTEGER PRIMARY KEY AUTOINCREMENT,
+    workflow_id        TEXT NOT NULL REFERENCES workflows(workflow_id) ON DELETE CASCADE,
+    step_order         INTEGER NOT NULL,  -- 1,2,3...
+    step_id            TEXT,             -- validate_order_status...
+    description        TEXT,
+    impl_class         TEXT,
+    impl_method        TEXT
+);
+```
+
+### 10.3. Database Tables, Columns & Impacts
+
+```sql
+CREATE TABLE db_tables (
+    id                 INTEGER PRIMARY KEY AUTOINCREMENT,
+    name               TEXT NOT NULL,   -- ORDER
+    schema_name        TEXT,            -- PUBLIC
+    description        TEXT
+);
+
+CREATE TABLE db_columns (
+    id                 INTEGER PRIMARY KEY AUTOINCREMENT,
+    table_id           INTEGER NOT NULL REFERENCES db_tables(id) ON DELETE CASCADE,
+    name               TEXT NOT NULL,   -- APPROVAL_STATUS, EXPIRY_DATE
+    data_type          TEXT,
+    description        TEXT
+);
+
+-- Liên kết class/method với column (đọc/ghi)
+CREATE TABLE column_usage (
+    id                 INTEGER PRIMARY KEY AUTOINCREMENT,
+    column_id          INTEGER NOT NULL REFERENCES db_columns(id) ON DELETE CASCADE,
+    usage_type         TEXT NOT NULL,   -- READ, WRITE
+    class              TEXT NOT NULL,
+    method             TEXT NOT NULL,
+    reason             TEXT
+);
+
+-- Mô tả impact khi column thay đổi
+CREATE TABLE column_impacts (
+    id                 INTEGER PRIMARY KEY AUTOINCREMENT,
+    column_id          INTEGER NOT NULL REFERENCES db_columns(id) ON DELETE CASCADE,
+    impact_type        TEXT NOT NULL,   -- SCREEN, BATCH, REPORT, RULE
+    target_id          TEXT NOT NULL,   -- screen_id, batch_id, report_id, rule_id...
+    description        TEXT
+);
+```
+
+### 10.4. Business Rules, Events & Audit
+
+```sql
+CREATE TABLE business_rules (
+    rule_id            TEXT PRIMARY KEY, -- RULE-ORDER-EXPIRY-001
+    name               TEXT NOT NULL,
+    description        TEXT,
+    notes              TEXT
+);
+
+CREATE TABLE business_rule_links (
+    id                 INTEGER PRIMARY KEY AUTOINCREMENT,
+    rule_id            TEXT NOT NULL REFERENCES business_rules(rule_id) ON DELETE CASCADE,
+    link_type          TEXT NOT NULL,   -- TABLE, COLUMN, SCREEN, WORKFLOW
+    table_name         TEXT,            -- optional nếu type=TABLE/COLUMN
+    column_name        TEXT,
+    screen_id          TEXT,
+    workflow_id        TEXT
+);
+
+CREATE TABLE rule_enforcements (
+    id                 INTEGER PRIMARY KEY AUTOINCREMENT,
+    rule_id            TEXT NOT NULL REFERENCES business_rules(rule_id) ON DELETE CASCADE,
+    class              TEXT NOT NULL,
+    method             TEXT NOT NULL,
+    description        TEXT
+);
+
+CREATE TABLE events (
+    event_id           TEXT PRIMARY KEY, -- OrderApproved, PaymentCaptured...
+    name               TEXT NOT NULL,
+    description        TEXT,
+    event_type         TEXT NOT NULL     -- DOMAIN, AUDIT
+);
+
+CREATE TABLE event_publishers (
+    id                 INTEGER PRIMARY KEY AUTOINCREMENT,
+    event_id           TEXT NOT NULL REFERENCES events(event_id) ON DELETE CASCADE,
+    class              TEXT NOT NULL,
+    method             TEXT NOT NULL
+);
+
+CREATE TABLE event_consumers (
+    id                 INTEGER PRIMARY KEY AUTOINCREMENT,
+    event_id           TEXT NOT NULL REFERENCES events(event_id) ON DELETE CASCADE,
+    class              TEXT NOT NULL,
+    method             TEXT NOT NULL
+);
+
+CREATE TABLE audit_logs (
+    id                 INTEGER PRIMARY KEY AUTOINCREMENT,
+    action             TEXT NOT NULL,    -- APPROVE_ORDER
+    description        TEXT,
+    log_table          TEXT NOT NULL,    -- ORDER_AUDIT_LOG
+    fields             TEXT              -- JSON hoặc chuỗi: ORDER_ID, ACTION, USER_ID...
+);
+
+CREATE TABLE audit_writers (
+    id                 INTEGER PRIMARY KEY AUTOINCREMENT,
+    audit_id           INTEGER NOT NULL REFERENCES audit_logs(id) ON DELETE CASCADE,
+    class              TEXT NOT NULL,
+    method             TEXT NOT NULL
+);
+```
+
+### 10.5. Relations & Knowledge Base Articles
+
+```sql
+CREATE TABLE relations (
+    id                 INTEGER PRIMARY KEY AUTOINCREMENT,
+    from_type          TEXT NOT NULL,    -- SCREEN, WORKFLOW, BATCH, REPORT
+    from_id            TEXT NOT NULL,
+    to_type            TEXT NOT NULL,    -- SCREEN, WORKFLOW, BATCH, REPORT
+    to_id              TEXT NOT NULL,
+    relation_type      TEXT NOT NULL,    -- navigates_to, shows_details_for, depends_on...
+    description        TEXT
+);
+
+CREATE TABLE kb_articles (
+    id                 TEXT PRIMARY KEY, -- KB-ORDER-EXPIRY-BUSINESS-LOGIC
+    title              TEXT NOT NULL,
+    body               TEXT,             -- có thể lưu nguyên văn hoặc chỉ path tới file md
+    body_path          TEXT,
+    tags               TEXT              -- JSON array hoặc chuỗi phân tách bằng dấu phẩy
+);
+```
+
+---
+
+## 11. RAG Index Schema (Documents & Embeddings)
+
+Metadata ở trên là “truth source” quan hệ. Để LLM truy vấn nhanh và ít tốn token, nên có thêm schema cho index (document + embedding). Dưới đây là một thiết kế đơn giản nếu bạn dùng SQLite làm storage cho index (hoặc một lớp abstraction tương đương nếu dùng Qdrant/pgvector, v.v.).
+
+### 11.1. Documents
+
+```sql
+CREATE TABLE rag_documents (
+    id                 INTEGER PRIMARY KEY AUTOINCREMENT,
+    source_type        TEXT NOT NULL,    -- SCREEN_YAML, KB, CODE, SCHEMA, GENERATED_FACT
+    source_path        TEXT,             -- file path nếu có: src/main/java/..., data/screens/...
+    anchor             TEXT,             -- symbol/mục nhỏ: OrderApprovalService.approveOrder, RULE-ORDER-EXPIRY-001
+    screen_id          TEXT,             -- liên kết nhanh tới screen nếu có
+    table_name         TEXT,
+    column_name        TEXT,
+    rule_id            TEXT,
+    event_id           TEXT,
+    workflow_id        TEXT,
+    summary            TEXT,             -- tóm tắt ngắn
+    content            TEXT NOT NULL     -- đoạn text đầy đủ mà LLM sẽ thấy
+);
+```
+
+### 11.2. Embeddings
+
+```sql
+CREATE TABLE rag_embeddings (
+    id                 INTEGER PRIMARY KEY AUTOINCREMENT,
+    document_id        INTEGER NOT NULL REFERENCES rag_documents(id) ON DELETE CASCADE,
+    provider           TEXT NOT NULL,    -- openai, anthropic, local...
+    model              TEXT NOT NULL,    -- tên model embedding
+    dim                INTEGER NOT NULL,
+    vector             BLOB NOT NULL     -- lưu vector dạng BLOB (hoặc JSON nếu cần)
+);
+
+CREATE INDEX idx_rag_embeddings_doc ON rag_embeddings(document_id);
+CREATE INDEX idx_rag_documents_screen ON rag_documents(screen_id);
+CREATE INDEX idx_rag_documents_table_col ON rag_documents(table_name, column_name);
+CREATE INDEX idx_rag_documents_rule ON rag_documents(rule_id);
+```
+
+### 11.3. Cách LLM sử dụng schema này
+
+- Khi **index**:
+  - Parse YAML + KB + code + schema.
+  - Sinh các đoạn “fact” dạng text (ngắn, rõ, ngôn ngữ tự nhiên).
+  - Lưu mỗi fact vào `rag_documents` (kèm metadata: `screen_id`, `table_name`, `column_name`, `rule_id`...).
+  - Tạo embedding tương ứng trong `rag_embeddings`.
+
+- Khi **trả lời câu hỏi**:
+  - Xác định context sơ bộ (screen hiện tại, từ khóa bảng/cột trong câu hỏi).
+  - Query `rag_embeddings` để lấy top-k documents (kết hợp filter metadata).
+  - Lấy `content` từ `rag_documents` → gửi vào LLM như context.
+  - Nếu cần chi tiết hơn, LLM có thể gọi tools:
+    - `get_screens_affecting_column(table, column)` → query `column_impacts`, `screens`, `relations`.
+    - `get_workflow_for_action(screen_id, action_id)` → query `workflows`, `workflow_steps`, `screen_components`.
+
+Với schema này:
+- Bạn có cấu trúc rõ ràng để lưu **mối quan hệ** (screen ↔ code ↔ database ↔ rules ↔ events).
+- Bạn có index RAG hiệu quả để **giảm token** và tăng độ chính xác khi LLM trả lời các câu hỏi nghiệp vụ phức tạp như:
+  - “Approve xử lý thế nào, viết vào bảng/cột nào?”
+  - “Thay đổi EXPIRY_DATE ảnh hưởng tới màn hình, batch, báo cáo nào?”.
+
