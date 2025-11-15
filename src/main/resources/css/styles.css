@@ -29,6 +29,11 @@
     -fx-max-width: 280px;
 }
 
+.app-icon {
+    -fx-icon-size: 28px;
+    -fx-icon-color: -color-accent-emphasis;
+}
+
 .sidebar-full-height {
     -fx-min-height: 100%;
 }

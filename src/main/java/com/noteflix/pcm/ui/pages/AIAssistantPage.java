@@ -16,9 +16,9 @@ import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import lombok.extern.slf4j.Slf4j;
-import org.kordamp.ikonli.antdesignicons.AntDesignIconsOutlined;
 import org.kordamp.ikonli.feather.Feather;
 import org.kordamp.ikonli.javafx.FontIcon;
+import org.kordamp.ikonli.octicons.Octicons;
 
 /**
  * AI Assistant Page - Clean Architecture Implementation
@@ -320,8 +320,7 @@ public class AIAssistantPage extends BasePage {
     container.setMaxSize(90, 90);
 
     // Main AI icon - using CommentOutlined from Ant Design
-    FontIcon mainIcon = new FontIcon(AntDesignIconsOutlined.COMMENT);
-    mainIcon.setIconSize(40);
+    FontIcon mainIcon = new FontIcon(Octicons.DEPENDABOT_24);
     mainIcon.getStyleClass().add("welcome-ai-icon");
 
     container.getChildren().add(mainIcon);

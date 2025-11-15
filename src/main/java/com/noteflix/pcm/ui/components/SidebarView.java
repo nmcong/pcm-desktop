@@ -12,17 +12,25 @@ import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.kordamp.ikonli.feather.Feather;
 import org.kordamp.ikonli.javafx.FontIcon;
+import org.kordamp.ikonli.octicons.Octicons;
 
 /** Sidebar component built with pure Java (no FXML) Following AtlantaFX Sampler patterns */
 @Slf4j
 public class SidebarView extends VBox implements ThemeChangeListener {
 
   private final ThemeManager themeManager;
-  private PageNavigator pageNavigator;
-  private ImageView appIcon;
+    /**
+     * -- SETTER --
+     *  Sets the page navigator for navigation functionality Dependency Injection - follows Dependency
+     *  Inversion Principle
+     */
+    @Setter
+    private PageNavigator pageNavigator;
+  private FontIcon appIcon;
   private ImageView botIcon;
   private Button themeButton;
 
@@ -46,27 +54,16 @@ public class SidebarView extends VBox implements ThemeChangeListener {
             createHeader(), createMainMenu(), createFavoritesSection(), createProjectsSection());
   }
 
-  /**
-   * Sets the page navigator for navigation functionality Dependency Injection - follows Dependency
-   * Inversion Principle
-   */
-  public void setPageNavigator(PageNavigator pageNavigator) {
-    this.pageNavigator = pageNavigator;
-  }
-
-  /** Creates the header with app title and theme switch (AtlantaFX Sampler pattern) */
+    /** Creates the header with app title and theme switch (AtlantaFX Sampler pattern) */
   private VBox createHeader() {
     VBox headerSection = new VBox(20);
     headerSection.getStyleClass().add("header");
 
-    // Logo section with theme-aware brain-circuit icon
-    appIcon =
-        IconUtils.createImageView(
-            themeManager.getBrainCircuitIcon(),
-            AppConstants.ICON_SIZE_LARGE,
-            AppConstants.ICON_SIZE_LARGE);
+    // Logo section with DEPENDABOT icon
+    appIcon = new FontIcon(Octicons.CPU_16);
+    appIcon.getStyleClass().add("app-icon");
 
-    Label titleLabel = new Label("PCM Desktop");
+    Label titleLabel = new Label("PCM");
     titleLabel.getStyleClass().add(Styles.TITLE_3);
 
     themeButton = new Button();
@@ -318,10 +315,8 @@ public class SidebarView extends VBox implements ThemeChangeListener {
   public void onThemeChanged(boolean isDarkTheme) {
     log.debug("Theme changed to: {}", isDarkTheme ? "dark" : "light");
 
-    // Update app icon
-    if (appIcon != null) {
-      IconUtils.updateImageView(appIcon, themeManager.getBrainCircuitIcon());
-    }
+    // App icon doesn't need theme update (using FontIcon instead of ImageView)
+    // FontIcon automatically adapts to theme
 
     // Update bot icon
     if (botIcon != null) {

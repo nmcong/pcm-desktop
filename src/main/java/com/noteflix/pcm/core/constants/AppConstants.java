@@ -22,9 +22,9 @@ public final class AppConstants {
   // CSS Paths
   public static final String CSS_STYLES = "/css/styles.css";
   // Icon Sizes
-  public static final double ICON_SIZE_LARGE = 32.0;
-  public static final double ICON_SIZE_MEDIUM = 20.0;
-  public static final double ICON_SIZE_SMALL = 16.0;
+  public static final int ICON_SIZE_LARGE = 42;
+  public static final int ICON_SIZE_MEDIUM = 20;
+  public static final int ICON_SIZE_SMALL = 16;
 
   private AppConstants() {
     // Utility class
