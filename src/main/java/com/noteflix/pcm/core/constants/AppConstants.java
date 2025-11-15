@@ -13,18 +13,11 @@ public final class AppConstants {
   public static final int MIN_WINDOW_HEIGHT = 600;
   // Layout Dimensions
   public static final double SIDEBAR_WIDTH = 280.0;
-  // Icon Paths
-  public static final String ICON_APP = "/images/icons/app-icon.png";
-  public static final String ICON_BRAIN_CIRCUIT = "/images/icons/brain-circuit.png";
-  public static final String ICON_BRAIN_CIRCUIT_DARK = "/images/icons/brain-circuit_dark.png";
-  public static final String ICON_BOT = "/images/icons/bot.png";
-  public static final String ICON_BOT_DARK = "/images/icons/bot_dark.png";
+
   // CSS Paths
   public static final String CSS_STYLES = "/css/styles.css";
-  // Icon Sizes
-  public static final int ICON_SIZE_LARGE = 42;
-  public static final int ICON_SIZE_MEDIUM = 20;
-  public static final int ICON_SIZE_SMALL = 16;
+  public static final String CSS_THEME_LIGHT = "/css/theme-light.css";
+  public static final String CSS_THEME_DARK = "/css/theme-dark.css";
 
   private AppConstants() {
     // Utility class

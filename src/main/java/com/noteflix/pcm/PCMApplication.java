@@ -87,16 +87,6 @@ public class PCMApplication extends Application {
       primaryStage.setMinWidth(AppConstants.MIN_WINDOW_WIDTH);
       primaryStage.setMinHeight(AppConstants.MIN_WINDOW_HEIGHT);
 
-      // Set application icon (optional)
-      try {
-        Image icon =
-            new Image(
-                Objects.requireNonNull(getClass().getResourceAsStream(AppConstants.ICON_APP)));
-        primaryStage.getIcons().add(icon);
-      } catch (Exception e) {
-        log.warn("Could not load application icon: {}", e.getMessage());
-      }
-
       // Show window
       primaryStage.show();
 

@@ -1,0 +1,358 @@
+/* ================================================================
+   PCM Desktop - Light Theme
+   Clean, modern light color scheme with Indigo/Purple accents
+   Applied after styles.css to override with theme colors
+   ================================================================ */
+
+/* ================================================================
+   SECTION 1: COLOR DEFINITIONS (Light Theme)
+   ================================================================ */
+.root {
+    /* Background Hierarchy - Light gray/white palette */
+    -fx-bg-primary: #ffffff;
+    -fx-bg-secondary: #f8f9fa;
+    -fx-bg-tertiary: #f1f3f5;
+    -fx-bg-elevated: #ffffff;
+
+    /* Accent Colors - Indigo/Purple */
+    -fx-accent-primary: #6366f1;
+    -fx-accent-secondary: #8b5cf6;
+    -fx-accent-hover: #4f46e5;
+
+    /* Text Hierarchy */
+    -fx-text-primary: #1f2937;
+    -fx-text-secondary: #374151;
+    -fx-text-muted: #6b7280;
+    -fx-text-disabled: #9ca3af;
+
+    /* Border Colors */
+    -fx-border-primary: #e5e7eb;
+    -fx-border-secondary: #d1d5db;
+
+    /* Message Bubble Colors */
+    -fx-user-bubble: #6366f1;
+    -fx-ai-bubble: #f3f4f6;
+
+    /* Status Colors */
+    -fx-success: #10b981;
+    -fx-warning: #f59e0b;
+    -fx-error: #ef4444;
+}
+
+/* ================================================================
+   SECTION 2: JAVAFX SYSTEM VARIABLES
+   Override AtlantaFX defaults with our light theme
+   ================================================================ */
+.root {
+    -fx-base: #ffffff;
+    -fx-background: #ffffff;
+    -fx-control-inner-background: #f8f9fa;
+    -fx-accent: #6366f1;
+    -fx-default-button: #6366f1;
+    -fx-focus-color: #6366f1;
+    -fx-faint-focus-color: rgba(99, 102, 241, 0.2);
+    -fx-text-fill: #1f2937;
+}
+
+/* ================================================================
+   SECTION 3: CHAT SIDEBAR (Light Theme Specific)
+   ================================================================ */
+
+.chat-sidebar .search-input {
+    -fx-background-color: #ffffff;
+    -fx-text-fill: #1f2937;
+    -fx-prompt-text-fill: #6b7280;
+    -fx-border-color: #e5e7eb;
+}
+
+.chat-sidebar .search-input:focused {
+    -fx-border-color: #6366f1;
+}
+
+.sidebar-section-title {
+    -fx-text-fill: #6b7280;
+    -fx-font-weight: bold;
+}
+
+/* Sessions Scrollbar - Light */
+.sessions-scroll .scroll-bar:vertical .thumb {
+    -fx-background-color: #d1d5db;
+}
+
+.sessions-scroll .scroll-bar:vertical .thumb:hover {
+    -fx-background-color: #6b7280;
+}
+
+/* Chat Session Buttons - Light hover states */
+.chat-session-btn:hover {
+    -fx-background-color: rgba(99, 102, 241, 0.08);
+}
+
+.chat-session-btn.active {
+    -fx-background-color: rgba(99, 102, 241, 0.12);
+}
+
+.chat-session-btn.active .session-title {
+    -fx-text-fill: #6366f1;
+}
+
+/* ================================================================
+   SECTION 4: CHAT HEADER & ACTIONS (Light Theme)
+   ================================================================ */
+
+.chat-header {
+    -fx-background-color: #f8f9fa;
+}
+
+.icon-btn:hover {
+    -fx-background-color: #f1f3f5;
+    -fx-border-color: #e5e7eb;
+    -fx-border-width: 1px;
+}
+
+.icon-btn:pressed {
+    -fx-background-color: #f1f3f5;
+    -fx-border-color: #6366f1;
+}
+
+.chat-action-btn:hover {
+    -fx-background-color: rgba(99, 102, 241, 0.1);
+    -fx-text-fill: #6366f1;
+}
+
+/* ================================================================
+   SECTION 5: MESSAGE BUBBLES (Light Theme)
+   ================================================================ */
+
+/* Chat Messages Scrollbar - Light */
+.chat-scroll .scroll-bar:vertical .track {
+    -fx-background-color: rgba(0, 0, 0, 0.05);
+}
+
+.chat-scroll .scroll-bar:vertical .thumb {
+    -fx-background-color: #d1d5db;
+}
+
+.chat-scroll .scroll-bar:vertical .thumb:hover {
+    -fx-background-color: #6b7280;
+}
+
+.chat-messages-area {
+    -fx-padding: 20px;
+}
+
+/* User Message - Blue bubble with shadow */
+.user-message-bubble {
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 8, 0, 0, 2);
+}
+
+.user-message-bubble .message-text {
+    -fx-text-fill: white;
+}
+
+.user-message-bubble .message-time {
+    -fx-text-fill: rgba(255, 255, 255, 0.8);
+}
+
+/* AI Message - Light gray bubble with border */
+.ai-message-bubble {
+    -fx-border-color: #e5e7eb;
+    -fx-border-width: 1px;
+    -fx-border-radius: 18px 18px 18px 4px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.08), 8, 0, 0, 2);
+}
+
+.ai-message-bubble .message-text {
+    -fx-text-fill: #1f2937;
+}
+
+.ai-message-bubble .message-time {
+    -fx-text-fill: #6b7280;
+}
+
+/* Message Icons with effects */
+.message-bot-icon {
+    -fx-effect: dropshadow(gaussian, rgba(99, 102, 241, 0.3), 10, 0, 0, 0);
+}
+
+.user-icon-wrapper {
+    -fx-effect: dropshadow(gaussian, rgba(99, 102, 241, 0.4), 8, 0, 0, 0);
+}
+
+.message-user-icon {
+    -fx-icon-color: white;
+}
+
+/* ================================================================
+   SECTION 6: LOADING INDICATOR (Light Theme)
+   ================================================================ */
+
+.loading-bubble {
+    -fx-border-color: #e5e7eb;
+    -fx-border-width: 1px;
+    -fx-border-radius: 18px 18px 18px 4px;
+}
+
+.loading-text {
+    -fx-text-fill: #374151;
+}
+
+.loading-dot {
+    -fx-text-fill: #6366f1;
+}
+
+/* ================================================================
+   SECTION 7: CHAT INPUT (Light Theme)
+   ================================================================ */
+
+.chat-input-box {
+    -fx-border-color: #e5e7eb;
+}
+
+.chat-input-box:focused-within {
+    -fx-border-color: #6366f1;
+    -fx-border-width: 2px;
+}
+
+.chat-input {
+    -fx-text-fill: #1f2937;
+    -fx-prompt-text-fill: #6b7280;
+}
+
+.input-action-btn:hover {
+    -fx-background-color: rgba(99, 102, 241, 0.1);
+    -fx-text-fill: #6366f1;
+}
+
+.send-btn {
+    -fx-cursor: hand;
+}
+
+.send-btn:pressed {
+    -fx-background-color: derive(#6366f1, -20%);
+}
+
+.send-btn:disabled {
+    -fx-background-color: #f1f3f5;
+    -fx-text-fill: #9ca3af;
+    -fx-opacity: 0.5;
+}
+
+/* ================================================================
+   SECTION 8: WELCOME SCREEN (Light Theme)
+   ================================================================ */
+
+.welcome-icon-container {
+    -fx-background-color: linear-gradient(to bottom right, rgba(99, 102, 241, 0.08), rgba(139, 92, 246, 0.08));
+    -fx-background-radius: 12px;
+    -fx-border-color: rgba(99, 102, 241, 0.25);
+    -fx-border-width: 2px;
+    -fx-border-radius: 12px;
+    -fx-effect: dropshadow(gaussian, rgba(99, 102, 241, 0.2), 20, 0.3, 0, 0);
+}
+
+.welcome-ai-icon {
+    -fx-icon-color: #6366f1;
+    -fx-effect: dropshadow(gaussian, rgba(99, 102, 241, 0.4), 15, 0, 0, 0);
+    -fx-icon-size: 40px;
+}
+
+.welcome-bot-icon {
+    -fx-effect: dropshadow(gaussian, rgba(99, 102, 241, 0.4), 20, 0, 0, 0);
+}
+
+.welcome-title {
+    -fx-text-fill: #1f2937;
+    -fx-font-weight: bold;
+}
+
+.welcome-subtitle {
+    -fx-text-fill: #6b7280;
+    -fx-font-size: 16px;
+}
+
+/* ================================================================
+   SECTION 9: SUGGESTION CARDS (Light Theme)
+   ================================================================ */
+
+.suggestion-card {
+    -fx-background-color: rgba(99, 102, 241, 0.03);
+    -fx-background-radius: 14px;
+    -fx-border-color: rgba(99, 102, 241, 0.15);
+    -fx-border-width: 1.5px;
+    -fx-border-radius: 14px;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.05), 8, 0, 0, 2);
+    -fx-padding: 16px;
+}
+
+.suggestion-card:hover {
+    -fx-background-color: rgba(99, 102, 241, 0.05);
+    -fx-border-color: #6366f1;
+    -fx-border-width: 2px;
+    -fx-effect: dropshadow(gaussian, rgba(99, 102, 241, 0.3), 16, 0.3, 0, 4);
+    -fx-scale-x: 1.03;
+    -fx-scale-y: 1.03;
+}
+
+.suggestion-card:pressed {
+    -fx-background-color: rgba(99, 102, 241, 0.1);
+    -fx-scale-x: 0.98;
+    -fx-scale-y: 0.98;
+}
+
+.suggestion-card .suggestion-icon {
+    -fx-icon-color: #6366f1;
+    -fx-effect: dropshadow(gaussian, rgba(99, 102, 241, 0.2), 6, 0, 0, 0);
+}
+
+.suggestion-card:hover .suggestion-icon {
+    -fx-icon-color: #8b5cf6;
+    -fx-effect: dropshadow(gaussian, rgba(139, 92, 246, 0.4), 10, 0, 0, 0);
+}
+
+.suggestion-card .suggestion-title {
+    -fx-text-fill: #1f2937;
+    -fx-font-size: 15px;
+    -fx-font-weight: 600;
+}
+
+.suggestion-card .suggestion-desc {
+    -fx-text-fill: #6b7280;
+    -fx-font-size: 12px;
+    -fx-line-spacing: 1px;
+}
+
+.suggestion-card:hover .suggestion-title {
+    -fx-text-fill: #6366f1;
+}
+
+.suggestion-card:hover .suggestion-desc {
+    -fx-text-fill: #374151;
+}
+
+/* Simple suggestion buttons */
+.suggestion-btn {
+    -fx-background-color: #ffffff;
+    -fx-text-fill: #1f2937;
+    -fx-border-color: #e5e7eb;
+}
+
+.suggestion-btn:hover {
+    -fx-background-color: #f8f9fa;
+    -fx-border-color: #6366f1;
+    -fx-text-fill: #6366f1;
+    -fx-effect: dropshadow(gaussian, rgba(99, 102, 241, 0.2), 10, 0, 0, 0);
+}
+
+.suggestion-btn:pressed {
+    -fx-background-color: rgba(99, 102, 241, 0.1);
+}
+
+/* ================================================================
+   SECTION 10: SCROLLBAR THEME
+   ================================================================ */
+
+.scroll-pane .viewport {
+    -fx-background-color: transparent;
+}

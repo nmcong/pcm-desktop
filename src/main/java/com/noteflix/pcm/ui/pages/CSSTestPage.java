@@ -12,7 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.kordamp.ikonli.feather.Feather;
 import org.kordamp.ikonli.javafx.FontIcon;
 
-/** Test page for CSS theming system Demonstrates how ai-assistant-dark.css is applied */
+/** Test page for CSS theming system. Demonstrates how theme-dark.css and theme-light.css are applied */
 @Slf4j
 public class CSSTestPage extends BasePage {
 
@@ -21,7 +21,7 @@ public class CSSTestPage extends BasePage {
   public CSSTestPage() {
     super(
         "CSS Theme Test",
-        "Test the theme system and ai-assistant-dark.css application",
+        "Test the theme system and theme files (theme-dark.css & theme-light.css) application",
         new FontIcon(Feather.SETTINGS));
   }
 
@@ -34,7 +34,7 @@ public class CSSTestPage extends BasePage {
     // Theme controls
     VBox themeControls = createThemeControls();
 
-    // Test elements with ai-assistant-dark.css classes
+    // Test elements with theme CSS classes
     VBox testElements = createTestElements();
 
     content.getChildren().addAll(themeControls, testElements);
@@ -69,7 +69,7 @@ public class CSSTestPage extends BasePage {
     darkButton.setOnAction(
         e -> {
           themeManager.setTheme(true);
-          log.info("Switched to dark theme - ai-assistant-dark.css should be applied");
+          log.info("Switched to dark theme - theme-dark.css should be applied");
         });
 
     Button toggleButton = new Button("Toggle Theme");
@@ -103,10 +103,10 @@ public class CSSTestPage extends BasePage {
     elements.getStyleClass().add("card");
     elements.setPadding(new Insets(16));
 
-    Label title = new Label("Test Elements with ai-assistant-dark.css Classes");
+    Label title = new Label("Test Elements with Theme CSS Classes");
     title.getStyleClass().add(Styles.TITLE_4);
 
-    // Chat-like elements to test ai-assistant-dark.css
+    // Chat-like elements to test theme CSS
     VBox chatSection = createChatTestSection();
 
     // Color test section
@@ -118,7 +118,7 @@ public class CSSTestPage extends BasePage {
 
   private VBox createChatTestSection() {
     VBox chatSection = new VBox(10);
-    chatSection.getStyleClass().add("ai-chat-page"); // This class is in ai-assistant-dark.css
+    chatSection.getStyleClass().add("ai-chat-page"); // This class is in theme CSS files
     chatSection.setPadding(new Insets(16));
 
     Label chatTitle = new Label("AI Chat Test Area");
@@ -155,7 +155,7 @@ public class CSSTestPage extends BasePage {
     Label colorTitle = new Label("Color Variables Test");
     colorTitle.getStyleClass().add(Styles.TEXT_BOLD);
 
-    // Test different color classes from ai-assistant-dark.css
+    // Test different color classes from theme CSS
     HBox colorRow1 = new HBox(10);
     colorRow1.setAlignment(Pos.CENTER);
 
@@ -194,6 +194,6 @@ public class CSSTestPage extends BasePage {
     log.info(
         "CSS Test page activated. Current theme: {}",
         themeManager.isDarkTheme() ? "Dark" : "Light");
-    log.info("To test: Toggle theme and observe ai-assistant-dark.css variables in action");
+    log.info("To test: Toggle theme and observe theme CSS color changes in action");
   }
 }

@@ -2,9 +2,12 @@ package com.noteflix.pcm.core.theme;
 
 import atlantafx.base.theme.NordDark;
 import atlantafx.base.theme.NordLight;
+import com.noteflix.pcm.core.constants.AppConstants;
 import com.noteflix.pcm.core.events.ThemeChangeListener;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+
 import javafx.application.Application;
 import javafx.scene.Scene;
 import lombok.extern.slf4j.Slf4j;
@@ -95,32 +98,22 @@ public class ThemeManager {
       mainScene.getStylesheets().clear();
 
       // Always add the main styles
-      if (getClass().getResource("/css/styles.css") != null) {
-        String mainCssUrl = getClass().getResource("/css/styles.css").toExternalForm();
+      if (getClass().getResource(AppConstants.CSS_STYLES) != null) {
+        String mainCssUrl = Objects.requireNonNull(getClass().getResource(AppConstants.CSS_STYLES)).toExternalForm();
         mainScene.getStylesheets().add(mainCssUrl);
         log.info("Applied main CSS: {}", mainCssUrl);
       } else {
-        log.warn("Main CSS file not found: /css/styles.css");
+        log.warn("Main CSS file not found: {}", AppConstants.CSS_STYLES);
       }
 
       // Add theme-specific CSS
-      if (isDarkTheme) {
-        if (getClass().getResource("/css/ai-assistant-dark.css") != null) {
-          String darkCssUrl = getClass().getResource("/css/ai-assistant-dark.css").toExternalForm();
-          mainScene.getStylesheets().add(darkCssUrl);
-          log.info("Applied dark theme CSS: {}", darkCssUrl);
-        } else {
-          log.warn("Dark theme CSS file not found: /css/ai-assistant-dark.css");
-        }
+      String themePath = isDarkTheme ? AppConstants.CSS_THEME_DARK : AppConstants.CSS_THEME_LIGHT;
+      if (getClass().getResource(themePath) != null) {
+        String themeCssUrl = Objects.requireNonNull(getClass().getResource(themePath)).toExternalForm();
+        mainScene.getStylesheets().add(themeCssUrl);
+        log.info("Applied {} theme CSS: {}", isDarkTheme ? "dark" : "light", themeCssUrl);
       } else {
-        if (getClass().getResource("/css/ai-assistant-light.css") != null) {
-          String lightCssUrl =
-              getClass().getResource("/css/ai-assistant-light.css").toExternalForm();
-          mainScene.getStylesheets().add(lightCssUrl);
-          log.info("Applied light theme CSS: {}", lightCssUrl);
-        } else {
-          log.warn("Light theme CSS file not found: /css/ai-assistant-light.css");
-        }
+        log.warn("Theme CSS file not found: {}", themePath);
       }
 
     } catch (Exception e) {

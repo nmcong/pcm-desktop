@@ -125,7 +125,6 @@ public class SidebarView extends VBox implements ThemeChangeListener {
   private Button createAIAssistantMenuItem() {
     // DEPENDABOT icon
     FontIcon dependabotIcon = new FontIcon(Octicons.DEPENDABOT_24);
-    dependabotIcon.setIconSize(AppConstants.ICON_SIZE_MEDIUM);
 
     Label label = new Label("AI Assistant");
 
@@ -365,7 +364,7 @@ public class SidebarView extends VBox implements ThemeChangeListener {
           "CSS Theme Test",
           "Test CSS theme system:\n\n"
               + "• Light/Dark theme switching\n"
-              + "• ai-assistant-dark.css application\n"
+              + "• theme-dark.css & theme-light.css application\n"
               + "• Color variables testing\n"
               + "• Theme-aware components");
     }
