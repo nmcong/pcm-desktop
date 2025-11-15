@@ -12,8 +12,8 @@
    NAVIGATION BAR (now part of content area)
    ================================================================ */
 .navbar {
-    -fx-background-color: -color-bg-default;
-    -fx-border-color: -color-border-default;
+    -fx-background-color: -fx-bg-primary;
+    -fx-border-color: -fx-border-primary;
     -fx-border-width: 0 0 1 0;
 }
 
@@ -21,8 +21,8 @@
    SIDEBAR (full height)
    ================================================================ */
 .sidebar {
-    -fx-background-color: -color-bg-subtle;
-    -fx-border-color: -color-border-default;
+    -fx-background-color: -fx-bg-secondary;
+    -fx-border-color: -fx-border-primary;
     -fx-border-width: 0 1 0 0;
     -fx-min-width: 280px;
     -fx-pref-width: 280px;
@@ -31,7 +31,7 @@
 
 .app-icon {
     -fx-icon-size: 28px;
-    -fx-icon-color: -color-accent-emphasis;
+    -fx-icon-color: -fx-accent-primary;
 }
 
 /* Common icon button style - clean by default, styled on hover */
@@ -63,13 +63,13 @@
 }
 
 .logo .title-3 {
-    -fx-text-fill: -color-fg-default;
+    -fx-text-fill: -fx-text-primary;
 }
 
 /* Search Button */
 .search-button {
-    -fx-background-color: -color-bg-default;
-    -fx-border-color: -color-border-default;
+    -fx-background-color: -fx-bg-primary;
+    -fx-border-color: -fx-border-primary;
     -fx-border-width: 1px;
     -fx-border-radius: 6px;
     -fx-background-radius: 6px;
@@ -81,8 +81,8 @@
 }
 
 .search-button:hover {
-    -fx-background-color: -color-bg-inset;
-    -fx-border-color: -color-accent-emphasis;
+    -fx-background-color: -fx-bg-tertiary;
+    -fx-border-color: -fx-accent-primary;
 }
 
 .search-button .content {
@@ -91,15 +91,15 @@
 }
 
 .search-button .search-label {
-    -fx-text-fill: -color-fg-muted;
+    -fx-text-fill: -fx-text-muted;
     -fx-font-size: 14px;
     -fx-graphic-text-gap: 8px;
 }
 
 .search-button .hint {
-    -fx-text-fill: -color-fg-muted;
+    -fx-text-fill: -fx-text-muted;
     -fx-font-size: 11px;
-    -fx-background-color: -color-bg-inset;
+    -fx-background-color: -fx-bg-tertiary;
     -fx-background-radius: 4px;
     -fx-padding: 2px 6px;
 }
@@ -119,7 +119,7 @@
 }
 
 .list-item:hover {
-    -fx-background-color: -color-bg-inset;
+    -fx-background-color: -fx-bg-tertiary;
 }
 
 /* Menu button hover effects */
@@ -128,12 +128,12 @@
 }
 
 .button.flat:hover {
-    -fx-background-color: -color-bg-inset;
+    -fx-background-color: -fx-bg-tertiary;
 }
 
 .button.left-pill:hover {
-    -fx-background-color: -color-accent-subtle;
-    -fx-text-fill: -color-accent-emphasis;
+    -fx-background-color: rgba(99, 102, 241, 0.1);
+    -fx-text-fill: -fx-accent-primary;
 }
 
 /* Sidebar Menu Items */
@@ -145,20 +145,20 @@
 }
 
 .sidebar-menu-item:hover {
-    -fx-background-color: -color-accent-subtle;
+    -fx-background-color: rgba(99, 102, 241, 0.1);
 }
 
 .sidebar-menu-item:hover .label {
-    -fx-text-fill: -color-accent-emphasis;
+    -fx-text-fill: -fx-accent-primary;
     -fx-font-weight: 600;
 }
 
 .sidebar-menu-item:hover .ikonli-font-icon {
-    -fx-icon-color: -color-accent-emphasis;
+    -fx-icon-color: -fx-accent-primary;
 }
 
 .sidebar-menu-item:pressed {
-    -fx-background-color: derive(-color-accent-subtle, -10%);
+    -fx-background-color: rgba(99, 102, 241, 0.15);
 }
 
 /* AI Assistant menu item special styling */
@@ -171,16 +171,10 @@
 }
 
 .ai-assistant-btn:hover .label {
-    -fx-text-fill: -color-accent-emphasis;
+    -fx-text-fill: -fx-accent-primary;
     -fx-font-weight: 600;
 }
 
-/* Icon buttons with soft borders */
-.icon-btn-bordered {
-    -fx-background-radius: 6px;
-    -fx-transition: all 0.2s ease-in-out;
-    -fx-cursor: hand;
-}
 
 /* All button icons should show cursor */
 .button {
@@ -196,7 +190,7 @@
    CONTENT AREA
    ================================================================ */
 .content-area {
-    -fx-background-color: -color-bg-default;
+    -fx-background-color: -fx-bg-primary;
 }
 
 /* Content wrapper with proper spacing */
@@ -254,12 +248,12 @@
 }
 
 .scroll-bar .thumb {
-    -fx-background-color: derive(-color-border-default, -20%);
+    -fx-background-color: -fx-border-primary;
     -fx-background-radius: 4px;
 }
 
 .scroll-bar .thumb:hover {
-    -fx-background-color: -color-border-default;
+    -fx-background-color: -fx-text-muted;
 }
 
 .scroll-bar .track {
@@ -292,7 +286,7 @@
 }
 
 .text-muted {
-    -fx-text-fill: -color-fg-muted;
+    -fx-text-fill: -fx-text-muted;
 }
 
 /* ================================================================
@@ -331,23 +325,23 @@
 
 /* Navbar always at top */
 .navbar {
-    -fx-background-color: -color-bg-default;
-    -fx-border-color: -color-border-default;
+    -fx-background-color: -fx-bg-primary;
+    -fx-border-color: -fx-border-primary;
     -fx-border-width: 0 0 1px 0;
 }
 
 /* AI Chat page specific styling */
 .ai-chat-page {
-    -fx-background-color: -color-bg-default;
+    -fx-background-color: -fx-bg-primary;
 }
 
 /* Right side layout */
 .right-side {
-    -fx-background-color: -color-bg-default;
+    -fx-background-color: -fx-bg-primary;
 }
 
 .content-area {
-    -fx-background-color: -color-bg-default;
+    -fx-background-color: -fx-bg-primary;
 }
 
 /* ================================================================
@@ -367,11 +361,11 @@
 .page-title {
     -fx-font-size: 24px;
     -fx-font-weight: bold;
-    -fx-text-fill: -color-fg-default;
+    -fx-text-fill: -fx-text-primary;
 }
 
 .page-description {
-    -fx-text-fill: -color-fg-muted;
+    -fx-text-fill: -fx-text-muted;
     -fx-wrap-text: true;
 }
 
@@ -381,9 +375,9 @@
 }
 
 .action-card {
-    -fx-background-color: -color-bg-default;
+    -fx-background-color: -fx-bg-primary;
     -fx-background-radius: 8px;
-    -fx-border-color: -color-border-default;
+    -fx-border-color: -fx-border-primary;
     -fx-border-radius: 8px;
     -fx-border-width: 1px;
     -fx-padding: 16px;
@@ -391,27 +385,27 @@
 }
 
 .action-card:hover {
-    -fx-background-color: -color-bg-subtle;
-    -fx-border-color: -color-border-muted;
+    -fx-background-color: -fx-bg-secondary;
+    -fx-border-color: -fx-border-secondary;
 }
 
 /* ChatGPT-style AI Chat Interface */
 .ai-chat-main {
-    -fx-background-color: -color-bg-default;
+    -fx-background-color: -fx-bg-primary;
 }
 
 .chat-content-layout {
-    -fx-background-color: -color-bg-default;
+    -fx-background-color: -fx-bg-primary;
 }
 
 .chat-area-wrapper {
-    -fx-background-color: -color-bg-default;
+    -fx-background-color: -fx-bg-primary;
     -fx-padding: 0;
 }
 
 /* Welcome content styling */
 .welcome-content {
-    -fx-background-color: -color-bg-default;
+    -fx-background-color: -fx-bg-primary;
     -fx-alignment: center;
 }
 
@@ -421,28 +415,28 @@
 
 /* Fixed input area for chat state */
 .fixed-input-area {
-    -fx-background-color: -color-bg-default;
-    -fx-border-color: -color-border-default;
+    -fx-background-color: -fx-bg-primary;
+    -fx-border-color: -fx-border-primary;
     -fx-border-width: 1px 0 0 0;
 }
 
 /* Chat Sidebar */
 .chat-sidebar {
-    -fx-background-color: -color-bg-subtle;
-    -fx-border-color: -color-border-default;
+    -fx-background-color: -fx-bg-secondary;
+    -fx-border-color: -fx-border-primary;
     -fx-border-width: 0 1px 0 0;
 }
 
 .search-input {
-    -fx-background-color: -color-bg-default;
-    -fx-border-color: -color-border-default;
+    -fx-background-color: -fx-bg-primary;
+    -fx-border-color: -fx-border-primary;
     -fx-border-radius: 8px;
     -fx-background-radius: 8px;
     -fx-padding: 8px 12px;
 }
 
 .sidebar-section-title {
-    -fx-text-fill: -color-fg-muted;
+    -fx-text-fill: -fx-text-muted;
     -fx-font-size: 12px;
 }
 
@@ -460,27 +454,27 @@
 }
 
 .chat-session-btn:hover {
-    -fx-background-color: -color-bg-default;
+    -fx-background-color: -fx-bg-primary;
 }
 
 .chat-session-btn.active {
-    -fx-background-color: -color-accent-subtle;
-    -fx-border-color: -color-accent-emphasis;
+    -fx-background-color: rgba(99, 102, 241, 0.15);
+    -fx-border-color: -fx-accent-primary;
     -fx-border-width: 1px;
 }
 
 .session-title {
-    -fx-text-fill: -color-fg-default;
+    -fx-text-fill: -fx-text-primary;
     -fx-font-size: 14px;
 }
 
 .session-preview {
-    -fx-text-fill: -color-fg-muted;
+    -fx-text-fill: -fx-text-muted;
     -fx-font-size: 12px;
 }
 
 .session-time {
-    -fx-text-fill: -color-fg-muted;
+    -fx-text-fill: -fx-text-muted;
     -fx-font-size: 11px;
 }
 
@@ -489,7 +483,7 @@
 }
 
 .message-count-badge {
-    -fx-background-color: -color-accent-emphasis;
+    -fx-background-color: -fx-accent-primary;
     -fx-text-fill: white;
     -fx-background-radius: 8px;
     -fx-padding: 2px 6px;
@@ -498,13 +492,13 @@
 }
 
 .new-chat-btn {
-    -fx-background-color: -color-accent-emphasis;
+    -fx-background-color: -fx-accent-primary;
     -fx-text-fill: white;
     -fx-background-radius: 6px;
 }
 
 .new-chat-btn:hover {
-    -fx-background-color: -color-accent-muted;
+    -fx-background-color: -fx-accent-hover;
 }
 
 .sessions-scroll {
@@ -514,7 +508,7 @@
 
 /* Main Chat Area */
 .main-chat-area {
-    -fx-background-color: -color-bg-default;
+    -fx-background-color: -fx-bg-primary;
 }
 
 .main-chat-area.welcome-state {
@@ -528,27 +522,27 @@
 }
 
 .chat-header {
-    -fx-background-color: -color-bg-default;
-    -fx-border-color: -color-border-default;
+    -fx-background-color: -fx-bg-primary;
+    -fx-border-color: -fx-border-primary;
     -fx-border-width: 0 0 1px 0;
 }
 
 .chat-action-btn {
-    -fx-text-fill: -color-fg-muted;
+    -fx-text-fill: -fx-text-muted;
 }
 
 .chat-action-btn:hover {
-    -fx-background-color: -color-bg-subtle;
-    -fx-text-fill: -color-fg-default;
+    -fx-background-color: -fx-bg-secondary;
+    -fx-text-fill: -fx-text-primary;
 }
 
 /* Chat Messages Area */
 .chat-messages-area {
-    -fx-background-color: -color-bg-default;
+    -fx-background-color: -fx-bg-primary;
 }
 
 .chat-scroll {
-    -fx-background-color: -color-bg-default;
+    -fx-background-color: -fx-bg-primary;
     -fx-border-color: transparent;
 }
 
@@ -565,13 +559,13 @@
 }
 
 .ai-message-bubble {
-    -fx-background-color: -color-bg-subtle;
+    -fx-background-color: -fx-ai-bubble;
     -fx-background-radius: 18px 18px 18px 4px;
-    -fx-text-fill: -color-fg-default;
+    -fx-text-fill: -fx-text-primary;
 }
 
 .user-message-bubble {
-    -fx-background-color: -color-accent-emphasis;
+    -fx-background-color: -fx-user-bubble;
     -fx-background-radius: 18px 18px 4px 18px;
     -fx-text-fill: white;
 }
@@ -591,11 +585,11 @@
 }
 
 .message-user-icon {
-    -fx-text-fill: -color-accent-emphasis;
+    -fx-text-fill: -fx-accent-primary;
 }
 
 .user-icon-wrapper {
-    -fx-background-color: -color-accent-emphasis;
+    -fx-background-color: -fx-accent-primary;
     -fx-background-radius: 16px;
 }
 
@@ -609,27 +603,27 @@
 }
 
 .welcome-icon {
-    -fx-text-fill: -color-accent-emphasis;
+    -fx-text-fill: -fx-accent-primary;
 }
 
 .welcome-title {
-    -fx-text-fill: -color-fg-default;
+    -fx-text-fill: -fx-text-primary;
 }
 
 .welcome-subtitle {
-    -fx-text-fill: -color-fg-muted;
+    -fx-text-fill: -fx-text-muted;
 }
 
 /* Chat Input Area */
 .chat-input-container {
-    -fx-background-color: -color-bg-default;
-    -fx-border-color: -color-border-default;
+    -fx-background-color: -fx-bg-primary;
+    -fx-border-color: -fx-border-primary;
     -fx-border-width: 1px 0 0 0;
 }
 
 .chat-input-box {
-    -fx-background-color: -color-bg-default;
-    -fx-border-color: -color-border-default;
+    -fx-background-color: -fx-bg-primary;
+    -fx-border-color: -fx-border-primary;
     -fx-border-radius: 24px;
     -fx-background-radius: 24px;
     -fx-border-width: 1px;
@@ -645,7 +639,7 @@
     -fx-border-color: transparent;
     -fx-padding: 12px 16px 4px 16px;
     -fx-font-size: 14px;
-    -fx-prompt-text-fill: -color-fg-muted;
+    -fx-prompt-text-fill: -fx-text-muted;
 }
 
 .chat-input:focused {
@@ -654,18 +648,18 @@
 }
 
 .input-action-btn {
-    -fx-text-fill: -color-fg-muted;
+    -fx-text-fill: -fx-text-muted;
     -fx-background-color: transparent;
 }
 
 .input-action-btn:hover {
-    -fx-text-fill: -color-fg-default;
-    -fx-background-color: -color-bg-subtle;
+    -fx-text-fill: -fx-text-primary;
+    -fx-background-color: -fx-bg-secondary;
     -fx-background-radius: 16px;
 }
 
 .send-btn {
-    -fx-background-color: -color-accent-emphasis;
+    -fx-background-color: -fx-accent-primary;
     -fx-text-fill: white;
     -fx-background-radius: 16px;
     -fx-min-width: 32px;
@@ -675,7 +669,7 @@
 }
 
 .send-btn:hover {
-    -fx-background-color: -color-accent-muted;
+    -fx-background-color: -fx-accent-hover;
 }
 
 /* Quick Suggestions */
@@ -685,9 +679,9 @@
 }
 
 .suggestion-btn {
-    -fx-background-color: -color-bg-subtle;
-    -fx-text-fill: -color-fg-default;
-    -fx-border-color: -color-border-default;
+    -fx-background-color: -fx-bg-secondary;
+    -fx-text-fill: -fx-text-primary;
+    -fx-border-color: -fx-border-primary;
     -fx-border-width: 1px;
     -fx-border-radius: 16px;
     -fx-background-radius: 16px;
@@ -697,8 +691,8 @@
 }
 
 .suggestion-btn:hover {
-    -fx-background-color: -color-bg-default;
-    -fx-border-color: -color-border-muted;
+    -fx-background-color: -fx-bg-primary;
+    -fx-border-color: -fx-border-secondary;
 }
 
 /* Database objects page */
@@ -707,7 +701,7 @@
 }
 
 .schema-tree {
-    -fx-background-color: -color-bg-default;
+    -fx-background-color: -fx-bg-primary;
 }
 
 .object-details {
@@ -715,8 +709,8 @@
 }
 
 .object-type-badge {
-    -fx-background-color: -color-accent-subtle;
-    -fx-text-fill: -color-accent-emphasis;
+    -fx-background-color: rgba(99, 102, 241, 0.1);
+    -fx-text-fill: -fx-accent-primary;
     -fx-background-radius: 4px;
     -fx-padding: 2px 8px;
 }
@@ -727,7 +721,7 @@
 }
 
 .welcome-icon {
-    -fx-text-fill: -color-fg-muted;
+    -fx-text-fill: -fx-text-muted;
 }
 
 /* Settings page styles */
@@ -737,7 +731,7 @@
 
 /* Status indicators */
 .status-connected {
-    -fx-text-fill: -color-success-emphasis;
+    -fx-text-fill: -fx-success;
     -fx-font-weight: bold;
 }
 
@@ -747,20 +741,20 @@
 }
 
 .loading-bubble {
-    -fx-background-color: -color-bg-subtle;
+    -fx-background-color: -fx-ai-bubble;
     -fx-background-radius: 18px 18px 18px 4px;
-    -fx-text-fill: -color-fg-default;
+    -fx-text-fill: -fx-text-primary;
 }
 
 .loading-text {
     -fx-font-size: 14px;
-    -fx-text-fill: -color-fg-muted;
+    -fx-text-fill: -fx-text-muted;
     -fx-font-style: italic;
 }
 
 .loading-dot {
     -fx-font-size: 16px;
-    -fx-text-fill: -color-accent-emphasis;
+    -fx-text-fill: -fx-accent-primary;
     -fx-font-weight: bold;
 }
 
@@ -768,26 +762,26 @@
    UNIVERSAL TEXT COMPONENT
    ================================================================ */
 .universal-text-component {
-    -fx-background-color: -color-bg-default;
-    -fx-border-color: -color-border-default;
+    -fx-background-color: -fx-bg-primary;
+    -fx-border-color: -fx-border-primary;
     -fx-border-radius: 6px;
     -fx-background-radius: 6px;
 }
 
 .text-component-toolbar {
-    -fx-background-color: -color-bg-subtle;
-    -fx-border-color: -color-border-default;
+    -fx-background-color: -fx-bg-secondary;
+    -fx-border-color: -fx-border-primary;
     -fx-border-width: 0 0 1px 0;
     -fx-padding: 8px 12px;
 }
 
 .text-content-area {
-    -fx-background-color: -color-bg-default;
+    -fx-background-color: -fx-bg-primary;
 }
 
 .text-editor {
-    -fx-background-color: -color-bg-default;
-    -fx-text-fill: -color-fg-default;
+    -fx-background-color: -fx-bg-primary;
+    -fx-text-fill: -fx-text-primary;
     -fx-border-color: transparent;
     -fx-background-insets: 0;
     -fx-border-insets: 0;
@@ -797,32 +791,32 @@
 }
 
 .text-editor:focused {
-    -fx-border-color: -color-accent-emphasis;
+    -fx-border-color: -fx-accent-primary;
     -fx-border-width: 2px;
 }
 
 .text-split-pane {
-    -fx-background-color: -color-bg-default;
+    -fx-background-color: -fx-bg-primary;
 }
 
 .text-split-pane > .split-pane-divider {
-    -fx-background-color: -color-border-default;
+    -fx-background-color: -fx-border-primary;
     -fx-padding: 0 1px 0 1px;
 }
 
 .editor-pane {
-    -fx-background-color: -color-bg-default;
+    -fx-background-color: -fx-bg-primary;
     -fx-padding: 0;
 }
 
 .view-pane {
-    -fx-background-color: -color-bg-default;
+    -fx-background-color: -fx-bg-primary;
     -fx-padding: 0;
 }
 
 /* Markdown Container */
 .markdown-container {
-    -fx-background-color: -color-bg-default;
+    -fx-background-color: -fx-bg-primary;
 }
 
 .markdown-scroll {
@@ -833,18 +827,18 @@
 
 /* Plain Text Renderer */
 .plain-text-container {
-    -fx-background-color: -color-bg-default;
+    -fx-background-color: -fx-bg-primary;
     -fx-spacing: 2px;
 }
 
 .plain-text-line {
-    -fx-text-fill: -color-fg-default;
+    -fx-text-fill: -fx-text-primary;
     -fx-font-size: 13px;
     -fx-wrap-text: true;
 }
 
 .plain-text-placeholder {
-    -fx-text-fill: -color-fg-muted;
+    -fx-text-fill: -fx-text-muted;
     -fx-font-style: italic;
 }
 
@@ -855,8 +849,8 @@
 
 /* Demo Page Controls */
 .demo-controls {
-    -fx-background-color: -color-bg-subtle;
-    -fx-border-color: -color-border-default;
+    -fx-background-color: -fx-bg-secondary;
+    -fx-border-color: -fx-border-primary;
     -fx-border-radius: 6px;
     -fx-background-radius: 6px;
     -fx-border-width: 1px;
@@ -864,7 +858,7 @@
 
 /* Error handling */
 .error-label {
-    -fx-text-fill: -color-danger-emphasis;
+    -fx-text-fill: -fx-error;
     -fx-font-style: italic;
     -fx-padding: 20px;
 }

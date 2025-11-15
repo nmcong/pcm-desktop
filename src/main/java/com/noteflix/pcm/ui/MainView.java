@@ -1,26 +1,34 @@
 package com.noteflix.pcm.ui;
 
 import atlantafx.base.theme.Styles;
+import com.noteflix.pcm.core.events.ThemeChangeListener;
+import com.noteflix.pcm.core.theme.ThemeManager;
 import com.noteflix.pcm.ui.components.SidebarView;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import lombok.extern.slf4j.Slf4j;
-import org.kordamp.ikonli.feather.Feather;
+import org.kordamp.ikonli.octicons.Octicons;
 import org.kordamp.ikonli.javafx.FontIcon;
 
 /** Main application view built with pure Java (no FXML) Following AtlantaFX Sampler patterns */
 @Slf4j
-public class MainView extends BorderPane {
+public class MainView extends BorderPane implements ThemeChangeListener {
 
   private final MainController controller;
+  private final ThemeManager themeManager;
   private SidebarView sidebar;
+  private Button themeButton;
 
   public MainView(MainController controller) {
     this.controller = controller;
+    this.themeManager = ThemeManager.getInstance();
 
     getStyleClass().add("root");
+
+    // Register for theme changes
+    themeManager.addThemeChangeListener(this);
 
     // Build UI: Sidebar left, right side divided into navbar (top) and content (bottom)
     setLeft(createSidebar());
@@ -74,8 +82,8 @@ public class MainView extends BorderPane {
 
     // Sidebar toggle button
     Button sidebarToggleBtn = new Button();
-    sidebarToggleBtn.setGraphic(new FontIcon(Feather.MENU));
-    sidebarToggleBtn.getStyleClass().addAll(Styles.BUTTON_ICON, Styles.FLAT, "icon-btn-bordered");
+    sidebarToggleBtn.setGraphic(new FontIcon(Octicons.THREE_BARS_16));
+    sidebarToggleBtn.getStyleClass().addAll(Styles.BUTTON_ICON, Styles.FLAT, "icon-btn");
     sidebarToggleBtn.setOnAction(e -> toggleSidebar());
 
     // Spacer
@@ -83,22 +91,24 @@ public class MainView extends BorderPane {
     HBox.setHgrow(spacer, Priority.ALWAYS);
 
     // Action buttons
-    Button newScreenBtn = new Button("New Screen");
-    newScreenBtn.setGraphic(new FontIcon(Feather.PLUS));
-    newScreenBtn.getStyleClass().addAll(Styles.ACCENT);
-    newScreenBtn.setOnAction(e -> controller.handleFileNew());
+    // Theme toggle button
+    themeButton = new Button();
+    themeButton.setGraphic(new FontIcon(themeManager.isDarkTheme() ? Octicons.MOON_16 : Octicons.SUN_16));
+    themeButton.getStyleClass().addAll(Styles.BUTTON_ICON, Styles.FLAT, "icon-btn");
+    themeButton.setTooltip(new Tooltip("Switch Theme"));
+    themeButton.setOnAction(e -> themeManager.toggleTheme());
 
     Button notificationsBtn = new Button();
-    notificationsBtn.setGraphic(new FontIcon(Feather.BELL));
-    notificationsBtn.getStyleClass().addAll(Styles.BUTTON_ICON, Styles.FLAT, "icon-btn-bordered");
+    notificationsBtn.setGraphic(new FontIcon(Octicons.BELL_16));
+    notificationsBtn.getStyleClass().addAll(Styles.BUTTON_ICON, Styles.FLAT, "icon-btn");
 
     Button settingsBtn = new Button();
-    settingsBtn.setGraphic(new FontIcon(Feather.SETTINGS));
-    settingsBtn.getStyleClass().addAll(Styles.BUTTON_ICON, Styles.FLAT, "icon-btn-bordered");
+    settingsBtn.setGraphic(new FontIcon(Octicons.GEAR_16));
+    settingsBtn.getStyleClass().addAll(Styles.BUTTON_ICON, Styles.FLAT, "icon-btn");
 
     MenuButton userMenu = new MenuButton();
-    userMenu.setGraphic(new FontIcon(Feather.USER));
-    userMenu.getStyleClass().addAll(Styles.BUTTON_ICON, Styles.FLAT, "icon-btn-bordered");
+    userMenu.setGraphic(new FontIcon(Octicons.PERSON_16));
+    userMenu.getStyleClass().addAll(Styles.BUTTON_ICON, Styles.FLAT, "icon-btn");
 
     MenuItem profileItem = new MenuItem("Profile");
     MenuItem preferencesItem = new MenuItem("Preferences");
@@ -119,7 +129,7 @@ public class MainView extends BorderPane {
 
     navbar
         .getChildren()
-        .addAll(sidebarToggleBtn, spacer, newScreenBtn, notificationsBtn, settingsBtn, userMenu);
+        .addAll(sidebarToggleBtn, spacer, themeButton, notificationsBtn, settingsBtn, userMenu);
 
     return navbar;
   }
@@ -170,11 +180,11 @@ public class MainView extends BorderPane {
     pageTitle.setStyle("-fx-font-weight: bold;");
 
     Button editBtn = new Button("Edit");
-    editBtn.setGraphic(new FontIcon(Feather.EDIT_2));
+    editBtn.setGraphic(new FontIcon(Octicons.PENCIL_16));
     editBtn.getStyleClass().add(Styles.ACCENT);
 
     Button moreBtn = new Button();
-    moreBtn.setGraphic(new FontIcon(Feather.MORE_HORIZONTAL));
+    moreBtn.setGraphic(new FontIcon(Octicons.KEBAB_HORIZONTAL_16));
     moreBtn.getStyleClass().addAll(Styles.BUTTON_ICON, Styles.FLAT);
 
     Region spacer = new Region();
@@ -355,7 +365,7 @@ public class MainView extends BorderPane {
     HBox.setHgrow(spacer, Priority.ALWAYS);
 
     Button addBtn = new Button();
-    addBtn.setGraphic(new FontIcon(Feather.PLUS));
+    addBtn.setGraphic(new FontIcon(Octicons.PLUS_16));
     addBtn.getStyleClass().addAll(Styles.BUTTON_ICON, Styles.FLAT, Styles.SMALL);
 
     headerRow.getChildren().addAll(header, spacer, addBtn);
@@ -380,7 +390,7 @@ public class MainView extends BorderPane {
     item.setPadding(new Insets(8));
     item.setAlignment(Pos.CENTER_LEFT);
 
-    FontIcon icon = new FontIcon(Feather.FILE_TEXT);
+    FontIcon icon = new FontIcon(Octicons.FILE_16);
     icon.setIconSize(16);
 
     VBox textBox = new VBox(2);
@@ -475,5 +485,31 @@ public class MainView extends BorderPane {
     item.getChildren().addAll(textLabel, timeLabel);
 
     return item;
+  }
+
+  @Override
+  public void onThemeChanged(boolean isDarkTheme) {
+    log.debug("Theme changed to: {}", isDarkTheme ? "dark" : "light");
+
+    // Update theme button
+    if (themeButton != null) {
+      FontIcon newIcon = new FontIcon(isDarkTheme ? Octicons.MOON_16 : Octicons.SUN_16);
+      themeButton.setGraphic(newIcon);
+      themeButton.setTooltip(
+          new Tooltip(isDarkTheme ? "Switch to Light Theme" : "Switch to Dark Theme"));
+    }
+  }
+
+  /**
+   * Cleanup method to unregister listeners
+   * Should be called when the component is no longer needed
+   */
+  public void cleanup() {
+    if (themeManager != null) {
+      themeManager.removeThemeChangeListener(this);
+    }
+    if (sidebar != null) {
+      sidebar.cleanup();
+    }
   }
 }

@@ -39,8 +39,19 @@
 }
 
 /* ============================================================================
-   Page Container
+   Global Application Styling - Apply AI Chat colors to entire app
    ============================================================================ */
+.root {
+    -fx-base: -fx-bg-primary;
+    -fx-background: -fx-bg-primary;
+    -fx-control-inner-background: -fx-bg-secondary;
+    -fx-accent: -fx-accent-primary;
+    -fx-default-button: -fx-accent-primary;
+    -fx-focus-color: -fx-accent-primary;
+    -fx-faint-focus-color: derive(-fx-accent-primary, 20%);
+    -fx-text-fill: -fx-text-primary;
+}
+
 .ai-chat-page {
     -fx-background-color: -fx-bg-primary;
 }

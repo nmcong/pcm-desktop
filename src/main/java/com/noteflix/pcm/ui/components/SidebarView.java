@@ -30,7 +30,6 @@ public class SidebarView extends VBox implements ThemeChangeListener {
     @Setter
     private PageNavigator pageNavigator;
   private FontIcon appIcon;
-  private Button themeButton;
 
   public SidebarView() {
     super(16);
@@ -64,15 +63,7 @@ public class SidebarView extends VBox implements ThemeChangeListener {
     Label titleLabel = new Label("PCM");
     titleLabel.getStyleClass().add(Styles.TITLE_3);
 
-    themeButton = new Button();
-    themeButton.setGraphic(new FontIcon(themeManager.isDarkTheme() ? Octicons.MOON_24 : Octicons.SUN_24));
-    themeButton
-        .getStyleClass()
-        .addAll(Styles.BUTTON_ICON, Styles.FLAT, "icon-btn");
-    themeButton.setTooltip(new Tooltip("Switch Theme"));
-    themeButton.setOnAction(e -> themeManager.toggleTheme());
-
-    HBox logoSection = new HBox(10, appIcon, titleLabel, createSpacer(), themeButton);
+    HBox logoSection = new HBox(10, appIcon, titleLabel);
     logoSection.setAlignment(Pos.CENTER_LEFT);
     logoSection.getStyleClass().add("logo");
 
@@ -314,13 +305,7 @@ public class SidebarView extends VBox implements ThemeChangeListener {
     // FontIcon automatically adapts to theme
     // DEPENDABOT icon also doesn't need theme update
 
-    // Update theme button
-    if (themeButton != null) {
-      FontIcon newIcon = new FontIcon(isDarkTheme ? Octicons.MOON_24 : Octicons.SUN_24);
-      themeButton.setGraphic(newIcon);
-      themeButton.setTooltip(
-          new Tooltip(isDarkTheme ? "Switch to Light Theme" : "Switch to Dark Theme"));
-    }
+    // Theme button removed - now handled in MainView navbar
   }
 
   private void handleAIAssistant() {
