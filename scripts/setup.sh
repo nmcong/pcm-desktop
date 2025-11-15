@@ -17,7 +17,7 @@ set -e
 # Change to project root directory
 cd "$(dirname "$0")/.."
 
-:start_setup
+# :start_setup
 
 echo
 echo "========================================"
