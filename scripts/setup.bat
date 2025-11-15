@@ -318,8 +318,8 @@ if exist onnxruntime-1.23.2.jar (
 echo.
 
 echo [INFO] 4. Downloading JavaParser
-if not exist javaparser-core-3.26.3.jar curl -O https://repo1.maven.org/maven2/com/github/javaparser/javaparser-core/3.26.3/javaparser-core-3.26.3.jar
-if not exist javaparser-symbol-solver-core-3.26.3.jar curl -O https://repo1.maven.org/maven2/com/github/javaparser/javaparser-symbol-solver-core/3.26.3/javaparser-symbol-solver-core-3.26.3.jar
+if not exist javaparser-core-3.27.1.jar curl -O https://repo1.maven.org/maven2/com/github/javaparser/javaparser-core/3.27.1/javaparser-core-3.27.1.jar
+if not exist javaparser-symbol-solver-core-3.27.1.jar curl -O https://repo1.maven.org/maven2/com/github/javaparser/javaparser-symbol-solver-core/3.27.1/javaparser-symbol-solver-core-3.27.1.jar
 echo [OK] JavaParser libraries checked
 echo.
 
