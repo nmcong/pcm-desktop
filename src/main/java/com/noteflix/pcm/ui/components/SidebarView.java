@@ -152,7 +152,9 @@ public class SidebarView extends VBox implements ThemeChangeListener {
     Button button = new Button();
     button.setGraphic(content);
     button.setMaxWidth(Double.MAX_VALUE);
-    button.getStyleClass().addAll(Styles.FLAT, Styles.LEFT_PILL, "ai-assistant-btn");
+    button
+        .getStyleClass()
+        .addAll(Styles.FLAT, Styles.LEFT_PILL, "sidebar-menu-item", "ai-assistant-btn");
     button.setAlignment(Pos.CENTER_LEFT);
     button.setOnAction(e -> handleAIAssistant());
 
@@ -172,7 +174,7 @@ public class SidebarView extends VBox implements ThemeChangeListener {
     Button button = new Button();
     button.setGraphic(content);
     button.setMaxWidth(Double.MAX_VALUE);
-    button.getStyleClass().addAll(Styles.FLAT, Styles.LEFT_PILL);
+    button.getStyleClass().addAll(Styles.FLAT, Styles.LEFT_PILL, "sidebar-menu-item");
     button.setAlignment(Pos.CENTER_LEFT);
     button.setOnAction(e -> action.run());
 

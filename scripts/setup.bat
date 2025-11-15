@@ -148,6 +148,9 @@ echo [INFO] 10. Downloading Ikonli
 curl -L -o ikonli-core-12.4.0.jar https://repo1.maven.org/maven2/org/kordamp/ikonli/ikonli-core/12.4.0/ikonli-core-12.4.0.jar
 curl -L -o ikonli-javafx-12.4.0.jar https://repo1.maven.org/maven2/org/kordamp/ikonli/ikonli-javafx/12.4.0/ikonli-javafx-12.4.0.jar
 curl -L -o ikonli-feather-pack-12.4.0.jar https://repo1.maven.org/maven2/org/kordamp/ikonli/ikonli-feather-pack/12.4.0/ikonli-feather-pack-12.4.0.jar
+curl -L -o ikonli-antdesignicons-pack-12.4.0.jar https://repo1.maven.org/maven2/org/kordamp/ikonli/ikonli-antdesignicons-pack/12.4.0/ikonli-antdesignicons-pack-12.4.0.jar
+curl -L -o ikonli-bpmn-pack-12.4.0.jar https://repo1.maven.org/maven2/org/kordamp/ikonli/ikonli-bpmn-pack/12.4.0/ikonli-bpmn-pack-12.4.0.jar
+curl -L -o ikonli-octicons-pack-12.4.0.jar https://repo1.maven.org/maven2/org/kordamp/ikonli/ikonli-octicons-pack/12.4.0/ikonli-octicons-pack-12.4.0.jar
 if %ERRORLEVEL%==0 (
     echo [OK] Ikonli downloaded
 ) else (

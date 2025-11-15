@@ -89,7 +89,9 @@ public class AIService {
       log.warn("Could not initialize Anthropic: {}", e.getMessage());
     }
 
-    // Ollama (Local)
+    // Ollama (Local) - DISABLED by default to avoid startup connection attempt
+    // Uncomment below to enable Ollama integration
+    /*
     try {
       OllamaProvider ollama = new OllamaProvider();
       ollama.configure(
@@ -106,6 +108,7 @@ public class AIService {
     } catch (Exception e) {
       log.warn("Could not initialize Ollama: {}", e.getMessage());
     }
+    */
 
     // Custom API (your service)
     try {

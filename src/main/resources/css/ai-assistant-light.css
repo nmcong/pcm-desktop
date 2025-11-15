@@ -1,36 +1,36 @@
 /* ============================================================================
-   AI Assistant Dark Theme
-   Based on reference image: dark blue/purple with modern design
+   AI Assistant Light Theme
+   Clean and modern light design
    ============================================================================ */
 
 /* ============================================================================
-   Color Variables (from reference image)
+   Color Variables (Light Theme)
    ============================================================================ */
 .root {
-    /* Background colors - Dark blue/gray palette */
-    -fx-bg-primary: #1a1d2e;
-    -fx-bg-secondary: #16192a;
-    -fx-bg-tertiary: #12151f;
-    -fx-bg-elevated: #1f2335;
+    /* Background colors - Light gray/white palette */
+    -fx-bg-primary: #ffffff;
+    -fx-bg-secondary: #f8f9fa;
+    -fx-bg-tertiary: #f1f3f5;
+    -fx-bg-elevated: #ffffff;
 
     /* Accent colors - Indigo/Purple */
     -fx-accent-primary: #6366f1;
     -fx-accent-secondary: #8b5cf6;
-    -fx-accent-hover: #7c3aed;
+    -fx-accent-hover: #4f46e5;
 
     /* Text colors */
-    -fx-text-primary: #f8fafc;
-    -fx-text-secondary: #cbd5e1;
-    -fx-text-muted: #64748b;
-    -fx-text-disabled: #475569;
+    -fx-text-primary: #1f2937;
+    -fx-text-secondary: #374151;
+    -fx-text-muted: #6b7280;
+    -fx-text-disabled: #9ca3af;
 
     /* Border colors */
-    -fx-border-primary: #2d3142;
-    -fx-border-secondary: #1f2335;
+    -fx-border-primary: #e5e7eb;
+    -fx-border-secondary: #d1d5db;
 
     /* Message bubble colors */
-    -fx-user-bubble: #2563eb;
-    -fx-ai-bubble: #1f2937;
+    -fx-user-bubble: #6366f1;
+    -fx-ai-bubble: #f3f4f6;
 
     /* Status colors */
     -fx-success: #10b981;
@@ -59,7 +59,7 @@
 }
 
 .chat-sidebar .search-input {
-    -fx-background-color: -fx-bg-tertiary;
+    -fx-background-color: -fx-bg-primary;
     -fx-text-fill: -fx-text-primary;
     -fx-prompt-text-fill: -fx-text-muted;
     -fx-background-radius: 8;
@@ -71,7 +71,7 @@
 
 .chat-sidebar .search-input:focused {
     -fx-border-color: -fx-accent-primary;
-    -fx-background-color: -fx-bg-elevated;
+    -fx-background-color: -fx-bg-primary;
 }
 
 .sidebar-section-title {
@@ -107,7 +107,7 @@
 }
 
 .sessions-scroll .scroll-bar:vertical .thumb {
-    -fx-background-color: -fx-border-primary;
+    -fx-background-color: -fx-border-secondary;
     -fx-background-radius: 4px;
 }
 
@@ -125,11 +125,11 @@
 }
 
 .chat-session-btn:hover {
-    -fx-background-color: rgba(99, 102, 241, 0.1);
+    -fx-background-color: rgba(99, 102, 241, 0.08);
 }
 
 .chat-session-btn.active {
-    -fx-background-color: rgba(99, 102, 241, 0.15);
+    -fx-background-color: rgba(99, 102, 241, 0.12);
     -fx-border-color: -fx-accent-primary;
     -fx-border-width: 1;
     -fx-border-radius: 8;
@@ -212,12 +212,12 @@
 }
 
 .chat-scroll .scroll-bar:vertical .track {
-    -fx-background-color: rgba(255, 255, 255, 0.05);
+    -fx-background-color: rgba(0, 0, 0, 0.05);
     -fx-background-radius: 5px;
 }
 
 .chat-scroll .scroll-bar:vertical .thumb {
-    -fx-background-color: -fx-border-primary;
+    -fx-background-color: -fx-border-secondary;
     -fx-background-radius: 5px;
 }
 
@@ -241,7 +241,7 @@
 .user-message-bubble {
     -fx-background-color: -fx-user-bubble;
     -fx-background-radius: 18 18 4 18;
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 8, 0, 0, 2);
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 8, 0, 0, 2);
 }
 
 .user-message-bubble .message-text {
@@ -251,17 +251,17 @@
 }
 
 .user-message-bubble .message-time {
-    -fx-text-fill: rgba(255, 255, 255, 0.7);
+    -fx-text-fill: rgba(255, 255, 255, 0.8);
 }
 
-/* AI Message (Left side, Dark gray) */
+/* AI Message (Left side, Light gray) */
 .ai-message-bubble {
     -fx-background-color: -fx-ai-bubble;
     -fx-background-radius: 18 18 18 4;
     -fx-border-color: -fx-border-primary;
     -fx-border-width: 1;
     -fx-border-radius: 18 18 18 4;
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 8, 0, 0, 2);
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.08), 8, 0, 0, 2);
 }
 
 .ai-message-bubble .message-text {
@@ -325,7 +325,7 @@
 }
 
 .chat-input-box {
-    -fx-background-color: -fx-bg-tertiary;
+    -fx-background-color: -fx-bg-primary;
     -fx-border-color: -fx-border-primary;
     -fx-border-width: 1;
     -fx-border-radius: 12;
@@ -385,7 +385,7 @@
 }
 
 .send-btn:disabled {
-    -fx-background-color: -fx-bg-elevated;
+    -fx-background-color: -fx-bg-tertiary;
     -fx-text-fill: -fx-text-disabled;
     -fx-opacity: 0.5;
 }
@@ -406,7 +406,7 @@
 }
 
 .welcome-bot-icon {
-    -fx-effect: dropshadow(gaussian, rgba(99, 102, 241, 0.5), 20, 0, 0, 0);
+    -fx-effect: dropshadow(gaussian, rgba(99, 102, 241, 0.4), 20, 0, 0, 0);
 }
 
 .welcome-title {
@@ -425,39 +425,39 @@
 }
 
 .suggestion-card {
-    -fx-background-color: rgba(99, 102, 241, 0.05);
+    -fx-background-color: rgba(99, 102, 241, 0.03);
     -fx-background-radius: 14;
     -fx-border-color: rgba(99, 102, 241, 0.15);
     -fx-border-width: 1.5;
     -fx-border-radius: 14;
     -fx-cursor: hand;
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 8, 0, 0, 2);
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.05), 8, 0, 0, 2);
     -fx-padding: 16;
 }
 
 .suggestion-card:hover {
-    -fx-background-color: rgba(99, 102, 241, 0.08);
+    -fx-background-color: rgba(99, 102, 241, 0.05);
     -fx-border-color: -fx-accent-primary;
     -fx-border-width: 2;
-    -fx-effect: dropshadow(gaussian, rgba(99, 102, 241, 0.5), 16, 0.3, 0, 4);
+    -fx-effect: dropshadow(gaussian, rgba(99, 102, 241, 0.3), 16, 0.3, 0, 4);
     -fx-scale-x: 1.03;
     -fx-scale-y: 1.03;
 }
 
 .suggestion-card:pressed {
-    -fx-background-color: rgba(99, 102, 241, 0.12);
+    -fx-background-color: rgba(99, 102, 241, 0.1);
     -fx-scale-x: 0.98;
     -fx-scale-y: 0.98;
 }
 
 .suggestion-card .suggestion-icon {
     -fx-icon-color: -fx-accent-primary;
-    -fx-effect: dropshadow(gaussian, rgba(99, 102, 241, 0.3), 6, 0, 0, 0);
+    -fx-effect: dropshadow(gaussian, rgba(99, 102, 241, 0.2), 6, 0, 0, 0);
 }
 
 .suggestion-card:hover .suggestion-icon {
     -fx-icon-color: -fx-accent-secondary;
-    -fx-effect: dropshadow(gaussian, rgba(139, 92, 246, 0.5), 10, 0, 0, 0);
+    -fx-effect: dropshadow(gaussian, rgba(139, 92, 246, 0.4), 10, 0, 0, 0);
 }
 
 .suggestion-card .suggestion-title {
@@ -481,7 +481,7 @@
 }
 
 .suggestion-btn {
-    -fx-background-color: -fx-bg-elevated;
+    -fx-background-color: -fx-bg-primary;
     -fx-text-fill: -fx-text-primary;
     -fx-background-radius: 12;
     -fx-border-color: -fx-border-primary;
@@ -496,7 +496,7 @@
     -fx-background-color: -fx-bg-secondary;
     -fx-border-color: -fx-accent-primary;
     -fx-text-fill: -fx-accent-primary;
-    -fx-effect: dropshadow(gaussian, rgba(99, 102, 241, 0.3), 10, 0, 0, 0);
+    -fx-effect: dropshadow(gaussian, rgba(99, 102, 241, 0.2), 10, 0, 0, 0);
 }
 
 .suggestion-btn:pressed {
@@ -513,46 +513,3 @@
 .scroll-pane .viewport {
     -fx-background-color: transparent;
 }
-
-/* ============================================================================
-   Animations
-   ============================================================================ */
-@keyframes fadeIn {
-    from {
-        -fx-opacity: 0;
-        -fx-translate-y: 10px;
-    }
-    to {
-        -fx-opacity: 1;
-        -fx-translate-y: 0;
-    }
-}
-
-/* Apply fade-in animation to messages */
-.message-box {
-    -fx-animation: fadeIn 0.3s ease-out;
-}
-
-/* ============================================================================
-   Responsive Design
-   ============================================================================ */
-@media (max-width: 1024px) {
-    .chat-sidebar {
-        -fx-pref-width: 240px;
-        -fx-min-width: 240px;
-        -fx-max-width: 240px;
-    }
-}
-
-@media (max-width: 768px) {
-    .chat-sidebar {
-        -fx-pref-width: 200px;
-        -fx-min-width: 200px;
-        -fx-max-width: 200px;
-    }
-
-    .chat-messages-area {
-        -fx-max-width: 600px;
-    }
-}
-

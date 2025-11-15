@@ -170,6 +170,21 @@
       <artifactId>ikonli-feather-pack</artifactId>
       <version>${ikonli.version}</version>
     </dependency>
+    <dependency>
+      <groupId>org.kordamp.ikonli</groupId>
+      <artifactId>ikonli-antdesignicons-pack</artifactId>
+      <version>${ikonli.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.kordamp.ikonli</groupId>
+      <artifactId>ikonli-bpmn-pack</artifactId>
+      <version>${ikonli.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.kordamp.ikonli</groupId>
+      <artifactId>ikonli-octicons-pack</artifactId>
+      <version>${ikonli.version}</version>
+    </dependency>
 
     <!-- Apache Lucene (RAG) -->
     <dependency>

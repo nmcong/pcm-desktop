@@ -112,16 +112,16 @@ public class ThemeManager {
         } else {
           log.warn("Dark theme CSS file not found: /css/ai-assistant-dark.css");
         }
+      } else {
+        if (getClass().getResource("/css/ai-assistant-light.css") != null) {
+          String lightCssUrl =
+              getClass().getResource("/css/ai-assistant-light.css").toExternalForm();
+          mainScene.getStylesheets().add(lightCssUrl);
+          log.info("Applied light theme CSS: {}", lightCssUrl);
+        } else {
+          log.warn("Light theme CSS file not found: /css/ai-assistant-light.css");
+        }
       }
-      // Note: You can add light-specific CSS here if needed
-      // else {
-      //     if (getClass().getResource("/css/ai-assistant-light.css") != null) {
-      //         String lightCssUrl =
-      // getClass().getResource("/css/ai-assistant-light.css").toExternalForm();
-      //         mainScene.getStylesheets().add(lightCssUrl);
-      //         log.info("Applied light theme CSS: {}", lightCssUrl);
-      //     }
-      // }
 
     } catch (Exception e) {
       log.error("Failed to apply theme CSS to scene", e);
