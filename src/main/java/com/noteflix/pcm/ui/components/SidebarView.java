@@ -70,7 +70,7 @@ public class SidebarView extends VBox implements ThemeChangeListener {
     themeButton.setGraphic(new FontIcon(themeManager.isDarkTheme() ? Feather.MOON : Feather.SUN));
     themeButton
         .getStyleClass()
-        .addAll(Styles.BUTTON_ICON, Styles.FLAT, Styles.SMALL, "icon-btn-bordered");
+        .addAll(Styles.BUTTON_ICON, Styles.FLAT, "icon-btn");
     themeButton.setTooltip(new Tooltip("Switch Theme"));
     themeButton.setOnAction(e -> themeManager.toggleTheme());
 
@@ -212,7 +212,7 @@ public class SidebarView extends VBox implements ThemeChangeListener {
     addButton.setGraphic(new FontIcon(Feather.PLUS));
     addButton
         .getStyleClass()
-        .addAll(Styles.BUTTON_ICON, Styles.FLAT, Styles.SMALL, "icon-btn-bordered");
+        .addAll(Styles.BUTTON_ICON, Styles.FLAT, "icon-btn");
     addButton.setTooltip(new Tooltip("New Project"));
     addButton.setOnAction(e -> handleNewProject());
 

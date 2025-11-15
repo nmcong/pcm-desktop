@@ -34,6 +34,19 @@
     -fx-icon-color: -color-accent-emphasis;
 }
 
+/* Common icon button style - clean by default, styled on hover */
+.icon-btn {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-background-radius: 6px;
+    -fx-border-radius: 6px;
+    -fx-padding: 8px;
+    -fx-min-width: 32px;
+    -fx-min-height: 32px;
+    -fx-max-width: 32px;
+    -fx-max-height: 32px;
+}
+
 .sidebar-full-height {
     -fx-min-height: 100%;
 }

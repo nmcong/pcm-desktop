@@ -174,7 +174,7 @@ public class AIAssistantPage extends BasePage {
 
     Button newChatBtn = new Button();
     newChatBtn.setGraphic(new FontIcon(Feather.PLUS));
-    newChatBtn.getStyleClass().addAll(Styles.BUTTON_ICON, Styles.FLAT);
+    newChatBtn.getStyleClass().addAll(Styles.BUTTON_ICON, Styles.FLAT, "icon-btn");
     newChatBtn.setTooltip(new Tooltip("New Chat"));
     newChatBtn.setOnAction(e -> createNewChat());
 
@@ -222,7 +222,7 @@ public class AIAssistantPage extends BasePage {
     // Chat actions
     Button clearBtn = new Button();
     clearBtn.setGraphic(new FontIcon(Feather.TRASH_2));
-    clearBtn.getStyleClass().addAll(Styles.BUTTON_ICON, Styles.FLAT);
+    clearBtn.getStyleClass().addAll(Styles.BUTTON_ICON, Styles.FLAT, "icon-btn");
     clearBtn.setTooltip(new Tooltip("Clear Chat"));
     clearBtn.setOnAction(e -> clearCurrentChat());
 
@@ -619,31 +619,12 @@ public class AIAssistantPage extends BasePage {
   }
 
   private Button createConversationButton(Conversation conv) {
-    HBox content = new HBox(12);
-    content.setAlignment(Pos.CENTER_LEFT);
-    content.setPadding(new Insets(12));
-
-    VBox textContent = new VBox(4);
-    HBox.setHgrow(textContent, Priority.ALWAYS);
-
     Label titleLabel = new Label(conv.getTitle());
-    titleLabel.getStyleClass().addAll(Styles.TEXT_BOLD);
-    titleLabel.setMaxWidth(200);
-
-    Label previewLabel =
-        new Label(conv.getPreview() != null ? conv.getPreview() : "Empty conversation");
-    previewLabel.getStyleClass().addAll(Styles.TEXT_SMALL, "text-muted");
-    previewLabel.setMaxWidth(200);
-
-    textContent.getChildren().addAll(titleLabel, previewLabel);
-
-    Label timeLabel = new Label(conv.getUpdatedAt().format(DateTimeFormatter.ofPattern("MMM dd")));
-    timeLabel.getStyleClass().addAll(Styles.TEXT_SMALL, "text-muted");
-
-    content.getChildren().addAll(textContent, timeLabel);
+    titleLabel.setMaxWidth(220);
+    titleLabel.setPadding(new Insets(8, 12, 8, 12));
 
     Button sessionBtn = new Button();
-    sessionBtn.setGraphic(content);
+    sessionBtn.setGraphic(titleLabel);
     sessionBtn.getStyleClass().add("chat-session-btn");
     sessionBtn.setMaxWidth(Double.MAX_VALUE);
 

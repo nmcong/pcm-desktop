@@ -172,13 +172,26 @@
 
 /* Chat Header */
 .chat-header {
-    -fx-background-color: -fx-bg-primary;
-    -fx-border-color: transparent;
-    -fx-border-width: 0;
+    -fx-background-color: -fx-bg-secondary;
+    -fx-border-color: -fx-border-primary;
+    -fx-border-width: 0 0 1 0;
 }
 
 .chat-header .text-muted {
     -fx-text-fill: -fx-text-muted;
+}
+
+/* Icon button hover effects for light theme */
+.icon-btn:hover {
+    -fx-background-color: -fx-bg-tertiary;
+    -fx-border-color: -fx-border-primary;
+    -fx-border-width: 1px;
+}
+
+.icon-btn:pressed {
+    -fx-background-color: -fx-bg-tertiary;
+    -fx-border-color: -fx-accent-primary;
+    -fx-border-width: 1px;
 }
 
 .chat-action-btn {
