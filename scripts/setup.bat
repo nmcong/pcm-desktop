@@ -46,6 +46,8 @@ if not exist "lib\javafx" mkdir lib\javafx
 if not exist "lib\others" mkdir lib\others
 if not exist "lib\rag" mkdir lib\rag
 if not exist "lib\text-component" mkdir lib\text-component
+if not exist "bin" mkdir bin
+if not exist "models" mkdir models
 echo [OK] Directories created
 echo.
 
@@ -348,6 +350,65 @@ cd ..\..
 echo [OK] Text Component libraries downloaded successfully!
 echo.
 
+REM Download Qdrant Vector Database
+echo ========================================
+echo    Downloading Qdrant Vector Database
+echo ========================================
+echo.
+
+echo [INFO] 1. Downloading Qdrant v1.15.5 for Windows...
+if exist "bin\qdrant.exe" (
+    echo [SKIP] Qdrant binary already exists
+) else (
+    curl -L -o qdrant-v1.15.5-x86_64-pc-windows-msvc.zip https://github.com/qdrant/qdrant/releases/download/v1.15.5/qdrant-v1.15.5-x86_64-pc-windows-msvc.zip
+    if %ERRORLEVEL%==0 (
+        echo [OK] Qdrant downloaded
+        
+        echo [INFO] 2. Extracting Qdrant...
+        powershell -command "Expand-Archive -Path qdrant-v1.15.5-x86_64-pc-windows-msvc.zip -DestinationPath temp-qdrant -Force"
+        move temp-qdrant\qdrant.exe bin\
+        rmdir /s /q temp-qdrant
+        del qdrant-v1.15.5-x86_64-pc-windows-msvc.zip
+        echo [OK] Qdrant extracted and ready
+    ) else (
+        echo [ERROR] Failed to download Qdrant
+    )
+)
+
+echo [OK] Qdrant Vector Database setup completed!
+echo.
+
+REM Download Embedding Model
+echo ========================================
+echo    Downloading Embedding Model
+echo ========================================
+echo.
+
+set MODEL_NAME=all-MiniLM-L6-v2
+echo [INFO] Downloading %MODEL_NAME% model...
+
+if exist "models\%MODEL_NAME%\model.onnx" (
+    echo [SKIP] Model %MODEL_NAME% already exists
+) else (
+    if not exist "models\%MODEL_NAME%" mkdir models\%MODEL_NAME%
+    cd models\%MODEL_NAME%
+    
+    echo [INFO] 1. Downloading model.onnx...
+    if not exist model.onnx curl -L -o model.onnx "https://huggingface.co/sentence-transformers/%MODEL_NAME%/resolve/main/onnx/model.onnx"
+    
+    echo [INFO] 2. Downloading tokenizer.json...
+    if not exist tokenizer.json curl -L -O "https://huggingface.co/sentence-transformers/%MODEL_NAME%/resolve/main/tokenizer.json"
+    
+    echo [INFO] 3. Downloading config.json...
+    if not exist config.json curl -L -O "https://huggingface.co/sentence-transformers/%MODEL_NAME%/resolve/main/config.json"
+    
+    cd ..\..
+    echo [OK] Embedding model %MODEL_NAME% downloaded
+)
+
+echo [OK] Embedding model setup completed!
+echo.
+
 REM Summary
 echo ========================================
 echo    Setup Completed Successfully!
@@ -375,6 +436,16 @@ dir /b lib\rag\*.jar 2>nul
 echo.
 echo   Text Component Libraries (lib\text-component\):
 dir /b lib\text-component\*.jar 2>nul
+echo.
+echo   Vector Database (bin\):
+if exist bin\qdrant.exe (
+    echo   qdrant.exe (v1.15.5)
+) else (
+    echo   [WARNING] Qdrant not found!
+)
+echo.
+echo   Embedding Models (models\):
+dir /b models\*\model.onnx 2>nul || echo   [WARNING] No models found!
 echo.
 
 echo [INFO] Next Steps:

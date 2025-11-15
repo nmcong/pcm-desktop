@@ -44,6 +44,8 @@ mkdir -p lib/javafx
 mkdir -p lib/others
 mkdir -p lib/rag
 mkdir -p lib/text-component
+mkdir -p bin
+mkdir -p models
 echo "[OK] Directories created"
 echo
 
@@ -260,6 +262,84 @@ cd ../..
 echo "[OK] Text Component libraries downloaded successfully!"
 echo
 
+# Download Qdrant Vector Database
+echo "========================================"
+echo "   Downloading Qdrant Vector Database"
+echo "========================================"
+echo
+
+# Detect platform for Qdrant
+OS_TYPE=$(uname -s)
+ARCH=$(uname -m)
+
+if [ "$OS_TYPE" = "Darwin" ]; then
+    # macOS
+    if [ "$ARCH" = "arm64" ]; then
+        QDRANT_URL="https://github.com/qdrant/qdrant/releases/download/v1.15.5/qdrant-v1.15.5-aarch64-apple-darwin.tar.gz"
+        QDRANT_FILE="qdrant-v1.15.5-aarch64-apple-darwin.tar.gz"
+    else
+        QDRANT_URL="https://github.com/qdrant/qdrant/releases/download/v1.15.5/qdrant-v1.15.5-x86_64-apple-darwin.tar.gz"
+        QDRANT_FILE="qdrant-v1.15.5-x86_64-apple-darwin.tar.gz"
+    fi
+elif [ "$OS_TYPE" = "Linux" ]; then
+    QDRANT_URL="https://github.com/qdrant/qdrant/releases/download/v1.15.5/qdrant-v1.15.5-x86_64-unknown-linux-gnu.tar.gz"
+    QDRANT_FILE="qdrant-v1.15.5-x86_64-unknown-linux-gnu.tar.gz"
+else
+    echo "[ERROR] Unsupported platform for Qdrant: $OS_TYPE"
+    echo "Please download Qdrant manually from: https://github.com/qdrant/qdrant/releases"
+fi
+
+if [ -n "$QDRANT_URL" ]; then
+    echo "[INFO] 1. Downloading Qdrant v1.15.5 for $OS_TYPE..."
+    if [ -f bin/qdrant ]; then
+        echo "[SKIP] Qdrant binary already exists"
+    else
+        curl -L -o "$QDRANT_FILE" "$QDRANT_URL"
+        echo "[OK] Qdrant downloaded"
+        
+        echo "[INFO] 2. Extracting Qdrant..."
+        tar -xzf "$QDRANT_FILE"
+        mv qdrant bin/
+        chmod +x bin/qdrant
+        rm "$QDRANT_FILE"
+        echo "[OK] Qdrant extracted and ready"
+    fi
+fi
+
+echo "[OK] Qdrant Vector Database setup completed!"
+echo
+
+# Download Embedding Model
+echo "========================================"
+echo "   Downloading Embedding Model"
+echo "========================================"
+echo
+
+MODEL_NAME="all-MiniLM-L6-v2"
+echo "[INFO] Downloading $MODEL_NAME model..."
+
+if [ -d "models/$MODEL_NAME" ] && [ -f "models/$MODEL_NAME/model.onnx" ]; then
+    echo "[SKIP] Model $MODEL_NAME already exists"
+else
+    mkdir -p models/$MODEL_NAME
+    cd models/$MODEL_NAME
+    
+    echo "[INFO] 1. Downloading model.onnx..."
+    [ -f model.onnx ] || curl -L -o model.onnx "https://huggingface.co/sentence-transformers/$MODEL_NAME/resolve/main/onnx/model.onnx"
+    
+    echo "[INFO] 2. Downloading tokenizer.json..."
+    [ -f tokenizer.json ] || curl -L -O "https://huggingface.co/sentence-transformers/$MODEL_NAME/resolve/main/tokenizer.json"
+    
+    echo "[INFO] 3. Downloading config.json..."
+    [ -f config.json ] || curl -L -O "https://huggingface.co/sentence-transformers/$MODEL_NAME/resolve/main/config.json"
+    
+    cd ../..
+    echo "[OK] Embedding model $MODEL_NAME downloaded"
+fi
+
+echo "[OK] Embedding model setup completed!"
+echo
+
 # Summary
 echo "========================================"
 echo "   Setup Completed Successfully!"
@@ -286,6 +366,14 @@ echo
 
 echo "  Text Component Libraries (lib/text-component/):"
 ls -1 lib/text-component/*.jar 2>/dev/null
+echo
+
+echo "  Vector Database (bin/):"
+[ -f bin/qdrant ] && echo "  qdrant (v1.15.5)" || echo "  [WARNING] Qdrant not found!"
+echo
+
+echo "  Embedding Models (models/):"
+ls -1 models/*/model.onnx 2>/dev/null || echo "  [WARNING] No models found!"
 echo
 
 echo "[INFO] Next Steps:"
