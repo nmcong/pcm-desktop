@@ -36,21 +36,127 @@ if %ERRORLEVEL% NEQ 0 (
 
 echo [INFO] Creating library directories...
 if not exist "lib\javafx" mkdir lib\javafx
-if not exist "lib\others" mkdir lib\others
+if not exist "lib\database" mkdir lib\database
+if not exist "lib\logs" mkdir lib\logs
 if not exist "lib\rag" mkdir lib\rag
-if not exist "lib\text-component" mkdir lib\text-component
+if not exist "lib\ui" mkdir lib\ui
+if not exist "lib\icons" mkdir lib\icons
+if not exist "lib\utils" mkdir lib\utils
 if not exist "bin" mkdir bin
 if not exist "models" mkdir models
 echo [OK] Directories created
 echo.
 
-REM Download core libraries
+REM Download Database Libraries
 echo ========================================
-echo    Downloading Core Libraries
+echo    Downloading Database Libraries
 echo ========================================
 echo.
 
-cd lib\others
+cd lib\database
+
+echo [INFO] 1. Downloading SQLite JDBC
+if exist sqlite-jdbc-3.51.0.0.jar (
+    echo [SKIP] SQLite JDBC already exists
+) else (
+    curl -O https://repo1.maven.org/maven2/org/xerial/sqlite-jdbc/3.51.0.0/sqlite-jdbc-3.51.0.0.jar
+    if %ERRORLEVEL%==0 (
+        echo [OK] SQLite JDBC downloaded
+    ) else (
+        echo [ERROR] Failed to download SQLite JDBC
+    )
+)
+echo.
+
+echo [INFO] 2. Downloading Oracle OJDBC
+if exist ojdbc11-23.26.0.0.0.jar (
+    echo [SKIP] Oracle OJDBC already exists
+) else (
+    curl -L -o ojdbc11-23.26.0.0.0.jar https://repo1.maven.org/maven2/com/oracle/database/jdbc/ojdbc11/23.26.0.0.0/ojdbc11-23.26.0.0.0.jar
+    if %ERRORLEVEL%==0 (
+        echo [OK] Oracle OJDBC downloaded
+    ) else (
+        echo [ERROR] Failed to download Oracle OJDBC
+    )
+)
+echo.
+
+echo [INFO] 3. Downloading HikariCP
+if exist HikariCP-7.0.2.jar (
+    echo [SKIP] HikariCP already exists
+) else (
+    curl -O https://repo1.maven.org/maven2/com/zaxxer/HikariCP/7.0.2/HikariCP-7.0.2.jar
+    if %ERRORLEVEL%==0 (
+        echo [OK] HikariCP downloaded
+    ) else (
+        echo [ERROR] Failed to download HikariCP
+    )
+)
+echo.
+
+echo [INFO] 4. Downloading Oracle UCP
+if exist ucp-23.26.0.0.0.jar (
+    echo [SKIP] Oracle UCP already exists
+) else (
+    curl -L -o ucp-23.26.0.0.0.jar https://repo1.maven.org/maven2/com/oracle/database/jdbc/ucp/23.26.0.0.0/ucp-23.26.0.0.0.jar
+    if %ERRORLEVEL%==0 (
+        echo [OK] Oracle UCP downloaded
+    ) else (
+        echo [ERROR] Failed to download Oracle UCP
+    )
+)
+echo.
+
+cd ..\..
+echo [OK] Database libraries downloaded successfully!
+echo.
+
+REM Download Logging Libraries
+echo ========================================
+echo    Downloading Logging Libraries
+echo ========================================
+echo.
+
+cd lib\logs
+
+echo [INFO] 1. Downloading SLF4J
+if exist slf4j-api-2.0.17.jar (
+    echo [SKIP] SLF4J already exists
+) else (
+    curl -O https://repo1.maven.org/maven2/org/slf4j/slf4j-api/2.0.17/slf4j-api-2.0.17.jar
+    if %ERRORLEVEL%==0 (
+        echo [OK] SLF4J downloaded
+    ) else (
+        echo [ERROR] Failed to download SLF4J
+    )
+)
+echo.
+
+echo [INFO] 2. Downloading Logback
+if exist logback-classic-1.5.21.jar (
+    echo [SKIP] Logback classic already exists
+) else (
+    curl -O https://repo1.maven.org/maven2/ch/qos/logback/logback-classic/1.5.21/logback-classic-1.5.21.jar
+)
+if exist logback-core-1.5.21.jar (
+    echo [SKIP] Logback core already exists
+) else (
+    curl -O https://repo1.maven.org/maven2/ch/qos/logback/logback-core/1.5.21/logback-core-1.5.21.jar
+)
+echo [OK] Logback libraries checked
+echo.
+
+cd ..\..
+echo [OK] Logging libraries downloaded successfully!
+echo.
+
+REM Download Utils Libraries
+echo ========================================
+echo    Downloading Utils Libraries
+echo ========================================
+echo.
+
+cd lib\utils
 
 echo [INFO] 1. Downloading Lombok
 if exist lombok-1.18.34.jar (
@@ -89,87 +195,19 @@ if exist jackson-datatype-jsr310-2.20.1.jar (
 echo [OK] Jackson libraries checked
 echo.
 
-echo [INFO] 3. Downloading SLF4J
-if exist slf4j-api-2.0.17.jar (
-    echo [SKIP] SLF4J already exists
-) else (
-    curl -O https://repo1.maven.org/maven2/org/slf4j/slf4j-api/2.0.17/slf4j-api-2.0.17.jar
-    if %ERRORLEVEL%==0 (
-        echo [OK] SLF4J downloaded
-    ) else (
-        echo [ERROR] Failed to download SLF4J
-    )
-)
+cd ..\..
+echo [OK] Utils libraries downloaded successfully!
 echo.
 
-echo [INFO] 4. Downloading Logback
-if exist logback-classic-1.5.21.jar (
-    echo [SKIP] Logback classic already exists
-) else (
-    curl -O https://repo1.maven.org/maven2/ch/qos/logback/logback-classic/1.5.21/logback-classic-1.5.21.jar
-)
-if exist logback-core-1.5.21.jar (
-    echo [SKIP] Logback core already exists
-) else (
-    curl -O https://repo1.maven.org/maven2/ch/qos/logback/logback-core/1.5.21/logback-core-1.5.21.jar
-)
-echo [OK] Logback libraries checked
+REM Download UI Libraries
+echo ========================================
+echo    Downloading UI Libraries
+echo ========================================
 echo.
 
-echo [INFO] 5. Downloading SQLite JDBC
-if exist sqlite-jdbc-3.51.0.0.jar (
-    echo [SKIP] SQLite JDBC already exists
-) else (
-    curl -O https://repo1.maven.org/maven2/org/xerial/sqlite-jdbc/3.51.0.0/sqlite-jdbc-3.51.0.0.jar
-    if %ERRORLEVEL%==0 (
-        echo [OK] SQLite JDBC downloaded
-    ) else (
-        echo [ERROR] Failed to download SQLite JDBC
-    )
-)
-echo.
+cd lib\ui
 
-echo [INFO] 6. Downloading Oracle OJDBC
-if exist ojdbc11-23.26.0.0.0.jar (
-    echo [SKIP] Oracle OJDBC already exists
-) else (
-    curl -L -o ojdbc11-23.26.0.0.0.jar https://repo1.maven.org/maven2/com/oracle/database/jdbc/ojdbc11/23.26.0.0.0/ojdbc11-23.26.0.0.0.jar
-    if %ERRORLEVEL%==0 (
-        echo [OK] Oracle OJDBC downloaded
-    ) else (
-        echo [ERROR] Failed to download Oracle OJDBC
-    )
-)
-echo.
-
-echo [INFO] 7. Downloading HikariCP
-if exist HikariCP-7.0.2.jar (
-    echo [SKIP] HikariCP already exists
-) else (
-    curl -O https://repo1.maven.org/maven2/com/zaxxer/HikariCP/7.0.2/HikariCP-7.0.2.jar
-    if %ERRORLEVEL%==0 (
-        echo [OK] HikariCP downloaded
-    ) else (
-        echo [ERROR] Failed to download HikariCP
-    )
-)
-echo.
-
-echo [INFO] 8. Downloading Oracle UCP
-if exist ucp-23.26.0.0.0.jar (
-    echo [SKIP] Oracle UCP already exists
-) else (
-    curl -L -o ucp-23.26.0.0.0.jar https://repo1.maven.org/maven2/com/oracle/database/jdbc/ucp/23.26.0.0.0/ucp-23.26.0.0.0.jar
-    if %ERRORLEVEL%==0 (
-        echo [OK] Oracle UCP downloaded
-    ) else (
-        echo [ERROR] Failed to download Oracle UCP
-    )
-)
-echo.
-
-REM Download AtlantaFX
-echo [INFO] 9. Downloading AtlantaFX
+echo [INFO] 1. Downloading AtlantaFX
 if exist atlantafx-base-2.1.0.jar (
     echo [SKIP] AtlantaFX already exists
 ) else (
@@ -182,8 +220,32 @@ if exist atlantafx-base-2.1.0.jar (
 )
 echo.
 
-REM Download Ikonli
-echo [INFO] 10. Downloading Ikonli
+echo [OK] AtlantaFX checked
+echo.
+
+echo [INFO] 3. Downloading RichTextFX
+if not exist richtextfx-0.11.6.jar curl -O https://repo1.maven.org/maven2/org/fxmisc/richtext/richtextfx/0.11.6/richtextfx-0.11.6.jar
+if not exist flowless-0.7.4.jar curl -O https://repo1.maven.org/maven2/org/fxmisc/flowless/flowless/0.7.4/flowless-0.7.4.jar
+if not exist reactfx-2.0-M6.jar curl -O https://repo1.maven.org/maven2/org/reactfx/reactfx/2.0-M6/reactfx-2.0-M6.jar
+if not exist undofx-2.1.1.jar curl -O https://repo1.maven.org/maven2/org/fxmisc/undo/undofx/2.1.1/undofx-2.1.1.jar
+if not exist wellbehavedfx-0.3.3.jar curl -O https://repo1.maven.org/maven2/org/fxmisc/wellbehaved/wellbehavedfx/0.3.3/wellbehavedfx-0.3.3.jar
+echo [OK] RichTextFX and dependencies checked
+echo.
+
+cd ..\..
+
+echo [OK] UI libraries downloaded successfully!
+echo.
+
+REM Download Icons Libraries
+echo ========================================
+echo    Downloading Icons Libraries
+echo ========================================
+echo.
+
+cd lib\icons
+
+echo [INFO] 1. Downloading Ikonli
 if exist ikonli-core-12.4.0.jar (
     echo [SKIP] Ikonli core already exists
 ) else (
@@ -219,7 +281,7 @@ echo.
 
 cd ..\..
 
-echo [OK] Core and UI libraries downloaded successfully!
+echo [OK] Icons libraries downloaded successfully!
 echo.
 
 REM Download RAG libraries
@@ -321,27 +383,6 @@ echo [OK] Cleanup completed
 echo [OK] JavaFX setup completed!
 echo.
 
-REM Download Text Component libraries
-echo ========================================
-echo    Downloading Text Component Libraries
-echo ========================================
-echo.
-
-cd lib\text-component
-
-echo [INFO] 1. Downloading RichTextFX
-if not exist richtextfx-0.11.6.jar curl -O https://repo1.maven.org/maven2/org/fxmisc/richtext/richtextfx/0.11.6/richtextfx-0.11.6.jar
-if not exist flowless-0.7.4.jar curl -O https://repo1.maven.org/maven2/org/fxmisc/flowless/flowless/0.7.4/flowless-0.7.4.jar
-if not exist reactfx-2.0-M6.jar curl -O https://repo1.maven.org/maven2/org/reactfx/reactfx/2.0-M6/reactfx-2.0-M6.jar
-if not exist undofx-2.1.1.jar curl -O https://repo1.maven.org/maven2/org/fxmisc/undo/undofx/2.1.1/undofx-2.1.1.jar
-if not exist wellbehavedfx-0.3.3.jar curl -O https://repo1.maven.org/maven2/org/fxmisc/wellbehaved/wellbehavedfx/0.3.3/wellbehavedfx-0.3.3.jar
-echo [OK] RichTextFX and dependencies checked
-echo.
-
-cd ..\..
-
-echo [OK] Text Component libraries downloaded successfully!
-echo.
 
 REM Download Qdrant Vector Database
 echo ========================================
@@ -421,14 +462,23 @@ dir /b lib\javafx\*.jar 2>nul | find /c ".jar" >nul && (
     dir /b lib\javafx\*.dll 2>nul
 ) || echo   [WARNING] JavaFX not found!
 echo.
-echo   Core and Oracle Libraries (lib\others\):
-dir /b lib\others\*.jar 2>nul
+echo   Database Libraries (lib\database\):
+dir /b lib\database\*.jar 2>nul || echo   [WARNING] Database libraries not found!
+echo.
+echo   Logging Libraries (lib\logs\):
+dir /b lib\logs\*.jar 2>nul || echo   [WARNING] Logging libraries not found!
+echo.
+echo   Utils Libraries (lib\utils\):
+dir /b lib\utils\*.jar 2>nul || echo   [WARNING] Utils libraries not found!
+echo.
+echo   UI Libraries (lib\ui\):
+dir /b lib\ui\*.jar 2>nul || echo   [WARNING] UI libraries not found!
+echo.
+echo   Icons Libraries (lib\icons\):
+dir /b lib\icons\*.jar 2>nul || echo   [WARNING] Icons libraries not found!
 echo.
 echo   RAG Libraries (lib\rag\):
-dir /b lib\rag\*.jar 2>nul
-echo.
-echo   Text Component Libraries (lib\text-component\):
-dir /b lib\text-component\*.jar 2>nul
+dir /b lib\rag\*.jar 2>nul || echo   [WARNING] RAG libraries not found!
 echo.
 echo   Vector Database (bin\):
 if exist bin\qdrant.exe (

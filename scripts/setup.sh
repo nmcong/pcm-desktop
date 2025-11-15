@@ -34,9 +34,12 @@ fi
 
 echo "[INFO] Creating library directories..."
 mkdir -p lib/javafx
-mkdir -p lib/others
+mkdir -p lib/database
+mkdir -p lib/logs
 mkdir -p lib/rag
-mkdir -p lib/text-component
+mkdir -p lib/ui
+mkdir -p lib/icons
+mkdir -p lib/utils
 mkdir -p bin
 mkdir -p models
 echo "[OK] Directories created"
@@ -48,7 +51,78 @@ echo "   Downloading Core Libraries"
 echo "========================================"
 echo
 
-cd lib/others
+# Download Database Libraries
+echo "========================================"
+echo "   Downloading Database Libraries"
+echo "========================================"
+echo
+
+cd lib/database
+
+echo "[INFO] 1. Downloading SQLite JDBC"
+[ -f sqlite-jdbc-3.51.0.0.jar ] && echo "[SKIP] SQLite JDBC already exists" || {
+    curl -O https://repo1.maven.org/maven2/org/xerial/sqlite-jdbc/3.51.0.0/sqlite-jdbc-3.51.0.0.jar
+    echo "[OK] SQLite JDBC downloaded"
+}
+echo
+
+echo "[INFO] 2. Downloading Oracle OJDBC"
+[ -f ojdbc11-23.26.0.0.0.jar ] && echo "[SKIP] Oracle OJDBC already exists" || {
+    curl -L -o ojdbc11-23.26.0.0.0.jar https://repo1.maven.org/maven2/com/oracle/database/jdbc/ojdbc11/23.26.0.0.0/ojdbc11-23.26.0.0.0.jar
+    echo "[OK] Oracle OJDBC downloaded"
+}
+echo
+
+echo "[INFO] 3. Downloading HikariCP"
+[ -f HikariCP-7.0.2.jar ] && echo "[SKIP] HikariCP already exists" || {
+    curl -O https://repo1.maven.org/maven2/com/zaxxer/HikariCP/7.0.2/HikariCP-7.0.2.jar
+    echo "[OK] HikariCP downloaded"
+}
+echo
+
+echo "[INFO] 4. Downloading Oracle UCP"
+[ -f ucp-23.26.0.0.0.jar ] && echo "[SKIP] Oracle UCP already exists" || {
+    curl -L -o ucp-23.26.0.0.0.jar https://repo1.maven.org/maven2/com/oracle/database/jdbc/ucp/23.26.0.0.0/ucp-23.26.0.0.0.jar
+    echo "[OK] Oracle UCP downloaded"
+}
+echo
+
+cd ../..
+echo "[OK] Database libraries downloaded successfully!"
+echo
+
+# Download Logging Libraries
+echo "========================================"
+echo "   Downloading Logging Libraries"
+echo "========================================"
+echo
+
+cd lib/logs
+
+echo "[INFO] 1. Downloading SLF4J"
+[ -f slf4j-api-2.0.17.jar ] && echo "[SKIP] SLF4J already exists" || {
+    curl -O https://repo1.maven.org/maven2/org/slf4j/slf4j-api/2.0.17/slf4j-api-2.0.17.jar
+    echo "[OK] SLF4J downloaded"
+}
+echo
+
+echo "[INFO] 2. Downloading Logback"
+[ -f logback-classic-1.5.21.jar ] || curl -O https://repo1.maven.org/maven2/ch/qos/logback/logback-classic/1.5.21/logback-classic-1.5.21.jar
+[ -f logback-core-1.5.21.jar ] || curl -O https://repo1.maven.org/maven2/ch/qos/logback/logback-core/1.5.21/logback-core-1.5.21.jar
+echo "[OK] Logback libraries checked"
+echo
+
+cd ../..
+echo "[OK] Logging libraries downloaded successfully!"
+echo
+
+# Download Utils Libraries
+echo "========================================"
+echo "   Downloading Utils Libraries"
+echo "========================================"
+echo
+
+cd lib/utils
 
 echo "[INFO] 1. Downloading Lombok"
 [ -f lombok-1.18.34.jar ] && echo "[SKIP] Lombok already exists" || {
@@ -65,55 +139,50 @@ echo "[INFO] 2. Downloading Jackson"
 echo "[OK] Jackson libraries checked"
 echo
 
-echo "[INFO] 3. Downloading SLF4J"
-[ -f slf4j-api-2.0.17.jar ] && echo "[SKIP] SLF4J already exists" || {
-    curl -O https://repo1.maven.org/maven2/org/slf4j/slf4j-api/2.0.17/slf4j-api-2.0.17.jar
-    echo "[OK] SLF4J downloaded"
-}
+cd ../..
+echo "[OK] Utils libraries downloaded successfully!"
 echo
 
-echo "[INFO] 4. Downloading Logback"
-[ -f logback-classic-1.5.21.jar ] || curl -O https://repo1.maven.org/maven2/ch/qos/logback/logback-classic/1.5.21/logback-classic-1.5.21.jar
-[ -f logback-core-1.5.21.jar ] || curl -O https://repo1.maven.org/maven2/ch/qos/logback/logback-core/1.5.21/logback-core-1.5.21.jar
-echo "[OK] Logback libraries checked"
+# Download UI Libraries
+echo "========================================"
+echo "   Downloading UI Libraries"
+echo "========================================"
 echo
 
-echo "[INFO] 5. Downloading SQLite JDBC"
-[ -f sqlite-jdbc-3.51.0.0.jar ] && echo "[SKIP] SQLite JDBC already exists" || {
-    curl -O https://repo1.maven.org/maven2/org/xerial/sqlite-jdbc/3.51.0.0/sqlite-jdbc-3.51.0.0.jar
-    echo "[OK] SQLite JDBC downloaded"
-}
-echo
+cd lib/ui
 
-echo "[INFO] 6. Downloading Oracle OJDBC"
-[ -f ojdbc11-23.26.0.0.0.jar ] && echo "[SKIP] Oracle OJDBC already exists" || {
-    curl -L -o ojdbc11-23.26.0.0.0.jar https://repo1.maven.org/maven2/com/oracle/database/jdbc/ojdbc11/23.26.0.0.0/ojdbc11-23.26.0.0.0.jar
-    echo "[OK] Oracle OJDBC downloaded"
-}
-echo
-
-echo "[INFO] 7. Downloading HikariCP"
-[ -f HikariCP-7.0.2.jar ] && echo "[SKIP] HikariCP already exists" || {
-    curl -O https://repo1.maven.org/maven2/com/zaxxer/HikariCP/7.0.2/HikariCP-7.0.2.jar
-    echo "[OK] HikariCP downloaded"
-}
-echo
-
-echo "[INFO] 8. Downloading Oracle UCP"
-curl -L -o ucp-23.26.0.0.0.jar https://repo1.maven.org/maven2/com/oracle/database/jdbc/ucp/23.26.0.0.0/ucp-23.26.0.0.0.jar
-echo "[OK] Oracle UCP downloaded"
-echo
-
-# Download AtlantaFX
-echo "[INFO] 9. Downloading AtlantaFX"
+echo "[INFO] 1. Downloading AtlantaFX"
 [ -f atlantafx-base-2.1.0.jar ] && echo "[SKIP] AtlantaFX already exists" || {
     curl -L -o atlantafx-base-2.1.0.jar https://repo1.maven.org/maven2/io/github/mkpaz/atlantafx-base/2.1.0/atlantafx-base-2.1.0.jar
     echo "[OK] AtlantaFX downloaded"
 }
 echo
 
-# Download Ikonli
-echo "[INFO] 10. Downloading Ikonli"
+echo "[OK] AtlantaFX checked"
+echo
+
+echo "[INFO] 3. Downloading RichTextFX"
+[ -f richtextfx-0.11.6.jar ] || curl -O https://repo1.maven.org/maven2/org/fxmisc/richtext/richtextfx/0.11.6/richtextfx-0.11.6.jar
+[ -f flowless-0.7.4.jar ] || curl -O https://repo1.maven.org/maven2/org/fxmisc/flowless/flowless/0.7.4/flowless-0.7.4.jar
+[ -f reactfx-2.0-M6.jar ] || curl -O https://repo1.maven.org/maven2/org/reactfx/reactfx/2.0-M6/reactfx-2.0-M6.jar
+[ -f undofx-2.1.1.jar ] || curl -O https://repo1.maven.org/maven2/org/fxmisc/undo/undofx/2.1.1/undofx-2.1.1.jar
+[ -f wellbehavedfx-0.3.3.jar ] || curl -O https://repo1.maven.org/maven2/org/fxmisc/wellbehaved/wellbehavedfx/0.3.3/wellbehavedfx-0.3.3.jar
+echo "[OK] RichTextFX and dependencies checked"
+echo
+
+cd ../..
+echo "[OK] UI libraries downloaded successfully!"
+echo
+
+# Download Icons Libraries
+echo "========================================"
+echo "   Downloading Icons Libraries"
+echo "========================================"
+echo
+
+cd lib/icons
+
+echo "[INFO] 1. Downloading Ikonli"
 [ -f ikonli-core-12.4.0.jar ] || curl -L -o ikonli-core-12.4.0.jar https://repo1.maven.org/maven2/org/kordamp/ikonli/ikonli-core/12.4.0/ikonli-core-12.4.0.jar
 [ -f ikonli-javafx-12.4.0.jar ] || curl -L -o ikonli-javafx-12.4.0.jar https://repo1.maven.org/maven2/org/kordamp/ikonli/ikonli-javafx/12.4.0/ikonli-javafx-12.4.0.jar
 [ -f ikonli-feather-pack-12.4.0.jar ] || curl -L -o ikonli-feather-pack-12.4.0.jar https://repo1.maven.org/maven2/org/kordamp/ikonli/ikonli-feather-pack/12.4.0/ikonli-feather-pack-12.4.0.jar
@@ -124,8 +193,7 @@ echo "[OK] Ikonli libraries checked"
 echo
 
 cd ../..
-
-echo "[OK] Core and UI libraries downloaded successfully!"
+echo "[OK] Icons libraries downloaded successfully!"
 echo
 
 # Download RAG libraries
@@ -233,27 +301,6 @@ echo
 echo "[OK] JavaFX setup completed!"
 echo
 
-# Download Text Component libraries
-echo "========================================"
-echo "   Downloading Text Component Libraries"
-echo "========================================"
-echo
-
-cd lib/text-component
-
-echo "[INFO] 1. Downloading RichTextFX"
-[ -f richtextfx-0.11.6.jar ] || curl -O https://repo1.maven.org/maven2/org/fxmisc/richtext/richtextfx/0.11.6/richtextfx-0.11.6.jar
-[ -f flowless-0.7.4.jar ] || curl -O https://repo1.maven.org/maven2/org/fxmisc/flowless/flowless/0.7.4/flowless-0.7.4.jar
-[ -f reactfx-2.0-M6.jar ] || curl -O https://repo1.maven.org/maven2/org/reactfx/reactfx/2.0-M6/reactfx-2.0-M6.jar
-[ -f undofx-2.1.1.jar ] || curl -O https://repo1.maven.org/maven2/org/fxmisc/undo/undofx/2.1.1/undofx-2.1.1.jar
-[ -f wellbehavedfx-0.3.3.jar ] || curl -O https://repo1.maven.org/maven2/org/fxmisc/wellbehaved/wellbehavedfx/0.3.3/wellbehavedfx-0.3.3.jar
-echo "[OK] RichTextFX and dependencies checked"
-echo
-
-cd ../..
-
-echo "[OK] Text Component libraries downloaded successfully!"
-echo
 
 # Download Qdrant Vector Database
 echo "========================================"
@@ -344,16 +391,28 @@ echo "  JavaFX Libraries (lib/javafx/):"
 ls -1 lib/javafx/*.jar 2>/dev/null || echo "  [WARNING] JavaFX not found!"
 echo
 
-echo "  Core and Oracle Libraries (lib/others/):"
-ls -1 lib/others/*.jar 2>/dev/null
+echo "  Database Libraries (lib/database/):"
+ls -1 lib/database/*.jar 2>/dev/null || echo "  [WARNING] Database libraries not found!"
+echo
+
+echo "  Logging Libraries (lib/logs/):"
+ls -1 lib/logs/*.jar 2>/dev/null || echo "  [WARNING] Logging libraries not found!"
+echo
+
+echo "  Utils Libraries (lib/utils/):"
+ls -1 lib/utils/*.jar 2>/dev/null || echo "  [WARNING] Utils libraries not found!"
+echo
+
+echo "  UI Libraries (lib/ui/):"
+ls -1 lib/ui/*.jar 2>/dev/null || echo "  [WARNING] UI libraries not found!"
+echo
+
+echo "  Icons Libraries (lib/icons/):"
+ls -1 lib/icons/*.jar 2>/dev/null || echo "  [WARNING] Icons libraries not found!"
 echo
 
 echo "  RAG Libraries (lib/rag/):"
-ls -1 lib/rag/*.jar 2>/dev/null
-echo
-
-echo "  Text Component Libraries (lib/text-component/):"
-ls -1 lib/text-component/*.jar 2>/dev/null
+ls -1 lib/rag/*.jar 2>/dev/null || echo "  [WARNING] RAG libraries not found!"
 echo
 
 echo "  Vector Database (bin/):"
