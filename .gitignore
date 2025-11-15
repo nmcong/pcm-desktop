@@ -15,9 +15,9 @@ pom.xml.next
 release.properties
 
 # IDE - IntelliJ IDEA
-.idea/
+#.idea/
 *.iws
-*.iml
+#*.iml
 *.ipr
 out/
 

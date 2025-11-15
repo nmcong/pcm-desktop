@@ -85,10 +85,30 @@ for %%L in (javafx.base javafx.controls javafx.fxml javafx.graphics javafx.media
     )
 )
 
-REM Check other libraries
-for %%L in (lombok jackson-databind jackson-core slf4j-api logback-classic sqlite-jdbc) do (
+REM Check database libraries
+for %%L in (sqlite-jdbc HikariCP) do (
     set FOUND=0
-    for %%F in (lib\others\%%L*.jar) do set FOUND=1
+    for %%F in (lib\database\%%L*.jar) do set FOUND=1
+    if !FOUND!==0 (
+        echo [ERROR] Missing: %%L
+        set /a LIB_ERRORS+=1
+    )
+)
+
+REM Check logging libraries
+for %%L in (slf4j-api logback-classic) do (
+    set FOUND=0
+    for %%F in (lib\logs\%%L*.jar) do set FOUND=1
+    if !FOUND!==0 (
+        echo [ERROR] Missing: %%L
+        set /a LIB_ERRORS+=1
+    )
+)
+
+REM Check utils libraries
+for %%L in (lombok jackson-databind jackson-core) do (
+    set FOUND=0
+    for %%F in (lib\utils\%%L*.jar) do set FOUND=1
     if !FOUND!==0 (
         echo [ERROR] Missing: %%L
         set /a LIB_ERRORS+=1
@@ -119,12 +139,7 @@ if not exist "out" mkdir "out"
 
 REM Build classpath
 echo [INFO] Building classpath...
-set CLASSPATH=lib\javafx\*;lib\others\*;lib\rag\*
-
-if %WITH_TEXT_COMPONENT% EQU 1 (
-    echo [INFO] Including Universal Text Component...
-    set CLASSPATH=!CLASSPATH!;lib\text-component\*
-)
+set CLASSPATH=lib\javafx\*;lib\database\*;lib\logs\*;lib\utils\*;lib\ui\*;lib\icons\*;lib\rag\*
 
 echo [OK] Classpath configured
 echo.

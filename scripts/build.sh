@@ -145,19 +145,43 @@ verify_libraries() {
         fi
     done
     
-    # Check other libraries
-    local other_libs=(
-        "lombok"
-        "jackson-databind"
-        "jackson-core"
-        "slf4j-api"
-        "logback-classic"
-        "sqlite-jdbc"
-    )
-    
-    for lib in "${other_libs[@]}"; do
+    # Check database libraries
+    local database_libs=("sqlite-jdbc" "HikariCP")
+    for lib in "${database_libs[@]}"; do
         local found=false
-        for jar in lib/others/${lib}*.jar; do
+        for jar in lib/database/${lib}*.jar; do
+            if [ -f "$jar" ]; then
+                found=true
+                break
+            fi
+        done
+        if [ "$found" = false ]; then
+            echo -e "  ${RED}✗${NC} $lib*.jar - MISSING"
+            ((errors++))
+        fi
+    done
+    
+    # Check logging libraries
+    local logging_libs=("slf4j-api" "logback-classic")
+    for lib in "${logging_libs[@]}"; do
+        local found=false
+        for jar in lib/logs/${lib}*.jar; do
+            if [ -f "$jar" ]; then
+                found=true
+                break
+            fi
+        done
+        if [ "$found" = false ]; then
+            echo -e "  ${RED}✗${NC} $lib*.jar - MISSING"
+            ((errors++))
+        fi
+    done
+    
+    # Check utils libraries
+    local utils_libs=("lombok" "jackson-databind" "jackson-core")
+    for lib in "${utils_libs[@]}"; do
+        local found=false
+        for jar in lib/utils/${lib}*.jar; do
             if [ -f "$jar" ]; then
                 found=true
                 break
@@ -196,8 +220,36 @@ for jar in lib/javafx/*.jar; do
     fi
 done
 
-# Add other libraries
-for jar in lib/others/*.jar; do
+# Add Database libraries
+for jar in lib/database/*.jar; do
+    if [ -f "$jar" ]; then
+        CLASSPATH="$CLASSPATH:$jar"
+    fi
+done
+
+# Add Logging libraries
+for jar in lib/logs/*.jar; do
+    if [ -f "$jar" ]; then
+        CLASSPATH="$CLASSPATH:$jar"
+    fi
+done
+
+# Add Utils libraries
+for jar in lib/utils/*.jar; do
+    if [ -f "$jar" ]; then
+        CLASSPATH="$CLASSPATH:$jar"
+    fi
+done
+
+# Add UI libraries
+for jar in lib/ui/*.jar; do
+    if [ -f "$jar" ]; then
+        CLASSPATH="$CLASSPATH:$jar"
+    fi
+done
+
+# Add Icons libraries
+for jar in lib/icons/*.jar; do
     if [ -f "$jar" ]; then
         CLASSPATH="$CLASSPATH:$jar"
     fi
@@ -209,23 +261,6 @@ for jar in lib/rag/*.jar; do
         CLASSPATH="$CLASSPATH:$jar"
     fi
 done
-
-# Add LangChain4j libraries
-for jar in lib/langchain4j/*.jar; do
-    if [ -f "$jar" ]; then
-        CLASSPATH="$CLASSPATH:$jar"
-    fi
-done
-
-# Add text component libraries if requested
-if [ "$WITH_TEXT_COMPONENT" = true ]; then
-    echo -e "${YELLOW}📚 Including Universal Text Component libraries...${NC}"
-    for jar in lib/text-component/*.jar; do
-        if [ -f "$jar" ]; then
-            CLASSPATH="$CLASSPATH:$jar"
-        fi
-    done
-fi
 
 # Remove leading colon
 CLASSPATH="${CLASSPATH#:}"

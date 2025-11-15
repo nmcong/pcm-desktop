@@ -173,12 +173,7 @@ echo -e "${GREEN}✅ Resources copied${NC}"
 echo ""
 
 # Build classpath
-CLASSPATH="out:lib/javafx/*:lib/others/*:lib/rag/*"
-
-# Add text component libraries if needed
-if [ "$WITH_TEXT_COMPONENT" = true ]; then
-    CLASSPATH="$CLASSPATH:lib/text-component/*"
-fi
+CLASSPATH="out:lib/javafx/*:lib/database/*:lib/logs/*:lib/utils/*:lib/ui/*:lib/icons/*:lib/rag/*"
 
 # Run based on mode
 case $RUN_MODE in

@@ -157,11 +157,7 @@ echo [INFO] Resources copied
 echo.
 
 REM Build classpath
-set CLASSPATH=out;lib\javafx\*;lib\others\*;lib\rag\*
-
-if %WITH_TEXT_COMPONENT%==1 (
-    set CLASSPATH=!CLASSPATH!;lib\text-component\*
-)
+set CLASSPATH=out;lib\javafx\*;lib\database\*;lib\logs\*;lib\utils\*;lib\ui\*;lib\icons\*;lib\rag\*
 
 REM Run based on mode
 if "%RUN_MODE%"=="api-demo" goto run_api_demo
