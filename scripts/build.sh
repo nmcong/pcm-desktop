@@ -147,17 +147,24 @@ verify_libraries() {
     
     # Check other libraries
     local other_libs=(
-        "lombok-1.18.34.jar"
-        "jackson-databind-2.18.2.jar"
-        "jackson-core-2.18.2.jar"
-        "slf4j-api-2.0.16.jar"
-        "logback-classic-1.5.12.jar"
-        "sqlite-jdbc-3.47.1.0.jar"
+        "lombok"
+        "jackson-databind"
+        "jackson-core"
+        "slf4j-api"
+        "logback-classic"
+        "sqlite-jdbc"
     )
     
     for lib in "${other_libs[@]}"; do
-        if [ ! -f "lib/others/$lib" ]; then
-            echo -e "  ${RED}✗${NC} $lib - MISSING"
+        local found=false
+        for jar in lib/others/${lib}*.jar; do
+            if [ -f "$jar" ]; then
+                found=true
+                break
+            fi
+        done
+        if [ "$found" = false ]; then
+            echo -e "  ${RED}✗${NC} $lib*.jar - MISSING"
             ((errors++))
         fi
     done

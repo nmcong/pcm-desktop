@@ -34,6 +34,9 @@ ensure_java_21() {
             if [ -n "$JAVA_21_HOME" ]; then
                 export JAVA_HOME="$JAVA_21_HOME"
                 export PATH="$JAVA_HOME/bin:$PATH"
+                # Force this session to use Java 21
+                alias java="$JAVA_HOME/bin/java"
+                alias javac="$JAVA_HOME/bin/javac"
                 echo -e "${GREEN}☕ Using Java 21: $JAVA_HOME${NC}"
                 return 0
             fi
@@ -170,7 +173,7 @@ echo -e "${GREEN}✅ Resources copied${NC}"
 echo ""
 
 # Build classpath
-CLASSPATH="out:lib/others/*"
+CLASSPATH="out:lib/javafx/*:lib/others/*:lib/rag/*"
 
 # Add text component libraries if needed
 if [ "$WITH_TEXT_COMPONENT" = true ]; then
@@ -201,7 +204,7 @@ case $RUN_MODE in
         echo -e "${GREEN}✅ API Key found${NC}"
         echo ""
         
-        java -cp "$CLASSPATH" com.noteflix.pcm.llm.examples.APIDemo
+        "$JAVA_HOME/bin/java" -cp "$CLASSPATH" com.noteflix.pcm.llm.examples.APIDemo
         
         echo ""
         echo -e "${GREEN}👋 Demo completed!${NC}"
@@ -215,7 +218,7 @@ case $RUN_MODE in
         # Create logs directory if it doesn't exist
         mkdir -p logs
         
-        java -cp "$CLASSPATH" com.noteflix.pcm.examples.SSOIntegrationDemo
+        "$JAVA_HOME/bin/java" -cp "$CLASSPATH" com.noteflix.pcm.examples.SSOIntegrationDemo
         
         echo ""
         echo -e "${GREEN}👋 SSO Integration Demo completed!${NC}"
@@ -251,7 +254,7 @@ case $RUN_MODE in
             fi
             
             # Run with text component support
-            java \
+            "$JAVA_HOME/bin/java" \
                 --module-path lib/javafx \
                 --add-modules javafx.controls,javafx.fxml,javafx.web,javafx.media \
                 --add-exports javafx.base/com.sun.javafx.event=ALL-UNNAMED \
@@ -266,8 +269,9 @@ case $RUN_MODE in
             echo -e "${BLUE}🎬 Starting PCM Desktop...${NC}"
             echo ""
             
-            # Standard run
-            java --module-path lib/javafx \
+            # Standard run - same as run.bat on Windows
+            "$JAVA_HOME/bin/java" -Djava.library.path=lib/javafx \
+                --module-path lib/javafx \
                 --add-modules javafx.controls,javafx.fxml,javafx.web,javafx.media \
                 -cp "$CLASSPATH" \
                 com.noteflix.pcm.PCMApplication

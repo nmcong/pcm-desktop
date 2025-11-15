@@ -105,10 +105,8 @@ echo "[INFO] 7. Downloading HikariCP"
 echo
 
 echo "[INFO] 8. Downloading Oracle UCP"
-[ -f ucp-23.26.0.jar ] && echo "[SKIP] Oracle UCP already exists" || {
-    curl -L -o ucp-23.26.0.jar https://repo1.maven.org/maven2/com/oracle/database/jdbc/ucp/23.26.0/ucp-23.26.0.jar
-    echo "[OK] Oracle UCP downloaded"
-}
+curl -L -o ucp-23.26.0.0.0.jar https://repo1.maven.org/maven2/com/oracle/database/jdbc/ucp/23.26.0.0.0/ucp-23.26.0.0.0.jar
+echo "[OK] Oracle UCP downloaded"
 echo
 
 # Download AtlantaFX

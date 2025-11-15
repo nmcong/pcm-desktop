@@ -68,6 +68,7 @@ hs_err_pid*
 *.temp
 *.swp
 *~
+sources.txt
 
 # Sampler directory
 sampler/

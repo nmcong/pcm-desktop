@@ -385,6 +385,9 @@ Complete documentation is organized in the `docs/` folder:
 ### 🔧 Troubleshooting
 
 - **[Troubleshooting Guide](docs/troubleshooting/README.md)** - Common issues and solutions
+- **[Quick Reference](docs/troubleshooting/QUICK_REFERENCE.md)** - Fast solutions for common problems
+- **[Runtime Issues](docs/troubleshooting/runtime/README.md)** - Application startup and runtime problems
+  - **[JavaFX Startup Issue (macOS/Linux)](docs/troubleshooting/runtime/javafx-application-startup-issue.md)** ⭐ Most Common
 
 ## 🏃 Run from Command Line
 
