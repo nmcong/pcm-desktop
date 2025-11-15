@@ -42,8 +42,8 @@ CREATE TABLE source_files (
   relative_path  TEXT NOT NULL,
   language       TEXT,
   size_bytes     INTEGER,
-  checksum       TEXT,
-  last_modified  DATETIME,
+  checksum       TEXT,        -- content hash (MD5/SHA-256)
+  last_modified  DATETIME,    -- file timestamp captured during scan
   is_binary      INTEGER DEFAULT 0,
   UNIQUE(source_id, relative_path)
 );
@@ -228,9 +228,10 @@ Payload should store `chunk_id` to map back to `vector_documents`.
 ## 6. Implementation Notes
 
 1. **Batching:** When storing AST nodes or vector chunks, batch inserts to keep SQLite fast.
-2. **Compression:** AST payloads and large reasoning fields can be compressed before storing in SQLite if size is a concern.
-3. **Consistency:** Use `snapshot_id` to tie AST, dependencies, and embeddings to a specific commit; store commit hash in metadata for reproducibility.
-4. **Security:** If users can upload arbitrary files, sanitize before indexing to avoid executing code.
+2. **File change detection:** Use `source_files.checksum`, `size_bytes`, and `last_modified` to skip unchanged files. Rebuild AST + embeddings only for records whose checksum differs from the previous scan.
+3. **Compression:** AST payloads and large reasoning fields can be compressed before storing in SQLite if size is a concern.
+4. **Consistency:** Use `snapshot_id` to tie AST, dependencies, and embeddings to a specific commit; store commit hash in metadata for reproducibility.
+5. **Security:** If users can upload arbitrary files, sanitize before indexing to avoid executing code.
 
 ---
 
