@@ -86,4 +86,4 @@ sampler/
 archives
 models
 data
-.qdrant-initialized
+.qdrant-initialized.idea/
