@@ -17,8 +17,12 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="rag" level="project" />
-    <orderEntry type="library" name="utils" level="project" />
+    <orderEntry type="library" name="database" level="project" />
+    <orderEntry type="library" name="icons" level="project" />
     <orderEntry type="library" name="javafx" level="project" />
+    <orderEntry type="library" name="logs" level="project" />
+    <orderEntry type="library" name="rag" level="project" />
+    <orderEntry type="library" name="ui" level="project" />
+    <orderEntry type="library" name="utils" level="project" />
   </component>
 </module>

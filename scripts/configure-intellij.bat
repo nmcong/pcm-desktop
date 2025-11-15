@@ -2,7 +2,7 @@
 REM =================================================================
 REM PCM Desktop - IntelliJ IDEA Library Configuration Script (Windows)
 REM =================================================================
-REM Automatically creates library configurations for IntelliJ IDEA
+REM Adds library entries to existing .idea/pcm-desktop.iml file
 REM
 REM Usage: configure-intellij.bat
 REM =================================================================
@@ -21,150 +21,131 @@ echo.
 REM Create .idea directory if it doesn't exist
 if not exist ".idea\libraries" mkdir .idea\libraries
 
-echo [INFO] Creating IntelliJ IDEA library configurations...
+echo [INFO] Configuring IntelliJ IDEA libraries...
 
-REM Create JavaFX library
-if exist "lib\javafx" (
-    echo [INFO] Creating javafx.xml library configuration...
-    (
-    echo ^<component name="libraryTable"^>
-    echo   ^<library name="javafx"^>
-    echo     ^<CLASSES^>
-    echo       ^<root url="file://$PROJECT_DIR$/lib/javafx" /^>
-    echo     ^</CLASSES^>
-    echo     ^<JAVADOC /^>
-    echo     ^<NATIVE^>
-    echo       ^<root url="file://$PROJECT_DIR$/lib/javafx" /^>
-    echo     ^</NATIVE^>
-    echo     ^<SOURCES /^>
-    echo     ^<jarDirectory url="file://$PROJECT_DIR$/lib/javafx" recursive="false" /^>
-    echo   ^</library^>
-    echo ^</component^>
-    ) > .idea\libraries\javafx.xml
-    echo [OK] javafx.xml created
-)
+REM Define libraries array
+set LIBRARIES=
+set LIB_COUNT=0
 
-REM Create Database library
+REM Check which library folders exist and add them to the list
 if exist "lib\database" (
-    echo [INFO] Creating database.xml library configuration...
-    (
-    echo ^<component name="libraryTable"^>
-    echo   ^<library name="database"^>
-    echo     ^<CLASSES^>
-    echo       ^<root url="file://$PROJECT_DIR$/lib/database" /^>
-    echo     ^</CLASSES^>
-    echo     ^<JAVADOC /^>
-    echo     ^<SOURCES /^>
-    echo     ^<jarDirectory url="file://$PROJECT_DIR$/lib/database" recursive="false" /^>
-    echo   ^</library^>
-    echo ^</component^>
-    ) > .idea\libraries\database.xml
-    echo [OK] database.xml created
+    set LIBRARIES=!LIBRARIES! database
+    set /a LIB_COUNT+=1
 )
 
-REM Create Logs library
-if exist "lib\logs" (
-    echo [INFO] Creating logs.xml library configuration...
-    (
-    echo ^<component name="libraryTable"^>
-    echo   ^<library name="logs"^>
-    echo     ^<CLASSES^>
-    echo       ^<root url="file://$PROJECT_DIR$/lib/logs" /^>
-    echo     ^</CLASSES^>
-    echo     ^<JAVADOC /^>
-    echo     ^<SOURCES /^>
-    echo     ^<jarDirectory url="file://$PROJECT_DIR$/lib/logs" recursive="false" /^>
-    echo   ^</library^>
-    echo ^</component^>
-    ) > .idea\libraries\logs.xml
-    echo [OK] logs.xml created
-)
-
-REM Create Utils library
-if exist "lib\utils" (
-    echo [INFO] Creating utils.xml library configuration...
-    (
-    echo ^<component name="libraryTable"^>
-    echo   ^<library name="utils"^>
-    echo     ^<CLASSES^>
-    echo       ^<root url="file://$PROJECT_DIR$/lib/utils" /^>
-    echo     ^</CLASSES^>
-    echo     ^<JAVADOC /^>
-    echo     ^<SOURCES /^>
-    echo     ^<jarDirectory url="file://$PROJECT_DIR$/lib/utils" recursive="false" /^>
-    echo   ^</library^>
-    echo ^</component^>
-    ) > .idea\libraries\utils.xml
-    echo [OK] utils.xml created
-)
-
-REM Create UI library
-if exist "lib\ui" (
-    echo [INFO] Creating ui.xml library configuration...
-    (
-    echo ^<component name="libraryTable"^>
-    echo   ^<library name="ui"^>
-    echo     ^<CLASSES^>
-    echo       ^<root url="file://$PROJECT_DIR$/lib/ui" /^>
-    echo     ^</CLASSES^>
-    echo     ^<JAVADOC /^>
-    echo     ^<SOURCES /^>
-    echo     ^<jarDirectory url="file://$PROJECT_DIR$/lib/ui" recursive="false" /^>
-    echo   ^</library^>
-    echo ^</component^>
-    ) > .idea\libraries\ui.xml
-    echo [OK] ui.xml created
-)
-
-REM Create Icons library
 if exist "lib\icons" (
-    echo [INFO] Creating icons.xml library configuration...
-    (
-    echo ^<component name="libraryTable"^>
-    echo   ^<library name="icons"^>
-    echo     ^<CLASSES^>
-    echo       ^<root url="file://$PROJECT_DIR$/lib/icons" /^>
-    echo     ^</CLASSES^>
-    echo     ^<JAVADOC /^>
-    echo     ^<SOURCES /^>
-    echo     ^<jarDirectory url="file://$PROJECT_DIR$/lib/icons" recursive="false" /^>
-    echo   ^</library^>
-    echo ^</component^>
-    ) > .idea\libraries\icons.xml
-    echo [OK] icons.xml created
+    set LIBRARIES=!LIBRARIES! icons
+    set /a LIB_COUNT+=1
 )
 
-REM Create RAG library
+if exist "lib\javafx" (
+    set LIBRARIES=!LIBRARIES! javafx
+    set /a LIB_COUNT+=1
+)
+
+if exist "lib\logs" (
+    set LIBRARIES=!LIBRARIES! logs
+    set /a LIB_COUNT+=1
+)
+
 if exist "lib\rag" (
-    echo [INFO] Creating rag.xml library configuration...
+    set LIBRARIES=!LIBRARIES! rag
+    set /a LIB_COUNT+=1
+)
+
+if exist "lib\ui" (
+    set LIBRARIES=!LIBRARIES! ui
+    set /a LIB_COUNT+=1
+)
+
+if exist "lib\utils" (
+    set LIBRARIES=!LIBRARIES! utils
+    set /a LIB_COUNT+=1
+)
+
+REM Create library XML files
+for %%L in (!LIBRARIES!) do (
+    echo [INFO] Creating %%L.xml library configuration...
     (
     echo ^<component name="libraryTable"^>
-    echo   ^<library name="rag"^>
+    echo   ^<library name="%%L"^>
     echo     ^<CLASSES^>
-    echo       ^<root url="file://$PROJECT_DIR$/lib/rag" /^>
+    echo       ^<root url="file://$PROJECT_DIR$/lib/%%L" /^>
     echo     ^</CLASSES^>
     echo     ^<JAVADOC /^>
+    if "%%L"=="javafx" (
+        echo     ^<NATIVE^>
+        echo       ^<root url="file://$PROJECT_DIR$/lib/%%L" /^>
+        echo     ^</NATIVE^>
+    )
     echo     ^<SOURCES /^>
-    echo     ^<jarDirectory url="file://$PROJECT_DIR$/lib/rag" recursive="false" /^>
+    echo     ^<jarDirectory url="file://$PROJECT_DIR$/lib/%%L" recursive="false" /^>
     echo   ^</library^>
     echo ^</component^>
-    ) > .idea\libraries\rag.xml
-    echo [OK] rag.xml created
+    ) > .idea\libraries\%%L.xml
+    echo [OK] %%L.xml created
+)
+
+REM Check if .idea\pcm-desktop.iml exists
+set IML_FILE=.idea\pcm-desktop.iml
+
+if not exist "%IML_FILE%" (
+    echo [WARNING] File %IML_FILE% not found!
+    echo [INFO] Please ensure your project is opened in IntelliJ IDEA first.
+    echo [INFO] Library configurations have been created in .idea\libraries\
+) else (
+    echo [INFO] Updating %IML_FILE% with library dependencies...
+    
+    REM Create temporary file for modification
+    set TEMP_FILE=%IML_FILE%.temp
+    
+    REM Check which libraries need to be added (avoid duplicates)
+    set LIBRARIES_TO_ADD=
+    for %%L in (!LIBRARIES!) do (
+        findstr /C:"name=\"%%L\"" "%IML_FILE%" >nul
+        if !errorlevel! neq 0 (
+            set LIBRARIES_TO_ADD=!LIBRARIES_TO_ADD! %%L
+        )
+    )
+    
+    REM Check if any libraries need to be added
+    if "!LIBRARIES_TO_ADD!"=="" (
+        echo [INFO] All libraries already present in %IML_FILE%
+    ) else (
+        REM Process the file line by line  
+        (
+        for /f "usebackq delims=" %%A in ("%IML_FILE%") do (
+            echo %%A
+            
+            REM If we find the sourceFolder line, add library entries after it
+            echo %%A | findstr /C:"orderEntry type=\"sourceFolder\"" >nul
+            if !errorlevel! equ 0 (
+                for %%L in (!LIBRARIES_TO_ADD!) do (
+                    echo     ^<orderEntry type="library" name="%%L" level="project" /^>
+                )
+            )
+        )
+        ) > "%TEMP_FILE%"
+        
+        REM Replace original file with modified one
+        move "%TEMP_FILE%" "%IML_FILE%" >nul
+        echo [OK] %IML_FILE% updated with library dependencies
+    )
 )
 
 echo.
-echo [SUCCESS] IntelliJ IDEA library configurations created successfully!
+echo [SUCCESS] IntelliJ IDEA configuration completed!
 echo.
-echo [INFO] Library files created in .idea\libraries\:
-if exist ".idea\libraries\*.xml" (
-    dir /b .idea\libraries\*.xml
-) else (
-    echo   No library files found
+echo [INFO] Files created/updated:
+for %%L in (!LIBRARIES!) do (
+    echo   - .idea\libraries\%%L.xml
+)
+if exist "%IML_FILE%" (
+    echo   - %IML_FILE% (updated with library dependencies)
 )
 echo.
-echo [INFO] To use these libraries in IntelliJ IDEA:
-echo   1. Open/Reload project in IntelliJ IDEA
-echo   2. Go to Project Structure (Ctrl+Alt+Shift+S)
-echo   3. Libraries will be automatically detected
-echo   4. Add them to your module dependencies as needed
+echo [INFO] To apply changes in IntelliJ IDEA:
+echo   1. Refresh project (Ctrl+Shift+F5 or File -^> Reload Gradle Project)
+echo   2. Or restart IntelliJ IDEA
+echo   3. Libraries will be automatically available
 echo.
