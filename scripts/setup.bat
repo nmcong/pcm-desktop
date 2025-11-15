@@ -34,13 +34,6 @@ if %ERRORLEVEL% NEQ 0 (
     exit /b 1
 )
 
-echo [INFO] Cleaning old library directory...
-if exist "lib" (
-    rmdir /s /q lib
-    echo [OK] Old library directory removed
-)
-echo.
-
 echo [INFO] Creating library directories...
 if not exist "lib\javafx" mkdir lib\javafx
 if not exist "lib\others" mkdir lib\others
@@ -360,15 +353,15 @@ echo [INFO] 1. Downloading Qdrant v1.15.5 for Windows...
 if exist "bin\qdrant.exe" (
     echo [SKIP] Qdrant binary already exists
 ) else (
-    curl -L -o qdrant-v1.15.5-x86_64-pc-windows-msvc.zip https://github.com/qdrant/qdrant/releases/download/v1.15.5/qdrant-v1.15.5-x86_64-pc-windows-msvc.zip
+    curl -L -o qdrant-x86_64-pc-windows-msvc.zip https://github.com/qdrant/qdrant/releases/download/v1.15.5/qdrant-x86_64-pc-windows-msvc.zip
     if %ERRORLEVEL%==0 (
         echo [OK] Qdrant downloaded
         
         echo [INFO] 2. Extracting Qdrant...
-        powershell -command "Expand-Archive -Path qdrant-v1.15.5-x86_64-pc-windows-msvc.zip -DestinationPath temp-qdrant -Force"
+        powershell -command "Expand-Archive -Path qdrant-x86_64-pc-windows-msvc.zip -DestinationPath temp-qdrant -Force"
         move temp-qdrant\qdrant.exe bin\
         rmdir /s /q temp-qdrant
-        del qdrant-v1.15.5-x86_64-pc-windows-msvc.zip
+        del qdrant-x86_64-pc-windows-msvc.zip
         echo [OK] Qdrant extracted and ready
     ) else (
         echo [ERROR] Failed to download Qdrant

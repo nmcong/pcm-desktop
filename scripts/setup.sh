@@ -32,13 +32,6 @@ if ! command -v curl &> /dev/null; then
     exit 1
 fi
 
-echo "[INFO] Cleaning old library directory..."
-if [ -d "lib" ]; then
-    rm -rf lib
-    echo "[OK] Old library directory removed"
-fi
-echo
-
 echo "[INFO] Creating library directories..."
 mkdir -p lib/javafx
 mkdir -p lib/others
@@ -274,13 +267,8 @@ ARCH=$(uname -m)
 
 if [ "$OS_TYPE" = "Darwin" ]; then
     # macOS
-    if [ "$ARCH" = "arm64" ]; then
-        QDRANT_URL="https://github.com/qdrant/qdrant/releases/download/v1.15.5/qdrant-v1.15.5-aarch64-apple-darwin.tar.gz"
-        QDRANT_FILE="qdrant-v1.15.5-aarch64-apple-darwin.tar.gz"
-    else
-        QDRANT_URL="https://github.com/qdrant/qdrant/releases/download/v1.15.5/qdrant-v1.15.5-x86_64-apple-darwin.tar.gz"
-        QDRANT_FILE="qdrant-v1.15.5-x86_64-apple-darwin.tar.gz"
-    fi
+    QDRANT_URL="https://github.com/qdrant/qdrant/releases/download/v1.15.5/qdrant-aarch64-apple-darwin.tar.gz"
+    QDRANT_FILE="qdrant-aarch64-apple-darwin.tar.gz"
 elif [ "$OS_TYPE" = "Linux" ]; then
     QDRANT_URL="https://github.com/qdrant/qdrant/releases/download/v1.15.5/qdrant-v1.15.5-x86_64-unknown-linux-gnu.tar.gz"
     QDRANT_FILE="qdrant-v1.15.5-x86_64-unknown-linux-gnu.tar.gz"
