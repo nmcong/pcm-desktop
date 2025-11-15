@@ -113,4 +113,53 @@ python scripts/ingest_chm.py \
   - FTS5 queries can filter by `source_type`.
   - Provide citations referencing the original CHM path and section.
 
+---
+
+## 8. Supporting Schema
+
+To keep CHM imports auditable and reusable, add the following SQLite tables:
+
+```sql
+CREATE TABLE chm_imports (
+  import_id      INTEGER PRIMARY KEY AUTOINCREMENT,
+  system_id      INTEGER REFERENCES systems(system_id),
+  subsystem_id   INTEGER REFERENCES subsystems(subsystem_id),
+  project_id     INTEGER REFERENCES projects(project_id),
+  chm_path       TEXT NOT NULL,
+  chm_checksum   TEXT,
+  extracted_path TEXT,
+  status         TEXT DEFAULT 'pending',
+  notes          TEXT,
+  imported_at    DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE chm_documents (
+  document_id    INTEGER PRIMARY KEY AUTOINCREMENT,
+  import_id      INTEGER NOT NULL REFERENCES chm_imports(import_id) ON DELETE CASCADE,
+  relative_path  TEXT NOT NULL,
+  title          TEXT,
+  toc_path       TEXT,
+  order_index    INTEGER,
+  content        TEXT NOT NULL,
+  checksum       TEXT,
+  metadata       TEXT
+);
+
+CREATE TABLE chm_assets (
+  asset_id       INTEGER PRIMARY KEY AUTOINCREMENT,
+  import_id      INTEGER NOT NULL REFERENCES chm_imports(import_id) ON DELETE CASCADE,
+  relative_path  TEXT NOT NULL,
+  mime_type      TEXT,
+  size_bytes     INTEGER,
+  checksum       TEXT
+);
+```
+
+Usage:
+- `chm_imports`: one row per CHM file processed.
+- `chm_documents`: normalized pages ready for indexing; link `document_id` to `search_corpus` or `vector_documents`.
+- `chm_assets`: optional table if you need to reference extracted images/files from the UI.
+
+After storing documents, insert their text into `search_corpus` (with `source_type='chm_doc'`) and chunk/embed them like other knowledge sources.
+
 This process ensures legacy CHM manuals become first-class knowledge sources within the platform.

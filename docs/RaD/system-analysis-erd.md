@@ -18,6 +18,10 @@ erDiagram
     projects ||--o{ search_corpus : indexes
     source_files ||..o{ search_corpus : "text source"
     search_corpus ||--|| search_index : mirrors
+    chm_imports ||--o{ chm_documents : contains
+    chm_imports ||--o{ chm_assets : stores
+    projects ||..o{ chm_imports : ingests
+    chm_documents ||..o{ search_corpus : feeds
     subsystems ||..o{ user_requests : originates
     projects ||..o{ user_requests : relevant
     user_requests ||--o{ request_artifacts : attaches
