@@ -17,7 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 public enum ConnectionManager {
   INSTANCE;
 
-  private static final String DB_URL = "jdbc:sqlite:pcm-desktop.db";
+  private static final String DB_URL = "jdbc:sqlite:data/pcm-desktop.db";
   private static final String DB_DRIVER = "org.sqlite.JDBC";
 
   /** Initialize database driver */

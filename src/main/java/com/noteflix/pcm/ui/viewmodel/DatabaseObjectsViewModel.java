@@ -36,7 +36,7 @@ public class DatabaseObjectsViewModel extends BaseViewModel {
             },
             result -> {
               setConnectionStatus(I18n.get("db.status.connected"));
-              setDatabaseName("pcm-desktop.db");
+              setDatabaseName("data/pcm-desktop.db");
               setSchemaVersion("V2");
               schemaObjects.setAll(
                   "Table: Projects",

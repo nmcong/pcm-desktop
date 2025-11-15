@@ -19,7 +19,7 @@ public class SettingsViewModel extends BaseViewModel {
   private final DoubleProperty sidebarWidth = new SimpleDoubleProperty(280.0);
 
   // Database properties
-  private final StringProperty databasePath = new SimpleStringProperty("./pcm-desktop.db");
+  private final StringProperty databasePath = new SimpleStringProperty("./data/pcm-desktop.db");
 
   // Notification properties
   private final BooleanProperty emailNotificationsEnabled = new SimpleBooleanProperty(false);
