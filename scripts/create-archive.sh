@@ -22,8 +22,8 @@ fi
 
 # Clean and create archives directory structure
 echo "[INFO] Preparing archive directories..."
-rm -rf archives/pcm-libs archives/pcm-source archives/pcm-data archives/pcm-bin archives/*.zip archives/*.z*
-mkdir -p archives/pcm-libs archives/pcm-source archives/pcm-data archives/pcm-bin
+rm -rf archives/pcm-libs archives/pcm-source archives/pcm-models archives/pcm-bin archives/*.zip archives/*.z*
+mkdir -p archives/pcm-libs archives/pcm-source archives/pcm-models archives/pcm-bin
 echo "[OK] Archive directories prepared"
 echo
 
@@ -46,13 +46,13 @@ echo
 # =================================================================
 # Copy Data Models
 # =================================================================
-echo "[INFO] Copying data/models files..."
+echo "[INFO] Copying models files..."
 
-if [ -d "data/models" ]; then
-    cp -r data/models/* archives/pcm-data/ 2>/dev/null || true
-    echo "[SUCCESS] Data models copied to archives/pcm-data/"
+if [ -d "models" ]; then
+    cp -r models/* archives/pcm-models/ 2>/dev/null || true
+    echo "[SUCCESS] Data models copied to archives/pcm-models/"
 else
-    echo "[SKIP] data/models directory not found"
+    echo "[SKIP] models directory not found"
 fi
 echo
 
@@ -78,7 +78,7 @@ echo "[INFO] Excluding: bin, data, examples, lib, logs, out, target, test-extrac
 # Copy all files and directories except excluded ones
 for item in *; do
     case "$item" in
-        bin|data|examples|lib|logs|out|target|test-extract|archives|.git|.idea)
+        bin|data|models|examples|lib|logs|out|target|test-extract|archives|.git|.idea)
             echo "[SKIP] $item"
             ;;
         .*)
@@ -139,14 +139,14 @@ fi
 # =================================================================
 # Create Data Models Archive
 # =================================================================
-if [ -d "pcm-data" ] && [ "$(ls -A pcm-data 2>/dev/null)" ]; then
+if [ -d "pcm-models" ] && [ "$(ls -A pcm-models 2>/dev/null)" ]; then
     echo "[INFO] Creating data models archive (45MB parts)..."
-    zip -r -s 45m -9 pcm-data.zip pcm-data
+    zip -r -s 45m -9 pcm-models.zip pcm-models
 
     if [ $? -eq 0 ]; then
         echo "[SUCCESS] Data models archive created successfully!"
         echo "[INFO] Data archive parts:"
-        ls -lh pcm-data.z* 2>/dev/null || ls -lh pcm-data.zip
+        ls -lh pcm-models.z* 2>/dev/null || ls -lh pcm-models.zip
         echo
     else
         echo "[ERROR] Data models archive creation failed!"
@@ -182,7 +182,7 @@ cd ..
 # Cleanup and Summary
 # =================================================================
 echo "[INFO] Cleaning up temporary directories..."
-rm -rf archives/pcm-libs archives/pcm-source archives/pcm-data archives/pcm-bin
+rm -rf archives/pcm-libs archives/pcm-source archives/pcm-models archives/pcm-bin
 echo "[OK] Cleanup completed"
 echo
 
@@ -197,9 +197,9 @@ echo
 echo "📁 Source Code Archive:"
 ls -lh archives/pcm-source.z* 2>/dev/null || ls -lh archives/pcm-source.zip
 echo
-if ls archives/pcm-data.z* archives/pcm-data.zip >/dev/null 2>&1; then
+if ls archives/pcm-models.z* archives/pcm-models.zip >/dev/null 2>&1; then
     echo "📊 Data Models Archive:"
-    ls -lh archives/pcm-data.z* 2>/dev/null || ls -lh archives/pcm-data.zip
+    ls -lh archives/pcm-models.z* 2>/dev/null || ls -lh archives/pcm-models.zip
     echo
 fi
 if ls archives/pcm-bin.z* archives/pcm-bin.zip >/dev/null 2>&1; then

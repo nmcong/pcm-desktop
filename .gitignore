@@ -83,7 +83,6 @@ sampler/
 
 # Claude AI directory
 .claude/
-
-data/qdrant-storage
-data/rag
+archives
+data
 .qdrant-initialized
