@@ -14,7 +14,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.kordamp.ikonli.feather.Feather;
 import org.kordamp.ikonli.javafx.FontIcon;
 import org.kordamp.ikonli.octicons.Octicons;
 
@@ -31,7 +30,6 @@ public class SidebarView extends VBox implements ThemeChangeListener {
     @Setter
     private PageNavigator pageNavigator;
   private FontIcon appIcon;
-  private ImageView botIcon;
   private Button themeButton;
 
   public SidebarView() {
@@ -67,7 +65,7 @@ public class SidebarView extends VBox implements ThemeChangeListener {
     titleLabel.getStyleClass().add(Styles.TITLE_3);
 
     themeButton = new Button();
-    themeButton.setGraphic(new FontIcon(themeManager.isDarkTheme() ? Feather.MOON : Feather.SUN));
+    themeButton.setGraphic(new FontIcon(themeManager.isDarkTheme() ? Octicons.MOON_24 : Octicons.SUN_24));
     themeButton
         .getStyleClass()
         .addAll(Styles.BUTTON_ICON, Styles.FLAT, "icon-btn");
@@ -85,7 +83,7 @@ public class SidebarView extends VBox implements ThemeChangeListener {
   /** Creates search button following AtlantaFX Sampler pattern */
   private Button createSearchButton() {
     // Search label with icon
-    FontIcon searchIcon = new FontIcon(Feather.SEARCH);
+    FontIcon searchIcon = new FontIcon(Octicons.SEARCH_24);
     searchIcon.setIconSize(14);
 
     Label searchLabel = new Label("Search");
@@ -122,28 +120,25 @@ public class SidebarView extends VBox implements ThemeChangeListener {
     menu.getChildren()
         .addAll(
             createAIAssistantMenuItem(),
-            createMenuItem("Knowledge Base", Feather.BOOK_OPEN, this::handleKnowledgeBase),
-            createMenuItem("Text Component", Feather.FILE_TEXT, this::handleTextComponent),
-            createMenuItem("CSS Theme Test", Feather.SETTINGS, this::handleCSSTest),
-            createMenuItem("Batch Jobs", Feather.CLOCK, this::handleBatchJobs),
-            createMenuItem("DB Objects", Feather.DATABASE, this::handleDBObjects),
-            createMenuItem("Settings", Feather.SLIDERS, this::handleSettingsMenu));
+            createMenuItem("Knowledge Base", Octicons.BOOK_24, this::handleKnowledgeBase),
+            createMenuItem("Text Component", Octicons.FILE_CODE_24, this::handleTextComponent),
+            createMenuItem("CSS Theme Test", Octicons.GEAR_24, this::handleCSSTest),
+            createMenuItem("Batch Jobs", Octicons.CLOCK_24, this::handleBatchJobs),
+            createMenuItem("DB Objects", Octicons.DATABASE_24, this::handleDBObjects),
+            createMenuItem("Settings", Octicons.TOOLS_24, this::handleSettingsMenu));
 
     return menu;
   }
 
-  /** Creates AI Assistant menu item with theme-aware bot icon */
+  /** Creates AI Assistant menu item with DEPENDABOT icon */
   private Button createAIAssistantMenuItem() {
-    // Theme-aware bot icon
-    botIcon =
-        IconUtils.createImageView(
-            themeManager.getBotIcon(),
-            AppConstants.ICON_SIZE_MEDIUM,
-            AppConstants.ICON_SIZE_MEDIUM);
+    // DEPENDABOT icon
+    FontIcon dependabotIcon = new FontIcon(Octicons.DEPENDABOT_24);
+    dependabotIcon.setIconSize(AppConstants.ICON_SIZE_MEDIUM);
 
     Label label = new Label("AI Assistant");
 
-    HBox content = new HBox(12, botIcon, label);
+    HBox content = new HBox(12, dependabotIcon, label);
     content.setAlignment(Pos.CENTER_LEFT);
 
     Button button = new Button();
@@ -159,7 +154,7 @@ public class SidebarView extends VBox implements ThemeChangeListener {
   }
 
   /** Creates a menu item button */
-  private Button createMenuItem(String text, Feather icon, Runnable action) {
+  private Button createMenuItem(String text, Octicons icon, Runnable action) {
     FontIcon iconNode = new FontIcon(icon);
     iconNode.setIconSize(16);
 
@@ -183,7 +178,7 @@ public class SidebarView extends VBox implements ThemeChangeListener {
     VBox section = new VBox(8);
 
     // Section header
-    HBox sectionHeader = createSectionHeader("ƯU THÍCH", Feather.STAR, null);
+    HBox sectionHeader = createSectionHeader("FAVORITES", Octicons.STAR_24, null);
 
     // Favorites cards
     VBox favoritesCard = new VBox(4);
@@ -209,14 +204,14 @@ public class SidebarView extends VBox implements ThemeChangeListener {
 
     // Section header with add button
     Button addButton = new Button();
-    addButton.setGraphic(new FontIcon(Feather.PLUS));
+    addButton.setGraphic(new FontIcon(Octicons.PLUS_24));
     addButton
         .getStyleClass()
         .addAll(Styles.BUTTON_ICON, Styles.FLAT, "icon-btn");
     addButton.setTooltip(new Tooltip("New Project"));
     addButton.setOnAction(e -> handleNewProject());
 
-    HBox sectionHeader = createSectionHeader("DỰ ÁN", Feather.FOLDER, addButton);
+    HBox sectionHeader = createSectionHeader("PROJECTS", Octicons.REPO_24, addButton);
 
     // Projects list in scrollpane
     VBox projectsList = new VBox(4);
@@ -242,7 +237,7 @@ public class SidebarView extends VBox implements ThemeChangeListener {
   }
 
   /** Creates section header with icon and optional action button */
-  private HBox createSectionHeader(String title, Feather icon, Button actionButton) {
+  private HBox createSectionHeader(String title, Octicons icon, Button actionButton) {
     FontIcon iconNode = new FontIcon(icon);
     iconNode.setIconSize(16);
 
@@ -317,15 +312,11 @@ public class SidebarView extends VBox implements ThemeChangeListener {
 
     // App icon doesn't need theme update (using FontIcon instead of ImageView)
     // FontIcon automatically adapts to theme
-
-    // Update bot icon
-    if (botIcon != null) {
-      IconUtils.updateImageView(botIcon, themeManager.getBotIcon());
-    }
+    // DEPENDABOT icon also doesn't need theme update
 
     // Update theme button
     if (themeButton != null) {
-      FontIcon newIcon = new FontIcon(isDarkTheme ? Feather.MOON : Feather.SUN);
+      FontIcon newIcon = new FontIcon(isDarkTheme ? Octicons.MOON_24 : Octicons.SUN_24);
       themeButton.setGraphic(newIcon);
       themeButton.setTooltip(
           new Tooltip(isDarkTheme ? "Switch to Light Theme" : "Switch to Dark Theme"));
