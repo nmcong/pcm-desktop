@@ -15,6 +15,9 @@ erDiagram
     ast_nodes ||--o{ ast_relationships : links
     projects ||--o{ vector_documents : chunks
     source_files ||..o{ vector_documents : "provides context for"
+    projects ||--o{ search_corpus : indexes
+    source_files ||..o{ search_corpus : "text source"
+    search_corpus ||--|| search_index : mirrors
     subsystems ||..o{ user_requests : originates
     projects ||..o{ user_requests : relevant
     user_requests ||--o{ request_artifacts : attaches
