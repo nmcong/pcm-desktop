@@ -423,7 +423,22 @@ echo "  Embedding Models (models/):"
 ls -1 models/*/model.onnx 2>/dev/null || echo "  [WARNING] No models found!"
 echo
 
+echo "[INFO] Configuring IntelliJ IDEA project..."
+echo
+
+# Configure IntelliJ IDEA
+if [ -f "scripts/configure-intellij.sh" ]; then
+    chmod +x scripts/configure-intellij.sh
+    echo "[INFO] Running IntelliJ IDEA configuration..."
+    ./scripts/configure-intellij.sh
+    echo "[OK] IntelliJ IDEA project configured!"
+else
+    echo "[WARNING] IntelliJ configuration script not found!"
+fi
+echo
+
 echo "[INFO] Next Steps:"
 echo "  1. Run: ./scripts/build.sh"
 echo "  2. Run: ./scripts/run.sh"
+echo "  3. Open project in IntelliJ IDEA (File -> Open -> Select project directory)"
 echo

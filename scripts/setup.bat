@@ -491,9 +491,23 @@ echo   Embedding Models (models\):
 dir /b models\*\model.onnx 2>nul || echo   [WARNING] No models found!
 echo.
 
+echo [INFO] Configuring IntelliJ IDEA project...
+echo.
+
+REM Configure IntelliJ IDEA
+if exist "scripts\configure-intellij.bat" (
+    echo [INFO] Running IntelliJ IDEA configuration...
+    call scripts\configure-intellij.bat
+    echo [OK] IntelliJ IDEA project configured!
+) else (
+    echo [WARNING] IntelliJ configuration script not found!
+)
+echo.
+
 echo [INFO] Next Steps:
 echo   1. Run: scripts\build.bat
 echo   2. Run: scripts\run.bat
+echo   3. Open project in IntelliJ IDEA (File -^> Open -^> Select project directory)
 echo.
 
 pause
