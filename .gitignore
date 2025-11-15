@@ -84,5 +84,6 @@ sampler/
 # Claude AI directory
 .claude/
 archives
+models
 data
 .qdrant-initialized
