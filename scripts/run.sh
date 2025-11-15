@@ -127,24 +127,22 @@ echo -e "${BLUE}🚀 PCM Desktop - Run Script${NC}"
 echo "================================"
 echo ""
 
-# Check if compiled
+# Auto-compile project
 if [ "$AUTO_COMPILE" = true ]; then
-    if [ ! -d "out" ] || [ -z "$(ls -A out 2>/dev/null)" ] || [ ! -f "out/com/noteflix/pcm/PCMApplication.class" ]; then
-        echo -e "${YELLOW}⚠️  Project not compiled. Compiling now...${NC}"
-        
-        if [ "$WITH_TEXT_COMPONENT" = true ]; then
-            ./scripts/build.sh --text
-        else
-            ./scripts/build.sh
-        fi
-        
-        if [ $? -ne 0 ]; then
-            echo -e "${RED}❌ Compilation failed!${NC}"
-            exit 1
-        fi
-        
-        echo ""
+    echo -e "${YELLOW}🔨 Building project...${NC}"
+    
+    if [ "$WITH_TEXT_COMPONENT" = true ]; then
+        ./scripts/build.sh --text
+    else
+        ./scripts/build.sh
     fi
+    
+    if [ $? -ne 0 ]; then
+        echo -e "${RED}❌ Compilation failed!${NC}"
+        exit 1
+    fi
+    
+    echo ""
 fi
 
 # Copy resources to output directory

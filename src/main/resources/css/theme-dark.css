@@ -10,7 +10,7 @@
 .root {
     /* Background Hierarchy - Dark blue/gray palette */
     -fx-bg-primary: #1a1d2e;
-    -fx-bg-secondary: #16192a;
+    -fx-bg-secondary: #0E0E20;
     -fx-bg-tertiary: #12151f;
     -fx-bg-elevated: #1f2335;
 
@@ -46,7 +46,7 @@
 .root {
     -fx-base: #1a1d2e;
     -fx-background: #1a1d2e;
-    -fx-control-inner-background: #16192a;
+    -fx-control-inner-background: #0E0E20;
     -fx-accent: #6366f1;
     -fx-default-button: #6366f1;
     -fx-focus-color: #6366f1;
@@ -101,8 +101,22 @@
    SECTION 4: CHAT HEADER & ACTIONS (Dark Theme)
    ================================================================ */
 
+.header {
+    -fx-background-color: #0E0E20;
+}
+
+.app-header {
+    -fx-background-color: #0E0E20;
+    -fx-border-color: transparent transparent #2d3142 transparent;
+    -fx-border-width: 0 0 1px 0;
+}
+
+.page-header {
+    -fx-background-color: #0E0E20;
+}
+
 .chat-header {
-    -fx-background-color: #16192a;
+    -fx-background-color: #0E0E20;
 }
 
 .icon-btn:hover {

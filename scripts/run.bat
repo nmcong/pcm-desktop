@@ -112,24 +112,22 @@ if not exist "lib\javafx\javafx.base.jar" (
     exit /b 1
 )
 
-REM Check if compiled
+REM Auto-compile project
 if %AUTO_COMPILE%==1 (
-    if not exist "out\com\noteflix\pcm\PCMApplication.class" (
-        echo [INFO] Project not compiled. Compiling now...
-        
-        if %WITH_TEXT_COMPONENT%==1 (
-            call scripts\build.bat --text
-        ) else (
-            call scripts\build.bat
-        )
-        
-        if %ERRORLEVEL% NEQ 0 (
-            echo [ERROR] Compilation failed!
-            pause
-            exit /b 1
-        )
-        echo.
+    echo [INFO] Building project...
+    
+    if %WITH_TEXT_COMPONENT%==1 (
+        call scripts\build.bat --text
+    ) else (
+        call scripts\build.bat
     )
+    
+    if %ERRORLEVEL% NEQ 0 (
+        echo [ERROR] Compilation failed!
+        pause
+        exit /b 1
+    )
+    echo.
 )
 
 REM Copy resources

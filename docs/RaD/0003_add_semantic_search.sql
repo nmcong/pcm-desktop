@@ -1,6 +1,5 @@
 PRAGMA foreign_keys = ON;
 
--- Base corpus table holds canonical text chunks (code, docs, KB, responses)
 CREATE TABLE IF NOT EXISTS search_corpus (
     corpus_id       INTEGER PRIMARY KEY AUTOINCREMENT,
     project_id      INTEGER REFERENCES projects(project_id) ON DELETE CASCADE,
@@ -16,7 +15,6 @@ CREATE INDEX IF NOT EXISTS idx_search_corpus_project ON search_corpus(project_id
 CREATE INDEX IF NOT EXISTS idx_search_corpus_file ON search_corpus(file_id);
 CREATE INDEX IF NOT EXISTS idx_search_corpus_type ON search_corpus(source_type);
 
--- Full-text index using FTS5 (TF-IDF/BM25 scoring)
 CREATE VIRTUAL TABLE IF NOT EXISTS search_index USING fts5(
     corpus_id UNINDEXED,
     project_id UNINDEXED,
@@ -27,7 +25,6 @@ CREATE VIRTUAL TABLE IF NOT EXISTS search_index USING fts5(
     detail = 'column'
 );
 
--- Synchronization triggers keep the virtual table in sync with base data
 CREATE TRIGGER IF NOT EXISTS trg_search_corpus_insert AFTER INSERT ON search_corpus
 BEGIN
     INSERT INTO search_index(rowid, corpus_id, project_id, source_type, label, content)

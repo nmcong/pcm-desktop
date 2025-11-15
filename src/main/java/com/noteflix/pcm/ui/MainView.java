@@ -47,7 +47,7 @@ public class MainView extends BorderPane implements ThemeChangeListener {
     rightSide.getStyleClass().add("right-side");
 
     // Top: Navbar
-    rightSide.setTop(createNavbar());
+    rightSide.setTop(createAppHeader());
 
     // Center: Content area (pages will be displayed here)
     StackPane contentArea = new StackPane();
@@ -74,11 +74,11 @@ public class MainView extends BorderPane implements ThemeChangeListener {
   }
 
   /** Creates the top navigation bar */
-  private HBox createNavbar() {
-    HBox navbar = new HBox(16);
-    navbar.getStyleClass().add("navbar");
-    navbar.setPadding(new Insets(12, 16, 12, 16));
-    navbar.setAlignment(Pos.CENTER_LEFT);
+  private HBox createAppHeader() {
+    HBox appHeader = new HBox(16);
+    appHeader.getStyleClass().add("app-header");
+    appHeader.setPadding(new Insets(12, 16, 12, 16));
+    appHeader.setAlignment(Pos.CENTER_LEFT);
 
     // Sidebar toggle button
     Button sidebarToggleBtn = new Button();
@@ -127,11 +127,11 @@ public class MainView extends BorderPane implements ThemeChangeListener {
             new SeparatorMenuItem(),
             logoutItem);
 
-    navbar
+    appHeader
         .getChildren()
         .addAll(sidebarToggleBtn, spacer, themeButton, notificationsBtn, settingsBtn, userMenu);
 
-    return navbar;
+    return appHeader;
   }
 
   /** Toggles sidebar visibility */
