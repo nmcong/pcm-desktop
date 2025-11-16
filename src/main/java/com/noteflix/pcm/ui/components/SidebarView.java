@@ -1,69 +1,56 @@
 package com.noteflix.pcm.ui.components;
 
-import atlantafx.base.theme.Styles;
-import com.noteflix.pcm.ui.pages.ai.AIAssistantPage;
 import com.noteflix.pcm.core.constants.AppConstants;
 import com.noteflix.pcm.core.events.ThemeChangeListener;
 import com.noteflix.pcm.core.navigation.PageNavigator;
 import com.noteflix.pcm.core.navigation.NavigationListener;
 import com.noteflix.pcm.core.theme.ThemeManager;
 import com.noteflix.pcm.ui.pages.*;
+import com.noteflix.pcm.ui.pages.ai.AIAssistantPage;
 import com.noteflix.pcm.ui.pages.projects.*;
 import com.noteflix.pcm.ui.base.BaseView;
 import com.noteflix.pcm.application.service.project.IProjectService;
 import com.noteflix.pcm.application.service.project.ProjectServiceFactory;
 import com.noteflix.pcm.domain.entity.Project;
+import com.noteflix.pcm.ui.components.sidebar.*;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
 import javafx.scene.layout.*;
-import javafx.animation.RotateTransition;
-import javafx.util.Duration;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.kordamp.ikonli.javafx.FontIcon;
-import org.kordamp.ikonli.octicons.Octicons;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Optional;
-import java.util.concurrent.CompletableFuture;
 import javafx.application.Platform;
 
-/** Sidebar component built with pure Java (no FXML) Following AtlantaFX Sampler patterns */
+/** 
+ * Refactored Sidebar component using composition and SOLID principles
+ * Main coordinator for sidebar components
+ */
 @Slf4j
 public class SidebarView extends VBox implements ThemeChangeListener, NavigationListener {
 
   private final ThemeManager themeManager;
   private final IProjectService projectService;
-    /**
-     * -- SETTER --
-     *  Sets the page navigator for navigation functionality Dependency Injection - follows Dependency
-     *  Inversion Principle
-     */
-    @Setter
-    private PageNavigator pageNavigator;
-  private FontIcon appIcon;
   
-  // Map to store menu buttons for highlighting
-  private final Map<Class<? extends BaseView>, Button> menuButtons = new HashMap<>();
-  // Map to store project items for highlighting
+  /**
+   * -- SETTER --
+   *  Sets the page navigator for navigation functionality
+   */
+  @Setter
+  private PageNavigator pageNavigator;
+  
+  // Component managers following Single Responsibility Principle
+  private final SidebarHeader header;
+  private final MainMenu mainMenu;
+  private final ProjectSectionManager projectSectionManager;
+  private final ProjectHighlightManager highlightManager;
+  private final SidebarNavigationHandler navigationHandler;
+  private final LoadingManager loadingManager;
+  
+  // Map to store project items for highlighting (shared with managers)
   private final Map<String, HBox> projectItems = new HashMap<>();
-  private Button activeMenuButton = null;
-  private HBox activeProjectItem = null;
-  private String activeProjectName = null; // Track current active project name
-  
-  // Navigation cancellation support
-  private CompletableFuture<?> currentNavigationTask = null;
-  
-  // Loading state
-  private boolean isLoading = false;
-  private CompletableFuture<Void> loadingTask = null;
-  
-  // Loading animations
-  private final List<RotateTransition> loadingAnimations = new ArrayList<>();
 
   public SidebarView() {
     super(16);
@@ -77,6 +64,29 @@ public class SidebarView extends VBox implements ThemeChangeListener, Navigation
     setMinWidth(AppConstants.SIDEBAR_WIDTH);
     setMaxWidth(AppConstants.SIDEBAR_WIDTH);
 
+    // Initialize component managers
+    this.highlightManager = new ProjectHighlightManager(projectItems);
+    this.navigationHandler = new SidebarNavigationHandler(pageNavigator, projectService, highlightManager);
+    this.loadingManager = new LoadingManager(projectService, this::handleSectionHeaderCreate);
+    this.header = new SidebarHeader(this::openSearchDialog);
+    this.mainMenu = new MainMenu(
+        this::navigateWithCancellation,
+        this::handleAIAssistant,
+        this::handleKnowledgeBase,
+        this::handleTextComponent,
+        this::handleBatchJobs,
+        this::handleDBObjects,
+        this::handleSettingsMenu
+    );
+    this.projectSectionManager = new ProjectSectionManager(
+        projectService,
+        projectItems,
+        highlightManager,
+        this::handleProjectClick,
+        this::handleRefreshProjects,
+        this::handleNewProject
+    );
+
     // Register for theme changes
     themeManager.addThemeChangeListener(this);
 
@@ -84,381 +94,57 @@ public class SidebarView extends VBox implements ThemeChangeListener, Navigation
     buildSidebarWithLoading();
   }
 
-    /** Creates the header with app title and theme switch (AtlantaFX Sampler pattern) */
+  // Delegate header creation to component
   private VBox createHeader() {
-    VBox headerSection = new VBox(20);
-    headerSection.getStyleClass().add("header");
-
-    // Logo section with DEPENDABOT icon
-    appIcon = new FontIcon(Octicons.CPU_16);
-    appIcon.getStyleClass().add("app-icon");
-
-    Label titleLabel = new Label("PCM");
-    titleLabel.getStyleClass().add(Styles.TITLE_3);
-
-    HBox logoSection = new HBox(10, appIcon, titleLabel);
-    logoSection.setAlignment(Pos.CENTER_LEFT);
-    logoSection.getStyleClass().add("logo");
-
-    headerSection.getChildren().addAll(logoSection, createSearchButton());
-    return headerSection;
-  }
-
-  /** Creates search button following AtlantaFX Sampler pattern */
-  private Button createSearchButton() {
-    // Search label with icon
-    FontIcon searchIcon = new FontIcon(Octicons.SEARCH_24);
-    searchIcon.setIconSize(14);
-
-    Label searchLabel = new Label("Search");
-    searchLabel.setGraphic(searchIcon);
-    searchLabel.getStyleClass().add("search-label");
-    searchLabel.setGraphicTextGap(8);
-
-    // Keyboard hint
-    Label hintLabel = new Label("Press /");
-    hintLabel.getStyleClass().addAll("hint", "text-muted", "text-small");
-
-    // Content container
-    HBox content = new HBox(12, searchLabel, createSpacer(), hintLabel);
-    content.setAlignment(Pos.CENTER_LEFT);
-    content.getStyleClass().add("content");
-
-    // Search button
-    Button searchButton = new Button();
-    searchButton.setGraphic(content);
-    searchButton.getStyleClass().add("search-button");
-    searchButton.setMaxWidth(Double.MAX_VALUE);
-    searchButton.setAlignment(Pos.CENTER_LEFT);
-    searchButton.setOnAction(e -> openSearchDialog());
-
-    return searchButton;
-  }
-
-  /** Creates main menu with icon buttons */
-  private VBox createMainMenu() {
-    VBox menu = new VBox(4);
-    menu.getStyleClass().add("card");
-    menu.setPadding(new Insets(8));
-
-    // Create menu items and store references for highlighting
-    Button aiAssistantBtn = createAIAssistantMenuItem();
-    Button knowledgeBaseBtn = createMenuItem("Knowledge Base", Octicons.BOOK_24, this::handleKnowledgeBase);
-    Button textComponentBtn = createMenuItem("Text Component", Octicons.FILE_CODE_24, this::handleTextComponent);
-    Button batchJobsBtn = createMenuItem("Batch Jobs", Octicons.CLOCK_24, this::handleBatchJobs);
-    Button dbObjectsBtn = createMenuItem("DB Objects", Octicons.DATABASE_24, this::handleDBObjects);
-    Button settingsBtn = createMenuItem("Settings", Octicons.TOOLS_24, this::handleSettingsMenu);
-    
-    // Store button references for highlighting
-    menuButtons.put(AIAssistantPage.class, aiAssistantBtn);
-    menuButtons.put(KnowledgeBasePage.class, knowledgeBaseBtn);
-    menuButtons.put(UniversalTextDemoPage.class, textComponentBtn);
-    menuButtons.put(BatchJobsPage.class, batchJobsBtn);
-    menuButtons.put(DatabaseObjectsPage.class, dbObjectsBtn);
-    menuButtons.put(SettingsPage.class, settingsBtn);
-
-    menu.getChildren().addAll(
-        aiAssistantBtn,
-        knowledgeBaseBtn, 
-        textComponentBtn,
-        batchJobsBtn,
-        dbObjectsBtn,
-        settingsBtn);
-
-    return menu;
-  }
-
-  /** Creates AI Assistant menu item with DEPENDABOT icon */
-  private Button createAIAssistantMenuItem() {
-    // DEPENDABOT icon
-    FontIcon dependabotIcon = new FontIcon(Octicons.DEPENDABOT_24);
-
-    Label label = new Label("AI Assistant");
-
-    HBox content = new HBox(12, dependabotIcon, label);
-    content.setAlignment(Pos.CENTER_LEFT);
-
-    Button button = new Button();
-    button.setGraphic(content);
-    button.setMaxWidth(Double.MAX_VALUE);
-    button
-        .getStyleClass()
-        .addAll(Styles.FLAT, Styles.LEFT_PILL, "sidebar-menu-item", "ai-assistant-btn");
-    button.setAlignment(Pos.CENTER_LEFT);
-    button.setOnAction(e -> handleAIAssistant());
-
-    return button;
-  }
-
-  /** Creates a menu item button */
-  private Button createMenuItem(String text, Octicons icon, Runnable action) {
-    FontIcon iconNode = new FontIcon(icon);
-    iconNode.setIconSize(16);
-
-    Label label = new Label(text);
-
-    HBox content = new HBox(12, iconNode, label);
-    content.setAlignment(Pos.CENTER_LEFT);
-
-    Button button = new Button();
-    button.setGraphic(content);
-    button.setMaxWidth(Double.MAX_VALUE);
-    button.getStyleClass().addAll(Styles.FLAT, Styles.LEFT_PILL, "sidebar-menu-item");
-    button.setAlignment(Pos.CENTER_LEFT);
-    button.setOnAction(e -> action.run());
-
-    return button;
-  }
-
-  /** Creates favorites section with header (only if there are favorites) */
-  private VBox createFavoritesSection() {
-    // Get favorite projects from service
-    List<Project> favoriteProjects = projectService.getFavoriteProjects();
-    
-    // Return null if no favorites (will be filtered out)
-    if (favoriteProjects.isEmpty()) {
-      log.debug("No favorite projects found, hiding favorites section");
-      return null;
-    }
-    
-    VBox section = new VBox(8);
-
-    // Section header with refresh button
-    Button refreshButton = new Button();
-    refreshButton.setGraphic(new FontIcon(Octicons.SYNC_24));
-    refreshButton
-        .getStyleClass()
-        .addAll(Styles.BUTTON_ICON, Styles.FLAT, "icon-btn");
-    refreshButton.setTooltip(new Tooltip("Refresh Projects"));
-    refreshButton.setOnAction(e -> handleRefreshProjects());
-
-    HBox sectionHeader = createSectionHeader("FAVORITES", Octicons.STAR_24, refreshButton);
-
-    // Favorites cards
-    VBox favoritesCard = new VBox(4);
-    favoritesCard.getStyleClass().add("card");
-    favoritesCard.setPadding(new Insets(8));
-
-    // Add favorite projects dynamically from service
-    for (Project project : favoriteProjects) {
-      String details = project.getScreenCount() + " screens • " + project.getStatus().getDisplayName();
-      favoritesCard.getChildren().add(
-        createProjectItem(project.getCode(), project.getName(), details, project.getColor())
-      );
-    }
-
-    section.getChildren().addAll(sectionHeader, favoritesCard);
-    return section;
-  }
-
-  /** Creates projects section with scrollable list (only if there are non-favorite projects) */
-  private VBox createProjectsSection() {
-    // Get non-favorite projects from service
-    List<Project> nonFavoriteProjects = projectService.getNonFavoriteProjects();
-    
-    // Return null if no non-favorite projects (will be filtered out)
-    if (nonFavoriteProjects.isEmpty()) {
-      log.debug("No non-favorite projects found, hiding projects section");
-      return null;
-    }
-    
-    VBox section = new VBox(8);
-    VBox.setVgrow(section, Priority.ALWAYS);
-
-    // Section header with add button
-    Button addButton = new Button();
-    addButton.setGraphic(new FontIcon(Octicons.PLUS_24));
-    addButton
-        .getStyleClass()
-        .addAll(Styles.BUTTON_ICON, Styles.FLAT, "icon-btn");
-    addButton.setTooltip(new Tooltip("New Project"));
-    addButton.setOnAction(e -> handleNewProject());
-
-    HBox sectionHeader = createSectionHeader("PROJECTS", Octicons.REPO_24, addButton);
-
-    // Projects list in scrollpane - only show non-favorite projects
-    VBox projectsList = new VBox(4);
-    projectsList.getStyleClass().add("card");
-    projectsList.setPadding(new Insets(8));
-
-    // Add only non-favorite projects from service
-    for (Project project : nonFavoriteProjects) {
-      String details = project.getScreenCount() + " screens";
-      projectsList.getChildren().add(
-        createProjectItem(project.getCode(), project.getName(), details, project.getColor())
-      );
-    }
-
-    ScrollPane scrollPane = new ScrollPane(projectsList);
-    scrollPane.setFitToWidth(true);
-    scrollPane.getStyleClass().add(Styles.DENSE);
-    VBox.setVgrow(scrollPane, Priority.ALWAYS);
-
-    section.getChildren().addAll(sectionHeader, scrollPane);
-    return section;
-  }
-
-  /** Creates section header with icon and optional action button */
-  private HBox createSectionHeader(String title, Octicons icon, Button actionButton) {
-    FontIcon iconNode = new FontIcon(icon);
-    iconNode.setIconSize(16);
-
-    Label titleLabel = new Label(title);
-    titleLabel.getStyleClass().add(Styles.TITLE_4);
-
-    HBox header = new HBox(8, iconNode, titleLabel);
-    header.setAlignment(Pos.CENTER_LEFT);
-
-    if (actionButton != null) {
-      Region spacer = createSpacer();
-      header.getChildren().addAll(spacer, actionButton);
-    }
-
     return header;
   }
 
-  /** Creates a project item with avatar and details */
-  private HBox createProjectItem(String initials, String name, String details, String colorVar) {
-    // Avatar with initials
-    Label initialsLabel = new Label(initials);
-    initialsLabel.setStyle("-fx-text-fill: white; -fx-font-size: 11px; -fx-font-weight: bold;");
 
-    StackPane avatar = new StackPane(initialsLabel);
-    avatar.setStyle("-fx-background-color: " + colorVar + "; -fx-background-radius: 6px;");
-    avatar.setMinSize(32, 32);
-    avatar.setMaxSize(32, 32);
-
-    // Project details
-    Label nameLabel = new Label(name);
-    nameLabel.getStyleClass().add(Styles.TEXT_BOLD);
-
-    Label detailsLabel = new Label(details);
-    detailsLabel.getStyleClass().addAll(Styles.TEXT_SMALL, "text-muted");
-
-    VBox textBox = new VBox(2, nameLabel, detailsLabel);
-
-    // Project item container
-    HBox projectItem = new HBox(12, avatar, textBox);
-    projectItem.setAlignment(Pos.CENTER_LEFT);
-    projectItem.getStyleClass().add("list-item");
-    projectItem.setPadding(new Insets(8));
-    projectItem.setOnMouseClicked(e -> {
-      // Only handle left-click for navigation
-      if (e.getButton() == javafx.scene.input.MouseButton.PRIMARY) {
-        handleProjectClick(name);
-      }
-    });
-    
-    // Add context menu for favorite toggle
-    ContextMenu contextMenu = createProjectContextMenu(initials);
-    projectItem.setOnContextMenuRequested(e -> {
-      contextMenu.show(projectItem, e.getScreenX(), e.getScreenY());
-      e.consume(); // Prevent other handlers from processing this event
-    });
-    
-    // Store project item for highlighting
-    projectItems.put(name, projectItem);
-    log.debug("Added project item to map: {} (map size: {})", name, projectItems.size());
-
-    // Check if this is the active project and highlight it immediately
-    if (name.equals(activeProjectName)) {
-      projectItem.getStyleClass().add("active");
-      activeProjectItem = projectItem;
-      log.debug("Immediately highlighted active project: {}", name);
-    }
-
-    return projectItem;
+  // Delegate main menu creation to component
+  private VBox createMainMenu() {
+    return mainMenu;
   }
-  
-  /** Creates context menu for project items */
-  private ContextMenu createProjectContextMenu(String projectCode) {
-    ContextMenu contextMenu = new ContextMenu();
-    
-    Optional<Project> projectOpt = projectService.getProjectByCode(projectCode);
-    if (projectOpt.isPresent()) {
-      Project project = projectOpt.get();
-      
-      MenuItem favoriteItem = new MenuItem();
-      if (project.isFavorite()) {
-        favoriteItem.setText("Remove from Favorites");
-        favoriteItem.setGraphic(new FontIcon(Octicons.STAR_FILL_24));
-      } else {
-        favoriteItem.setText("Add to Favorites");
-        favoriteItem.setGraphic(new FontIcon(Octicons.STAR_24));
-      }
-      
-      favoriteItem.setOnAction(e -> {
-        projectService.toggleFavorite(projectCode);
-        // Just rebuild UI without loading state - data is already updated in service
-        buildSidebarWithProjects();
-      });
-      
-      contextMenu.getItems().add(favoriteItem);
-    }
-    
-    return contextMenu;
+
+
+
+  // Delegate favorites section creation to component
+  private VBox createFavoritesSection() {
+    return projectSectionManager.createFavoritesSection();
   }
+
+  // Delegate projects section creation to component
+  private VBox createProjectsSection() {
+    return projectSectionManager.createProjectsSection();
+  }
+
+
   
-  /** 
-   * Cancel current navigation task if any
-   */
+  
+  // Delegate to navigation handler
   private void cancelCurrentNavigation() {
-    if (currentNavigationTask != null && !currentNavigationTask.isDone()) {
-      log.debug("Cancelling current navigation task");
-      currentNavigationTask.cancel(true);
-      currentNavigationTask = null;
-    }
+    navigationHandler.cancelCurrentNavigation();
   }
   
-  /**
-   * Cancel current loading task if any
-   */
+  // Delegate to loading manager
   private void cancelCurrentLoading() {
-    if (loadingTask != null && !loadingTask.isDone()) {
-      log.debug("Cancelling current loading task");
-      loadingTask.cancel(true);
-      isLoading = false;
-      // Stop loading animations
-      stopLoadingAnimations();
-    }
+    loadingManager.cancelCurrentLoading();
   }
   
-  /** 
-   * Safe navigation that cancels previous navigation and loading
-   */
+  // Delegate to navigation handler
   private void navigateWithCancellation(Runnable navigationAction) {
-    // Cancel any ongoing navigation
-    cancelCurrentNavigation();
-    
-    // Cancel any ongoing loading task
+    // Cancel any ongoing loading first
     cancelCurrentLoading();
-    
-    // Execute navigation immediately for UI components (menu items)
-    // For async operations, this would be wrapped in CompletableFuture
-    currentNavigationTask = CompletableFuture.runAsync(() -> {
-      try {
-        // Small delay to simulate async operation
-        Thread.sleep(100);
-        
-        // Check if not cancelled before proceeding
-        if (!Thread.currentThread().isInterrupted()) {
-          javafx.application.Platform.runLater(navigationAction);
-        }
-      } catch (InterruptedException e) {
-        log.debug("Navigation task was cancelled");
-        Thread.currentThread().interrupt();
-      }
-    });
+    navigationHandler.navigateWithCancellation(navigationAction);
   }
 
-  /** Refresh sidebar to show updated project lists */
+  // Enhanced refresh method using loading manager
   private void refreshSidebar() {
     log.debug("Refreshing sidebar with updated project data");
     
     // If currently loading, wait for it to complete then refresh
-    if (isLoading) {
-      if (loadingTask != null) {
-        loadingTask.thenRun(() -> Platform.runLater(this::refreshWithLoadingState));
+    if (loadingManager.isLoading()) {
+      if (loadingManager.getLoadingTask() != null) {
+        loadingManager.getLoadingTask().thenRun(() -> Platform.runLater(this::refreshWithLoadingState));
       }
       return;
     }
@@ -467,135 +153,50 @@ public class SidebarView extends VBox implements ThemeChangeListener, Navigation
     refreshWithLoadingState();
   }
   
-  /**
-   * Refresh sidebar with loading state - used when data needs to be refetched
-   */
+  // Enhanced refresh with loading state using loading manager
   private void refreshWithLoadingState() {
     log.debug("Refreshing sidebar with loading state");
-    isLoading = true;
     
     // Clear current content and show loading
     getChildren().clear();
     getChildren().addAll(createHeader(), createMainMenu());
     
-    // Always show loading placeholders when refreshing (since we're refetching data)
-    getChildren().addAll(createLoadingSection("FAVORITES"), createLoadingSection("PROJECTS"));
+    // Show loading placeholders using loading manager
+    getChildren().addAll(
+        loadingManager.createLoadingSection("FAVORITES"), 
+        loadingManager.createLoadingSection("PROJECTS")
+    );
     
-    // Start async data refresh
-    refreshProjectDataAsync();
+    // Start async data refresh using loading manager
+    loadingManager.refreshProjectDataAsync(this::buildSidebarWithProjects);
   }
   
-  /**
-   * Refresh project data asynchronously and update UI
-   */
-  private void refreshProjectDataAsync() {
-    if (loadingTask != null && !loadingTask.isDone()) {
-      loadingTask.cancel(true);
-    }
-    
-    loadingTask = projectService.refreshDataAsync().thenRun(() -> {
-      Platform.runLater(() -> {
-        isLoading = false;
-        buildSidebarWithProjects();
-        log.info("Sidebar refresh completed");
-      });
-    });
-  }
 
-  /** 
-   * Builds sidebar with loading state, then loads projects asynchronously
-   */
+  // Enhanced build with loading using loading manager
   private void buildSidebarWithLoading() {
     log.debug("Building sidebar with loading state");
-    isLoading = true;
     
     // Add header and main menu immediately
     getChildren().addAll(createHeader(), createMainMenu());
     
-    // Add loading placeholders for project sections
-    getChildren().addAll(createLoadingSection("FAVORITES"), createLoadingSection("PROJECTS"));
+    // Add loading placeholders using loading manager
+    getChildren().addAll(
+        loadingManager.createLoadingSection("FAVORITES"), 
+        loadingManager.createLoadingSection("PROJECTS")
+    );
     
-    // Start async loading of project data
-    loadProjectsAsync();
+    // Start async loading using loading manager
+    loadingManager.startAsyncDataLoading(this::buildSidebarWithProjects);
   }
   
-  /** 
-   * Creates a loading placeholder section
-   */
-  private VBox createLoadingSection(String title) {
-    VBox section = new VBox(8);
-    
-    // Section header
-    Octicons icon = title.equals("FAVORITES") ? Octicons.STAR_24 : Octicons.REPO_24;
-    HBox sectionHeader = createSectionHeader(title, icon, null);
-    
-    // Loading indicator
-    VBox loadingCard = new VBox(12);
-    loadingCard.getStyleClass().add("card");
-    loadingCard.setPadding(new Insets(16));
-    loadingCard.setAlignment(Pos.CENTER);
-    
-    // Loading spinner icon with rotation animation
-    FontIcon spinnerIcon = new FontIcon(Octicons.SYNC_24);
-    spinnerIcon.getStyleClass().add("loading-spinner");
-    
-    // Create rotation animation
-    RotateTransition rotateTransition = new RotateTransition(Duration.seconds(1.0), spinnerIcon);
-    rotateTransition.setByAngle(360);
-    rotateTransition.setCycleCount(RotateTransition.INDEFINITE);
-    rotateTransition.play();
-    
-    // Track animation for cleanup
-    loadingAnimations.add(rotateTransition);
-    
-    // Loading text
-    Label loadingText = new Label("Loading " + title.toLowerCase() + "...");
-    loadingText.getStyleClass().addAll(Styles.TEXT_SMALL, "text-muted");
-    
-    loadingCard.getChildren().addAll(spinnerIcon, loadingText);
-    section.getChildren().addAll(sectionHeader, loadingCard);
-    
-    return section;
-  }
   
-  /** 
-   * Loads projects asynchronously and updates UI
-   */
-  private void loadProjectsAsync() {
-    if (loadingTask != null && !loadingTask.isDone()) {
-      loadingTask.cancel(true);
-    }
-    
-    loadingTask = CompletableFuture.runAsync(() -> {
-      try {
-        log.info("Starting async project data loading");
-        
-        // Simulate loading delay (1 second as requested)
-        Thread.sleep(1000);
-        
-        // Check if not cancelled before proceeding
-        if (!Thread.currentThread().isInterrupted()) {
-          Platform.runLater(() -> {
-            isLoading = false;
-            buildSidebarWithProjects();
-            log.info("Project data loading completed");
-          });
-        }
-      } catch (InterruptedException e) {
-        log.debug("Project loading was cancelled");
-        Thread.currentThread().interrupt();
-      }
-    });
-  }
   
-  /** 
-   * Builds sidebar with actual project data
-   */
+  // Enhanced build method using component managers
   private void buildSidebarWithProjects() {
     log.debug("Building sidebar with project data");
     
-    // Stop all loading animations
-    stopLoadingAnimations();
+    // Stop all loading animations using loading manager
+    loadingManager.stopLoadingAnimations();
     
     // Clear existing children
     getChildren().clear();
@@ -621,81 +222,17 @@ public class SidebarView extends VBox implements ThemeChangeListener, Navigation
     // Now the projectItems map should be populated
     log.debug("Project items map populated with {} items: {}", projectItems.size(), projectItems.keySet());
     
-    // Restore highlighting after UI is built and project items are populated
-    if (activeProjectName != null) {
-      Platform.runLater(() -> {
-        log.debug("Attempting to restore highlighting for: {} (available: {})", activeProjectName, projectItems.keySet());
-        restoreProjectHighlighting(activeProjectName);
-        
-        // Double-check with a small delay
-        Platform.runLater(() -> {
-          if (!projectItems.isEmpty()) {
-            ensureHighlightingIsApplied();
-          }
-        });
-      });
-    }
+    // Schedule highlighting restoration using highlight manager
+    highlightManager.scheduleHighlightingRestoration();
   }
   
-  /**
-   * Stop all loading animations and clear the list
-   */
+  // Delegate to loading manager
   private void stopLoadingAnimations() {
-    for (RotateTransition animation : loadingAnimations) {
-      if (animation != null) {
-        animation.stop();
-      }
-    }
-    loadingAnimations.clear();
+    loadingManager.stopLoadingAnimations();
   }
   
-  /**
-   * Restore project highlighting after rebuild
-   */
-  private void restoreProjectHighlighting(String projectName) {
-    log.debug("Attempting to restore highlighting for project: {} (projectItems size: {})", 
-              projectName, projectItems.size());
-    
-    HBox projectItem = projectItems.get(projectName);
-    if (projectItem != null) {
-      projectItem.getStyleClass().add("active");
-      activeProjectItem = projectItem;
-      log.info("✓ Restored highlighting for project: {}", projectName);
-    } else {
-      log.warn("✗ Could not restore highlighting - project item not found: {}", projectName);
-      log.debug("Available project items: {}", projectItems.keySet());
-    }
-  }
   
-  /**
-   * Ensure highlighting is applied - final fallback method
-   */
-  private void ensureHighlightingIsApplied() {
-    if (activeProjectName != null && (activeProjectItem == null || 
-        !activeProjectItem.getStyleClass().contains("active"))) {
-      log.debug("Final attempt to ensure highlighting for: {}", activeProjectName);
-      
-      HBox projectItem = projectItems.get(activeProjectName);
-      if (projectItem != null) {
-        // Remove active from all items first
-        projectItems.values().forEach(item -> item.getStyleClass().remove("active"));
-        
-        // Add active to correct item
-        projectItem.getStyleClass().add("active");
-        activeProjectItem = projectItem;
-        log.info("✓ Final highlighting applied for project: {}", activeProjectName);
-      } else {
-        log.warn("✗ Final highlighting failed - still no project item for: {}", activeProjectName);
-      }
-    }
-  }
 
-  /** Creates a horizontal spacer */
-  private Region createSpacer() {
-    Region spacer = new Region();
-    HBox.setHgrow(spacer, Priority.ALWAYS);
-    return spacer;
-  }
 
   // Event handlers
 
@@ -710,161 +247,104 @@ public class SidebarView extends VBox implements ThemeChangeListener, Navigation
             + "• Quick navigation\n\n"
             + "Tip: Use keyboard shortcut '/' to open search quickly");
   }
+  
+  private void handleSectionHeaderCreate(String title) {
+    // Callback for loading manager if needed
+    log.debug("Section header created for: {}", title);
+  }
 
   @Override
   public void onThemeChanged(boolean isDarkTheme) {
     log.debug("Theme changed to: {}", isDarkTheme ? "dark" : "light");
-
-    // App icon doesn't need theme update (using FontIcon instead of ImageView)
-    // FontIcon automatically adapts to theme
-    // DEPENDABOT icon also doesn't need theme update
-
-    // Theme button removed - now handled in MainView navbar
+    // Icons automatically adapt to theme changes
   }
   
   @Override
   public void onNavigationChanged(BaseView previousPage, BaseView currentPage) {
     if (currentPage != null) {
-      updateActiveMenuItem(currentPage.getClass());
+      // Update menu highlighting using main menu component
+      mainMenu.updateActiveMenuItem(currentPage.getClass());
       
-      // Handle project page highlighting
+      // Handle project page highlighting using highlight manager
       if (currentPage instanceof BaseProjectPage) {
         BaseProjectPage projectPage = (BaseProjectPage) currentPage;
         String projectCode = projectPage.getProjectCode();
         String projectName = getProjectNameFromCode(projectCode);
         
-        // Update active project name and highlighting
-        activeProjectName = projectName;
-        updateActiveProjectItem(projectName);
+        // Update active project name and highlighting using highlight manager
+        highlightManager.setActiveProjectName(projectName);
+        highlightManager.updateActiveProjectItem(projectName);
         log.debug("Navigation changed - set active project: {}", projectName);
       } else {
         // Clear project highlighting if not on a project page
-        updateActiveProjectItem(null);
+        highlightManager.updateActiveProjectItem(null);
       }
     }
   }
 
   private void handleAIAssistant() {
     // Clear project highlighting when navigating to menu item
-    updateActiveProjectItem(null);
+    navigationHandler.clearProjectHighlightingForMenuNavigation();
     
-    navigateWithCancellation(() -> {
-      if (pageNavigator != null) {
-        pageNavigator.navigateToPage(AIAssistantPage.class);
-      } else {
-        log.warn("PageNavigator not set - showing fallback dialog");
-        showInfo(
-            "AI Assistant",
-            "AI-Powered System Analysis Assistant:\n\n"
-                + "• Natural language queries\n"
-                + "• Code analysis and suggestions\n"
-                + "• Database insights\n"
-                + "• Workflow optimization\n"
-                + "• Business process analysis\n\n"
-                + "Ask me anything about your system!");
-      }
-    });
+    if (pageNavigator != null) {
+      pageNavigator.navigateToPage(AIAssistantPage.class);
+    } else {
+      log.warn("PageNavigator not set - showing fallback dialog");
+      showInfo(
+          "AI Assistant",
+          "AI-Powered System Analysis Assistant:\n\n"
+              + "• Natural language queries\n"
+              + "• Code analysis and suggestions\n"
+              + "• Database insights\n"
+              + "• Workflow optimization\n"
+              + "• Business process analysis\n\n"
+              + "Ask me anything about your system!");
+    }
   }
 
   private void handleKnowledgeBase() {
-    // Clear project highlighting when navigating to menu item
-    updateActiveProjectItem(null);
-    
-    navigateWithCancellation(() -> {
-      if (pageNavigator != null) {
-        pageNavigator.navigateToPage(KnowledgeBasePage.class);
-      } else {
-        log.warn("PageNavigator not set - showing fallback dialog");
-        showInfo(
-            "Knowledge Base",
-            "Browse and search your knowledge base:\n\n"
-                + "• Documentation\n"
-                + "• Best practices\n"
-                + "• Design patterns\n"
-                + "• Technical notes");
-      }
-    });
+    navigationHandler.clearProjectHighlightingForMenuNavigation();
+    if (pageNavigator != null) {
+      pageNavigator.navigateToPage(KnowledgeBasePage.class);
+    } else {
+      showInfo("Knowledge Base", "Browse and search your knowledge base");
+    }
   }
 
   private void handleTextComponent() {
-    // Clear project highlighting when navigating to menu item
-    updateActiveProjectItem(null);
-    
-    navigateWithCancellation(() -> {
-      if (pageNavigator != null) {
-        pageNavigator.navigateToPage(UniversalTextDemoPage.class);
-      } else {
-        log.warn("PageNavigator not set - showing fallback dialog");
-        showInfo(
-            "Universal Text Component",
-            "Demo of Universal Text Component:\n\n"
-                + "• Markdown rendering\n"
-                + "• Syntax highlighting\n"
-                + "• Multiple view modes\n"
-                + "• Live preview\n"
-                + "• Theme support");
-      }
-    });
+    navigationHandler.clearProjectHighlightingForMenuNavigation();
+    if (pageNavigator != null) {
+      pageNavigator.navigateToPage(UniversalTextDemoPage.class);
+    } else {
+      showInfo("Universal Text Component", "Demo of Universal Text Component");
+    }
   }
 
   private void handleBatchJobs() {
-    // Clear project highlighting when navigating to menu item
-    updateActiveProjectItem(null);
-    
-    navigateWithCancellation(() -> {
-      if (pageNavigator != null) {
-        pageNavigator.navigateToPage(BatchJobsPage.class);
-      } else {
-        log.warn("PageNavigator not set - showing fallback dialog");
-        showInfo(
-            "Batch Jobs",
-            "Manage scheduled and batch operations:\n\n"
-                + "• View running jobs\n"
-                + "• Schedule new tasks\n"
-                + "• Job history\n"
-                + "• Execution logs");
-      }
-    });
+    navigationHandler.clearProjectHighlightingForMenuNavigation();
+    if (pageNavigator != null) {
+      pageNavigator.navigateToPage(BatchJobsPage.class);
+    } else {
+      showInfo("Batch Jobs", "Manage scheduled and batch operations");
+    }
   }
 
   private void handleDBObjects() {
-    // Clear project highlighting when navigating to menu item
-    updateActiveProjectItem(null);
-    
-    navigateWithCancellation(() -> {
-      if (pageNavigator != null) {
-        pageNavigator.navigateToPage(DatabaseObjectsPage.class);
-      } else {
-        log.warn("PageNavigator not set - showing fallback dialog");
-        showInfo(
-            "Database Objects",
-            "Database schema and objects:\n\n"
-                + "• Tables\n"
-                + "• Views\n"
-                + "• Stored procedures\n"
-                + "• Triggers & Functions");
-      }
-    });
+    navigationHandler.clearProjectHighlightingForMenuNavigation();
+    if (pageNavigator != null) {
+      pageNavigator.navigateToPage(DatabaseObjectsPage.class);
+    } else {
+      showInfo("Database Objects", "Database schema and objects");
+    }
   }
 
   private void handleSettingsMenu() {
-    // Clear project highlighting when navigating to menu item
-    updateActiveProjectItem(null);
-    
-    navigateWithCancellation(() -> {
-      if (pageNavigator != null) {
-        pageNavigator.navigateToPage(SettingsPage.class);
-      } else {
-        log.warn("PageNavigator not set - showing fallback dialog");
-        showInfo(
-            "Settings",
-            "Application configuration:\n\n"
-                + "• User preferences\n"
-                + "• Project settings\n"
-                + "• Database connections\n"
-                + "• Theme & appearance");
-      }
-    });
+    navigationHandler.clearProjectHighlightingForMenuNavigation();
+    if (pageNavigator != null) {
+      pageNavigator.navigateToPage(SettingsPage.class);
+    } else {
+      showInfo("Settings", "Application configuration");
+    }
   }
 
   private void handleNewProject() {
@@ -874,35 +354,12 @@ public class SidebarView extends VBox implements ThemeChangeListener, Navigation
   
   private void handleRefreshProjects() {
     log.info("Refreshing project list");
-    // Show loading state and refresh data from service
-    refreshSidebar();
+    buildSidebarWithProjects(); // Direct rebuild for context menu actions
   }
 
+  // Delegate to navigation handler
   private void handleProjectClick(String projectName) {
-    log.info("Opening project: {}", projectName);
-    
-    // Store active project name - highlighting will be applied when UI is rebuilt
-    activeProjectName = projectName;
-    log.debug("Set active project: {}", projectName);
-    
-    // Try to highlight immediately if possible
-    updateActiveProjectItem(projectName);
-    
-    navigateWithCancellation(() -> {
-      if (pageNavigator != null) {
-        String projectCode = getProjectCodeFromName(projectName);
-        if (projectCode != null) {
-          // Navigate to BaseProjectPage with the project code
-          BaseProjectPage projectPage = new BaseProjectPage(projectCode);
-          pageNavigator.navigateToPage(projectPage);
-        } else {
-          showInfo("Project", "Project code not found for: " + projectName);
-        }
-      } else {
-        log.warn("PageNavigator not set - showing fallback dialog");
-        showInfo("Project", "View details for: " + projectName);
-      }
-    });
+    navigationHandler.handleProjectClick(projectName);
   }
   
   private Class<? extends BaseView> getProjectPageClass(String projectName) {
@@ -921,59 +378,11 @@ public class SidebarView extends VBox implements ThemeChangeListener, Navigation
     alert.showAndWait();
   }
 
-  /**
-   * Updates the active menu item highlighting based on the current page
-   * @param currentPageClass The class of the currently active page
-   */
+  // Delegate to main menu component
   public void updateActiveMenuItem(Class<? extends BaseView> currentPageClass) {
-    // Remove active state from previous button
-    if (activeMenuButton != null) {
-      activeMenuButton.getStyleClass().remove("active");
-    }
-    
-    // Add active state to current button
-    Button currentButton = menuButtons.get(currentPageClass);
-    if (currentButton != null) {
-      currentButton.getStyleClass().add("active");
-      activeMenuButton = currentButton;
-      log.debug("Highlighted menu item for page: {}", currentPageClass.getSimpleName());
-    } else {
-      activeMenuButton = null;
-      log.debug("No menu item found for page: {}", currentPageClass != null ? currentPageClass.getSimpleName() : "null");
-    }
+    mainMenu.updateActiveMenuItem(currentPageClass);
   }
   
-  /**
-   * Updates the active project item highlighting
-   * @param projectName The name of the project to highlight (null to clear)
-   */
-  private void updateActiveProjectItem(String projectName) {
-    // Remove active state from ALL project items to ensure clean state
-    projectItems.values().forEach(item -> item.getStyleClass().remove("active"));
-    
-    // Clear active project item reference
-    activeProjectItem = null;
-    
-    // Only clear activeProjectName if explicitly setting to null
-    if (projectName == null) {
-      activeProjectName = null;
-      log.debug("Cleared project highlighting");
-      return;
-    }
-    
-    // Set new active project name
-    activeProjectName = projectName;
-    
-    // Add active state to current project item
-    HBox currentProjectItem = projectItems.get(projectName);
-    if (currentProjectItem != null) {
-      currentProjectItem.getStyleClass().add("active");
-      activeProjectItem = currentProjectItem;
-      log.debug("Highlighted project item: {}", projectName);
-    } else {
-      log.debug("No project item found for: {} (will highlight when UI rebuilds)", projectName);
-    }
-  }
   
   /**
    * Get project name from project code
@@ -987,19 +396,13 @@ public class SidebarView extends VBox implements ThemeChangeListener, Navigation
   }
   
   /**
-   * Cleanup method to unregister listeners Should be called when the component is no longer needed
+   * Enhanced cleanup method using component managers
    */
   public void cleanup() {
-    // Cancel any ongoing navigation
-    cancelCurrentNavigation();
-    
-    // Cancel any ongoing loading
-    if (loadingTask != null && !loadingTask.isDone()) {
-      loadingTask.cancel(true);
-    }
-    
-    // Stop all loading animations
-    stopLoadingAnimations();
+    // Cleanup all component managers
+    navigationHandler.cleanup();
+    loadingManager.cleanup();
+    mainMenu.clearHighlighting();
     
     if (themeManager != null) {
       themeManager.removeThemeChangeListener(this);
