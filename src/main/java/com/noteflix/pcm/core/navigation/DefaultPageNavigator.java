@@ -1,6 +1,6 @@
 package com.noteflix.pcm.core.navigation;
 
-import com.noteflix.pcm.ui.pages.BasePage;
+import com.noteflix.pcm.ui.base.BaseView;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Stack;
@@ -15,9 +15,9 @@ import lombok.extern.slf4j.Slf4j;
 public class DefaultPageNavigator implements PageNavigator {
 
   private final StackPane contentContainer;
-  private final Map<Class<? extends BasePage>, BasePage> pageCache;
-  private final Stack<BasePage> navigationHistory;
-  private BasePage currentPage;
+  private final Map<Class<? extends BaseView>, BaseView> pageCache;
+  private final Stack<BaseView> navigationHistory;
+  private BaseView currentPage;
 
   public DefaultPageNavigator(StackPane contentContainer) {
     this.contentContainer = contentContainer;
@@ -26,7 +26,7 @@ public class DefaultPageNavigator implements PageNavigator {
   }
 
   @Override
-  public void navigateToPage(BasePage page) {
+  public void navigateToPage(BaseView page) {
     if (page == null) {
       log.warn("Attempted to navigate to null page");
       return;
@@ -34,7 +34,7 @@ public class DefaultPageNavigator implements PageNavigator {
 
     // Deactivate current page
     if (currentPage != null) {
-      currentPage.onPageDeactivated();
+      currentPage.onDeactivate();
       navigationHistory.push(currentPage);
     }
 
@@ -46,19 +46,19 @@ public class DefaultPageNavigator implements PageNavigator {
     contentContainer.getChildren().add(page);
 
     // Activate new page
-    page.onPageActivated();
+    page.onActivate();
 
     log.info("Navigated to page: {}", page.getPageTitle());
   }
 
   @Override
-  public void navigateToPage(Class<? extends BasePage> pageClass) {
-    BasePage page = getOrCreatePage(pageClass);
+  public void navigateToPage(Class<? extends BaseView> pageClass) {
+    BaseView page = getOrCreatePage(pageClass);
     navigateToPage(page);
   }
 
   @Override
-  public BasePage getCurrentPage() {
+  public BaseView getCurrentPage() {
     return currentPage;
   }
 
@@ -74,11 +74,11 @@ public class DefaultPageNavigator implements PageNavigator {
       return;
     }
 
-    BasePage previousPage = navigationHistory.pop();
+    BaseView previousPage = navigationHistory.pop();
 
     // Deactivate current page (don't add to history since we're going back)
     if (currentPage != null) {
-      currentPage.onPageDeactivated();
+      currentPage.onDeactivate();
     }
 
     // Set previous page as current
@@ -89,7 +89,7 @@ public class DefaultPageNavigator implements PageNavigator {
     contentContainer.getChildren().add(previousPage);
 
     // Activate previous page
-    previousPage.onPageActivated();
+    previousPage.onActivate();
 
     log.info("Navigated back to page: {}", previousPage.getPageTitle());
   }
@@ -98,12 +98,12 @@ public class DefaultPageNavigator implements PageNavigator {
    * Gets an existing page from cache or creates a new one Implements lazy loading for better
    * performance
    */
-  private BasePage getOrCreatePage(Class<? extends BasePage> pageClass) {
+  private BaseView getOrCreatePage(Class<? extends BaseView> pageClass) {
     return pageCache.computeIfAbsent(
         pageClass,
         clazz -> {
           try {
-            BasePage page = clazz.getDeclaredConstructor().newInstance();
+            BaseView page = clazz.getDeclaredConstructor().newInstance();
             log.debug("Created new page instance: {}", clazz.getSimpleName());
             return page;
           } catch (Exception e) {

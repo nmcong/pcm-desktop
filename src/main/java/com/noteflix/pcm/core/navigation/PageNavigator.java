@@ -1,6 +1,6 @@
 package com.noteflix.pcm.core.navigation;
 
-import com.noteflix.pcm.ui.pages.BasePage;
+import com.noteflix.pcm.ui.base.BaseView;
 
 /**
  * Interface for page navigation - Dependency Inversion Principle Allows different implementations
@@ -13,21 +13,21 @@ public interface PageNavigator {
    *
    * @param page The page to navigate to
    */
-  void navigateToPage(BasePage page);
+  void navigateToPage(BaseView page);
 
   /**
    * Navigate to a page by its class type
    *
    * @param pageClass The class of the page to navigate to
    */
-  void navigateToPage(Class<? extends BasePage> pageClass);
+  void navigateToPage(Class<? extends BaseView> pageClass);
 
   /**
    * Get the currently active page
    *
    * @return The current page, or null if none is active
    */
-  BasePage getCurrentPage();
+  BaseView getCurrentPage();
 
   /**
    * Check if navigation can go back
