@@ -3,9 +3,13 @@ package com.noteflix.pcm.ui.pages;
 import atlantafx.base.theme.Styles;
 import com.noteflix.pcm.core.di.Injector;
 import com.noteflix.pcm.core.i18n.I18n;
+import com.noteflix.pcm.ui.styles.LayoutConstants;
+import com.noteflix.pcm.ui.styles.StyleConstants;
+import com.noteflix.pcm.ui.utils.LayoutHelper;
+import com.noteflix.pcm.ui.utils.UIFactory;
 import com.noteflix.pcm.ui.viewmodel.SettingsViewModel;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -16,7 +20,23 @@ import org.kordamp.ikonli.feather.Feather;
 import org.kordamp.ikonli.javafx.FontIcon;
 
 /**
- * Settings page - MVVM Architecture Uses SettingsViewModel for state management and business logic
+ * Settings Page - Refactored (Example)
+ *
+ * <p>Demonstrates refactoring using:
+ * - New constants (LayoutConstants, StyleConstants)
+ * - UI utilities (UIFactory, LayoutHelper)
+ * - Better code organization
+ * - Reduced code duplication
+ *
+ * <p>Still uses BasePage for backward compatibility.
+ * Future: Migrate to BaseView directly when navigation system is updated.
+ *
+ * <p>Architecture: MVVM
+ * - View: Settings UI
+ * - ViewModel: SettingsViewModel
+ *
+ * @author PCM Team
+ * @version 2.0.0
  */
 @Slf4j
 public class SettingsPage extends BasePage {
@@ -33,34 +53,34 @@ public class SettingsPage extends BasePage {
   }
 
   @Override
-  protected VBox createMainContent() {
-    VBox mainContent = new VBox(20);
+  protected Node createMainContent() {
+    VBox mainContent = LayoutHelper.createVBox(LayoutConstants.SPACING_XL);
     mainContent.getStyleClass().add("settings-content");
-    VBox.setVgrow(mainContent, Priority.ALWAYS);
+    LayoutHelper.setVGrow(mainContent);
 
-    mainContent.getChildren().add(createAppearanceSection());
-    mainContent.getChildren().add(createDatabaseSection());
-    mainContent.getChildren().add(createNotificationSection());
-    mainContent.getChildren().add(createAdvancedSection());
+    mainContent.getChildren().addAll(
+        createAppearanceSection(),
+        createDatabaseSection(),
+        createNotificationSection(),
+        createAdvancedSection());
 
     return mainContent;
   }
 
   @Override
-  public void onPageActivated() {
-    super.onPageActivated();
+  public void onActivate() {
+    super.onActivate();
     viewModel.loadSettings();
   }
 
   private VBox createAppearanceSection() {
-    VBox section = new VBox(16);
-    section.getStyleClass().add("card");
-    section.setPadding(new Insets(20));
+    VBox section = UIFactory.createCard();
+    section.getStyleClass().add(StyleConstants.CARD);
 
-    Label title = new Label(I18n.get("settings.appearance.title"));
-    title.getStyleClass().addAll(Styles.TITLE_3);
+    // Section header
+    Label title = UIFactory.createSectionTitle(I18n.get("settings.appearance.title"));
     title.setGraphic(new FontIcon(Feather.MONITOR));
-    title.setGraphicTextGap(12);
+    title.setGraphicTextGap(LayoutConstants.SPACING_MD);
 
     // Theme selection with bidirectional binding
     HBox themeRow =
@@ -112,29 +132,30 @@ public class SettingsPage extends BasePage {
   }
 
   private VBox createDatabaseSection() {
-    VBox section = new VBox(16);
-    section.getStyleClass().add("card");
-    section.setPadding(new Insets(20));
+    VBox section = UIFactory.createCard();
+    section.getStyleClass().add(StyleConstants.CARD);
 
-    Label title = new Label(I18n.get("settings.database.title"));
-    title.getStyleClass().addAll(Styles.TITLE_3);
+    // Section header
+    Label title = UIFactory.createSectionTitle(I18n.get("settings.database.title"));
     title.setGraphic(new FontIcon(Feather.DATABASE));
-    title.setGraphicTextGap(12);
+    title.setGraphicTextGap(LayoutConstants.SPACING_MD);
 
     HBox dbPathRow =
         createSettingRow(
             I18n.get("settings.database.path"), I18n.get("settings.database.path.desc"));
     Label dbPathLabel = new Label();
     dbPathLabel.textProperty().bind(viewModel.databasePathProperty());
-    Button changeDbPathBtn = new Button(I18n.get("settings.database.path.change"));
-    changeDbPathBtn.setOnAction(e -> viewModel.changeDatabasePath());
+    Button changeDbPathBtn = UIFactory.createSecondaryButton(
+        I18n.get("settings.database.path.change"),
+        viewModel::changeDatabasePath);
     dbPathRow.getChildren().addAll(dbPathLabel, changeDbPathBtn);
 
     HBox migrateRow =
         createSettingRow(
             I18n.get("settings.database.migrate"), I18n.get("settings.database.migrate.desc"));
-    Button migrateBtn = new Button(I18n.get("settings.database.migrate.run"));
-    migrateBtn.setOnAction(e -> viewModel.runMigrations());
+    Button migrateBtn = UIFactory.createSecondaryButton(
+        I18n.get("settings.database.migrate.run"),
+        viewModel::runMigrations);
     migrateRow.getChildren().add(migrateBtn);
 
     section.getChildren().addAll(title, dbPathRow, migrateRow);
@@ -142,14 +163,13 @@ public class SettingsPage extends BasePage {
   }
 
   private VBox createNotificationSection() {
-    VBox section = new VBox(16);
-    section.getStyleClass().add("card");
-    section.setPadding(new Insets(20));
+    VBox section = UIFactory.createCard();
+    section.getStyleClass().add(StyleConstants.CARD);
 
-    Label title = new Label(I18n.get("settings.notifications.title"));
-    title.getStyleClass().addAll(Styles.TITLE_3);
+    // Section header
+    Label title = UIFactory.createSectionTitle(I18n.get("settings.notifications.title"));
     title.setGraphic(new FontIcon(Feather.BELL));
-    title.setGraphicTextGap(12);
+    title.setGraphicTextGap(LayoutConstants.SPACING_MD);
 
     HBox emailNotifRow =
         createSettingRow(
@@ -164,21 +184,20 @@ public class SettingsPage extends BasePage {
   }
 
   private VBox createAdvancedSection() {
-    VBox section = new VBox(16);
-    section.getStyleClass().add("card");
-    section.setPadding(new Insets(20));
+    VBox section = UIFactory.createCard();
+    section.getStyleClass().add(StyleConstants.CARD);
 
-    Label title = new Label(I18n.get("settings.advanced.title"));
-    title.getStyleClass().addAll(Styles.TITLE_3);
+    // Section header
+    Label title = UIFactory.createSectionTitle(I18n.get("settings.advanced.title"));
     title.setGraphic(new FontIcon(Feather.CODE));
-    title.setGraphicTextGap(12);
+    title.setGraphicTextGap(LayoutConstants.SPACING_MD);
 
     HBox resetRow =
         createSettingRow(
             I18n.get("settings.advanced.reset"), I18n.get("settings.advanced.reset.desc"));
-    Button resetBtn = new Button(I18n.get("settings.advanced.reset.button"));
-    resetBtn.getStyleClass().add(Styles.DANGER);
-    resetBtn.setOnAction(e -> viewModel.resetSettings());
+    Button resetBtn = UIFactory.createDangerButton(
+        I18n.get("settings.advanced.reset.button"),
+        viewModel::resetSettings);
     resetRow.getChildren().add(resetBtn);
 
     section.getChildren().addAll(title, resetRow);
@@ -186,19 +205,23 @@ public class SettingsPage extends BasePage {
   }
 
   private HBox createSettingRow(String title, String description) {
-    HBox row = new HBox(12);
+    HBox row = LayoutHelper.createHBox(LayoutConstants.SPACING_MD);
     row.setAlignment(Pos.CENTER_LEFT);
     row.getStyleClass().add("setting-row");
 
-    VBox textContent = new VBox(2);
+    // Text content
+    VBox textContent = LayoutHelper.createVBox(LayoutConstants.SPACING_XS);
+    
     Label titleLabel = new Label(title);
     titleLabel.getStyleClass().add(Styles.TEXT_BOLD);
-    Label descLabel = new Label(description);
-    descLabel.getStyleClass().addAll(Styles.TEXT_SMALL, Styles.TEXT_MUTED);
+    
+    Label descLabel = UIFactory.createMutedLabel(description);
+    descLabel.getStyleClass().add(Styles.TEXT_SMALL);
+    
     textContent.getChildren().addAll(titleLabel, descLabel);
 
-    Region spacer = new Region();
-    HBox.setHgrow(spacer, Priority.ALWAYS);
+    // Spacer
+    Region spacer = UIFactory.createHorizontalSpacer();
 
     row.getChildren().addAll(textContent, spacer);
     return row;
