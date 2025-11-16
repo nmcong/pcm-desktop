@@ -15,33 +15,32 @@ import javafx.scene.control.ProgressIndicator;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.kordamp.ikonli.javafx.FontIcon;
 import org.kordamp.ikonli.octicons.Octicons;
 
-import java.time.format.DateTimeFormatter;
-
 /**
  * Base Project Page - Abstract implementation for all project pages
- * 
  * Provides common structure and styling for project-specific placeholder pages.
  * Each project page extends this to show relevant project information and features.
  */
 @Slf4j
 public class BaseProjectPage extends BaseView {
 
-  private final String projectCode;
+    // Getters
+    @Getter
+    private final String projectCode;
   private final ProjectService projectService;
   private ProjectData projectData;
   private VBox dynamicContent;
   private StackPane loadingContainer;
-  private VBox headerContainer;
-  private Label titleLabel;
+    private Label titleLabel;
   private Label descriptionLabel;
 
   public BaseProjectPage(String projectCode) {
     super(
-        "Loading Project..." + " (" + projectCode + ")",
+        "Loading Project...",
         "Loading project information...",
         new FontIcon(Octicons.REPO_24)
     );
@@ -55,12 +54,12 @@ public class BaseProjectPage extends BaseView {
 
   @Override
   protected VBox createPageHeader() {
-    headerContainer = LayoutHelper.createVBox(LayoutConstants.SPACING_SM);
-    headerContainer.setAlignment(Pos.TOP_LEFT);  // Giữ header ở vị trí như cũ
+      VBox headerContainer = LayoutHelper.createVBox(LayoutConstants.SPACING_SM);
+    headerContainer.setAlignment(Pos.TOP_LEFT);
     headerContainer.getStyleClass().add(StyleConstants.PAGE_HEADER);
 
     // Title with icon
-    titleLabel = new Label("Loading Project... (" + projectCode + ")");
+    titleLabel = new Label("Loading Project...");
     titleLabel.setGraphic(new FontIcon(Octicons.REPO_24));
     titleLabel.getStyleClass().addAll("title-1", StyleConstants.PAGE_TITLE);
     titleLabel.setStyle("-fx-font-weight: bold; -fx-graphic-text-gap: " + LayoutConstants.SPACING_MD + "px;");
@@ -176,23 +175,19 @@ public class BaseProjectPage extends BaseView {
     loadingContainer = new StackPane();
     loadingContainer.getStyleClass().add("loading-overlay");
     loadingContainer.setVisible(false);
-    // Đảm bảo loading container chiếm toàn bộ không gian
     loadingContainer.setPrefSize(Region.USE_COMPUTED_SIZE, Region.USE_COMPUTED_SIZE);
+    loadingContainer.setMinSize(0, 0);
     loadingContainer.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-    loadingContainer.setStyle("-fx-background-color: rgba(255,255,255,0.9);");  // Màu nền nhẹ hơn
     
     VBox loadingContent = new VBox(LayoutConstants.SPACING_MD);
     loadingContent.setAlignment(Pos.CENTER);
     loadingContent.getStyleClass().add("loading-content");
-    // Bỏ bo tròn và padding để hiển thị đơn giản hơn
-    loadingContent.setStyle("-fx-padding: 20px;");
     
     ProgressIndicator progressIndicator = new ProgressIndicator();
-    progressIndicator.setMaxSize(60, 60);  // Tăng kích thước một chút
+    progressIndicator.setMaxSize(60, 60);
     
-    Label loadingLabel = UIFactory.createMutedLabel("Loading project data...");
+    Label loadingLabel = new Label("Loading project data...");
     loadingLabel.getStyleClass().add("loading-label");
-    loadingLabel.setStyle("-fx-font-size: 16px; -fx-font-weight: normal;");
     
     loadingContent.getChildren().addAll(progressIndicator, loadingLabel);
     loadingContainer.getChildren().add(loadingContent);
@@ -241,8 +236,7 @@ public class BaseProjectPage extends BaseView {
   private void updateUIWithProjectData(ProjectData data) {
     Platform.runLater(() -> {
       this.projectData = data;
-      
-      // Update header with project data - kiểm tra null
+
       if (data != null && data.getName() != null) {
         titleLabel.setText(data.getName() + " (" + projectCode + ")");
         descriptionLabel.setText(data.getDescription() != null ? data.getDescription() : "");
@@ -276,7 +270,6 @@ public class BaseProjectPage extends BaseView {
   }
 
   private void showErrorState(Throwable throwable) {
-    // Update header với thông tin lỗi
     titleLabel.setText("Error Loading Project (" + projectCode + ")");
     descriptionLabel.setText("Failed to load project information");
     
@@ -301,8 +294,4 @@ public class BaseProjectPage extends BaseView {
     
     log.error("Failed to load project data for {}", projectCode, throwable);
   }
-
-  // Getters
-  public String getProjectCode() { return projectCode; }
-  protected ProjectData getProjectData() { return projectData; }
 }

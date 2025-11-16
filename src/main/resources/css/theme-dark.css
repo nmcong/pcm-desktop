@@ -13,6 +13,9 @@
     -fx-bg-secondary: #0E0E20;
     -fx-bg-tertiary: #12151f;
     -fx-bg-elevated: #1f2335;
+    
+    /* Translucent backgrounds for overlays */
+    -fx-bg-primary-translucent: rgba(26, 29, 46, 0.9);
 
     /* Accent Colors - Indigo/Purple (same as light for consistency) */
     -fx-accent-primary: #6366f1;
@@ -109,10 +112,6 @@
     -fx-background-color: #0E0E20;
     -fx-border-color: transparent transparent #2d3142 transparent;
     -fx-border-width: 0 0 1px 0;
-}
-
-.page-header {
-    -fx-background-color: #0E0E20;
 }
 
 .chat-header {

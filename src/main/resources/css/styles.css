@@ -439,9 +439,15 @@
     -fx-background-color: -fx-bg-primary;
 }
 
+/* Base page styling - ensure consistent backgrounds */
+.page-container {
+    -fx-background-color: -fx-bg-primary;
+}
+
 .page-content {
     -fx-padding: 24px;
     -fx-spacing: 24px;
+    -fx-background-color: -fx-bg-primary;
 }
 
 .page-header {
@@ -849,6 +855,34 @@
     -fx-icon-color: -fx-accent-primary;
     -fx-icon-size: 20px;
     -fx-opacity: 0.7;
+}
+
+/* ================================================================
+   SECTION 11: PAGE LOADING OVERLAY
+   ================================================================ */
+
+.loading-overlay {
+    -fx-background-color: -fx-bg-primary-translucent;
+    -fx-min-width: 0;
+    -fx-min-height: 0;
+    -fx-pref-width: -1;
+    -fx-pref-height: -1;
+    -fx-max-width: infinity;
+    -fx-max-height: infinity;
+}
+
+.loading-content {
+    /*-fx-background-color: -fx-bg-elevated;*/
+    /*-fx-background-radius: 12px;*/
+    /*-fx-border-color: -fx-border-primary;*/
+    /*-fx-border-width: 1px;*/
+    /*-fx-border-radius: 12px;*/
+    /*-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 20, 0, 0, 4);*/
+    /*-fx-padding: 24px;*/
+}
+
+.loading-label {
+    -fx-text-fill: -fx-text-primary;
 }
 
 /* ================================================================
