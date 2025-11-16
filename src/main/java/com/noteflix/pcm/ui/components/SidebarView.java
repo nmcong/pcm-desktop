@@ -8,6 +8,7 @@ import com.noteflix.pcm.core.navigation.PageNavigator;
 import com.noteflix.pcm.core.navigation.NavigationListener;
 import com.noteflix.pcm.core.theme.ThemeManager;
 import com.noteflix.pcm.ui.pages.*;
+import com.noteflix.pcm.ui.pages.projects.*;
 import com.noteflix.pcm.ui.base.BaseView;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -436,7 +437,29 @@ public class SidebarView extends VBox implements ThemeChangeListener, Navigation
 
   private void handleProjectClick(String projectName) {
     log.info("Opening project: {}", projectName);
-    showInfo("Project", "View details for: " + projectName);
+    
+    if (pageNavigator != null) {
+      Class<? extends BaseView> projectPageClass = getProjectPageClass(projectName);
+      if (projectPageClass != null) {
+        pageNavigator.navigateToPage(projectPageClass);
+      } else {
+        showInfo("Project", "Project page not found for: " + projectName);
+      }
+    } else {
+      log.warn("PageNavigator not set - showing fallback dialog");
+      showInfo("Project", "View details for: " + projectName);
+    }
+  }
+  
+  private Class<? extends BaseView> getProjectPageClass(String projectName) {
+    return switch (projectName) {
+      case "Customer Service" -> CustomerServiceProjectPage.class;
+      case "Order Management" -> OrderManagementProjectPage.class;
+      case "Payment Gateway" -> PaymentGatewayProjectPage.class;
+      case "Inventory Admin" -> InventoryAdminProjectPage.class;
+      case "Reports Portal" -> ReportsPortalProjectPage.class;
+      default -> null;
+    };
   }
 
   private void showInfo(String title, String content) {

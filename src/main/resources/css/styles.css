@@ -283,6 +283,72 @@
     -fx-max-width: 400px;
 }
 
+/* Project Placeholder Cards */
+.project-placeholder-card {
+    -fx-padding: 40px;
+    -fx-spacing: 32px;
+    -fx-max-width: 600px;
+}
+
+.project-avatar-large {
+    -fx-alignment: center;
+}
+
+.project-title {
+    -fx-text-alignment: center;
+    -fx-font-size: 24px;
+}
+
+.project-description {
+    -fx-text-alignment: center;
+    -fx-max-width: 500px;
+}
+
+.project-stats {
+    -fx-text-alignment: center;
+    -fx-font-size: 14px;
+}
+
+.project-features {
+    -fx-padding: 20px;
+    -fx-spacing: 16px;
+    -fx-background-color: rgba(99, 102, 241, 0.05);
+    -fx-background-radius: 8px;
+}
+
+.features-title {
+    -fx-text-alignment: center;
+    -fx-font-size: 16px;
+}
+
+.features-content {
+    -fx-text-alignment: left;
+    -fx-max-width: 450px;
+    -fx-line-spacing: 2px;
+}
+
+.coming-soon {
+    -fx-text-alignment: center;
+    -fx-font-size: 14px;
+}
+
+/* Project Avatar Colors */
+.project-color-accent {
+    -fx-background-color: -fx-accent-primary;
+}
+
+.project-color-success {
+    -fx-background-color: #10b981;
+}
+
+.project-color-warning {
+    -fx-background-color: #f59e0b;
+}
+
+.project-color-danger {
+    -fx-background-color: #ef4444;
+}
+
 /* ================================================================
    SECTION 5: SCROLLBARS
    ================================================================ */
