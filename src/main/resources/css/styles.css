@@ -217,6 +217,22 @@
     -fx-background-color: rgba(99, 102, 241, 0.15);
 }
 
+/* Active sidebar menu item */
+.sidebar-menu-item.active {
+    -fx-background-color: rgba(99, 102, 241, 0.15);
+    -fx-border-color: -fx-accent-primary;
+    -fx-border-width: 0 0 0 3px;
+}
+
+.sidebar-menu-item.active .label {
+    -fx-text-fill: -fx-accent-primary;
+    -fx-font-weight: 600;
+}
+
+.sidebar-menu-item.active .ikonli-font-icon {
+    -fx-icon-color: -fx-accent-primary;
+}
+
 /* AI Assistant Button */
 .ai-assistant-btn {
     -fx-cursor: hand;
@@ -229,6 +245,21 @@
 .ai-assistant-btn:hover .label {
     -fx-text-fill: -fx-accent-primary;
     -fx-font-weight: 600;
+}
+
+.ai-assistant-btn.active {
+    -fx-background-color: rgba(99, 102, 241, 0.15);
+    -fx-border-color: -fx-accent-primary;
+    -fx-border-width: 0 0 0 3px;
+}
+
+.ai-assistant-btn.active .label {
+    -fx-text-fill: -fx-accent-primary;
+    -fx-font-weight: 600;
+}
+
+.ai-assistant-btn.active .ikonli-font-icon {
+    -fx-icon-color: -fx-accent-primary;
 }
 
 /* ================================================================

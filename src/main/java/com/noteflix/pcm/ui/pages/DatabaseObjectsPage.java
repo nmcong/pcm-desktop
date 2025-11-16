@@ -4,21 +4,29 @@ import atlantafx.base.theme.Styles;
 import com.noteflix.pcm.core.di.Injector;
 import com.noteflix.pcm.core.i18n.I18n;
 import com.noteflix.pcm.ui.base.BaseView;
+import com.noteflix.pcm.ui.styles.LayoutConstants;
+import com.noteflix.pcm.ui.styles.StyleConstants;
+import com.noteflix.pcm.ui.utils.UIFactory;
+import com.noteflix.pcm.ui.utils.LayoutHelper;
 import com.noteflix.pcm.ui.viewmodel.DatabaseObjectsViewModel;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import lombok.extern.slf4j.Slf4j;
-import org.kordamp.ikonli.feather.Feather;
+import org.kordamp.ikonli.octicons.Octicons;
 import org.kordamp.ikonli.javafx.FontIcon;
 
 /**
- * Database Objects page - MVVM Architecture Uses DatabaseObjectsViewModel for state management and
- * business logic
+ * Database Objects page - Modern MVVM Architecture
+ * 
+ * Uses DatabaseObjectsViewModel for state management and business logic.
+ * Refactored to follow UI_GUIDE.md best practices with:
+ * - BaseView template pattern
+ * - UI constants and factory methods
+ * - Proper component structure
  */
 @Slf4j
 public class DatabaseObjectsPage extends BaseView {
@@ -31,16 +39,45 @@ public class DatabaseObjectsPage extends BaseView {
   private Label schemaVersionLabel;
 
   public DatabaseObjectsPage() {
-    super(I18n.get("page.db.title"), I18n.get("page.db.subtitle"), new FontIcon(Feather.DATABASE));
-    this.viewModel = Injector.getInstance().get(DatabaseObjectsViewModel.class);
+    this(initializeViewModel());
+  }
+  
+  private DatabaseObjectsPage(DatabaseObjectsViewModel viewModel) {
+    super(
+        I18n.get("page.db.title"), 
+        I18n.get("page.db.subtitle"), 
+        new FontIcon(Octicons.DATABASE_24)
+    );
+    this.viewModel = viewModel;
     log.debug("DatabaseObjectsPage initialized with ViewModel");
+  }
+  
+  private static DatabaseObjectsViewModel initializeViewModel() {
+    try {
+      DatabaseObjectsViewModel vm = Injector.getInstance().get(DatabaseObjectsViewModel.class);
+      if (vm == null) {
+        log.error("Failed to inject DatabaseObjectsViewModel - got null");
+        throw new RuntimeException("DatabaseObjectsViewModel injection failed");
+      }
+      return vm;
+    } catch (Exception e) {
+      log.error("Failed to initialize DatabaseObjectsViewModel", e);
+      throw new RuntimeException("Failed to initialize DatabaseObjectsViewModel", e);
+    }
   }
 
   @Override
-  protected VBox createMainContent() {
-    VBox mainContent = new VBox(20);
-    mainContent.getStyleClass().add("database-objects-content");
-    VBox.setVgrow(mainContent, Priority.ALWAYS);
+  protected Node createMainContent() {
+    if (viewModel == null) {
+      log.error("ViewModel is null when creating main content");
+      VBox errorContainer = LayoutHelper.createVBox(LayoutConstants.SPACING_MD);
+      errorContainer.getChildren().add(UIFactory.createMutedLabel("Error: Unable to load database objects view"));
+      return errorContainer;
+    }
+    
+    VBox mainContent = LayoutHelper.createVBox(LayoutConstants.SPACING_XL);
+    mainContent.getStyleClass().add(StyleConstants.PAGE_CONTAINER);
+    LayoutHelper.setVGrow(mainContent);
 
     // Database connection info
     mainContent.getChildren().add(createConnectionInfo());
@@ -52,37 +89,49 @@ public class DatabaseObjectsPage extends BaseView {
   }
 
   private VBox createConnectionInfo() {
-    VBox section = new VBox(12);
-    section.getStyleClass().add("card");
-    section.setPadding(new Insets(20));
+    VBox section = UIFactory.createCard();
+    section.setPadding(LayoutConstants.PADDING_DEFAULT);
 
-    Label title = new Label(I18n.get("db.connection.title"));
-    title.getStyleClass().addAll(Styles.TITLE_3);
+    Label title = UIFactory.createSectionTitle(I18n.get("db.connection.title"));
 
-    HBox connectionRow = new HBox(16);
-    connectionRow.setAlignment(Pos.CENTER_LEFT);
+    HBox connectionRow = LayoutHelper.createHBox(Pos.CENTER_LEFT, LayoutConstants.SPACING_LG);
 
-    VBox connectionInfo = new VBox(4);
-    databaseNameLabel = new Label();
-    databaseNameLabel.textProperty().bind(viewModel.databaseNameProperty());
-    databaseNameLabel.getStyleClass().addAll(Styles.TEXT_BOLD);
+    VBox connectionInfo = LayoutHelper.createVBox(LayoutConstants.SPACING_XS);
+    databaseNameLabel = UIFactory.createBoldLabel("");
+    if (viewModel != null && viewModel.databaseNameProperty() != null) {
+      databaseNameLabel.textProperty().bind(viewModel.databaseNameProperty());
+    } else {
+      databaseNameLabel.setText("Database");
+    }
 
-    schemaVersionLabel = new Label();
-    schemaVersionLabel.textProperty().bind(viewModel.schemaVersionProperty());
-    schemaVersionLabel.getStyleClass().addAll(Styles.TEXT_SMALL, "text-muted");
+    schemaVersionLabel = UIFactory.createMutedLabel("");
+    schemaVersionLabel.getStyleClass().add(Styles.TEXT_SMALL);
+    if (viewModel != null && viewModel.schemaVersionProperty() != null) {
+      schemaVersionLabel.textProperty().bind(viewModel.schemaVersionProperty());
+    } else {
+      schemaVersionLabel.setText("Unknown version");
+    }
     connectionInfo.getChildren().addAll(databaseNameLabel, schemaVersionLabel);
 
-    Region spacer = new Region();
-    HBox.setHgrow(spacer, Priority.ALWAYS);
+    Region spacer = UIFactory.createHorizontalSpacer();
 
     connectionStatusLabel = new Label();
-    connectionStatusLabel.textProperty().bind(viewModel.connectionStatusProperty());
     connectionStatusLabel.getStyleClass().addAll(Styles.TEXT_SMALL, "status-connected");
+    if (viewModel != null && viewModel.connectionStatusProperty() != null) {
+      connectionStatusLabel.textProperty().bind(viewModel.connectionStatusProperty());
+    } else {
+      connectionStatusLabel.setText("Disconnected");
+    }
 
-    Button refreshButton = new Button(I18n.get("db.refresh.button"));
-    refreshButton.setGraphic(new FontIcon(Feather.REFRESH_CW));
-    refreshButton.getStyleClass().addAll(Styles.BUTTON_OUTLINED);
-    refreshButton.setOnAction(e -> viewModel.refreshSchema());
+    Button refreshButton = UIFactory.createSecondaryButton(
+        I18n.get("db.refresh.button"), 
+        () -> {
+          if (viewModel != null) {
+            viewModel.refreshSchema();
+          }
+        }
+    );
+    refreshButton.setGraphic(new FontIcon(Octicons.SYNC_24));
 
     connectionRow
         .getChildren()
@@ -93,9 +142,9 @@ public class DatabaseObjectsPage extends BaseView {
   }
 
   private HBox createSchemaExplorer() {
-    HBox explorer = new HBox(16);
+    HBox explorer = LayoutHelper.createHBox(Pos.TOP_LEFT, LayoutConstants.SPACING_LG);
     explorer.getStyleClass().add("schema-explorer");
-    HBox.setHgrow(explorer, Priority.ALWAYS);
+    LayoutHelper.setHGrow(explorer);
 
     // Left panel - Schema tree
     VBox treePanel = createSchemaTreePanel();
@@ -103,36 +152,33 @@ public class DatabaseObjectsPage extends BaseView {
 
     // Right panel - Object details
     VBox detailsPanel = createObjectDetailsPanel();
-    HBox.setHgrow(detailsPanel, Priority.ALWAYS);
+    LayoutHelper.setHGrow(detailsPanel);
 
     explorer.getChildren().addAll(treePanel, detailsPanel);
     return explorer;
   }
 
   private VBox createSchemaTreePanel() {
-    VBox panel = new VBox(12);
-    panel.getStyleClass().add("card");
-    panel.setPadding(new Insets(20));
+    VBox panel = UIFactory.createCard();
+    panel.setPadding(LayoutConstants.PADDING_DEFAULT);
 
-    HBox headerRow = new HBox();
-    headerRow.setAlignment(Pos.CENTER_LEFT);
+    HBox headerRow = LayoutHelper.createHBox(Pos.CENTER_LEFT, LayoutConstants.SPACING_SM);
 
-    Label title = new Label(I18n.get("db.schema.objects"));
-    title.getStyleClass().addAll(Styles.TITLE_4);
+    Label title = UIFactory.createSectionTitle(I18n.get("db.schema.objects"));
 
-    Region spacer = new Region();
-    HBox.setHgrow(spacer, Priority.ALWAYS);
+    Region spacer = UIFactory.createHorizontalSpacer();
 
     TextField searchField = new TextField();
     searchField.setPromptText(I18n.get("db.search.placeholder"));
     searchField.setPrefWidth(120);
+    searchField.getStyleClass().add(StyleConstants.SEARCH_INPUT);
 
     headerRow.getChildren().addAll(title, spacer, searchField);
 
     // Create schema tree
     schemaTree = new TreeView<>();
     schemaTree.getStyleClass().add("schema-tree");
-    VBox.setVgrow(schemaTree, Priority.ALWAYS);
+    LayoutHelper.setVGrow(schemaTree);
 
     // Bind schema objects from ViewModel
     updateSchemaTree();
@@ -143,7 +189,7 @@ public class DatabaseObjectsPage extends BaseView {
         .selectedItemProperty()
         .addListener(
             (obs, oldVal, newVal) -> {
-              if (newVal != null) {
+              if (newVal != null && viewModel != null) {
                 viewModel.selectSchemaObject(newVal.getValue());
               }
             });
@@ -153,13 +199,18 @@ public class DatabaseObjectsPage extends BaseView {
   }
 
   private void updateSchemaTree() {
-    TreeItem<String> root = new TreeItem<>(viewModel.getDatabaseName());
+    String dbName = (viewModel != null && viewModel.getDatabaseName() != null) 
+        ? viewModel.getDatabaseName() 
+        : "Database";
+    TreeItem<String> root = new TreeItem<>(dbName);
     root.setExpanded(true);
 
     // Populate from ViewModel's observable list
-    for (String obj : viewModel.getSchemaObjects()) {
-      TreeItem<String> item = new TreeItem<>(obj);
-      root.getChildren().add(item);
+    if (viewModel != null && viewModel.getSchemaObjects() != null) {
+      for (String obj : viewModel.getSchemaObjects()) {
+        TreeItem<String> item = new TreeItem<>(obj);
+        root.getChildren().add(item);
+      }
     }
 
     schemaTree.setRoot(root);
@@ -169,29 +220,27 @@ public class DatabaseObjectsPage extends BaseView {
     TreeItem<String> item = new TreeItem<>(name);
     FontIcon icon =
         switch (type) {
-          case "Table" -> new FontIcon(Feather.GRID);
-          case "View" -> new FontIcon(Feather.EYE);
-          case "Procedure" -> new FontIcon(Feather.SETTINGS);
-          case "Function" -> new FontIcon(Feather.ZAP);
-          case "Sequence" -> new FontIcon(Feather.HASH);
-          default -> new FontIcon(Feather.CIRCLE);
+          case "Table" -> new FontIcon(Octicons.TABLE_24);
+          case "View" -> new FontIcon(Octicons.EYE_24);
+          case "Procedure" -> new FontIcon(Octicons.GEAR_24);
+          case "Function" -> new FontIcon(Octicons.ZAP_24);
+          case "Sequence" -> new FontIcon(Octicons.NUMBER_24);
+          default -> new FontIcon(Octicons.DOT_24);
         };
     item.setGraphic(icon);
     return item;
   }
 
   private VBox createObjectDetailsPanel() {
-    VBox panel = new VBox(12);
-    panel.getStyleClass().add("card");
-    panel.setPadding(new Insets(20));
-    HBox.setHgrow(panel, Priority.ALWAYS);
+    VBox panel = UIFactory.createCard();
+    panel.setPadding(LayoutConstants.PADDING_DEFAULT);
+    LayoutHelper.setHGrow(panel);
 
-    Label title = new Label("Object Details");
-    title.getStyleClass().addAll(Styles.TITLE_4);
+    Label title = UIFactory.createSectionTitle("Object Details");
 
-    objectDetails = new VBox(16);
+    objectDetails = LayoutHelper.createVBox(LayoutConstants.SPACING_LG);
     objectDetails.getStyleClass().add("object-details");
-    VBox.setVgrow(objectDetails, Priority.ALWAYS);
+    LayoutHelper.setVGrow(objectDetails);
 
     // Default content
     showWelcomeMessage();
@@ -203,16 +252,15 @@ public class DatabaseObjectsPage extends BaseView {
   private void showWelcomeMessage() {
     objectDetails.getChildren().clear();
 
-    VBox welcome = new VBox(16);
+    VBox welcome = LayoutHelper.createVBox(LayoutConstants.SPACING_LG);
     welcome.setAlignment(Pos.CENTER);
     welcome.getStyleClass().add("welcome-message");
 
-    FontIcon icon = new FontIcon(Feather.DATABASE);
-    icon.setIconSize(48);
+    FontIcon icon = new FontIcon(Octicons.DATABASE_24);
+    icon.setIconSize((int)(LayoutConstants.ICON_SIZE_XL * 1.5));
     icon.getStyleClass().add("welcome-icon");
 
-    Label message = new Label("Select an object from the schema tree to view its details");
-    message.getStyleClass().addAll(Styles.TEXT_MUTED);
+    Label message = UIFactory.createMutedLabel("Select an object from the schema tree to view its details");
     message.setAlignment(Pos.CENTER);
 
     welcome.getChildren().addAll(icon, message);
@@ -223,16 +271,14 @@ public class DatabaseObjectsPage extends BaseView {
     objectDetails.getChildren().clear();
 
     // Object header
-    HBox header = new HBox(12);
-    header.setAlignment(Pos.CENTER_LEFT);
+    HBox header = LayoutHelper.createHBox(Pos.CENTER_LEFT, LayoutConstants.SPACING_MD);
 
     FontIcon typeIcon = getObjectIcon(objectType);
-    typeIcon.setIconSize(20);
+    typeIcon.setIconSize(LayoutConstants.ICON_SIZE_MD);
 
-    Label nameLabel = new Label(objectName);
-    nameLabel.getStyleClass().addAll(Styles.TITLE_3);
+    Label nameLabel = UIFactory.createSectionTitle(objectName);
 
-    Label typeLabel = new Label(objectType);
+    Label typeLabel = UIFactory.createMutedLabel(objectType);
     typeLabel.getStyleClass().addAll(Styles.TEXT_SMALL, "object-type-badge");
 
     header.getChildren().addAll(typeIcon, nameLabel, typeLabel);
@@ -240,7 +286,7 @@ public class DatabaseObjectsPage extends BaseView {
     // Tabs for different views
     TabPane tabPane = new TabPane();
     tabPane.getStyleClass().add("object-tabs");
-    VBox.setVgrow(tabPane, Priority.ALWAYS);
+    LayoutHelper.setVGrow(tabPane);
 
     if (objectType.equals("Table")) {
       tabPane
@@ -259,12 +305,12 @@ public class DatabaseObjectsPage extends BaseView {
 
   private FontIcon getObjectIcon(String objectType) {
     return switch (objectType) {
-      case "Table" -> new FontIcon(Feather.GRID);
-      case "View" -> new FontIcon(Feather.EYE);
-      case "Procedure" -> new FontIcon(Feather.SETTINGS);
-      case "Function" -> new FontIcon(Feather.ZAP);
-      case "Sequence" -> new FontIcon(Feather.HASH);
-      default -> new FontIcon(Feather.CIRCLE);
+      case "Table" -> new FontIcon(Octicons.TABLE_24);
+      case "View" -> new FontIcon(Octicons.EYE_24);
+      case "Procedure" -> new FontIcon(Octicons.GEAR_24);
+      case "Function" -> new FontIcon(Octicons.ZAP_24);
+      case "Sequence" -> new FontIcon(Octicons.NUMBER_24);
+      default -> new FontIcon(Octicons.DOT_24);
     };
   }
 
@@ -351,7 +397,11 @@ public class DatabaseObjectsPage extends BaseView {
   @Override
   public void onActivate() {
     super.onActivate();
-    viewModel.loadDatabaseInfo();
+    if (viewModel != null) {
+      viewModel.loadDatabaseInfo();
+    } else {
+      log.warn("Cannot load database info - viewModel is null");
+    }
   }
 
   // Inner class for column information

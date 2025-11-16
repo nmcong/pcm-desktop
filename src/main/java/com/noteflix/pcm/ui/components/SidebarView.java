@@ -5,8 +5,10 @@ import com.noteflix.pcm.ui.pages.ai.AIAssistantPage;
 import com.noteflix.pcm.core.constants.AppConstants;
 import com.noteflix.pcm.core.events.ThemeChangeListener;
 import com.noteflix.pcm.core.navigation.PageNavigator;
+import com.noteflix.pcm.core.navigation.NavigationListener;
 import com.noteflix.pcm.core.theme.ThemeManager;
 import com.noteflix.pcm.ui.pages.*;
+import com.noteflix.pcm.ui.base.BaseView;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
@@ -16,9 +18,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.kordamp.ikonli.javafx.FontIcon;
 import org.kordamp.ikonli.octicons.Octicons;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /** Sidebar component built with pure Java (no FXML) Following AtlantaFX Sampler patterns */
 @Slf4j
-public class SidebarView extends VBox implements ThemeChangeListener {
+public class SidebarView extends VBox implements ThemeChangeListener, NavigationListener {
 
   private final ThemeManager themeManager;
     /**
@@ -29,6 +34,10 @@ public class SidebarView extends VBox implements ThemeChangeListener {
     @Setter
     private PageNavigator pageNavigator;
   private FontIcon appIcon;
+  
+  // Map to store menu buttons for highlighting
+  private final Map<Class<? extends BaseView>, Button> menuButtons = new HashMap<>();
+  private Button activeMenuButton = null;
 
   public SidebarView() {
     super(16);
@@ -107,14 +116,29 @@ public class SidebarView extends VBox implements ThemeChangeListener {
     menu.getStyleClass().add("card");
     menu.setPadding(new Insets(8));
 
-    menu.getChildren()
-        .addAll(
-            createAIAssistantMenuItem(),
-            createMenuItem("Knowledge Base", Octicons.BOOK_24, this::handleKnowledgeBase),
-            createMenuItem("Text Component", Octicons.FILE_CODE_24, this::handleTextComponent),
-            createMenuItem("Batch Jobs", Octicons.CLOCK_24, this::handleBatchJobs),
-            createMenuItem("DB Objects", Octicons.DATABASE_24, this::handleDBObjects),
-            createMenuItem("Settings", Octicons.TOOLS_24, this::handleSettingsMenu));
+    // Create menu items and store references for highlighting
+    Button aiAssistantBtn = createAIAssistantMenuItem();
+    Button knowledgeBaseBtn = createMenuItem("Knowledge Base", Octicons.BOOK_24, this::handleKnowledgeBase);
+    Button textComponentBtn = createMenuItem("Text Component", Octicons.FILE_CODE_24, this::handleTextComponent);
+    Button batchJobsBtn = createMenuItem("Batch Jobs", Octicons.CLOCK_24, this::handleBatchJobs);
+    Button dbObjectsBtn = createMenuItem("DB Objects", Octicons.DATABASE_24, this::handleDBObjects);
+    Button settingsBtn = createMenuItem("Settings", Octicons.TOOLS_24, this::handleSettingsMenu);
+    
+    // Store button references for highlighting
+    menuButtons.put(AIAssistantPage.class, aiAssistantBtn);
+    menuButtons.put(KnowledgeBasePage.class, knowledgeBaseBtn);
+    menuButtons.put(UniversalTextDemoPage.class, textComponentBtn);
+    menuButtons.put(BatchJobsPage.class, batchJobsBtn);
+    menuButtons.put(DatabaseObjectsPage.class, dbObjectsBtn);
+    menuButtons.put(SettingsPage.class, settingsBtn);
+
+    menu.getChildren().addAll(
+        aiAssistantBtn,
+        knowledgeBaseBtn, 
+        textComponentBtn,
+        batchJobsBtn,
+        dbObjectsBtn,
+        settingsBtn);
 
     return menu;
   }
@@ -304,6 +328,13 @@ public class SidebarView extends VBox implements ThemeChangeListener {
 
     // Theme button removed - now handled in MainView navbar
   }
+  
+  @Override
+  public void onNavigationChanged(BaseView previousPage, BaseView currentPage) {
+    if (currentPage != null) {
+      updateActiveMenuItem(currentPage.getClass());
+    }
+  }
 
   private void handleAIAssistant() {
     if (pageNavigator != null) {
@@ -416,6 +447,28 @@ public class SidebarView extends VBox implements ThemeChangeListener {
     alert.showAndWait();
   }
 
+  /**
+   * Updates the active menu item highlighting based on the current page
+   * @param currentPageClass The class of the currently active page
+   */
+  public void updateActiveMenuItem(Class<? extends BaseView> currentPageClass) {
+    // Remove active state from previous button
+    if (activeMenuButton != null) {
+      activeMenuButton.getStyleClass().remove("active");
+    }
+    
+    // Add active state to current button
+    Button currentButton = menuButtons.get(currentPageClass);
+    if (currentButton != null) {
+      currentButton.getStyleClass().add("active");
+      activeMenuButton = currentButton;
+      log.debug("Highlighted menu item for page: {}", currentPageClass.getSimpleName());
+    } else {
+      activeMenuButton = null;
+      log.debug("No menu item found for page: {}", currentPageClass != null ? currentPageClass.getSimpleName() : "null");
+    }
+  }
+  
   /**
    * Cleanup method to unregister listeners Should be called when the component is no longer needed
    */

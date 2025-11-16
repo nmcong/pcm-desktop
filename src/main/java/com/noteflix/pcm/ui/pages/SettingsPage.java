@@ -16,7 +16,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import lombok.extern.slf4j.Slf4j;
-import org.kordamp.ikonli.feather.Feather;
+import org.kordamp.ikonli.octicons.Octicons;
 import org.kordamp.ikonli.javafx.FontIcon;
 
 /**
@@ -44,18 +44,43 @@ public class SettingsPage extends BaseView {
   private final SettingsViewModel viewModel;
 
   public SettingsPage() {
+    this(initializeViewModel());
+  }
+  
+  private SettingsPage(SettingsViewModel viewModel) {
     super(
         I18n.get("page.settings.title"),
         I18n.get("page.settings.subtitle"),
-        new FontIcon(Feather.SETTINGS));
-    this.viewModel = Injector.getInstance().get(SettingsViewModel.class);
+        new FontIcon(Octicons.GEAR_24));
+    this.viewModel = viewModel;
     log.debug("SettingsPage initialized with ViewModel");
+  }
+  
+  private static SettingsViewModel initializeViewModel() {
+    try {
+      SettingsViewModel vm = Injector.getInstance().get(SettingsViewModel.class);
+      if (vm == null) {
+        log.error("Failed to inject SettingsViewModel - got null");
+        throw new RuntimeException("SettingsViewModel injection failed");
+      }
+      return vm;
+    } catch (Exception e) {
+      log.error("Failed to initialize SettingsViewModel", e);
+      throw new RuntimeException("Failed to initialize SettingsViewModel", e);
+    }
   }
 
   @Override
   protected Node createMainContent() {
+    if (viewModel == null) {
+      log.error("ViewModel is null when creating main content");
+      VBox errorContainer = LayoutHelper.createVBox(LayoutConstants.SPACING_MD);
+      errorContainer.getChildren().add(UIFactory.createMutedLabel("Error: Unable to load settings view"));
+      return errorContainer;
+    }
+    
     VBox mainContent = LayoutHelper.createVBox(LayoutConstants.SPACING_XL);
-    mainContent.getStyleClass().add("settings-content");
+    mainContent.getStyleClass().add(StyleConstants.PAGE_CONTAINER);
     LayoutHelper.setVGrow(mainContent);
 
     mainContent.getChildren().addAll(
@@ -70,7 +95,11 @@ public class SettingsPage extends BaseView {
   @Override
   public void onActivate() {
     super.onActivate();
-    viewModel.loadSettings();
+    if (viewModel != null) {
+      viewModel.loadSettings();
+    } else {
+      log.warn("Cannot load settings - viewModel is null");
+    }
   }
 
   private VBox createAppearanceSection() {
@@ -79,7 +108,7 @@ public class SettingsPage extends BaseView {
 
     // Section header
     Label title = UIFactory.createSectionTitle(I18n.get("settings.appearance.title"));
-    title.setGraphic(new FontIcon(Feather.MONITOR));
+    title.setGraphic(new FontIcon(Octicons.DEVICE_DESKTOP_24));
     title.setGraphicTextGap(LayoutConstants.SPACING_MD);
 
     // Theme selection with bidirectional binding
@@ -87,8 +116,12 @@ public class SettingsPage extends BaseView {
         createSettingRow(
             I18n.get("settings.appearance.theme"), I18n.get("settings.appearance.theme.desc"));
     ComboBox<String> themeCombo = new ComboBox<>();
-    themeCombo.getItems().addAll(viewModel.getAvailableThemes());
-    themeCombo.valueProperty().bindBidirectional(viewModel.selectedThemeProperty());
+    if (viewModel != null && viewModel.getAvailableThemes() != null) {
+      themeCombo.getItems().addAll(viewModel.getAvailableThemes());
+      if (viewModel.selectedThemeProperty() != null) {
+        themeCombo.valueProperty().bindBidirectional(viewModel.selectedThemeProperty());
+      }
+    }
     themeRow.getChildren().add(themeCombo);
 
     // Language selection with bidirectional binding
@@ -97,8 +130,12 @@ public class SettingsPage extends BaseView {
             I18n.get("settings.appearance.language"),
             I18n.get("settings.appearance.language.desc"));
     ComboBox<String> languageCombo = new ComboBox<>();
-    languageCombo.getItems().addAll(viewModel.getAvailableLanguages());
-    languageCombo.valueProperty().bindBidirectional(viewModel.selectedLanguageProperty());
+    if (viewModel != null && viewModel.getAvailableLanguages() != null) {
+      languageCombo.getItems().addAll(viewModel.getAvailableLanguages());
+      if (viewModel.selectedLanguageProperty() != null) {
+        languageCombo.valueProperty().bindBidirectional(viewModel.selectedLanguageProperty());
+      }
+    }
     languageRow.getChildren().add(languageCombo);
 
     // Font size with bidirectional binding
@@ -111,7 +148,9 @@ public class SettingsPage extends BaseView {
     fontSlider.setShowTickMarks(true);
     fontSlider.setMajorTickUnit(2);
     fontSlider.setPrefWidth(200);
-    fontSlider.valueProperty().bindBidirectional(viewModel.fontSizeProperty());
+    if (viewModel != null && viewModel.fontSizeProperty() != null) {
+      fontSlider.valueProperty().bindBidirectional(viewModel.fontSizeProperty());
+    }
     fontRow.getChildren().add(fontSlider);
 
     // Sidebar width with bidirectional binding
@@ -124,7 +163,9 @@ public class SettingsPage extends BaseView {
     sidebarSlider.setShowTickMarks(true);
     sidebarSlider.setMajorTickUnit(50);
     sidebarSlider.setPrefWidth(200);
-    sidebarSlider.valueProperty().bindBidirectional(viewModel.sidebarWidthProperty());
+    if (viewModel != null && viewModel.sidebarWidthProperty() != null) {
+      sidebarSlider.valueProperty().bindBidirectional(viewModel.sidebarWidthProperty());
+    }
     sidebarRow.getChildren().add(sidebarSlider);
 
     section.getChildren().addAll(title, themeRow, languageRow, fontRow, sidebarRow);
@@ -137,17 +178,25 @@ public class SettingsPage extends BaseView {
 
     // Section header
     Label title = UIFactory.createSectionTitle(I18n.get("settings.database.title"));
-    title.setGraphic(new FontIcon(Feather.DATABASE));
+    title.setGraphic(new FontIcon(Octicons.DATABASE_24));
     title.setGraphicTextGap(LayoutConstants.SPACING_MD);
 
     HBox dbPathRow =
         createSettingRow(
             I18n.get("settings.database.path"), I18n.get("settings.database.path.desc"));
     Label dbPathLabel = new Label();
-    dbPathLabel.textProperty().bind(viewModel.databasePathProperty());
+    if (viewModel != null && viewModel.databasePathProperty() != null) {
+      dbPathLabel.textProperty().bind(viewModel.databasePathProperty());
+    } else {
+      dbPathLabel.setText("No database path configured");
+    }
     Button changeDbPathBtn = UIFactory.createSecondaryButton(
         I18n.get("settings.database.path.change"),
-        viewModel::changeDatabasePath);
+        () -> {
+          if (viewModel != null) {
+            viewModel.changeDatabasePath();
+          }
+        });
     dbPathRow.getChildren().addAll(dbPathLabel, changeDbPathBtn);
 
     HBox migrateRow =
@@ -155,7 +204,11 @@ public class SettingsPage extends BaseView {
             I18n.get("settings.database.migrate"), I18n.get("settings.database.migrate.desc"));
     Button migrateBtn = UIFactory.createSecondaryButton(
         I18n.get("settings.database.migrate.run"),
-        viewModel::runMigrations);
+        () -> {
+          if (viewModel != null) {
+            viewModel.runMigrations();
+          }
+        });
     migrateRow.getChildren().add(migrateBtn);
 
     section.getChildren().addAll(title, dbPathRow, migrateRow);
@@ -168,7 +221,7 @@ public class SettingsPage extends BaseView {
 
     // Section header
     Label title = UIFactory.createSectionTitle(I18n.get("settings.notifications.title"));
-    title.setGraphic(new FontIcon(Feather.BELL));
+    title.setGraphic(new FontIcon(Octicons.BELL_24));
     title.setGraphicTextGap(LayoutConstants.SPACING_MD);
 
     HBox emailNotifRow =
@@ -176,7 +229,9 @@ public class SettingsPage extends BaseView {
             I18n.get("settings.notifications.email"),
             I18n.get("settings.notifications.email.desc"));
     CheckBox emailCheck = new CheckBox();
-    emailCheck.selectedProperty().bindBidirectional(viewModel.emailNotificationsEnabledProperty());
+    if (viewModel != null && viewModel.emailNotificationsEnabledProperty() != null) {
+      emailCheck.selectedProperty().bindBidirectional(viewModel.emailNotificationsEnabledProperty());
+    }
     emailNotifRow.getChildren().add(emailCheck);
 
     section.getChildren().addAll(title, emailNotifRow);
@@ -189,7 +244,7 @@ public class SettingsPage extends BaseView {
 
     // Section header
     Label title = UIFactory.createSectionTitle(I18n.get("settings.advanced.title"));
-    title.setGraphic(new FontIcon(Feather.CODE));
+    title.setGraphic(new FontIcon(Octicons.CODE_24));
     title.setGraphicTextGap(LayoutConstants.SPACING_MD);
 
     HBox resetRow =
@@ -197,7 +252,11 @@ public class SettingsPage extends BaseView {
             I18n.get("settings.advanced.reset"), I18n.get("settings.advanced.reset.desc"));
     Button resetBtn = UIFactory.createDangerButton(
         I18n.get("settings.advanced.reset.button"),
-        viewModel::resetSettings);
+        () -> {
+          if (viewModel != null) {
+            viewModel.resetSettings();
+          }
+        });
     resetRow.getChildren().add(resetBtn);
 
     section.getChildren().addAll(title, resetRow);
@@ -212,8 +271,7 @@ public class SettingsPage extends BaseView {
     // Text content
     VBox textContent = LayoutHelper.createVBox(LayoutConstants.SPACING_XS);
     
-    Label titleLabel = new Label(title);
-    titleLabel.getStyleClass().add(Styles.TEXT_BOLD);
+    Label titleLabel = UIFactory.createBoldLabel(title);
     
     Label descLabel = UIFactory.createMutedLabel(description);
     descLabel.getStyleClass().add(Styles.TEXT_SMALL);

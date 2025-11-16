@@ -5,8 +5,12 @@ import com.noteflix.pcm.ui.base.BaseView;
 import com.noteflix.pcm.ui.components.text.TextContentType;
 import com.noteflix.pcm.ui.components.text.UniversalTextComponent;
 import com.noteflix.pcm.ui.components.text.ViewMode;
-import javafx.geometry.Insets;
+import com.noteflix.pcm.ui.styles.LayoutConstants;
+import com.noteflix.pcm.ui.styles.StyleConstants;
+import com.noteflix.pcm.ui.utils.UIFactory;
+import com.noteflix.pcm.ui.utils.LayoutHelper;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -15,10 +19,18 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import lombok.extern.slf4j.Slf4j;
-import org.kordamp.ikonli.feather.Feather;
+import org.kordamp.ikonli.octicons.Octicons;
 import org.kordamp.ikonli.javafx.FontIcon;
 
-/** Demo page for testing the Universal Text Component */
+/**
+ * Universal Text Demo page - Modern MVVM Architecture
+ * 
+ * Demo page for testing the Universal Text Component.
+ * Refactored to follow UI_GUIDE.md best practices with:
+ * - BaseView template pattern
+ * - UI constants and factory methods
+ * - Proper component structure
+ */
 @Slf4j
 public class UniversalTextDemoPage extends BaseView {
 
@@ -29,13 +41,14 @@ public class UniversalTextDemoPage extends BaseView {
     super(
         "Universal Text Demo",
         "Test the Universal Text Component with Markdown, Mermaid, and Code rendering",
-        new FontIcon(Feather.FILE_TEXT));
+        new FontIcon(Octicons.FILE_24));
   }
 
   @Override
-  protected VBox createMainContent() {
-    VBox content = new VBox(16);
-    content.setPadding(new Insets(20));
+  protected Node createMainContent() {
+    VBox content = LayoutHelper.createVBox(LayoutConstants.SPACING_LG);
+    content.getStyleClass().add(StyleConstants.PAGE_CONTAINER);
+    content.setPadding(LayoutConstants.PADDING_DEFAULT);
 
     // Demo controls
     HBox controls = createControls();
@@ -45,6 +58,7 @@ public class UniversalTextDemoPage extends BaseView {
     textComponent.setContent(SampleContent.MARKDOWN_SAMPLE.getContent());
     textComponent.setContentType(TextContentType.MARKDOWN);
     textComponent.setViewMode(ViewMode.SPLIT);
+    LayoutHelper.setVGrow(textComponent);
 
     // Setup callbacks
     textComponent.setOnContentChanged(
@@ -62,22 +76,18 @@ public class UniversalTextDemoPage extends BaseView {
           log.info("View mode changed to: {}", newMode);
         });
 
-    VBox.setVgrow(textComponent, Priority.ALWAYS);
-
     content.getChildren().addAll(controls, textComponent);
 
     return content;
   }
 
   private HBox createControls() {
-    HBox controls = new HBox(12);
-    controls.setAlignment(Pos.CENTER_LEFT);
-    controls.setPadding(new Insets(10));
+    HBox controls = LayoutHelper.createHBox(Pos.CENTER_LEFT, LayoutConstants.SPACING_MD);
+    controls.setPadding(LayoutConstants.PADDING_COMPACT);
     controls.getStyleClass().add("demo-controls");
 
     // Sample content selector
-    Label sampleLabel = new Label("Sample:");
-    sampleLabel.getStyleClass().add(Styles.TEXT_BOLD);
+    Label sampleLabel = UIFactory.createBoldLabel("Sample:");
 
     sampleSelector = new ComboBox<>();
     sampleSelector.getItems().addAll(SampleContent.values());
@@ -85,19 +95,31 @@ public class UniversalTextDemoPage extends BaseView {
     sampleSelector.setOnAction(e -> loadSampleContent());
 
     // Quick action buttons
-    Button loadMarkdownBtn = new Button("Markdown");
-    loadMarkdownBtn.setOnAction(e -> loadSample(SampleContent.MARKDOWN_SAMPLE));
+    Button loadMarkdownBtn = UIFactory.createSecondaryButton(
+        "Markdown", 
+        () -> loadSample(SampleContent.MARKDOWN_SAMPLE)
+    );
 
-    Button loadCodeBtn = new Button("Code");
-    loadCodeBtn.setOnAction(e -> loadSample(SampleContent.CODE_SAMPLE));
+    Button loadCodeBtn = UIFactory.createSecondaryButton(
+        "Code", 
+        () -> loadSample(SampleContent.CODE_SAMPLE)
+    );
 
-    Button loadPlainBtn = new Button("Plain Text");
-    loadPlainBtn.setOnAction(e -> loadSample(SampleContent.PLAIN_TEXT_SAMPLE));
+    Button loadPlainBtn = UIFactory.createSecondaryButton(
+        "Plain Text", 
+        () -> loadSample(SampleContent.PLAIN_TEXT_SAMPLE)
+    );
 
     // Mode toggle button
-    Button toggleModeBtn = new Button("Toggle Mode");
-    toggleModeBtn.setGraphic(new FontIcon(Feather.REFRESH_CCW));
-    toggleModeBtn.setOnAction(e -> textComponent.toggleViewMode());
+    Button toggleModeBtn = UIFactory.createSecondaryButton(
+        "Toggle Mode", 
+        () -> {
+          if (textComponent != null) {
+            textComponent.toggleViewMode();
+          }
+        }
+    );
+    toggleModeBtn.setGraphic(new FontIcon(Octicons.SYNC_24));
 
     controls
         .getChildren()

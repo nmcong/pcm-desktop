@@ -4,6 +4,8 @@ import com.noteflix.pcm.ui.base.BaseView;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Stack;
+import java.util.ArrayList;
+import java.util.List;
 import javafx.scene.layout.StackPane;
 import lombok.extern.slf4j.Slf4j;
 
@@ -18,6 +20,7 @@ public class DefaultPageNavigator implements PageNavigator {
   private final Map<Class<? extends BaseView>, BaseView> pageCache;
   private final Stack<BaseView> navigationHistory;
   private BaseView currentPage;
+  private final List<NavigationListener> navigationListeners = new ArrayList<>();
 
   public DefaultPageNavigator(StackPane contentContainer) {
     this.contentContainer = contentContainer;
@@ -31,6 +34,8 @@ public class DefaultPageNavigator implements PageNavigator {
       log.warn("Attempted to navigate to null page");
       return;
     }
+
+    BaseView previousPage = currentPage;
 
     // Deactivate current page
     if (currentPage != null) {
@@ -47,6 +52,9 @@ public class DefaultPageNavigator implements PageNavigator {
 
     // Activate new page
     page.onActivate();
+
+    // Notify navigation listeners
+    notifyNavigationListeners(previousPage, currentPage);
 
     log.info("Navigated to page: {}", page.getPageTitle());
   }
@@ -74,6 +82,7 @@ public class DefaultPageNavigator implements PageNavigator {
       return;
     }
 
+    BaseView oldCurrentPage = currentPage;
     BaseView previousPage = navigationHistory.pop();
 
     // Deactivate current page (don't add to history since we're going back)
@@ -90,6 +99,9 @@ public class DefaultPageNavigator implements PageNavigator {
 
     // Activate previous page
     previousPage.onActivate();
+
+    // Notify navigation listeners
+    notifyNavigationListeners(oldCurrentPage, currentPage);
 
     log.info("Navigated back to page: {}", previousPage.getPageTitle());
   }
@@ -123,5 +135,41 @@ public class DefaultPageNavigator implements PageNavigator {
   public void clearCache() {
     pageCache.clear();
     log.debug("Page cache cleared");
+  }
+  
+  /**
+   * Adds a navigation listener to be notified of page changes
+   * @param listener The listener to add
+   */
+  public void addNavigationListener(NavigationListener listener) {
+    if (listener != null && !navigationListeners.contains(listener)) {
+      navigationListeners.add(listener);
+      log.debug("Added navigation listener: {}", listener.getClass().getSimpleName());
+    }
+  }
+  
+  /**
+   * Removes a navigation listener
+   * @param listener The listener to remove
+   */
+  public void removeNavigationListener(NavigationListener listener) {
+    if (navigationListeners.remove(listener)) {
+      log.debug("Removed navigation listener: {}", listener.getClass().getSimpleName());
+    }
+  }
+  
+  /**
+   * Notifies all navigation listeners of a page change
+   * @param previousPage The previous page (can be null)
+   * @param currentPage The current page
+   */
+  private void notifyNavigationListeners(BaseView previousPage, BaseView currentPage) {
+    for (NavigationListener listener : navigationListeners) {
+      try {
+        listener.onNavigationChanged(previousPage, currentPage);
+      } catch (Exception e) {
+        log.error("Error notifying navigation listener", e);
+      }
+    }
   }
 }

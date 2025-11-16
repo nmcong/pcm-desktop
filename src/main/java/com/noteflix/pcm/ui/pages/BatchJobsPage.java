@@ -17,7 +17,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import lombok.extern.slf4j.Slf4j;
-import org.kordamp.ikonli.feather.Feather;
+import org.kordamp.ikonli.octicons.Octicons;
 import org.kordamp.ikonli.javafx.FontIcon;
 
 /**
@@ -48,7 +48,7 @@ public class BatchJobsPage extends BaseView {
     super(
         I18n.get("page.jobs.title"), 
         I18n.get("page.jobs.subtitle"), 
-        new FontIcon(Feather.CLOCK)
+        new FontIcon(Octicons.CLOCK_24)
     );
     
     this.viewModel = viewModel;
@@ -99,7 +99,7 @@ public class BatchJobsPage extends BaseView {
     HBox statsRow = LayoutHelper.createHBox(Pos.CENTER, LayoutConstants.SPACING_LG);
 
     // Total jobs stat
-    VBox totalCard = createStatCard(I18n.get("jobs.stat.total"), Feather.BRIEFCASE, "info");
+    VBox totalCard = createStatCard(I18n.get("jobs.stat.total"), Octicons.BRIEFCASE_24, "info");
     totalJobsLabel = (Label) ((VBox) totalCard.getChildren().get(1)).getChildren().get(0);
     if (viewModel != null && viewModel.totalJobsProperty() != null) {
       totalJobsLabel.textProperty().bind(viewModel.totalJobsProperty().asString());
@@ -108,7 +108,7 @@ public class BatchJobsPage extends BaseView {
     }
 
     // Running jobs stat
-    VBox runningCard = createStatCard(I18n.get("jobs.stat.running"), Feather.PLAY_CIRCLE, "success");
+    VBox runningCard = createStatCard(I18n.get("jobs.stat.running"), Octicons.PLAY_24, "success");
     runningJobsLabel = (Label) ((VBox) runningCard.getChildren().get(1)).getChildren().get(0);
     if (viewModel != null && viewModel.runningJobsProperty() != null) {
       runningJobsLabel.textProperty().bind(viewModel.runningJobsProperty().asString());
@@ -117,7 +117,7 @@ public class BatchJobsPage extends BaseView {
     }
 
     // Failed jobs stat
-    VBox failedCard = createStatCard(I18n.get("jobs.stat.failed"), Feather.ALERT_CIRCLE, "danger");
+    VBox failedCard = createStatCard(I18n.get("jobs.stat.failed"), Octicons.ALERT_24, "danger");
     failedJobsLabel = (Label) ((VBox) failedCard.getChildren().get(1)).getChildren().get(0);
     if (viewModel != null && viewModel.failedJobsProperty() != null) {
       failedJobsLabel.textProperty().bind(viewModel.failedJobsProperty().asString());
@@ -126,7 +126,7 @@ public class BatchJobsPage extends BaseView {
     }
 
     // Last refresh stat
-    VBox refreshCard = createStatCard(I18n.get("jobs.stat.refresh"), Feather.CLOCK, "info");
+    VBox refreshCard = createStatCard(I18n.get("jobs.stat.refresh"), Octicons.CLOCK_24, "info");
     lastRefreshLabel = (Label) ((VBox) refreshCard.getChildren().get(1)).getChildren().get(0);
     if (viewModel != null && viewModel.lastRefreshTimeProperty() != null) {
       lastRefreshLabel.textProperty().bind(viewModel.lastRefreshTimeProperty());
@@ -138,7 +138,7 @@ public class BatchJobsPage extends BaseView {
     return statsRow;
   }
 
-  private VBox createStatCard(String title, Feather icon, String type) {
+  private VBox createStatCard(String title, Octicons icon, String type) {
     VBox card = UIFactory.createCard();
     card.getStyleClass().addAll("stat-card", "stat-" + type);
     card.setPadding(LayoutConstants.PADDING_DEFAULT);
@@ -176,7 +176,7 @@ public class BatchJobsPage extends BaseView {
           }
         }
     );
-    refreshButton.setGraphic(new FontIcon(Feather.REFRESH_CW));
+    refreshButton.setGraphic(new FontIcon(Octicons.SYNC_24));
 
     Region spacer = UIFactory.createHorizontalSpacer();
 

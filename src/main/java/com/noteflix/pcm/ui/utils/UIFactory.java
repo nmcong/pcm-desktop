@@ -187,6 +187,18 @@ public final class UIFactory {
     return label;
   }
 
+  /**
+   * Create bold label
+   *
+   * @param text Label text
+   * @return Bold label
+   */
+  public static Label createBoldLabel(String text) {
+    Label label = new Label(text);
+    label.getStyleClass().add(Styles.TEXT_BOLD);
+    return label;
+  }
+
   // ===== LAYOUT HELPERS =====
 
   /**

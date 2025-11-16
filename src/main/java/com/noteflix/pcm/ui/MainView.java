@@ -66,9 +66,10 @@ public class MainView extends BorderPane implements ThemeChangeListener {
   private void initializeNavigation(StackPane contentArea) {
     var pageNavigator = new DefaultPageNavigator(contentArea);
 
-    // Set navigator for sidebar
+    // Set navigator for sidebar and register it as listener for highlighting
     if (sidebar != null) {
       sidebar.setPageNavigator(pageNavigator);
+      pageNavigator.addNavigationListener(sidebar);
     }
 
     // Navigate to default page
