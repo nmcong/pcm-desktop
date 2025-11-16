@@ -11,6 +11,9 @@ import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
+import javafx.scene.control.ProgressIndicator;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import lombok.extern.slf4j.Slf4j;
 import org.kordamp.ikonli.javafx.FontIcon;
@@ -25,14 +28,18 @@ import java.time.format.DateTimeFormatter;
  * Each project page extends this to show relevant project information and features.
  */
 @Slf4j
-public abstract class BaseProjectPage extends BaseView {
+public class BaseProjectPage extends BaseView {
 
   private final String projectCode;
   private final ProjectService projectService;
   private ProjectData projectData;
   private VBox dynamicContent;
+  private StackPane loadingContainer;
+  private VBox headerContainer;
+  private Label titleLabel;
+  private Label descriptionLabel;
 
-  protected BaseProjectPage(String projectCode) {
+  public BaseProjectPage(String projectCode) {
     super(
         "Loading Project..." + " (" + projectCode + ")",
         "Loading project information...",
@@ -41,23 +48,59 @@ public abstract class BaseProjectPage extends BaseView {
     this.projectCode = projectCode;
     this.projectService = new ProjectService();
     log.debug("{} project page initialized", projectCode);
+    
+    // Initialize loading after construction is complete
+    Platform.runLater(this::loadProjectData);
+  }
+
+  @Override
+  protected VBox createPageHeader() {
+    headerContainer = LayoutHelper.createVBox(LayoutConstants.SPACING_SM);
+    headerContainer.setAlignment(Pos.TOP_LEFT);  // Giữ header ở vị trí như cũ
+    headerContainer.getStyleClass().add(StyleConstants.PAGE_HEADER);
+
+    // Title with icon
+    titleLabel = new Label("Loading Project... (" + projectCode + ")");
+    titleLabel.setGraphic(new FontIcon(Octicons.REPO_24));
+    titleLabel.getStyleClass().addAll("title-1", StyleConstants.PAGE_TITLE);
+    titleLabel.setStyle("-fx-font-weight: bold; -fx-graphic-text-gap: " + LayoutConstants.SPACING_MD + "px;");
+
+    // Description
+    descriptionLabel = new Label("Loading project information...");
+    descriptionLabel.getStyleClass().addAll("text-muted", StyleConstants.PAGE_DESCRIPTION);
+    descriptionLabel.setWrapText(true);
+
+    headerContainer.getChildren().addAll(titleLabel, descriptionLabel);
+    return headerContainer;
   }
 
   @Override
   protected Node createMainContent() {
+    // Create root container with loading overlay support
+    StackPane root = new StackPane();
+    
+    // Create main content container
     VBox content = LayoutHelper.createVBox(LayoutConstants.SPACING_XL);
     content.getStyleClass().add(StyleConstants.PAGE_CONTAINER);
     content.setAlignment(Pos.CENTER);
     LayoutHelper.setVGrow(content);
+    content.setMaxSize(Region.USE_COMPUTED_SIZE, Region.USE_COMPUTED_SIZE);
 
     // Create dynamic content container
     dynamicContent = LayoutHelper.createVBox(LayoutConstants.SPACING_XL);
+    dynamicContent.setAlignment(Pos.CENTER);
+    LayoutHelper.setVGrow(dynamicContent);
     content.getChildren().add(dynamicContent);
+    
+    // Create loading overlay
+    createLoadingOverlay();
+    
+    // Add to root
+    root.getChildren().addAll(content, loadingContainer);
+    StackPane.setAlignment(content, Pos.CENTER);
+    StackPane.setAlignment(loadingContainer, Pos.CENTER);
 
-    // Start loading project data
-    loadProjectData();
-
-    return content;
+    return root;
   }
 
   private VBox createProjectAvatar() {
@@ -129,18 +172,65 @@ public abstract class BaseProjectPage extends BaseView {
     log.debug("{} project page activated", projectCode);
   }
 
+  private void createLoadingOverlay() {
+    loadingContainer = new StackPane();
+    loadingContainer.getStyleClass().add("loading-overlay");
+    loadingContainer.setVisible(false);
+    // Đảm bảo loading container chiếm toàn bộ không gian
+    loadingContainer.setPrefSize(Region.USE_COMPUTED_SIZE, Region.USE_COMPUTED_SIZE);
+    loadingContainer.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+    loadingContainer.setStyle("-fx-background-color: rgba(255,255,255,0.9);");  // Màu nền nhẹ hơn
+    
+    VBox loadingContent = new VBox(LayoutConstants.SPACING_MD);
+    loadingContent.setAlignment(Pos.CENTER);
+    loadingContent.getStyleClass().add("loading-content");
+    // Bỏ bo tròn và padding để hiển thị đơn giản hơn
+    loadingContent.setStyle("-fx-padding: 20px;");
+    
+    ProgressIndicator progressIndicator = new ProgressIndicator();
+    progressIndicator.setMaxSize(60, 60);  // Tăng kích thước một chút
+    
+    Label loadingLabel = UIFactory.createMutedLabel("Loading project data...");
+    loadingLabel.getStyleClass().add("loading-label");
+    loadingLabel.setStyle("-fx-font-size: 16px; -fx-font-weight: normal;");
+    
+    loadingContent.getChildren().addAll(progressIndicator, loadingLabel);
+    loadingContainer.getChildren().add(loadingContent);
+    StackPane.setAlignment(loadingContent, Pos.CENTER);
+  }
+  
+  private void showLoading() {
+    if (loadingContainer != null) {
+      loadingContainer.setVisible(true);
+    }
+  }
+  
+  private void hideLoading() {
+    if (loadingContainer != null) {
+      loadingContainer.setVisible(false);
+    }
+  }
+
   // Methods that use projectData
   protected String getProjectColorClass() {
-    return projectData != null ? projectData.getColorClass() : "project-color-default";
+    return projectData != null ? projectData.getProjectColorClass() : "project-color-default";
   }
 
   protected String getProjectFeaturesText() {
-    return projectData != null ? projectData.getFormattedFeatures() : "Loading features...";
+    if (projectData != null && projectData.getFeatures() != null) {
+      return String.join("\n• ", projectData.getFeatures());
+    }
+    return "Loading features...";
   }
 
   private void loadProjectData() {
+    if (projectService == null) {
+      log.error("ProjectService is null, cannot load project data");
+      return;
+    }
+    
     showLoading();
-    projectService.loadProject(projectCode)
+    projectService.loadProjectAsync(projectCode)
         .thenAccept(this::updateUIWithProjectData)
         .exceptionally(throwable -> {
           Platform.runLater(() -> showErrorState(throwable));
@@ -152,14 +242,17 @@ public abstract class BaseProjectPage extends BaseView {
     Platform.runLater(() -> {
       this.projectData = data;
       
-      // Update title and description
-      setTitle(data.getName() + " (" + projectCode + ")");
-      setDescription(data.getDescription());
+      // Update header with project data - kiểm tra null
+      if (data != null && data.getName() != null) {
+        titleLabel.setText(data.getName() + " (" + projectCode + ")");
+        descriptionLabel.setText(data.getDescription() != null ? data.getDescription() : "");
+      }
       
       // Create main project card
       VBox projectCard = UIFactory.createCard();
       projectCard.setAlignment(Pos.CENTER);
       projectCard.setPrefHeight(500);
+      projectCard.setMaxWidth(600);
       projectCard.getStyleClass().add("project-placeholder-card");
 
       // Project icon/avatar
@@ -178,11 +271,15 @@ public abstract class BaseProjectPage extends BaseView {
       dynamicContent.getChildren().add(projectCard);
       
       hideLoading();
-      log.info("Project data loaded for {}: {}", projectCode, data.getName());
+      log.info("Project data loaded for {}: {}", projectCode, data != null ? data.getName() : "null");
     });
   }
 
   private void showErrorState(Throwable throwable) {
+    // Update header với thông tin lỗi
+    titleLabel.setText("Error Loading Project (" + projectCode + ")");
+    descriptionLabel.setText("Failed to load project information");
+    
     VBox errorCard = UIFactory.createCard();
     errorCard.setAlignment(Pos.CENTER);
     errorCard.getStyleClass().add("error-state");
@@ -206,6 +303,6 @@ public abstract class BaseProjectPage extends BaseView {
   }
 
   // Getters
-  protected String getProjectCode() { return projectCode; }
+  public String getProjectCode() { return projectCode; }
   protected ProjectData getProjectData() { return projectData; }
 }

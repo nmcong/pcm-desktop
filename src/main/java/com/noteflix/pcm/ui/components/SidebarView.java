@@ -38,7 +38,10 @@ public class SidebarView extends VBox implements ThemeChangeListener, Navigation
   
   // Map to store menu buttons for highlighting
   private final Map<Class<? extends BaseView>, Button> menuButtons = new HashMap<>();
+  // Map to store project items for highlighting
+  private final Map<String, HBox> projectItems = new HashMap<>();
   private Button activeMenuButton = null;
+  private HBox activeProjectItem = null;
 
   public SidebarView() {
     super(16);
@@ -294,6 +297,9 @@ public class SidebarView extends VBox implements ThemeChangeListener, Navigation
     projectItem.getStyleClass().add("list-item");
     projectItem.setPadding(new Insets(8));
     projectItem.setOnMouseClicked(e -> handleProjectClick(name));
+    
+    // Store project item for highlighting
+    projectItems.put(name, projectItem);
 
     return projectItem;
   }
@@ -334,6 +340,17 @@ public class SidebarView extends VBox implements ThemeChangeListener, Navigation
   public void onNavigationChanged(BaseView previousPage, BaseView currentPage) {
     if (currentPage != null) {
       updateActiveMenuItem(currentPage.getClass());
+      
+      // Handle project page highlighting
+      if (currentPage instanceof BaseProjectPage) {
+        BaseProjectPage projectPage = (BaseProjectPage) currentPage;
+        String projectCode = projectPage.getProjectCode();
+        String projectName = getProjectNameFromCode(projectCode);
+        updateActiveProjectItem(projectName);
+      } else {
+        // Clear project highlighting if not on a project page
+        updateActiveProjectItem(null);
+      }
     }
   }
 
@@ -439,11 +456,13 @@ public class SidebarView extends VBox implements ThemeChangeListener, Navigation
     log.info("Opening project: {}", projectName);
     
     if (pageNavigator != null) {
-      Class<? extends BaseView> projectPageClass = getProjectPageClass(projectName);
-      if (projectPageClass != null) {
-        pageNavigator.navigateToPage(projectPageClass);
+      String projectCode = getProjectCodeFromName(projectName);
+      if (projectCode != null) {
+        // Navigate to BaseProjectPage with the project code
+        BaseProjectPage projectPage = new BaseProjectPage(projectCode);
+        pageNavigator.navigateToPage(projectPage);
       } else {
-        showInfo("Project", "Project page not found for: " + projectName);
+        showInfo("Project", "Project code not found for: " + projectName);
       }
     } else {
       log.warn("PageNavigator not set - showing fallback dialog");
@@ -452,12 +471,9 @@ public class SidebarView extends VBox implements ThemeChangeListener, Navigation
   }
   
   private Class<? extends BaseView> getProjectPageClass(String projectName) {
+    // All projects now use BaseProjectPage with different project codes
     return switch (projectName) {
-      case "Customer Service" -> CustomerServiceProjectPage.class;
-      case "Order Management" -> OrderManagementProjectPage.class;
-      case "Payment Gateway" -> PaymentGatewayProjectPage.class;
-      case "Inventory Admin" -> InventoryAdminProjectPage.class;
-      case "Reports Portal" -> ReportsPortalProjectPage.class;
+      case "Customer Service", "Order Management", "Payment Gateway", "Inventory Admin", "Reports Portal" -> BaseProjectPage.class;
       default -> null;
     };
   }
@@ -493,11 +509,64 @@ public class SidebarView extends VBox implements ThemeChangeListener, Navigation
   }
   
   /**
+   * Updates the active project item highlighting
+   * @param projectName The name of the project to highlight (null to clear)
+   */
+  private void updateActiveProjectItem(String projectName) {
+    // Remove active state from previous project item
+    if (activeProjectItem != null) {
+      activeProjectItem.getStyleClass().remove("active");
+    }
+    
+    // Add active state to current project item
+    if (projectName != null) {
+      HBox currentProjectItem = projectItems.get(projectName);
+      if (currentProjectItem != null) {
+        currentProjectItem.getStyleClass().add("active");
+        activeProjectItem = currentProjectItem;
+        log.debug("Highlighted project item: {}", projectName);
+      } else {
+        activeProjectItem = null;
+        log.debug("No project item found for: {}", projectName);
+      }
+    } else {
+      activeProjectItem = null;
+    }
+  }
+  
+  /**
+   * Get project name from project code
+   * @param projectCode The project code (e.g., "CS", "OM")
+   * @return The full project name
+   */
+  private String getProjectNameFromCode(String projectCode) {
+    return switch (projectCode) {
+      case "CS" -> "Customer Service";
+      case "OM" -> "Order Management";
+      case "PG" -> "Payment Gateway";
+      case "IA" -> "Inventory Admin";
+      case "RP" -> "Reports Portal";
+      default -> null;
+    };
+  }
+  
+  /**
    * Cleanup method to unregister listeners Should be called when the component is no longer needed
    */
   public void cleanup() {
     if (themeManager != null) {
       themeManager.removeThemeChangeListener(this);
     }
+  }
+  
+  private String getProjectCodeFromName(String projectName) {
+    return switch (projectName) {
+      case "Customer Service" -> "CS";
+      case "Order Management" -> "OM";
+      case "Payment Gateway" -> "PG";
+      case "Inventory Admin" -> "IA";
+      case "Reports Portal" -> "RP";
+      default -> null;
+    };
   }
 }
