@@ -6,12 +6,10 @@ import com.noteflix.pcm.core.constants.AppConstants;
 import com.noteflix.pcm.core.events.ThemeChangeListener;
 import com.noteflix.pcm.core.navigation.PageNavigator;
 import com.noteflix.pcm.core.theme.ThemeManager;
-import com.noteflix.pcm.core.utils.IconUtils;
 import com.noteflix.pcm.ui.pages.*;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -114,7 +112,6 @@ public class SidebarView extends VBox implements ThemeChangeListener {
             createAIAssistantMenuItem(),
             createMenuItem("Knowledge Base", Octicons.BOOK_24, this::handleKnowledgeBase),
             createMenuItem("Text Component", Octicons.FILE_CODE_24, this::handleTextComponent),
-            createMenuItem("CSS Theme Test", Octicons.GEAR_24, this::handleCSSTest),
             createMenuItem("Batch Jobs", Octicons.CLOCK_24, this::handleBatchJobs),
             createMenuItem("DB Objects", Octicons.DATABASE_24, this::handleDBObjects),
             createMenuItem("Settings", Octicons.TOOLS_24, this::handleSettingsMenu));
@@ -353,21 +350,6 @@ public class SidebarView extends VBox implements ThemeChangeListener {
               + "• Multiple view modes\n"
               + "• Live preview\n"
               + "• Theme support");
-    }
-  }
-
-  private void handleCSSTest() {
-    if (pageNavigator != null) {
-      pageNavigator.navigateToPage(CSSTestPage.class);
-    } else {
-      log.warn("PageNavigator not set - showing fallback dialog");
-      showInfo(
-          "CSS Theme Test",
-          "Test CSS theme system:\n\n"
-              + "• Light/Dark theme switching\n"
-              + "• theme-dark.css & theme-light.css application\n"
-              + "• Color variables testing\n"
-              + "• Theme-aware components");
     }
   }
 
