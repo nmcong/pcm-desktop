@@ -20,4 +20,3 @@ public interface ChatEventHandler {
 
     void onShowTokenInfo(Long messageId);
 }
-
