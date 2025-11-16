@@ -1,6 +1,7 @@
 package com.noteflix.pcm.ui.components;
 
 import atlantafx.base.theme.Styles;
+import com.noteflix.pcm.ui.pages.ai.AIAssistantPage;
 import com.noteflix.pcm.core.constants.AppConstants;
 import com.noteflix.pcm.core.events.ThemeChangeListener;
 import com.noteflix.pcm.core.navigation.PageNavigator;

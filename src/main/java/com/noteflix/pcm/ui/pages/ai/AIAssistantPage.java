@@ -1,10 +1,11 @@
-package com.noteflix.pcm.ui.pages;
+package com.noteflix.pcm.ui.pages.ai;
 
 import atlantafx.base.theme.Styles;
 import com.noteflix.pcm.application.service.chat.AIService;
 import com.noteflix.pcm.application.service.chat.ConversationService;
 import com.noteflix.pcm.domain.chat.Conversation;
 import com.noteflix.pcm.domain.chat.Message;
+import com.noteflix.pcm.ui.pages.BasePage;
 import com.noteflix.pcm.llm.model.LLMChunk;
 import com.noteflix.pcm.llm.model.StreamingObserver;
 import java.time.format.DateTimeFormatter;

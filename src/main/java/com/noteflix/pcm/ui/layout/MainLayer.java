@@ -4,7 +4,7 @@ import com.noteflix.pcm.core.constants.AppConstants;
 import com.noteflix.pcm.core.navigation.DefaultPageNavigator;
 import com.noteflix.pcm.core.navigation.PageNavigator;
 import com.noteflix.pcm.ui.components.SidebarView;
-import com.noteflix.pcm.ui.pages.AIAssistantPage;
+import com.noteflix.pcm.ui.pages.ai.AIAssistantPage;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;

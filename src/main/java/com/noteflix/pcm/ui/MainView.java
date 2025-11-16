@@ -2,8 +2,10 @@ package com.noteflix.pcm.ui;
 
 import atlantafx.base.theme.Styles;
 import com.noteflix.pcm.core.events.ThemeChangeListener;
+import com.noteflix.pcm.core.navigation.DefaultPageNavigator;
 import com.noteflix.pcm.core.theme.ThemeManager;
 import com.noteflix.pcm.ui.components.SidebarView;
+import com.noteflix.pcm.ui.pages.ai.AIAssistantPage;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
@@ -62,7 +64,7 @@ public class MainView extends BorderPane implements ThemeChangeListener {
 
   /** Initialize navigation system */
   private void initializeNavigation(StackPane contentArea) {
-    var pageNavigator = new com.noteflix.pcm.core.navigation.DefaultPageNavigator(contentArea);
+    var pageNavigator = new DefaultPageNavigator(contentArea);
 
     // Set navigator for sidebar
     if (sidebar != null) {
@@ -70,7 +72,7 @@ public class MainView extends BorderPane implements ThemeChangeListener {
     }
 
     // Navigate to default page
-    pageNavigator.navigateToPage(com.noteflix.pcm.ui.pages.AIAssistantPage.class);
+    pageNavigator.navigateToPage(AIAssistantPage.class);
   }
 
   /** Creates the top navigation bar */
