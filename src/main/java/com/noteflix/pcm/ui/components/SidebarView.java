@@ -17,6 +17,8 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
+import javafx.animation.RotateTransition;
+import javafx.util.Duration;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.kordamp.ikonli.javafx.FontIcon;
@@ -25,6 +27,7 @@ import org.kordamp.ikonli.octicons.Octicons;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import javafx.application.Platform;
@@ -58,6 +61,9 @@ public class SidebarView extends VBox implements ThemeChangeListener, Navigation
   // Loading state
   private boolean isLoading = false;
   private CompletableFuture<Void> loadingTask = null;
+  
+  // Loading animations
+  private final List<RotateTransition> loadingAnimations = new ArrayList<>();
 
   public SidebarView() {
     super(16);
@@ -352,6 +358,14 @@ public class SidebarView extends VBox implements ThemeChangeListener, Navigation
     
     // Store project item for highlighting
     projectItems.put(name, projectItem);
+    log.debug("Added project item to map: {} (map size: {})", name, projectItems.size());
+
+    // Check if this is the active project and highlight it immediately
+    if (name.equals(activeProjectName)) {
+      projectItem.getStyleClass().add("active");
+      activeProjectItem = projectItem;
+      log.debug("Immediately highlighted active project: {}", name);
+    }
 
     return projectItem;
   }
@@ -396,12 +410,28 @@ public class SidebarView extends VBox implements ThemeChangeListener, Navigation
     }
   }
   
+  /**
+   * Cancel current loading task if any
+   */
+  private void cancelCurrentLoading() {
+    if (loadingTask != null && !loadingTask.isDone()) {
+      log.debug("Cancelling current loading task");
+      loadingTask.cancel(true);
+      isLoading = false;
+      // Stop loading animations
+      stopLoadingAnimations();
+    }
+  }
+  
   /** 
-   * Safe navigation that cancels previous navigation
+   * Safe navigation that cancels previous navigation and loading
    */
   private void navigateWithCancellation(Runnable navigationAction) {
     // Cancel any ongoing navigation
     cancelCurrentNavigation();
+    
+    // Cancel any ongoing loading task
+    cancelCurrentLoading();
     
     // Execute navigation immediately for UI components (menu items)
     // For async operations, this would be wrapped in CompletableFuture
@@ -505,9 +535,18 @@ public class SidebarView extends VBox implements ThemeChangeListener, Navigation
     loadingCard.setPadding(new Insets(16));
     loadingCard.setAlignment(Pos.CENTER);
     
-    // Loading spinner icon
+    // Loading spinner icon with rotation animation
     FontIcon spinnerIcon = new FontIcon(Octicons.SYNC_24);
     spinnerIcon.getStyleClass().add("loading-spinner");
+    
+    // Create rotation animation
+    RotateTransition rotateTransition = new RotateTransition(Duration.seconds(1.0), spinnerIcon);
+    rotateTransition.setByAngle(360);
+    rotateTransition.setCycleCount(RotateTransition.INDEFINITE);
+    rotateTransition.play();
+    
+    // Track animation for cleanup
+    loadingAnimations.add(rotateTransition);
     
     // Loading text
     Label loadingText = new Label("Loading " + title.toLowerCase() + "...");
@@ -555,8 +594,14 @@ public class SidebarView extends VBox implements ThemeChangeListener, Navigation
   private void buildSidebarWithProjects() {
     log.debug("Building sidebar with project data");
     
+    // Stop all loading animations
+    stopLoadingAnimations();
+    
     // Clear existing children
     getChildren().clear();
+    
+    // Clear project items map first - it will be rebuilt when creating sections
+    projectItems.clear();
     
     // Add header and main menu
     getChildren().addAll(createHeader(), createMainMenu());
@@ -573,24 +618,75 @@ public class SidebarView extends VBox implements ThemeChangeListener, Navigation
       getChildren().add(projectsSection);
     }
     
-    // Clear and rebuild project items map
-    projectItems.clear();
+    // Now the projectItems map should be populated
+    log.debug("Project items map populated with {} items: {}", projectItems.size(), projectItems.keySet());
     
-    // Restore highlighting if there was an active project
+    // Restore highlighting after UI is built and project items are populated
     if (activeProjectName != null) {
-      restoreProjectHighlighting(activeProjectName);
+      Platform.runLater(() -> {
+        log.debug("Attempting to restore highlighting for: {} (available: {})", activeProjectName, projectItems.keySet());
+        restoreProjectHighlighting(activeProjectName);
+        
+        // Double-check with a small delay
+        Platform.runLater(() -> {
+          if (!projectItems.isEmpty()) {
+            ensureHighlightingIsApplied();
+          }
+        });
+      });
     }
+  }
+  
+  /**
+   * Stop all loading animations and clear the list
+   */
+  private void stopLoadingAnimations() {
+    for (RotateTransition animation : loadingAnimations) {
+      if (animation != null) {
+        animation.stop();
+      }
+    }
+    loadingAnimations.clear();
   }
   
   /**
    * Restore project highlighting after rebuild
    */
   private void restoreProjectHighlighting(String projectName) {
+    log.debug("Attempting to restore highlighting for project: {} (projectItems size: {})", 
+              projectName, projectItems.size());
+    
     HBox projectItem = projectItems.get(projectName);
     if (projectItem != null) {
       projectItem.getStyleClass().add("active");
       activeProjectItem = projectItem;
-      log.debug("Restored highlighting for project: {}", projectName);
+      log.info("✓ Restored highlighting for project: {}", projectName);
+    } else {
+      log.warn("✗ Could not restore highlighting - project item not found: {}", projectName);
+      log.debug("Available project items: {}", projectItems.keySet());
+    }
+  }
+  
+  /**
+   * Ensure highlighting is applied - final fallback method
+   */
+  private void ensureHighlightingIsApplied() {
+    if (activeProjectName != null && (activeProjectItem == null || 
+        !activeProjectItem.getStyleClass().contains("active"))) {
+      log.debug("Final attempt to ensure highlighting for: {}", activeProjectName);
+      
+      HBox projectItem = projectItems.get(activeProjectName);
+      if (projectItem != null) {
+        // Remove active from all items first
+        projectItems.values().forEach(item -> item.getStyleClass().remove("active"));
+        
+        // Add active to correct item
+        projectItem.getStyleClass().add("active");
+        activeProjectItem = projectItem;
+        log.info("✓ Final highlighting applied for project: {}", activeProjectName);
+      } else {
+        log.warn("✗ Final highlighting failed - still no project item for: {}", activeProjectName);
+      }
     }
   }
 
@@ -636,7 +732,11 @@ public class SidebarView extends VBox implements ThemeChangeListener, Navigation
         BaseProjectPage projectPage = (BaseProjectPage) currentPage;
         String projectCode = projectPage.getProjectCode();
         String projectName = getProjectNameFromCode(projectCode);
+        
+        // Update active project name and highlighting
+        activeProjectName = projectName;
         updateActiveProjectItem(projectName);
+        log.debug("Navigation changed - set active project: {}", projectName);
       } else {
         // Clear project highlighting if not on a project page
         updateActiveProjectItem(null);
@@ -645,6 +745,9 @@ public class SidebarView extends VBox implements ThemeChangeListener, Navigation
   }
 
   private void handleAIAssistant() {
+    // Clear project highlighting when navigating to menu item
+    updateActiveProjectItem(null);
+    
     navigateWithCancellation(() -> {
       if (pageNavigator != null) {
         pageNavigator.navigateToPage(AIAssistantPage.class);
@@ -664,6 +767,9 @@ public class SidebarView extends VBox implements ThemeChangeListener, Navigation
   }
 
   private void handleKnowledgeBase() {
+    // Clear project highlighting when navigating to menu item
+    updateActiveProjectItem(null);
+    
     navigateWithCancellation(() -> {
       if (pageNavigator != null) {
         pageNavigator.navigateToPage(KnowledgeBasePage.class);
@@ -681,6 +787,9 @@ public class SidebarView extends VBox implements ThemeChangeListener, Navigation
   }
 
   private void handleTextComponent() {
+    // Clear project highlighting when navigating to menu item
+    updateActiveProjectItem(null);
+    
     navigateWithCancellation(() -> {
       if (pageNavigator != null) {
         pageNavigator.navigateToPage(UniversalTextDemoPage.class);
@@ -699,6 +808,9 @@ public class SidebarView extends VBox implements ThemeChangeListener, Navigation
   }
 
   private void handleBatchJobs() {
+    // Clear project highlighting when navigating to menu item
+    updateActiveProjectItem(null);
+    
     navigateWithCancellation(() -> {
       if (pageNavigator != null) {
         pageNavigator.navigateToPage(BatchJobsPage.class);
@@ -716,6 +828,9 @@ public class SidebarView extends VBox implements ThemeChangeListener, Navigation
   }
 
   private void handleDBObjects() {
+    // Clear project highlighting when navigating to menu item
+    updateActiveProjectItem(null);
+    
     navigateWithCancellation(() -> {
       if (pageNavigator != null) {
         pageNavigator.navigateToPage(DatabaseObjectsPage.class);
@@ -733,6 +848,9 @@ public class SidebarView extends VBox implements ThemeChangeListener, Navigation
   }
 
   private void handleSettingsMenu() {
+    // Clear project highlighting when navigating to menu item
+    updateActiveProjectItem(null);
+    
     navigateWithCancellation(() -> {
       if (pageNavigator != null) {
         pageNavigator.navigateToPage(SettingsPage.class);
@@ -763,7 +881,11 @@ public class SidebarView extends VBox implements ThemeChangeListener, Navigation
   private void handleProjectClick(String projectName) {
     log.info("Opening project: {}", projectName);
     
-    // Update highlighting immediately
+    // Store active project name - highlighting will be applied when UI is rebuilt
+    activeProjectName = projectName;
+    log.debug("Set active project: {}", projectName);
+    
+    // Try to highlight immediately if possible
     updateActiveProjectItem(projectName);
     
     navigateWithCancellation(() -> {
@@ -826,27 +948,30 @@ public class SidebarView extends VBox implements ThemeChangeListener, Navigation
    * @param projectName The name of the project to highlight (null to clear)
    */
   private void updateActiveProjectItem(String projectName) {
-    // Remove active state from previous project item
-    if (activeProjectItem != null) {
-      activeProjectItem.getStyleClass().remove("active");
+    // Remove active state from ALL project items to ensure clean state
+    projectItems.values().forEach(item -> item.getStyleClass().remove("active"));
+    
+    // Clear active project item reference
+    activeProjectItem = null;
+    
+    // Only clear activeProjectName if explicitly setting to null
+    if (projectName == null) {
+      activeProjectName = null;
+      log.debug("Cleared project highlighting");
+      return;
     }
     
-    // Update active project name tracking
+    // Set new active project name
     activeProjectName = projectName;
     
     // Add active state to current project item
-    if (projectName != null) {
-      HBox currentProjectItem = projectItems.get(projectName);
-      if (currentProjectItem != null) {
-        currentProjectItem.getStyleClass().add("active");
-        activeProjectItem = currentProjectItem;
-        log.debug("Highlighted project item: {}", projectName);
-      } else {
-        activeProjectItem = null;
-        log.debug("No project item found for: {}", projectName);
-      }
+    HBox currentProjectItem = projectItems.get(projectName);
+    if (currentProjectItem != null) {
+      currentProjectItem.getStyleClass().add("active");
+      activeProjectItem = currentProjectItem;
+      log.debug("Highlighted project item: {}", projectName);
     } else {
-      activeProjectItem = null;
+      log.debug("No project item found for: {} (will highlight when UI rebuilds)", projectName);
     }
   }
   
@@ -872,6 +997,9 @@ public class SidebarView extends VBox implements ThemeChangeListener, Navigation
     if (loadingTask != null && !loadingTask.isDone()) {
       loadingTask.cancel(true);
     }
+    
+    // Stop all loading animations
+    stopLoadingAnimations();
     
     if (themeManager != null) {
       themeManager.removeThemeChangeListener(this);
