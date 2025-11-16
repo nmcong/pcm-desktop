@@ -42,7 +42,7 @@ public class PCMApplication extends Application {
 
     // Initialize DI container
     log.info("🔧 Initializing Dependency Injection...");
-    Injector injector = Injector.getInstance();
+    Injector.getInstance(); // Initialize DI container and register default dependencies
     log.info("✅ DI Container initialized");
 
     // Initialize i18n
@@ -53,6 +53,7 @@ public class PCMApplication extends Application {
     // Run database migrations BEFORE UI initialization
     log.info("🔄 Running database migrations...");
     runDatabaseMigrations();
+    log.info("✅ Database initialization completed successfully");
   }
 
   @Override
