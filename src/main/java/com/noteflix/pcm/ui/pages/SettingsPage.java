@@ -3,6 +3,7 @@ package com.noteflix.pcm.ui.pages;
 import atlantafx.base.theme.Styles;
 import com.noteflix.pcm.core.di.Injector;
 import com.noteflix.pcm.core.i18n.I18n;
+import com.noteflix.pcm.ui.base.BaseView;
 import com.noteflix.pcm.ui.styles.LayoutConstants;
 import com.noteflix.pcm.ui.styles.StyleConstants;
 import com.noteflix.pcm.ui.utils.LayoutHelper;
@@ -12,7 +13,6 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import lombok.extern.slf4j.Slf4j;
@@ -39,7 +39,7 @@ import org.kordamp.ikonli.javafx.FontIcon;
  * @version 2.0.0
  */
 @Slf4j
-public class SettingsPage extends BasePage {
+public class SettingsPage extends BaseView {
 
   private final SettingsViewModel viewModel;
 

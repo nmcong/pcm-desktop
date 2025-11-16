@@ -3,6 +3,7 @@ package com.noteflix.pcm.ui.pages;
 import atlantafx.base.theme.Styles;
 import com.noteflix.pcm.core.di.Injector;
 import com.noteflix.pcm.core.i18n.I18n;
+import com.noteflix.pcm.ui.base.BaseView;
 import com.noteflix.pcm.ui.viewmodel.DatabaseObjectsViewModel;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -20,7 +21,7 @@ import org.kordamp.ikonli.javafx.FontIcon;
  * business logic
  */
 @Slf4j
-public class DatabaseObjectsPage extends BasePage {
+public class DatabaseObjectsPage extends BaseView {
 
   private final DatabaseObjectsViewModel viewModel;
   private TreeView<String> schemaTree;
@@ -348,8 +349,8 @@ public class DatabaseObjectsPage extends BasePage {
   }
 
   @Override
-  public void onPageActivated() {
-    super.onPageActivated();
+  public void onActivate() {
+    super.onActivate();
     viewModel.loadDatabaseInfo();
   }
 

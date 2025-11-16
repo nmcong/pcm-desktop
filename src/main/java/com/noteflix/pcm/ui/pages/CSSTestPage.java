@@ -2,6 +2,7 @@ package com.noteflix.pcm.ui.pages;
 
 import atlantafx.base.theme.Styles;
 import com.noteflix.pcm.core.theme.ThemeManager;
+import com.noteflix.pcm.ui.base.BaseView;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -14,9 +15,9 @@ import org.kordamp.ikonli.javafx.FontIcon;
 
 /** Test page for CSS theming system. Demonstrates how theme-dark.css and theme-light.css are applied */
 @Slf4j
-public class CSSTestPage extends BasePage {
+public class CSSTestPage extends BaseView {
 
-  private ThemeManager themeManager = ThemeManager.getInstance();
+  private final ThemeManager themeManager = ThemeManager.getInstance();
 
   public CSSTestPage() {
     super(
@@ -189,8 +190,8 @@ public class CSSTestPage extends BasePage {
   }
 
   @Override
-  public void onPageActivated() {
-    super.onPageActivated();
+  public void onActivate() {
+    super.onActivate();
     log.info(
         "CSS Test page activated. Current theme: {}",
         themeManager.isDarkTheme() ? "Dark" : "Light");

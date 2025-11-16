@@ -3,6 +3,7 @@ package com.noteflix.pcm.ui.pages;
 import atlantafx.base.theme.Styles;
 import com.noteflix.pcm.core.di.Injector;
 import com.noteflix.pcm.core.i18n.I18n;
+import com.noteflix.pcm.ui.base.BaseView;
 import com.noteflix.pcm.ui.viewmodel.KnowledgeBaseViewModel;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -22,7 +23,7 @@ import org.kordamp.ikonli.javafx.FontIcon;
  * business logic
  */
 @Slf4j
-public class KnowledgeBasePage extends BasePage {
+public class KnowledgeBasePage extends BaseView {
 
   private final KnowledgeBaseViewModel viewModel;
   private TextField searchField;
@@ -263,8 +264,8 @@ public class KnowledgeBasePage extends BasePage {
   }
 
   @Override
-  public void onPageActivated() {
-    super.onPageActivated();
+  public void onActivate() {
+    super.onActivate();
     if (searchField != null) {
       searchField.requestFocus();
     }

@@ -5,7 +5,7 @@ import com.noteflix.pcm.application.service.chat.AIService;
 import com.noteflix.pcm.application.service.chat.ConversationService;
 import com.noteflix.pcm.domain.chat.Conversation;
 import com.noteflix.pcm.domain.chat.Message;
-import com.noteflix.pcm.ui.pages.BasePage;
+import com.noteflix.pcm.ui.base.BaseView;
 import com.noteflix.pcm.llm.model.LLMChunk;
 import com.noteflix.pcm.llm.model.StreamingObserver;
 import java.time.format.DateTimeFormatter;
@@ -34,7 +34,7 @@ import org.kordamp.ikonli.javafx.FontIcon;
  * @version 2.0.0
  */
 @Slf4j
-public class AIAssistantPage extends BasePage {
+public class AIAssistantPage extends BaseView {
 
   // Services (injected via constructor)
   private final ConversationService conversationService;
@@ -811,8 +811,8 @@ public class AIAssistantPage extends BasePage {
   }
 
   @Override
-  public void onPageActivated() {
-    super.onPageActivated();
+  public void onActivate() {
+    super.onActivate();
 
     // Load conversations on first activation (lazy initialization)
     if (chatSessionsList != null && chatSessionsList.getChildren().isEmpty()) {

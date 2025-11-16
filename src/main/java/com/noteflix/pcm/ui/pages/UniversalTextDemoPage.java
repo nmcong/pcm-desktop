@@ -1,6 +1,7 @@
 package com.noteflix.pcm.ui.pages;
 
 import atlantafx.base.theme.Styles;
+import com.noteflix.pcm.ui.base.BaseView;
 import com.noteflix.pcm.ui.components.text.TextContentType;
 import com.noteflix.pcm.ui.components.text.UniversalTextComponent;
 import com.noteflix.pcm.ui.components.text.ViewMode;
@@ -19,7 +20,7 @@ import org.kordamp.ikonli.javafx.FontIcon;
 
 /** Demo page for testing the Universal Text Component */
 @Slf4j
-public class UniversalTextDemoPage extends BasePage {
+public class UniversalTextDemoPage extends BaseView {
 
   private UniversalTextComponent textComponent;
   private ComboBox<SampleContent> sampleSelector;
@@ -129,8 +130,8 @@ public class UniversalTextDemoPage extends BasePage {
   }
 
   @Override
-  public void onPageActivated() {
-    super.onPageActivated();
+  public void onActivate() {
+    super.onActivate();
     if (textComponent != null) {
       textComponent.focusEditor();
     }
