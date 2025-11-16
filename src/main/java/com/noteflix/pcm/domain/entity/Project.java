@@ -20,6 +20,8 @@ public class Project extends BaseEntity {
   private ProjectType type;
   private ProjectStatus status;
   private String color; // Hex color for UI
+  private boolean isFavorite; // Flag to mark project as favorite
+  private int screenCount; // Number of screens in the project
   private String createdBy;
   private String updatedBy;
 
