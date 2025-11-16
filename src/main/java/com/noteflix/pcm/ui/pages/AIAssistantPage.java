@@ -7,30 +7,41 @@ import com.noteflix.pcm.domain.chat.Conversation;
 import com.noteflix.pcm.domain.chat.Message;
 import com.noteflix.pcm.llm.model.LLMChunk;
 import com.noteflix.pcm.llm.model.StreamingObserver;
-import java.time.format.DateTimeFormatter;
+import com.noteflix.pcm.ui.pages.ai.components.ChatInputArea;
+import com.noteflix.pcm.ui.pages.ai.components.ChatMessageList;
+import com.noteflix.pcm.ui.pages.ai.components.ChatSidebar;
+import com.noteflix.pcm.ui.pages.ai.components.ConversationItem;
+import com.noteflix.pcm.ui.styles.LayoutConstants;
+import com.noteflix.pcm.ui.utils.DialogHelper;
+import com.noteflix.pcm.ui.utils.LayoutHelper;
+
 import java.util.List;
 import java.util.Optional;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import lombok.extern.slf4j.Slf4j;
 import org.kordamp.ikonli.feather.Feather;
 import org.kordamp.ikonli.javafx.FontIcon;
-import org.kordamp.ikonli.octicons.Octicons;
 
 /**
- * AI Assistant Page - Clean Architecture Implementation
+ * AI Assistant Page - Refactored with Component Architecture
  *
- * <p>Follows SOLID principles: - Single Responsibility: Only handles UI rendering - Dependency
- * Inversion: Depends on service interfaces - Open/Closed: Easy to extend with new features
+ * <p>Clean implementation using reusable components:
+ * - ChatSidebar: Conversation list and search
+ * - ChatMessageList: Message display with streaming
+ * - ChatInputArea: User input with send button
+ * - ConversationItem: Individual conversation item
  *
- * <p>Features: - Real-time AI chat with streaming responses - Persistent conversation history via
- * database - Search and conversation management - Multi-LLM provider support
+ * <p>Features:
+ * - Real-time AI chat with streaming responses
+ * - Persistent conversation history via database
+ * - Search and conversation management
+ * - Multi-LLM provider support
  *
  * @author PCM Team
- * @version 2.0.0
+ * @version 3.0.0 (Refactored)
  */
 @Slf4j
 public class AIAssistantPage extends BasePage {
@@ -39,15 +50,14 @@ public class AIAssistantPage extends BasePage {
   private final ConversationService conversationService;
   private final AIService aiService;
   private final String currentUserId = "default-user"; // TODO: Get from auth service
+
   // Current state
   private Long currentConversationId;
-  // UI Components
-  private VBox chatSessionsList;
-  private VBox chatMessagesArea;
-  private TextArea chatInput;
-  private ScrollPane chatScroll;
-  private VBox loadingIndicator;
-  private Label streamingMessageLabel;
+
+  // UI Components (new component-based architecture)
+  private ChatSidebar chatSidebar;
+  private ChatMessageList chatMessageList;
+  private ChatInputArea chatInputArea;
 
   /** Constructor with dependency injection */
   public AIAssistantPage(ConversationService conversationService, AIService aiService) {
@@ -65,15 +75,11 @@ public class AIAssistantPage extends BasePage {
     setSpacing(0);
     getStyleClass().add("ai-chat-page");
 
-    log.info("AIAssistantPage initialized with services");
+    log.info("AIAssistantPage initialized with component-based architecture");
   }
 
-  /**
-   * Default constructor (creates services internally) Note: Services are created here and passed to
-   * main constructor
-   */
+  /** Default constructor (creates services internally) */
   public AIAssistantPage() {
-    // Create services BEFORE calling super to avoid NPE during UI construction
     this(createDefaultConversationService(), createDefaultAIService());
   }
 
@@ -108,106 +114,72 @@ public class AIAssistantPage extends BasePage {
     return null;
   }
 
+  /**
+   * Create main layout with sidebar and content area
+   * This is the only layout method - all other UI is in components
+   */
   private HBox createMainLayout() {
     HBox mainLayout = new HBox();
     mainLayout.getStyleClass().add("main-layout");
     mainLayout.setSpacing(0);
 
-    // Left sidebar (280px fixed width)
-    VBox sidebar = createChatSidebar();
-    sidebar.setPrefWidth(280);
-    sidebar.setMinWidth(280);
-    sidebar.setMaxWidth(280);
+    // Left sidebar - NEW: Use ChatSidebar component
+    chatSidebar = new ChatSidebar()
+        .withNewChatHandler(this::handleNewChat)
+        .withSearchHandler(this::handleSearch);
 
-    // Right content area (grows to fill remaining space)
+    // Right content area
     VBox contentArea = createContentArea();
     HBox.setHgrow(contentArea, Priority.ALWAYS);
 
-    mainLayout.getChildren().addAll(sidebar, contentArea);
+    mainLayout.getChildren().addAll(chatSidebar, contentArea);
     return mainLayout;
   }
 
-  private VBox createChatSidebar() {
-    VBox sidebar = new VBox();
-    sidebar.getStyleClass().add("chat-sidebar");
-    sidebar.setPadding(new Insets(16));
-    sidebar.setSpacing(12);
-
-    // Sidebar header with new chat button
-    HBox sidebarHeader = createSidebarHeader();
-
-    // Search box
-    TextField searchBox = new TextField();
-    searchBox.setPromptText("Search conversations...");
-    searchBox.getStyleClass().add("search-input");
-    searchBox.textProperty().addListener((obs, old, newVal) -> handleSearch(newVal));
-
-    // Chat sessions list
-    Label historyLabel = new Label("Chat History");
-    historyLabel.getStyleClass().addAll(Styles.TEXT_BOLD, "sidebar-section-title");
-
-    chatSessionsList = new VBox(8);
-    chatSessionsList.getStyleClass().add("chat-sessions-list");
-
-    ScrollPane sessionsScroll = new ScrollPane(chatSessionsList);
-    sessionsScroll.setFitToWidth(true);
-    sessionsScroll.getStyleClass().add("sessions-scroll");
-    VBox.setVgrow(sessionsScroll, Priority.ALWAYS);
-
-    sidebar.getChildren().addAll(sidebarHeader, searchBox, historyLabel, sessionsScroll);
-
-    // NOTE: Don't load conversations here - will be loaded in onPageActivated()
-    // This avoids NPE during constructor execution
-
-    return sidebar;
-  }
-
-  private HBox createSidebarHeader() {
-    HBox header = new HBox(12);
-    header.setAlignment(Pos.CENTER_LEFT);
-
-    Label title = new Label("AI Assistant");
-    title.getStyleClass().addAll(Styles.TITLE_4);
-
-    Region spacer = new Region();
-    HBox.setHgrow(spacer, Priority.ALWAYS);
-
-    Button newChatBtn = new Button();
-    newChatBtn.setGraphic(new FontIcon(Feather.PLUS));
-    newChatBtn.getStyleClass().addAll(Styles.BUTTON_ICON, Styles.FLAT, "icon-btn");
-    newChatBtn.setTooltip(new Tooltip("New Chat"));
-    newChatBtn.setOnAction(e -> createNewChat());
-
-    header.getChildren().addAll(title, spacer, newChatBtn);
-    return header;
-  }
-
+  /**
+   * Create content area with messages and input
+   * Uses new ChatMessageList and ChatInputArea components
+   */
   private VBox createContentArea() {
-    VBox contentArea = new VBox();
+    VBox contentArea = LayoutHelper.createVBox(0);
     contentArea.getStyleClass().add("content-area");
     VBox.setVgrow(contentArea, Priority.ALWAYS);
 
     // Top: Header
     HBox chatHeader = createChatHeader();
 
-    // Bottom: Messages area + Input area
-    VBox messagesAndInputArea = createMessagesAndInputArea();
-    VBox.setVgrow(messagesAndInputArea, Priority.ALWAYS);
+    // Middle: Messages area - NEW: Use ChatMessageList component
+    chatMessageList = new ChatMessageList();
+    LayoutHelper.setVGrow(chatMessageList);
 
-    contentArea.getChildren().addAll(chatHeader, messagesAndInputArea);
+    // Show welcome if no conversation
+    if (currentConversationId == null) {
+      chatMessageList.showWelcome();
+    }
+
+    // Bottom: Input area - NEW: Use ChatInputArea component
+    chatInputArea = new ChatInputArea()
+        .withSendHandler(this::handleSendMessage);
+
+    contentArea.getChildren().addAll(chatHeader, chatMessageList, chatInputArea);
     return contentArea;
   }
 
+  /**
+   * Create chat header with title and actions
+   */
   private HBox createChatHeader() {
-    HBox header = new HBox(12);
-    header.setAlignment(Pos.CENTER_LEFT);
+    HBox header = LayoutHelper.createHBox(
+        javafx.geometry.Pos.CENTER_LEFT,
+        LayoutConstants.SPACING_MD
+    );
     header.getStyleClass().add("chat-header");
-    header.setPadding(new Insets(12, 16, 12, 16));
+    header.setPadding(LayoutConstants.PADDING_DEFAULT);
 
     FontIcon chatIcon = new FontIcon(Feather.MESSAGE_CIRCLE);
-    chatIcon.setIconSize(16);
+    chatIcon.setIconSize(LayoutConstants.ICON_SIZE_SM);
 
-    VBox titleBox = new VBox(2);
+    VBox titleBox = LayoutHelper.createVBox(LayoutConstants.SPACING_XS);
     Label titleLabel = new Label(getCurrentTitle());
     titleLabel.getStyleClass().addAll(Styles.TITLE_4);
 
@@ -216,273 +188,36 @@ public class AIAssistantPage extends BasePage {
 
     titleBox.getChildren().addAll(titleLabel, subtitleLabel);
 
+    // Spacer
     Region spacer = new Region();
     HBox.setHgrow(spacer, Priority.ALWAYS);
 
-    // Chat actions
+    // Clear chat button
     Button clearBtn = new Button();
     clearBtn.setGraphic(new FontIcon(Feather.TRASH_2));
     clearBtn.getStyleClass().addAll(Styles.BUTTON_ICON, Styles.FLAT, "icon-btn");
     clearBtn.setTooltip(new Tooltip("Clear Chat"));
-    clearBtn.setOnAction(e -> clearCurrentChat());
+    clearBtn.setOnAction(e -> handleClearChat());
 
-    HBox actions = new HBox(8, clearBtn);
-
-    header.getChildren().addAll(chatIcon, titleBox, spacer, actions);
+    header.getChildren().addAll(chatIcon, titleBox, spacer, clearBtn);
     return header;
-  }
-
-  private VBox createMessagesAndInputArea() {
-    VBox container = new VBox();
-    container.getStyleClass().add("messages-and-input-area");
-    VBox.setVgrow(container, Priority.ALWAYS);
-
-    // Messages area (grows to fill space)
-    VBox messagesArea = createMessagesArea();
-    VBox.setVgrow(messagesArea, Priority.ALWAYS);
-
-    // Input area (fixed height at bottom)
-    VBox inputArea = createChatInputArea();
-
-    container.getChildren().addAll(messagesArea, inputArea);
-    return container;
-  }
-
-  private VBox createMessagesArea() {
-    VBox messagesArea = new VBox();
-    messagesArea.getStyleClass().add("messages-area");
-    VBox.setVgrow(messagesArea, Priority.ALWAYS);
-
-    if (currentConversationId == null) {
-      // Welcome state
-      VBox welcomeContent = createWelcomeContent();
-      messagesArea.getChildren().add(welcomeContent);
-      messagesArea.setAlignment(Pos.CENTER);
-    } else {
-      // Chat state
-      messagesArea.setAlignment(Pos.TOP_LEFT);
-
-      VBox messagesContainer = new VBox();
-      messagesContainer.setAlignment(Pos.TOP_CENTER);
-      messagesContainer.setPadding(new Insets(20));
-
-      chatMessagesArea = new VBox(12);
-      chatMessagesArea.getStyleClass().add("chat-messages-area");
-      chatMessagesArea.setMaxWidth(768);
-      chatMessagesArea.setAlignment(Pos.TOP_LEFT);
-
-      messagesContainer.getChildren().add(chatMessagesArea);
-
-      chatScroll = new ScrollPane(messagesContainer);
-      chatScroll.setFitToWidth(true);
-      chatScroll.getStyleClass().add("chat-scroll");
-      chatScroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
-      chatScroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-      VBox.setVgrow(chatScroll, Priority.ALWAYS);
-
-      messagesArea.getChildren().add(chatScroll);
-
-      // Load messages
-      loadMessages();
-    }
-
-    return messagesArea;
-  }
-
-  private VBox createWelcomeContent() {
-    VBox welcome = new VBox(24);
-    welcome.setAlignment(Pos.CENTER);
-    welcome.getStyleClass().add("welcome-content");
-    welcome.setPadding(new Insets(40, 40, 40, 40));
-
-    // AI icon with gradient background
-    VBox iconContainer = createWelcomeIcon();
-
-    Label title = new Label("AI Assistant");
-    title.getStyleClass().addAll(Styles.TITLE_2);
-
-    Label subtitle = new Label("How can I help you today?");
-    subtitle.getStyleClass().addAll(Styles.TEXT_MUTED);
-
-    // Quick suggestions
-    javafx.scene.layout.GridPane suggestions = createQuickSuggestions();
-
-    welcome.getChildren().addAll(iconContainer, title, subtitle, suggestions);
-    return welcome;
-  }
-
-  private VBox createWelcomeIcon() {
-    VBox container = new VBox();
-    container.setAlignment(Pos.CENTER);
-    container.getStyleClass().add("welcome-icon-container");
-    container.setPrefSize(90, 90);
-    container.setMinSize(90, 90);
-    container.setMaxSize(90, 90);
-
-    // Main AI icon - using CommentOutlined from Ant Design
-    FontIcon mainIcon = new FontIcon(Octicons.DEPENDABOT_24);
-    mainIcon.getStyleClass().add("welcome-ai-icon");
-
-    container.getChildren().add(mainIcon);
-    return container;
-  }
-
-  private GridPane createQuickSuggestions() {
-    javafx.scene.layout.GridPane grid = new javafx.scene.layout.GridPane();
-    grid.setAlignment(Pos.CENTER);
-    grid.setHgap(16);
-    grid.setVgap(16);
-    grid.getStyleClass().add("quick-suggestions");
-    grid.setMaxWidth(600);
-
-    // Define 4 suggestion themes with icons
-    SuggestionCard[] suggestions = {
-      new SuggestionCard(
-          Feather.SEARCH, "Search Knowledge", "Explore database schema and structure"),
-      new SuggestionCard(Feather.TOOL, "Find Solutions", "Review code quality and best practices"),
-      new SuggestionCard(Feather.EDIT_3, "Create Content", "Generate documentation and reports"),
-      new SuggestionCard(
-          Feather.ACTIVITY, "Analyze System", "Get insights on performance and metrics")
-    };
-
-    // Add cards to grid (2x2 layout)
-    int row = 0, col = 0;
-    for (SuggestionCard suggestion : suggestions) {
-      VBox card = createSuggestionCard(suggestion);
-      grid.add(card, col, row);
-
-      col++;
-      if (col > 1) {
-        col = 0;
-        row++;
-      }
-    }
-
-    return grid;
-  }
-
-  private VBox createSuggestionCard(SuggestionCard suggestion) {
-    VBox card = new VBox(8);
-    card.setAlignment(Pos.CENTER);
-    card.getStyleClass().add("suggestion-card");
-    card.setPrefWidth(280);
-    card.setPrefHeight(120);
-
-    // Icon
-    FontIcon icon = new FontIcon(suggestion.icon);
-    icon.setIconSize(28);
-    icon.getStyleClass().add("suggestion-icon");
-
-    // Title
-    Label titleLabel = new Label(suggestion.title);
-    titleLabel.getStyleClass().addAll(Styles.TEXT_BOLD, "suggestion-title");
-    titleLabel.setWrapText(true);
-    titleLabel.setAlignment(Pos.CENTER);
-    titleLabel.setMaxWidth(250);
-
-    // Description
-    Label descLabel = new Label(suggestion.description);
-    descLabel.getStyleClass().addAll(Styles.TEXT_SMALL, "suggestion-desc", "text-muted");
-    descLabel.setWrapText(true);
-    descLabel.setAlignment(Pos.CENTER);
-    descLabel.setMaxWidth(250);
-
-    card.getChildren().addAll(icon, titleLabel, descLabel);
-
-    // Click handler
-    card.setOnMouseClicked(
-        e -> {
-          chatInput.setText(suggestion.description);
-          handleSendMessage();
-        });
-
-    return card;
-  }
-
-  // Helper class for suggestion data
-  private static class SuggestionCard {
-    final Feather icon;
-    final String title;
-    final String description;
-
-    SuggestionCard(Feather icon, String title, String description) {
-      this.icon = icon;
-      this.title = title;
-      this.description = description;
-    }
-  }
-
-  private VBox createChatInputArea() {
-    VBox inputArea = new VBox(12);
-    inputArea.getStyleClass().add("chat-input-container");
-    inputArea.setPadding(new Insets(20));
-    inputArea.setAlignment(Pos.CENTER);
-
-    HBox inputBox = new HBox(12);
-    inputBox.setAlignment(Pos.CENTER);
-    inputBox.getStyleClass().add("chat-input-box");
-    inputBox.setMaxWidth(768);
-
-    VBox inputWrapper = new VBox();
-    inputWrapper.getStyleClass().add("input-wrapper");
-
-    chatInput = new TextArea();
-    chatInput.setPromptText("Ask me anything about your system...");
-    chatInput.getStyleClass().add("chat-input");
-    chatInput.setPrefRowCount(1);
-    chatInput.setWrapText(true);
-
-    // Auto-resize
-    chatInput
-        .textProperty()
-        .addListener(
-            (obs, old, newText) -> {
-              if (newText.contains("\n")) {
-                int lines = newText.split("\n").length;
-                chatInput.setPrefRowCount(Math.min(lines, 8));
-              }
-            });
-
-    // Input actions
-    HBox inputActions = new HBox(8);
-    inputActions.setAlignment(Pos.CENTER_RIGHT);
-    inputActions.setPadding(new Insets(8));
-
-    Button sendBtn = new Button();
-    sendBtn.setGraphic(new FontIcon(Feather.SEND));
-    sendBtn.getStyleClass().addAll(Styles.BUTTON_ICON, "send-btn");
-    sendBtn.setOnAction(e -> handleSendMessage());
-
-    inputActions.getChildren().add(sendBtn);
-
-    inputWrapper.getChildren().addAll(chatInput, inputActions);
-    HBox.setHgrow(inputWrapper, Priority.ALWAYS);
-
-    inputBox.getChildren().add(inputWrapper);
-    inputArea.getChildren().add(inputBox);
-
-    // Enter key handler
-    chatInput.setOnKeyPressed(
-        e -> {
-          if (e.getCode().toString().equals("ENTER") && !e.isShiftDown()) {
-            e.consume();
-            handleSendMessage();
-          }
-        });
-
-    return inputArea;
   }
 
   // ========== Event Handlers ==========
 
-  private void handleSendMessage() {
-    String message = chatInput.getText().trim();
-    if (message.isEmpty()) return;
+  /**
+   * Handle sending a message
+   * Updated to work with new ChatInputArea component
+   */
+  private void handleSendMessage(String message) {
+    if (message == null || message.trim().isEmpty()) {
+      return;
+    }
 
     // Safety check
     if (conversationService == null || aiService == null) {
       log.error("Services not initialized - cannot send message");
-      showError(new IllegalStateException("Services not initialized"));
+      DialogHelper.showError("Error", "Services not initialized");
       return;
     }
 
@@ -491,30 +226,36 @@ public class AIAssistantPage extends BasePage {
     // Create conversation if needed
     if (currentConversationId == null) {
       try {
-        Conversation conv =
-            conversationService.createConversation(
-                "New Chat", currentUserId, "openai", "gpt-3.5-turbo");
+        Conversation conv = conversationService.createConversation(
+            "New Chat",
+            currentUserId,
+            "openai",
+            "gpt-3.5-turbo"
+        );
         currentConversationId = conv.getId();
+        
+        // Rebuild UI to show messages area
         rebuildUI();
+        
+        // Re-send message after rebuild
+        Platform.runLater(() -> handleSendMessage(message));
+        return;
       } catch (Exception e) {
         log.error("Failed to create conversation", e);
-        showError(e);
+        DialogHelper.showError("Error", "Failed to create conversation: " + e.getMessage());
         return;
       }
     }
 
     // Display user message
-    displayUserMessage(message);
+    Message userMsg = Message.user(currentConversationId, message);
+    chatMessageList.addMessage(userMsg);
 
     // Clear and disable input
-    chatInput.clear();
-    chatInput.setPrefRowCount(1);
-    chatInput.setDisable(true);
+    chatInputArea.clear();
+    chatInputArea.setInputDisabled(true);
 
-    // Show loading
-    showLoadingIndicator();
-
-    // Get AI response (with streaming)
+    // Get AI response with streaming
     aiService.streamResponse(
         conversationService.getConversation(currentConversationId).get(),
         message,
@@ -523,52 +264,57 @@ public class AIAssistantPage extends BasePage {
 
           @Override
           public void onChunk(LLMChunk chunk) {
-            Platform.runLater(
-                () -> {
-                  fullResponse.append(chunk.getContent());
-                  updateStreamingMessage(fullResponse.toString());
-                });
+            Platform.runLater(() -> {
+              fullResponse.append(chunk.getContent());
+              chatMessageList.showStreaming(fullResponse.toString());
+            });
           }
 
           @Override
           public void onComplete() {
-            Platform.runLater(
-                () -> {
-                  hideLoadingIndicator();
-                  finalizeStreamingMessage();
-                  chatInput.setDisable(false);
-                  chatInput.requestFocus();
-                  loadConversations(); // Refresh sidebar
-                });
+            Platform.runLater(() -> {
+              chatMessageList.hideStreaming();
+              loadMessages(); // Reload to get persisted message
+              chatInputArea.setInputDisabled(false);
+              chatInputArea.requestInputFocus();
+              loadConversations(); // Refresh sidebar
+            });
           }
 
           @Override
           public void onError(Throwable error) {
-            Platform.runLater(
-                () -> {
-                  hideLoadingIndicator();
-                  showError(error);
-                  chatInput.setDisable(false);
-                });
+            Platform.runLater(() -> {
+              chatMessageList.hideStreaming();
+              DialogHelper.showError("AI Error", error.getMessage());
+              chatInputArea.setInputDisabled(false);
+              log.error("AI response error", error);
+            });
           }
         });
   }
 
-  private void createNewChat() {
+  /**
+   * Handle creating a new chat
+   */
+  private void handleNewChat() {
     currentConversationId = null;
     rebuildUI();
-    if (chatInput != null) {
-      chatInput.requestFocus();
-    }
+    chatInputArea.requestInputFocus();
   }
 
-  private void clearCurrentChat() {
+  /**
+   * Handle clearing current chat
+   */
+  private void handleClearChat() {
     if (currentConversationId != null) {
       conversationService.clearConversation(currentConversationId);
       rebuildUI();
     }
   }
 
+  /**
+   * Handle search in conversations
+   */
   private void handleSearch(String query) {
     if (query == null || query.trim().isEmpty()) {
       loadConversations();
@@ -578,6 +324,9 @@ public class AIAssistantPage extends BasePage {
     }
   }
 
+  /**
+   * Switch to a different conversation
+   */
   private void switchToConversation(Long conversationId) {
     if (!conversationId.equals(currentConversationId)) {
       currentConversationId = conversationId;
@@ -587,8 +336,10 @@ public class AIAssistantPage extends BasePage {
 
   // ========== UI Update Methods ==========
 
+  /**
+   * Load conversations from database and update sidebar
+   */
   private void loadConversations() {
-    // Safety check: Services should be initialized by now
     if (conversationService == null) {
       log.warn("ConversationService is null - cannot load conversations");
       return;
@@ -599,178 +350,61 @@ public class AIAssistantPage extends BasePage {
       updateConversationsList(conversations);
     } catch (Exception e) {
       log.error("Failed to load conversations", e);
-      // Show error in UI
-      if (chatSessionsList != null) {
-        chatSessionsList.getChildren().clear();
-        Label errorLabel = new Label("Failed to load conversations");
-        errorLabel.getStyleClass().addAll(Styles.TEXT_SMALL, "text-danger");
-        chatSessionsList.getChildren().add(errorLabel);
-      }
+      DialogHelper.showError("Error", "Failed to load conversations: " + e.getMessage());
     }
   }
 
+  /**
+   * Update conversations list in sidebar
+   * NEW: Uses ConversationItem component
+   */
   private void updateConversationsList(List<Conversation> conversations) {
-    chatSessionsList.getChildren().clear();
+    chatSidebar.clearConversations();
 
     for (Conversation conv : conversations) {
-      Button sessionBtn = createConversationButton(conv);
-      chatSessionsList.getChildren().add(sessionBtn);
+      ConversationItem item = new ConversationItem(conv)
+          .withSelectHandler(c -> switchToConversation(c.getId()))
+          .withSelected(conv.getId().equals(currentConversationId));
+      
+      chatSidebar.addConversation(item);
     }
   }
 
-  private Button createConversationButton(Conversation conv) {
-    Label titleLabel = new Label(conv.getTitle());
-    titleLabel.setMaxWidth(220);
-    titleLabel.setPadding(new Insets(8, 12, 8, 12));
-
-    Button sessionBtn = new Button();
-    sessionBtn.setGraphic(titleLabel);
-    sessionBtn.getStyleClass().add("chat-session-btn");
-    sessionBtn.setMaxWidth(Double.MAX_VALUE);
-
-    if (conv.getId().equals(currentConversationId)) {
-      sessionBtn.getStyleClass().add("active");
-    }
-
-    sessionBtn.setOnAction(e -> switchToConversation(conv.getId()));
-
-    return sessionBtn;
-  }
-
+  /**
+   * Load messages for current conversation
+   * NEW: Simplified with ChatMessageList component
+   */
   private void loadMessages() {
-    if (currentConversationId == null || chatMessagesArea == null) return;
+    if (currentConversationId == null || chatMessageList == null) {
+      return;
+    }
 
-    // Safety check
     if (conversationService == null) {
       log.warn("ConversationService is null - cannot load messages");
       return;
     }
 
     try {
-      Optional<Conversation> convOpt =
+      Optional<Conversation> convOpt = 
           conversationService.getConversationWithMessages(currentConversationId);
 
       if (convOpt.isPresent()) {
         Conversation conv = convOpt.get();
-        chatMessagesArea.getChildren().clear();
+        chatMessageList.clearMessages();
 
         for (Message msg : conv.getMessages()) {
-          VBox messageBox = createMessageBox(msg);
-          chatMessagesArea.getChildren().add(messageBox);
+          chatMessageList.addMessage(msg);
         }
-
-        scrollToBottom();
       }
     } catch (Exception e) {
       log.error("Failed to load messages", e);
+      DialogHelper.showError("Error", "Failed to load messages: " + e.getMessage());
     }
   }
 
-  private void displayUserMessage(String content) {
-    Message userMsg = Message.user(currentConversationId, content);
-    VBox messageBox = createMessageBox(userMsg);
-    chatMessagesArea.getChildren().add(messageBox);
-    scrollToBottom();
-  }
-
-  private VBox createMessageBox(Message message) {
-    VBox messageBox = new VBox(8);
-    messageBox.getStyleClass().add("message-box");
-
-    HBox messageRow = new HBox(12);
-    messageRow.setAlignment(message.isFromAI() ? Pos.TOP_LEFT : Pos.TOP_RIGHT);
-
-    // Message bubble
-    VBox bubble = new VBox(4);
-    bubble.getStyleClass().add(message.isFromAI() ? "ai-message-bubble" : "user-message-bubble");
-    bubble.setPadding(new Insets(12, 16, 12, 16));
-    bubble.setMaxWidth(600);
-
-    Label messageLabel = new Label(message.getContent());
-    messageLabel.setWrapText(true);
-    messageLabel.getStyleClass().add("message-text");
-
-    Label timeLabel =
-        new Label(message.getCreatedAt().format(DateTimeFormatter.ofPattern("HH:mm")));
-    timeLabel.getStyleClass().addAll(Styles.TEXT_SMALL, "text-muted");
-
-    bubble.getChildren().addAll(messageLabel, timeLabel);
-
-    if (message.isFromAI()) {
-      messageRow.getChildren().add(bubble);
-    } else {
-      messageRow.getChildren().add(bubble);
-    }
-
-    messageBox.getChildren().add(messageRow);
-    return messageBox;
-  }
-
-  private void showLoadingIndicator() {
-    if (chatMessagesArea != null) {
-      loadingIndicator = new VBox(8);
-      loadingIndicator.getStyleClass().add("loading-indicator");
-      loadingIndicator.setAlignment(Pos.CENTER_LEFT);
-
-      Label loadingText = new Label("AI is thinking...");
-      loadingText.getStyleClass().add("loading-text");
-
-      loadingIndicator.getChildren().add(loadingText);
-      chatMessagesArea.getChildren().add(loadingIndicator);
-      scrollToBottom();
-    }
-  }
-
-  private void hideLoadingIndicator() {
-    if (chatMessagesArea != null && loadingIndicator != null) {
-      chatMessagesArea.getChildren().remove(loadingIndicator);
-      loadingIndicator = null;
-    }
-  }
-
-  private void updateStreamingMessage(String content) {
-    if (streamingMessageLabel == null) {
-      hideLoadingIndicator();
-
-      VBox bubble = new VBox(4);
-      bubble.getStyleClass().add("ai-message-bubble");
-      bubble.setPadding(new Insets(12, 16, 12, 16));
-      bubble.setMaxWidth(600);
-
-      streamingMessageLabel = new Label(content);
-      streamingMessageLabel.setWrapText(true);
-      streamingMessageLabel.getStyleClass().add("message-text");
-
-      bubble.getChildren().add(streamingMessageLabel);
-      chatMessagesArea.getChildren().add(bubble);
-    } else {
-      streamingMessageLabel.setText(content);
-    }
-
-    scrollToBottom();
-  }
-
-  private void finalizeStreamingMessage() {
-    streamingMessageLabel = null;
-    loadMessages(); // Reload to get persisted message
-  }
-
-  private void showError(Throwable error) {
-    Alert alert = new Alert(Alert.AlertType.ERROR);
-    alert.setTitle("Error");
-    alert.setHeaderText("Failed to get AI response");
-    alert.setContentText(error.getMessage());
-    alert.showAndWait();
-
-    log.error("AI response error", error);
-  }
-
-  private void scrollToBottom() {
-    if (chatScroll != null) {
-      Platform.runLater(() -> chatScroll.setVvalue(1.0));
-    }
-  }
-
+  /**
+   * Rebuild entire UI (when switching conversations)
+   */
   private void rebuildUI() {
     VBox mainContent = (VBox) getChildren().get(getChildren().size() - 1);
     mainContent.getChildren().clear();
@@ -779,8 +413,17 @@ public class AIAssistantPage extends BasePage {
     VBox.setVgrow(mainLayout, Priority.ALWAYS);
 
     mainContent.getChildren().add(mainLayout);
+
+    // Load data
+    loadConversations();
+    if (currentConversationId != null) {
+      loadMessages();
+    }
   }
 
+  /**
+   * Get current conversation title
+   */
   private String getCurrentTitle() {
     if (currentConversationId != null) {
       Optional<Conversation> conv = conversationService.getConversation(currentConversationId);
@@ -794,12 +437,10 @@ public class AIAssistantPage extends BasePage {
     super.onPageActivated();
 
     // Load conversations on first activation (lazy initialization)
-    if (chatSessionsList != null && chatSessionsList.getChildren().isEmpty()) {
-      loadConversations();
-    }
+    loadConversations();
 
-    if (chatInput != null) {
-      chatInput.requestFocus();
+    if (chatInputArea != null) {
+      chatInputArea.requestInputFocus();
     }
   }
 }
