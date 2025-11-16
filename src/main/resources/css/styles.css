@@ -198,6 +198,8 @@
     -fx-cursor: hand;
     -fx-background-radius: 8px;
     -fx-transition: all 0.2s ease-in-out;
+    -fx-border-color: transparent;
+    -fx-border-width: 0 0 0 3px;
 }
 
 .sidebar-menu-item:hover {
@@ -221,7 +223,6 @@
 .sidebar-menu-item.active {
     -fx-background-color: rgba(99, 102, 241, 0.15);
     -fx-border-color: -fx-accent-primary;
-    -fx-border-width: 0 0 0 3px;
 }
 
 .sidebar-menu-item.active .label {
@@ -236,6 +237,8 @@
 /* AI Assistant Button */
 .ai-assistant-btn {
     -fx-cursor: hand;
+    -fx-border-color: transparent;
+    -fx-border-width: 0 0 0 3px;
 }
 
 .ai-assistant-btn:hover {
@@ -250,7 +253,6 @@
 .ai-assistant-btn.active {
     -fx-background-color: rgba(99, 102, 241, 0.15);
     -fx-border-color: -fx-accent-primary;
-    -fx-border-width: 0 0 0 3px;
 }
 
 .ai-assistant-btn.active .label {
@@ -260,6 +262,25 @@
 
 .ai-assistant-btn.active .ikonli-font-icon {
     -fx-icon-color: -fx-accent-primary;
+}
+
+/* Placeholder Cards */
+.placeholder-card {
+    -fx-padding: 60px;
+    -fx-spacing: 24px;
+}
+
+.placeholder-icon {
+    -fx-icon-color: -fx-text-muted;
+}
+
+.placeholder-title {
+    -fx-text-alignment: center;
+}
+
+.placeholder-description {
+    -fx-text-alignment: center;
+    -fx-max-width: 400px;
 }
 
 /* ================================================================
