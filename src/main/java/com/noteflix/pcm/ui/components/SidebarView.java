@@ -35,18 +35,41 @@ public class SidebarView extends VBox implements ThemeChangeListener, Navigation
   private final IProjectService projectService;
   
   /**
-   * -- SETTER --
-   *  Sets the page navigator for navigation functionality
+   * Sets the page navigator for navigation functionality
    */
-  @Setter
   private PageNavigator pageNavigator;
+  
+  public void setPageNavigator(PageNavigator pageNavigator) {
+    this.pageNavigator = pageNavigator;
+    // Update navigation handler when pageNavigator is set
+    if (navigationHandler != null) {
+      // Recreate navigation handler with new pageNavigator
+      SidebarNavigationHandler newNavigationHandler = new SidebarNavigationHandler(
+          pageNavigator, 
+          projectService, 
+          highlightManager,
+          () -> mainMenu.clearHighlighting()
+      );
+      // Replace the old handler - we'll need to update the reference
+      updateNavigationHandler(newNavigationHandler);
+    }
+  }
+  
+  private void updateNavigationHandler(SidebarNavigationHandler newHandler) {
+    // Clean up old handler
+    if (navigationHandler != null) {
+      navigationHandler.cleanup();
+    }
+    // Update the reference
+    this.navigationHandler = newHandler;
+  }
   
   // Component managers following Single Responsibility Principle
   private final SidebarHeader header;
   private final MainMenu mainMenu;
   private final ProjectSectionManager projectSectionManager;
   private final ProjectHighlightManager highlightManager;
-  private final SidebarNavigationHandler navigationHandler;
+  private SidebarNavigationHandler navigationHandler; // Non-final to allow updates
   private final LoadingManager loadingManager;
   
   // Map to store project items for highlighting (shared with managers)
@@ -66,7 +89,6 @@ public class SidebarView extends VBox implements ThemeChangeListener, Navigation
 
     // Initialize component managers
     this.highlightManager = new ProjectHighlightManager(projectItems);
-    this.navigationHandler = new SidebarNavigationHandler(pageNavigator, projectService, highlightManager);
     this.loadingManager = new LoadingManager(projectService, this::handleSectionHeaderCreate);
     this.header = new SidebarHeader(this::openSearchDialog);
     this.mainMenu = new MainMenu(
@@ -78,13 +100,23 @@ public class SidebarView extends VBox implements ThemeChangeListener, Navigation
         this::handleDBObjects,
         this::handleSettingsMenu
     );
+    
+    // Navigation handler initialized with null pageNavigator (will be updated when pageNavigator is set)
+    this.navigationHandler = new SidebarNavigationHandler(
+        null, // pageNavigator will be set later
+        projectService, 
+        highlightManager,
+        () -> mainMenu.clearHighlighting() // Callback to clear menu highlighting
+    );
+    
     this.projectSectionManager = new ProjectSectionManager(
         projectService,
         projectItems,
         highlightManager,
         this::handleProjectClick,
         this::handleRefreshProjects,
-        this::handleNewProject
+        this::handleNewProject,
+        this::buildSidebarWithProjects // For context menu actions - just rebuild UI
     );
 
     // Register for theme changes
@@ -354,7 +386,8 @@ public class SidebarView extends VBox implements ThemeChangeListener, Navigation
   
   private void handleRefreshProjects() {
     log.info("Refreshing project list");
-    buildSidebarWithProjects(); // Direct rebuild for context menu actions
+    // Show loading state and refresh data from service
+    refreshSidebar();
   }
 
   // Delegate to navigation handler

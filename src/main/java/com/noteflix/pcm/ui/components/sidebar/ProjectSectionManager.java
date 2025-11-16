@@ -29,19 +29,22 @@ public class ProjectSectionManager {
     private final Consumer<String> onProjectClick;
     private final Runnable onRefreshProjects;
     private final Runnable onNewProject;
+    private final Runnable onRebuildUI; // For context menu actions that just need UI rebuild
     
     public ProjectSectionManager(IProjectService projectService,
                                 Map<String, HBox> projectItems,
                                 ProjectHighlightManager highlightManager,
                                 Consumer<String> onProjectClick,
                                 Runnable onRefreshProjects,
-                                Runnable onNewProject) {
+                                Runnable onNewProject,
+                                Runnable onRebuildUI) {
         this.projectService = projectService;
         this.projectItems = projectItems;
         this.highlightManager = highlightManager;
         this.onProjectClick = onProjectClick;
         this.onRefreshProjects = onRefreshProjects;
         this.onNewProject = onNewProject;
+        this.onRebuildUI = onRebuildUI;
     }
     
     /**
@@ -223,8 +226,8 @@ public class ProjectSectionManager {
                 projectService.toggleFavorite(projectCode);
                 log.debug("Toggled favorite for project: {} (active project: {})", 
                          projectCode, highlightManager.getActiveProjectName());
-                // Trigger UI rebuild
-                onRefreshProjects.run();
+                // Just rebuild UI without loading state - data is already updated in service
+                onRebuildUI.run();
             });
             
             contextMenu.getItems().add(favoriteItem);

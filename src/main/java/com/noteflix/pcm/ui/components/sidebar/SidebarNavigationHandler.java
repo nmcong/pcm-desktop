@@ -20,16 +20,19 @@ public class SidebarNavigationHandler {
     private final PageNavigator pageNavigator;
     private final IProjectService projectService;
     private final ProjectHighlightManager highlightManager;
+    private final Runnable onClearMenuHighlight; // Callback to clear menu highlighting
     
     // Navigation cancellation support
     private CompletableFuture<?> currentNavigationTask = null;
     
     public SidebarNavigationHandler(PageNavigator pageNavigator, 
                                    IProjectService projectService,
-                                   ProjectHighlightManager highlightManager) {
+                                   ProjectHighlightManager highlightManager,
+                                   Runnable onClearMenuHighlight) {
         this.pageNavigator = pageNavigator;
         this.projectService = projectService;
         this.highlightManager = highlightManager;
+        this.onClearMenuHighlight = onClearMenuHighlight;
     }
     
     /**
@@ -38,27 +41,31 @@ public class SidebarNavigationHandler {
     public void handleProjectClick(String projectName) {
         log.info("Opening project: {}", projectName);
         
+        // Clear menu highlighting when clicking on project
+        if (onClearMenuHighlight != null) {
+            onClearMenuHighlight.run();
+        }
+        
         // Store active project name for highlighting
         highlightManager.setActiveProjectName(projectName);
         
         // Try to highlight immediately if possible
         highlightManager.updateActiveProjectItem(projectName);
         
-        navigateWithCancellation(() -> {
-            if (pageNavigator != null) {
-                String projectCode = getProjectCodeFromName(projectName);
-                if (projectCode != null) {
-                    // Navigate to BaseProjectPage with the project code
-                    BaseProjectPage projectPage = new BaseProjectPage(projectCode);
-                    pageNavigator.navigateToPage(projectPage);
-                } else {
-                    showInfo("Project", "Project code not found for: " + projectName);
-                }
+        // Navigate directly without cancellation wrapper for immediate response
+        if (pageNavigator != null) {
+            String projectCode = getProjectCodeFromName(projectName);
+            if (projectCode != null) {
+                // Navigate to BaseProjectPage with the project code
+                BaseProjectPage projectPage = new BaseProjectPage(projectCode);
+                pageNavigator.navigateToPage(projectPage);
             } else {
-                log.warn("PageNavigator not set - showing fallback dialog");
-                showInfo("Project", "View details for: " + projectName);
+                showInfo("Project", "Project code not found for: " + projectName);
             }
-        });
+        } else {
+            log.warn("PageNavigator not set - showing fallback dialog");
+            showInfo("Project", "View details for: " + projectName);
+        }
     }
     
     /**
