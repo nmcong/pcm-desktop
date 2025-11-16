@@ -4,6 +4,7 @@ package atlantafx.base.controls;
 
 import java.util.Objects;
 import java.util.function.BiConsumer;
+
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.css.PseudoClass;

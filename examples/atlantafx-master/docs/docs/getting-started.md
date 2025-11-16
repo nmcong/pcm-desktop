@@ -1,9 +1,14 @@
 # Getting Started
 
-AtlantaFX has *no dependencies*. If you want to use additional controls it provides, continue with Maven installation. If you just need to style standard JavaFX controls, you can also use the local installation, but in that case you'll have to download and update CSS files manually.
+AtlantaFX has *no dependencies*. If you want to use additional controls it provides, continue with Maven installation.
+If you just need to style standard JavaFX controls, you can also use the local installation, but in that case you'll
+have to download and update CSS files manually.
 
 !!! info
-    Any AtlantaFX theme is compiled to a user-agent stylesheet. It's a <ins>single CSS file</ins> that is used to provide default styling for all UI controls. It completely **replaces** default JavaFX stylesheet, namely [Modena](https://github.com/openjdk/jfx/blob/master/modules/javafx.controls/src/main/resources/com/sun/javafx/scene/control/skin/modena/modena.css) theme.
+Any AtlantaFX theme is compiled to a user-agent stylesheet. It's a <ins>single CSS file</ins> that is used to provide
+default styling for all UI controls. It completely **replaces** default JavaFX stylesheet,
+namely [Modena](https://github.com/openjdk/jfx/blob/master/modules/javafx.controls/src/main/resources/com/sun/javafx/scene/control/skin/modena/modena.css)
+theme.
 
 ## Installing
 
@@ -53,7 +58,9 @@ public class Launcher extends Application {
 
 ### Local Installation
 
-If you don't want to use additional dependencies, you can download compiled CSS themes from the [GitHub Releases](https://github.com/mkpaz/atlantafx/releases). Unpack `AtlantaFX-*-themes.zip` and place it to your project's classpath.
+If you don't want to use additional dependencies, you can download compiled CSS themes from
+the [GitHub Releases](https://github.com/mkpaz/atlantafx/releases). Unpack `AtlantaFX-*-themes.zip` and place it to your
+project's classpath.
 
 Set CSS theme:
 

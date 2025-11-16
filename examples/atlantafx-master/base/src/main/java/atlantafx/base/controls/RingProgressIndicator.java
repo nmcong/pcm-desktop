@@ -19,12 +19,21 @@ import org.jspecify.annotations.Nullable;
  */
 public class RingProgressIndicator extends ProgressIndicator {
 
+    protected final ObjectProperty<@Nullable Node> graphic = new SimpleObjectProperty<>(this, "graphic", null);
+    protected final ObjectProperty<@Nullable StringConverter<Double>> stringConverter =
+            new SimpleObjectProperty<>(this, "converter", null);
+    protected final ReadOnlyBooleanWrapper reverse = new ReadOnlyBooleanWrapper(this, "reverse", false);
+
     /**
      * Creates a new indeterminate ProgressIndicator.
      */
     public RingProgressIndicator() {
         super();
     }
+
+    ///////////////////////////////////////////////////////////////////////////
+    // Properties                                                            //
+    ///////////////////////////////////////////////////////////////////////////
 
     /**
      * Creates a new ProgressIndicator with the given progress value.
@@ -55,10 +64,6 @@ public class RingProgressIndicator extends ProgressIndicator {
         return new RingProgressIndicatorSkin(this);
     }
 
-    ///////////////////////////////////////////////////////////////////////////
-    // Properties                                                            //
-    ///////////////////////////////////////////////////////////////////////////
-
     /**
      * Represents the node to be displayed within the progress indicator. If null,
      * it will fall back to the Label with an integer progress value from 1 to 100.
@@ -66,8 +71,6 @@ public class RingProgressIndicator extends ProgressIndicator {
     public ObjectProperty<@Nullable Node> graphicProperty() {
         return graphic;
     }
-
-    protected final ObjectProperty<@Nullable Node> graphic = new SimpleObjectProperty<>(this, "graphic", null);
 
     public @Nullable Node getGraphic() {
         return graphicProperty().get();
@@ -87,9 +90,6 @@ public class RingProgressIndicator extends ProgressIndicator {
         return stringConverter;
     }
 
-    protected final ObjectProperty<@Nullable StringConverter<Double>> stringConverter =
-        new SimpleObjectProperty<>(this, "converter", null);
-
     public @Nullable StringConverter<Double> getStringConverter() {
         return stringConverterProperty().get();
     }
@@ -105,8 +105,6 @@ public class RingProgressIndicator extends ProgressIndicator {
     public ReadOnlyBooleanProperty reverseProperty() {
         return reverse.getReadOnlyProperty();
     }
-
-    protected final ReadOnlyBooleanWrapper reverse = new ReadOnlyBooleanWrapper(this, "reverse", false);
 
     public boolean isReverse() {
         return reverse.get();

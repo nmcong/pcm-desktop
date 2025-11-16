@@ -1,6 +1,7 @@
 # PCM Desktop - Đặc tả thiết kế chi tiết
 
-Tài liệu này cung cấp đặc tả thiết kế toàn diện cho ứng dụng PCM (Project Configuration Management) Desktop, mở rộng từ đặc tả function calling với hướng dẫn triển khai chi tiết, hợp đồng API và kiến trúc hệ thống.
+Tài liệu này cung cấp đặc tả thiết kế toàn diện cho ứng dụng PCM (Project Configuration Management) Desktop, mở rộng từ
+đặc tả function calling với hướng dẫn triển khai chi tiết, hợp đồng API và kiến trúc hệ thống.
 
 ## Mục lục
 
@@ -79,6 +80,7 @@ public class SystemRegistrationService {
 ```
 
 **Schema yêu cầu**:
+
 ```json
 {
   "system": {
@@ -666,6 +668,7 @@ Tất cả endpoints tuân theo quy ước RESTful với JSON request/response b
 **Authentication**: Bearer token authentication
 
 **Định dạng phản hồi chung**:
+
 ```json
 {
   "success": true,
@@ -681,6 +684,7 @@ Tất cả endpoints tuân theo quy ước RESTful với JSON request/response b
 **Endpoint**: `/ws/agent-responses`
 
 **Events**:
+
 - `response.chunk` - Nội dung phản hồi streaming
 - `response.complete` - Phản hồi hoàn tất
 - `response.error` - Có lỗi xảy ra
@@ -726,20 +730,24 @@ Tất cả endpoints tuân theo quy ước RESTful với JSON request/response b
 ## Chiến lược kiểm thử
 
 ### Unit Testing
+
 - **Mục tiêu bao phủ**: 85%+ bao phủ dòng
 - **Framework**: JUnit 5 + Mockito
 - **Test Doubles**: Mock các dịch vụ bên ngoài (LLM, Qdrant)
 
 ### Integration Testing
+
 - **Database**: H2 in-memory cho testing
 - **Search**: Chỉ mục Lucene nhúng
 - **End-to-End**: TestFX cho UI testing
 
 ### Performance Testing
+
 - **Load Testing**: JMeter cho API endpoints
 - **Memory Profiling**: Monitor rò rỉ bộ nhớ
 - **Search Performance**: Benchmark với bộ dữ liệu lớn
 
 ---
 
-Đặc tả chi tiết này cung cấp nền tảng để triển khai ứng dụng PCM Desktop mạnh mẽ, có thể mở rộng với khả năng phân tích được hỗ trợ AI toàn diện.
+Đặc tả chi tiết này cung cấp nền tảng để triển khai ứng dụng PCM Desktop mạnh mẽ, có thể mở rộng với khả năng phân tích
+được hỗ trợ AI toàn diện.

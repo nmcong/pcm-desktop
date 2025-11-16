@@ -16,33 +16,33 @@ package com.noteflix.pcm.ui.base;
  */
 public interface ViewLifecycle {
 
-  /**
-   * Called when view becomes active/visible
-   * Use this to:
-   * - Load data
-   * - Start background tasks
-   * - Register listeners
-   * - Initialize state
-   */
-  void onActivate();
+    /**
+     * Called when view becomes active/visible
+     * Use this to:
+     * - Load data
+     * - Start background tasks
+     * - Register listeners
+     * - Initialize state
+     */
+    void onActivate();
 
-  /**
-   * Called when view becomes inactive/hidden
-   * Use this to:
-   * - Pause background tasks
-   * - Save state
-   * - Clear temporary data
-   */
-  void onDeactivate();
+    /**
+     * Called when view becomes inactive/hidden
+     * Use this to:
+     * - Pause background tasks
+     * - Save state
+     * - Clear temporary data
+     */
+    void onDeactivate();
 
-  /**
-   * Called when view is being destroyed
-   * Use this to:
-   * - Unregister listeners
-   * - Cancel tasks
-   * - Release resources
-   * - Prevent memory leaks
-   */
-  void cleanup();
+    /**
+     * Called when view is being destroyed
+     * Use this to:
+     * - Unregister listeners
+     * - Cancel tasks
+     * - Release resources
+     * - Prevent memory leaks
+     */
+    void cleanup();
 }
 

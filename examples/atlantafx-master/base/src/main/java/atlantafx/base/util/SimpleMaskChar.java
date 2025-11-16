@@ -75,6 +75,14 @@ public final class SimpleMaskChar implements MaskChar {
     }
 
     /**
+     * A utility method for creating a fixed character - that is, the character used to represent
+     * the fixed part (a prefix or a suffix) of the input mask.
+     */
+    public static SimpleMaskChar fixed(char ch) {
+        return new SimpleMaskChar(c -> c == ch, UnaryOperator.identity(), ch, true);
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override
@@ -104,13 +112,5 @@ public final class SimpleMaskChar implements MaskChar {
     @Override
     public boolean isFixed() {
         return fixed;
-    }
-
-    /**
-     * A utility method for creating a fixed character - that is, the character used to represent
-     * the fixed part (a prefix or a suffix) of the input mask.
-     */
-    public static SimpleMaskChar fixed(char ch) {
-        return new SimpleMaskChar(c -> c == ch, UnaryOperator.identity(), ch, true);
     }
 }

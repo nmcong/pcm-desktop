@@ -4,14 +4,14 @@
 @use "../settings/effects";
 @use "../settings/icons";
 
-$color-arrow-button-fg:  -color-fg-muted   !default;
-$color-list-bg:          -color-bg-default !default;
-$color-list-bg-hover:    if(cfg.$darkMode, -color-base-7, -color-base-1) !default;
+$color-arrow-button-fg: -color-fg-muted !default;
+$color-list-bg: -color-bg-default !default;
+$color-list-bg-hover: if(cfg.$darkMode, -color-base-7, -color-base-1) !default;
 $color-list-bg-selected: if(cfg.$darkMode, -color-base-6, -color-base-2) !default;
-$color-list-fg:          -color-fg-default !default;
-$color-list-fg-hover:    -color-fg-default !default;
+$color-list-fg: -color-fg-default !default;
+$color-list-fg-hover: -color-fg-default !default;
 $color-list-fg-selected: -color-fg-default !default;
-$use-alt-icon:           false !default;
+$use-alt-icon: false !default;
 
 @mixin _arrow($is-alt: false) {
   @if $use-alt-icon {
@@ -20,8 +20,7 @@ $use-alt-icon:           false !default;
 
   @if $is-alt {
     @include icons.get("unfold-more", false);
-  }
-  @else {
+  } @else {
     @include icons.get("arrow-drop-down", false);
   }
 }
@@ -91,35 +90,35 @@ $use-alt-icon:           false !default;
 
   @include _combo-box-base();
 
-  >.arrow-button {
+  > .arrow-button {
     -fx-padding: cfg.$padding-y cfg.$padding-x cfg.$padding-y cfg.$padding-x;
 
-    >.arrow {
+    > .arrow {
       @include _arrow();
       -fx-background-color: $color-arrow-button-fg;
     }
   }
 
-  >.text-field {
+  > .text-field {
     -fx-background-insets: 0, cfg.$border-width 0 cfg.$border-width cfg.$border-width;
-    -fx-background-radius: cfg.$border-radius 0 0 cfg.$border-radius, cfg.$inner-border-radius 0 0  cfg.$inner-border-radius;
+    -fx-background-radius: cfg.$border-radius 0 0 cfg.$border-radius, cfg.$inner-border-radius 0 0 cfg.$inner-border-radius;
   }
 
   &:success {
-    >.arrow-button>.arrow {
+    > .arrow-button > .arrow {
       -fx-background-color: -color-success-fg;
     }
   }
 
   &:danger {
-    >.arrow-button>.arrow {
+    > .arrow-button > .arrow {
       -fx-background-color: -color-danger-fg;
     }
   }
 
   // #tweaks/alt-icon
   &.alt-icon {
-    >.arrow-button>.arrow {
+    > .arrow-button > .arrow {
       @include _arrow(true);
     }
   }
@@ -128,40 +127,40 @@ $use-alt-icon:           false !default;
 .combo-box {
 
   // customize the ListCell that appears in the ComboBox button itself
-  >.list-cell {
+  > .list-cell {
     -fx-background-color: transparent;
     -fx-text-fill: -color-fg-default;
     -fx-padding: cfg.$padding-y cfg.$padding-x cfg.$padding-y cfg.$padding-x;
     -fx-graphic-text-gap: cfg.$graphic-gap;
   }
 
-  &:success>.list-cell {
+  &:success > .list-cell {
     -fx-text-fill: -color-success-fg;
   }
 
-  &:danger>.list-cell {
+  &:danger > .list-cell {
     -fx-text-fill: -color-danger-fg;
   }
 
   &.small {
-    >.list-cell {
+    > .list-cell {
       -fx-padding: cfg.$padding-y-small cfg.$padding-x-small cfg.$padding-y-small cfg.$padding-x-small;
       -fx-font-size: cfg.$font-small;
     }
 
-    >.text-field {
+    > .text-field {
       -fx-padding: cfg.$padding-y-small cfg.$padding-x-small cfg.$padding-y-small cfg.$padding-x-small;
       -fx-font-size: cfg.$font-small;
     }
   }
 
   &.large {
-    >.list-cell {
+    > .list-cell {
       -fx-padding: cfg.$padding-y-large cfg.$padding-x-large cfg.$padding-y-large cfg.$padding-x-large;
       -fx-font-size: cfg.$font-title-4;
     }
 
-    >.text-field {
+    > .text-field {
       -fx-padding: cfg.$padding-y-large cfg.$padding-x-large cfg.$padding-y-large cfg.$padding-x-large;
       -fx-font-size: cfg.$font-title-4;
     }
@@ -169,7 +168,7 @@ $use-alt-icon:           false !default;
 }
 
 .combo-box-popup {
-  >.list-view {
+  > .list-view {
     -fx-background-color: -color-border-default, $color-list-bg;
     -fx-background-insets: 0, 1;
     -fx-border-radius: cfg.$border-radius, cfg.$inner-border-radius;
@@ -177,10 +176,10 @@ $use-alt-icon:           false !default;
     -fx-padding: cfg.$popup-padding-y cfg.$popup-padding-x cfg.$popup-padding-y cfg.$popup-padding-x;
     @include effects.shadow(-color-shadow-default, cfg.$popup-shadow-radius, cfg.$popup-shadow-spread);
 
-    >.virtual-flow {
-      >.clipped-container {
-        >.sheet {
-          >.list-cell {
+    > .virtual-flow {
+      > .clipped-container {
+        > .sheet {
+          > .list-cell {
             // reset cell size, because height is set via paddings
             // to use the same values as ChoiceBox
             -fx-cell-size: 0;
@@ -221,8 +220,8 @@ $use-alt-icon:           false !default;
     }
 
     // placeholder is shown to the user when the ComboBox has no content to show
-    >.placeholder {
-      >.label {
+    > .placeholder {
+      > .label {
         -fx-text-fill: -color-fg-muted;
       }
     }
@@ -239,47 +238,47 @@ $use-alt-icon:           false !default;
 
   -fx-padding: cfg.$padding-y cfg.$padding-x cfg.$padding-y cfg.$padding-x;
 
-  >.label {
+  > .label {
     -fx-text-fill: -color-fg-default;
   }
 
-  >.open-button {
+  > .open-button {
 
-    >.arrow {
+    > .arrow {
       @include _arrow();
       -fx-background-color: $color-arrow-button-fg;
     }
   }
 
   &:success {
-    >.label {
+    > .label {
       -fx-text-fill: -color-success-fg;
     }
 
-    >.open-button>.arrow {
+    > .open-button > .arrow {
       -fx-background-color: -color-success-fg;
     }
   }
 
   &:danger {
-    >.label {
+    > .label {
       -fx-text-fill: -color-danger-fg;
     }
 
-    >.open-button>.arrow {
+    > .open-button > .arrow {
       -fx-background-color: -color-danger-fg;
     }
   }
 
   &:disabled {
-    >.label {
+    > .label {
       -fx-opacity: 1;
     }
   }
 
   // #tweaks/alt-icon
   &.alt-icon {
-    >.open-button>.arrow {
+    > .open-button > .arrow {
       @include _arrow(true);
     }
   }
@@ -287,7 +286,7 @@ $use-alt-icon:           false !default;
   &.small {
     -fx-padding: cfg.$padding-y-small cfg.$padding-x-small cfg.$padding-y-small cfg.$padding-x-small;
 
-    >.label {
+    > .label {
       -fx-font-size: cfg.$font-small;
     }
   }
@@ -295,7 +294,7 @@ $use-alt-icon:           false !default;
   &.large {
     -fx-padding: cfg.$padding-y-large cfg.$padding-x-large cfg.$padding-y-large cfg.$padding-x-large;
 
-    >.label {
+    > .label {
       -fx-font-size: cfg.$font-title-4;
     }
   }

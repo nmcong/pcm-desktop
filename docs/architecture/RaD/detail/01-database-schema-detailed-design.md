@@ -1,6 +1,7 @@
 # Database Schema - Detailed Design Specification
 
 **Tạo từ các file nguồn:**
+
 - `docs/RaD/ideas/system-hierarchy.md`
 - `docs/RaD/ideas/system-analysis.md`
 - `docs/RaD/ideas/system-analysis-erd.md`
@@ -15,6 +16,7 @@
 ## 1. Tổng quan
 
 Tài liệu này mô tả chi tiết schema cơ sở dữ liệu SQLite cho hệ thống PCM Desktop, bao gồm:
+
 - Quản lý phân cấp hệ thống (System → Subsystem → Project → Batch)
 - Metadata mã nguồn và AST (Abstract Syntax Tree)
 - Tìm kiếm ngữ nghĩa và toàn văn (FTS5)
@@ -23,12 +25,12 @@ Tài liệu này mô tả chi tiết schema cơ sở dữ liệu SQLite cho hệ
 
 ### 1.1 Lựa chọn công nghệ
 
-| Mục đích | Công nghệ | Lý do |
-|----------|-----------|-------|
-| Metadata hoạt động | SQLite | Nhẹ, có transaction, dễ triển khai |
-| Tìm kiếm ngữ nghĩa (RAG) | Qdrant | Vector similarity, filtering, payload |
-| Tìm kiếm toàn văn | SQLite FTS5 | Tích hợp sẵn, BM25 scoring |
-| Artifacts/BLOBs | Local filesystem | Lưu trữ AST snapshots, uploads |
+| Mục đích                 | Công nghệ        | Lý do                                 |
+|--------------------------|------------------|---------------------------------------|
+| Metadata hoạt động       | SQLite           | Nhẹ, có transaction, dễ triển khai    |
+| Tìm kiếm ngữ nghĩa (RAG) | Qdrant           | Vector similarity, filtering, payload |
+| Tìm kiếm toàn văn        | SQLite FTS5      | Tích hợp sẵn, BM25 scoring            |
+| Artifacts/BLOBs          | Local filesystem | Lưu trữ AST snapshots, uploads        |
 
 ---
 
@@ -63,6 +65,7 @@ CREATE INDEX IF NOT EXISTS idx_systems_code ON systems(code);
 ```
 
 **Các trường:**
+
 - `system_id`: Khóa chính tự tăng
 - `code`: Mã định danh ngắn gọn, duy nhất (ví dụ: "ERP", "CRM")
 - `name`: Tên đầy đủ của hệ thống
@@ -71,6 +74,7 @@ CREATE INDEX IF NOT EXISTS idx_systems_code ON systems(code);
 - `created_at`, `updated_at`: Timestamp để audit
 
 **Ràng buộc:**
+
 - `code` phải duy nhất
 - Không cho phép xóa nếu còn subsystems
 
@@ -95,6 +99,7 @@ CREATE INDEX IF NOT EXISTS idx_subsystems_status ON subsystems(status);
 ```
 
 **Các trường:**
+
 - `subsystem_id`: Khóa chính
 - `system_id`: Khóa ngoại tới `systems`
 - `code`: Mã duy nhất trong phạm vi system
@@ -102,6 +107,7 @@ CREATE INDEX IF NOT EXISTS idx_subsystems_status ON subsystems(status);
 - `status`: Trạng thái ('active', 'deprecated', 'archived')
 
 **Ràng buộc:**
+
 - Cặp (`system_id`, `code`) phải duy nhất
 - `ON DELETE CASCADE`: Xóa system sẽ xóa tất cả subsystems
 
@@ -129,6 +135,7 @@ CREATE INDEX IF NOT EXISTS idx_projects_dates ON projects(start_date, end_date);
 ```
 
 **Các trường:**
+
 - `project_id`: Khóa chính
 - `subsystem_id`: Khóa ngoại tới `subsystems`
 - `lead`: Người lãnh đạo dự án
@@ -136,6 +143,7 @@ CREATE INDEX IF NOT EXISTS idx_projects_dates ON projects(start_date, end_date);
 - `start_date`, `end_date`: Thời gian dự án
 
 **Ràng buộc:**
+
 - Cặp (`subsystem_id`, `code`) phải duy nhất
 - `ON DELETE CASCADE`: Xóa subsystem sẽ xóa tất cả projects
 
@@ -161,6 +169,7 @@ CREATE INDEX IF NOT EXISTS idx_batches_status ON batches(status);
 ```
 
 **Các trường:**
+
 - `batch_id`: Khóa chính
 - `subsystem_id`: Khóa ngoại tới `subsystems`
 - `schedule_cron`: Cron expression cho lịch chạy
@@ -192,6 +201,7 @@ CREATE INDEX IF NOT EXISTS idx_project_sources_status ON project_sources(scan_st
 ```
 
 **Các trường:**
+
 - `source_id`: Khóa chính
 - `project_id`: Dự án sở hữu
 - `root_path`: Đường dẫn gốc tới repository
@@ -200,6 +210,7 @@ CREATE INDEX IF NOT EXISTS idx_project_sources_status ON project_sources(scan_st
 - `scan_status`: 'pending', 'scanning', 'complete', 'failed'
 
 **Use cases:**
+
 - Cho phép một project có nhiều source roots
 - Theo dõi trạng thái scan để tránh quét trùng lặp
 - Lưu commit hash để reproducibility
@@ -226,6 +237,7 @@ CREATE INDEX IF NOT EXISTS idx_source_files_language ON source_files(language);
 ```
 
 **Các trường:**
+
 - `file_id`: Khóa chính
 - `relative_path`: Đường dẫn tương đối từ `root_path`
 - `language`: Ngôn ngữ lập trình (Java, Python, JavaScript, v.v.)
@@ -233,6 +245,7 @@ CREATE INDEX IF NOT EXISTS idx_source_files_language ON source_files(language);
 - `is_binary`: Flag cho file nhị phân (0=text, 1=binary)
 
 **Checksum logic:**
+
 - Dùng để phát hiện thay đổi file
 - Nếu checksum giống nhau → bỏ qua re-parse AST
 - Nếu khác → trigger re-indexing
@@ -254,12 +267,14 @@ CREATE INDEX IF NOT EXISTS idx_file_deps_target ON file_dependencies(target_file
 ```
 
 **Các trường:**
+
 - `file_id`: File nguồn
 - `target_file_id`: File đích (được import/gọi)
 - `dependency_type`: Loại phụ thuộc ('import', 'call', 'extends', 'implements', 'reference')
 - `symbol_name`: Tên symbol (class, function, v.v.)
 
 **Use cases:**
+
 - Impact analysis: tìm files bị ảnh hưởng khi thay đổi một file
 - Visualize dependency graph
 - Detect circular dependencies
@@ -285,6 +300,7 @@ CREATE INDEX IF NOT EXISTS idx_ast_snapshots_commit ON ast_snapshots(commit_hash
 ```
 
 **Các trường:**
+
 - `snapshot_id`: Khóa chính
 - `source_id`: Source root được parse
 - `commit_hash`: Git commit tương ứng
@@ -292,6 +308,7 @@ CREATE INDEX IF NOT EXISTS idx_ast_snapshots_commit ON ast_snapshots(commit_hash
 - `root_checksum`: Checksum tổng hợp của toàn bộ source tree
 
 **Use cases:**
+
 - Snapshot management: so sánh AST giữa các commits
 - Historical analysis: rollback hoặc diff
 - Version tracking cho reproducibility
@@ -320,6 +337,7 @@ CREATE INDEX IF NOT EXISTS idx_ast_nodes_fq_name ON ast_nodes(fq_name);
 ```
 
 **Các trường:**
+
 - `node_id`: Khóa chính
 - `snapshot_id`: Snapshot chứa node này
 - `file_id`: File chứa node
@@ -331,6 +349,7 @@ CREATE INDEX IF NOT EXISTS idx_ast_nodes_fq_name ON ast_nodes(fq_name);
 - `payload`: JSON chứa attributes bổ sung (modifiers, parameters, return type, v.v.)
 
 **Payload example:**
+
 ```json
 {
   "modifiers": ["public", "static"],
@@ -361,19 +380,21 @@ CREATE INDEX IF NOT EXISTS idx_ast_rels_type ON ast_relationships(relation_type)
 ```
 
 **Các trường:**
+
 - `relationship_id`: Khóa chính
 - `parent_node_id`: Node cha
 - `child_node_id`: Node con
 - `relation_type`: Loại quan hệ:
-  - `parent`: Quan hệ cây AST (class chứa method)
-  - `calls`: Method A gọi method B
-  - `implements`: Class implements interface
-  - `extends`: Class extends base class
-  - `references`: Variable reference
-  - `overrides`: Method override
-  - `annotates`: Annotation relationship
+    - `parent`: Quan hệ cây AST (class chứa method)
+    - `calls`: Method A gọi method B
+    - `implements`: Class implements interface
+    - `extends`: Class extends base class
+    - `references`: Variable reference
+    - `overrides`: Method override
+    - `annotates`: Annotation relationship
 
 **Use cases:**
+
 - Traverse AST tree
 - Call graph analysis
 - Inheritance hierarchy
@@ -404,20 +425,22 @@ CREATE INDEX IF NOT EXISTS idx_search_corpus_checksum ON search_corpus(checksum)
 ```
 
 **Các trường:**
+
 - `corpus_id`: Khóa chính
 - `project_id`: Project chứa content
 - `file_id`: File nguồn (nếu có)
 - `source_type`: Loại nguồn:
-  - `code`: Mã nguồn
-  - `doc`: Documentation
-  - `kb_article`: Knowledge base article
-  - `chm_doc`: CHM documentation
-  - `response`: AI agent response (để reuse)
+    - `code`: Mã nguồn
+    - `doc`: Documentation
+    - `kb_article`: Knowledge base article
+    - `chm_doc`: CHM documentation
+    - `response`: AI agent response (để reuse)
 - `label`: Nhãn/tiêu đề (filename, article title)
 - `content`: Nội dung text đầy đủ
 - `checksum`: Hash để detect duplicates/changes
 
 **Use cases:**
+
 - Base table cho FTS5 index
 - Store normalized text cho search
 - Map search hits về file/project
@@ -437,12 +460,14 @@ CREATE VIRTUAL TABLE IF NOT EXISTS search_index USING fts5(
 ```
 
 **Cấu hình:**
+
 - `corpus_id`, `project_id`: UNINDEXED (không tham gia full-text, chỉ dùng để filter)
 - `source_type`, `label`, `content`: Được index để search
 - `tokenize='unicode61 remove_diacritics 2'`: Hỗ trợ Unicode, bỏ diacritics
 - `detail='column'`: Giữ chi tiết column để tính BM25 chính xác
 
 **Query syntax:**
+
 ```sql
 -- Basic search
 SELECT * FROM search_index WHERE search_index MATCH 'user authentication';
@@ -490,11 +515,13 @@ END;
 ```
 
 **Hoạt động:**
+
 - Tự động đồng bộ `search_corpus` → `search_index`
 - Không cần maintain index thủ công
 - Đảm bảo consistency
 
 **Maintenance:**
+
 ```sql
 -- Optimize index (nên chạy định kỳ)
 INSERT INTO search_index(search_index) VALUES('optimize');
@@ -528,6 +555,7 @@ CREATE INDEX IF NOT EXISTS idx_chm_imports_status ON chm_imports(status);
 ```
 
 **Các trường:**
+
 - `import_id`: Khóa chính
 - `system_id`, `subsystem_id`, `project_id`: Scope của import (có thể null)
 - `chm_path`: Đường dẫn tới file CHM gốc
@@ -536,6 +564,7 @@ CREATE INDEX IF NOT EXISTS idx_chm_imports_status ON chm_imports(status);
 - `status`: 'pending', 'extracting', 'complete', 'failed'
 
 **Workflow:**
+
 1. User chọn CHM file → insert row với `status='pending'`
 2. Background job extract CHM → update `status='extracting'`
 3. Parse HTML pages → populate `chm_documents`
@@ -561,6 +590,7 @@ CREATE INDEX IF NOT EXISTS idx_chm_documents_import ON chm_documents(import_id);
 ```
 
 **Các trường:**
+
 - `document_id`: Khóa chính
 - `import_id`: CHM import chứa document này
 - `relative_path`: Đường dẫn trong CHM (ví dụ: "topics/intro.html")
@@ -571,6 +601,7 @@ CREATE INDEX IF NOT EXISTS idx_chm_documents_import ON chm_documents(import_id);
 - `metadata`: JSON chứa thông tin bổ sung
 
 **Metadata example:**
+
 ```json
 {
   "original_encoding": "UTF-8",
@@ -597,6 +628,7 @@ CREATE INDEX IF NOT EXISTS idx_chm_assets_import ON chm_assets(import_id);
 ```
 
 **Các trường:**
+
 - `asset_id`: Khóa chính
 - `import_id`: CHM import chứa asset này
 - `relative_path`: Đường dẫn asset (images, CSS, JS)
@@ -605,6 +637,7 @@ CREATE INDEX IF NOT EXISTS idx_chm_assets_import ON chm_assets(import_id);
 - `checksum`: Hash để detect duplicates
 
 **Use cases:**
+
 - Track images, stylesheets từ CHM
 - Serve assets khi render documentation trong UI
 - Deduplicate common assets
@@ -638,6 +671,7 @@ CREATE INDEX IF NOT EXISTS idx_user_requests_created ON user_requests(created_at
 ```
 
 **Các trường:**
+
 - `request_id`: Khóa chính
 - `user_id`: Người tạo request
 - `subsystem_id`, `project_id`: Scope của request
@@ -665,14 +699,15 @@ CREATE INDEX IF NOT EXISTS idx_request_artifacts_type ON request_artifacts(artif
 ```
 
 **Các trường:**
+
 - `artifact_id`: Khóa chính
 - `request_id`: Request liên quan
 - `artifact_type`: Loại artifact:
-  - `file`: File đính kèm
-  - `code_segment`: Đoạn code
-  - `document`: Tài liệu
-  - `url`: Link tham khảo
-  - `retrieved_chunk`: Chunk từ RAG retrieval
+    - `file`: File đính kèm
+    - `code_segment`: Đoạn code
+    - `document`: Tài liệu
+    - `url`: Link tham khảo
+    - `retrieved_chunk`: Chunk từ RAG retrieval
 - `reference_path`: Đường dẫn/URL
 - `metadata`: JSON với thông tin bổ sung
 - `content_hash`: Hash của content
@@ -695,6 +730,7 @@ CREATE INDEX IF NOT EXISTS idx_agent_responses_status ON agent_responses(status)
 ```
 
 **Các trường:**
+
 - `response_id`: Khóa chính
 - `request_id`: Request được trả lời
 - `answer_text`: Câu trả lời từ AI
@@ -703,6 +739,7 @@ CREATE INDEX IF NOT EXISTS idx_agent_responses_status ON agent_responses(status)
 - `status`: 'draft', 'complete', 'edited'
 
 **cited_sources example:**
+
 ```json
 [
   {
@@ -737,12 +774,14 @@ CREATE INDEX IF NOT EXISTS idx_answer_feedback_rating ON answer_feedback(rating)
 ```
 
 **Các trường:**
+
 - `feedback_id`: Khóa chính
 - `response_id`: Response được đánh giá
 - `rating`: Điểm 1-5 (1=rất tệ, 5=rất tốt)
 - `comment`: Nhận xét chi tiết
 
 **Use cases:**
+
 - Quality monitoring
 - Continuous improvement
 - Identify problematic responses
@@ -774,6 +813,7 @@ CREATE INDEX IF NOT EXISTS idx_vector_docs_qdrant ON vector_documents(qdrant_poi
 ```
 
 **Các trường:**
+
 - `document_id`: Khóa chính SQLite
 - `project_id`: Project chứa document
 - `file_id`: File nguồn (nếu có)
@@ -784,6 +824,7 @@ CREATE INDEX IF NOT EXISTS idx_vector_docs_qdrant ON vector_documents(qdrant_poi
 - `qdrant_point`: ID của point trong Qdrant
 
 **Metadata example:**
+
 ```json
 {
   "language": "java",
@@ -797,6 +838,7 @@ CREATE INDEX IF NOT EXISTS idx_vector_docs_qdrant ON vector_documents(qdrant_poi
 ```
 
 **Qdrant payload (stored in Qdrant):**
+
 ```json
 {
   "chunk_id": "abc123",
@@ -835,6 +877,7 @@ CREATE INDEX IF NOT EXISTS idx_review_comments_severity ON review_comments(sever
 ```
 
 **Các trường:**
+
 - `comment_id`: Khóa chính
 - `request_id`: Request trigger review (nếu có)
 - `file_id`: File được review
@@ -861,6 +904,7 @@ CREATE INDEX IF NOT EXISTS idx_test_catalog_scope ON test_catalog(scope);
 ```
 
 **Các trường:**
+
 - `test_id`: Khóa chính
 - `name`: Tên test case
 - `description`: Mô tả test
@@ -886,6 +930,7 @@ CREATE INDEX IF NOT EXISTS idx_test_recs_priority ON test_recommendations(priori
 ```
 
 **Các trường:**
+
 - `recommendation_id`: Khóa chính
 - `request_id`: Request yêu cầu test
 - `test_type`: 'unit', 'integration', 'boundary', 'i18n', 'security'
@@ -929,6 +974,7 @@ erDiagram
 ```
 
 **Chú thích:**
+
 - `||--o{`: Quan hệ 1-nhiều bắt buộc
 - `||..o{`: Quan hệ 1-nhiều tùy chọn (nullable foreign key)
 
@@ -1037,26 +1083,28 @@ erDiagram
 ### 12.1 Index Strategy
 
 **Ưu tiên cao:**
+
 - Foreign keys: Luôn tạo index trên FK để JOIN nhanh
 - Status fields: Để filter theo trạng thái
 - Dates/timestamps: Để query range
 - Checksum: Để lookup nhanh
 
 **Optional indexes:**
+
 - Full-text fields: Dùng FTS5 thay vì B-tree
 - Large TEXT fields: Không nên index trực tiếp
 
 ### 12.2 Performance Tips
 
 1. **Batch Operations:**
-   - Dùng transactions cho bulk inserts
-   - Batch size: 500-1000 rows
-   - Disable triggers nếu cần import lớn
+    - Dùng transactions cho bulk inserts
+    - Batch size: 500-1000 rows
+    - Disable triggers nếu cần import lớn
 
 2. **Checksum Logic:**
-   - Tránh re-parse files không đổi
-   - Cache embeddings theo checksum
-   - Incremental updates only
+    - Tránh re-parse files không đổi
+    - Cache embeddings theo checksum
+    - Incremental updates only
 
 3. **FTS5 Maintenance:**
    ```sql
@@ -1068,13 +1116,13 @@ erDiagram
    ```
 
 4. **Compression:**
-   - Compress large `payload` fields (JSON)
-   - Consider BLOB storage cho AST snapshots lớn
-   - External storage cho binary assets
+    - Compress large `payload` fields (JSON)
+    - Consider BLOB storage cho AST snapshots lớn
+    - External storage cho binary assets
 
 5. **Sharding (future):**
-   - Partition theo `project_id` nếu quá lớn
-   - Separate Qdrant collections per subsystem
+    - Partition theo `project_id` nếu quá lớn
+    - Separate Qdrant collections per subsystem
 
 ### 12.3 Backup & Migration
 
@@ -1095,6 +1143,7 @@ EOF
 ```
 
 **Migration strategy:**
+
 - Sử dụng versioned migration scripts (V0001__init.sql, V0002__add_chm.sql)
 - Store migration version in `schema_version` table
 - Forward-only migrations
@@ -1110,6 +1159,7 @@ PRAGMA foreign_keys = ON;
 ```
 
 **Luôn bật foreign keys để:**
+
 - Đảm bảo referential integrity
 - Cascade deletes tự động
 - Prevent orphaned records
@@ -1117,18 +1167,19 @@ PRAGMA foreign_keys = ON;
 ### 13.2 Data Sanitization
 
 1. **Before indexing:**
-   - Strip credentials/secrets từ code
-   - Remove PII từ comments
-   - Escape SQL injection patterns
+    - Strip credentials/secrets từ code
+    - Remove PII từ comments
+    - Escape SQL injection patterns
 
 2. **User input:**
-   - Parameterized queries (no string concatenation)
-   - Validate FTS5 query syntax
-   - Escape markdown/HTML trong UI
+    - Parameterized queries (no string concatenation)
+    - Validate FTS5 query syntax
+    - Escape markdown/HTML trong UI
 
 ### 13.3 Access Control
 
 **Future enhancement:**
+
 ```sql
 CREATE TABLE IF NOT EXISTS user_permissions (
     permission_id INTEGER PRIMARY KEY,
@@ -1141,6 +1192,7 @@ CREATE TABLE IF NOT EXISTS user_permissions (
 ```
 
 **Permissions:**
+
 - `read`: Xem dữ liệu
 - `write`: Sửa dữ liệu
 - `delete`: Xóa dữ liệu
@@ -1233,6 +1285,7 @@ LIMIT 30;
 ### 15.2 Telemetry Events
 
 Log các events sau:
+
 - Source scan started/completed
 - AST snapshot created
 - Embedding generated
@@ -1295,6 +1348,7 @@ VALUES ('V0001', 'System hierarchy tables');
 ### 17.1 Enumerations
 
 **source_type:**
+
 - `code`: Source code files
 - `doc`: Documentation (Markdown, HTML)
 - `kb_article`: Knowledge base articles
@@ -1302,12 +1356,14 @@ VALUES ('V0001', 'System hierarchy tables');
 - `response`: AI agent responses
 
 **node_type:**
+
 - `class`, `interface`, `enum`, `annotation`
 - `method`, `function`, `constructor`
 - `field`, `variable`, `parameter`
 - `import`, `package`, `module`
 
 **relation_type:**
+
 - `parent`: AST tree parent-child
 - `calls`: Method invocation
 - `implements`: Interface implementation
@@ -1317,6 +1373,7 @@ VALUES ('V0001', 'System hierarchy tables');
 - `annotates`: Annotation application
 
 **dependency_type:**
+
 - `import`: Static import
 - `call`: Method call across files
 - `extends`: Inheritance
@@ -1324,12 +1381,14 @@ VALUES ('V0001', 'System hierarchy tables');
 - `reference`: Field/constant reference
 
 **scan_status:**
+
 - `pending`: Chờ quét
 - `scanning`: Đang quét
 - `complete`: Hoàn thành
 - `failed`: Lỗi
 
 **request_type:**
+
 - `question`: Câu hỏi chung
 - `feature`: Yêu cầu tính năng
 - `bug`: Báo lỗi
@@ -1337,6 +1396,7 @@ VALUES ('V0001', 'System hierarchy tables');
 - `review`: Code review
 
 **severity:**
+
 - `info`: Thông tin
 - `warning`: Cảnh báo
 - `error`: Lỗi
@@ -1391,9 +1451,10 @@ Schema này cung cấp nền tảng hoàn chỉnh cho hệ thống PCM Desktop, 
 ✅ **CHM Integration**: Legacy documentation  
 ✅ **Request Tracking**: User requests, AI responses, feedback  
 ✅ **Code Review**: Automated comments and suggestions  
-✅ **Test Management**: Test catalog and recommendations  
+✅ **Test Management**: Test catalog and recommendations
 
 **Next Steps:**
+
 1. Implement migration scripts
 2. Build DAO/Repository layer
 3. Create service layer with business logic

@@ -3,9 +3,9 @@
 @use "../settings/config" as cfg;
 @use "button";
 
-$color-bg-selected:     -color-accent-emphasis  !default;
-$color-fg-selected:     -color-fg-emphasis      !default;
-$color-border-selected: -color-accent-emphasis  !default;
+$color-bg-selected: -color-accent-emphasis !default;
+$color-fg-selected: -color-fg-emphasis !default;
+$color-border-selected: -color-accent-emphasis !default;
 
 .toggle-button {
   @include button.base();
@@ -28,7 +28,7 @@ $color-border-selected: -color-accent-emphasis  !default;
   }
 
   &:show-mnemonics:selected {
-    >.mnemonic-underline {
+    > .mnemonic-underline {
       -fx-stroke: -color-button-fg-selected;
     }
   }

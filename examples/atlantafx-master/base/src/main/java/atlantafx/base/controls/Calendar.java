@@ -36,6 +36,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
+
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -71,8 +72,26 @@ import org.jspecify.annotations.Nullable;
  */
 public class Calendar extends Control {
 
+    private static final String DEFAULT_STYLE_CLASS = "calendar";
+    private final ObjectProperty<@Nullable LocalDate> value = new SimpleObjectProperty<>(this, "value");
+    private final ObjectProperty<@Nullable Chronology> chronology
+            = new SimpleObjectProperty<>(this, "chronology", null);
+    private final ObjectProperty<@Nullable Node> topNode
+            = new SimpleObjectProperty<>(this, "topNode", null);
+    private final ObjectProperty<@Nullable Node> bottomNode
+            = new SimpleObjectProperty<>(this, "bottomNode", null);
+
+    ///////////////////////////////////////////////////////////////////////////
+    // Properties                                                            //
+    ///////////////////////////////////////////////////////////////////////////
     protected @Nullable LocalDate lastValidDate = null;
     protected Chronology lastValidChronology = IsoChronology.INSTANCE;
+    /**
+     * A custom cell factory can be provided to customize individual day cells
+     * Refer to {@link DateCell} and {@link Cell} for more information on cell factories.
+     */
+    private @Nullable ObjectProperty<@Nullable Callback<Calendar, DateCell>> dayCellFactory;
+    private @Nullable BooleanProperty showWeekNumbers;
 
     /**
      * Creates a default Calendar instance with a <code>null</code>
@@ -118,6 +137,39 @@ public class Calendar extends Control {
     }
 
     /**
+     * Returns the CssMetaData associated with this class, which may include the
+     * CssMetaData of its superclasses.
+     */
+    public static List<CssMetaData<? extends Styleable, ?>> getClassCssMetaData() {
+        return StyleableProperties.STYLEABLES;
+    }
+
+    @SuppressWarnings("CatchAndPrintStackTrace")
+    static boolean isValidDate(Chronology chrono, @Nullable LocalDate date, int offset, ChronoUnit unit) {
+        if (date != null) {
+            try {
+                return isValidDate(chrono, date.plus(offset, unit));
+            } catch (DateTimeException e) {
+                e.printStackTrace();
+            }
+        }
+        return false;
+    }
+
+    @SuppressWarnings("ReturnValueIgnored")
+    static boolean isValidDate(Chronology chrono, @Nullable LocalDate date) {
+        try {
+            if (date != null) {
+                chrono.date(date);
+            }
+            return true;
+        } catch (DateTimeException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override
@@ -125,18 +177,12 @@ public class Calendar extends Control {
         return new CalendarSkin(this);
     }
 
-    ///////////////////////////////////////////////////////////////////////////
-    // Properties                                                            //
-    ///////////////////////////////////////////////////////////////////////////
-
     /**
      * Represents the currently selected {@link LocalDate}. The default value is null.
      */
     public ObjectProperty<@Nullable LocalDate> valueProperty() {
         return value;
     }
-
-    private final ObjectProperty<@Nullable LocalDate> value = new SimpleObjectProperty<>(this, "value");
 
     public final @Nullable LocalDate getValue() {
         return valueProperty().get();
@@ -146,18 +192,12 @@ public class Calendar extends Control {
         valueProperty().set(value);
     }
 
-    /**
-     * A custom cell factory can be provided to customize individual day cells
-     * Refer to {@link DateCell} and {@link Cell} for more information on cell factories.
-     */
-    private @Nullable ObjectProperty<@Nullable Callback<Calendar, DateCell>> dayCellFactory;
+    public final @Nullable Callback<Calendar, DateCell> getDayCellFactory() {
+        return (dayCellFactory != null) ? dayCellFactory.get() : null;
+    }
 
     public final void setDayCellFactory(@Nullable Callback<Calendar, DateCell> value) {
         dayCellFactoryProperty().set(value);
-    }
-
-    public final @Nullable Callback<Calendar, DateCell> getDayCellFactory() {
-        return (dayCellFactory != null) ? dayCellFactory.get() : null;
     }
 
     public final ObjectProperty<@Nullable Callback<Calendar, DateCell>> dayCellFactoryProperty() {
@@ -181,9 +221,6 @@ public class Calendar extends Control {
     public ObjectProperty<@Nullable Chronology> chronologyProperty() {
         return chronology;
     }
-
-    private final ObjectProperty<@Nullable Chronology> chronology
-        = new SimpleObjectProperty<>(this, "chronology", null);
 
     @SuppressWarnings("CatchAndPrintStackTrace")
     public final Chronology getChronology() {
@@ -235,14 +272,12 @@ public class Calendar extends Control {
         return showWeekNumbers;
     }
 
-    private @Nullable BooleanProperty showWeekNumbers;
+    public final boolean isShowWeekNumbers() {
+        return showWeekNumbersProperty().getValue();
+    }
 
     public final void setShowWeekNumbers(boolean value) {
         showWeekNumbersProperty().setValue(value);
-    }
-
-    public final boolean isShowWeekNumbers() {
-        return showWeekNumbersProperty().getValue();
     }
 
     /**
@@ -252,15 +287,16 @@ public class Calendar extends Control {
         return topNode;
     }
 
-    private final ObjectProperty<@Nullable Node> topNode
-        = new SimpleObjectProperty<>(this, "topNode", null);
+    public final @Nullable Node getTopNode() {
+        return topNode.getValue();
+    }
+
+    ///////////////////////////////////////////////////////////////////////////
+    // Stylesheet Handling                                                   //
+    ///////////////////////////////////////////////////////////////////////////
 
     public final void setTopNode(@Nullable Node value) {
         topNode.setValue(value);
-    }
-
-    public final @Nullable Node getTopNode() {
-        return topNode.getValue();
     }
 
     /**
@@ -270,54 +306,12 @@ public class Calendar extends Control {
         return bottomNode;
     }
 
-    private final ObjectProperty<@Nullable Node> bottomNode
-        = new SimpleObjectProperty<>(this, "bottomNode", null);
-
-    public final void setBottomNode(@Nullable Node value) {
-        bottomNode.setValue(value);
-    }
-
     public final @Nullable Node getBottomNode() {
         return bottomNode.getValue();
     }
 
-    ///////////////////////////////////////////////////////////////////////////
-    // Stylesheet Handling                                                   //
-    ///////////////////////////////////////////////////////////////////////////
-
-    private static final String DEFAULT_STYLE_CLASS = "calendar";
-
-    private static class StyleableProperties {
-
-        private static final List<CssMetaData<? extends Styleable, ?>> STYLEABLES;
-
-        private static final CssMetaData<Calendar, Boolean> SHOW_WEEK_NUMBERS =
-            new CssMetaData<>("-fx-show-week-numbers", BooleanConverter.getInstance(), false) {
-                @Override
-                public boolean isSettable(Calendar n) {
-                    return n.showWeekNumbers == null || !n.showWeekNumbers.isBound();
-                }
-
-                @Override
-                @SuppressWarnings("RedundantCast")
-                public StyleableProperty<Boolean> getStyleableProperty(Calendar n) {
-                    return (StyleableProperty<Boolean>) (WritableValue<Boolean>) n.showWeekNumbersProperty();
-                }
-            };
-
-        static {
-            final List<CssMetaData<? extends Styleable, ?>> styleables = new ArrayList<>(Control.getClassCssMetaData());
-            Collections.addAll(styleables, SHOW_WEEK_NUMBERS);
-            STYLEABLES = Collections.unmodifiableList(styleables);
-        }
-    }
-
-    /**
-     * Returns the CssMetaData associated with this class, which may include the
-     * CssMetaData of its superclasses.
-     */
-    public static List<CssMetaData<? extends Styleable, ?>> getClassCssMetaData() {
-        return StyleableProperties.STYLEABLES;
+    public final void setBottomNode(@Nullable Node value) {
+        bottomNode.setValue(value);
     }
 
     /**
@@ -328,28 +322,28 @@ public class Calendar extends Control {
         return getClassCssMetaData();
     }
 
-    @SuppressWarnings("CatchAndPrintStackTrace")
-    static boolean isValidDate(Chronology chrono, @Nullable LocalDate date, int offset, ChronoUnit unit) {
-        if (date != null) {
-            try {
-                return isValidDate(chrono, date.plus(offset, unit));
-            } catch (DateTimeException e) {
-                e.printStackTrace();
-            }
-        }
-        return false;
-    }
+    private static class StyleableProperties {
 
-    @SuppressWarnings("ReturnValueIgnored")
-    static boolean isValidDate(Chronology chrono, @Nullable LocalDate date) {
-        try {
-            if (date != null) {
-                chrono.date(date);
-            }
-            return true;
-        } catch (DateTimeException e) {
-            e.printStackTrace();
-            return false;
-        }
+        private static final List<CssMetaData<? extends Styleable, ?>> STYLEABLES;
+
+        static {
+            final List<CssMetaData<? extends Styleable, ?>> styleables = new ArrayList<>(Control.getClassCssMetaData());
+            Collections.addAll(styleables, SHOW_WEEK_NUMBERS);
+            STYLEABLES = Collections.unmodifiableList(styleables);
+        }        private static final CssMetaData<Calendar, Boolean> SHOW_WEEK_NUMBERS =
+                new CssMetaData<>("-fx-show-week-numbers", BooleanConverter.getInstance(), false) {
+                    @Override
+                    public boolean isSettable(Calendar n) {
+                        return n.showWeekNumbers == null || !n.showWeekNumbers.isBound();
+                    }
+
+                    @Override
+                    @SuppressWarnings("RedundantCast")
+                    public StyleableProperty<Boolean> getStyleableProperty(Calendar n) {
+                        return (StyleableProperty<Boolean>) (WritableValue<Boolean>) n.showWeekNumbersProperty();
+                    }
+                };
+
+
     }
 }

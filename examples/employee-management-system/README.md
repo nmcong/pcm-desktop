@@ -5,6 +5,7 @@ Hệ thống quản lý nhân sự được xây dựng bằng Spring MVC, MyBat
 ## Tính năng
 
 ### 1. Quản lý Nhân viên
+
 - ✅ Thêm nhân viên mới
 - ✅ Xem danh sách nhân viên
 - ✅ Xem chi tiết nhân viên
@@ -15,10 +16,12 @@ Hệ thống quản lý nhân sự được xây dựng bằng Spring MVC, MyBat
 - ✅ Validation dữ liệu (mã nhân viên, email unique)
 
 ### 2. Quản lý Phòng ban
+
 - ✅ Xem danh sách phòng ban
 - ✅ Xem nhân viên theo phòng ban
 
 ### 3. Dashboard
+
 - ✅ Thống kê tổng số nhân viên
 - ✅ Thống kê nhân viên đang làm việc
 - ✅ Thống kê số phòng ban
@@ -27,6 +30,7 @@ Hệ thống quản lý nhân sự được xây dựng bằng Spring MVC, MyBat
 ## Công nghệ sử dụng
 
 ### Backend
+
 - **Spring MVC 6.0.13** - Web Framework
 - **MyBatis 3.5.13** - ORM Framework
 - **H2 Database 2.2.224** - In-memory Database
@@ -34,12 +38,14 @@ Hệ thống quản lý nhân sự được xây dựng bằng Spring MVC, MyBat
 - **Java 17** - Programming Language
 
 ### Frontend
+
 - **JSP & JSTL** - View Technology
 - **Bootstrap 5.3** - CSS Framework
 - **jQuery 3.7.1** - JavaScript Library
 - **Bootstrap Icons** - Icon Library
 
 ### Other
+
 - **Lombok** - Boilerplate Code Reduction
 - **Logback** - Logging Framework
 - **Jakarta Validation** - Bean Validation
@@ -122,7 +128,8 @@ Copy file `target/employee-management.war` vào thư mục `webapps` của Tomca
 
 ## Cấu hình Database
 
-Dự án sử dụng **H2 in-memory database** nên không cần cài đặt database riêng. Database sẽ được khởi tạo tự động khi ứng dụng chạy.
+Dự án sử dụng **H2 in-memory database** nên không cần cài đặt database riêng. Database sẽ được khởi tạo tự động khi ứng
+dụng chạy.
 
 ### Cấu hình hiện tại (trong spring-mvc-config.xml):
 
@@ -142,12 +149,14 @@ Nếu muốn xem database qua H2 Console, thêm dependency sau vào `pom.xml` v�
 ## Sample Data
 
 Hệ thống đã có sẵn dữ liệu mẫu:
+
 - **6 phòng ban**: Kỹ thuật, Nhân sự, Kế toán, Marketing, Kinh doanh, Hành chính
 - **10 nhân viên** với đầy đủ thông tin
 
 ## API Endpoints
 
 ### Web Pages (JSP)
+
 - `GET /` - Dashboard/Trang chủ
 - `GET /employees` - Danh sách nhân viên
 - `GET /employees/new` - Form thêm nhân viên
@@ -159,6 +168,7 @@ Hệ thống đã có sẵn dữ liệu mẫu:
 - `GET /departments` - Danh sách phòng ban
 
 ### REST API (AJAX)
+
 - `GET /employees/api/{id}` - Lấy thông tin nhân viên (JSON)
 - `GET /employees/api/search?keyword=` - Tìm kiếm nhân viên (JSON)
 - `GET /employees/api/check-code?code=&excludeId=` - Kiểm tra mã nhân viên
@@ -169,11 +179,13 @@ Hệ thống đã có sẵn dữ liệu mẫu:
 ## Tính năng nổi bật
 
 ### 1. Validation
+
 - ✅ Server-side validation với Jakarta Validation
 - ✅ Client-side validation với jQuery
 - ✅ Real-time validation (check unique constraints)
 
 ### 2. User Experience
+
 - ✅ Responsive design với Bootstrap 5
 - ✅ Flash messages (success, error)
 - ✅ Confirmation dialogs
@@ -182,11 +194,13 @@ Hệ thống đã có sẵn dữ liệu mẫu:
 - ✅ Smooth animations
 
 ### 3. Search & Filter
+
 - ✅ Tìm kiếm theo multiple fields
 - ✅ Lọc theo phòng ban
 - ✅ Debounced search
 
 ### 4. Code Quality
+
 - ✅ Clean architecture (Controller → Service → Mapper)
 - ✅ DTOs for data transfer
 - ✅ Logging với Logback
@@ -213,6 +227,7 @@ Hệ thống đã có sẵn dữ liệu mẫu:
 ## Troubleshooting
 
 ### Port đã được sử dụng
+
 Thay đổi port trong plugin Jetty trong `pom.xml`:
 
 ```xml
@@ -222,6 +237,7 @@ Thay đổi port trong plugin Jetty trong `pom.xml`:
 ```
 
 ### Lỗi build
+
 Kiểm tra Java version:
 
 ```bash
@@ -230,6 +246,7 @@ mvn -version   # Should be 3.6+
 ```
 
 ### Database không khởi tạo
+
 Kiểm tra logs trong thư mục `logs/` để xem lỗi chi tiết.
 
 ## Tác giả

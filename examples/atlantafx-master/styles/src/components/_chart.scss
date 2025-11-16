@@ -5,20 +5,20 @@
 .chart {
   -fx-padding: 4px;
 
-  >.chart-title {
+  > .chart-title {
     -fx-font-size: cfg.$font-title-4;
   }
 
-  >.chart-content {
+  > .chart-content {
     -fx-padding: 10px;
 
-    >.chart-plot-background {
+    > .chart-plot-background {
       -fx-background-color: -color-bg-default;
     }
   }
 
   &:disabled {
-    >.chart-content {
+    > .chart-content {
 
       // prevent opacity from being applied twice
       .label {
@@ -29,7 +29,7 @@
     }
   }
 
-  >.chart-legend {
+  > .chart-legend {
     -fx-padding: 6px;
   }
 
@@ -54,18 +54,18 @@
       -fx-border-color: transparent -fx-axis-color transparent transparent;
     }
 
-    &:top>.axis-label,
-    &:left>.axis-label {
+    &:top > .axis-label,
+    &:left > .axis-label {
       -fx-padding: 0 0 4px 0;
     }
 
-    &:bottom>.axis-label,
-    &:right>.axis-label {
+    &:bottom > .axis-label,
+    &:right > .axis-label {
       -fx-padding: 4px 0 0 0;
     }
 
-    >.axis-tick-mark,
-    >.axis-minor-tick-mark {
+    > .axis-tick-mark,
+    > .axis-minor-tick-mark {
       -fx-fill: none;
       -fx-stroke: -fx-axis-color;
     }
@@ -369,9 +369,9 @@
 .chart-bubble {
   -fx-bubble-fill: -color-chart-1-alpha70;
   -fx-background-color: radial-gradient(center 50% 50%,
-      radius 80%,
-      derive(-fx-bubble-fill, 20%),
-      derive(-fx-bubble-fill, -30%));
+    radius 80%,
+    derive(-fx-bubble-fill, 20%),
+    derive(-fx-bubble-fill, -30%));
 }
 
 .default-color0.chart-bubble {
@@ -413,11 +413,11 @@
 .chart-bar {
   -fx-bar-fill: -color-chart-1;
   -fx-background-color: linear-gradient(to right,
-      derive(-fx-bar-fill, -4%),
-      derive(-fx-bar-fill, -1%),
-      derive(-fx-bar-fill, 0%),
-      derive(-fx-bar-fill, -1%),
-      derive(-fx-bar-fill, -6%));
+    derive(-fx-bar-fill, -4%),
+    derive(-fx-bar-fill, -1%),
+    derive(-fx-bar-fill, 0%),
+    derive(-fx-bar-fill, -1%),
+    derive(-fx-bar-fill, -6%));
   -fx-background-insets: 0;
 }
 
@@ -432,11 +432,11 @@
 .bar-chart:horizontal .chart-bar,
 .stacked-bar-chart:horizontal .chart-bar {
   -fx-background-color: linear-gradient(to bottom,
-      derive(-fx-bar-fill, -4%),
-      derive(-fx-bar-fill, -1%),
-      derive(-fx-bar-fill, 0%),
-      derive(-fx-bar-fill, -1%),
-      derive(-fx-bar-fill, -6%));
+    derive(-fx-bar-fill, -4%),
+    derive(-fx-bar-fill, -1%),
+    derive(-fx-bar-fill, 0%),
+    derive(-fx-bar-fill, -1%),
+    derive(-fx-bar-fill, -6%));
 }
 
 .default-color0.chart-bar {
@@ -482,8 +482,8 @@
 .chart-pie {
   -fx-pie-color: -color-chart-1;
   -fx-background-color: radial-gradient(radius 100%,
-      derive(-fx-pie-color, 20%),
-      derive(-fx-pie-color, -10%));
+    derive(-fx-pie-color, 20%),
+    derive(-fx-pie-color, -10%));
   -fx-background-insets: 1;
   -fx-border-color: -color-bg-default;
 }

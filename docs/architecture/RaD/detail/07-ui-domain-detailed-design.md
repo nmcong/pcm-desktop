@@ -1,6 +1,7 @@
 # UI & Domain Overview - Detailed Design Specification
 
 **Tạo từ các file nguồn:**
+
 - `docs/RaD/ideas/ui-domain-overview.md`
 - `docs/RaD/ideas/ui-ui-review.md`
 
@@ -12,6 +13,7 @@
 ## 1. Tổng quan
 
 Tài liệu này consolidates các entities và screens được quản lý bởi PCM Desktop, bao gồm:
+
 1. **Core Domain Entities**: Tất cả domain objects và relationships
 2. **Screen Catalogue**: Chi tiết từng screen và chức năng
 3. **UI Architecture**: MVVM pattern và data binding
@@ -23,21 +25,21 @@ Tài liệu này consolidates các entities và screens được quản lý bở
 
 ### 2.1 Entity Overview
 
-| Entity | Description | Source Docs |
-|--------|-------------|-------------|
-| **System** | Top-level platform/business domain | Database schema |
-| **Subsystem** | Logical grouping (module, capability) | Database schema |
-| **Project** | Specific initiative/application | Database schema |
-| **Batch** | Scheduled job tied to subsystem | Database schema |
-| **Project Source** | Repository metadata (path, branch, commit) | Database schema |
-| **Source File** | File-level metadata (language, checksum) | Database schema |
-| **AST Snapshot/Node** | Structural representation of code | AST design |
-| **Vector Document** | Chunk metadata for embeddings | RAG design |
-| **Search Corpus Entry** | Text record for FTS/semantic search | Search design |
-| **CHM Import/Document** | Legacy docs from CHM packages | CHM design |
-| **User Request** | Question/requirement from users | Database schema |
-| **Agent Response** | Answer produced by LLM | RAG design |
-| **Feedback** | Evaluation for quality loop | Database schema |
+| Entity                  | Description                                | Source Docs     |
+|-------------------------|--------------------------------------------|-----------------|
+| **System**              | Top-level platform/business domain         | Database schema |
+| **Subsystem**           | Logical grouping (module, capability)      | Database schema |
+| **Project**             | Specific initiative/application            | Database schema |
+| **Batch**               | Scheduled job tied to subsystem            | Database schema |
+| **Project Source**      | Repository metadata (path, branch, commit) | Database schema |
+| **Source File**         | File-level metadata (language, checksum)   | Database schema |
+| **AST Snapshot/Node**   | Structural representation of code          | AST design      |
+| **Vector Document**     | Chunk metadata for embeddings              | RAG design      |
+| **Search Corpus Entry** | Text record for FTS/semantic search        | Search design   |
+| **CHM Import/Document** | Legacy docs from CHM packages              | CHM design      |
+| **User Request**        | Question/requirement from users            | Database schema |
+| **Agent Response**      | Answer produced by LLM                     | RAG design      |
+| **Feedback**            | Evaluation for quality loop                | Database schema |
 
 ### 2.2 Entity Relationship Diagram
 
@@ -81,6 +83,7 @@ erDiagram
 **Purpose:** Maintain System → Subsystem → Project → Batch structure
 
 **UI Components:**
+
 ```
 SystemManagerPage
 ├─ TreeView<HierarchyNode>
@@ -101,12 +104,14 @@ SystemManagerPage
 ```
 
 **Key Actions:**
+
 - Create/Edit/Delete entities
 - View ownership and metadata
 - Assign source repositories to projects
 - View batch schedules
 
 **ViewModel:**
+
 ```java
 public class SystemManagerViewModel {
     private final ObservableList<HierarchyNode> hierarchyTree = FXCollections.observableArrayList();
@@ -154,6 +159,7 @@ public class SystemManagerViewModel {
 **Purpose:** Register project source roots, track scan status, trigger re-scan
 
 **UI Components:**
+
 ```
 SourceManagerPage
 ├─ TableView<ProjectSource>
@@ -174,6 +180,7 @@ SourceManagerPage
 ```
 
 **Key Actions:**
+
 - Select folder as source root
 - Set VCS info (type, branch, commit)
 - View checksum/change status
@@ -182,6 +189,7 @@ SourceManagerPage
 **Data Sources:** `project_sources`, `source_files`, `ast_snapshots`
 
 **Scan Logic:**
+
 ```java
 public class SourceManagerViewModel {
     public void triggerScan(ProjectSource source) {
@@ -220,6 +228,7 @@ public class SourceManagerViewModel {
 **Purpose:** Visualize AST nodes, relationships, dependencies for impact analysis
 
 **UI Components:**
+
 ```
 AstExplorerPage
 ├─ SplitPane (horizontal)
@@ -237,6 +246,7 @@ AstExplorerPage
 ```
 
 **Features:**
+
 - Tree view per snapshot
 - Search symbol by name/type
 - Show references (inbound/outbound)
@@ -244,6 +254,7 @@ AstExplorerPage
 - Link to vector docs for context preview
 
 **Integration:**
+
 ```java
 public class AstExplorerViewModel {
     private final ObservableList<AstNode> searchResults = FXCollections.observableArrayList();
@@ -277,6 +288,7 @@ public class AstExplorerViewModel {
 **Purpose:** Run TF-IDF/BM25 queries over `search_corpus`
 
 **UI Components:**
+
 ```
 SearchConsolePage
 ├─ SearchBar
@@ -299,6 +311,7 @@ SearchConsolePage
 ```
 
 **Integration:**
+
 ```java
 public class SearchConsoleViewModel {
     public void executeSearch(String query, SearchFilters filters) {
@@ -351,6 +364,7 @@ public class SearchConsoleViewModel {
 **Purpose:** Manage CHM and other knowledge sources
 
 **UI Components:**
+
 ```
 KnowledgeImportPage
 ├─ TabPane
@@ -368,12 +382,14 @@ KnowledgeImportPage
 ```
 
 **Workflow:**
+
 1. User uploads CHM → track status (`chm_imports.status`)
 2. View extracted docs (`chm_documents`)
 3. Preview doc, set tags/mapping to subsystems
 4. Re-ingest, delete import
 
 **Implementation:**
+
 ```java
 public class KnowledgeImportViewModel {
     public void startChmImport(Path chmFile, Long projectId) {
@@ -410,6 +426,7 @@ public class KnowledgeImportViewModel {
 **Purpose:** User chat interface for requirement analysis
 
 **UI Components:**
+
 ```
 AIAssistantPage
 ├─ SideBar (conversations)
@@ -436,6 +453,7 @@ AIAssistantPage
 ```
 
 **Data Flow:**
+
 ```java
 public class AIAssistantViewModel {
     private final ObservableList<Message> messages = FXCollections.observableArrayList();
@@ -503,6 +521,7 @@ public class AIAssistantViewModel {
 **Purpose:** Dashboard to review all `user_requests`, statuses, assigned projects
 
 **UI Components:**
+
 ```
 RequestHistoryPage
 ├─ FilterBar
@@ -525,12 +544,14 @@ RequestHistoryPage
 ```
 
 **Features:**
+
 - Filter by date, project, status, rating
 - Link to responses and artifacts
 - View conversation history
 - Export to PDF/Markdown
 
 **Implementation:**
+
 ```java
 public class RequestHistoryViewModel {
     public void loadRequests(RequestFilters filters) {
@@ -565,6 +586,7 @@ public class RequestHistoryViewModel {
 **Purpose:** Theme/system settings plus analytics (retrieval latency, answer quality)
 
 **UI Components:**
+
 ```
 SettingsPage
 ├─ TabPane
@@ -594,6 +616,7 @@ SettingsPage
 ```
 
 **Analytics Queries:**
+
 ```java
 public class AnalyticsViewModel {
     public ChartData getRequestVolumeData(int days) {
@@ -645,6 +668,7 @@ public class AnalyticsViewModel {
 ```
 
 **Responsibilities:**
+
 - **View**: UI layout, rendering, user interactions
 - **ViewModel**: Observable properties, commands, state management
 - **Model**: Domain objects, repositories, services
@@ -722,10 +746,12 @@ public class SendMessageCommand implements Command {
 ### 5.1 DatabaseObjectsPage: Schema tree never updates
 
 **Issue:**
+
 - `updateSchemaTree()` called only once in constructor
 - `onPageActivated()` triggers async `loadDatabaseInfo()` but tree never observes changes
 
 **Fix:**
+
 ```java
 public class DatabaseObjectsPage extends VBox {
     public DatabaseObjectsPage(DatabaseObjectsViewModel viewModel) {
@@ -747,10 +773,12 @@ public class DatabaseObjectsPage extends VBox {
 ### 5.2 DatabaseObjectsPage: Object detail panel never reflects selection
 
 **Issue:**
+
 - Selection triggers `viewModel.selectSchemaObject()` but `objectDetails` never updated
 - `showObjectDetails()` method is unused
 
 **Fix:**
+
 ```java
 public DatabaseObjectsPage(DatabaseObjectsViewModel viewModel) {
     // ...
@@ -769,10 +797,12 @@ public DatabaseObjectsPage(DatabaseObjectsViewModel viewModel) {
 ### 5.3 AIAssistantPage: Chat messages never persist
 
 **Issue:**
+
 - `handleSendMessage()` shows messages in UI but never calls `ConversationService.addMessageToConversation()`
 - When `loadMessages()` runs, it reloads from repository (still old state)
 
 **Fix:**
+
 ```java
 private void handleSendMessage() {
     String input = messageInput.getText();
@@ -813,9 +843,11 @@ private void handleSendMessage() {
 ### 5.4 AIAssistantPage: Service calls block JavaFX thread
 
 **Issue:**
+
 - Methods like `handleSearch`, `loadConversations`, `loadMessages` call services synchronously on FX thread
 
 **Fix:**
+
 ```java
 private void loadConversations() {
     // Show loading indicator
@@ -853,10 +885,12 @@ private void handleSearch(String query) {
 ### 5.5 SettingsPage: Listeners registered repeatedly
 
 **Issue:**
+
 - `onPageActivated()` calls `loadSettings()` every time page shown
 - `loadSettings()` attaches new listeners without guarding against duplicates
 
 **Fix:**
+
 ```java
 public class SettingsViewModel {
     private boolean listenersRegistered = false;
@@ -889,12 +923,14 @@ public class SettingsViewModel {
 ### 6.1 Threading
 
 ✅ **DO:**
+
 - Always update UI on JavaFX Application Thread (`Platform.runLater()`)
 - Run long operations (I/O, network) on background threads
 - Use `Task` or `CompletableFuture` for async operations
 - Show progress indicators during loading
 
 ❌ **DON'T:**
+
 - Call repository/service methods directly from UI event handlers
 - Block FX thread with `Thread.sleep()` or synchronous waits
 - Update Observable collections from background threads
@@ -902,12 +938,14 @@ public class SettingsViewModel {
 ### 6.2 Data Binding
 
 ✅ **DO:**
+
 - Use bidirectional binding for input fields
 - Observe ViewModel properties in View
 - Keep ViewModel properties as `Property<T>` types
 - Bind button disabled state to validation rules
 
 ❌ **DON'T:**
+
 - Directly manipulate UI from ViewModel
 - Pass UI components to ViewModel
 - Mix business logic in View code
@@ -915,12 +953,14 @@ public class SettingsViewModel {
 ### 6.3 Error Handling
 
 ✅ **DO:**
+
 - Show user-friendly error messages in dialogs
 - Log detailed errors for debugging
 - Provide recovery options (Retry, Cancel)
 - Validate input before submitting
 
 ❌ **DON'T:**
+
 - Show stack traces to users
 - Silently swallow exceptions
 - Crash app on non-critical errors
@@ -930,6 +970,7 @@ public class SettingsViewModel {
 ## 7. Future UI Enhancements
 
 ### 7.1 Planned Features
+
 - **Dark mode**: Complete theme support
 - **Keyboard shortcuts**: Vim-style navigation
 - **Code diff viewer**: Side-by-side comparison
@@ -938,6 +979,7 @@ public class SettingsViewModel {
 - **Collaboration**: Share conversations, comments
 
 ### 7.2 Accessibility
+
 - Screen reader support (ARIA labels)
 - High contrast mode
 - Keyboard navigation for all features

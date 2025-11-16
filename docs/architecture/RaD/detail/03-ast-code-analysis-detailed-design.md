@@ -1,6 +1,7 @@
 # AST & Code Analysis - Detailed Design Specification
 
 **Tạo từ các file nguồn:**
+
 - `docs/RaD/ideas/ast-source-analysis.md`
 
 **Phiên bản:** 1.0  
@@ -10,7 +11,8 @@
 
 ## 1. Tổng quan
 
-Tài liệu này mô tả chi tiết hệ thống phân tích cú pháp trừu tượng (AST - Abstract Syntax Tree) và quản lý metadata mã nguồn trong PCM Desktop. Hệ thống này cung cấp:
+Tài liệu này mô tả chi tiết hệ thống phân tích cú pháp trừu tượng (AST - Abstract Syntax Tree) và quản lý metadata mã
+nguồn trong PCM Desktop. Hệ thống này cung cấp:
 
 - Biểu diễn cấu trúc chính xác của source code (theo commit/snapshot)
 - Theo dõi quan hệ giữa files, symbols và references
@@ -49,6 +51,7 @@ CREATE INDEX idx_source_files_language ON source_files(language);
 ```
 
 **Mục đích:**
+
 - File-level metadata cho change detection
 - Checksum để phát hiện modifications
 - Language classification cho parser selection
@@ -70,6 +73,7 @@ CREATE INDEX idx_ast_snapshots_commit ON ast_snapshots(commit_hash);
 ```
 
 **Mục đích:**
+
 - Capture each parsing run tied to specific code state
 - Link to VCS commit for reproducibility
 - Track parser version for compatibility
@@ -104,10 +108,10 @@ CREATE INDEX idx_ast_nodes_checksum ON ast_nodes(checksum);
 - `snapshot_id`: Snapshot chứa node này
 - `file_id`: File chứa node
 - `node_type`: Loại node
-  - `class`, `interface`, `enum`, `annotation`
-  - `method`, `function`, `constructor`
-  - `field`, `variable`, `parameter`
-  - `import`, `package`, `module`
+    - `class`, `interface`, `enum`, `annotation`
+    - `method`, `function`, `constructor`
+    - `field`, `variable`, `parameter`
+    - `import`, `package`, `module`
 - `name`: Tên đơn giản (ví dụ: "login")
 - `fq_name`: Fully qualified name (ví dụ: "com.example.AuthService.login")
 - `start_line`, `end_line`: Vị trí trong file
@@ -115,6 +119,7 @@ CREATE INDEX idx_ast_nodes_checksum ON ast_nodes(checksum);
 - `payload`: JSON với attributes bổ sung
 
 **Payload structure:**
+
 ```json
 {
   "modifiers": ["public", "static", "final"],
@@ -183,6 +188,7 @@ CREATE INDEX idx_file_deps_target ON file_dependencies(target_file_id);
 ```
 
 **Dependency types:**
+
 - `import`: Static import
 - `include`: C/C++ include
 - `require`: JavaScript/TypeScript require
@@ -1291,6 +1297,7 @@ public class CitationRenderer {
 
 **Documentation:**
 Authenticates a user with username and password.
+
 ```
 
 ---
@@ -1518,6 +1525,7 @@ LIMIT 20;
 ## 9. Future Enhancements
 
 ### 9.1 Multi-language Support
+
 - TypeScript/JavaScript (ESTree parser)
 - C/C++ (Clang libtooling)
 - Go (go/parser package)
@@ -1525,17 +1533,20 @@ LIMIT 20;
 - PHP (PHP-Parser)
 
 ### 9.2 Advanced Analysis
+
 - **Control Flow Graphs (CFG)**: Analyze execution paths
 - **Data Flow Analysis**: Track variable assignments and usage
 - **Taint Analysis**: Security vulnerability detection
 - **Dead Code Detection**: Find unused functions/classes
 
 ### 9.3 Incremental Parsing
+
 - Parse only changed files (based on checksum)
 - Reuse unchanged AST nodes from previous snapshot
 - Delta encoding for snapshot storage
 
 ### 9.4 Visualization
+
 - AST tree viewer in UI
 - Call graph visualization (D3.js)
 - Dependency graph (Graphviz)
@@ -1546,6 +1557,7 @@ LIMIT 20;
 ## 10. Best Practices
 
 ✅ **DO:**
+
 - Always create new snapshot for each significant code change
 - Use checksum to skip unchanged files
 - Batch insert nodes and relationships
@@ -1553,6 +1565,7 @@ LIMIT 20;
 - Compress large payloads
 
 ❌ **DON'T:**
+
 - Parse binary files
 - Store full AST in memory (use streaming)
 - Create snapshots for every minor change

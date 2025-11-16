@@ -8,10 +8,10 @@ import java.time.format.DateTimeFormatter;
  * Utility class for formatting dates in JSP
  */
 public class DateFormatter {
-    
+
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy");
     private static final DateTimeFormatter DATETIME_FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
-    
+
     /**
      * Format LocalDate to dd/MM/yyyy
      */
@@ -21,7 +21,7 @@ public class DateFormatter {
         }
         return date.format(DATE_FORMATTER);
     }
-    
+
     /**
      * Format LocalDateTime to dd/MM/yyyy HH:mm:ss
      */

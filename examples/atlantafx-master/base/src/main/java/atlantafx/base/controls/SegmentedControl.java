@@ -4,6 +4,7 @@ package atlantafx.base.controls;
 
 import java.util.Arrays;
 import java.util.Objects;
+
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
@@ -25,6 +26,13 @@ import org.jspecify.annotations.Nullable;
 public class SegmentedControl extends Control {
 
     protected static final Duration DEFAULT_ANIMATION_DURATION = Duration.millis(150);
+    protected final ObservableList<ToggleLabel> segments = FXCollections.observableArrayList();
+    protected final ObjectProperty<ToggleGroup> toggleGroup = new SimpleObjectProperty<>(
+            this, "toggleGroup", new ToggleGroup()
+    );
+    protected final ObjectProperty<Duration> animationDuration = new SimpleObjectProperty<>(
+            this, "animationDuration", DEFAULT_ANIMATION_DURATION
+    );
 
     public SegmentedControl() {
         super();
@@ -33,17 +41,21 @@ public class SegmentedControl extends Control {
         setFocusTraversable(false);
     }
 
-    public SegmentedControl(String @Nullable... segments) {
+    public SegmentedControl(String @Nullable ... segments) {
         this();
 
         if (segments != null) {
             this.segments.setAll(
-                Arrays.stream(segments).map(ToggleLabel::new).toList()
+                    Arrays.stream(segments).map(ToggleLabel::new).toList()
             );
         }
     }
 
-    public SegmentedControl(ToggleLabel @Nullable... segments) {
+    //=========================================================================
+    // Properties
+    //=========================================================================
+
+    public SegmentedControl(ToggleLabel @Nullable ... segments) {
         this();
 
         if (segments != null) {
@@ -70,10 +82,6 @@ public class SegmentedControl extends Control {
         return new SegmentedControlSkin(this);
     }
 
-    //=========================================================================
-    // Properties
-    //=========================================================================
-
     /**
      * Returns the list of buttons that this SegmentedButton consists of.
      */
@@ -81,18 +89,12 @@ public class SegmentedControl extends Control {
         return segments;
     }
 
-    protected final ObservableList<ToggleLabel> segments = FXCollections.observableArrayList();
-
     /**
      * The ToggleGroup that is used internally maintain the selection.
      */
     public ObjectProperty<ToggleGroup> toggleGroupProperty() {
         return toggleGroup;
     }
-
-    protected final ObjectProperty<ToggleGroup> toggleGroup = new SimpleObjectProperty<>(
-        this, "toggleGroup", new ToggleGroup()
-    );
 
     public ToggleGroup getToggleGroup() {
         return toggleGroupProperty().getValue();
@@ -109,10 +111,6 @@ public class SegmentedControl extends Control {
     public ObjectProperty<Duration> animationDurationProperty() {
         return animationDuration;
     }
-
-    protected final ObjectProperty<Duration> animationDuration = new SimpleObjectProperty<>(
-        this, "animationDuration", DEFAULT_ANIMATION_DURATION
-    );
 
     public Duration getAnimationDuration() {
         return animationDurationProperty().getValue();

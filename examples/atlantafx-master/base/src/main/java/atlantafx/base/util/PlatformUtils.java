@@ -8,10 +8,6 @@ package atlantafx.base.util;
  */
 public final class PlatformUtils {
 
-    private PlatformUtils() {
-        // Default constructor
-    }
-
     private static final String OS = System.getProperty("os.name", "generic").toLowerCase();
     private static final boolean WINDOWS = OS.startsWith("windows");
     private static final boolean MAC = OS.contains("mac") || OS.contains("darwin");
@@ -19,6 +15,9 @@ public final class PlatformUtils {
     private static final boolean FREE_BSD = OS.startsWith("freebsd");
     private static final boolean OPEN_BSD = OS.startsWith("openbsd");
     private static final boolean NET_BSD = OS.startsWith("netbsd");
+    private PlatformUtils() {
+        // Default constructor
+    }
 
     /**
      * Returns "true" if this is Windows.

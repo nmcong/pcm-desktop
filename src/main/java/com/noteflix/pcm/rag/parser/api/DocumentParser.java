@@ -1,6 +1,7 @@
 package com.noteflix.pcm.rag.parser.api;
 
 import com.noteflix.pcm.rag.model.RAGDocument;
+
 import java.io.IOException;
 import java.nio.file.Path;
 
@@ -14,27 +15,27 @@ import java.nio.file.Path;
  */
 public interface DocumentParser {
 
-  /**
-   * Check if parser can handle this file.
-   *
-   * @param filePath File path
-   * @return true if parser can handle
-   */
-  boolean canParse(Path filePath);
+    /**
+     * Check if parser can handle this file.
+     *
+     * @param filePath File path
+     * @return true if parser can handle
+     */
+    boolean canParse(Path filePath);
 
-  /**
-   * Parse file into RAG document.
-   *
-   * @param filePath File path
-   * @return Parsed document
-   * @throws IOException if parsing fails
-   */
-  RAGDocument parse(Path filePath) throws IOException;
+    /**
+     * Parse file into RAG document.
+     *
+     * @param filePath File path
+     * @return Parsed document
+     * @throws IOException if parsing fails
+     */
+    RAGDocument parse(Path filePath) throws IOException;
 
-  /**
-   * Get supported file extensions.
-   *
-   * @return Array of extensions (e.g., [".java", ".txt"])
-   */
-  String[] getSupportedExtensions();
+    /**
+     * Get supported file extensions.
+     *
+     * @return Array of extensions (e.g., [".java", ".txt"])
+     */
+    String[] getSupportedExtensions();
 }

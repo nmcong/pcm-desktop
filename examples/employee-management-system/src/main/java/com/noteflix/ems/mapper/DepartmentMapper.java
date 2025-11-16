@@ -10,37 +10,37 @@ import java.util.List;
  */
 @Mapper
 public interface DepartmentMapper {
-    
+
     /**
      * Find all departments
      */
     List<Department> findAll();
-    
+
     /**
      * Find department by ID
      */
     Department findById(Long id);
-    
+
     /**
      * Find department by name
      */
     Department findByName(String name);
-    
+
     /**
      * Insert new department
      */
     int insert(Department department);
-    
+
     /**
      * Update existing department
      */
     int update(Department department);
-    
+
     /**
      * Delete department by ID
      */
     int deleteById(Long id);
-    
+
     /**
      * Count total departments
      */

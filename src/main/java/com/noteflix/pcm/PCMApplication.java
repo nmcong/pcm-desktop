@@ -31,98 +31,100 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class PCMApplication extends Application {
 
-  public static void main(String[] args) {
-    log.info("🚀 Starting Project Cognition Mentor - AI-Powered System Analysis Tool...");
-    launch(args);
-  }
-
-  @Override
-  public void init() throws Exception {
-    super.init();
-
-    // Initialize DI container
-    log.info("🔧 Initializing Dependency Injection...");
-    Injector.getInstance(); // Initialize DI container and register default dependencies
-    log.info("✅ DI Container initialized");
-
-    // Initialize i18n
-    log.info("🌍 Initializing internationalization...");
-    I18n.setLocale("en"); // Default to English
-    log.info("✅ i18n initialized: {}", I18n.getCurrentLocale().getDisplayName());
-
-    // Run database migrations BEFORE UI initialization
-    log.info("🔄 Running database migrations...");
-    runDatabaseMigrations();
-    log.info("✅ Database initialization completed successfully");
-  }
-
-  @Override
-  public void start(Stage primaryStage) {
-    try {
-      log.info("Initializing application window...");
-
-      // Initialize ThemeManager with default light theme
-      ThemeManager themeManager = ThemeManager.getInstance();
-      log.info("✨ ThemeManager initialized");
-
-      // Create controller and view (Java-based, no FXML)
-      MainController controller = new MainController();
-      MainView mainView = new MainView(controller);
-      log.info("✅ Main view created with Java code (no FXML)");
-
-      // Create scene
-      Scene scene =
-          new Scene(
-              mainView, AppConstants.DEFAULT_WINDOW_WIDTH, AppConstants.DEFAULT_WINDOW_HEIGHT);
-
-      // Set scene reference in ThemeManager for CSS management
-      themeManager.setMainScene(scene);
-      themeManager.setTheme(false); // Start with light theme
-      log.info("✨ Theme system initialized with CSS management");
-
-      // Configure stage
-      primaryStage.setTitle(AppConstants.APP_TITLE);
-      primaryStage.setScene(scene);
-      primaryStage.setMinWidth(AppConstants.MIN_WINDOW_WIDTH);
-      primaryStage.setMinHeight(AppConstants.MIN_WINDOW_HEIGHT);
-
-      // Show window
-      primaryStage.show();
-
-      log.info("✅ Application started successfully");
-      log.info("🎨 UI built with pure Java code following AtlantaFX Sampler patterns");
-
-    } catch (Exception e) {
-      log.error("❌ Failed to start application", e);
-      throw new RuntimeException("Failed to load application UI", e);
+    public static void main(String[] args) {
+        log.info("🚀 Starting Project Cognition Mentor - AI-Powered System Analysis Tool...");
+        launch(args);
     }
-  }
 
-  /** Run database migrations */
-  private void runDatabaseMigrations() {
-    try {
-      DatabaseMigrationManager migrationManager =
-          new DatabaseMigrationManager(ConnectionManager.INSTANCE);
+    @Override
+    public void init() throws Exception {
+        super.init();
 
-      migrationManager.migrate();
+        // Initialize DI container
+        log.info("🔧 Initializing Dependency Injection...");
+        Injector.getInstance(); // Initialize DI container and register default dependencies
+        log.info("✅ DI Container initialized");
 
-      log.info("✅ Database migrations completed");
+        // Initialize i18n
+        log.info("🌍 Initializing internationalization...");
+        I18n.setLocale("en"); // Default to English
+        log.info("✅ i18n initialized: {}", I18n.getCurrentLocale().getDisplayName());
 
-    } catch (Exception e) {
-      log.error("❌ Database migration failed", e);
-      throw new RuntimeException("Failed to run database migrations", e);
+        // Run database migrations BEFORE UI initialization
+        log.info("🔄 Running database migrations...");
+        runDatabaseMigrations();
+        log.info("✅ Database initialization completed successfully");
     }
-  }
 
-  @Override
-  public void stop() {
-    log.info("Shutting down Project Cognition Mentor...");
+    @Override
+    public void start(Stage primaryStage) {
+        try {
+            log.info("Initializing application window...");
 
-    // Shutdown async executor
-    Asyncs.shutdown();
-    log.info("✅ Async executor shutdown complete");
+            // Initialize ThemeManager with default light theme
+            ThemeManager themeManager = ThemeManager.getInstance();
+            log.info("✨ ThemeManager initialized");
 
-    // Other cleanup
-    log.info("✅ Application shutdown complete");
-  }
+            // Create controller and view (Java-based, no FXML)
+            MainController controller = new MainController();
+            MainView mainView = new MainView(controller);
+            log.info("✅ Main view created with Java code (no FXML)");
+
+            // Create scene
+            Scene scene =
+                    new Scene(
+                            mainView, AppConstants.DEFAULT_WINDOW_WIDTH, AppConstants.DEFAULT_WINDOW_HEIGHT);
+
+            // Set scene reference in ThemeManager for CSS management
+            themeManager.setMainScene(scene);
+            themeManager.setTheme(false); // Start with light theme
+            log.info("✨ Theme system initialized with CSS management");
+
+            // Configure stage
+            primaryStage.setTitle(AppConstants.APP_TITLE);
+            primaryStage.setScene(scene);
+            primaryStage.setMinWidth(AppConstants.MIN_WINDOW_WIDTH);
+            primaryStage.setMinHeight(AppConstants.MIN_WINDOW_HEIGHT);
+
+            // Show window
+            primaryStage.show();
+
+            log.info("✅ Application started successfully");
+            log.info("🎨 UI built with pure Java code following AtlantaFX Sampler patterns");
+
+        } catch (Exception e) {
+            log.error("❌ Failed to start application", e);
+            throw new RuntimeException("Failed to load application UI", e);
+        }
+    }
+
+    /**
+     * Run database migrations
+     */
+    private void runDatabaseMigrations() {
+        try {
+            DatabaseMigrationManager migrationManager =
+                    new DatabaseMigrationManager(ConnectionManager.INSTANCE);
+
+            migrationManager.migrate();
+
+            log.info("✅ Database migrations completed");
+
+        } catch (Exception e) {
+            log.error("❌ Database migration failed", e);
+            throw new RuntimeException("Failed to run database migrations", e);
+        }
+    }
+
+    @Override
+    public void stop() {
+        log.info("Shutting down Project Cognition Mentor...");
+
+        // Shutdown async executor
+        Asyncs.shutdown();
+        log.info("✅ Async executor shutdown complete");
+
+        // Other cleanup
+        log.info("✅ Application shutdown complete");
+    }
 }

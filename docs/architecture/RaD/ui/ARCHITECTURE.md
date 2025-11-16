@@ -226,12 +226,14 @@ public class MyPageViewModel extends BaseViewModel {
 #### View Rules
 
 ✅ **DO:**
+
 - Bind to ViewModel properties
 - Call ViewModel commands
 - Handle layout và styling
 - Display data from ViewModel
 
 ❌ **DON'T:**
+
 - Contains business logic
 - Direct service calls
 - Data manipulation
@@ -240,6 +242,7 @@ public class MyPageViewModel extends BaseViewModel {
 #### ViewModel Rules
 
 ✅ **DO:**
+
 - Expose Observable Properties
 - Coordinate services
 - Handle async operations
@@ -247,6 +250,7 @@ public class MyPageViewModel extends BaseViewModel {
 - Maintain UI state
 
 ❌ **DON'T:**
+
 - Reference JavaFX UI components
 - Know about View structure
 - Direct database access

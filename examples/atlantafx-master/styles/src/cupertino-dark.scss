@@ -4,42 +4,42 @@
 @use "settings/utils" as utils;
 
 // IOS dark color palette
-$systemBackground:                 rgba(0.0, 0.0, 0.0, 1.0);    // #000000ff
-$secondarySystemBackground:        rgba(28.0, 28.0, 30.0, 1.0); // #1c1c1eff
-$tertiarySystemBackground:         rgba(44.0, 44.0, 46.0, 1.0); // #2c2c2eff
-$systemGroupedBackground:          rgba(0.0, 0.0, 0.0, 1.0);    // #000000ff
+$systemBackground: rgba(0.0, 0.0, 0.0, 1.0); // #000000ff
+$secondarySystemBackground: rgba(28.0, 28.0, 30.0, 1.0); // #1c1c1eff
+$tertiarySystemBackground: rgba(44.0, 44.0, 46.0, 1.0); // #2c2c2eff
+$systemGroupedBackground: rgba(0.0, 0.0, 0.0, 1.0); // #000000ff
 $secondarySystemGroupedBackground: rgba(28.0, 28.0, 30.0, 1.0); // #1c1c1eff
-$tertiarySystemGroupedBackground:  rgba(44.0, 44.0, 46.0, 1.0); // #2c2c2eff
-$systemFill:           rgba(120.0, 120.0, 128.0, 0.36); // #7878805b
-$secondarySystemFill:  rgba(120.0, 120.0, 128.0, 0.32); // #78788051
-$tertiarySystemFill:   rgba(118.0, 118.0, 128.0, 0.24); // #7676803d
+$tertiarySystemGroupedBackground: rgba(44.0, 44.0, 46.0, 1.0); // #2c2c2eff
+$systemFill: rgba(120.0, 120.0, 128.0, 0.36); // #7878805b
+$secondarySystemFill: rgba(120.0, 120.0, 128.0, 0.32); // #78788051
+$tertiarySystemFill: rgba(118.0, 118.0, 128.0, 0.24); // #7676803d
 $quaternarySystemFill: rgba(118.0, 118.0, 128.0, 0.18); // #7676802d
-$systemBlue:   rgba(10.0, 132.0, 255.0, 1.0);  // #0a84ffff
-$systemGreen:  rgba(50.0, 215.0, 75.0, 1.0);   // #32d74bff
-$systemIndigo: rgba(94.0, 92.0, 230.0, 1.0);   // #5e5ce6ff
-$systemOrange: rgba(255.0, 159.0, 10.0, 1.0);  // #ff9f0aff
-$systemPink:   rgba(255.0, 55.0, 95.0, 1.0);   // #ff375fff
-$systemPurple: rgba(191.0, 90.0, 242.0, 1.0);  // #bf5af2ff
-$systemRed:    rgba(255.0, 69.0, 58.0, 1.0);   // #ff453aff
-$systemTeal:   rgba(100.0, 210.0, 255.0, 1.0); // #64d2ffff
-$systemYellow: rgba(255.0, 214.0, 10.0, 1.0);  // #ffd60aff
-$systemGray:   rgba(142.0, 142.0, 147.0, 1.0); // #8e8e93ff
-$systemGray2:  rgba(99.0, 99.0, 102.0, 1.0);   // #636366ff
-$systemGray3:  rgba(72.0, 72.0, 74.0, 1.0);    // #48484aff
-$systemGray4:  rgba(58.0, 58.0, 60.0, 1.0);    // #3a3a3cff
-$systemGray5:  rgba(44.0, 44.0, 46.0, 1.0);    // #2c2c2eff
-$systemGray6:  rgba(28.0, 28.0, 30.0, 1.0);    // #1c1c1eff
+$systemBlue: rgba(10.0, 132.0, 255.0, 1.0); // #0a84ffff
+$systemGreen: rgba(50.0, 215.0, 75.0, 1.0); // #32d74bff
+$systemIndigo: rgba(94.0, 92.0, 230.0, 1.0); // #5e5ce6ff
+$systemOrange: rgba(255.0, 159.0, 10.0, 1.0); // #ff9f0aff
+$systemPink: rgba(255.0, 55.0, 95.0, 1.0); // #ff375fff
+$systemPurple: rgba(191.0, 90.0, 242.0, 1.0); // #bf5af2ff
+$systemRed: rgba(255.0, 69.0, 58.0, 1.0); // #ff453aff
+$systemTeal: rgba(100.0, 210.0, 255.0, 1.0); // #64d2ffff
+$systemYellow: rgba(255.0, 214.0, 10.0, 1.0); // #ffd60aff
+$systemGray: rgba(142.0, 142.0, 147.0, 1.0); // #8e8e93ff
+$systemGray2: rgba(99.0, 99.0, 102.0, 1.0); // #636366ff
+$systemGray3: rgba(72.0, 72.0, 74.0, 1.0); // #48484aff
+$systemGray4: rgba(58.0, 58.0, 60.0, 1.0); // #3a3a3cff
+$systemGray5: rgba(44.0, 44.0, 46.0, 1.0); // #2c2c2eff
+$systemGray6: rgba(28.0, 28.0, 30.0, 1.0); // #1c1c1eff
 
-$darkText:        rgba(0.0, 0.0, 0.0, 1.0);        // #000000ff
-$lightText:       rgba(255.0, 255.0, 255.0, 0.6);  // #ffffff99
-$label:           rgba(255.0, 255.0, 255.0, 1.0);  // #ffffffff
-$secondaryLabel:  rgba(235.0, 235.0, 245.0, 0.6);  // #ebebf599
-$tertiaryLabel:   rgba(235.0, 235.0, 245.0, 0.3);  // #ebebf54c
+$darkText: rgba(0.0, 0.0, 0.0, 1.0); // #000000ff
+$lightText: rgba(255.0, 255.0, 255.0, 0.6); // #ffffff99
+$label: rgba(255.0, 255.0, 255.0, 1.0); // #ffffffff
+$secondaryLabel: rgba(235.0, 235.0, 245.0, 0.6); // #ebebf599
+$tertiaryLabel: rgba(235.0, 235.0, 245.0, 0.3); // #ebebf54c
 $quaternaryLabel: rgba(235.0, 235.0, 245.0, 0.18); // #ebebf52d
-$placeholderText: rgba(235.0, 235.0, 245.0, 0.3);  // #ebebf54c
-$link:            rgba(9.0, 132.0, 255.0, 1.0);    // #0984ffff
-$separator:       rgba(84.0, 84.0, 88.0, 0.6);     // #54545899
-$opaqueSeparator: rgba(56.0, 56.0, 58.0, 1.0);     // #38383aff
+$placeholderText: rgba(235.0, 235.0, 245.0, 0.3); // #ebebf54c
+$link: rgba(9.0, 132.0, 255.0, 1.0); // #0984ffff
+$separator: rgba(84.0, 84.0, 88.0, 0.6); // #54545899
+$opaqueSeparator: rgba(56.0, 56.0, 58.0, 1.0); // #38383aff
 
 @forward "settings/color-scale" with (
 

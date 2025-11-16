@@ -6,14 +6,14 @@ Qdrant là vector database hiệu suất cao, tối ưu cho semantic search vớ
 
 **So sánh Lucene vs Qdrant:**
 
-| Feature | Lucene (Hiện tại) | Qdrant |
-|---------|-------------------|--------|
-| **Search Type** | Keyword (BM25) | Semantic (Vector) |
-| **Deployment** | Embedded | Server hoặc Embedded |
-| **Setup** | ✅ Zero config | Cần setup |
-| **Performance** | Fast (text search) | Very fast (vector search) |
-| **Use Case** | Exact/keyword match | Semantic similarity |
-| **Offline** | ✅ 100% | ✅ (local mode) |
+| Feature         | Lucene (Hiện tại)   | Qdrant                    |
+|-----------------|---------------------|---------------------------|
+| **Search Type** | Keyword (BM25)      | Semantic (Vector)         |
+| **Deployment**  | Embedded            | Server hoặc Embedded      |
+| **Setup**       | ✅ Zero config       | Cần setup                 |
+| **Performance** | Fast (text search)  | Very fast (vector search) |
+| **Use Case**    | Exact/keyword match | Semantic similarity       |
+| **Offline**     | ✅ 100%              | ✅ (local mode)            |
 
 ---
 
@@ -22,6 +22,7 @@ Qdrant là vector database hiệu suất cao, tối ưu cho semantic search vớ
 ### Phương án 1: Qdrant Docker (RECOMMENDED) ⭐
 
 **Ưu điểm:**
+
 - ✅ Full-featured, production-ready
 - ✅ Easy setup
 - ✅ Web UI for monitoring
@@ -29,10 +30,12 @@ Qdrant là vector database hiệu suất cao, tối ưu cho semantic search vớ
 - ✅ Không ảnh hưởng JavaFX app
 
 **Nhược điểm:**
+
 - ⚠️ Cần Docker installed
 - ⚠️ Separate process (không embedded)
 
 **Setup:**
+
 ```bash
 # 1. Pull Qdrant image
 docker pull qdrant/qdrant
@@ -47,6 +50,7 @@ open http://localhost:6333/dashboard
 ```
 
 **Usage trong app:**
+
 ```java
 // Create Qdrant vector store (local)
 VectorStore store = VectorStoreFactory.create(
@@ -64,18 +68,21 @@ VectorStore store = VectorStoreFactory.create(
 ### Phương án 2: Qdrant Binary (Lightweight)
 
 **Ưu điểm:**
+
 - ✅ Không cần Docker
 - ✅ Single binary file
 - ✅ JavaFX có thể start/stop via `ProcessBuilder`
 - ✅ 100% offline
 
 **Nhược điểm:**
+
 - ⚠️ Cần download binary cho từng OS
 - ⚠️ Quản lý process lifecycle
 
 **Setup:**
 
 1. **Download Qdrant binary:**
+
 ```bash
 # macOS (ARM)
 wget https://github.com/qdrant/qdrant/releases/download/v1.7.0/qdrant-aarch64-apple-darwin.tar.gz
@@ -92,6 +99,7 @@ wget https://github.com/qdrant/qdrant/releases/download/v1.7.0/qdrant-x86_64-unk
 ```
 
 2. **Start Qdrant from JavaFX:**
+
 ```java
 public class QdrantEmbeddedManager {
     private Process qdrantProcess;
@@ -159,6 +167,7 @@ public class QdrantEmbeddedManager {
 ```
 
 3. **Integration với JavaFX lifecycle:**
+
 ```java
 public class PCMApplication extends Application {
     private QdrantEmbeddedManager qdrantManager;
@@ -190,16 +199,19 @@ public class PCMApplication extends Application {
 ### Phương án 3: Qdrant Cloud (Remote)
 
 **Ưu điểm:**
+
 - ✅ No setup required
 - ✅ Scalable
 - ✅ Automatic backups
 
 **Nhược điểm:**
+
 - ❌ NOT offline
 - ❌ Requires internet
 - ❌ Monthly cost
 
 **Usage:**
+
 ```java
 VectorStore store = VectorStoreFactory.create(
     VectorStoreConfig.qdrant(
@@ -215,6 +227,7 @@ VectorStore store = VectorStoreFactory.create(
 ### ⚠️ Phương án 4: Qdrant Embedded (KHÔNG KHẢ DỤNG)
 
 **Lý do:**
+
 - ❌ Qdrant **KHÔNG có** embedded Java version
 - ❌ Qdrant core viết bằng Rust
 - ❌ Không có JNI bindings official
@@ -228,6 +241,7 @@ VectorStore store = VectorStoreFactory.create(
 ### 1. Add Qdrant Java Client
 
 **Download:**
+
 ```bash
 # Qdrant Java client
 cd lib/rag
@@ -384,45 +398,48 @@ public class HybridRAGService implements RAGService {
 
 ## 📊 So sánh phương án
 
-| Phương án | Setup | Offline | Performance | Recommended |
-|-----------|-------|---------|-------------|-------------|
-| **Lucene (Hiện tại)** | ✅ Zero | ✅ Yes | ⚡ Fast | ✅ Always use |
-| **Qdrant Docker** | ⚠️ Medium | ✅ Yes | ⚡⚡⚡ Very fast | ✅ For advanced users |
-| **Qdrant Binary** | ⚠️ Medium | ✅ Yes | ⚡⚡⚡ Very fast | ✅ For distribution |
-| **Qdrant Cloud** | ✅ Easy | ❌ No | ⚡⚡⚡ Very fast | ❌ Not for PCM |
-| **Qdrant Embedded** | N/A | N/A | N/A | ❌ Not available |
+| Phương án             | Setup     | Offline | Performance   | Recommended          |
+|-----------------------|-----------|---------|---------------|----------------------|
+| **Lucene (Hiện tại)** | ✅ Zero    | ✅ Yes   | ⚡ Fast        | ✅ Always use         |
+| **Qdrant Docker**     | ⚠️ Medium | ✅ Yes   | ⚡⚡⚡ Very fast | ✅ For advanced users |
+| **Qdrant Binary**     | ⚠️ Medium | ✅ Yes   | ⚡⚡⚡ Very fast | ✅ For distribution   |
+| **Qdrant Cloud**      | ✅ Easy    | ❌ No    | ⚡⚡⚡ Very fast | ❌ Not for PCM        |
+| **Qdrant Embedded**   | N/A       | N/A     | N/A           | ❌ Not available      |
 
 ---
 
 ## 🎯 Recommendation cho PCM Desktop
 
 ### Phase 1 (Hiện tại): ✅ DONE
+
 - ✅ Use Lucene (embedded, zero config)
 - ✅ Fast keyword search
 - ✅ 100% offline
 - ✅ Production ready
 
 ### Phase 2 (Optional): Future Enhancement
+
 1. **Thêm Qdrant Docker support:**
-   - Detect if Qdrant is running on localhost:6333
-   - Auto-switch to hybrid mode if available
-   - Fallback to Lucene if not
+    - Detect if Qdrant is running on localhost:6333
+    - Auto-switch to hybrid mode if available
+    - Fallback to Lucene if not
 
 2. **Bundle Qdrant binary:**
-   - Include Qdrant binary trong distribution
-   - Auto-start via `ProcessBuilder`
-   - Manage lifecycle với JavaFX
+    - Include Qdrant binary trong distribution
+    - Auto-start via `ProcessBuilder`
+    - Manage lifecycle với JavaFX
 
 3. **Add embeddings:**
-   - Local embedding model (e.g., all-MiniLM-L6-v2)
-   - Generate vectors for documents
-   - Store in Qdrant
+    - Local embedding model (e.g., all-MiniLM-L6-v2)
+    - Generate vectors for documents
+    - Store in Qdrant
 
 ---
 
 ## 💡 Quick Start (Qdrant Docker)
 
 ### 1. Start Qdrant
+
 ```bash
 docker run -d --name qdrant \
     -p 6333:6333 \
@@ -431,6 +448,7 @@ docker run -d --name qdrant \
 ```
 
 ### 2. Update code
+
 ```java
 // In AIService or RAG initialization
 try {
@@ -447,6 +465,7 @@ try {
 ```
 
 ### 3. Check Qdrant
+
 ```bash
 # Web UI
 open http://localhost:6333/dashboard
@@ -464,21 +483,23 @@ curl http://localhost:6333/health
 **"Làm sao để chạy Qdrant embedded bên trong JavaFX?"**
 
 **Trả lời:**
+
 1. ❌ **TRUE embedded (trong JVM)**: KHÔNG KHẢ DỤNG
-   - Qdrant không có Java/JNI version
-   
+    - Qdrant không có Java/JNI version
+
 2. ✅ **Embedded (separate process)**: KHẢ DỤNG
-   - Download Qdrant binary
-   - Start via `ProcessBuilder` khi JavaFX start
-   - Stop khi JavaFX exit
-   - 100% offline, tự động
+    - Download Qdrant binary
+    - Start via `ProcessBuilder` khi JavaFX start
+    - Stop khi JavaFX exit
+    - 100% offline, tự động
 
 3. ✅ **Docker (recommended)**: KHẢ DỤNG
-   - Chạy Qdrant trong Docker
-   - JavaFX connect via HTTP
-   - Dễ setup, production-ready
+    - Chạy Qdrant trong Docker
+    - JavaFX connect via HTTP
+    - Dễ setup, production-ready
 
 **Recommendation:**
+
 - **Hiện tại**: Dùng Lucene (đã implement, works great!)
 - **Tương lai**: Add Qdrant Docker support (optional)
 - **Advanced**: Bundle Qdrant binary (cho distribution)

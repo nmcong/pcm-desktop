@@ -9,6 +9,7 @@ After the refactoring to MVVM architecture (v4.0.0), you need to rebuild the pro
 ## ⚠️ Expected Linter Errors (Before Build)
 
 You may see errors like:
+
 - `javafx.controls cannot be resolved to a module`
 - `lombok cannot be resolved to a module`
 - `javafx.beans.property is not accessible`
@@ -63,9 +64,9 @@ After building, verify the refactoring:
    ```
 
 3. **Verify new components:**
-   - DI system should initialize (check logs)
-   - i18n should be loaded (check console)
-   - Application should start normally
+    - DI system should initialize (check logs)
+    - i18n should be loaded (check console)
+    - Application should start normally
 
 ---
 
@@ -74,6 +75,7 @@ After building, verify the refactoring:
 The refactoring added these new files:
 
 ### Core Infrastructure
+
 - ✅ `core/di/Injector.java` - Dependency injection
 - ✅ `core/i18n/I18n.java` - Internationalization
 - ✅ `core/navigation/Route.java` - Navigation routes
@@ -82,18 +84,22 @@ The refactoring added these new files:
 - ✅ `core/utils/FxBindings.java` - Binding helpers
 
 ### ViewModels (MVVM Pattern)
+
 - ✅ `ui/viewmodel/BaseViewModel.java` - Base class
 - ✅ `ui/viewmodel/AIAssistantViewModel.java` - AI chat
 - ✅ `ui/viewmodel/SettingsViewModel.java` - Settings
 
 ### Resources
+
 - ✅ `resources/i18n/messages.properties` - English
 - ✅ `resources/i18n/messages_vi.properties` - Vietnamese
 
 ### Module System
+
 - ✅ `src/main/java/module-info.java` - JPMS descriptor
 
 ### Documentation
+
 - ✅ `docs/ARCHITECTURE_REFACTORING.md` - Architecture guide
 - ✅ `docs/REFACTORING_QUICK_START.md` - Quick start
 - ✅ `docs/development/REFACTORING_README.md` - README
@@ -113,8 +119,8 @@ The refactoring added these new files:
    ```
 
 2. **Verify dependencies:**
-   - Check that all JARs in `lib/` are present
-   - Verify JavaFX libraries are available
+    - Check that all JARs in `lib/` are present
+    - Verify JavaFX libraries are available
 
 3. **Clean build:**
    ```bash
@@ -128,6 +134,7 @@ The refactoring added these new files:
 ### If module-info.java errors persist:
 
 The `module-info.java` expects these modules. Verify they're available:
+
 - JavaFX (javafx.controls, javafx.graphics, javafx.base)
 - AtlantaFX (atlantafx.base)
 - Ikonli (org.kordamp.ikonli.*)
@@ -139,6 +146,7 @@ The `module-info.java` expects these modules. Verify they're available:
 ### If DI errors occur at runtime:
 
 Check that `Injector.getInstance()` is called in `PCMApplication.init()`:
+
 ```java
 @Override
 public void init() throws Exception {
@@ -153,6 +161,7 @@ public void init() throws Exception {
 ## 🎯 Expected Build Output
 
 Successful build should show:
+
 ```
 🔧 Initializing Dependency Injection...
 ✅ DI Container initialized
@@ -170,6 +179,7 @@ Successful build should show:
 Verify these libraries exist in `lib/`:
 
 ### JavaFX (lib/javafx/)
+
 - javafx.base.jar
 - javafx.controls.jar
 - javafx.graphics.jar
@@ -177,6 +187,7 @@ Verify these libraries exist in `lib/`:
 - javafx.web.jar
 
 ### Others (lib/others/)
+
 - atlantafx-base-2.0.1.jar
 - ikonli-core-12.3.1.jar
 - ikonli-javafx-12.3.1.jar
@@ -200,18 +211,18 @@ Verify these libraries exist in `lib/`:
    ```
 
 2. **Verify i18n:**
-   - Check menu labels
-   - Test language switching (if implemented)
+    - Check menu labels
+    - Test language switching (if implemented)
 
 3. **Test AI Assistant:**
-   - Navigate to AI Assistant page
-   - Verify ViewModel is working
-   - Check async operations
+    - Navigate to AI Assistant page
+    - Verify ViewModel is working
+    - Check async operations
 
 4. **Check logs:**
-   - Look for DI initialization
-   - Verify i18n loading
-   - Check for any warnings
+    - Look for DI initialization
+    - Verify i18n loading
+    - Check for any warnings
 
 ---
 
@@ -220,19 +231,19 @@ Verify these libraries exist in `lib/`:
 After successful build:
 
 1. **Read Documentation:**
-   - `REFACTORING_SUMMARY.md` - What changed
-   - `docs/ARCHITECTURE_REFACTORING.md` - How it works
-   - `docs/REFACTORING_QUICK_START.md` - How to use
+    - `REFACTORING_SUMMARY.md` - What changed
+    - `docs/ARCHITECTURE_REFACTORING.md` - How it works
+    - `docs/REFACTORING_QUICK_START.md` - How to use
 
 2. **Study Examples:**
-   - `ui/viewmodel/AIAssistantViewModel.java` - Complete example
-   - `core/di/Injector.java` - DI system
-   - `core/utils/Asyncs.java` - Async patterns
+    - `ui/viewmodel/AIAssistantViewModel.java` - Complete example
+    - `core/di/Injector.java` - DI system
+    - `core/utils/Asyncs.java` - Async patterns
 
 3. **Apply Patterns:**
-   - Refactor remaining pages to use ViewModels
-   - Use new utilities in your code
-   - Follow MVVM pattern
+    - Refactor remaining pages to use ViewModels
+    - Use new utilities in your code
+    - Follow MVVM pattern
 
 ---
 
@@ -257,18 +268,19 @@ After successful build:
    ```
 
 2. **Use IDE** for better error messages:
-   - IntelliJ IDEA will show more detailed errors
-   - Auto-completion works better after first build
+    - IntelliJ IDEA will show more detailed errors
+    - Auto-completion works better after first build
 
 3. **Check logs** for issues:
-   - Console output shows initialization steps
-   - Log file: `logs/pcm-desktop.log`
+    - Console output shows initialization steps
+    - Log file: `logs/pcm-desktop.log`
 
 ---
 
 ## 🎉 Success!
 
-If the application starts without errors and you see the DI/i18n initialization messages, the refactoring is working correctly!
+If the application starts without errors and you see the DI/i18n initialization messages, the refactoring is working
+correctly!
 
 **Next:** Read the documentation and start applying the patterns to your code.
 

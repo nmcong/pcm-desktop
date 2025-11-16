@@ -1,17 +1,18 @@
 # Intelligent Requirement Analysis Platform – Data & Processing Design
 
-This document captures the data schema, storage choices, and processing flow required to build a system that ingests user requirements, analyzes project source code, and delivers accurate answers (RAG + AST assisted).
+This document captures the data schema, storage choices, and processing flow required to build a system that ingests
+user requirements, analyzes project source code, and delivers accurate answers (RAG + AST assisted).
 
 ---
 
 ## 1. Storage Overview
 
-| Purpose                         | Store              | Rationale                                        |
-|---------------------------------|--------------------|--------------------------------------------------|
-| Operational metadata            | SQLite             | Lightweight, transactional, easy to bundle       |
-| Semantic search (RAG)           | Qdrant             | Vector similarity queries, filtering, payload    |
-| Optional full‑text on code/docs | (optional) Lucene/Elastic) | For large repos needing regex/full-text   |
-| Optional artifacts/BLOBs        | Object storage (S3/minio/local) | Store heavy AST snapshots or uploads  |
+| Purpose                         | Store                           | Rationale                                     |
+|---------------------------------|---------------------------------|-----------------------------------------------|
+| Operational metadata            | SQLite                          | Lightweight, transactional, easy to bundle    |
+| Semantic search (RAG)           | Qdrant                          | Vector similarity queries, filtering, payload |
+| Optional full‑text on code/docs | (optional) Lucene/Elastic)      | For large repos needing regex/full-text       |
+| Optional artifacts/BLOBs        | Object storage (S3/minio/local) | Store heavy AST snapshots or uploads          |
 
 ---
 
@@ -177,39 +178,44 @@ Payload should store `chunk_id` to map back to `vector_documents`.
 ## 4. Processing Flow
 
 ### 4.1 Project Registration
+
 1. User selects/creates System → Subsystem → Project in UI.
 2. User picks local source root → insert into `project_sources` (status `pending`).
 3. Optionally capture VCS info (branch/commit).
 
 ### 4.2 Source Scan & AST Build
+
 1. Scheduler/worker reads `project_sources` with `scan_status='pending'`.
 2. Walk filesystem:
-   - Insert/Update `source_files`.
-   - Detect deletions (remove stale records).
+    - Insert/Update `source_files`.
+    - Detect deletions (remove stale records).
 3. Dependency extraction (language parser or ctags) → fill `file_dependencies`.
 4. Build AST snapshot (per commit):
-   - Insert row in `ast_snapshots`.
-   - Store nodes & relationships with checksums for dedup.
+    - Insert row in `ast_snapshots`.
+    - Store nodes & relationships with checksums for dedup.
 5. Mark `scan_status='complete'`, set `last_scanned_at`.
 
 ### 4.3 Chunking & Vectorization
+
 1. For each relevant file (code/doc), split into chunks (e.g., 200 tokens with overlap).
 2. Store metadata in `vector_documents`.
 3. Generate embedding → upsert into Qdrant using `chunk_id` as point id.
 4. Keep embedding payload consistent with metadata (project, path, lines).
 
 ### 4.4 Handling User Requests
+
 1. User submits requirement/question (select subsystem/project) → `user_requests`.
 2. Pipeline:
-   - Retrieve contextual metadata (project, recent activity).
-   - Query Qdrant with requirement text to get top‑k chunks.
-   - Optionally query SQLite for AST/metadata (e.g., symbol search, dependencies).
+    - Retrieve contextual metadata (project, recent activity).
+    - Query Qdrant with requirement text to get top‑k chunks.
+    - Optionally query SQLite for AST/metadata (e.g., symbol search, dependencies).
 3. Compose context (chunks + metadata) → feed to LLM.
 4. Store response in `agent_responses` with `cited_sources`.
 5. Attach artifacts (e.g., generated diff, diagrams) via `request_artifacts`.
 6. Present answer; user can rate (`answer_feedback`).
 
 ### 4.5 Impact Analysis (example use of AST/Dependencies)
+
 1. Select code element (from AST) referenced in requirement.
 2. Walk `ast_relationships` + `file_dependencies` to list affected nodes/files.
 3. Locate embeddings for those files (via `vector_documents`) and fetch documentation chunks from Qdrant for context.
@@ -228,11 +234,15 @@ Payload should store `chunk_id` to map back to `vector_documents`.
 ## 6. Implementation Notes
 
 1. **Batching:** When storing AST nodes or vector chunks, batch inserts to keep SQLite fast.
-2. **File change detection:** Use `source_files.checksum`, `size_bytes`, and `last_modified` to skip unchanged files. Rebuild AST + embeddings only for records whose checksum differs from the previous scan.
-3. **Compression:** AST payloads and large reasoning fields can be compressed before storing in SQLite if size is a concern.
-4. **Consistency:** Use `snapshot_id` to tie AST, dependencies, and embeddings to a specific commit; store commit hash in metadata for reproducibility.
+2. **File change detection:** Use `source_files.checksum`, `size_bytes`, and `last_modified` to skip unchanged files.
+   Rebuild AST + embeddings only for records whose checksum differs from the previous scan.
+3. **Compression:** AST payloads and large reasoning fields can be compressed before storing in SQLite if size is a
+   concern.
+4. **Consistency:** Use `snapshot_id` to tie AST, dependencies, and embeddings to a specific commit; store commit hash
+   in metadata for reproducibility.
 5. **Security:** If users can upload arbitrary files, sanitize before indexing to avoid executing code.
 
 ---
 
-This schema and flow provide the backbone for a requirement-analysis assistant that understands project structure, sources, and historical interactions. Extend as needed for domain-specific artifacts or integrations.
+This schema and flow provide the backbone for a requirement-analysis assistant that understands project structure,
+sources, and historical interactions. Extend as needed for domain-specific artifacts or integrations.

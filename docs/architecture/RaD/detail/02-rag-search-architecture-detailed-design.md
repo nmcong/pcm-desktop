@@ -1,6 +1,7 @@
 # RAG & Search Architecture - Detailed Design Specification
 
 **Tạo từ các file nguồn:**
+
 - `docs/RaD/ideas/rag-strategy.md`
 - `docs/RaD/ideas/semantic-search.md`
 - `docs/RaD/ideas/source-search-guide.md`
@@ -12,7 +13,9 @@
 
 ## 1. Tổng quan
 
-Tài liệu này mô tả chi tiết kiến trúc Retrieval-Augmented Generation (RAG) và hệ thống tìm kiếm của PCM Desktop, bao gồm:
+Tài liệu này mô tả chi tiết kiến trúc Retrieval-Augmented Generation (RAG) và hệ thống tìm kiếm của PCM Desktop, bao
+gồm:
+
 - Hybrid retrieval (vector + lexical search)
 - Chunking strategies
 - Embedding generation và caching
@@ -85,29 +88,32 @@ Tài liệu này mô tả chi tiết kiến trúc Retrieval-Augmented Generation
 
 ### 2.1 Component Selection
 
-| Layer | Technology | Rationale |
-|-------|------------|-----------|
-| **Embeddings** | OpenAI text-embedding-3-large / local BGE | High quality, configurable per deployment |
-| **Vector DB** | Qdrant | HNSW index, payload filtering, on-disk collections |
-| **Keyword Search** | SQLite FTS5 | Built-in, BM25 scoring, no external deps |
-| **Parser/Chunker** | tree-sitter, JavaParser | Language-aware chunking aligned with AST |
-| **LLM** | OpenAI GPT-4o, Anthropic Claude 3.5, Local (Llama3) | Configurable provider registry |
-| **Orchestration** | Java services with async tasks | Integrate with existing stack |
-| **Prompt Framework** | Template engine / LangChain4j | Deterministic prompts |
+| Layer                | Technology                                          | Rationale                                          |
+|----------------------|-----------------------------------------------------|----------------------------------------------------|
+| **Embeddings**       | OpenAI text-embedding-3-large / local BGE           | High quality, configurable per deployment          |
+| **Vector DB**        | Qdrant                                              | HNSW index, payload filtering, on-disk collections |
+| **Keyword Search**   | SQLite FTS5                                         | Built-in, BM25 scoring, no external deps           |
+| **Parser/Chunker**   | tree-sitter, JavaParser                             | Language-aware chunking aligned with AST           |
+| **LLM**              | OpenAI GPT-4o, Anthropic Claude 3.5, Local (Llama3) | Configurable provider registry                     |
+| **Orchestration**    | Java services with async tasks                      | Integrate with existing stack                      |
+| **Prompt Framework** | Template engine / LangChain4j                       | Deterministic prompts                              |
 
 ### 2.2 Deployment Modes
 
 **Cloud Mode:**
+
 - OpenAI embeddings + GPT-4o
 - Qdrant Cloud or local Qdrant
 - Internet required
 
 **Hybrid Mode:**
+
 - Local embeddings (BGE-large ONNX)
 - Local Qdrant
 - Cloud LLM fallback
 
 **Offline Mode:**
+
 - Local embeddings
 - Local Qdrant
 - Local LLM (Llama3 via Ollama)
@@ -121,11 +127,13 @@ Tài liệu này mô tả chi tiết kiến trúc Retrieval-Augmented Generation
 #### Code Chunking
 
 **Parameters:**
+
 - Chunk size: 150-300 tokens
 - Overlap: 20% (30-60 tokens)
 - Method: AST-aware splitting
 
 **Rules:**
+
 1. Keep complete functions/methods intact if < 300 tokens
 2. Split large classes at method boundaries
 3. Include class declaration context in each method chunk
@@ -159,6 +167,7 @@ public class AuthService {
 ```
 
 **Metadata per chunk:**
+
 ```json
 {
   "chunk_id": "auth-service-login-v1",
@@ -176,11 +185,13 @@ public class AuthService {
 #### Documentation Chunking
 
 **Parameters:**
+
 - Chunk size: 300-500 tokens
 - Overlap: 15% (45-75 tokens)
 - Method: Heading-aware splitting
 
 **Rules:**
+
 1. Split at heading boundaries (H1-H6)
 2. Keep heading hierarchy in metadata
 3. Include parent section context
@@ -225,6 +236,7 @@ After validation...
 ```
 
 **Metadata:**
+
 ```json
 {
   "chunk_id": "auth-guide-login-step1",
@@ -239,6 +251,7 @@ After validation...
 #### Agent Response Chunking
 
 **Parameters:**
+
 - Chunk size: 200-400 tokens
 - No overlap (responses are self-contained)
 - Include full conversation context in metadata
@@ -265,6 +278,7 @@ After validation...
 #### Caching Strategy
 
 **Cache table:**
+
 ```sql
 CREATE TABLE IF NOT EXISTS embedding_cache (
     cache_id      INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -279,6 +293,7 @@ CREATE INDEX idx_embedding_cache_hash ON embedding_cache(content_hash, model_nam
 ```
 
 **Cache invalidation:**
+
 - Never expire (embeddings are immutable per content hash)
 - Only clear when model changes
 - Size limit: 100k entries (~4GB for 1536-dim vectors)
@@ -286,11 +301,13 @@ CREATE INDEX idx_embedding_cache_hash ON embedding_cache(content_hash, model_nam
 #### Batching
 
 **Batch parameters:**
+
 - Batch size: 100-500 chunks (depending on API limits)
 - Parallel batches: 3-5 (rate limiting)
 - Retry logic: Exponential backoff (1s, 2s, 4s, 8s)
 
 **Code example:**
+
 ```java
 public class EmbeddingBatchProcessor {
     private static final int BATCH_SIZE = 100;
@@ -332,14 +349,17 @@ public class EmbeddingBatchProcessor {
 #### Model Selection
 
 **OpenAI:**
+
 - `text-embedding-3-large`: 3072 dims, high quality, $0.13/1M tokens
 - `text-embedding-3-small`: 1536 dims, fast, $0.02/1M tokens
 
 **Local (ONNX):**
+
 - `bge-large-en-v1.5`: 1024 dims, free, ~200ms/batch on CPU
 - `all-MiniLM-L6-v2`: 384 dims, fast, ~50ms/batch on CPU
 
 **Selection criteria:**
+
 - Large projects (>100k files): Use small/fast model
 - High-quality requirements: Use large model
 - Offline/air-gapped: Use local model
@@ -351,6 +371,7 @@ public class EmbeddingBatchProcessor {
 ### 4.1 FTS5 Configuration
 
 **Schema:**
+
 ```sql
 CREATE VIRTUAL TABLE search_index USING fts5(
     corpus_id UNINDEXED,
@@ -364,6 +385,7 @@ CREATE VIRTUAL TABLE search_index USING fts5(
 ```
 
 **Tokenizer options:**
+
 - `unicode61`: Full Unicode support (CJK, Arabic, etc.)
 - `remove_diacritics 2`: Normalize accents (café → cafe)
 - `detail='column'`: Store per-column statistics for accurate BM25
@@ -371,6 +393,7 @@ CREATE VIRTUAL TABLE search_index USING fts5(
 ### 4.2 Query Syntax
 
 **Basic search:**
+
 ```sql
 SELECT corpus_id, bm25(search_index, 1.2, 0.75) AS score
 FROM search_index
@@ -380,6 +403,7 @@ LIMIT 50;
 ```
 
 **Boolean operators:**
+
 ```sql
 -- AND
 WHERE search_index MATCH 'login AND password'
@@ -401,6 +425,7 @@ WHERE search_index MATCH 'label:AuthService'
 ```
 
 **Advanced scoring:**
+
 ```sql
 -- Custom BM25 parameters
 SELECT *, bm25(search_index, 
@@ -428,6 +453,7 @@ WHERE search_index MATCH :query;
 ```
 
 **Output example:**
+
 ```
 ...public void <mark>login</mark>(User user) {
     validate<mark>User</mark>(user);
@@ -437,6 +463,7 @@ WHERE search_index MATCH :query;
 ### 4.4 Performance Optimization
 
 **Optimize index:**
+
 ```sql
 -- Run nightly
 INSERT INTO search_index(search_index) VALUES('optimize');
@@ -448,6 +475,7 @@ SELECT (SELECT page_count FROM pragma_page_count()) *
 ```
 
 **Query rewriting:**
+
 ```java
 public class QueryRewriter {
     public String rewrite(String userQuery) {
@@ -474,6 +502,7 @@ public class QueryRewriter {
 ### 5.1 Collection Setup
 
 **Collection schema:**
+
 ```json
 {
   "name": "pcm_chunks",
@@ -501,6 +530,7 @@ public class QueryRewriter {
 ```
 
 **Parameters:**
+
 - `distance="Cosine"`: Best for embeddings (range 0-2, lower is better)
 - `on_disk=true`: Reduce memory usage
 - `m=16`: HNSW graph connections (balance quality/speed)
@@ -509,6 +539,7 @@ public class QueryRewriter {
 ### 5.2 Indexing (Upsert)
 
 **Single point:**
+
 ```java
 public void upsertChunk(VectorDocument doc) {
     Points.Point point = Points.Point.newBuilder()
@@ -532,6 +563,7 @@ public void upsertChunk(VectorDocument doc) {
 ```
 
 **Batch upsert:**
+
 ```java
 public void upsertBatch(List<VectorDocument> docs) {
     List<Points.Point> points = docs.stream()
@@ -548,6 +580,7 @@ public void upsertBatch(List<VectorDocument> docs) {
 ### 5.3 Search (Query)
 
 **Basic search:**
+
 ```java
 public List<ScoredPoint> search(float[] queryVector, int topK) {
     SearchRequest request = SearchRequest.newBuilder()
@@ -564,6 +597,7 @@ public List<ScoredPoint> search(float[] queryVector, int topK) {
 ```
 
 **Filtered search:**
+
 ```java
 public List<ScoredPoint> searchWithFilter(
     float[] queryVector, 
@@ -605,6 +639,7 @@ public List<ScoredPoint> searchWithFilter(
 ```
 
 **Advanced: Scroll (for batch processing):**
+
 ```java
 public List<ScoredPoint> scrollAll(Filter filter) {
     List<ScoredPoint> allPoints = new ArrayList<>();
@@ -633,6 +668,7 @@ public List<ScoredPoint> scrollAll(Filter filter) {
 ### 5.4 Performance Tuning
 
 **Search parameters:**
+
 ```java
 SearchParams params = SearchParams.newBuilder()
     .setHnswEf(128)  // Higher = more accurate but slower
@@ -648,6 +684,7 @@ SearchRequest request = SearchRequest.newBuilder()
 ```
 
 **Recommendations:**
+
 - `hnsw_ef=128`: Good balance (default=128, range 4-512)
 - `exact=false`: Use HNSW (10-100x faster)
 - `exact=true`: Brute-force (only for <10k vectors)
@@ -754,6 +791,7 @@ public class WeightedFusion {
 ### 6.2 Deduplication
 
 **Strategy:**
+
 ```java
 public List<ChunkHit> deduplicate(List<ChunkHit> hits) {
     Map<String, ChunkHit> byFileAndLine = new HashMap<>();
@@ -775,6 +813,7 @@ public List<ChunkHit> deduplicate(List<ChunkHit> hits) {
 ### 6.3 Re-ranking (Optional)
 
 **Cross-encoder re-ranking:**
+
 ```java
 public class CrossEncoderReranker {
     private final CrossEncoder model;
@@ -801,6 +840,7 @@ public class CrossEncoderReranker {
 ```
 
 **When to use:**
+
 - Top-k candidates (k=50-100) from hybrid search
 - Rerank to top-n (n=10-20) for context
 - Cost: ~100ms per batch on GPU, ~500ms on CPU
@@ -812,6 +852,7 @@ public class CrossEncoderReranker {
 ### 7.1 Token Budget
 
 **Limits:**
+
 ```java
 public class ContextBudget {
     private static final int MAX_CONTEXT_TOKENS = 4000;
@@ -825,6 +866,7 @@ public class ContextBudget {
 ```
 
 **Allocation strategy:**
+
 - System prompt: 500 tokens
 - User question: 200 tokens
 - Context chunks: 3300 tokens (≈10-15 chunks)
@@ -923,6 +965,7 @@ public String formatContext(List<EnrichedChunk> chunks) {
 ```
 
 **Output example:**
+
 ```
 === Source 1 ===
 File: src/main/java/com/example/auth/AuthService.java
@@ -951,6 +994,7 @@ public void login(User user) {
 
 === Source 2 ===
 ...
+
 ```
 
 ---
@@ -984,6 +1028,7 @@ public class LlmProviderRegistry {
 ```
 
 **Providers:**
+
 - OpenAI (GPT-4o, GPT-4-turbo)
 - Anthropic (Claude 3.5 Sonnet)
 - Local (Ollama, LlamaCpp)
@@ -1219,6 +1264,7 @@ public class RagEvaluator {
 ```
 
 **Golden test set structure:**
+
 ```json
 {
   "test_cases": [
@@ -1243,6 +1289,7 @@ public class RagEvaluator {
 ### 9.4 Alerting
 
 **Prometheus alerts:**
+
 ```yaml
 groups:
   - name: rag_alerts
@@ -1279,18 +1326,21 @@ groups:
 ### 10.1 Resource Requirements
 
 **Minimum (small projects, <10k files):**
+
 - CPU: 4 cores
 - RAM: 8 GB
 - Storage: 20 GB (10 GB for DB, 10 GB for Qdrant)
 - Network: Stable internet (if using cloud LLM)
 
 **Recommended (medium projects, 10k-100k files):**
+
 - CPU: 8 cores
 - RAM: 16 GB
 - Storage: 100 GB SSD
 - GPU: Optional (for local embeddings, 10x speedup)
 
 **Large (>100k files):**
+
 - CPU: 16+ cores
 - RAM: 32+ GB
 - Storage: 500+ GB SSD
@@ -1300,6 +1350,7 @@ groups:
 ### 10.2 Configuration
 
 **application.yml:**
+
 ```yaml
 rag:
   embeddings:
@@ -1347,16 +1398,19 @@ rag:
 ### 10.3 Scaling Strategy
 
 **Horizontal scaling:**
+
 - Run multiple app instances behind load balancer
 - Share SQLite DB via NFS (read-only replicas)
 - Qdrant cluster with sharding
 
 **Vertical scaling:**
+
 - Increase RAM for larger caches
 - Add GPU for faster local embeddings
 - SSD for faster I/O
 
 **Caching layers:**
+
 - Redis for hot queries (TTL 1 hour)
 - CDN for static assets (models, docs)
 - Embedding cache (persistent, no expiry)
@@ -1370,6 +1424,7 @@ rag:
 **Issue: Vector search returns irrelevant results**
 
 Solution:
+
 - Check embedding model consistency (same model for index & query)
 - Verify payload filters are correct
 - Try different fusion weights (increase lexical weight)
@@ -1378,6 +1433,7 @@ Solution:
 **Issue: FTS5 search is slow**
 
 Solution:
+
 - Run `INSERT INTO search_index(search_index) VALUES('optimize');`
 - Check query complexity (avoid too many wildcards)
 - Add project_id filter to limit scope
@@ -1386,6 +1442,7 @@ Solution:
 **Issue: Embedding generation is slow**
 
 Solution:
+
 - Enable batching (100-500 chunks per batch)
 - Use caching (check cache hit rate)
 - Switch to smaller/faster model (text-embedding-3-small)
@@ -1394,6 +1451,7 @@ Solution:
 **Issue: Out of memory errors**
 
 Solution:
+
 - Reduce chunk size (300 → 200 tokens)
 - Lower top_k (50 → 20)
 - Enable Qdrant on-disk mode
@@ -1402,6 +1460,7 @@ Solution:
 ### 11.2 Debug Queries
 
 **Check embedding cache stats:**
+
 ```sql
 SELECT 
     model_name,
@@ -1414,6 +1473,7 @@ GROUP BY model_name;
 ```
 
 **Analyze retrieval patterns:**
+
 ```sql
 SELECT 
     source_type,
@@ -1427,6 +1487,7 @@ ORDER BY retrieval_count DESC;
 ```
 
 **Find queries with no results:**
+
 ```sql
 SELECT r.request_id, r.description
 FROM user_requests r
@@ -1443,6 +1504,7 @@ ORDER BY r.created_at DESC;
 ## 12. Best Practices
 
 ### 12.1 Chunking
+
 ✅ DO: Align chunks with code structure (functions, classes)  
 ✅ DO: Include context (class name, imports) in metadata  
 ✅ DO: Use overlap to avoid boundary issues  
@@ -1450,6 +1512,7 @@ ORDER BY r.created_at DESC;
 ❌ DON'T: Create chunks > 500 tokens (hurts retrieval quality)
 
 ### 12.2 Embeddings
+
 ✅ DO: Cache embeddings by content hash  
 ✅ DO: Use same model for indexing and querying  
 ✅ DO: Batch requests to minimize API calls  
@@ -1457,6 +1520,7 @@ ORDER BY r.created_at DESC;
 ❌ DON'T: Mix different embedding models in same collection
 
 ### 12.3 Search
+
 ✅ DO: Use filters (project_id, language) to narrow scope  
 ✅ DO: Combine vector + lexical for best results  
 ✅ DO: Monitor and tune fusion weights per use case  
@@ -1464,6 +1528,7 @@ ORDER BY r.created_at DESC;
 ❌ DON'T: Skip deduplication (wastes context tokens)
 
 ### 12.4 LLM Prompting
+
 ✅ DO: Include structured context with citations  
 ✅ DO: Set clear instructions in system prompt  
 ✅ DO: Stream responses for better UX  
@@ -1475,23 +1540,27 @@ ORDER BY r.created_at DESC;
 ## 13. Future Enhancements
 
 ### 13.1 Advanced Retrieval
+
 - **Multi-hop reasoning**: Chain multiple retrievals
 - **Query expansion**: Use LLM to rephrase/expand queries
 - **Dynamic top-k**: Adjust based on query complexity
 - **Personalization**: Learn user preferences over time
 
 ### 13.2 Advanced Reranking
+
 - **Cross-encoder**: Fine-tuned for code search
 - **ColBERT**: Token-level late interaction
 - **LLM-as-reranker**: Use GPT-4 for final ranking
 
 ### 13.3 Advanced Context
+
 - **Adaptive chunking**: Vary size based on content type
 - **Graph-based context**: Include AST relationships
 - **Multi-modal**: Support diagrams, screenshots
 - **Temporal context**: Prefer recent code/docs
 
 ### 13.4 Advanced Monitoring
+
 - **A/B testing**: Compare fusion strategies
 - **User feedback loop**: Auto-retrain on ratings
 - **Drift detection**: Alert when quality degrades
@@ -1504,6 +1573,7 @@ ORDER BY r.created_at DESC;
 ### 14.1 API Reference
 
 **Hybrid Retrieval:**
+
 ```java
 List<ChunkHit> hybridRetrieve(
     String query,
@@ -1514,6 +1584,7 @@ List<ChunkHit> hybridRetrieve(
 ```
 
 **Embedding Generation:**
+
 ```java
 List<float[]> generateEmbeddings(
     List<String> texts,
@@ -1522,6 +1593,7 @@ List<float[]> generateEmbeddings(
 ```
 
 **FTS5 Search:**
+
 ```java
 List<ChunkHit> fts5Search(
     String query,
@@ -1532,6 +1604,7 @@ List<ChunkHit> fts5Search(
 ```
 
 **Vector Search:**
+
 ```java
 List<ScoredPoint> vectorSearch(
     float[] queryVector,
@@ -1543,16 +1616,19 @@ List<ScoredPoint> vectorSearch(
 ### 14.2 Performance Benchmarks
 
 **Embedding generation (1000 chunks, avg 200 tokens):**
+
 - OpenAI text-embedding-3-large: ~5s (API latency)
 - Local BGE-large (CPU): ~40s
 - Local BGE-large (GPU): ~4s
 
 **Search latency (100k vectors, 10k FTS docs):**
+
 - Vector search (Qdrant, top-50): ~50ms
 - FTS5 search (SQLite, top-50): ~20ms
 - Hybrid retrieval + fusion: ~100ms
 
 **Context assembly:**
+
 - AST enrichment (10 chunks): ~10ms
 - Formatting: ~5ms
 

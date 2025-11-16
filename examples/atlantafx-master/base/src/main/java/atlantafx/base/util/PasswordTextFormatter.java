@@ -3,6 +3,7 @@
 package atlantafx.base.util;
 
 import java.util.function.UnaryOperator;
+
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ReadOnlyStringProperty;
@@ -54,6 +55,28 @@ public class PasswordTextFormatter extends TextFormatter<String> {
     }
 
     /**
+     * Creates a new password text formatter with the provided mask character and
+     * applies itself to the specified text field.
+     */
+    public static PasswordTextFormatter create(TextField field, char bullet) {
+        var filter = new PasswordFilter();
+        var converter = new PasswordStringConverter(filter);
+
+        var formatter = new PasswordTextFormatter(converter, filter, field, bullet);
+        field.setTextFormatter(formatter);
+
+        return formatter;
+    }
+
+    /**
+     * Creates a new password text formatter with the default mask character and
+     * applies itself to the specified text field.
+     */
+    public static PasswordTextFormatter create(TextField textField) {
+        return create(textField, BULLET);
+    }
+
+    /**
      * Always returns the unmasked password text regardless of
      * the {@link #revealPasswordProperty} state.
      */
@@ -87,28 +110,6 @@ public class PasswordTextFormatter extends TextFormatter<String> {
      */
     public void setRevealPassword(boolean reveal) {
         revealPasswordProperty().set(reveal);
-    }
-
-    /**
-     * Creates a new password text formatter with the provided mask character and
-     * applies itself to the specified text field.
-     */
-    public static PasswordTextFormatter create(TextField field, char bullet) {
-        var filter = new PasswordFilter();
-        var converter = new PasswordStringConverter(filter);
-
-        var formatter = new PasswordTextFormatter(converter, filter, field, bullet);
-        field.setTextFormatter(formatter);
-
-        return formatter;
-    }
-
-    /**
-     * Creates a new password text formatter with the default mask character and
-     * applies itself to the specified text field.
-     */
-    public static PasswordTextFormatter create(TextField textField) {
-        return create(textField, BULLET);
     }
 
     ///////////////////////////////////////////////////////////////////////////

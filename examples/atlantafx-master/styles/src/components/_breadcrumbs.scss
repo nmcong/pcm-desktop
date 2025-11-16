@@ -18,11 +18,11 @@ $divider-spacing: 0.5em !default;
 .breadcrumbs {
   -fx-padding: $padding-y $padding-x $padding-y $padding-x;
 
-  >.hyperlink {
+  > .hyperlink {
     -color-link-fg-visited: -color-link-fg;
   }
 
-  >.label.divider {
+  > .label.divider {
     -fx-padding: 0 $divider-spacing 0 $divider-spacing;
   }
 }

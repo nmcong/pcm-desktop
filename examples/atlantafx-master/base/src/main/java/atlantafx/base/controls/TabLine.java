@@ -82,6 +82,23 @@ public class TabLine extends Control {
 
     // fo the reference: https://bugs.openjdk.org/browse/JDK-8350921
     protected final ObservableList<Tab> tabs = new ReorderableList<>(new ArrayList<>());
+    private final ObjectProperty<@Nullable Node> leftNode = new SimpleObjectProperty<>(this, "leftNode", null);
+    private final ObjectProperty<@Nullable Node> rightNode = new SimpleObjectProperty<>(this, "rightNode", null);
+    protected ObjectProperty<SingleSelectionModel<Tab>> selectionModel = new SimpleObjectProperty<>(
+            this, "selectionModel", new TabLineSelectionModel(this)
+    );
+    protected @Nullable ObjectProperty<Tab.ClosingPolicy> tabClosingPolicy;
+
+    //=========================================================================
+    // Properties
+    //=========================================================================
+    protected @Nullable ObjectProperty<Tab.DragPolicy> tabDragPolicy;
+    protected @Nullable ObjectProperty<Tab.ResizePolicy> tabResizePolicy;
+    protected @Nullable BooleanProperty animated;
+    protected @Nullable DoubleProperty tabFixedWidth;
+    protected @Nullable DoubleProperty tabMinWidth;
+    protected @Nullable ReadOnlyBooleanWrapper tabsFit;
+    protected @Nullable StringProperty ellipsisString;
 
     /**
      * Creates a new TabLine with no tabs.
@@ -104,6 +121,14 @@ public class TabLine extends Control {
         }
     }
 
+    /**
+     * Gets the {@code CssMetaData} associated with this class,
+     * which may include the {@code CssMetaData} of its superclasses.
+     */
+    public static List<CssMetaData<? extends Styleable, ?>> getClassCssMetaData() {
+        return StyleableProperties.STYLEABLES;
+    }
+
     @Override
     public Skin<?> createDefaultSkin() {
         return new TabLineSkin(this);
@@ -122,10 +147,6 @@ public class TabLine extends Control {
         return tabs;
     }
 
-    //=========================================================================
-    // Properties
-    //=========================================================================
-
     /**
      * The selection model used for selecting tabs. Changing the model alters
      * how the tabs are selected and which tabs are first or last.
@@ -133,10 +154,6 @@ public class TabLine extends Control {
     public final ObjectProperty<SingleSelectionModel<Tab>> selectionModelProperty() {
         return selectionModel;
     }
-
-    protected ObjectProperty<SingleSelectionModel<Tab>> selectionModel = new SimpleObjectProperty<>(
-        this, "selectionModel", new TabLineSelectionModel(this)
-    );
 
     public SingleSelectionModel<Tab> getSelectionModel() {
         return selectionModel.get();
@@ -155,13 +172,11 @@ public class TabLine extends Control {
     public final ObjectProperty<Tab.ClosingPolicy> tabClosingPolicyProperty() {
         if (tabClosingPolicy == null) {
             tabClosingPolicy = new SimpleObjectProperty<>(
-                this, "tabClosingPolicy", Tab.ClosingPolicy.ALL_TABS
+                    this, "tabClosingPolicy", Tab.ClosingPolicy.ALL_TABS
             );
         }
         return tabClosingPolicy;
     }
-
-    protected @Nullable ObjectProperty<Tab.ClosingPolicy> tabClosingPolicy;
 
     public Tab.ClosingPolicy getTabClosingPolicy() {
         return tabClosingPolicyProperty().get();
@@ -180,8 +195,6 @@ public class TabLine extends Control {
         }
         return tabDragPolicy;
     }
-
-    protected @Nullable ObjectProperty<Tab.DragPolicy> tabDragPolicy;
 
     public Tab.DragPolicy getTabDragPolicy() {
         return tabDragPolicyProperty().get();
@@ -202,8 +215,6 @@ public class TabLine extends Control {
         return tabResizePolicy;
     }
 
-    protected @Nullable ObjectProperty<Tab.ResizePolicy> tabResizePolicy;
-
     public Tab.ResizePolicy getTabResizePolicy() {
         return tabResizePolicyProperty().get();
     }
@@ -222,8 +233,6 @@ public class TabLine extends Control {
         }
         return animated;
     }
-
-    protected @Nullable BooleanProperty animated;
 
     public boolean getAnimated() {
         return animated == null || animatedProperty().get();
@@ -263,8 +272,6 @@ public class TabLine extends Control {
         return tabFixedWidth;
     }
 
-    protected @Nullable DoubleProperty tabFixedWidth;
-
     public double getTabFixedWidth() {
         return tabFixedWidth != null ? tabFixedWidth.getValue() : DEFAULT_TAB_FIXED_WIDTH;
     }
@@ -302,8 +309,6 @@ public class TabLine extends Control {
         return tabMinWidth;
     }
 
-    protected @Nullable DoubleProperty tabMinWidth;
-
     public double getTabMinWidth() {
         return tabMinWidth != null ? tabMinWidth.getValue() : DEFAULT_TAB_MIN_WIDTH;
     }
@@ -318,8 +323,6 @@ public class TabLine extends Control {
     public final ReadOnlyBooleanProperty tabsFitProperty() {
         return tabsFitPropertyImpl().getReadOnlyProperty();
     }
-
-    protected @Nullable ReadOnlyBooleanWrapper tabsFit;
 
     protected ReadOnlyBooleanWrapper tabsFitPropertyImpl() {
         if (tabsFit == null) {
@@ -347,8 +350,6 @@ public class TabLine extends Control {
         return ellipsisString;
     }
 
-    protected @Nullable StringProperty ellipsisString;
-
     public String getEllipsisString() {
         return ellipsisString != null ? ellipsisString.get() : "";
     }
@@ -363,8 +364,6 @@ public class TabLine extends Control {
     public final ObjectProperty<@Nullable Node> leftNodeProperty() {
         return leftNode;
     }
-
-    private final ObjectProperty<@Nullable Node> leftNode = new SimpleObjectProperty<>(this, "leftNode", null);
 
     public @Nullable Node getLeftNode() {
         return leftNode.getValue();
@@ -381,12 +380,6 @@ public class TabLine extends Control {
         return rightNode;
     }
 
-    private final ObjectProperty<@Nullable Node> rightNode = new SimpleObjectProperty<>(this, "rightNode", null);
-
-    public void setRightNode(@Nullable Node value) {
-        rightNode.setValue(value);
-    }
-
     public @Nullable Node getRightNode() {
         return rightNode.getValue();
     }
@@ -394,6 +387,10 @@ public class TabLine extends Control {
     //=========================================================================
     // Auxiliary Methods
     //=========================================================================
+
+    public void setRightNode(@Nullable Node value) {
+        rightNode.setValue(value);
+    }
 
     @SuppressWarnings("ConstantValue")
     protected void pinOrUnpin(Tab tab) {
@@ -438,8 +435,8 @@ public class TabLine extends Control {
 
         if (lastPinnedTabIndex == -1) {
             return index == -1
-                ? 0 // no pinned tabs, make first
-                : lastTabIndex; // all tabs pinned, make last
+                    ? 0 // no pinned tabs, make first
+                    : lastTabIndex; // all tabs pinned, make last
         }
 
         return Math.min(lastPinnedTabIndex + 1, lastTabIndex);
@@ -460,6 +457,10 @@ public class TabLine extends Control {
         return index;
     }
 
+    //=========================================================================
+    // Stylesheet Handling
+    //=========================================================================
+
     protected void reorderTabs(int fromIndex, int toIndex) {
         var fromTab = getTabs().get(fromIndex);
         var toTab = getTabs().get(toIndex);
@@ -477,68 +478,56 @@ public class TabLine extends Control {
         }
     }
 
-    //=========================================================================
-    // Stylesheet Handling
-    //=========================================================================
-
-    private static class StyleableProperties {
-
-        private static final CssMetaData<TabLine, Number> TAB_FIXED_WIDTH =
-            new CssMetaData<>("-fx-tab-fixed-width", SizeConverter.getInstance(), DEFAULT_TAB_FIXED_WIDTH) {
-
-                @Override
-                public boolean isSettable(TabLine tabLine) {
-                    return tabLine.tabFixedWidth == null || !tabLine.tabFixedWidth.isBound();
-                }
-
-                @Override
-                @SuppressWarnings("unchecked")
-                public StyleableProperty<Number> getStyleableProperty(TabLine tabLine) {
-                    return (StyleableProperty<Number>) tabLine.tabFixedWidthProperty();
-                }
-            };
-
-        private static final CssMetaData<TabLine, Number> TAB_MIN_WIDTH =
-            new CssMetaData<>("-fx-tab-min-width", SizeConverter.getInstance(), DEFAULT_TAB_MIN_WIDTH) {
-
-                @Override
-                public boolean isSettable(TabLine tabLine) {
-                    return tabLine.tabMinWidth == null || !tabLine.tabMinWidth.isBound();
-                }
-
-                @Override
-                @SuppressWarnings("unchecked")
-                public StyleableProperty<Number> getStyleableProperty(TabLine tabLine) {
-                    return (StyleableProperty<Number>) tabLine.tabMinWidthProperty();
-                }
-            };
-
-        private static final List<CssMetaData<? extends Styleable, ?>> STYLEABLES;
-
-        static {
-            final List<CssMetaData<? extends Styleable, ?>> styleables = new ArrayList<>(
-                Control.getClassCssMetaData()
-            );
-            styleables.add(TAB_FIXED_WIDTH);
-            styleables.add(TAB_MIN_WIDTH);
-            STYLEABLES = Collections.unmodifiableList(styleables);
-        }
-    }
-
-    /**
-     * Gets the {@code CssMetaData} associated with this class,
-     * which may include the {@code CssMetaData} of its superclasses.
-     */
-    public static List<CssMetaData<? extends Styleable, ?>> getClassCssMetaData() {
-        return StyleableProperties.STYLEABLES;
-    }
-
     /**
      * {@inheritDoc}
      */
     @Override
     public List<CssMetaData<? extends Styleable, ?>> getControlCssMetaData() {
         return getClassCssMetaData();
+    }
+
+    private static class StyleableProperties {
+
+        private static final List<CssMetaData<? extends Styleable, ?>> STYLEABLES;        private static final CssMetaData<TabLine, Number> TAB_FIXED_WIDTH =
+                new CssMetaData<>("-fx-tab-fixed-width", SizeConverter.getInstance(), DEFAULT_TAB_FIXED_WIDTH) {
+
+                    @Override
+                    public boolean isSettable(TabLine tabLine) {
+                        return tabLine.tabFixedWidth == null || !tabLine.tabFixedWidth.isBound();
+                    }
+
+                    @Override
+                    @SuppressWarnings("unchecked")
+                    public StyleableProperty<Number> getStyleableProperty(TabLine tabLine) {
+                        return (StyleableProperty<Number>) tabLine.tabFixedWidthProperty();
+                    }
+                };
+
+        static {
+            final List<CssMetaData<? extends Styleable, ?>> styleables = new ArrayList<>(
+                    Control.getClassCssMetaData()
+            );
+            styleables.add(TAB_FIXED_WIDTH);
+            styleables.add(TAB_MIN_WIDTH);
+            STYLEABLES = Collections.unmodifiableList(styleables);
+        }        private static final CssMetaData<TabLine, Number> TAB_MIN_WIDTH =
+                new CssMetaData<>("-fx-tab-min-width", SizeConverter.getInstance(), DEFAULT_TAB_MIN_WIDTH) {
+
+                    @Override
+                    public boolean isSettable(TabLine tabLine) {
+                        return tabLine.tabMinWidth == null || !tabLine.tabMinWidth.isBound();
+                    }
+
+                    @Override
+                    @SuppressWarnings("unchecked")
+                    public StyleableProperty<Number> getStyleableProperty(TabLine tabLine) {
+                        return (StyleableProperty<Number>) tabLine.tabMinWidthProperty();
+                    }
+                };
+
+
+
+
     }
 
     //=========================================================================

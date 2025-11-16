@@ -1,6 +1,7 @@
 # Vector Store Performance Benchmarks & Recommendations
 
 ## Table of Contents
+
 1. [Benchmark Overview](#benchmark-overview)
 2. [Test Environment](#test-environment)
 3. [Dataset Specifications](#dataset-specifications)
@@ -25,20 +26,21 @@ Our performance benchmarks follow industry-standard practices:
 
 ### Key Performance Indicators (KPIs)
 
-| Metric | Description | Target | Measurement |
-|--------|-------------|---------|-------------|
-| **Query Latency P95** | 95th percentile response time | <50ms | Time from query to results |
-| **Indexing Throughput** | Documents indexed per second | >1000 docs/sec | Bulk indexing rate |
-| **Memory Efficiency** | Memory per million documents | <2GB/1M docs | RSS memory usage |
-| **Storage Efficiency** | Disk space per document | <5KB/doc | Index size on disk |
-| **Concurrent Capacity** | Max concurrent queries | >100 QPS | Sustained query rate |
-| **Index Build Time** | Time to index full dataset | <1 hour/1M docs | Initial indexing |
+| Metric                  | Description                   | Target          | Measurement                |
+|-------------------------|-------------------------------|-----------------|----------------------------|
+| **Query Latency P95**   | 95th percentile response time | <50ms           | Time from query to results |
+| **Indexing Throughput** | Documents indexed per second  | >1000 docs/sec  | Bulk indexing rate         |
+| **Memory Efficiency**   | Memory per million documents  | <2GB/1M docs    | RSS memory usage           |
+| **Storage Efficiency**  | Disk space per document       | <5KB/doc        | Index size on disk         |
+| **Concurrent Capacity** | Max concurrent queries        | >100 QPS        | Sustained query rate       |
+| **Index Build Time**    | Time to index full dataset    | <1 hour/1M docs | Initial indexing           |
 
 ## Test Environment
 
 ### Hardware Specifications
 
 #### Primary Test Machine
+
 ```yaml
 System Configuration:
   CPU: Intel Xeon E5-2680 v4 (2.4GHz, 14 cores, 28 threads)
@@ -55,6 +57,7 @@ JVM Configuration:
 ```
 
 #### Secondary Test Machines (Scaling Tests)
+
 ```yaml
 Small Instance:
   CPU: 4 vCPUs (Intel Xeon)
@@ -68,6 +71,7 @@ Large Instance:
 ```
 
 ### Software Environment
+
 ```yaml
 Operating System: Ubuntu 22.04 LTS
 Java Runtime: OpenJDK 17.0.7 LTS
@@ -80,6 +84,7 @@ Load Testing: Apache JMeter 5.5
 ## Dataset Specifications
 
 ### Dataset 1: Wikipedia Articles (Text-Heavy)
+
 ```yaml
 Name: "Wikipedia-1M"
 Description: English Wikipedia articles
@@ -96,6 +101,7 @@ Update Frequency: Static (read-heavy workload)
 ```
 
 ### Dataset 2: Technical Documentation (Mixed Content)
+
 ```yaml
 Name: "TechDocs-500K"
 Description: Software documentation and code
@@ -112,6 +118,7 @@ Update Frequency: Medium (20% updates/day)
 ```
 
 ### Dataset 3: Research Papers (Academic Content)
+
 ```yaml
 Name: "ArXiv-250K"
 Description: Academic papers abstracts and content
@@ -131,6 +138,7 @@ Update Frequency: Low (5% new/day)
 ### Indexing Performance
 
 #### Single-Threaded Indexing
+
 ```yaml
 Wikipedia-1M Dataset:
   Total Time: 42 minutes
@@ -155,6 +163,7 @@ ArXiv-250K Dataset:
 ```
 
 #### Multi-Threaded Indexing
+
 ```yaml
 Configuration: 8 indexing threads
 Buffer Size: 512 MB RAM buffer
@@ -175,6 +184,7 @@ TechDocs-500K Dataset:
 ```
 
 #### Batch Size Impact Analysis
+
 ```yaml
 Document Batch Sizes vs Throughput (Wikipedia-1M):
 
@@ -195,6 +205,7 @@ Batch 10000: 18.2 GB (memory pressure)
 ### Query Performance
 
 #### Latency Distribution
+
 ```yaml
 Simple Term Queries ("machine learning"):
   P50: 3.2ms
@@ -226,6 +237,7 @@ Wildcard Queries ("artific* intelligen*"):
 ```
 
 #### Throughput Under Load
+
 ```yaml
 Concurrent Users vs Query Performance (Wikipedia-1M):
 
@@ -246,6 +258,7 @@ Memory Usage:
 ```
 
 ### Result Set Size Impact
+
 ```yaml
 Results Limit vs Query Latency (Complex Boolean Query):
 
@@ -268,6 +281,7 @@ Limit 5000:   ~7.5 MB
 ### Index Structure Analysis
 
 #### Segment Distribution
+
 ```yaml
 Optimal Segment Strategy (Wikipedia-1M):
   Number of Segments: 12-15 (after optimization)
@@ -289,6 +303,7 @@ Force Merge Impact:
 ```
 
 #### Field Analysis Impact
+
 ```yaml
 Field Configuration Performance:
 
@@ -311,6 +326,7 @@ Term Vectors Enabled:
 ```
 
 #### Analyzer Performance Comparison
+
 ```yaml
 StandardAnalyzer (baseline):
   Indexing: 396 docs/sec
@@ -333,6 +349,7 @@ Custom Analyzer (optimized):
 ### Memory Usage Patterns
 
 #### Heap Memory Analysis
+
 ```yaml
 JVM Memory Distribution (32GB heap, Wikipedia-1M):
 
@@ -359,6 +376,7 @@ Available: 28.75 GB (90% headroom)
 ```
 
 #### Off-Heap Memory Usage
+
 ```yaml
 File System Cache Impact:
 
@@ -379,6 +397,7 @@ Optimal Cache Size:
 ```
 
 #### Garbage Collection Impact
+
 ```yaml
 GC Configuration Impact:
 
@@ -409,6 +428,7 @@ ZGC (Low Latency):
 ### Vertical Scaling Analysis
 
 #### CPU Scaling
+
 ```yaml
 Query Performance vs CPU Cores (Wikipedia-1M, 100 concurrent users):
 
@@ -436,6 +456,7 @@ Note: Diminishing returns after 16 cores for this workload
 ```
 
 #### Memory Scaling
+
 ```yaml
 Query Performance vs Available RAM (Wikipedia-1M):
 
@@ -467,6 +488,7 @@ Query Performance vs Available RAM (Wikipedia-1M):
 ### Horizontal Scaling Patterns
 
 #### Index Sharding Strategy
+
 ```yaml
 Single Index (Baseline):
   Documents: 1M
@@ -496,6 +518,7 @@ Single Index (Baseline):
 ```
 
 #### Load Balancing Impact
+
 ```yaml
 Round Robin Distribution:
   Variance: ±15% latency
@@ -516,6 +539,7 @@ Least Connections:
 ```
 
 ### Dataset Size Scaling
+
 ```yaml
 Performance vs Dataset Size (Single Node):
 
@@ -557,6 +581,7 @@ Scaling Observations:
 ### Detailed Memory Profiling
 
 #### Heap Memory Breakdown
+
 ```yaml
 Peak Memory Usage During Heavy Load (Wikipedia-1M, 200 concurrent users):
 
@@ -591,6 +616,7 @@ Total Heap Usage: 3.4 GB / 32 GB (10.6% utilization)
 ```
 
 #### Native Memory Usage
+
 ```yaml
 Off-Heap Memory Consumption:
 
@@ -621,6 +647,7 @@ Native Libraries:
 ### Resource Utilization Patterns
 
 #### CPU Usage Distribution
+
 ```yaml
 CPU Time Distribution (100 concurrent queries):
 
@@ -643,6 +670,7 @@ Hot Methods (>5% CPU time):
 ```
 
 #### I/O Patterns
+
 ```yaml
 Disk I/O Analysis (Cold start):
 
@@ -673,6 +701,7 @@ Storage Performance Requirements:
 ### JVM Tuning
 
 #### Heap Configuration
+
 ```bash
 # Production JVM settings for Lucene
 -Xmx16g                    # Heap size (50-75% of system RAM)
@@ -695,6 +724,7 @@ Storage Performance Requirements:
 ```
 
 #### Advanced JVM Tuning
+
 ```bash
 # Large page support (if available)
 -XX:+UseLargePages
@@ -718,6 +748,7 @@ Storage Performance Requirements:
 ### Lucene Configuration Optimization
 
 #### IndexWriter Settings
+
 ```java
 // Optimized IndexWriter configuration
 IndexWriterConfig config = new IndexWriterConfig(analyzer);
@@ -744,6 +775,7 @@ config.setMaxBufferedDeleteTerms(1000);
 ```
 
 #### SearcherManager Configuration
+
 ```java
 // Optimized searcher management
 SearcherFactory factory = new SearcherFactory() {
@@ -776,6 +808,7 @@ refreshExecutor.scheduleAtFixedRate(() -> {
 ```
 
 #### Query Optimization
+
 ```java
 // Optimized query construction
 public class OptimizedQueryBuilder {
@@ -833,6 +866,7 @@ public class OptimizedQueryBuilder {
 ### System-Level Optimizations
 
 #### File System Tuning
+
 ```bash
 # Mount options for index directory
 mount -o noatime,nodiratime /dev/ssd /var/lucene/index
@@ -851,6 +885,7 @@ echo noop > /sys/block/nvme0n1/queue/scheduler
 ```
 
 #### Operating System Configuration
+
 ```bash
 # CPU governor for consistent performance
 echo performance > /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
@@ -871,6 +906,7 @@ echo 'vm.overcommit_memory=1' >> /etc/sysctl.conf
 ### Environment-Specific Configurations
 
 #### Development Environment
+
 ```yaml
 Purpose: Fast iteration, debugging
 Resource Allocation:
@@ -896,6 +932,7 @@ Monitoring:
 ```
 
 #### Staging Environment
+
 ```yaml
 Purpose: Performance testing, integration testing
 Resource Allocation:
@@ -922,6 +959,7 @@ Monitoring:
 ```
 
 #### Production Environment
+
 ```yaml
 Purpose: High availability, optimal performance
 Resource Allocation:
@@ -956,6 +994,7 @@ Monitoring:
 ### Scaling Strategies
 
 #### Vertical Scaling Guidelines
+
 ```yaml
 Scale Up Triggers:
   - Query latency P95 > 50ms consistently  
@@ -976,7 +1015,8 @@ Cost-Benefit Analysis:
   - Network: Low impact for single node
 ```
 
-#### Horizontal Scaling Guidelines  
+#### Horizontal Scaling Guidelines
+
 ```yaml
 Scale Out Triggers:
   - Dataset size > 10M documents
@@ -1001,6 +1041,7 @@ Load Distribution:
 ### Monitoring & Alerting
 
 #### Key Metrics to Monitor
+
 ```yaml
 Application Metrics:
   - Query latency (P50, P95, P99)
@@ -1030,6 +1071,7 @@ Lucene-Specific Metrics:
 ```
 
 #### Alerting Thresholds
+
 ```yaml
 Critical Alerts:
   - Query latency P95 > 100ms (5min avg)
@@ -1055,6 +1097,7 @@ Info Alerts:
 ---
 
 **Related Documentation:**
+
 - [Lucene Implementation Guide](lucene-guide.md)
-- [Qdrant vs Lucene Comparison](qdrant-vs-lucene.md)  
+- [Qdrant vs Lucene Comparison](qdrant-vs-lucene.md)
 - [Architecture Overview](architecture-overview.md)

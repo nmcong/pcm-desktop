@@ -12,19 +12,21 @@
 
 **Dialog:** `AddSystemDialog` / `EditSystemDialog`
 
-| Field | Type | Required | Validation | Default | Notes |
-|-------|------|----------|------------|---------|-------|
-| `code` | TextField | ✅ | Pattern: `^[A-Z0-9_-]{2,50}$`<br>Unique globally | - | Auto-uppercase |
-| `name` | TextField | ✅ | Max length: 255<br>Non-empty | - | |
-| `description` | TextArea | ❌ | Max length: 2000 | - | Resizable, 5 rows |
-| `owner` | TextField | ❌ | Max length: 255 | Current user | Autocomplete from users |
+| Field         | Type      | Required | Validation                                       | Default      | Notes                   |
+|---------------|-----------|----------|--------------------------------------------------|--------------|-------------------------|
+| `code`        | TextField | ✅        | Pattern: `^[A-Z0-9_-]{2,50}$`<br>Unique globally | -            | Auto-uppercase          |
+| `name`        | TextField | ✅        | Max length: 255<br>Non-empty                     | -            |                         |
+| `description` | TextArea  | ❌        | Max length: 2000                                 | -            | Resizable, 5 rows       |
+| `owner`       | TextField | ❌        | Max length: 255                                  | Current user | Autocomplete from users |
 
 **Buttons:**
+
 - `[Save]` - Enabled when form valid and dirty
 - `[Cancel]` - Close without saving
 - `[Delete]` - Only in edit mode, shows confirm dialog
 
 **Validation Messages:**
+
 - "Code is required"
 - "Code must be 2-50 characters (A-Z, 0-9, _, -)"
 - "Code already exists"
@@ -37,22 +39,24 @@
 
 **Dialog:** `AddSubsystemDialog` / `EditSubsystemDialog`
 
-| Field | Type | Required | Validation | Default | Notes |
-|-------|------|----------|------------|---------|-------|
-| `system_id` | ComboBox | ✅ | Must select valid system | - | Dropdown list of systems |
-| `code` | TextField | ✅ | Pattern: `^[A-Z0-9_-]{2,50}$`<br>Unique per system | - | Auto-uppercase |
-| `name` | TextField | ✅ | Max length: 255 | - | |
-| `description` | TextArea | ❌ | Max length: 2000 | - | |
-| `tech_stack` | TextField | ❌ | Max length: 255 | - | Autocomplete: Java, Python, Node.js, etc. |
-| `status` | ComboBox | ✅ | Enum: active, deprecated, archived | `active` | |
+| Field         | Type      | Required | Validation                                         | Default  | Notes                                     |
+|---------------|-----------|----------|----------------------------------------------------|----------|-------------------------------------------|
+| `system_id`   | ComboBox  | ✅        | Must select valid system                           | -        | Dropdown list of systems                  |
+| `code`        | TextField | ✅        | Pattern: `^[A-Z0-9_-]{2,50}$`<br>Unique per system | -        | Auto-uppercase                            |
+| `name`        | TextField | ✅        | Max length: 255                                    | -        |                                           |
+| `description` | TextArea  | ❌        | Max length: 2000                                   | -        |                                           |
+| `tech_stack`  | TextField | ❌        | Max length: 255                                    | -        | Autocomplete: Java, Python, Node.js, etc. |
+| `status`      | ComboBox  | ✅        | Enum: active, deprecated, archived                 | `active` |                                           |
 
 **ComboBox Options:**
-- `status`: 
-  - `active` ✅ (default)
-  - `deprecated` ⚠️
-  - `archived` 📦
+
+- `status`:
+    - `active` ✅ (default)
+    - `deprecated` ⚠️
+    - `archived` 📦
 
 **Validation Messages:**
+
 - "System is required"
 - "Code is required and must be unique within this system"
 - "Name is required"
@@ -64,25 +68,27 @@
 
 **Dialog:** `AddProjectDialog` / `EditProjectDialog`
 
-| Field | Type | Required | Validation | Default | Notes |
-|-------|------|----------|------------|---------|-------|
-| `subsystem_id` | ComboBox | ✅ | Must select valid subsystem | - | Hierarchical: System > Subsystem |
-| `code` | TextField | ✅ | Pattern: `^[A-Z0-9_-]{2,50}$`<br>Unique per subsystem | - | Auto-uppercase |
-| `name` | TextField | ✅ | Max length: 255 | - | |
-| `description` | TextArea | ❌ | Max length: 2000 | - | |
-| `lead` | TextField | ❌ | Max length: 255 | Current user | Autocomplete from users |
-| `status` | ComboBox | ✅ | Enum: draft, active, completed, cancelled | `draft` | |
-| `start_date` | DatePicker | ❌ | Date format | Today | |
-| `end_date` | DatePicker | ❌ | Must be >= start_date | - | Validation on blur |
+| Field          | Type       | Required | Validation                                            | Default      | Notes                            |
+|----------------|------------|----------|-------------------------------------------------------|--------------|----------------------------------|
+| `subsystem_id` | ComboBox   | ✅        | Must select valid subsystem                           | -            | Hierarchical: System > Subsystem |
+| `code`         | TextField  | ✅        | Pattern: `^[A-Z0-9_-]{2,50}$`<br>Unique per subsystem | -            | Auto-uppercase                   |
+| `name`         | TextField  | ✅        | Max length: 255                                       | -            |                                  |
+| `description`  | TextArea   | ❌        | Max length: 2000                                      | -            |                                  |
+| `lead`         | TextField  | ❌        | Max length: 255                                       | Current user | Autocomplete from users          |
+| `status`       | ComboBox   | ✅        | Enum: draft, active, completed, cancelled             | `draft`      |                                  |
+| `start_date`   | DatePicker | ❌        | Date format                                           | Today        |                                  |
+| `end_date`     | DatePicker | ❌        | Must be >= start_date                                 | -            | Validation on blur               |
 
 **ComboBox Options:**
+
 - `status`:
-  - `draft` 📝 (default)
-  - `active` ▶️
-  - `completed` ✅
-  - `cancelled` ❌
+    - `draft` 📝 (default)
+    - `active` ▶️
+    - `completed` ✅
+    - `cancelled` ❌
 
 **Validation Messages:**
+
 - "Subsystem is required"
 - "Code must be unique within this subsystem"
 - "End date must be after start date"
@@ -93,28 +99,31 @@
 
 **Dialog:** `AddBatchDialog` / `EditBatchDialog`
 
-| Field | Type | Required | Validation | Default | Notes |
-|-------|------|----------|------------|---------|-------|
-| `subsystem_id` | ComboBox | ✅ | Must select valid subsystem | - | |
-| `code` | TextField | ✅ | Pattern: `^[A-Z0-9_-]{2,50}$`<br>Unique per subsystem | - | Auto-uppercase |
-| `name` | TextField | ✅ | Max length: 255 | - | |
-| `description` | TextArea | ❌ | Max length: 2000 | - | |
-| `schedule_cron` | TextField | ❌ | Valid cron expression | - | Validator + helper button |
-| `status` | ComboBox | ✅ | Enum: idle, running, failed, disabled | `idle` | |
+| Field           | Type      | Required | Validation                                            | Default | Notes                     |
+|-----------------|-----------|----------|-------------------------------------------------------|---------|---------------------------|
+| `subsystem_id`  | ComboBox  | ✅        | Must select valid subsystem                           | -       |                           |
+| `code`          | TextField | ✅        | Pattern: `^[A-Z0-9_-]{2,50}$`<br>Unique per subsystem | -       | Auto-uppercase            |
+| `name`          | TextField | ✅        | Max length: 255                                       | -       |                           |
+| `description`   | TextArea  | ❌        | Max length: 2000                                      | -       |                           |
+| `schedule_cron` | TextField | ❌        | Valid cron expression                                 | -       | Validator + helper button |
+| `status`        | ComboBox  | ✅        | Enum: idle, running, failed, disabled                 | `idle`  |                           |
 
 **Helper UI:**
+
 - Cron expression builder button 🕐
 - Opens `CronBuilderDialog` for visual construction
 - Examples: "Daily at midnight", "Every Monday at 9 AM"
 
 **ComboBox Options:**
+
 - `status`:
-  - `idle` ⏸️ (default)
-  - `running` ▶️
-  - `failed` ❌
-  - `disabled` 🚫
+    - `idle` ⏸️ (default)
+    - `running` ▶️
+    - `failed` ❌
+    - `disabled` 🚫
 
 **Validation Messages:**
+
 - "Subsystem is required"
 - "Invalid cron expression (use * * * * * format)"
 
@@ -125,6 +134,7 @@
 **Dialog:** `DeleteConfirmDialog`
 
 **Content:**
+
 ```
 ┌────────────────────────────────────────┐
 │ ⚠️  Delete [Entity Type]?              │
@@ -162,38 +172,41 @@
 
 **Dialog:** `AddSourceDialog`
 
-| Field | Type | Required | Validation | Default | Notes |
-|-------|------|----------|------------|---------|-------|
-| `project_id` | ComboBox | ✅ | Must select valid project | - | Hierarchical dropdown |
-| `root_path` | TextField + Button | ✅ | Must be valid directory path<br>Must be readable | - | Browse button opens directory picker |
-| `vcs_type` | ComboBox | ✅ | Enum: git, svn, none | `git` | |
-| `default_branch` | TextField | ❌ | Only if vcs_type=git | `main` | Auto-detect from repo |
-| `language` | ComboBox | ❌ | Enum: Java, Python, JS, etc. | Auto-detect | Override auto-detection |
-| `scan_immediately` | CheckBox | ✅ | - | `true` | Start scan after save |
+| Field              | Type               | Required | Validation                                       | Default     | Notes                                |
+|--------------------|--------------------|----------|--------------------------------------------------|-------------|--------------------------------------|
+| `project_id`       | ComboBox           | ✅        | Must select valid project                        | -           | Hierarchical dropdown                |
+| `root_path`        | TextField + Button | ✅        | Must be valid directory path<br>Must be readable | -           | Browse button opens directory picker |
+| `vcs_type`         | ComboBox           | ✅        | Enum: git, svn, none                             | `git`       |                                      |
+| `default_branch`   | TextField          | ❌        | Only if vcs_type=git                             | `main`      | Auto-detect from repo                |
+| `language`         | ComboBox           | ❌        | Enum: Java, Python, JS, etc.                     | Auto-detect | Override auto-detection              |
+| `scan_immediately` | CheckBox           | ✅        | -                                                | `true`      | Start scan after save                |
 
 **Directory Picker:**
+
 - Native file dialog
 - Show hidden files toggle
 - Recent directories dropdown
 
 **ComboBox Options:**
+
 - `vcs_type`:
-  - `git` 
-  - `svn`
-  - `none` (plain directory)
-  
+    - `git`
+    - `svn`
+    - `none` (plain directory)
+
 - `language`:
-  - Auto-detect (default)
-  - Java
-  - Python
-  - JavaScript/TypeScript
-  - C/C++
-  - Go
-  - Rust
-  - PHP
-  - Other
+    - Auto-detect (default)
+    - Java
+    - Python
+    - JavaScript/TypeScript
+    - C/C++
+    - Go
+    - Rust
+    - PHP
+    - Other
 
 **Validation Messages:**
+
 - "Project is required"
 - "Root path is required"
 - "Directory does not exist or is not readable"
@@ -207,6 +220,7 @@
 **Dialog:** `ScanProgressDialog`
 
 **Content:**
+
 ```
 ┌────────────────────────────────────────┐
 │ Scanning Source Code...                │
@@ -227,6 +241,7 @@
 ```
 
 **Fields:**
+
 - Progress bar (indeterminate or percentage)
 - Current operation label (real-time update)
 - Statistics (updated every second)
@@ -239,6 +254,7 @@
 **Dialog:** `FileListDialog`
 
 **Content:**
+
 ```
 ┌────────────────────────────────────────────────┐
 │ Source Files - /code/payroll          [✕]     │
@@ -261,6 +277,7 @@
 ```
 
 **Features:**
+
 - Tree view with file hierarchy
 - Language filter dropdown
 - Search box (filename/path filter)
@@ -276,21 +293,23 @@
 
 **Dialog:** `ImportChmDialog`
 
-| Field | Type | Required | Validation | Default | Notes |
-|-------|------|----------|------------|---------|-------|
-| `chm_path` | TextField + Button | ✅ | Must be *.chm file<br>Must exist and be readable | - | Browse button for file picker |
-| `scope_type` | RadioButton Group | ✅ | One of: System, Subsystem, Project | `Project` | Determines which dropdown shows |
-| `system_id` | ComboBox | Conditional | If scope_type=System | - | |
-| `subsystem_id` | ComboBox | Conditional | If scope_type=Subsystem | - | |
-| `project_id` | ComboBox | Conditional | If scope_type=Project | Current project | |
-| `notes` | TextArea | ❌ | Max length: 1000 | - | |
+| Field          | Type               | Required    | Validation                                       | Default         | Notes                           |
+|----------------|--------------------|-------------|--------------------------------------------------|-----------------|---------------------------------|
+| `chm_path`     | TextField + Button | ✅           | Must be *.chm file<br>Must exist and be readable | -               | Browse button for file picker   |
+| `scope_type`   | RadioButton Group  | ✅           | One of: System, Subsystem, Project               | `Project`       | Determines which dropdown shows |
+| `system_id`    | ComboBox           | Conditional | If scope_type=System                             | -               |                                 |
+| `subsystem_id` | ComboBox           | Conditional | If scope_type=Subsystem                          | -               |                                 |
+| `project_id`   | ComboBox           | Conditional | If scope_type=Project                            | Current project |                                 |
+| `notes`        | TextArea           | ❌           | Max length: 1000                                 | -               |                                 |
 
 **File Picker:**
+
 - Filter: *.chm files only
 - Recent CHM files dropdown
 - Drag-and-drop support
 
 **Layout:**
+
 ```
 Choose CHM file:
 [C:\docs\api-docs.chm        ] [Browse...]
@@ -309,6 +328,7 @@ Notes (optional):
 
 **Import Process:**
 After clicking Import:
+
 1. Dialog transforms to progress view
 2. Shows extraction progress
 3. Shows parsing progress
@@ -319,6 +339,7 @@ After clicking Import:
 ### 3.2 Import Progress (embedded in dialog)
 
 **Content:**
+
 ```
 ┌────────────────────────────────────────┐
 │ Importing api-docs.chm...              │
@@ -337,6 +358,7 @@ After clicking Import:
 ```
 
 **On completion:**
+
 ```
 ┌────────────────────────────────────────┐
 │ ✓ Import Complete!                     │
@@ -357,14 +379,15 @@ After clicking Import:
 
 **Dialog:** `NewArticleDialog`
 
-| Field | Type | Required | Validation | Default | Notes |
-|-------|------|----------|------------|---------|-------|
-| `title` | TextField | ✅ | Max length: 255<br>Non-empty | - | |
-| `project_id` | ComboBox | ❌ | - | Current project | Optional scope |
-| `content` | Rich Text Editor | ✅ | Max length: 50,000<br>Non-empty | - | Markdown support |
-| `tags` | TagInput | ❌ | Max 10 tags<br>Each max 50 chars | - | Comma-separated, autocomplete |
+| Field        | Type             | Required | Validation                       | Default         | Notes                         |
+|--------------|------------------|----------|----------------------------------|-----------------|-------------------------------|
+| `title`      | TextField        | ✅        | Max length: 255<br>Non-empty     | -               |                               |
+| `project_id` | ComboBox         | ❌        | -                                | Current project | Optional scope                |
+| `content`    | Rich Text Editor | ✅        | Max length: 50,000<br>Non-empty  | -               | Markdown support              |
+| `tags`       | TagInput         | ❌        | Max 10 tags<br>Each max 50 chars | -               | Comma-separated, autocomplete |
 
 **Rich Text Editor Features:**
+
 - Markdown formatting toolbar
 - Preview tab
 - Insert code block
@@ -373,6 +396,7 @@ After clicking Import:
 - Syntax highlighting
 
 **Layout:**
+
 ```
 ┌──────────────────────────────────────────────────┐
 │ New Knowledge Article                     [✕]   │
@@ -406,6 +430,7 @@ After clicking Import:
 **Dialog:** `DocumentPreviewDialog`
 
 **Content:**
+
 ```
 ┌──────────────────────────────────────────────────┐
 │ api-docs.chm > Getting Started > Install [✕]   │
@@ -429,6 +454,7 @@ After clicking Import:
 ```
 
 **Navigation:**
+
 - Previous/Next buttons (within TOC order)
 - Breadcrumb path (clickable)
 - Zoom controls
@@ -442,18 +468,20 @@ After clicking Import:
 
 **Component:** `ChatInputArea`
 
-| Field | Type | Required | Validation | Default | Notes |
-|-------|------|----------|------------|---------|-------|
-| `message` | TextArea | ✅ | Max length: 10,000<br>Non-empty | - | Multi-line, auto-resize |
-| `attachments` | File List | ❌ | Max 10 files<br>Each max 10MB | - | Drag-and-drop support |
+| Field         | Type      | Required | Validation                      | Default | Notes                   |
+|---------------|-----------|----------|---------------------------------|---------|-------------------------|
+| `message`     | TextArea  | ✅        | Max length: 10,000<br>Non-empty | -       | Multi-line, auto-resize |
+| `attachments` | File List | ❌        | Max 10 files<br>Each max 10MB   | -       | Drag-and-drop support   |
 
 **Attachment Types Supported:**
+
 - Code files (*.java, *.py, *.js, etc.)
 - Text files (*.txt, *.md)
 - Images (*.png, *.jpg) - for screenshots
 - Documents (*.pdf, *.docx) - future
 
 **UI Elements:**
+
 ```
 ┌────────────────────────────────────────────────┐
 │ Type your question...                          │
@@ -469,12 +497,14 @@ Attached files:
 ```
 
 **Options Menu (gear icon):**
+
 - Project scope selector
 - Temperature slider (0.0 - 2.0)
 - Max tokens input
 - Include conversation history? (checkbox)
 
 **Keyboard Shortcuts:**
+
 - `Enter` - Send (if not multi-line)
 - `Shift+Enter` - New line
 - `Ctrl+Enter` - Send (always)
@@ -488,13 +518,14 @@ Attached files:
 
 Triggered by clicking 👍 or 👎 after response
 
-| Field | Type | Required | Validation | Default | Notes |
-|-------|------|----------|------------|---------|-------|
-| `rating` | Star Rating | ✅ | 1-5 stars | Thumb → Star mapping | 👎=1-2 stars, 👍=4-5 stars |
-| `comment` | TextArea | ❌ | Max length: 2000 | - | Optional detailed feedback |
-| `issue_type` | CheckBox Group | ❌ | - | - | Multiple selection |
+| Field        | Type           | Required | Validation       | Default              | Notes                      |
+|--------------|----------------|----------|------------------|----------------------|----------------------------|
+| `rating`     | Star Rating    | ✅        | 1-5 stars        | Thumb → Star mapping | 👎=1-2 stars, 👍=4-5 stars |
+| `comment`    | TextArea       | ❌        | Max length: 2000 | -                    | Optional detailed feedback |
+| `issue_type` | CheckBox Group | ❌        | -                | -                    | Multiple selection         |
 
 **Issue Type Options:**
+
 - ☐ Incorrect information
 - ☐ Missing context
 - ☐ Irrelevant sources
@@ -503,6 +534,7 @@ Triggered by clicking 👍 or 👎 after response
 - ☐ Too slow
 
 **Layout:**
+
 ```
 ┌────────────────────────────────────────┐
 │ Feedback on Response                   │
@@ -535,6 +567,7 @@ Triggered by clicking 👍 or 👎 after response
 **Tabs:** Upload File | Select from Project
 
 **Tab 1: Upload File**
+
 ```
 ┌────────────────────────────────────────┐
 │ Drag files here or click to browse    │
@@ -552,6 +585,7 @@ Uploaded:
 ```
 
 **Tab 2: Select from Project**
+
 ```
 Project: [Demo Project        ▾]
 
@@ -571,36 +605,40 @@ Project: [Demo Project        ▾]
 
 **Dialog:** `AdvancedSearchDialog`
 
-| Field | Type | Required | Validation | Default | Notes |
-|-------|------|----------|------------|---------|-------|
-| `query` | TextField | ✅ | Non-empty | - | |
-| `search_mode` | RadioButton Group | ✅ | - | `keyword` | |
-| `boolean_operator` | ComboBox | Conditional | If mode=boolean | `AND` | |
-| `field_specific` | CheckBox + ComboBox | ❌ | - | - | Search in specific field |
-| `use_regex` | CheckBox | ❌ | Valid regex if checked | `false` | |
-| `case_sensitive` | CheckBox | ❌ | - | `false` | |
-| `whole_word` | CheckBox | ❌ | - | `false` | |
+| Field              | Type                | Required    | Validation             | Default   | Notes                    |
+|--------------------|---------------------|-------------|------------------------|-----------|--------------------------|
+| `query`            | TextField           | ✅           | Non-empty              | -         |                          |
+| `search_mode`      | RadioButton Group   | ✅           | -                      | `keyword` |                          |
+| `boolean_operator` | ComboBox            | Conditional | If mode=boolean        | `AND`     |                          |
+| `field_specific`   | CheckBox + ComboBox | ❌           | -                      | -         | Search in specific field |
+| `use_regex`        | CheckBox            | ❌           | Valid regex if checked | `false`   |                          |
+| `case_sensitive`   | CheckBox            | ❌           | -                      | `false`   |                          |
+| `whole_word`       | CheckBox            | ❌           | -                      | `false`   |                          |
 
 **Search Modes:**
+
 - ( ) Keyword search (default)
 - ( ) Boolean search (AND, OR, NOT)
 - ( ) Phrase search ("exact phrase")
 - ( ) Regular expression
 
 **Boolean Operators:**
+
 - AND (default)
 - OR
 - NOT
 
 **Field-Specific Search:**
+
 - ☐ Search in specific field: [Field ▾]
-  - File path
-  - File name
-  - Content only
-  - Comments only
-  - FQ name (for AST)
+    - File path
+    - File name
+    - Content only
+    - Comments only
+    - FQ name (for AST)
 
 **Layout:**
+
 ```
 ┌────────────────────────────────────────────────┐
 │ Advanced Search                         [✕]   │
@@ -634,6 +672,7 @@ Project: [Demo Project        ▾]
 **Dialog:** `ResultPreviewDialog`
 
 **Content:**
+
 ```
 ┌────────────────────────────────────────────────┐
 │ AuthService.java:45-72                  [✕]   │
@@ -661,6 +700,7 @@ Project: [Demo Project        ▾]
 ```
 
 **Features:**
+
 - Syntax highlighting
 - Line numbers
 - Highlighted search terms
@@ -674,37 +714,39 @@ Project: [Demo Project        ▾]
 
 ### 6.1 General Settings Tab
 
-| Field | Type | Required | Validation | Default | Notes |
-|-------|------|----------|------------|---------|-------|
-| `theme` | ComboBox | ✅ | Enum: Light, Dark | `Light` | Apply immediately |
-| `language` | ComboBox | ✅ | Enum: EN, VI, KO, ZH, JA | `EN` | Restart required |
-| `default_project` | ComboBox | ❌ | Valid project | - | For new chats |
-| `auto_save_interval` | Spinner | ✅ | 30-300 seconds | `60` | |
-| `enable_notifications` | CheckBox | ✅ | - | `true` | |
-| `show_line_numbers` | CheckBox | ✅ | - | `true` | In code views |
+| Field                  | Type     | Required | Validation               | Default | Notes             |
+|------------------------|----------|----------|--------------------------|---------|-------------------|
+| `theme`                | ComboBox | ✅        | Enum: Light, Dark        | `Light` | Apply immediately |
+| `language`             | ComboBox | ✅        | Enum: EN, VI, KO, ZH, JA | `EN`    | Restart required  |
+| `default_project`      | ComboBox | ❌        | Valid project            | -       | For new chats     |
+| `auto_save_interval`   | Spinner  | ✅        | 30-300 seconds           | `60`    |                   |
+| `enable_notifications` | CheckBox | ✅        | -                        | `true`  |                   |
+| `show_line_numbers`    | CheckBox | ✅        | -                        | `true`  | In code views     |
 
 ---
 
 ### 6.2 AI Configuration Tab
 
-| Field | Type | Required | Validation | Default | Notes |
-|-------|------|----------|------------|---------|-------|
-| `llm_provider` | ComboBox | ✅ | Enum: OpenAI, Anthropic, Local | `OpenAI` | |
-| `api_key` | PasswordField | Conditional | Required if cloud provider | - | Masked input |
-| `model` | ComboBox | ✅ | Provider-specific models | - | Dynamic based on provider |
-| `temperature` | Slider | ✅ | 0.0 - 2.0 | `0.2` | Step: 0.1 |
-| `max_tokens` | Spinner | ✅ | 100 - 4000 | `2000` | |
-| `enable_streaming` | CheckBox | ✅ | - | `true` | |
-| `embedding_model` | ComboBox | ✅ | Provider models | - | |
-| `embedding_dimensions` | TextField | ✅ | Read-only | - | Auto from model |
-| `enable_embedding_cache` | CheckBox | ✅ | - | `true` | |
+| Field                    | Type          | Required    | Validation                     | Default  | Notes                     |
+|--------------------------|---------------|-------------|--------------------------------|----------|---------------------------|
+| `llm_provider`           | ComboBox      | ✅           | Enum: OpenAI, Anthropic, Local | `OpenAI` |                           |
+| `api_key`                | PasswordField | Conditional | Required if cloud provider     | -        | Masked input              |
+| `model`                  | ComboBox      | ✅           | Provider-specific models       | -        | Dynamic based on provider |
+| `temperature`            | Slider        | ✅           | 0.0 - 2.0                      | `0.2`    | Step: 0.1                 |
+| `max_tokens`             | Spinner       | ✅           | 100 - 4000                     | `2000`   |                           |
+| `enable_streaming`       | CheckBox      | ✅           | -                              | `true`   |                           |
+| `embedding_model`        | ComboBox      | ✅           | Provider models                | -        |                           |
+| `embedding_dimensions`   | TextField     | ✅           | Read-only                      | -        | Auto from model           |
+| `enable_embedding_cache` | CheckBox      | ✅           | -                              | `true`   |                           |
 
 **Model Options (dynamic):**
+
 - OpenAI: gpt-4o, gpt-4-turbo, gpt-3.5-turbo
 - Anthropic: claude-3-5-sonnet, claude-3-opus, claude-3-haiku
 - Local: llama3, mixtral, codellama
 
 **Test Connection Button:**
+
 - Click → Shows progress spinner
 - Success: Green checkmark + latency
 - Failure: Red X + error message
@@ -713,17 +755,17 @@ Project: [Demo Project        ▾]
 
 ### 6.3 Search Configuration Tab
 
-| Field | Type | Required | Validation | Default | Notes |
-|-------|------|----------|------------|---------|-------|
-| `vector_top_k` | Spinner | ✅ | 10 - 200 | `50` | |
-| `lexical_top_k` | Spinner | ✅ | 10 - 200 | `50` | |
-| `fusion_strategy` | ComboBox | ✅ | Enum: RRF, Weighted, Cross-Encoder | `RRF` | |
-| `rrf_k` | Spinner | Conditional | 1 - 100 | `60` | Only if fusion=RRF |
-| `vector_weight` | Slider | Conditional | 0.0 - 1.0 | `0.7` | Only if fusion=Weighted |
-| `lexical_weight` | Slider | Conditional | 0.0 - 1.0 | `0.3` | Only if fusion=Weighted |
-| `qdrant_url` | TextField | ✅ | Valid URL | `http://localhost:6333` | |
-| `qdrant_api_key` | PasswordField | ❌ | - | - | Optional |
-| `index_optimization_schedule` | TextField | ❌ | Valid cron | `0 2 * * *` | Daily at 2 AM |
+| Field                         | Type          | Required    | Validation                         | Default                 | Notes                   |
+|-------------------------------|---------------|-------------|------------------------------------|-------------------------|-------------------------|
+| `vector_top_k`                | Spinner       | ✅           | 10 - 200                           | `50`                    |                         |
+| `lexical_top_k`               | Spinner       | ✅           | 10 - 200                           | `50`                    |                         |
+| `fusion_strategy`             | ComboBox      | ✅           | Enum: RRF, Weighted, Cross-Encoder | `RRF`                   |                         |
+| `rrf_k`                       | Spinner       | Conditional | 1 - 100                            | `60`                    | Only if fusion=RRF      |
+| `vector_weight`               | Slider        | Conditional | 0.0 - 1.0                          | `0.7`                   | Only if fusion=Weighted |
+| `lexical_weight`              | Slider        | Conditional | 0.0 - 1.0                          | `0.3`                   | Only if fusion=Weighted |
+| `qdrant_url`                  | TextField     | ✅           | Valid URL                          | `http://localhost:6333` |                         |
+| `qdrant_api_key`              | PasswordField | ❌           | -                                  | -                       | Optional                |
+| `index_optimization_schedule` | TextField     | ❌           | Valid cron                         | `0 2 * * *`             | Daily at 2 AM           |
 
 ---
 
@@ -737,6 +779,7 @@ Project: [Demo Project        ▾]
 - Popular topics - Word cloud
 
 **Export Button:**
+
 - Opens `ExportAnalyticsDialog`
 - Select date range
 - Select metrics to include
@@ -748,36 +791,42 @@ Project: [Demo Project        ▾]
 ## 7. Common Validation Patterns
 
 ### 7.1 Required Field
+
 ```
 Error: "This field is required"
 Display: Red border + error text below field
 ```
 
 ### 7.2 Pattern Validation
+
 ```
 Error: "Invalid format. Expected: [pattern description]"
 Example: "Code must be 2-50 characters (A-Z, 0-9, _, -)"
 ```
 
 ### 7.3 Unique Constraint
+
 ```
 Error: "This [field] already exists in [scope]"
 Example: "Code 'HR' already exists in System 'ERP'"
 ```
 
 ### 7.4 Range Validation
+
 ```
 Error: "[Field] must be between [min] and [max]"
 Example: "Temperature must be between 0.0 and 2.0"
 ```
 
 ### 7.5 Date Range Validation
+
 ```
 Error: "End date must be after start date"
 Display: Highlight both fields in red
 ```
 
 ### 7.6 Async Validation (e.g., API key)
+
 ```
 Progress: Spinner icon in field
 Success: Green checkmark
@@ -817,6 +866,7 @@ Failure: Red X + error tooltip
 ## 9. Accessibility Attributes
 
 All fields should have:
+
 - `aria-label` or `<label for="">` association
 - `aria-required="true"` for required fields
 - `aria-invalid="true"` when validation fails

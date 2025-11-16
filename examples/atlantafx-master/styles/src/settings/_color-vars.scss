@@ -4,47 +4,47 @@
 @use "color-scale" as scale;
 @use "utils";
 
-$fg-default:           scale.$base-9 !default;
-$fg-muted:             scale.$base-6 !default;
-$fg-subtle:            scale.$base-5 !default;
-$fg-onEmphasis:        scale.$light  !default;
+$fg-default: scale.$base-9 !default;
+$fg-muted: scale.$base-6 !default;
+$fg-subtle: scale.$base-5 !default;
+$fg-onEmphasis: scale.$light !default;
 
-$canvas-default:       scale.$light  !default;
-$canvas-overlay:       scale.$light  !default;
-$canvas-inset:         scale.$base-0 !default;
-$canvas-subtle:        scale.$base-0 !default;
+$canvas-default: scale.$light !default;
+$canvas-overlay: scale.$light !default;
+$canvas-inset: scale.$base-0 !default;
+$canvas-subtle: scale.$base-0 !default;
 
-$border-default:       scale.$base-2 !default;
-$border-muted:         lighten(scale.$base-2, 0.03) !default;
-$border-subtle:        utils.flattenColor(scale.$light, color.change(scale.$dark, $alpha: 0.15)) !default;
-$shadow-default:       scale.$base-2 !default;
+$border-default: scale.$base-2 !default;
+$border-muted: lighten(scale.$base-2, 0.03) !default;
+$border-subtle: utils.flattenColor(scale.$light, color.change(scale.$dark, $alpha: 0.15)) !default;
+$shadow-default: scale.$base-2 !default;
 
 // neutral is used by the .split-menu-button,
 // note that you should maintain some contrast between neutral and canvas.subtle
 $neutral-emphasisPlus: scale.$base-9 !default;
-$neutral-emphasis:     scale.$base-5 !default;
-$neutral-muted:        color.change(scale.$base-3, $alpha: 0.2) !default;
-$neutral-subtle:       color.change(scale.$base-1, $alpha: 0.5) !default;
+$neutral-emphasis: scale.$base-5 !default;
+$neutral-muted: color.change(scale.$base-3, $alpha: 0.2) !default;
+$neutral-subtle: color.change(scale.$base-1, $alpha: 0.5) !default;
 
-$accent-fg:            scale.$accent-5 !default;
-$accent-emphasis:      scale.$accent-5 !default;
-$accent-muted:         color.change(scale.$accent-3, $alpha: 0.4) !default;
-$accent-subtle:        scale.$accent-0 !default;
+$accent-fg: scale.$accent-5 !default;
+$accent-emphasis: scale.$accent-5 !default;
+$accent-muted: color.change(scale.$accent-3, $alpha: 0.4) !default;
+$accent-subtle: scale.$accent-0 !default;
 
-$success-fg:           scale.$success-5 !default;
-$success-emphasis:     scale.$success-4 !default;
-$success-muted:        color.change(scale.$success-3, $alpha: 0.4) !default;
-$success-subtle:       scale.$success-0 !default;
+$success-fg: scale.$success-5 !default;
+$success-emphasis: scale.$success-4 !default;
+$success-muted: color.change(scale.$success-3, $alpha: 0.4) !default;
+$success-subtle: scale.$success-0 !default;
 
-$warning-fg:           scale.$warning-5 !default;
-$warning-emphasis:     scale.$warning-4 !default;
-$warning-muted:        color.change(scale.$warning-3, $alpha: 0.4) !default;
-$warning-subtle:       scale.$warning-0 !default;
+$warning-fg: scale.$warning-5 !default;
+$warning-emphasis: scale.$warning-4 !default;
+$warning-muted: color.change(scale.$warning-3, $alpha: 0.4) !default;
+$warning-subtle: scale.$warning-0 !default;
 
-$danger-fg:            scale.$danger-5 !default;
-$danger-emphasis:      scale.$danger-5 !default;
-$danger-muted:         color.change(scale.$danger-3, $alpha: 0.4) !default;
-$danger-subtle:        scale.$danger-0 !default;
+$danger-fg: scale.$danger-5 !default;
+$danger-emphasis: scale.$danger-5 !default;
+$danger-muted: color.change(scale.$danger-3, $alpha: 0.4) !default;
+$danger-subtle: scale.$danger-0 !default;
 
 $chart-1: #f3622d !default;
 $chart-2: #fba71b !default;

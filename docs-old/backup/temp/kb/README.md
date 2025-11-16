@@ -2,7 +2,8 @@
 
 ## 📋 Tổng Quan
 
-Module **Knowledge Base** là hệ thống internal StackOverflow-like cho team knowledge sharing. Cung cấp nền tảng để lưu trữ, tìm kiếm và chia sẻ kiến thức, giải pháp cho các vấn đề thường gặp trong dự án.
+Module **Knowledge Base** là hệ thống internal StackOverflow-like cho team knowledge sharing. Cung cấp nền tảng để lưu
+trữ, tìm kiếm và chia sẻ kiến thức, giải pháp cho các vấn đề thường gặp trong dự án.
 
 ### ✨ Features
 
@@ -19,9 +20,9 @@ Module **Knowledge Base** là hệ thống internal StackOverflow-like cho team 
 - **Total Files**: 5 files
 - **Page**: 1 file (581 lines)
 - **Components**: 3 files (755 lines total)
-  - KnowledgeBaseModal: 248 lines
-  - CategoryManagementModal: 332 lines
-  - KnowledgeBaseDetailModal: 175 lines
+    - KnowledgeBaseModal: 248 lines
+    - CategoryManagementModal: 332 lines
+    - KnowledgeBaseDetailModal: 175 lines
 - **Styles**: 1 file (755 lines)
 - **Total**: ~2,091 lines
 
@@ -50,9 +51,9 @@ knowledge-base/
 
 - **Module Structure**: Created folder structure ✅
 - **File Migration**: All files moved to module ✅
-  - KnowledgeBasePage.js → pages/
-  - 3 modal components → components/
-  - knowledge-base.css → styles/
+    - KnowledgeBasePage.js → pages/
+    - 3 modal components → components/
+    - knowledge-base.css → styles/
 - **Import Path Updates**: All imports fixed ✅
 - **CSS Integration**: Updated in index.html ✅
 - **Export Updates**: Updated pages/index.js ✅
@@ -378,29 +379,29 @@ None - All imports updated automatically. Module is backward compatible through 
 ### Potential Features
 
 1. **Advanced Search**:
-   - Full-text search
-   - Search by tags
-   - Date range filter
+    - Full-text search
+    - Search by tags
+    - Date range filter
 
 2. **Collaboration**:
-   - Comments system
-   - Upvote/downvote
-   - Follow items for updates
+    - Comments system
+    - Upvote/downvote
+    - Follow items for updates
 
 3. **Export/Import**:
-   - Export to PDF
-   - Export to Markdown
-   - Import from external sources
+    - Export to PDF
+    - Export to Markdown
+    - Import from external sources
 
 4. **Analytics**:
-   - View counts
-   - Most helpful items
-   - Search analytics
+    - View counts
+    - Most helpful items
+    - Search analytics
 
 5. **Attachments**:
-   - File attachments
-   - Images in solutions
-   - Code snippets with syntax highlighting
+    - File attachments
+    - Images in solutions
+    - Code snippets with syntax highlighting
 
 ---
 

@@ -1,6 +1,8 @@
 # Theming
 
-AtlantaFX uses *looked-up colors*. Each color property starts with `-color-*` prefix. There're [global colors](reference/global-colors.md), that are defined at the Scene root level and *individual controls colors* (check the corresponding control reference for the info).
+AtlantaFX uses *looked-up colors*. Each color property starts with `-color-*` prefix.
+There're [global colors](reference/global-colors.md), that are defined at the Scene root level and *individual controls
+colors* (check the corresponding control reference for the info).
 
 !!! note "What's looked-up color?"
 
@@ -34,7 +36,9 @@ AtlantaFX uses *looked-up colors*. Each color property starts with `-color-*` pr
     r3 - green
     ```
 
-All stylesheets are written in [SASS](https://sass-lang.com/documentation/) and compiled to CSS by using a very handy [sass-cli-maven-plugin](https://github.com/HebiRobotics/sass-cli-maven-plugin). You don't have to learn SASS, though it's a very simple language if you're already familiar with CSS.
+All stylesheets are written in [SASS](https://sass-lang.com/documentation/) and compiled to CSS by using a very
+handy [sass-cli-maven-plugin](https://github.com/HebiRobotics/sass-cli-maven-plugin). You don't have to learn SASS,
+though it's a very simple language if you're already familiar with CSS.
 
 !!! tip
 
@@ -56,7 +60,8 @@ All stylesheets are written in [SASS](https://sass-lang.com/documentation/) and 
 
 ## Compilation
 
-You can find ready to use custom theme template in the [`atlantafx-sample-theme`](https://github.com/mkpaz/atlantafx-sample-theme) repository.
+You can find ready to use custom theme template in
+the [`atlantafx-sample-theme`](https://github.com/mkpaz/atlantafx-sample-theme) repository.
 
 * Clone the sample repository.
 
@@ -79,15 +84,21 @@ You can find ready to use custom theme template in the [`atlantafx-sample-theme`
 
 ## Modification
 
-Each SCSS file in the source directory is nothing but a separate SASS module that can be imported by other files. You can find a bunch of SASS variables at the top of a file. If variable is marked as `!default`, it can be changed during theme compilation.
+Each SCSS file in the source directory is nothing but a separate SASS module that can be imported by other files. You
+can find a bunch of SASS variables at the top of a file. If variable is marked as `!default`, it can be changed during
+theme compilation.
 
-In fact, any AtlantaFX theme can be used as an example. They all share the common sources and use SASS variable modification to compile the different stylesheets.
+In fact, any AtlantaFX theme can be used as an example. They all share the common sources and use SASS variable
+modification to compile the different stylesheets.
 
 !!! tip
-    If you want to customize a style property that is not exposed as SASS variable, don't hesitate to open an [issue](https://github.com/mkpaz/atlantafx/issues) or send a [PR](https://github.com/mkpaz/atlantafx/pulls).
+If you want to customize a style property that is not exposed as SASS variable, don't hesitate to open
+an [issue](https://github.com/mkpaz/atlantafx/issues) or send a [PR](https://github.com/mkpaz/atlantafx/pulls).
 
 !!! warning
-    Note that SASS is only loading any module (file) just once, so **customization order does matter**. E.g. if A module imports B and B imports C then we have to override C variables first, then B, then A. Otherwise, there will be an exception that we are attempting to change a variable in a module that has been already loaded.
+Note that SASS is only loading any module (file) just once, so **customization order does matter**. E.g. if A module
+imports B and B imports C then we have to override C variables first, then B, then A. Otherwise, there will be an
+exception that we are attempting to change a variable in a module that has been already loaded.
 
 Example:
 
@@ -116,7 +127,9 @@ Example:
 
 ## Color Contrast
 
-If you want to develop a good theme, there are some accessibility rules. Color contrast between text and its background must meet required [WCAG standards](https://www.w3.org/WAI/WCAG21/Understanding/contrast-minimum.html). The contrast requirements are:
+If you want to develop a good theme, there are some accessibility rules. Color contrast between text and its background
+must meet required [WCAG standards](https://www.w3.org/WAI/WCAG21/Understanding/contrast-minimum.html). The contrast
+requirements are:
 
 * `4.5:1` for normal text
 * `3:1` for large text (>24px)
@@ -135,7 +148,8 @@ Click on any block to run contrast checker and get more detailed info.
 
 You can use Sampler app to test and develop your custom theme. Including hot reload, of course.
 
-Start Sampler app in development mode (check [build instructions](build.md) for more info). If you downloaded packaged Sampler app, you can do that by setting `ATLANTAFX_MODE=dev` env variable.
+Start Sampler app in development mode (check [build instructions](build.md) for more info). If you downloaded packaged
+Sampler app, you can do that by setting `ATLANTAFX_MODE=dev` env variable.
 
 Go to the `Theme` page and add your CSS file.
 

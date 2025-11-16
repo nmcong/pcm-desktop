@@ -1,6 +1,7 @@
 # CHM Integration - Detailed Design Specification
 
 **Tạo từ các file nguồn:**
+
 - `docs/RaD/ideas/chm-ingestion.md`
 
 **Phiên bản:** 1.0  
@@ -10,7 +11,8 @@
 
 ## 1. Tổng quan
 
-Tài liệu này mô tả chi tiết quy trình tích hợp Microsoft Compiled HTML Help (CHM) files vào hệ thống PCM Desktop. CHM files thường chứa legacy documentation cần được index và search như các knowledge sources khác.
+Tài liệu này mô tả chi tiết quy trình tích hợp Microsoft Compiled HTML Help (CHM) files vào hệ thống PCM Desktop. CHM
+files thường chứa legacy documentation cần được index và search như các knowledge sources khác.
 
 ### 1.1 Lý do tích hợp CHM
 
@@ -45,13 +47,13 @@ Ready for RAG retrieval
 
 ### 2.1 Tool Comparison
 
-| Tool | Platform | Pros | Cons |
-|------|----------|------|------|
-| `hh.exe -decompile` | Windows | Native, reliable | Windows-only |
-| `extract_chmLib` | Linux/macOS | Open-source, cross-platform | Needs compilation |
-| `libmspack` | Cross | Well-maintained | Complex API |
-| `pychm` | Cross | Python bindings, easy | Requires Python |
-| `CHMLib` Java | JVM | Pure Java, portable | Less maintained |
+| Tool                | Platform    | Pros                        | Cons              |
+|---------------------|-------------|-----------------------------|-------------------|
+| `hh.exe -decompile` | Windows     | Native, reliable            | Windows-only      |
+| `extract_chmLib`    | Linux/macOS | Open-source, cross-platform | Needs compilation |
+| `libmspack`         | Cross       | Well-maintained             | Complex API       |
+| `pychm`             | Cross       | Python bindings, easy       | Requires Python   |
+| `CHMLib` Java       | JVM         | Pure Java, portable         | Less maintained   |
 
 **Recommendation:** Use `extract_chmLib` (Linux/macOS) or `hh.exe` (Windows), wrapped in Java `ProcessBuilder`.
 
@@ -166,6 +168,7 @@ CREATE INDEX idx_chm_imports_status ON chm_imports(status);
 ```
 
 **Status values:**
+
 - `pending`: Awaiting processing
 - `extracting`: Currently extracting
 - `parsing`: Parsing HTML/TOC
@@ -194,6 +197,7 @@ CREATE INDEX idx_chm_documents_import ON chm_documents(import_id);
 ```
 
 **Metadata JSON structure:**
+
 ```json
 {
   "encoding": "UTF-8",
@@ -870,6 +874,7 @@ public class ChmBrowserPage extends VBox {
 **Issue: Extraction fails on macOS**
 
 Solution:
+
 ```bash
 # Install extract_chmLib via Homebrew
 brew install chmlib
@@ -881,6 +886,7 @@ pip install pychm
 **Issue: Encoding problems (garbled text)**
 
 Solution:
+
 ```java
 // Detect encoding
 Charset detectedCharset = detectEncoding(htmlFile);
@@ -896,6 +902,7 @@ String utf8Content = new String(
 **Issue: TOC not loading**
 
 Solution:
+
 - Check for `.hhc` file in extracted directory
 - Fallback to file listing if TOC parsing fails
 - Validate HTML structure (some CHMs have malformed TOC)

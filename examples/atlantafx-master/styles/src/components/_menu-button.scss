@@ -9,8 +9,8 @@ $color-split-arrow-bg: -color-neutral-emphasis-plus !default;
 $color-split-arrow-fg: -color-fg-emphasis !default;
 $color-split-arrow-opacity: 0.75 !default;
 
-$arrow-button-width: 0.5em  !default;
-$separator-width:    0.75px !default;
+$arrow-button-width: 0.5em !default;
+$separator-width: 0.75px !default;
 
 .menu-button,
 .split-menu-button {
@@ -19,15 +19,15 @@ $separator-width:    0.75px !default;
   -fx-padding: 0;
   -fx-alignment: CENTER_LEFT;
 
-  >.label {
+  > .label {
     -fx-padding: cfg.$padding-y cfg.$padding-x cfg.$padding-y cfg.$padding-x;
     -fx-text-fill: -color-button-fg;
   }
 
-  >.arrow-button {
+  > .arrow-button {
     -fx-padding: cfg.$padding-y cfg.$padding-x cfg.$padding-y 0;
 
-    >.arrow {
+    > .arrow {
       @include icons.get("arrow-right", false);
       -fx-background-color: -color-button-fg;
       -fx-min-width: $arrow-button-width;
@@ -37,16 +37,16 @@ $separator-width:    0.75px !default;
   // "vertically" means popup side (either top or bottom),
   // so, it's actually default state
   &:openvertically {
-    >.arrow-button {
-      >.arrow {
+    > .arrow-button {
+      > .arrow {
         @include icons.get("arrow-drop-down", false);
       }
     }
   }
 
   &:show-mnemonics {
-    >.label {
-      >.mnemonic-underline {
+    > .label {
+      > .mnemonic-underline {
         -fx-stroke: -color-button-fg;
       }
     }
@@ -60,12 +60,12 @@ $separator-width:    0.75px !default;
     -fx-background-color: -color-button-border-hover, -color-button-bg-hover;
     -fx-opacity: button.$opacity-hover;
 
-    >.label {
+    > .label {
       -fx-text-fill: -color-button-fg-hover;
     }
 
-    >.arrow-button {
-      >.arrow {
+    > .arrow-button {
+      > .arrow {
         -fx-background-color: -color-button-fg-hover;
       }
     }
@@ -74,11 +74,11 @@ $separator-width:    0.75px !default;
   &:focused {
     -fx-background-color: -color-button-border-focused, -color-button-bg-focused;
 
-    >.label {
+    > .label {
       -fx-text-fill: -color-button-fg-focused;
     }
 
-    >.arrow-button>.arrow {
+    > .arrow-button > .arrow {
       -fx-background-color: -color-button-fg-focused;
     }
 
@@ -93,11 +93,11 @@ $separator-width:    0.75px !default;
     -fx-background-color: -color-button-border-pressed, -color-button-bg-pressed;
     -fx-text-fill: -color-button-fg-pressed;
 
-    >.label {
+    > .label {
       -fx-text-fill: -color-button-fg-pressed;
     }
 
-    >.arrow-button>.arrow {
+    > .arrow-button > .arrow {
       -fx-background-color: -color-button-fg-pressed;
     }
 
@@ -108,8 +108,8 @@ $separator-width:    0.75px !default;
   }
 
   &.button-outlined {
-    -color-button-bg:       -color-bg-default;
-    -color-button-fg:       button.$color-fg;
+    -color-button-bg: -color-bg-default;
+    -color-button-fg: button.$color-fg;
     -color-button-bg-hover: button.$color-bg-hover;
     -color-button-fg-hover: button.$color-fg-hover;
   }
@@ -132,12 +132,12 @@ $separator-width:    0.75px !default;
 
   // prevent opacity from being applied twice
   &:disabled {
-    >.label {
+    > .label {
       -fx-opacity: 1;
     }
   }
 
- .menu-item {
+  .menu-item {
     #{cfg.$font-icon-selector} {
       -fx-icon-color: menu.$color-menuitem-fg;
       -fx-fill: menu.$color-menuitem-fg;
@@ -156,10 +156,10 @@ $separator-width:    0.75px !default;
 
   // #tweak/no-arrow
   &.no-arrow {
-    >.arrow-button {
+    > .arrow-button {
       -fx-padding: 0;
 
-      >.arrow {
+      > .arrow {
         -fx-shape: none;
         -fx-scale-shape: false;
         -fx-min-width: -1;
@@ -170,20 +170,20 @@ $separator-width:    0.75px !default;
 
 .split-menu-button {
 
-  >.label {
+  > .label {
     -fx-padding: cfg.$padding-y calc(cfg.$padding-x / 2) cfg.$padding-y cfg.$padding-x;
   }
 
   &:hover,
   &:focused:hover {
-    >.arrow-button {
+    > .arrow-button {
       -fx-background-color: $color-split-arrow-bg;
       -fx-background-insets: cfg.$border-width;
       -fx-background-radius: cfg.$inner-border-radius;
       -fx-border-color: transparent;
       -fx-opacity: $color-split-arrow-opacity;
 
-      >.arrow {
+      > .arrow {
         -fx-background-color: $color-split-arrow-fg;
         -fx-opacity: 1.0;
       }
@@ -194,10 +194,10 @@ $separator-width:    0.75px !default;
   &.accent:hover,
   &.success:hover,
   &.danger:hover {
-    >.arrow-button {
+    > .arrow-button {
       -fx-background-color: -color-fg-emphasis;
 
-      >.arrow {
+      > .arrow {
         -fx-background-color: -color-button-bg-hover;
       }
     }
@@ -205,7 +205,7 @@ $separator-width:    0.75px !default;
 
   &.button-outlined:hover,
   &.button-outlined:focused {
-    >.arrow-button {
+    > .arrow-button {
       -color-button-fg: -color-fg-default;
     }
 
@@ -213,13 +213,13 @@ $separator-width:    0.75px !default;
     &.accent,
     &.success,
     &.danger {
-      >.arrow-button {
+      > .arrow-button {
         -color-button-fg: -color-fg-emphasis;
       }
     }
   }
 
-  >.arrow-button {
+  > .arrow-button {
     -fx-padding: cfg.$padding-y cfg.$padding-x cfg.$padding-y cfg.$padding-x;
     -fx-background-radius: 0 cfg.$inner-border-radius cfg.$inner-border-radius 0;
     -fx-border-color: -color-button-fg;

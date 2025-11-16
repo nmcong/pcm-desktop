@@ -27,12 +27,14 @@ package atlantafx.base.shim.collections;
 
 import java.util.Collections;
 import java.util.List;
+
 import javafx.collections.ListChangeListener.Change;
 import javafx.collections.ObservableList;
 
 @SuppressWarnings("all")
 public abstract class NonIterableChange<E> extends Change<E> {
 
+    private static final int[] EMPTY_PERM = new int[0];
     private final int from;
     private final int to;
     private boolean invalid = true;
@@ -54,8 +56,6 @@ public abstract class NonIterableChange<E> extends Change<E> {
         checkState();
         return to;
     }
-
-    private static final int[] EMPTY_PERM = new int[0];
 
     @Override
     protected int[] getPermutation() {
@@ -119,6 +119,7 @@ public abstract class NonIterableChange<E> extends Change<E> {
     public static class SimpleRemovedChange<E> extends NonIterableChange<E> {
 
         private final List<E> removed;
+
         public SimpleRemovedChange(int from, int to, E removed, ObservableList<E> list) {
             super(from, to, list);
             this.removed = Collections.singletonList(removed);
@@ -158,7 +159,7 @@ public abstract class NonIterableChange<E> extends Change<E> {
 
     }
 
-    public static class SimplePermutationChange<E> extends NonIterableChange<E>{
+    public static class SimplePermutationChange<E> extends NonIterableChange<E> {
 
         private final int[] permutation;
 
@@ -181,7 +182,7 @@ public abstract class NonIterableChange<E> extends Change<E> {
         }
     }
 
-    public static class SimpleUpdateChange<E> extends NonIterableChange<E>{
+    public static class SimpleUpdateChange<E> extends NonIterableChange<E> {
 
         public SimpleUpdateChange(int position, ObservableList<E> list) {
             this(position, position + 1, list);

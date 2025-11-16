@@ -5,6 +5,7 @@ Complete documentation for PCM Desktop's RAG (Retrieval-Augmented Generation) sy
 ## 📚 **Overview**
 
 This directory contains comprehensive documentation for:
+
 - **Embedding Services** - Text-to-vector conversion
 - **Vector Stores** - Vector database integration
 - **RAG Pipeline** - Complete workflows
@@ -74,6 +75,7 @@ java -cp "out:lib/javafx/*:lib/others/*:lib/rag/*" \
 ### For Beginners
 
 **Start here:**
+
 1. [DJL Overview](./embedding/DJL_OVERVIEW.md) - Learn embedding basics
 2. [Model Selection](./embedding/MODEL_SELECTION_GUIDE.md) - Choose your model
 3. Run examples in `src/main/java/com/noteflix/pcm/rag/examples/`
@@ -85,6 +87,7 @@ java -cp "out:lib/javafx/*:lib/others/*:lib/rag/*" \
 ### For Intermediate Users
 
 **Recommended path:**
+
 1. [Model Comparison](./embedding/MODEL_COMPARISON.md) - Compare performance
 2. [Qdrant Implementation](./vectorstore/QDRANT_IMPLEMENTATION.md) - Vector database
 3. Build your RAG application
@@ -96,6 +99,7 @@ java -cp "out:lib/javafx/*:lib/others/*:lib/rag/*" \
 ### For Advanced Users
 
 **Production deployment:**
+
 1. Read all embedding docs
 2. Read vector store docs
 3. Performance benchmarking
@@ -113,9 +117,11 @@ java -cp "out:lib/javafx/*:lib/others/*:lib/rag/*" \
 **What:** Convert text to vector representations
 
 **Production Implementation:**
+
 - **DJLEmbeddingService** - The ONLY embedding service (DJL + ONNX Runtime + HuggingFace Tokenizer)
 
 **When to use:**
+
 - Semantic search
 - Document similarity
 - Clustering & classification
@@ -130,11 +136,13 @@ java -cp "out:lib/javafx/*:lib/others/*:lib/rag/*" \
 **What:** Store and search vector embeddings
 
 **Implementations:**
+
 - **QdrantVectorStore** - Production-grade (Qdrant REST API)
 - **LuceneVectorStore** - Offline search (Apache Lucene)
 - **SimpleVectorStore** - In-memory (for testing)
 
 **When to use:**
+
 - Large document collections (>1K docs)
 - Fast similarity search required
 - Production RAG systems
@@ -148,17 +156,17 @@ java -cp "out:lib/javafx/*:lib/others/*:lib/rag/*" \
 
 ### Embedding Services
 
-| Service | Memory | Speed | Quality | Status |
-|---------|--------|-------|---------|--------|
+| Service                 | Memory | Speed                                   | Quality          | Status         |
+|-------------------------|--------|-----------------------------------------|------------------|----------------|
 | **DJLEmbeddingService** | ~400MB | ~70-90ms (single)<br>~500ms (batch 100) | Production-grade | ✅ **USE THIS** |
 
 ### Vector Stores
 
-| Store | Scalability | Speed | Setup | Best For |
-|-------|-------------|-------|-------|----------|
-| **Qdrant** | Millions | ⚡ Fast | Docker | ✅ Production |
-| **Lucene** | ~100K | 🔵 Medium | None | Offline |
-| **Simple** | ~10K | ⚡ Fast | None | Testing |
+| Store      | Scalability | Speed     | Setup  | Best For     |
+|------------|-------------|-----------|--------|--------------|
+| **Qdrant** | Millions    | ⚡ Fast    | Docker | ✅ Production |
+| **Lucene** | ~100K       | 🔵 Medium | None   | Offline      |
+| **Simple** | ~10K        | ⚡ Fast    | None   | Testing      |
 
 ---
 
@@ -183,6 +191,7 @@ for (ScoredDocument doc : results) {
 ```
 
 **Recommended:**
+
 - **Embeddings:** DJLEmbeddingService with all-MiniLM-L6-v2
 - **Vector Store:** Lucene (offline) or Qdrant (scalable)
 
@@ -205,6 +214,7 @@ List<ScoredDocument> results = ragService.search(query, options);
 ```
 
 **Recommended:**
+
 - **Embeddings:** DJLEmbeddingService with all-mpnet-base-v2 (best quality)
 - **Vector Store:** Qdrant (scalable)
 
@@ -225,6 +235,7 @@ FAQ bestMatch = findMostSimilar(queryEmb, faqs);
 ```
 
 **Recommended:**
+
 - **Embeddings:** DJLEmbeddingService (fast with batch processing)
 - **Vector Store:** In-memory (small dataset)
 
@@ -235,11 +246,13 @@ FAQ bestMatch = findMostSimilar(queryEmb, faqs);
 ### System Requirements
 
 **Minimum:**
+
 - Java 21+
 - 4GB RAM
 - 500MB disk space
 
 **Recommended:**
+
 - Java 21+
 - 8GB RAM
 - 2GB disk space (with models)
@@ -247,6 +260,7 @@ FAQ bestMatch = findMostSimilar(queryEmb, faqs);
 ### Dependencies
 
 **For Embeddings (DJLEmbeddingService):**
+
 ```
 ✅ ai.djl:api:0.35.0
 ✅ ai.djl.onnxruntime:onnxruntime-engine:0.35.0
@@ -255,6 +269,7 @@ FAQ bestMatch = findMostSimilar(queryEmb, faqs);
 ```
 
 **For Qdrant Vector Store:**
+
 ```
 ✅ Java HttpClient (built-in)
 ✅ Jackson JSON (included)
@@ -268,24 +283,28 @@ FAQ bestMatch = findMostSimilar(queryEmb, faqs);
 ### Common Issues
 
 **1. Model not found**
+
 ```bash
 # Solution
 ./scripts/setup-embeddings-djl.sh
 ```
 
 **2. Qdrant connection failed**
+
 ```bash
 # Solution
 docker run -p 6333:6333 qdrant/qdrant
 ```
 
 **3. OutOfMemoryError**
+
 ```bash
 # Solution
 export JAVA_OPTS="-Xmx4g"
 ```
 
 **4. Slow performance**
+
 ```java
 // Solution: Warm up JVM
 for (int i = 0; i < 20; i++) {
@@ -399,6 +418,7 @@ Before deploying to production:
 Want to improve the RAG system or documentation?
 
 **How to contribute:**
+
 1. Read existing documentation
 2. Identify improvements
 3. Make changes
@@ -406,6 +426,7 @@ Want to improve the RAG system or documentation?
 5. Submit pull request
 
 **Areas for contribution:**
+
 - More embedding models
 - Additional vector stores
 - Performance optimizations
@@ -416,14 +437,14 @@ Want to improve the RAG system or documentation?
 
 ## 📊 **Statistics**
 
-| Category | Components | Lines of Code | Documentation |
-|----------|------------|---------------|---------------|
-| **Embeddings** | 3 services | ~1,200 | 4 guides |
-| **Vector Stores** | 3 implementations | ~800 | 1 guide |
-| **Pipeline** | RAG service + indexer | ~600 | Examples |
-| **Examples** | 6 examples | ~1,200 | 2 READMEs |
-| **Documentation** | 6 guides | ~50,000 words | This folder |
-| **Total** | **15+ components** | **~3,800 LOC** | **~50K words** |
+| Category          | Components            | Lines of Code  | Documentation  |
+|-------------------|-----------------------|----------------|----------------|
+| **Embeddings**    | 3 services            | ~1,200         | 4 guides       |
+| **Vector Stores** | 3 implementations     | ~800           | 1 guide        |
+| **Pipeline**      | RAG service + indexer | ~600           | Examples       |
+| **Examples**      | 6 examples            | ~1,200         | 2 READMEs      |
+| **Documentation** | 6 guides              | ~50,000 words  | This folder    |
+| **Total**         | **15+ components**    | **~3,800 LOC** | **~50K words** |
 
 ---
 

@@ -32,6 +32,7 @@ package atlantafx.base.controls;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
 import javafx.animation.Animation;
 import javafx.animation.TranslateTransition;
 import javafx.beans.property.DoubleProperty;
@@ -61,6 +62,11 @@ public class ToggleSwitchSkin extends SkinBase<ToggleSwitch> {
     protected final Label label;
     protected final StackPane labelContainer;
     protected final TranslateTransition transition;
+    /**
+     * How many milliseconds it should take for the thumb to go from
+     * one edge to the other.
+     */
+    private @Nullable DoubleProperty thumbMoveAnimationTime = null;
 
     public ToggleSwitchSkin(ToggleSwitch control) {
         super(control);
@@ -114,12 +120,6 @@ public class ToggleSwitchSkin extends SkinBase<ToggleSwitch> {
     private void mousePressedOnToggleSwitch(ToggleSwitch toggleSwitch) {
         toggleSwitch.setSelected(!toggleSwitch.isSelected());
     }
-
-    /**
-     * How many milliseconds it should take for the thumb to go from
-     * one edge to the other.
-     */
-    private @Nullable DoubleProperty thumbMoveAnimationTime = null;
 
     private DoubleProperty thumbMoveAnimationTimeProperty() {
         if (thumbMoveAnimationTime == null) {
@@ -265,8 +265,8 @@ public class ToggleSwitchSkin extends SkinBase<ToggleSwitch> {
 
     static class StyleableProperties {
 
-        private static final CssMetaData<ToggleSwitch, Number> THUMB_MOVE_ANIMATION_TIME = new CssMetaData<>(
-            "-fx-thumb-move-animation-time", SizeConverter.getInstance(), DEFAULT_ANIMATION_TIME.toMillis()
+        private static final List<CssMetaData<? extends Styleable, ?>> STYLEABLES;        private static final CssMetaData<ToggleSwitch, Number> THUMB_MOVE_ANIMATION_TIME = new CssMetaData<>(
+                "-fx-thumb-move-animation-time", SizeConverter.getInstance(), DEFAULT_ANIMATION_TIME.toMillis()
         ) {
 
             @Override
@@ -283,14 +283,14 @@ public class ToggleSwitchSkin extends SkinBase<ToggleSwitch> {
             }
         };
 
-        private static final List<CssMetaData<? extends Styleable, ?>> STYLEABLES;
-
         static {
             final List<CssMetaData<? extends Styleable, ?>> styleables = new ArrayList<>(
-                SkinBase.getClassCssMetaData()
+                    SkinBase.getClassCssMetaData()
             );
             styleables.add(THUMB_MOVE_ANIMATION_TIME);
             STYLEABLES = Collections.unmodifiableList(styleables);
         }
+
+
     }
 }

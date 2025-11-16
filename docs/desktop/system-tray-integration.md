@@ -1,6 +1,7 @@
 # System Tray Integration và Auto-startup Guide
 
 ## Table of Contents
+
 1. [Overview](#overview)
 2. [System Tray Implementation](#system-tray-implementation)
 3. [Auto-startup Configuration](#auto-startup-configuration)
@@ -12,11 +13,13 @@
 ## Overview
 
 ### System Requirements
+
 - **Java**: 17+ with JavaFX support
 - **Platforms**: Windows 10/11, macOS 10.14+, Linux (GNOME/KDE)
 - **Dependencies**: AWT System Tray support
 
 ### Features to Implement
+
 - **System Tray Icon**: Ứng dụng thu nhỏ xuống system tray
 - **Auto-startup**: Tự động khởi động khi boot system
 - **Context Menu**: Menu chuột phải trên tray icon
@@ -28,6 +31,7 @@
 ### 1. Dependencies Required
 
 #### Maven Dependencies
+
 ```xml
 <dependencies>
     <!-- JavaFX for UI -->
@@ -60,6 +64,7 @@
 ```
 
 #### Module Info Updates
+
 ```java
 // module-info.java
 module com.noteflix.pcm {
@@ -78,6 +83,7 @@ module com.noteflix.pcm {
 ### 2. System Tray Manager Implementation
 
 #### Core Tray Manager Class
+
 ```java
 package com.noteflix.pcm.tray;
 
@@ -448,6 +454,7 @@ public class SystemTrayManager {
 ### 3. Integration with JavaFX Application
 
 #### Main Application Class Updates
+
 ```java
 package com.noteflix.pcm;
 
@@ -598,6 +605,7 @@ public class PCMDesktopApplication extends Application {
 ### 1. Auto-startup Manager Implementation
 
 #### Cross-platform Auto-startup Manager
+
 ```java
 package com.noteflix.pcm.startup;
 
@@ -964,6 +972,7 @@ public class AutoStartupManager {
 ### 2. Settings Integration
 
 #### Auto-startup Settings UI
+
 ```java
 package com.noteflix.pcm.ui.settings;
 
@@ -1149,6 +1158,7 @@ public class SystemSettingsPane extends VBox {
 ### 1. Platform-Specific Behavior
 
 #### Windows Specific
+
 ```java
 // Windows registry management for auto-startup
 public class WindowsIntegration {
@@ -1185,6 +1195,7 @@ public class WindowsIntegration {
 ```
 
 #### macOS Specific
+
 ```java
 // macOS-specific integration
 public class MacOSIntegration {
@@ -1236,6 +1247,7 @@ public class MacOSIntegration {
 ```
 
 #### Linux Specific
+
 ```java
 // Linux-specific integration
 public class LinuxIntegration {
@@ -1303,6 +1315,7 @@ public class LinuxIntegration {
 ### 2. Icon Resources Organization
 
 #### Directory Structure
+
 ```
 src/main/resources/icons/
 ├── app/                    # Application icons
@@ -1333,6 +1346,7 @@ src/main/resources/icons/
 ```
 
 #### Icon Design Guidelines
+
 ```yaml
 Application Icons:
   Formats: PNG with transparency
@@ -1364,6 +1378,7 @@ Tray Icons:
 ### 1. Configuration Schema
 
 #### System Integration Settings
+
 ```json
 {
   "system": {
@@ -1400,6 +1415,7 @@ Tray Icons:
 ### 2. Settings Persistence
 
 #### Configuration Manager Extension
+
 ```java
 public class SystemIntegrationConfig {
     
@@ -1463,6 +1479,7 @@ public class SystemIntegrationConfig {
 ### 1. First-time Setup
 
 #### Welcome Configuration Flow
+
 ```java
 public class FirstTimeSetupWizard {
     
@@ -1533,6 +1550,7 @@ public class FirstTimeSetupWizard {
 ### 2. User Notifications
 
 #### Tray Notification System
+
 ```java
 public class TrayNotificationManager {
     
@@ -1575,6 +1593,7 @@ public class TrayNotificationManager {
 ### 3. Accessibility Considerations
 
 #### Keyboard Navigation
+
 ```java
 public class AccessibilitySupport {
     
@@ -1633,6 +1652,7 @@ public class AccessibilitySupport {
 ### 1. Unit Tests
 
 #### System Tray Manager Tests
+
 ```java
 @ExtendWith(MockitoExtension.class)
 class SystemTrayManagerTest {
@@ -1695,6 +1715,7 @@ class SystemTrayManagerTest {
 ```
 
 #### Auto-startup Manager Tests
+
 ```java
 @ExtendWith(MockitoExtension.class)
 class AutoStartupManagerTest {
@@ -1737,6 +1758,7 @@ class AutoStartupManagerTest {
 ### 2. Integration Tests
 
 #### End-to-End Workflow Tests
+
 ```java
 @TestMethodOrder(OrderAnnotation.class)
 class SystemIntegrationE2ETest {
@@ -1811,6 +1833,7 @@ class SystemIntegrationE2ETest {
 ### 3. Manual Testing Checklist
 
 #### System Tray Testing
+
 ```yaml
 Basic Functionality:
   □ Application minimizes to tray when requested
@@ -1848,6 +1871,7 @@ User Experience:
 ```
 
 #### Auto-startup Testing
+
 ```yaml
 Configuration:
   □ Auto-startup can be enabled from settings
@@ -1881,19 +1905,22 @@ Behavior:
 ---
 
 **Implementation Priority:**
+
 1. **High**: System Tray basic functionality
-2. **High**: Auto-startup configuration  
+2. **High**: Auto-startup configuration
 3. **Medium**: Cross-platform optimizations
 4. **Medium**: Advanced notifications
 5. **Low**: Accessibility enhancements
 
 **Dependencies:**
+
 - Java AWT System Tray support
 - Platform-specific APIs (JNA)
 - Icon assets in multiple formats
 - Configuration management system
 
 **Security Considerations:**
+
 - Registry access permissions (Windows)
 - File system permissions for autostart directories
 - Code signing for auto-startup trust

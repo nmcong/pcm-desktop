@@ -23,7 +23,8 @@
 
 ### 1.1. Bối Cảnh
 
-Module UI hiện tại của PCM Desktop đã được xây dựng với JavaFX và tuân theo các nguyên tắc Clean Architecture. Tuy nhiên, qua thời gian phát triển, cấu trúc code đã xuất hiện một số vấn đề về:
+Module UI hiện tại của PCM Desktop đã được xây dựng với JavaFX và tuân theo các nguyên tắc Clean Architecture. Tuy
+nhiên, qua thời gian phát triển, cấu trúc code đã xuất hiện một số vấn đề về:
 
 - **Tính nhất quán**: Cách tổ chức code không đồng nhất giữa các pages
 - **Khả năng mở rộng**: Khó thêm features mới mà không ảnh hưởng code cũ
@@ -90,25 +91,25 @@ ui/
 #### 2.1.2. Design Patterns Hiện Tại
 
 1. **MVVM Pattern** (Partial)
-   - ✅ ViewModels được tách riêng
-   - ❌ Không phải tất cả Pages đều sử dụng ViewModel
-   - ❌ Data binding chưa được tận dụng tối đa
+    - ✅ ViewModels được tách riêng
+    - ❌ Không phải tất cả Pages đều sử dụng ViewModel
+    - ❌ Data binding chưa được tận dụng tối đa
 
 2. **Template Method Pattern**
-   - ✅ `BasePage` sử dụng template method
-   - ✅ Pages kế thừa và override methods
+    - ✅ `BasePage` sử dụng template method
+    - ✅ Pages kế thừa và override methods
 
 3. **Dependency Injection** (Manual)
-   - ⚠️ DI thủ công qua constructor
-   - ❌ Không có DI container/framework
+    - ⚠️ DI thủ công qua constructor
+    - ❌ Không có DI container/framework
 
 4. **Observer Pattern**
-   - ✅ Sử dụng JavaFX Properties
-   - ✅ ThemeChangeListener cho theme switching
+    - ✅ Sử dụng JavaFX Properties
+    - ✅ ThemeChangeListener cho theme switching
 
 5. **Factory Pattern**
-   - ⚠️ Sử dụng factory methods trong một số trường hợp
-   - ❌ Chưa có dedicated Factory classes
+    - ⚠️ Sử dụng factory methods trong một số trường hợp
+    - ❌ Chưa có dedicated Factory classes
 
 ### 2.2. Luồng Dữ Liệu Hiện Tại
 
@@ -133,12 +134,14 @@ ui/
 ### 2.3. Dependencies
 
 #### External Dependencies
+
 - **AtlantaFX**: Theme framework và UI components
 - **Ikonli**: Icon library (Octicons, Feather)
 - **Lombok**: Boilerplate reduction
 - **SLF4J + Logback**: Logging
 
 #### Internal Dependencies
+
 - `com.noteflix.pcm.core.navigation`: Navigation system
 - `com.noteflix.pcm.core.theme`: Theme management
 - `com.noteflix.pcm.core.i18n`: Internationalization
@@ -155,15 +158,18 @@ ui/
 #### 3.1.1. God Classes ⚠️⚠️⚠️
 
 **AIAssistantPage.java** (806 lines)
+
 - Quá nhiều responsibilities trong một class
 - Khó đọc, khó maintain
 - Violates Single Responsibility Principle
 
 **MainView.java** (515 lines)
+
 - Chứa cả logic layout và demo content
 - Mix concerns: navigation, theme, demo UI
 
 **SidebarView.java** (344 lines)
+
 - Chứa cả UI creation và event handling
 - Tạo menu items inline
 
@@ -189,22 +195,22 @@ ui/
    ```
 
 3. **Layout Patterns**
-   - Section headers với icon và action button
-   - Card layouts với padding và styling
-   - List items với avatar và details
+    - Section headers với icon và action button
+    - Card layouts với padding và styling
+    - List items với avatar và details
 
 #### 3.1.3. Inconsistent Architecture
 
 1. **ViewModel Usage**
-   - ✅ `AIAssistantPage` + `AIAssistantViewModel`: MVVM properly
-   - ❌ `CSSTestPage`: No ViewModel
-   - ❌ `UniversalTextDemoPage`: No ViewModel
-   - ⚠️ Mixed approach gây confusion
+    - ✅ `AIAssistantPage` + `AIAssistantViewModel`: MVVM properly
+    - ❌ `CSSTestPage`: No ViewModel
+    - ❌ `UniversalTextDemoPage`: No ViewModel
+    - ⚠️ Mixed approach gây confusion
 
 2. **Service Injection**
-   - Some pages: Constructor injection
-   - Some pages: Factory methods
-   - Some pages: Direct instantiation
+    - Some pages: Constructor injection
+    - Some pages: Factory methods
+    - Some pages: Direct instantiation
 
 3. **Page Initialization**
    ```java
@@ -229,42 +235,42 @@ ui/
    ```
 
 2. **Theme Management**
-   - Direct dependency on `ThemeManager.getInstance()`
-   - Singleton pattern tạo tight coupling
+    - Direct dependency on `ThemeManager.getInstance()`
+    - Singleton pattern tạo tight coupling
 
 #### 3.1.5. Missing Abstractions
 
 1. **No UI Component Library**
-   - Mỗi page tự tạo buttons, cards, forms
-   - Không có reusable UI components
+    - Mỗi page tự tạo buttons, cards, forms
+    - Không có reusable UI components
 
 2. **No Layout Utilities**
-   - Duplicate layout code (spacing, padding, alignment)
-   - Magic numbers everywhere
+    - Duplicate layout code (spacing, padding, alignment)
+    - Magic numbers everywhere
 
 3. **No Validation Framework**
-   - Form validation logic scattered
-   - No consistent error handling
+    - Form validation logic scattered
+    - No consistent error handling
 
 #### 3.1.6. Testing Issues
 
 1. **Hard to Unit Test**
-   - UI logic mixed với business logic
-   - Heavy use của JavaFX components
+    - UI logic mixed với business logic
+    - Heavy use của JavaFX components
 
 2. **No Test Coverage**
-   - Không có UI tests
-   - Không có ViewModel tests
+    - Không có UI tests
+    - Không có ViewModel tests
 
 ### 3.2. Performance Issues
 
 1. **Page Creation**
-   - Pages được tạo mới mỗi lần navigate (cached nhưng eager initialization)
-   - Heavy pages như `AIAssistantPage` slow startup
+    - Pages được tạo mới mỗi lần navigate (cached nhưng eager initialization)
+    - Heavy pages như `AIAssistantPage` slow startup
 
 2. **Memory Leaks**
-   - Listeners không được cleanup properly
-   - Navigation history có thể grow unbounded
+    - Listeners không được cleanup properly
+    - Navigation history có thể grow unbounded
 
 ### 3.3. Maintainability Issues
 
@@ -282,8 +288,8 @@ ui/
    ```
 
 3. **Poor Documentation**
-   - Một số methods thiếu JavaDoc
-   - Không có architecture documentation
+    - Một số methods thiếu JavaDoc
+    - Không có architecture documentation
 
 ---
 
@@ -292,39 +298,39 @@ ui/
 ### 4.1. Mục Tiêu Chính
 
 1. **Cải thiện Tính Nhất Quán**
-   - Tất cả pages sử dụng MVVM pattern
-   - Consistent naming conventions
-   - Consistent code structure
+    - Tất cả pages sử dụng MVVM pattern
+    - Consistent naming conventions
+    - Consistent code structure
 
 2. **Tăng Khả Năng Tái Sử Dụng**
-   - UI component library
-   - Reusable layout components
-   - Shared utilities
+    - UI component library
+    - Reusable layout components
+    - Shared utilities
 
 3. **Giảm Coupling**
-   - Dependency Injection framework
-   - Interface-based design
-   - Event-driven architecture
+    - Dependency Injection framework
+    - Interface-based design
+    - Event-driven architecture
 
 4. **Cải thiện Testability**
-   - Separate UI từ business logic
-   - Mockable dependencies
-   - Test-friendly architecture
+    - Separate UI từ business logic
+    - Mockable dependencies
+    - Test-friendly architecture
 
 5. **Tăng Maintainability**
-   - Smaller, focused classes
-   - Clear separation of concerns
-   - Better documentation
+    - Smaller, focused classes
+    - Clear separation of concerns
+    - Better documentation
 
 ### 4.2. Metrics Đo Lường Thành Công
 
-| Metric | Current | Target |
-|--------|---------|--------|
-| Avg. Lines per Page | ~300 | < 200 |
-| Largest Class | 806 lines | < 300 |
-| Code Duplication | ~25% | < 10% |
-| Test Coverage | 0% | > 70% |
-| MVVM Compliance | 40% | 100% |
+| Metric              | Current   | Target |
+|---------------------|-----------|--------|
+| Avg. Lines per Page | ~300      | < 200  |
+| Largest Class       | 806 lines | < 300  |
+| Code Duplication    | ~25%      | < 10%  |
+| Test Coverage       | 0%        | > 70%  |
+| MVVM Compliance     | 40%       | 100%   |
 
 ---
 
@@ -601,34 +607,35 @@ Phase 5: Documentation & Polish (Week 10)
 #### Tasks
 
 1. **Setup New Package Structure** (2 days)
-   - [ ] Create new package directories
-   - [ ] Create README files for each package
-   - [ ] Setup package-info.java files
+    - [ ] Create new package directories
+    - [ ] Create README files for each package
+    - [ ] Setup package-info.java files
 
 2. **Create Base Classes** (3 days)
-   - [ ] Refactor `BaseViewModel.java`
-   - [ ] Create `ViewModelLifecycle.java`
-   - [ ] Create `ViewModelFactory.java`
-   - [ ] Refactor `BasePage.java` → `BaseView.java`
-   - [ ] Create `ViewLifecycle.java`
-   - [ ] Create `BaseController.java`
+    - [ ] Refactor `BaseViewModel.java`
+    - [ ] Create `ViewModelLifecycle.java`
+    - [ ] Create `ViewModelFactory.java`
+    - [ ] Refactor `BasePage.java` → `BaseView.java`
+    - [ ] Create `ViewLifecycle.java`
+    - [ ] Create `BaseController.java`
 
 3. **Create DI Container** (2 days)
-   - [ ] Implement simple DI container
-   - [ ] Create service registration
-   - [ ] Test DI with existing services
+    - [ ] Implement simple DI container
+    - [ ] Create service registration
+    - [ ] Test DI with existing services
 
 4. **Create Constants** (1 day)
-   - [ ] `StyleConstants.java`
-   - [ ] `LayoutConstants.java`
-   - [ ] `ColorConstants.java`
+    - [ ] `StyleConstants.java`
+    - [ ] `LayoutConstants.java`
+    - [ ] `ColorConstants.java`
 
 5. **Create Utilities** (2 days)
-   - [ ] `UIFactory.java`
-   - [ ] `LayoutHelper.java`
-   - [ ] `ValidationHelper.java`
+    - [ ] `UIFactory.java`
+    - [ ] `LayoutHelper.java`
+    - [ ] `ValidationHelper.java`
 
 **Deliverables:**
+
 - New package structure created
 - Base classes implemented
 - DI container working
@@ -639,44 +646,45 @@ Phase 5: Documentation & Polish (Week 10)
 #### Tasks
 
 1. **Common Components - Buttons** (1 day)
-   - [ ] `IconButton.java`
-   - [ ] `PrimaryButton.java`
-   - [ ] `SecondaryButton.java`
-   - [ ] `ButtonBuilder.java`
+    - [ ] `IconButton.java`
+    - [ ] `PrimaryButton.java`
+    - [ ] `SecondaryButton.java`
+    - [ ] `ButtonBuilder.java`
 
 2. **Common Components - Cards** (1 day)
-   - [ ] `Card.java`
-   - [ ] `StatCard.java`
-   - [ ] `InfoCard.java`
+    - [ ] `Card.java`
+    - [ ] `StatCard.java`
+    - [ ] `InfoCard.java`
 
 3. **Common Components - Forms** (2 days)
-   - [ ] `FormField.java`
-   - [ ] `ValidatedTextField.java`
-   - [ ] `FormBuilder.java`
+    - [ ] `FormField.java`
+    - [ ] `ValidatedTextField.java`
+    - [ ] `FormBuilder.java`
 
 4. **Common Components - Dialogs** (1 day)
-   - [ ] `DialogBuilder.java`
-   - [ ] `ConfirmDialog.java`
-   - [ ] `InfoDialog.java`
+    - [ ] `DialogBuilder.java`
+    - [ ] `ConfirmDialog.java`
+    - [ ] `InfoDialog.java`
 
 5. **Common Components - Lists** (1 day)
-   - [ ] `ListItem.java`
-   - [ ] `AvatarListItem.java`
-   - [ ] `IconListItem.java`
+    - [ ] `ListItem.java`
+    - [ ] `AvatarListItem.java`
+    - [ ] `IconListItem.java`
 
 6. **Navigation Components** (2 days)
-   - [ ] `NavigationBar.java`
-   - [ ] `Breadcrumb.java`
-   - [ ] `AppHeader.java`
-   - [ ] Refactor `SidebarView.java`
+    - [ ] `NavigationBar.java`
+    - [ ] `Breadcrumb.java`
+    - [ ] `AppHeader.java`
+    - [ ] Refactor `SidebarView.java`
 
 7. **Widgets** (2 days)
-   - [ ] `SearchBox.java`
-   - [ ] `LoadingIndicator.java`
-   - [ ] `StatusBadge.java`
-   - [ ] `ThemeToggle.java`
+    - [ ] `SearchBox.java`
+    - [ ] `LoadingIndicator.java`
+    - [ ] `StatusBadge.java`
+    - [ ] `ThemeToggle.java`
 
 **Deliverables:**
+
 - Complete component library
 - Components tested individually
 - Documentation for each component
@@ -684,6 +692,7 @@ Phase 5: Documentation & Polish (Week 10)
 ### 6.4. Phase 3: Pages Refactoring (Week 5-7)
 
 #### Priority Order:
+
 1. AIAssistantPage (highest priority, most complex)
 2. KnowledgeBasePage
 3. DatabaseObjectsPage
@@ -696,24 +705,28 @@ Phase 5: Documentation & Polish (Week 10)
 **Week 5: AIAssistantPage** (5 days)
 
 Day 1-2: Break down into components
+
 - [ ] Create `ai/components/ChatSidebar.java`
 - [ ] Create `ai/components/ChatMessageList.java`
 - [ ] Create `ai/components/ChatInputArea.java`
 - [ ] Create `ai/components/ConversationItem.java`
 
 Day 3: Refactor ViewModel
+
 - [ ] Review `AIAssistantViewModel.java`
 - [ ] Extract common logic to base
 - [ ] Improve property bindings
 - [ ] Add validation
 
 Day 4: Refactor Page
+
 - [ ] Simplify `AIAssistantPage.java`
 - [ ] Use new components
 - [ ] Apply MVVM strictly
 - [ ] Target < 200 lines
 
 Day 5: Testing
+
 - [ ] Unit tests for ViewModel
 - [ ] Integration tests for Page
 - [ ] Manual testing
@@ -721,12 +734,14 @@ Day 5: Testing
 **Week 6: KnowledgeBase + Database** (5 days)
 
 Days 1-2: KnowledgeBasePage
+
 - [ ] Create components
 - [ ] Refactor ViewModel
 - [ ] Refactor Page
 - [ ] Tests
 
 Days 3-4: DatabaseObjectsPage
+
 - [ ] Create components
 - [ ] Refactor ViewModel
 - [ ] Refactor Page
@@ -741,6 +756,7 @@ Days 3-4: SettingsPage
 Day 5: Demo pages
 
 **Deliverables:**
+
 - All pages refactored
 - All pages use MVVM
 - All pages < 300 lines
@@ -753,43 +769,44 @@ Day 5: Demo pages
 **Week 8: Integration**
 
 1. **Refactor MainView** (2 days)
-   - [ ] Use new `AppHeader` component
-   - [ ] Use refactored `SidebarView`
-   - [ ] Remove demo content
-   - [ ] Simplify structure
+    - [ ] Use new `AppHeader` component
+    - [ ] Use refactored `SidebarView`
+    - [ ] Remove demo content
+    - [ ] Simplify structure
 
 2. **Refactor MainController** (1 day)
-   - [ ] Remove boilerplate
-   - [ ] Use DI
-   - [ ] Simplify methods
+    - [ ] Remove boilerplate
+    - [ ] Use DI
+    - [ ] Simplify methods
 
 3. **Update Navigation** (1 day)
-   - [ ] Integrate with new page structure
-   - [ ] Test navigation flow
-   - [ ] Fix navigation history
+    - [ ] Integrate with new page structure
+    - [ ] Test navigation flow
+    - [ ] Fix navigation history
 
 4. **Theme Integration** (1 day)
-   - [ ] Test theme switching
-   - [ ] Verify all components
-   - [ ] Fix theme issues
+    - [ ] Test theme switching
+    - [ ] Verify all components
+    - [ ] Fix theme issues
 
 **Week 9: Testing**
 
 1. **Unit Tests** (2 days)
-   - [ ] ViewModel tests
-   - [ ] Component tests
-   - [ ] Utility tests
+    - [ ] ViewModel tests
+    - [ ] Component tests
+    - [ ] Utility tests
 
 2. **Integration Tests** (2 days)
-   - [ ] Page integration tests
-   - [ ] Navigation tests
-   - [ ] Service integration tests
+    - [ ] Page integration tests
+    - [ ] Navigation tests
+    - [ ] Service integration tests
 
 3. **E2E Tests** (1 day)
-   - [ ] User workflows
-   - [ ] Critical paths
+    - [ ] User workflows
+    - [ ] Critical paths
 
 **Deliverables:**
+
 - Fully integrated system
 - Test coverage > 70%
 - All tests passing
@@ -799,26 +816,27 @@ Day 5: Demo pages
 #### Tasks
 
 1. **Code Documentation** (2 days)
-   - [ ] JavaDoc for all public APIs
-   - [ ] Package documentation
-   - [ ] Architecture diagrams
+    - [ ] JavaDoc for all public APIs
+    - [ ] Package documentation
+    - [ ] Architecture diagrams
 
 2. **User Documentation** (1 day)
-   - [ ] Component usage guide
-   - [ ] Page creation guide
-   - [ ] Best practices
+    - [ ] Component usage guide
+    - [ ] Page creation guide
+    - [ ] Best practices
 
 3. **Developer Documentation** (1 day)
-   - [ ] Architecture overview
-   - [ ] Design patterns used
-   - [ ] Extension guide
+    - [ ] Architecture overview
+    - [ ] Design patterns used
+    - [ ] Extension guide
 
 4. **Code Review & Cleanup** (1 day)
-   - [ ] Remove deprecated code
-   - [ ] Fix warnings
-   - [ ] Format code
+    - [ ] Remove deprecated code
+    - [ ] Fix warnings
+    - [ ] Format code
 
 **Deliverables:**
+
 - Complete documentation
 - Clean codebase
 - Ready for production
@@ -1005,6 +1023,7 @@ void testChatWorkflow() {
 ### 9.2. During Refactoring
 
 #### Phase 1: Foundation
+
 - [ ] Package structure created
 - [ ] Base classes implemented
 - [ ] DI container working
@@ -1012,6 +1031,7 @@ void testChatWorkflow() {
 - [ ] Utilities created
 
 #### Phase 2: Components
+
 - [ ] Button components
 - [ ] Card components
 - [ ] Form components
@@ -1021,6 +1041,7 @@ void testChatWorkflow() {
 - [ ] Widgets
 
 #### Phase 3: Pages
+
 - [ ] AIAssistantPage refactored
 - [ ] KnowledgeBasePage refactored
 - [ ] DatabaseObjectsPage refactored
@@ -1029,6 +1050,7 @@ void testChatWorkflow() {
 - [ ] Demo pages refactored
 
 #### Phase 4: Integration
+
 - [ ] MainView refactored
 - [ ] MainController refactored
 - [ ] Navigation updated
@@ -1036,6 +1058,7 @@ void testChatWorkflow() {
 - [ ] All tests passing
 
 #### Phase 5: Documentation
+
 - [ ] Code documentation
 - [ ] User documentation
 - [ ] Developer documentation
@@ -1060,13 +1083,13 @@ void testChatWorkflow() {
 
 ### 10.1. Identified Risks
 
-| Risk | Impact | Probability | Mitigation |
-|------|--------|-------------|------------|
-| Breaking existing features | High | Medium | Incremental migration, extensive testing |
-| Performance degradation | Medium | Low | Performance benchmarks, profiling |
-| Team learning curve | Medium | Medium | Training, documentation, pair programming |
-| Scope creep | High | High | Strict phase boundaries, regular reviews |
-| Timeline delays | Medium | Medium | Buffer time, prioritization |
+| Risk                       | Impact | Probability | Mitigation                                |
+|----------------------------|--------|-------------|-------------------------------------------|
+| Breaking existing features | High   | Medium      | Incremental migration, extensive testing  |
+| Performance degradation    | Medium | Low         | Performance benchmarks, profiling         |
+| Team learning curve        | Medium | Medium      | Training, documentation, pair programming |
+| Scope creep                | High   | High        | Strict phase boundaries, regular reviews  |
+| Timeline delays            | Medium | Medium      | Buffer time, prioritization               |
 
 ### 10.2. Rollback Plan
 
@@ -1264,9 +1287,9 @@ public class ChatSidebar extends VBox {
 
 ## Changelog
 
-| Version | Date | Author | Changes |
-|---------|------|--------|---------|
-| 1.0.0 | 2025-11-15 | PCM Team | Initial draft |
+| Version | Date       | Author   | Changes       |
+|---------|------------|----------|---------------|
+| 1.0.0   | 2025-11-15 | PCM Team | Initial draft |
 
 ---
 

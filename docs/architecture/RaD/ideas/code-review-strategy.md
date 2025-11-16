@@ -1,6 +1,7 @@
 # Source Code Review Strategy
 
-This document outlines how PCM Desktop can support automated and assisted code reviews, leveraging the existing metadata (AST, semantic search, impact analysis) to highlight risks and ensure consistency.
+This document outlines how PCM Desktop can support automated and assisted code reviews, leveraging the existing
+metadata (AST, semantic search, impact analysis) to highlight risks and ensure consistency.
 
 ---
 
@@ -34,23 +35,25 @@ graph TD
 ```
 
 ### Detailed Flow
+
 1. **Diff Parsing**
-   - Map changed lines to `source_files` and `ast_nodes` (use `snapshot_id` comparison).
+    - Map changed lines to `source_files` and `ast_nodes` (use `snapshot_id` comparison).
 2. **Context Gathering**
-   - Retrieve surrounding code, dependencies, existing comments/TODOs.
-   - Run `hybridRetrieve` to fetch documentation or previous discussions relevant to the change.
+    - Retrieve surrounding code, dependencies, existing comments/TODOs.
+    - Run `hybridRetrieve` to fetch documentation or previous discussions relevant to the change.
 3. **Heuristic Checks**
-   - Coding standards: naming, null checks, error handling.
-   - Security: input validation, authentication, injection risks.
-   - Internationalization: string literals vs. resource bundles, encoding.
-   - Performance: unbounded loops, large allocations.
-   - Test impact: verify affected components have corresponding tests or recommendations.
+    - Coding standards: naming, null checks, error handling.
+    - Security: input validation, authentication, injection risks.
+    - Internationalization: string literals vs. resource bundles, encoding.
+    - Performance: unbounded loops, large allocations.
+    - Test impact: verify affected components have corresponding tests or recommendations.
 4. **LLM-assisted Review (optional)**
-   - Provide diff + context to LLM with instructions to highlight issues, referencing `function-calling-spec.md` for any necessary lookups.
+    - Provide diff + context to LLM with instructions to highlight issues, referencing `function-calling-spec.md` for
+      any necessary lookups.
 5. **Comment Generation**
-   - Merge heuristic and LLM findings into structured comments with severity levels (`info`, `warning`, `critical`).
+    - Merge heuristic and LLM findings into structured comments with severity levels (`info`, `warning`, `critical`).
 6. **Presentation**
-   - Display in UI review panel or embed in agent response with citations (file path, lines, node ID).
+    - Display in UI review panel or embed in agent response with citations (file path, lines, node ID).
 
 ---
 
@@ -78,11 +81,11 @@ This table allows persistent storage of review feedback tied to requests or comm
 ## 5. Function Interfaces
 
 - `reviewChange(request_id, diff): List<ReviewComment>`
-  - Orchestrates the flow above and stores comments in `review_comments`.
+    - Orchestrates the flow above and stores comments in `review_comments`.
 - `listReviewComments(request_id)`
-  - Retrieves comments for display/export.
+    - Retrieves comments for display/export.
 - `applyReviewRule(ruleId, context)`
-  - Allows plugging in additional heuristic or ML rules.
+    - Allows plugging in additional heuristic or ML rules.
 
 ---
 
@@ -103,7 +106,8 @@ This table allows persistent storage of review feedback tied to requests or comm
 
 ## 7. Integration with UI & Agents
 
-- **UI Review Panel**: Show list of comments, highlight code snippet (reuse `SnippetFormatter`). Allow users to mark resolved/unresolved.
+- **UI Review Panel**: Show list of comments, highlight code snippet (reuse `SnippetFormatter`). Allow users to mark
+  resolved/unresolved.
 - **Agent Responses**: When a user asks for a review, the LLM can cite these comments and propose fixes.
 - **Notifications**: Optionally send alerts (email/Slack) when critical issues are detected.
 
@@ -116,4 +120,5 @@ This table allows persistent storage of review feedback tied to requests or comm
 - Provide quick actions: “generate fix snippet”, “create task”, “open file in IDE”.
 - Log all automated review actions for audit and continuous improvement.
 
-This strategy ensures code reviews are consistent, traceable, and integrated with the overall requirement-analysis workflow.
+This strategy ensures code reviews are consistent, traceable, and integrated with the overall requirement-analysis
+workflow.

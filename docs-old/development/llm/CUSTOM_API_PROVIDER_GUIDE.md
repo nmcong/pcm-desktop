@@ -7,6 +7,7 @@
 ## 📋 **Tổng Quan**
 
 **CustomAPIProvider** là provider được thiết kế đặc biệt cho service LLM riêng của bạn với:
+
 - ✅ Conversation management (tạo & tracking conversation ID)
 - ✅ SSE streaming với **thinking mode** built-in
 - ✅ Function calling (inject vào content)
@@ -17,9 +18,11 @@
 ## 🏗️ **API Endpoints**
 
 ### 1. **POST /api/chat/create**
+
 Tạo conversation mới, trả về ID.
 
 **Request:**
+
 ```json
 {
   // Empty or with metadata
@@ -27,6 +30,7 @@ Tạo conversation mới, trả về ID.
 ```
 
 **Response:**
+
 ```json
 {
   "id": "conv_12345"
@@ -39,9 +43,11 @@ Tạo conversation mới, trả về ID.
 ```
 
 ### 2. **POST /api/chat/stream**
+
 Stream chat với LLM (SSE format).
 
 **Request:**
+
 ```json
 {
   "conversation_id": "conv_12345",
@@ -51,6 +57,7 @@ Stream chat với LLM (SSE format).
 ```
 
 **Response (SSE):**
+
 ```
 data: {"type": "thinking", "content": "Let me think..."}
 
@@ -64,9 +71,11 @@ data: {"type": "done", "usage": {"prompt_tokens": 10, "completion_tokens": 20}}
 ```
 
 ### 3. **GET /api/chat/tokens/{conversationId}**
+
 Lấy số token còn lại của conversation.
 
 **Response:**
+
 ```json
 {
   "remaining_tokens": 1500
@@ -320,27 +329,32 @@ requestBody.put("metadata", metadata);
 ## 🎯 **Features**
 
 ### ✅ Conversation Management
+
 - Tự động tạo conversation khi cần
 - Cache conversation IDs để reuse
 - Customizable cache strategy
 
 ### ✅ Thinking Mode (Built-in!)
+
 - Tự động detect `"type": "thinking"` trong SSE
 - Trigger `onThinking()` callback
 - Hiển thị riêng trong UI
 
 ### ✅ Function Calling (Injected)
+
 - Inject function definitions vào content
 - Format: XML-style `<function_call>...</function_call>`
 - LLM response theo format để call functions
 - Bạn parse và execute
 
 ### ✅ Token Tracking
+
 - Check remaining tokens cho conversation
 - Alert user khi sắp hết tokens
 - Monitor usage cho mỗi request
 
 ### ✅ Error Handling
+
 - Retry logic với exponential backoff
 - Comprehensive error messages
 - `onError()` callback cho UI
@@ -352,6 +366,7 @@ requestBody.put("metadata", metadata);
 Xem file: `src/main/java/com/noteflix/pcm/llm/examples/CustomAPIUsageExample.java`
 
 4 examples:
+
 1. Basic setup & chat
 2. Streaming với thinking
 3. Function calling (injected)
@@ -362,6 +377,7 @@ Xem file: `src/main/java/com/noteflix/pcm/llm/examples/CustomAPIUsageExample.jav
 ## 🔍 **Troubleshooting**
 
 ### Provider not ready?
+
 ```java
 if (!provider.isReady()) {
     throw new IllegalStateException("Provider not configured");
@@ -372,7 +388,9 @@ boolean connected = provider.testConnection();
 ```
 
 ### SSE format không match?
+
 Kiểm tra logs để xem format response:
+
 ```java
 log.debug("SSE chunk: {}", data);
 ```
@@ -380,14 +398,18 @@ log.debug("SSE chunk: {}", data);
 Sau đó sửa parsing logic trong `streamChat()` method.
 
 ### Function calling không work?
+
 Check content được gửi lên API:
+
 ```java
 String content = buildContentWithFunctions(messages, options);
 log.info("Content with functions: {}", content);
 ```
 
 ### Conversation ID bị conflict?
+
 Clear cache:
+
 ```java
 provider.clearConversationCache(null);
 ```
@@ -397,6 +419,7 @@ provider.clearConversationCache(null);
 ## 📊 **Response Format Examples**
 
 ### Option 1: Structured JSON
+
 ```json
 {
   "type": "thinking",
@@ -405,6 +428,7 @@ provider.clearConversationCache(null);
 ```
 
 ### Option 2: OpenAI-style
+
 ```json
 {
   "choices": [{
@@ -416,6 +440,7 @@ provider.clearConversationCache(null);
 ```
 
 ### Option 3: Simple
+
 ```json
 {
   "content": "token here",
@@ -442,6 +467,7 @@ provider.clearConversationCache(null);
 CustomAPIProvider đã sẵn sàng để use với service LLM của bạn!
 
 **Next steps:**
+
 1. ✅ Configure provider với base URL & API key
 2. ✅ Test với simple chat
 3. ✅ Enable thinking mode trong UI

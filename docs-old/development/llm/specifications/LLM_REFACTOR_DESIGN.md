@@ -766,21 +766,25 @@ llm/
 ## 🚀 Migration Path
 
 ### Phase 1: Core Infrastructure
+
 1. Create new interfaces
 2. Create registries
 3. Create token counter
 
 ### Phase 2: Provider Implementation
+
 4. Refactor OpenAI provider
 5. Refactor Anthropic provider
 6. Refactor Ollama provider
 
 ### Phase 3: Advanced Features
+
 7. Add function registry
 8. Add thinking mode
 9. Add event system
 
 ### Phase 4: Polish
+
 10. Add error handling
 11. Update examples
 12. Update documentation

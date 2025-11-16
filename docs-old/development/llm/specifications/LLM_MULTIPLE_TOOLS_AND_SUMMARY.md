@@ -3,9 +3,11 @@
 ## 🎯 New Features
 
 ### 1. **Multiple Tool Calls in One Response**
+
 LLM có thể trả về nhiều tool calls cùng lúc, execute tuần tự hoặc song song.
 
 ### 2. **Auto-Summarization**
+
 Tự động tóm tắt conversation khi gần hết context window, với custom summarizer.
 
 ---
@@ -13,6 +15,7 @@ Tự động tóm tắt conversation khi gần hết context window, với custo
 ## 🔧 Multiple Tool Calls
 
 ### **Why?**
+
 - ✅ Efficient: Execute multiple actions in one round trip
 - ✅ Natural: "Search for X and get details for Y"
 - ✅ Faster: Parallel execution where possible
@@ -170,6 +173,7 @@ if (response.hasToolCalls()) {
 ## 📝 Auto-Summarization
 
 ### **Why?**
+
 - ✅ **Long conversations**: Keep context within limits
 - ✅ **Cost reduction**: Fewer tokens = lower cost
 - ✅ **Better responses**: Focus on recent context
@@ -339,6 +343,7 @@ public class SmartContextManager {
 ### **Usage Examples**
 
 #### **Example 1: LLM Summarizer**
+
 ```java
 LLMProvider provider = registry.getActive();
 
@@ -367,6 +372,7 @@ for (int i = 0; i < 100; i++) {
 ```
 
 #### **Example 2: Extractive Summarizer (Fast & Cheap)**
+
 ```java
 SmartContextManager contextManager = new SmartContextManager(
     provider.getTokenCounter(),
@@ -379,6 +385,7 @@ SmartContextManager contextManager = new SmartContextManager(
 ```
 
 #### **Example 3: Custom Summarizer**
+
 ```java
 ConversationSummarizer customSummarizer = new CustomSummarizer(messages -> {
     StringBuilder summary = new StringBuilder();
@@ -404,6 +411,7 @@ SmartContextManager contextManager = new SmartContextManager(
 ```
 
 #### **Example 4: Different Strategies for Different Scenarios**
+
 ```java
 public class AdaptiveSummarizer implements ConversationSummarizer {
     private LLMSummarizer llmSummarizer;
@@ -429,12 +437,14 @@ public class AdaptiveSummarizer implements ConversationSummarizer {
 ## 🎯 Benefits
 
 ### **Multiple Tool Calls**
+
 - ✅ **Efficiency**: One round trip for multiple actions
 - ✅ **Natural**: Matches how users think
 - ✅ **Performance**: Parallel execution where possible
 - ✅ **Flexibility**: Sequential or optimized
 
 ### **Auto-Summarization**
+
 - ✅ **Cost Effective**: Fewer tokens = lower bills
 - ✅ **Better Context**: Focus on recent, relevant info
 - ✅ **Automatic**: No manual management
@@ -446,6 +456,7 @@ public class AdaptiveSummarizer implements ConversationSummarizer {
 ## 📊 Performance Comparison
 
 ### **Without Summarization**
+
 ```
 Conversation length: 100 messages
 Total tokens: 8000
@@ -454,6 +465,7 @@ Context limit exceeded: ❌
 ```
 
 ### **With Auto-Summarization**
+
 ```
 Conversation length: 100 messages
 Active context: 2000 tokens (after summarization)

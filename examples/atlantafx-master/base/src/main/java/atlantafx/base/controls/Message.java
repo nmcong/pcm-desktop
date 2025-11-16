@@ -18,6 +18,10 @@ import org.jspecify.annotations.Nullable;
  */
 public class Message extends TileBase {
 
+    protected final ObjectProperty<@Nullable EventHandler<? super Event>> onClose =
+            new SimpleObjectProperty<>(this, "onClose");
+    private final ObjectProperty<@Nullable Runnable> actionHandler = new SimpleObjectProperty<>(this, "actionHandler");
+
     /**
      * Creates an empty Message.
      */
@@ -35,6 +39,10 @@ public class Message extends TileBase {
                    @Nullable @NamedArg("description") String description) {
         this(title, description, null);
     }
+
+    ///////////////////////////////////////////////////////////////////////////
+    // Properties                                                            //
+    ///////////////////////////////////////////////////////////////////////////
 
     /**
      * Creates a new Message with an initial title, description and graphic.
@@ -58,10 +66,6 @@ public class Message extends TileBase {
         return new MessageSkin(this);
     }
 
-    ///////////////////////////////////////////////////////////////////////////
-    // Properties                                                            //
-    ///////////////////////////////////////////////////////////////////////////
-
     /**
      * Represents the message’s action handler. Setting an action handler makes the
      * message interactive (or clickable). When a user clicks on the interactive
@@ -70,8 +74,6 @@ public class Message extends TileBase {
     public ObjectProperty<@Nullable Runnable> actionHandlerProperty() {
         return actionHandler;
     }
-
-    private final ObjectProperty<@Nullable Runnable> actionHandler = new SimpleObjectProperty<>(this, "actionHandler");
 
     public @Nullable Runnable getActionHandler() {
         return actionHandler.get();
@@ -89,9 +91,6 @@ public class Message extends TileBase {
     public ObjectProperty<@Nullable EventHandler<? super Event>> onCloseProperty() {
         return onClose;
     }
-
-    protected final ObjectProperty<@Nullable EventHandler<? super Event>> onClose =
-        new SimpleObjectProperty<>(this, "onClose");
 
     public @Nullable EventHandler<? super Event> getOnClose() {
         return onClose.get();

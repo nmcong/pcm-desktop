@@ -1,6 +1,7 @@
 # Apache Lucene Vector Store - Comprehensive Guide
 
 ## Table of Contents
+
 1. [Overview](#overview)
 2. [Architecture](#architecture)
 3. [Core Components](#core-components)
@@ -13,9 +14,12 @@
 
 ## Overview
 
-Apache Lucene is a powerful, mature, and feature-rich information retrieval library written entirely in Java. Our `LuceneVectorStore` implementation provides a 100% offline, production-ready vector store solution with the following key characteristics:
+Apache Lucene is a powerful, mature, and feature-rich information retrieval library written entirely in Java.
+Our `LuceneVectorStore` implementation provides a 100% offline, production-ready vector store solution with the
+following key characteristics:
 
 ### Key Features
+
 - **100% Offline**: No external dependencies or cloud services required
 - **BM25 Ranking**: Industry-standard ranking algorithm for text relevance
 - **Full-Text Search**: Advanced query parsing with boolean operators
@@ -25,6 +29,7 @@ Apache Lucene is a powerful, mature, and feature-rich information retrieval libr
 - **Thread-Safe**: Concurrent read/write operations supported
 
 ### Use Cases
+
 - **Document Search**: Full-text search across large document collections
 - **Knowledge Base**: Enterprise knowledge management systems
 - **Content Discovery**: Finding relevant content based on text similarity
@@ -34,6 +39,7 @@ Apache Lucene is a powerful, mature, and feature-rich information retrieval libr
 ## Architecture
 
 ### High-Level Architecture
+
 ```
 ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
 │   Application   │    │  LuceneVector   │    │   File System   │
@@ -53,6 +59,7 @@ Apache Lucene is a powerful, mature, and feature-rich information retrieval libr
 ```
 
 ### Component Interaction Flow
+
 ```
 1. Document Indexing:
    RAGDocument → LuceneDocument → IndexWriter → File System Index
@@ -67,14 +74,17 @@ Apache Lucene is a powerful, mature, and feature-rich information retrieval libr
 ## Core Components
 
 ### 1. IndexWriter
+
 **Purpose**: Manages document indexing and updates to the Lucene index.
 
 **Key Responsibilities**:
+
 - Document insertion, update, and deletion
 - Index commits and transaction management
 - Memory management and index optimization
 
 **Configuration**:
+
 ```java
 IndexWriterConfig config = new IndexWriterConfig(analyzer);
 config.setOpenMode(IndexWriterConfig.OpenMode.CREATE_OR_APPEND);
@@ -83,14 +93,17 @@ config.setMaxBufferedDocs(1000);   // Documents before flush
 ```
 
 ### 2. SearcherManager
+
 **Purpose**: Manages IndexSearcher instances for concurrent search operations.
 
 **Key Benefits**:
+
 - Thread-safe searcher pooling
 - Automatic refresh of search results after index updates
 - Resource lifecycle management
 
 **Usage Pattern**:
+
 ```java
 IndexSearcher searcher = searcherManager.acquire();
 try {
@@ -102,15 +115,18 @@ try {
 ```
 
 ### 3. Analyzer
+
 **Purpose**: Text processing and tokenization for indexing and searching.
 
 **StandardAnalyzer Features**:
+
 - Tokenization on whitespace and punctuation
 - Lowercase normalization
 - Stop word filtering (optional)
 - Unicode normalization
 
 **Custom Analyzer Example**:
+
 ```java
 Analyzer customAnalyzer = new StandardAnalyzer(
     CharArraySet.copy(StopAnalyzer.ENGLISH_STOP_WORDS_SET)
@@ -118,9 +134,11 @@ Analyzer customAnalyzer = new StandardAnalyzer(
 ```
 
 ### 4. Query Parser
+
 **Purpose**: Converts human-readable queries into Lucene Query objects.
 
 **Supported Query Types**:
+
 - **Term Queries**: `java programming`
 - **Phrase Queries**: `"machine learning"`
 - **Boolean Queries**: `java AND programming`
@@ -133,15 +151,15 @@ Analyzer customAnalyzer = new StandardAnalyzer(
 
 Our implementation uses the following field mapping:
 
-| Field Name | Lucene Type | Stored | Indexed | Purpose |
-|------------|-------------|---------|---------|---------|
-| `id` | StringField | YES | NO | Unique document identifier |
-| `content` | TextField | YES | YES | Main searchable content |
-| `type` | StringField | YES | YES | Document type filtering |
-| `title` | TextField | YES | YES | Document title (searchable) |
-| `sourcePath` | StringField | YES | NO | Original file path |
-| `indexedAt` | StringField | YES | NO | Indexing timestamp |
-| `meta_*` | StringField | YES | YES | Custom metadata fields |
+| Field Name   | Lucene Type | Stored | Indexed | Purpose                     |
+|--------------|-------------|--------|---------|-----------------------------|
+| `id`         | StringField | YES    | NO      | Unique document identifier  |
+| `content`    | TextField   | YES    | YES     | Main searchable content     |
+| `type`       | StringField | YES    | YES     | Document type filtering     |
+| `title`      | TextField   | YES    | YES     | Document title (searchable) |
+| `sourcePath` | StringField | YES    | NO      | Original file path          |
+| `indexedAt`  | StringField | YES    | NO      | Indexing timestamp          |
+| `meta_*`     | StringField | YES    | YES     | Custom metadata fields      |
 
 ### Indexing Process
 
@@ -209,6 +227,7 @@ private double normalizeScore(float score) {
 ```
 
 **Benefits**:
+
 - Adaptive to different document collections
 - Consistent scoring across different queries
 - Improved relevance threshold filtering
@@ -328,6 +347,7 @@ writer.commit(); // Single commit for entire batch
 ## Best Practices
 
 ### 1. Resource Management
+
 ```java
 // Always use try-with-resources or finally blocks
 IndexSearcher searcher = null;
@@ -342,6 +362,7 @@ try {
 ```
 
 ### 2. Exception Handling
+
 ```java
 // Use specific exceptions
 try {
@@ -354,6 +375,7 @@ try {
 ```
 
 ### 3. Input Validation
+
 ```java
 // Validate all inputs
 if (document == null || document.getId() == null || document.getId().trim().isEmpty()) {
@@ -362,6 +384,7 @@ if (document == null || document.getId() == null || document.getId().trim().isEm
 ```
 
 ### 4. Logging Strategy
+
 ```java
 // Use appropriate log levels
 log.debug("Indexed document: {}", documentId);           // Detailed operations
@@ -371,6 +394,7 @@ log.error("Index corruption detected", exception);        // Critical errors
 ```
 
 ### 5. Threading Considerations
+
 ```java
 // SearcherManager is thread-safe
 // IndexWriter is thread-safe for different operations
@@ -388,9 +412,11 @@ private final ThreadLocal<Analyzer> analyzerThreadLocal =
 ### Common Issues
 
 #### 1. Lock Acquisition Failed
+
 **Error**: `LockObtainFailedException`
 **Cause**: Another process holds the index lock
 **Solution**:
+
 ```java
 // Check for stale locks
 if (IndexWriter.isLocked(directory)) {
@@ -399,9 +425,11 @@ if (IndexWriter.isLocked(directory)) {
 ```
 
 #### 2. Too Many Open Files
+
 **Error**: `IOException: Too many open files`
 **Cause**: OS file descriptor limit exceeded
 **Solution**:
+
 ```bash
 # Increase file descriptor limit
 ulimit -n 65536
@@ -412,9 +440,11 @@ ulimit -n 65536
 ```
 
 #### 3. Out of Memory
+
 **Error**: `OutOfMemoryError`
 **Cause**: Large documents or insufficient heap
 **Solution**:
+
 ```java
 // Reduce RAM buffer size
 config.setRAMBufferSizeMB(64.0);
@@ -424,8 +454,10 @@ int batchSize = 100; // Reduce from larger batch sizes
 ```
 
 #### 4. Search Performance Degradation
+
 **Symptoms**: Slow search responses
 **Causes & Solutions**:
+
 ```java
 // Cause: Too many segments
 writer.forceMergeDeletes(); // Periodic cleanup
@@ -440,6 +472,7 @@ searcherManager.maybeRefreshBlocking(); // Warm up new searchers
 ### Debugging Tools
 
 #### Index Statistics
+
 ```java
 public void printIndexStats(IndexReader reader) {
     log.info("Total documents: {}", reader.numDocs());
@@ -450,6 +483,7 @@ public void printIndexStats(IndexReader reader) {
 ```
 
 #### Query Analysis
+
 ```java
 public void analyzeQuery(String queryString) {
     QueryParser parser = new QueryParser(FIELD_CONTENT, analyzer);
@@ -463,6 +497,7 @@ public void analyzeQuery(String queryString) {
 ```
 
 #### Performance Monitoring
+
 ```java
 public class LuceneMetrics {
     private final Timer indexTimer = Timer.newTimer("lucene.index.time");
@@ -475,14 +510,17 @@ public class LuceneMetrics {
 ## API Reference
 
 ### Constructor
+
 ```java
 public LuceneVectorStore(String indexPath) throws VectorStoreException
 ```
+
 Creates a new Lucene vector store at the specified path.
 
 ### Core Operations
 
 #### Document Management
+
 ```java
 // Single document operations
 void indexDocument(RAGDocument document) throws VectorStoreException
@@ -501,11 +539,13 @@ void close()
 ```
 
 #### Search Operations
+
 ```java
 List<ScoredDocument> search(String query, RetrievalOptions options) throws VectorStoreException
 ```
 
 ### RetrievalOptions
+
 ```java
 public class RetrievalOptions {
     private int maxResults = 10;
@@ -519,6 +559,7 @@ public class RetrievalOptions {
 ```
 
 ### Exception Hierarchy
+
 ```java
 VectorStoreException
 ├── IndexingException
@@ -530,6 +571,7 @@ VectorStoreException
 ### Usage Examples
 
 #### Basic Search
+
 ```java
 LuceneVectorStore store = new LuceneVectorStore("/path/to/index");
 
@@ -541,6 +583,7 @@ List<ScoredDocument> results = store.search("machine learning", options);
 ```
 
 #### Advanced Search with Filters
+
 ```java
 RetrievalOptions options = new RetrievalOptions();
 options.setTypes(Set.of(DocumentType.RESEARCH_PAPER, DocumentType.ARTICLE));
@@ -551,6 +594,7 @@ List<ScoredDocument> results = store.search("neural networks", options);
 ```
 
 #### Batch Indexing
+
 ```java
 List<RAGDocument> documents = loadDocuments();
 store.indexDocuments(documents);

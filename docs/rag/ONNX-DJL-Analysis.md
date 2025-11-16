@@ -109,7 +109,8 @@ Tensor Ops: Reshape, Transpose, Concat, Split
 
 ### Ưu điểm của ONNX
 
-#### 1. **Interoperability** 
+#### 1. **Interoperability**
+
 ```python
 # Train in PyTorch
 model = torch.nn.Transformer(...)
@@ -123,6 +124,7 @@ torch.onnx.export(model, input, "model.onnx")
 ```
 
 #### 2. **Performance Optimization**
+
 ```cpp
 // Automatic optimizations
 - Operator fusion (Conv+BatchNorm+ReLU → ConvBNReLU)
@@ -132,6 +134,7 @@ torch.onnx.export(model, input, "model.onnx")
 ```
 
 #### 3. **Hardware Acceleration**
+
 ```yaml
 Execution Providers:
   CPU: Optimized BLAS, vectorization
@@ -144,6 +147,7 @@ Execution Providers:
 ### Nhược điểm và hạn chế
 
 #### 1. **Operator Coverage**
+
 ```python
 # Not all PyTorch/TensorFlow ops supported
 - Custom operators need manual implementation
@@ -152,6 +156,7 @@ Execution Providers:
 ```
 
 #### 2. **Debugging Complexity**
+
 ```
 Original Model → ONNX → Runtime
     ↑              ↑        ↑
@@ -165,7 +170,8 @@ Original Model → ONNX → Runtime
 
 ### Định nghĩa và Philosophy
 
-**Deep Java Library (DJL)** là framework deep learning được thiết kế đặc biệt cho Java ecosystem, phát triển bởi Amazon Web Services.
+**Deep Java Library (DJL)** là framework deep learning được thiết kế đặc biệt cho Java ecosystem, phát triển bởi Amazon
+Web Services.
 
 ```mermaid
 graph TB
@@ -186,6 +192,7 @@ graph TB
 ### Core Design Principles
 
 #### 1. **Java-First Design**
+
 ```java
 // Native Java API - no Python bridge
 Model model = Model.newInstance();
@@ -197,6 +204,7 @@ NDArray output = model.predict(input);
 ```
 
 #### 2. **Engine Agnostic**
+
 ```java
 // Same code, different engines
 Criteria criteria = Criteria.builder()
@@ -207,6 +215,7 @@ Criteria criteria = Criteria.builder()
 ```
 
 #### 3. **Production Ready**
+
 ```java
 // Built for enterprise deployment
 - Thread safety
@@ -219,6 +228,7 @@ Criteria criteria = Criteria.builder()
 ### DJL Components
 
 #### 1. **NDArray System**
+
 ```java
 // Multi-dimensional arrays with automatic memory management
 try (NDManager manager = NDManager.newBaseManager()) {
@@ -229,6 +239,7 @@ try (NDManager manager = NDManager.newBaseManager()) {
 ```
 
 #### 2. **Model Abstraction**
+
 ```java
 // Unified model interface
 public interface Model extends AutoCloseable {
@@ -240,6 +251,7 @@ public interface Model extends AutoCloseable {
 ```
 
 #### 3. **Training Infrastructure**
+
 ```java
 // Full training pipeline (though we use inference only)
 Trainer trainer = model.newTrainer(config);
@@ -418,6 +430,7 @@ session.close();
 ```
 
 **vs DJL Wrapper:**
+
 ```java
 // DJL wrapper (current approach)
 EmbeddingService service = new DJLEmbeddingService("model/path");
@@ -426,14 +439,14 @@ float[] embedding = service.embed(text); // Automatic resource management
 
 **Comparison:**
 
-| Aspect | Pure ONNX Runtime | DJL + ONNX Runtime |
-|--------|-------------------|-------------------|
-| **Setup Complexity** | High | Low |
-| **Memory Management** | Manual | Automatic |
-| **Thread Safety** | Manual synchronization | Built-in ThreadLocal |
-| **Error Handling** | Verbose try-catch | Simplified |
-| **Resource Cleanup** | Manual close() calls | Auto-cleanup |
-| **Performance** | Slightly faster | Minimal overhead |
+| Aspect                | Pure ONNX Runtime      | DJL + ONNX Runtime   |
+|-----------------------|------------------------|----------------------|
+| **Setup Complexity**  | High                   | Low                  |
+| **Memory Management** | Manual                 | Automatic            |
+| **Thread Safety**     | Manual synchronization | Built-in ThreadLocal |
+| **Error Handling**    | Verbose try-catch      | Simplified           |
+| **Resource Cleanup**  | Manual close() calls   | Auto-cleanup         |
+| **Performance**       | Slightly faster        | Minimal overhead     |
 
 ### 2. Python + REST API
 
@@ -464,14 +477,14 @@ public float[] embed(String text) {
 
 **Comparison:**
 
-| Aspect | Python Service | Java + ONNX + DJL |
-|--------|----------------|-------------------|
-| **Deployment** | Multi-service | Single JAR |
-| **Latency** | High (network) | Low (in-process) |
-| **Dependencies** | Python runtime | Self-contained |
-| **Scaling** | Horizontal | Vertical |
-| **Development** | Language boundary | Pure Java |
-| **Offline** | Need Python env | Fully offline |
+| Aspect           | Python Service    | Java + ONNX + DJL |
+|------------------|-------------------|-------------------|
+| **Deployment**   | Multi-service     | Single JAR        |
+| **Latency**      | High (network)    | Low (in-process)  |
+| **Dependencies** | Python runtime    | Self-contained    |
+| **Scaling**      | Horizontal        | Vertical          |
+| **Development**  | Language boundary | Pure Java         |
+| **Offline**      | Need Python env   | Fully offline     |
 
 ### 3. TensorFlow Java
 
@@ -494,14 +507,14 @@ try (SavedModelBundle model = SavedModelBundle.load("model/path", "serve")) {
 
 **Comparison:**
 
-| Aspect | TensorFlow Java | DJL + ONNX |
-|--------|-----------------|-----------|
-| **Model Format** | SavedModel | ONNX (standard) |
-| **Community** | Google-backed | AWS + Microsoft |
-| **Performance** | Good | Excellent |
-| **Model Support** | TF models only | Multi-framework |
-| **API Design** | Low-level | High-level |
-| **Documentation** | Limited | Comprehensive |
+| Aspect            | TensorFlow Java | DJL + ONNX      |
+|-------------------|-----------------|-----------------|
+| **Model Format**  | SavedModel      | ONNX (standard) |
+| **Community**     | Google-backed   | AWS + Microsoft |
+| **Performance**   | Good            | Excellent       |
+| **Model Support** | TF models only  | Multi-framework |
+| **API Design**    | Low-level       | High-level      |
+| **Documentation** | Limited         | Comprehensive   |
 
 ---
 
@@ -534,6 +547,7 @@ graph TD
 ### Key Implementation Decisions
 
 #### 1. **ThreadLocal Pattern**
+
 ```java
 // Why ThreadLocal?
 private final ThreadLocal<OrtSession> sessionPool = 
@@ -547,6 +561,7 @@ private final ThreadLocal<OrtSession> sessionPool =
 ```
 
 #### 2. **Batch Processing**
+
 ```java
 // Single vs Batch inference
 public float[] embed(String text) {
@@ -562,6 +577,7 @@ public float[][] embedBatch(String[] texts) {
 ```
 
 #### 3. **Memory Management**
+
 ```java
 // Resource lifecycle
 public float[] embed(String text) {
@@ -696,6 +712,7 @@ development productivity and maintainability benefits
 ### Tại sao chọn DJL + ONNX Runtime?
 
 #### 1. **Best of Both Worlds**
+
 ```
 ONNX Runtime: Performance + Hardware optimization
     +
@@ -705,13 +722,15 @@ Production-ready solution for enterprise Java applications
 ```
 
 #### 2. **Strategic Benefits**
+
 - **Future-proof**: ONNX is industry standard
-- **Vendor neutral**: Not locked to single ML framework  
+- **Vendor neutral**: Not locked to single ML framework
 - **Java-native**: No language boundaries or REST APIs
 - **Scalable**: Built for concurrent, high-throughput scenarios
 - **Maintainable**: Clean abstraction over complex ML infrastructure
 
 #### 3. **Trade-offs Accepted**
+
 ```
 Slight performance overhead (3-5ms) for:
 ✅ Much simpler development

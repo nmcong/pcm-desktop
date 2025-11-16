@@ -14,7 +14,8 @@
 
 ## Tổng Quan
 
-Module UI của PCM Desktop được xây dựng với JavaFX và tuân theo kiến trúc MVVM (Model-View-ViewModel). Module này cung cấp giao diện người dùng cho toàn bộ ứng dụng, bao gồm các trang chính, components tái sử dụng, và các utilities hỗ trợ.
+Module UI của PCM Desktop được xây dựng với JavaFX và tuân theo kiến trúc MVVM (Model-View-ViewModel). Module này cung
+cấp giao diện người dùng cho toàn bộ ứng dụng, bao gồm các trang chính, components tái sử dụng, và các utilities hỗ trợ.
 
 ### Đặc Điểm Chính
 

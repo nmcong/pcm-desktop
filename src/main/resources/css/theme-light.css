@@ -13,7 +13,7 @@
     -fx-bg-secondary: #f8f9fa;
     -fx-bg-tertiary: #f1f3f5;
     -fx-bg-elevated: #ffffff;
-    
+
     /* Translucent backgrounds for overlays */
     -fx-bg-primary-translucent: rgba(255, 255, 255, 0.9);
 

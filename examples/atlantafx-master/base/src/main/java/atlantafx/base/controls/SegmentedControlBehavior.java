@@ -4,6 +4,7 @@ package atlantafx.base.controls;
 
 import java.util.List;
 import java.util.Objects;
+
 import javafx.geometry.NodeOrientation;
 import javafx.scene.Node;
 import javafx.scene.control.Toggle;

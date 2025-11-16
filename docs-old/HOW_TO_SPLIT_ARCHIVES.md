@@ -12,6 +12,7 @@
 ## 🚀 Quick Start - Dùng Scripts
 
 ### Chia file
+
 ```bash
 # Chia thành các phần 50MB
 ./scripts/split-archive.sh models.zip 50m
@@ -27,6 +28,7 @@
 ```
 
 ### Ghép lại
+
 ```bash
 # Cách 1: Dùng merge script
 ./models.zip.merge.sh
@@ -42,12 +44,12 @@ cat models.zip.part* > models.zip
 
 ## 📋 Methods Comparison
 
-| Method | Pros | Cons | Recommended |
-|--------|------|------|-------------|
-| **split command** | ✅ Built-in, simple | ⚠️ Manual naming | ✅ Quick splits |
-| **zip -s** | ✅ Integrated | ⚠️ Only for zips | For new zips |
-| **tar + split** | ✅ Compression + split | ⚠️ Two steps | ✅ Best compression |
-| **7-Zip** | ✅ Cross-platform | ⚠️ Needs install | For Windows compat |
+| Method            | Pros                  | Cons             | Recommended        |
+|-------------------|-----------------------|------------------|--------------------|
+| **split command** | ✅ Built-in, simple    | ⚠️ Manual naming | ✅ Quick splits     |
+| **zip -s**        | ✅ Integrated          | ⚠️ Only for zips | For new zips       |
+| **tar + split**   | ✅ Compression + split | ⚠️ Two steps     | ✅ Best compression |
+| **7-Zip**         | ✅ Cross-platform      | ⚠️ Needs install | For Windows compat |
 
 ---
 
@@ -56,11 +58,13 @@ cat models.zip.part* > models.zip
 ### Method 1: split command (Simplest) ⭐
 
 **Chia:**
+
 ```bash
 split -b 50m file.zip file.zip.part
 ```
 
 **Kết quả:**
+
 ```
 file.zip.partaa
 file.zip.partab
@@ -68,11 +72,13 @@ file.zip.partac
 ```
 
 **Ghép:**
+
 ```bash
 cat file.zip.part* > file.zip
 ```
 
 **Sizes available:**
+
 - `50m` = 50 megabytes
 - `100m` = 100 megabytes
 - `1g` = 1 gigabyte
@@ -83,11 +89,13 @@ cat file.zip.part* > file.zip
 ### Method 2: zip -s (For new archives)
 
 **Tạo và chia:**
+
 ```bash
 zip -r -s 50m archive.zip folder/
 ```
 
 **Kết quả:**
+
 ```
 archive.z01 (50MB)
 archive.z02 (50MB)
@@ -95,6 +103,7 @@ archive.zip (last part)
 ```
 
 **Ghép:**
+
 ```bash
 zip -F archive.zip --out complete.zip
 ```
@@ -104,11 +113,13 @@ zip -F archive.zip --out complete.zip
 ### Method 3: tar + split (Best compression) ⭐
 
 **Nén và chia:**
+
 ```bash
 tar czf - folder/ | split -b 50m - folder.tar.gz.part
 ```
 
 **Ghép và giải nén:**
+
 ```bash
 cat folder.tar.gz.part* | tar xzf -
 ```
@@ -118,16 +129,19 @@ cat folder.tar.gz.part* | tar xzf -
 ### Method 4: 7-Zip (Cross-platform)
 
 **Install:**
+
 ```bash
 brew install p7zip
 ```
 
 **Chia:**
+
 ```bash
 7z a -v50m archive.7z folder/
 ```
 
 **Kết quả:**
+
 ```
 archive.7z.001
 archive.7z.002
@@ -135,6 +149,7 @@ archive.7z.003
 ```
 
 **Giải nén:**
+
 ```bash
 7z x archive.7z.001
 ```
@@ -256,11 +271,13 @@ echo "✅ Models ready!"
 ## 📊 Size Guidelines
 
 ### GitHub Limits
+
 - Max file size: **100MB**
 - Repository size: **1GB** (recommended)
 - Large File Storage (LFS): **2GB** per file
 
 ### Recommendations
+
 ```bash
 # For GitHub without LFS
 split -b 95m file.zip file.zip.part
@@ -280,6 +297,7 @@ split -b 3g file.zip file.zip.part
 ## ✅ Verification
 
 ### Check split was successful
+
 ```bash
 # Original file
 ls -lh original.zip
@@ -292,6 +310,7 @@ du -ch original.zip.part* | tail -1
 ```
 
 ### Test merge
+
 ```bash
 # Merge to different name
 cat original.zip.part* > test.zip
@@ -359,6 +378,7 @@ cat /path/to/file.zip.part* > /path/to/output.zip
 ```
 
 ### "Not a valid archive" after merge
+
 ```bash
 # Check file sizes
 ls -lh file.zip.part*
@@ -371,6 +391,7 @@ md5 file.zip.partaa
 ```
 
 ### "Permission denied"
+
 ```bash
 chmod +x merge-script.sh
 ```
@@ -418,6 +439,7 @@ file merged.zip                               # Check file type
 ```
 
 **Benefits:**
+
 - ✅ Simple one-command split
 - ✅ Auto-generated merge script
 - ✅ Clear file naming

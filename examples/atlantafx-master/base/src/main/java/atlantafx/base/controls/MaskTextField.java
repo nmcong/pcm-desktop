@@ -30,8 +30,10 @@ package atlantafx.base.controls;
 import atlantafx.base.util.MaskChar;
 import atlantafx.base.util.MaskTextFormatter;
 import atlantafx.base.util.SimpleMaskChar;
+
 import java.util.List;
 import java.util.Objects;
+
 import javafx.beans.NamedArg;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.SimpleStringProperty;
@@ -55,7 +57,7 @@ public class MaskTextField extends CustomTextField {
     protected final StringProperty mask = new SimpleStringProperty(this, "mask");
 
     protected final ReadOnlyObjectWrapper<@Nullable MaskTextFormatter> formatter =
-        new ReadOnlyObjectWrapper<>(this, "formatter");
+            new ReadOnlyObjectWrapper<>(this, "formatter");
 
     /**
      * Creates an empty MaskTextField.

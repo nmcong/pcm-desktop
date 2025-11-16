@@ -5,52 +5,52 @@
 
 // Dracula color palette
 // https://spec.draculatheme.com
-$background:  #282a36;
+$background: #282a36;
 $currentLine: #44475a;
-$foreground:  #f8f8f2;
-$comment:     #6272a4;
-$cyan:        #8be9fd;
-$green:	      #50fa7b;
-$orange:	    #ffb86c;
-$pink:	      #ff79c6;
-$purple:	    #bd93f9;
-$red:	        #ff5555;
-$yellow:	    #f1fa8c;
+$foreground: #f8f8f2;
+$comment: #6272a4;
+$cyan: #8be9fd;
+$green: #50fa7b;
+$orange: #ffb86c;
+$pink: #ff79c6;
+$purple: #bd93f9;
+$red: #ff5555;
+$yellow: #f1fa8c;
 
 // Dracula UI color palette
 // https: //ui.draculatheme.com/
-$ui-black:           hsl(230, 15%, 15%);
-$ui-blackSecondary:  hsl(230, 15%, 30%);
-$ui-blackTernary:    hsl(230, 15%, 70%);
-$ui-blackLight:      hsla(230, 15%, 15%, 5%);
-$ui-grey:            hsl(230, 15%, 30%);
-$ui-greySecondary:   hsl(230, 15%, 45%);
-$ui-greyTernary:     hsl(230, 15%, 75%);
-$ui-greyLight:       hsla(230, 15%, 30%, 5%);
-$ui-white:           hsl(60, 30%, 96%);
-$ui-whiteSecondary:  hsl(60,  30%, 100%);
-$ui-whiteLight:      hsla(60, 30%, 96%, 5%);
-$ui-cyan:            hsl(170, 100%, 75%);
-$ui-cyanSecondary:   hsl(170, 100%, 90%);
-$ui-cyanLight:       hsla(170, 100%, 75%, 5%);
-$ui-green:           hsl(115, 100%, 75%);
-$ui-greenSecondary:  hsl(115, 100%, 90%);
-$ui-greenLight:      hsla(115, 100%, 75%, 5%);
-$ui-orange:          hsl(35, 100%, 75%);
+$ui-black: hsl(230, 15%, 15%);
+$ui-blackSecondary: hsl(230, 15%, 30%);
+$ui-blackTernary: hsl(230, 15%, 70%);
+$ui-blackLight: hsla(230, 15%, 15%, 5%);
+$ui-grey: hsl(230, 15%, 30%);
+$ui-greySecondary: hsl(230, 15%, 45%);
+$ui-greyTernary: hsl(230, 15%, 75%);
+$ui-greyLight: hsla(230, 15%, 30%, 5%);
+$ui-white: hsl(60, 30%, 96%);
+$ui-whiteSecondary: hsl(60, 30%, 100%);
+$ui-whiteLight: hsla(60, 30%, 96%, 5%);
+$ui-cyan: hsl(170, 100%, 75%);
+$ui-cyanSecondary: hsl(170, 100%, 90%);
+$ui-cyanLight: hsla(170, 100%, 75%, 5%);
+$ui-green: hsl(115, 100%, 75%);
+$ui-greenSecondary: hsl(115, 100%, 90%);
+$ui-greenLight: hsla(115, 100%, 75%, 5%);
+$ui-orange: hsl(35, 100%, 75%);
 $ui-orangeSecondary: hsl(35, 100%, 90%);
-$ui-orangeLight:     hsla(35, 100%, 75%, 5%);
-$ui-pink:            hsl(330, 100%, 75%);
-$ui-pinkSecondary:   hsl(330, 100%, 90%);
-$ui-pinkLight:       hsla(330, 100%, 75%, 5%);
-$ui-purple:          hsl(250, 100%, 75%);
+$ui-orangeLight: hsla(35, 100%, 75%, 5%);
+$ui-pink: hsl(330, 100%, 75%);
+$ui-pinkSecondary: hsl(330, 100%, 90%);
+$ui-pinkLight: hsla(330, 100%, 75%, 5%);
+$ui-purple: hsl(250, 100%, 75%);
 $ui-purpleSecondary: hsl(250, 100%, 90%);
-$ui-purpleLight:     hsl(250, 100%, 75%, 5%);
-$ui-red:             hsl(10, 100%, 75%);
-$ui-redSecondary:    hsl(10, 100%, 90%);
-$ui-redLight:        hsla(10, 100%, 75%, 5%);
-$ui-yellow:          hsl(60, 100%, 75%);
+$ui-purpleLight: hsl(250, 100%, 75%, 5%);
+$ui-red: hsl(10, 100%, 75%);
+$ui-redSecondary: hsl(10, 100%, 90%);
+$ui-redLight: hsla(10, 100%, 75%, 5%);
+$ui-yellow: hsl(60, 100%, 75%);
 $ui-yellowSecondary: hsl(60, 100%, 90%);
-$ui-yellowLight:     hsla(60, 100%, 75%, 5%);
+$ui-yellowLight: hsla(60, 100%, 75%, 5%);
 
 @forward "settings/color-scale" with (
 

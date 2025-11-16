@@ -1,6 +1,7 @@
 # DJL (Deep Java Library) - Tổng quan và Hướng dẫn
 
 ## 📚 Mục lục
+
 - [Giới thiệu](#giới-thiệu)
 - [Kiến trúc](#kiến-trúc)
 - [Cài đặt](#cài-đặt)
@@ -15,7 +16,8 @@
 
 ### DJL là gì?
 
-**Deep Java Library (DJL)** là một framework deep learning mã nguồn mở dành cho Java, được phát triển bởi AWS. DJL cung cấp:
+**Deep Java Library (DJL)** là một framework deep learning mã nguồn mở dành cho Java, được phát triển bởi AWS. DJL cung
+cấp:
 
 - ✅ **API Java native**: Không cần Python, hoàn toàn Java
 - ✅ **Multi-engine**: Hỗ trợ nhiều backend (PyTorch, TensorFlow, ONNX Runtime, MXNet)
@@ -25,14 +27,14 @@
 
 ### Tại sao chọn DJL cho Embeddings?
 
-| Đặc điểm | DJL | Python (sentence-transformers) |
-|----------|-----|--------------------------------|
-| **Tốc độ** | ⚡ Nhanh (JVM optimized) | 🐢 Chậm hơn |
-| **Memory** | 💚 Hiệu quả | 💛 Tốn memory hơn |
-| **Deployment** | ✅ Single JAR | ❌ Cần Python runtime |
-| **Integration** | ✅ Trực tiếp trong Java | ❌ Cần bridge/API |
-| **Offline** | ✅ Hoàn toàn offline | ✅ Có thể offline |
-| **Production** | ✅ Enterprise-ready | 💛 Cần setup phức tạp |
+| Đặc điểm        | DJL                     | Python (sentence-transformers) |
+|-----------------|-------------------------|--------------------------------|
+| **Tốc độ**      | ⚡ Nhanh (JVM optimized) | 🐢 Chậm hơn                    |
+| **Memory**      | 💚 Hiệu quả             | 💛 Tốn memory hơn              |
+| **Deployment**  | ✅ Single JAR            | ❌ Cần Python runtime           |
+| **Integration** | ✅ Trực tiếp trong Java  | ❌ Cần bridge/API               |
+| **Offline**     | ✅ Hoàn toàn offline     | ✅ Có thể offline               |
+| **Production**  | ✅ Enterprise-ready      | 💛 Cần setup phức tạp          |
 
 ---
 
@@ -288,12 +290,15 @@ public DJLEmbeddingService(String modelPath) throws IOException
 ```
 
 **Parameters:**
+
 - `modelPath` - Đường dẫn đến thư mục chứa model (phải có `model.onnx`, `tokenizer.json`, `config.json`)
 
 **Throws:**
+
 - `IOException` - Nếu model không tồn tại hoặc không load được
 
 **Example:**
+
 ```java
 EmbeddingService service = new DJLEmbeddingService(
     "data/models/all-MiniLM-L6-v2"
@@ -311,17 +316,21 @@ public float[] embed(String text)
 ```
 
 **Parameters:**
+
 - `text` - Text cần embed (tối đa 512 tokens)
 
 **Returns:**
+
 - `float[]` - Vector embedding đã được normalize (L2 norm = 1)
 
 **Throws:**
+
 - `RuntimeException` - Nếu inference failed
 
 **Time complexity:** O(n) với n là số tokens
 
 **Example:**
+
 ```java
 float[] vector = service.embed("Hello world");
 ```
@@ -335,12 +344,15 @@ public float[][] embedBatch(String[] texts)
 ```
 
 **Parameters:**
+
 - `texts` - Array of texts
 
 **Returns:**
+
 - `float[][]` - Array of embedding vectors
 
 **Example:**
+
 ```java
 float[][] vectors = service.embedBatch(new String[]{
     "Text 1",
@@ -358,6 +370,7 @@ public int getDimension()
 ```
 
 **Returns:**
+
 - `int` - Dimension (384 cho all-MiniLM-L6-v2)
 
 ##### `getModelName()`
@@ -369,6 +382,7 @@ public String getModelName()
 ```
 
 **Returns:**
+
 - `String` - Model name
 
 ##### `close()`
@@ -380,6 +394,7 @@ public void close()
 ```
 
 **Example:**
+
 ```java
 try (DJLEmbeddingService service = new DJLEmbeddingService("...")) {
     // Use service
@@ -397,9 +412,11 @@ public static DJLEmbeddingService createDefault() throws IOException
 ```
 
 **Returns:**
+
 - `DJLEmbeddingService` - Service với model all-MiniLM-L6-v2
 
 **Example:**
+
 ```java
 EmbeddingService service = DJLEmbeddingService.createDefault();
 ```
@@ -413,6 +430,7 @@ EmbeddingService service = DJLEmbeddingService.createDefault();
 **Nguyên nhân:** Model chưa được download
 
 **Giải pháp:**
+
 ```bash
 ./scripts/setup-embeddings-djl.sh
 ```
@@ -422,6 +440,7 @@ EmbeddingService service = DJLEmbeddingService.createDefault();
 **Nguyên nhân:** JAR file bị corrupt
 
 **Giải pháp:**
+
 ```bash
 # Xóa file bị lỗi
 rm lib/rag/*.jar
@@ -435,6 +454,7 @@ rm lib/rag/*.jar
 **Nguyên nhân:** Không đủ heap memory
 
 **Giải pháp:**
+
 ```bash
 # Tăng heap size khi chạy
 export JAVA_OPTS="-Xmx4g"
@@ -446,6 +466,7 @@ export JAVA_OPTS="-Xmx4g"
 **Nguyên nhân:** Thiếu Visual C++ Redistributable
 
 **Giải pháp:**
+
 1. Download [VC++ Redistributable](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist)
 2. Cài đặt
 3. Restart application
@@ -453,6 +474,7 @@ export JAVA_OPTS="-Xmx4g"
 ### Performance chậm
 
 **Giải pháp:**
+
 1. **Batch processing**: Embed nhiều texts cùng lúc
 2. **Caching**: Cache embeddings đã tính
 3. **Warm-up**: Chạy vài inference để JVM optimize
@@ -563,12 +585,12 @@ try {
 
 ### Benchmarks
 
-| Operation | Time | Memory |
-|-----------|------|--------|
-| Load model | ~500ms | ~300 MB |
-| First inference | ~100ms | +50 MB |
-| Subsequent inference | ~20ms | Stable |
-| Batch (10 texts) | ~80ms | Stable |
+| Operation            | Time   | Memory  |
+|----------------------|--------|---------|
+| Load model           | ~500ms | ~300 MB |
+| First inference      | ~100ms | +50 MB  |
+| Subsequent inference | ~20ms  | Stable  |
+| Batch (10 texts)     | ~80ms  | Stable  |
 
 ### Optimization
 
@@ -583,11 +605,13 @@ try {
 ## 📝 Changelog
 
 ### Version 2.1.0 (2025-11-14)
+
 - ✅ Updated to ONNX Runtime 1.23.2 (latest stable version)
 - ✅ Enhanced security with official Microsoft build
 - ✅ Smaller file size (72MB vs 89MB)
 
 ### Version 2.0.0 (2024-11-13)
+
 - ✅ Full DJL ONNX Runtime implementation
 - ✅ Updated to DJL 0.35.0
 - ✅ Updated to ONNX Runtime 1.19.0
@@ -595,6 +619,7 @@ try {
 - ✅ Better resource management
 
 ### Version 1.0.0 (Initial)
+
 - ✅ Basic structure
 - ❌ Placeholder implementation
 

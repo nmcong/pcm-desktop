@@ -8,34 +8,36 @@ import com.noteflix.pcm.ui.base.BaseView;
  */
 public interface PageNavigator {
 
-  /**
-   * Navigate to a specific page
-   *
-   * @param page The page to navigate to
-   */
-  void navigateToPage(BaseView page);
+    /**
+     * Navigate to a specific page
+     *
+     * @param page The page to navigate to
+     */
+    void navigateToPage(BaseView page);
 
-  /**
-   * Navigate to a page by its class type
-   *
-   * @param pageClass The class of the page to navigate to
-   */
-  void navigateToPage(Class<? extends BaseView> pageClass);
+    /**
+     * Navigate to a page by its class type
+     *
+     * @param pageClass The class of the page to navigate to
+     */
+    void navigateToPage(Class<? extends BaseView> pageClass);
 
-  /**
-   * Get the currently active page
-   *
-   * @return The current page, or null if none is active
-   */
-  BaseView getCurrentPage();
+    /**
+     * Get the currently active page
+     *
+     * @return The current page, or null if none is active
+     */
+    BaseView getCurrentPage();
 
-  /**
-   * Check if navigation can go back
-   *
-   * @return true if back navigation is possible
-   */
-  boolean canGoBack();
+    /**
+     * Check if navigation can go back
+     *
+     * @return true if back navigation is possible
+     */
+    boolean canGoBack();
 
-  /** Navigate back to the previous page */
-  void goBack();
+    /**
+     * Navigate back to the previous page
+     */
+    void goBack();
 }

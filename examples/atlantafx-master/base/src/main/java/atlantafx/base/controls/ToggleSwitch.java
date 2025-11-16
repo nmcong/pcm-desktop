@@ -32,6 +32,7 @@ package atlantafx.base.controls;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.BooleanPropertyBase;
 import javafx.beans.property.ObjectProperty;
@@ -62,6 +63,9 @@ public class ToggleSwitch extends Labeled implements Toggle {
     protected static final String DEFAULT_STYLE_CLASS = "toggle-switch";
     protected static final PseudoClass PSEUDO_CLASS_SELECTED = PseudoClass.getPseudoClass("selected");
     protected static final PseudoClass PSEUDO_CLASS_RIGHT = PseudoClass.getPseudoClass("right");
+    private @Nullable BooleanProperty selected;
+    private @Nullable ObjectProperty<@Nullable ToggleGroup> toggleGroup;
+    private @Nullable ObjectProperty<HorizontalDirection> labelPosition;
 
     /**
      * Creates a toggle switch with empty string for its label.
@@ -69,6 +73,10 @@ public class ToggleSwitch extends Labeled implements Toggle {
     public ToggleSwitch() {
         initialize();
     }
+
+    ///////////////////////////////////////////////////////////////////////////
+    // Properties                                                            //
+    ///////////////////////////////////////////////////////////////////////////
 
     /**
      * Creates a toggle switch with the specified label.
@@ -91,10 +99,6 @@ public class ToggleSwitch extends Labeled implements Toggle {
     private void initialize() {
         getStyleClass().setAll(DEFAULT_STYLE_CLASS);
     }
-
-    ///////////////////////////////////////////////////////////////////////////
-    // Properties                                                            //
-    ///////////////////////////////////////////////////////////////////////////
 
     /**
      * Returns whether this Toggle Switch is selected.
@@ -152,16 +156,14 @@ public class ToggleSwitch extends Labeled implements Toggle {
         return selected;
     }
 
-    private @Nullable BooleanProperty selected;
+    @Override
+    public final boolean isSelected() {
+        return selected != null && selected.get();
+    }
 
     @Override
     public final void setSelected(boolean value) {
         selectedProperty().set(value);
-    }
-
-    @Override
-    public final boolean isSelected() {
-        return selected != null && selected.get();
     }
 
     /**
@@ -204,16 +206,14 @@ public class ToggleSwitch extends Labeled implements Toggle {
         return toggleGroup;
     }
 
-    private @Nullable ObjectProperty<@Nullable ToggleGroup> toggleGroup;
+    @Override
+    public final @Nullable ToggleGroup getToggleGroup() {
+        return toggleGroup == null ? null : toggleGroup.get();
+    }
 
     @Override
     public final void setToggleGroup(@Nullable ToggleGroup value) {
         toggleGroupProperty().set(value);
-    }
-
-    @Override
-    public final @Nullable ToggleGroup getToggleGroup() {
-        return toggleGroup == null ? null : toggleGroup.get();
     }
 
     /**
@@ -250,14 +250,12 @@ public class ToggleSwitch extends Labeled implements Toggle {
         return labelPosition;
     }
 
-    private @Nullable ObjectProperty<HorizontalDirection> labelPosition;
+    public final HorizontalDirection getLabelPosition() {
+        return labelPosition == null ? HorizontalDirection.LEFT : labelPosition.getValue();
+    }
 
     public final void setLabelPosition(@Nullable HorizontalDirection pos) {
         labelPositionProperty().setValue(pos);
-    }
-
-    public final HorizontalDirection getLabelPosition() {
-        return labelPosition == null ? HorizontalDirection.LEFT : labelPosition.getValue();
     }
 
     ///////////////////////////////////////////////////////////////////////////
@@ -288,8 +286,8 @@ public class ToggleSwitch extends Labeled implements Toggle {
 
     private static class StyleableProperties {
 
-        private static final CssMetaData<ToggleSwitch, HorizontalDirection> LABEL_POSITION = new CssMetaData<>(
-            "-fx-label-position", new EnumConverter<>(HorizontalDirection.class), HorizontalDirection.LEFT
+        private static final List<CssMetaData<? extends Styleable, ?>> STYLEABLES;        private static final CssMetaData<ToggleSwitch, HorizontalDirection> LABEL_POSITION = new CssMetaData<>(
+                "-fx-label-position", new EnumConverter<>(HorizontalDirection.class), HorizontalDirection.LEFT
         ) {
 
             @Override
@@ -305,12 +303,12 @@ public class ToggleSwitch extends Labeled implements Toggle {
             }
         };
 
-        private static final List<CssMetaData<? extends Styleable, ?>> STYLEABLES;
-
         static {
             final List<CssMetaData<? extends Styleable, ?>> styleables = new ArrayList<>(Labeled.getClassCssMetaData());
             styleables.add(LABEL_POSITION);
             STYLEABLES = Collections.unmodifiableList(styleables);
         }
+
+
     }
 }

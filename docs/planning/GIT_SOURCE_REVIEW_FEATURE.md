@@ -28,6 +28,7 @@
 ### 🎯 Objective
 
 Develop a comprehensive Git integration feature for PCM Desktop that enables:
+
 - Automated source code review using AI/RAG
 - Support for both GitHub API and local Git operations
 - Flexible deployment in both connected and isolated environments
@@ -53,6 +54,7 @@ Develop a comprehensive Git integration feature for PCM Desktop that enables:
 ### 2.1 Core Capabilities
 
 #### Option A: GitHub API Integration (Preferred)
+
 - Direct connection to GitHub repositories
 - Real-time PR monitoring
 - Automated review comments
@@ -60,6 +62,7 @@ Develop a comprehensive Git integration feature for PCM Desktop that enables:
 - Webhook support for push events
 
 #### Option B: Local Git Operations (Fallback)
+
 - Work with local repository clones
 - Git command-line integration
 - Support for multiple Git providers (GitHub, GitLab, Bitbucket)
@@ -68,6 +71,7 @@ Develop a comprehensive Git integration feature for PCM Desktop that enables:
 ### 2.2 Review Features
 
 **Automated Analysis:**
+
 - Code quality checks
 - Security vulnerability detection
 - Best practices validation
@@ -75,12 +79,14 @@ Develop a comprehensive Git integration feature for PCM Desktop that enables:
 - Documentation completeness
 
 **AI-Powered Insights:**
+
 - Context-aware suggestions
 - Historical pattern analysis
 - Similar code detection
 - Complexity assessment
 
 **Integration Points:**
+
 - CI/CD pipeline integration
 - Issue tracker linking
 - Code coverage reports
@@ -139,6 +145,7 @@ Develop a comprehensive Git integration feature for PCM Desktop that enables:
 ### 3.2 Component Interaction Flow
 
 **Scenario 1: GitHub API (Connected Environment)**
+
 ```
 1. User triggers review (PR URL or webhook)
 2. GitHub Module fetches PR details via API
@@ -149,6 +156,7 @@ Develop a comprehensive Git integration feature for PCM Desktop that enables:
 ```
 
 **Scenario 2: Local Git (Isolated Environment)**
+
 ```
 1. User selects local repository
 2. Git Module executes git commands to get changes
@@ -192,6 +200,7 @@ GitHubConfig.java
 ```
 
 **Dependencies:**
+
 - `java.net.http.HttpClient` (Java 11+)
 - Jackson for JSON parsing
 - OAuth/Token authentication
@@ -234,6 +243,7 @@ GitChange.java
 ```
 
 **Dependencies:**
+
 - ProcessBuilder for command execution
 - JGit library (optional, for pure Java implementation)
 
@@ -374,6 +384,7 @@ CommitDiffViewController.java
 7. [Optional] User posts review back to GitHub
 
 **Alternative Flow:**
+
 - If network error → Switch to local Git mode
 - If authentication fails → Prompt for new token
 
@@ -392,6 +403,7 @@ CommitDiffViewController.java
 7. Results displayed in UI (no posting to remote)
 
 **Alternative Flow:**
+
 - If not a Git repo → Display error
 - If Git not installed → Show installation guide
 
@@ -427,6 +439,7 @@ CommitDiffViewController.java
 ### 6.1 GitHub API Integration
 
 **Authentication:**
+
 ```java
 // Personal Access Token
 Authorization: token ghp_xxxxxxxxxxxx
@@ -449,6 +462,7 @@ GET  /repos/{owner}/{repo}/commits/{ref}
 ```
 
 **Rate Limiting:**
+
 - Authenticated: 5,000 requests/hour
 - Search API: 30 requests/minute
 - Strategy: Implement exponential backoff
@@ -584,18 +598,21 @@ C  - File copied
 ### Phase 1: Foundation (2 weeks)
 
 **Week 1:**
+
 - ✅ Set up project structure
 - ✅ Create data models
 - ✅ Implement Git command executor
 - ✅ Basic diff parsing
 
 **Week 2:**
+
 - ✅ GitHub API client
 - ✅ Authentication flow
 - ✅ PR fetching logic
 - ✅ Unit tests
 
 **Deliverables:**
+
 - Git command module functional
 - GitHub API integration working
 - 80% test coverage
@@ -603,18 +620,21 @@ C  - File copied
 ### Phase 2: Code Analysis (2 weeks)
 
 **Week 3:**
+
 - ✅ Code analyzer framework
 - ✅ Java analyzer implementation
 - ✅ Basic quality rules
 - ✅ Security rules
 
 **Week 4:**
+
 - ✅ JavaScript/Python analyzers
 - ✅ SQL analyzer
 - ✅ Rule engine
 - ✅ Analysis result generation
 
 **Deliverables:**
+
 - Multi-language support
 - 20+ analysis rules
 - Analysis report generation
@@ -622,18 +642,21 @@ C  - File copied
 ### Phase 3: RAG Integration (2 weeks)
 
 **Week 5:**
+
 - ✅ RAG service adapter
 - ✅ Code indexing pipeline
 - ✅ Similar code search
 - ✅ Context building
 
 **Week 6:**
+
 - ✅ Pattern recognition
 - ✅ Best practice suggestions
 - ✅ Historical analysis
 - ✅ Integration testing
 
 **Deliverables:**
+
 - RAG-powered suggestions
 - Code pattern database
 - Context-aware reviews
@@ -641,18 +664,21 @@ C  - File copied
 ### Phase 4: UI Development (2 weeks)
 
 **Week 7:**
+
 - ✅ Main review interface
 - ✅ GitHub connection dialog
 - ✅ Local repo selector
 - ✅ Diff viewer
 
 **Week 8:**
+
 - ✅ Results visualization
 - ✅ Review posting interface
 - ✅ Settings panel
 - ✅ UI polish
 
 **Deliverables:**
+
 - Complete UI
 - User-friendly workflow
 - Responsive design
@@ -660,18 +686,21 @@ C  - File copied
 ### Phase 5: Integration & Testing (2 weeks)
 
 **Week 9:**
+
 - ✅ End-to-end testing
 - ✅ Performance optimization
 - ✅ Bug fixing
 - ✅ Security audit
 
 **Week 10:**
+
 - ✅ Documentation
 - ✅ User guide
 - ✅ Beta testing
 - ✅ Final polish
 
 **Deliverables:**
+
 - Production-ready feature
 - Complete documentation
 - Test report
@@ -685,12 +714,14 @@ C  - File copied
 **Target:** 80% coverage
 
 **Key Areas:**
+
 - Git command parsing
 - GitHub API responses
 - Analysis rules
 - Diff processing
 
 **Tools:**
+
 - JUnit 5
 - Mockito
 - AssertJ
@@ -698,12 +729,14 @@ C  - File copied
 ### 8.2 Integration Testing
 
 **Scenarios:**
+
 - GitHub API integration
 - Git command execution
 - RAG service integration
 - Database operations
 
 **Tools:**
+
 - TestContainers
 - WireMock (for GitHub API)
 - H2 in-memory database
@@ -713,28 +746,31 @@ C  - File copied
 **Test Cases:**
 
 1. **Full GitHub PR Review**
-   - Authenticate → Fetch PR → Analyze → Post results
-   
+    - Authenticate → Fetch PR → Analyze → Post results
+
 2. **Local Repository Review**
-   - Select repo → Parse changes → Analyze → Display results
-   
+    - Select repo → Parse changes → Analyze → Display results
+
 3. **Error Handling**
-   - Network failures → Graceful degradation
-   - Invalid Git repo → Clear error message
+    - Network failures → Graceful degradation
+    - Invalid Git repo → Clear error message
 
 **Tools:**
+
 - TestFX (JavaFX UI testing)
 - Selenium (if web UI)
 
 ### 8.4 Performance Testing
 
 **Metrics:**
+
 - Review time for 100-file PR: < 5 minutes
 - API response time: < 2 seconds
 - Git command execution: < 1 second
 - Memory usage: < 500MB for typical review
 
 **Tools:**
+
 - JMH (Java Microbenchmark Harness)
 - VisualVM
 
@@ -759,6 +795,7 @@ Week:  1 2 3 4   5 6 7 8   9 10
 ```
 
 **Milestones:**
+
 - ✅ Week 2: Git integration working
 - ✅ Week 4: Code analysis functional
 - ✅ Week 6: RAG integration complete
@@ -771,28 +808,28 @@ Week:  1 2 3 4   5 6 7 8   9 10
 
 ### 10.1 Technical Risks
 
-| Risk | Probability | Impact | Mitigation |
-|------|-------------|--------|------------|
-| GitHub API rate limiting | High | Medium | Implement caching, use conditional requests |
-| Git command compatibility | Medium | High | Test on multiple OS, provide fallback options |
-| Performance with large PRs | Medium | High | Implement chunking, async processing |
-| RAG accuracy | Low | Medium | Continuous training, human feedback loop |
+| Risk                       | Probability | Impact | Mitigation                                    |
+|----------------------------|-------------|--------|-----------------------------------------------|
+| GitHub API rate limiting   | High        | Medium | Implement caching, use conditional requests   |
+| Git command compatibility  | Medium      | High   | Test on multiple OS, provide fallback options |
+| Performance with large PRs | Medium      | High   | Implement chunking, async processing          |
+| RAG accuracy               | Low         | Medium | Continuous training, human feedback loop      |
 
 ### 10.2 Business Risks
 
-| Risk | Probability | Impact | Mitigation |
-|------|-------------|--------|------------|
-| Corporate firewall blocks GitHub | High | High | **Local Git mode is essential** |
-| User adoption low | Medium | Medium | Comprehensive training, clear benefits |
-| Integration complexity | Medium | High | Phased rollout, extensive testing |
+| Risk                             | Probability | Impact | Mitigation                             |
+|----------------------------------|-------------|--------|----------------------------------------|
+| Corporate firewall blocks GitHub | High        | High   | **Local Git mode is essential**        |
+| User adoption low                | Medium      | Medium | Comprehensive training, clear benefits |
+| Integration complexity           | Medium      | High   | Phased rollout, extensive testing      |
 
 ### 10.3 Security Risks
 
-| Risk | Probability | Impact | Mitigation |
-|------|-------------|--------|------------|
-| Token exposure | Low | Critical | Secure storage, encryption at rest |
-| Code leakage | Low | Critical | Local-only processing option |
-| Injection attacks | Low | High | Input validation, sandboxed execution |
+| Risk              | Probability | Impact   | Mitigation                            |
+|-------------------|-------------|----------|---------------------------------------|
+| Token exposure    | Low         | Critical | Secure storage, encryption at rest    |
+| Code leakage      | Low         | Critical | Local-only processing option          |
+| Injection attacks | Low         | High     | Input validation, sandboxed execution |
 
 ---
 
@@ -921,6 +958,7 @@ LOG_PATH=logs/git-review.log
 ### Tools & Libraries
 
 **Java Libraries:**
+
 - JGit: Git operations in Java
 - OkHttp: HTTP client for GitHub API
 - Jackson: JSON processing
@@ -928,6 +966,7 @@ LOG_PATH=logs/git-review.log
 - TestFX: UI testing
 
 **External Services:**
+
 - GitHub API
 - (Optional) GitLab API
 - (Optional) Bitbucket API
@@ -944,11 +983,13 @@ This Git Source Code Review feature will significantly enhance PCM Desktop's cap
 4. **Integrating seamlessly** with existing RAG infrastructure
 
 The phased approach ensures:
+
 - Minimal risk through incremental delivery
 - Early feedback from users
 - Flexibility to adjust based on learnings
 
 **Next Steps:**
+
 1. ✅ Review and approve this document
 2. ✅ Set up development environment
 3. ✅ Begin Phase 1 implementation

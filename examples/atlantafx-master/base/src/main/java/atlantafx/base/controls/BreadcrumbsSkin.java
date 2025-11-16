@@ -30,9 +30,11 @@
 package atlantafx.base.controls;
 
 import atlantafx.base.controls.Breadcrumbs.BreadCrumbItem;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
 import javafx.css.PseudoClass;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -51,13 +53,13 @@ public class BreadcrumbsSkin<T> extends SkinBase<Breadcrumbs<T>> {
     protected static final PseudoClass LAST = PseudoClass.getPseudoClass("last");
 
     protected final EventHandler<TreeModificationEvent<Object>> treeChildrenModifiedHandler =
-        e -> updateBreadCrumbs();
+            e -> updateBreadCrumbs();
 
     public BreadcrumbsSkin(final Breadcrumbs<T> control) {
         super(control);
 
         control.selectedCrumbProperty().addListener(
-            (obs, old, val) -> updateSelectedPath(old, val)
+                (obs, old, val) -> updateSelectedPath(old, val)
         );
         updateSelectedPath(getSkinnable().selectedCrumbProperty().get(), null);
     }

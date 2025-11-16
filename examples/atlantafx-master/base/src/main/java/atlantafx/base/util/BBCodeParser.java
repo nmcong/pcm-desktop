@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+
 import javafx.geometry.Pos;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -36,14 +37,14 @@ public class BBCodeParser {
      * as the {@link BBCodeHandler} is responsible for implementation.
      */
     public static final Set<String> RESERVED_TAGS = Set.of(
-        // supported by the default handler
-        "abbr", "align", "b", "caption", "center", "code", "color", "email", "heading",
-        "font", "hr", "i", "indent", "label", "left", "li", "ol",
-        "right", "s", "size", "small", "span", "style", "sub", "sup", "u", "ul", "url",
-        // reserved
-        "alert", "em", "fieldset", "h1", "h2", "h3", "h4", "icon", "img", "info", "kbd",
-        "list", "media", "plain", "pre", "quote", "spoiler", "stop", "table", "tooltip",
-        "td", "th", "tr", "warning"
+            // supported by the default handler
+            "abbr", "align", "b", "caption", "center", "code", "color", "email", "heading",
+            "font", "hr", "i", "indent", "label", "left", "li", "ol",
+            "right", "s", "size", "small", "span", "style", "sub", "sup", "u", "ul", "url",
+            // reserved
+            "alert", "em", "fieldset", "h1", "h2", "h3", "h4", "icon", "img", "info", "kbd",
+            "list", "media", "plain", "pre", "quote", "spoiler", "stop", "table", "tooltip",
+            "td", "th", "tr", "warning"
     );
 
     private final String input;
@@ -76,6 +77,39 @@ public class BBCodeParser {
     }
 
     /**
+     * See {@link #createLayout(String, Pane)}.
+     */
+    public static TextFlow createFormattedText(String input) {
+        return createLayout(input, new TextFlow());
+    }
+
+    /**
+     * See {@link #createLayout(String, Pane)}.
+     */
+    public static VBox createLayout(String input) {
+        var b = new VBox(10);
+        b.setAlignment(Pos.TOP_LEFT);
+        return createLayout(input, b);
+    }
+
+    /**
+     * Parses the given string using BBCode markup and returns corresponding layout.
+     * This is a shorthand method for using the feature.
+     *
+     * @param input     The BBCode markup string.
+     * @param container The root container.
+     * @see BBCodeHandler
+     */
+    public static <T extends Pane> T createLayout(String input, T container) {
+        var handler = new BBCodeHandler.Default<>(container);
+
+        var parser = new BBCodeParser(input, handler);
+        parser.parse();
+
+        return container;
+    }
+
+    /**
      * Starts input parsing.
      * There's no way to stop the process until parsing is finished.
      */
@@ -105,8 +139,8 @@ public class BBCodeParser {
                     // push leading and intermediate characters
                     if (openTags.isEmpty()) {
                         handleCharacters(
-                            lastClosingPos > 0 ? lastClosingPos + 1 : 0,
-                            lastClosingPos > 0 ? offset - lastClosingPos - 1 : offset
+                                lastClosingPos > 0 ? lastClosingPos + 1 : 0,
+                                lastClosingPos > 0 ? offset - lastClosingPos - 1 : offset
                         );
                     }
 
@@ -150,45 +184,12 @@ public class BBCodeParser {
         // push trailing characters
         if (lastClosingPos < input.length()) {
             handleCharacters(
-                lastClosingPos > 0 ? lastClosingPos + 1 : lastClosingPos,
-                lastClosingPos > 0 ? input.length() - lastClosingPos - 1 : input.length()
+                    lastClosingPos > 0 ? lastClosingPos + 1 : lastClosingPos,
+                    lastClosingPos > 0 ? input.length() - lastClosingPos - 1 : input.length()
             );
         }
 
         handler.endDocument();
-    }
-
-    /**
-     * See {@link #createLayout(String, Pane)}.
-     */
-    public static TextFlow createFormattedText(String input) {
-        return createLayout(input, new TextFlow());
-    }
-
-    /**
-     * See {@link #createLayout(String, Pane)}.
-     */
-    public static VBox createLayout(String input) {
-        var b = new VBox(10);
-        b.setAlignment(Pos.TOP_LEFT);
-        return createLayout(input, b);
-    }
-
-    /**
-     * Parses the given string using BBCode markup and returns corresponding layout.
-     * This is a shorthand method for using the feature.
-     *
-     * @param input     The BBCode markup string.
-     * @param container The root container.
-     * @see BBCodeHandler
-     */
-    public static <T extends Pane> T createLayout(String input, T container) {
-        var handler = new BBCodeHandler.Default<>(container);
-
-        var parser = new BBCodeParser(input, handler);
-        parser.parse();
-
-        return container;
     }
 
     ///////////////////////////////////////////////////////////////////////////
@@ -246,14 +247,14 @@ public class BBCodeParser {
 
         if (openTags.isEmpty()) {
             throw new IllegalStateException(
-                "Invalid BBCode: Closing tag without corresponding opening tag: '" + name + "'"
+                    "Invalid BBCode: Closing tag without corresponding opening tag: '" + name + "'"
             );
         }
 
         String lastTag = openTags.pop();
         if (!lastTag.equals(name)) {
             throw new IllegalStateException(
-                "Invalid BBCode: Closing tag '" + name + "' does not match opening tag '" + lastTag + "'"
+                    "Invalid BBCode: Closing tag '" + name + "' does not match opening tag '" + lastTag + "'"
             );
         }
 

@@ -14,7 +14,7 @@ public class InputGroupTest {
     @Test
     public void testInitSingleNode() {
         var g = new InputGroup(
-            new Pane()
+                new Pane()
         );
 
         Assertions.assertThat(g.getChildren().size()).isEqualTo(1);
@@ -24,7 +24,7 @@ public class InputGroupTest {
     @Test
     public void testInitTwoNodes() {
         var g = new InputGroup(
-            new Pane(), new Pane()
+                new Pane(), new Pane()
         );
 
         Assertions.assertThat(g.getChildren().size()).isEqualTo(2);
@@ -35,7 +35,7 @@ public class InputGroupTest {
     @Test
     public void testInitMultipleNodes() {
         var g = new InputGroup(
-            new Pane(), new Pane(), new Pane(), new Pane()
+                new Pane(), new Pane(), new Pane(), new Pane()
         );
 
         Assertions.assertThat(g.getChildren().size()).isEqualTo(4);
@@ -71,7 +71,7 @@ public class InputGroupTest {
     @Test
     public void testRemoveNodes() {
         var g = new InputGroup(
-            new Pane(), new Pane(), new Pane(), new Pane()
+                new Pane(), new Pane(), new Pane(), new Pane()
         );
         Assertions.assertThat(g.getChildren().size()).isEqualTo(4);
         assertStyle(g, 0, Styles.LEFT_PILL);

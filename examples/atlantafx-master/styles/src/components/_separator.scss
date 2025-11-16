@@ -2,9 +2,9 @@
 
 @use "../settings/config" as cfg;
 
-$padding:    map-get(cfg.$separators, "medium") !default;
+$padding: map-get(cfg.$separators, "medium") !default;
 $line-color: -color-border-muted !default;
-$line-width: cfg.$border-width   !default;
+$line-width: cfg.$border-width !default;
 
 .separator {
 
@@ -14,7 +14,7 @@ $line-width: cfg.$border-width   !default;
     -fx-padding: $padding 0 $padding 0;
 
     // using border instead of insets to get thinner line
-    >.line {
+    > .line {
       -fx-border-color: -color-separator transparent transparent transparent;
       -fx-border-insets: $line-width 0 0 0;
     }
@@ -23,7 +23,7 @@ $line-width: cfg.$border-width   !default;
   &:vertical {
     -fx-padding: 0 $padding 0 $padding;
 
-    >.line {
+    > .line {
       -fx-border-color: transparent transparent transparent -color-separator;
       -fx-border-insets: 0 0 0 $line-width;
     }

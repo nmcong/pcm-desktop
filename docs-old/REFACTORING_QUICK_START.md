@@ -2,7 +2,8 @@
 
 ## 🚀 Quick Overview
 
-PCM Desktop has been refactored to follow **MVVM architecture** with **Best Practices**, **Clean Code**, and **SOLID principles**.
+PCM Desktop has been refactored to follow **MVVM architecture** with **Best Practices**, **Clean Code**, and **SOLID
+principles**.
 
 ---
 
@@ -11,35 +12,35 @@ PCM Desktop has been refactored to follow **MVVM architecture** with **Best Prac
 ### Core Infrastructure
 
 1. **✅ Dependency Injection (DI)** - `Injector` class
-   - Manages service and ViewModel dependencies
-   - Location: `com.noteflix.pcm.core.di.Injector`
+    - Manages service and ViewModel dependencies
+    - Location: `com.noteflix.pcm.core.di.Injector`
 
 2. **✅ ViewModels** - MVVM pattern
-   - Separate UI state from UI components
-   - Location: `com.noteflix.pcm.ui.viewmodel/`
+    - Separate UI state from UI components
+    - Location: `com.noteflix.pcm.ui.viewmodel/`
 
 3. **✅ Async Utilities** - Background task management
-   - `Asyncs` class for non-blocking operations
-   - Location: `com.noteflix.pcm.core.utils.Asyncs`
+    - `Asyncs` class for non-blocking operations
+    - Location: `com.noteflix.pcm.core.utils.Asyncs`
 
 4. **✅ Dialog Service** - Centralized dialogs
-   - `DialogService` for consistent UI
-   - Location: `com.noteflix.pcm.core.utils.DialogService`
+    - `DialogService` for consistent UI
+    - Location: `com.noteflix.pcm.core.utils.DialogService`
 
 5. **✅ Internationalization (i18n)** - Multi-language support
-   - `I18n` class with ResourceBundle
-   - Location: `com.noteflix.pcm.core.i18n.I18n`
+    - `I18n` class with ResourceBundle
+    - Location: `com.noteflix.pcm.core.i18n.I18n`
 
 6. **✅ Navigation** - Type-safe routing
-   - `Route` enum for navigation
-   - Location: `com.noteflix.pcm.core.navigation.Route`
+    - `Route` enum for navigation
+    - Location: `com.noteflix.pcm.core.navigation.Route`
 
 7. **✅ Binding Helpers** - Property binding utilities
-   - `FxBindings` for common binding patterns
-   - Location: `com.noteflix.pcm.core.utils.FxBindings`
+    - `FxBindings` for common binding patterns
+    - Location: `com.noteflix.pcm.core.utils.FxBindings`
 
 8. **✅ Module System** - JPMS support
-   - `module-info.java` for modular architecture
+    - `module-info.java` for modular architecture
 
 ---
 
@@ -238,6 +239,7 @@ FxBindings.bindBidirectionalWithConverter(
 ## 📁 File Organization
 
 ### Before Refactoring
+
 ```
 ui/
 ├── MainController.java (logic + UI)
@@ -246,6 +248,7 @@ ui/
 ```
 
 ### After Refactoring
+
 ```
 ui/
 ├── viewmodel/                    # NEW!
@@ -295,6 +298,7 @@ If you're updating existing code:
 ### 1. **Observable Properties**
 
 Instead of:
+
 ```java
 private String name;
 public void setName(String name) {
@@ -304,6 +308,7 @@ public void setName(String name) {
 ```
 
 Use:
+
 ```java
 private final StringProperty name = new SimpleStringProperty("");
 public StringProperty nameProperty() { return name; }
@@ -315,6 +320,7 @@ label.textProperty().bind(viewModel.nameProperty());
 ### 2. **Commands vs Event Handlers**
 
 Instead of:
+
 ```java
 button.setOnAction(e -> {
     // Lots of logic here
@@ -322,6 +328,7 @@ button.setOnAction(e -> {
 ```
 
 Use:
+
 ```java
 // In ViewModel
 public void save() {
@@ -335,6 +342,7 @@ button.setOnAction(e -> viewModel.save());
 ### 3. **Async Pattern**
 
 **Always** run IO on background thread:
+
 ```java
 Asyncs.runAsync(
     () -> {
@@ -353,24 +361,24 @@ Asyncs.runAsync(
 ## 📚 Key Files to Check
 
 1. **Injector** - `core/di/Injector.java`
-   - See how services are registered
-   - See how ViewModels are created
+    - See how services are registered
+    - See how ViewModels are created
 
 2. **AIAssistantViewModel** - `ui/viewmodel/AIAssistantViewModel.java`
-   - Example of complete ViewModel
-   - Shows property usage and commands
+    - Example of complete ViewModel
+    - Shows property usage and commands
 
 3. **Asyncs** - `core/utils/Asyncs.java`
-   - See async patterns
-   - Understand thread management
+    - See async patterns
+    - Understand thread management
 
 4. **PCMApplication** - `PCMApplication.java`
-   - See initialization order
-   - See how DI is set up
+    - See initialization order
+    - See how DI is set up
 
 5. **I18n** - `core/i18n/I18n.java`
-   - See how to use messages
-   - Check message files in `resources/i18n/`
+    - See how to use messages
+    - Check message files in `resources/i18n/`
 
 ---
 
@@ -387,11 +395,13 @@ Asyncs.runAsync(
 ## 🐛 Common Mistakes
 
 ### ❌ Creating services with `new`
+
 ```java
 ConversationService service = new ConversationService(); // NO!
 ```
 
 ### ✅ Use DI instead
+
 ```java
 ConversationService service = Injector.getInstance().get(ConversationService.class);
 ```
@@ -399,6 +409,7 @@ ConversationService service = Injector.getInstance().get(ConversationService.cla
 ---
 
 ### ❌ Blocking UI thread
+
 ```java
 button.setOnAction(e -> {
     String data = database.load(); // BLOCKS!
@@ -407,6 +418,7 @@ button.setOnAction(e -> {
 ```
 
 ### ✅ Use async
+
 ```java
 button.setOnAction(e -> {
     Asyncs.runAsync(
@@ -419,6 +431,7 @@ button.setOnAction(e -> {
 ---
 
 ### ❌ Manual UI updates
+
 ```java
 nameProperty.addListener((obs, old, newVal) -> {
     label.setText(newVal);
@@ -426,6 +439,7 @@ nameProperty.addListener((obs, old, newVal) -> {
 ```
 
 ### ✅ Use binding
+
 ```java
 label.textProperty().bind(nameProperty);
 ```
@@ -454,6 +468,7 @@ label.textProperty().bind(nameProperty);
 ## 📞 Need Help?
 
 Check these resources:
+
 - `ARCHITECTURE_REFACTORING.md` - Full architecture details
 - `BESTPRACTICES.md` - Original best practices
 - `BESTPRACTICES_02.md` - Advanced patterns

@@ -1,13 +1,16 @@
 # Screen & System Metadata Specification for LLM Integration
 
-This document defines a standard format for describing screens, workflows, and data so that the LLM can reliably understand the relationships between UI screens, source code (BE/FE), and database objects. The goal is to make questions like:
+This document defines a standard format for describing screens, workflows, and data so that the LLM can reliably
+understand the relationships between UI screens, source code (BE/FE), and database objects. The goal is to make
+questions like:
 
 - "Quy trình approve diễn ra như thế nào, lưu vào cột nào?"
 - "Thay đổi cột ngày hết hạn ảnh hưởng tới nghiệp vụ nào?"
 
 trở nên có thể trả lời chính xác dựa trên metadata + code + schema.
 
-> Recommended storage format: one YAML file per screen (or subsystem) under `data/screens/`, plus optional knowledge base files under `data/kb/`.
+> Recommended storage format: one YAML file per screen (or subsystem) under `data/screens/`, plus optional knowledge
+> base files under `data/kb/`.
 
 ---
 
@@ -31,6 +34,7 @@ tags:                               # Optional tags for retrieval
 ```
 
 **Guidelines**
+
 - `screen_id` nên mang tính “business-friendly” (ví dụ: `AR-APPROVAL`, `CUST-DETAIL`).
 - `business_purpose` nên nói rõ đầu vào, đầu ra, và actor chính.
 
@@ -73,6 +77,7 @@ frontend:
 ```
 
 **Guidelines**
+
 - Chỉ cần liệt kê các component quan trọng (buttons, fields) có liên quan đến logic nghiệp vụ.
 - `action_handler` phải trỏ đến class/method thực trong code để LLM có thể mapping sang BE.
 
@@ -132,6 +137,7 @@ backend:
 ```
 
 **Guidelines**
+
 - `workflows` nên mô tả rõ *sequence* chính, không cần quá chi tiết về từng dòng code.
 - Rất quan trọng: mapping bước workflow → implementation (class/method) → database (xem phần tiếp theo).
 
@@ -197,12 +203,13 @@ database:
 ```
 
 **Guidelines**
+
 - Mỗi cột quan trọng (status, amount, expiry date, …) nên có:
-  - `updated_by` rõ ràng (class/method + lý do).
-  - `impacts` liệt kê màn hình, batch, báo cáo, rule liên quan.
+    - `updated_by` rõ ràng (class/method + lý do).
+    - `impacts` liệt kê màn hình, batch, báo cáo, rule liên quan.
 - Điều này cho phép LLM trả lời:
-  - “Cột này ai cập nhật?” → dựa vào `updated_by`.
-  - “Thay đổi cột này ảnh hưởng tới đâu?” → dựa vào `impacts`.
+    - “Cột này ai cập nhật?” → dựa vào `updated_by`.
+    - “Thay đổi cột này ảnh hưởng tới đâu?” → dựa vào `impacts`.
 
 ---
 
@@ -239,6 +246,7 @@ events:
 ```
 
 **Guidelines**
+
 - Luôn mô tả event ở mức business (OrderApproved, PaymentCaptured, v.v.).
 - Kết nối event với screen/workflow giúp LLM kể lại “toàn bộ câu chuyện” sau một hành động.
 
@@ -281,9 +289,10 @@ business_rules:
 ```
 
 **Guidelines**
+
 - Mỗi rule nên:
-  - Có `id` rõ ràng, dễ search.
-  - Liên kết tới bảng/cột và nơi enforce trong code.
+    - Có `id` rõ ràng, dễ search.
+    - Liên kết tới bảng/cột và nơi enforce trong code.
 - Đặc biệt quan trọng với các câu hỏi “thay đổi field X thì sao?”.
 
 ---
@@ -322,6 +331,7 @@ relations:
 ```
 
 **Guidelines**
+
 - Dùng `relations` để nối nhiều screen, batch, report lại thành một “graph nghiệp vụ”.
 - LLM có thể dùng graph này để trả lời câu hỏi impact ở cấp hệ thống.
 
@@ -358,14 +368,16 @@ Các file KB này sẽ được index giống như screen metadata và dùng là
 
 ## 9. Best Practices Khi Viết Metadata
 
-- Viết bằng ngôn ngữ gần với cách mà business và developer nói chuyện (có thể dùng tiếng Việt, Anh hoặc mix, nhưng nên thống nhất).
+- Viết bằng ngôn ngữ gần với cách mà business và developer nói chuyện (có thể dùng tiếng Việt, Anh hoặc mix, nhưng nên
+  thống nhất).
 - Ưu tiên đầy đủ thông tin hơn là quá ngắn gọn, đặc biệt với:
-  - Luồng phê duyệt, trạng thái, ngày tháng, số tiền.
-  - Các cột có impact lớn (status, expiry, flags…).
+    - Luồng phê duyệt, trạng thái, ngày tháng, số tiền.
+    - Các cột có impact lớn (status, expiry, flags…).
 - Luôn nối 3 tầng: **Screen → Code → Database**, và thêm **Rules/Events** nếu có.
 - Cập nhật metadata cùng lúc với khi thay đổi logic (treat như code).
 
 Khi mọi màn hình quan trọng đều có file metadata theo spec này, LLM + RAG có thể:
+
 - Tìm được chính xác method/service/batch xử lý một hành động cụ thể.
 - Biết cột nào được ghi/đọc, và những màn hình/báo cáo/job nào bị ảnh hưởng khi cột thay đổi.
 - Trả lời câu hỏi nghiệp vụ một cách mạch lạc, có dẫn chiếu đến bảng/cột/method/screen cụ thể.
@@ -375,6 +387,7 @@ Khi mọi màn hình quan trọng đều có file metadata theo spec này, LLM +
 ## 10. Storage Schema (SQLite) for Screen & System Metadata
 
 Đây là schema gợi ý để lưu trữ metadata đã parse từ YAML/KB vào SQLite (hoặc bất kỳ DB quan hệ nào). Mục tiêu:
+
 - Dễ query theo screen, table, column, rule, batch, report.
 - Dễ dùng cho tools của LLM (function calling).
 
@@ -566,7 +579,9 @@ CREATE TABLE kb_articles (
 
 ## 11. RAG Index Schema (Documents & Embeddings)
 
-Metadata ở trên là “truth source” quan hệ. Để LLM truy vấn nhanh và ít tốn token, nên có thêm schema cho index (document + embedding). Dưới đây là một thiết kế đơn giản nếu bạn dùng SQLite làm storage cho index (hoặc một lớp abstraction tương đương nếu dùng Qdrant/pgvector, v.v.).
+Metadata ở trên là “truth source” quan hệ. Để LLM truy vấn nhanh và ít tốn token, nên có thêm schema cho index (
+document + embedding). Dưới đây là một thiết kế đơn giản nếu bạn dùng SQLite làm storage cho index (hoặc một lớp
+abstraction tương đương nếu dùng Qdrant/pgvector, v.v.).
 
 ### 11.1. Documents
 
@@ -608,22 +623,23 @@ CREATE INDEX idx_rag_documents_rule ON rag_documents(rule_id);
 ### 11.3. Cách LLM sử dụng schema này
 
 - Khi **index**:
-  - Parse YAML + KB + code + schema.
-  - Sinh các đoạn “fact” dạng text (ngắn, rõ, ngôn ngữ tự nhiên).
-  - Lưu mỗi fact vào `rag_documents` (kèm metadata: `screen_id`, `table_name`, `column_name`, `rule_id`...).
-  - Tạo embedding tương ứng trong `rag_embeddings`.
+    - Parse YAML + KB + code + schema.
+    - Sinh các đoạn “fact” dạng text (ngắn, rõ, ngôn ngữ tự nhiên).
+    - Lưu mỗi fact vào `rag_documents` (kèm metadata: `screen_id`, `table_name`, `column_name`, `rule_id`...).
+    - Tạo embedding tương ứng trong `rag_embeddings`.
 
 - Khi **trả lời câu hỏi**:
-  - Xác định context sơ bộ (screen hiện tại, từ khóa bảng/cột trong câu hỏi).
-  - Query `rag_embeddings` để lấy top-k documents (kết hợp filter metadata).
-  - Lấy `content` từ `rag_documents` → gửi vào LLM như context.
-  - Nếu cần chi tiết hơn, LLM có thể gọi tools:
-    - `get_screens_affecting_column(table, column)` → query `column_impacts`, `screens`, `relations`.
-    - `get_workflow_for_action(screen_id, action_id)` → query `workflows`, `workflow_steps`, `screen_components`.
+    - Xác định context sơ bộ (screen hiện tại, từ khóa bảng/cột trong câu hỏi).
+    - Query `rag_embeddings` để lấy top-k documents (kết hợp filter metadata).
+    - Lấy `content` từ `rag_documents` → gửi vào LLM như context.
+    - Nếu cần chi tiết hơn, LLM có thể gọi tools:
+        - `get_screens_affecting_column(table, column)` → query `column_impacts`, `screens`, `relations`.
+        - `get_workflow_for_action(screen_id, action_id)` → query `workflows`, `workflow_steps`, `screen_components`.
 
 Với schema này:
+
 - Bạn có cấu trúc rõ ràng để lưu **mối quan hệ** (screen ↔ code ↔ database ↔ rules ↔ events).
 - Bạn có index RAG hiệu quả để **giảm token** và tăng độ chính xác khi LLM trả lời các câu hỏi nghiệp vụ phức tạp như:
-  - “Approve xử lý thế nào, viết vào bảng/cột nào?”
-  - “Thay đổi EXPIRY_DATE ảnh hưởng tới màn hình, batch, báo cáo nào?”.
+    - “Approve xử lý thế nào, viết vào bảng/cột nào?”
+    - “Thay đổi EXPIRY_DATE ảnh hưởng tới màn hình, batch, báo cáo nào?”.
 

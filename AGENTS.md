@@ -1,6 +1,7 @@
 # Repository Guidelines
 
-This file describes how to work in the `pcm-desktop` repository. It applies to all source, tests, scripts, and documentation.
+This file describes how to work in the `pcm-desktop` repository. It applies to all source, tests, scripts, and
+documentation.
 
 ## Project Structure & Modules
 
@@ -35,7 +36,8 @@ This file describes how to work in the `pcm-desktop` repository. It applies to a
 
 - Follow conventional, descriptive messages (e.g., `feat: add rag chunking config`, `fix: handle null embeddings`).
 - Keep commits logically scoped; avoid mixing formatting-only and behavior changes.
-- PRs should include: short summary, motivation/issue link, testing notes (`mvn test` / script run), and screenshots for UI changes.
+- PRs should include: short summary, motivation/issue link, testing notes (`mvn test` / script run), and screenshots for
+  UI changes.
 
 ## Agent-Specific Notes
 

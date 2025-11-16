@@ -1,6 +1,8 @@
 # PCM Desktop - Detailed Design Specification
 
-This document provides a comprehensive design specification for the PCM (Project Configuration Management) Desktop application, expanding on the function calling specification with detailed implementation guidelines, API contracts, and system architecture.
+This document provides a comprehensive design specification for the PCM (Project Configuration Management) Desktop
+application, expanding on the function calling specification with detailed implementation guidelines, API contracts, and
+system architecture.
 
 ## Table of Contents
 
@@ -79,6 +81,7 @@ public class SystemRegistrationService {
 ```
 
 **Request Schema**:
+
 ```json
 {
   "system": {
@@ -666,6 +669,7 @@ All endpoints follow RESTful conventions with JSON request/response bodies.
 **Authentication**: Bearer token authentication
 
 **Common Response Format**:
+
 ```json
 {
   "success": true,
@@ -681,6 +685,7 @@ All endpoints follow RESTful conventions with JSON request/response bodies.
 **Endpoint**: `/ws/agent-responses`
 
 **Events**:
+
 - `response.chunk` - Streaming response content
 - `response.complete` - Response finished
 - `response.error` - Error occurred
@@ -726,20 +731,24 @@ All endpoints follow RESTful conventions with JSON request/response bodies.
 ## Testing Strategy
 
 ### Unit Testing
+
 - **Coverage Target**: 85%+ line coverage
 - **Framework**: JUnit 5 + Mockito
 - **Test Doubles**: Mock external services (LLM, Qdrant)
 
 ### Integration Testing
+
 - **Database**: In-memory H2 for testing
 - **Search**: Embedded Lucene index
 - **End-to-End**: TestFX for UI testing
 
 ### Performance Testing
+
 - **Load Testing**: JMeter for API endpoints
 - **Memory Profiling**: Monitor for memory leaks
 - **Search Performance**: Benchmark with large datasets
 
 ---
 
-This detailed specification provides the foundation for implementing a robust, scalable PCM Desktop application with comprehensive AI-powered analysis capabilities.
+This detailed specification provides the foundation for implementing a robust, scalable PCM Desktop application with
+comprehensive AI-powered analysis capabilities.

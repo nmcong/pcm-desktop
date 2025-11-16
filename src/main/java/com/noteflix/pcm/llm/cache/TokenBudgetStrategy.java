@@ -12,45 +12,45 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class TokenBudgetStrategy implements ToolResultCacheStrategy {
 
-  private final int maxTokensPerToolResult;
+    private final int maxTokensPerToolResult;
 
-  public TokenBudgetStrategy(int maxTokensPerToolResult) {
-    this.maxTokensPerToolResult = maxTokensPerToolResult;
-  }
-
-  @Override
-  public CacheDecision decide(ToolExecutionContext context) {
-    int resultTokens = context.getResultTokenCount();
-
-    if (resultTokens <= maxTokensPerToolResult) {
-      log.debug(
-          "Result {} within budget ({}/{})",
-          context.getToolName(),
-          resultTokens,
-          maxTokensPerToolResult);
-      return CacheDecision.builder()
-          .shouldCache(true)
-          .shouldSummarize(false)
-          .summarizationStrategy("none")
-          .reason("Within token budget")
-          .build();
+    public TokenBudgetStrategy(int maxTokensPerToolResult) {
+        this.maxTokensPerToolResult = maxTokensPerToolResult;
     }
 
-    log.debug(
-        "Result {} exceeds budget ({}/{}), summarizing",
-        context.getToolName(),
-        resultTokens,
-        maxTokensPerToolResult);
-    return CacheDecision.builder()
-        .shouldCache(true)
-        .shouldSummarize(true)
-        .summarizationStrategy("extractive")
-        .reason("Exceeds token budget: " + maxTokensPerToolResult)
-        .build();
-  }
+    @Override
+    public CacheDecision decide(ToolExecutionContext context) {
+        int resultTokens = context.getResultTokenCount();
 
-  @Override
-  public String getStrategyName() {
-    return "token-budget-" + maxTokensPerToolResult;
-  }
+        if (resultTokens <= maxTokensPerToolResult) {
+            log.debug(
+                    "Result {} within budget ({}/{})",
+                    context.getToolName(),
+                    resultTokens,
+                    maxTokensPerToolResult);
+            return CacheDecision.builder()
+                    .shouldCache(true)
+                    .shouldSummarize(false)
+                    .summarizationStrategy("none")
+                    .reason("Within token budget")
+                    .build();
+        }
+
+        log.debug(
+                "Result {} exceeds budget ({}/{}), summarizing",
+                context.getToolName(),
+                resultTokens,
+                maxTokensPerToolResult);
+        return CacheDecision.builder()
+                .shouldCache(true)
+                .shouldSummarize(true)
+                .summarizationStrategy("extractive")
+                .reason("Exceeds token budget: " + maxTokensPerToolResult)
+                .build();
+    }
+
+    @Override
+    public String getStrategyName() {
+        return "token-budget-" + maxTokensPerToolResult;
+    }
 }

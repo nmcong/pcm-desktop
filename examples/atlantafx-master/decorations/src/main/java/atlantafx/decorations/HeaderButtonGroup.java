@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+
 import javafx.css.PseudoClass;
 import javafx.scene.control.Control;
 import javafx.scene.control.Skin;
@@ -79,6 +80,37 @@ public class HeaderButtonGroup extends Control {
     }
 
     /**
+     * Creates a standard HeaderButtonGroup that includes minimize, maximize,
+     * and close buttons.
+     */
+    public static HeaderButtonGroup standardGroup() {
+        return new HeaderButtonGroup(
+                new HeaderButton(HeaderButtonType.ICONIFY),
+                new HeaderButton(HeaderButtonType.MAXIMIZE),
+                new HeaderButton(HeaderButtonType.CLOSE)
+        );
+    }
+
+    /**
+     * Creates a utility HeaderButtonGroup that includes minimize and close buttons.
+     */
+    public static HeaderButtonGroup utilityGroup() {
+        return new HeaderButtonGroup(
+                new HeaderButton(HeaderButtonType.ICONIFY),
+                new HeaderButton(HeaderButtonType.CLOSE)
+        );
+    }
+
+    /**
+     * Creates a HeaderButtonGroup consisting of a single close button.
+     */
+    public static HeaderButtonGroup closeOnlyGroup() {
+        return new HeaderButtonGroup(
+                new HeaderButton(HeaderButtonType.CLOSE)
+        );
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override
@@ -100,8 +132,8 @@ public class HeaderButtonGroup extends Control {
      */
     public Optional<HeaderButton> getButton(HeaderButtonType type) {
         return getButtons().stream()
-                   .filter(button -> Objects.equals(type, button.getType()))
-                   .findFirst();
+                .filter(button -> Objects.equals(type, button.getType()))
+                .findFirst();
     }
 
     /**
@@ -153,6 +185,8 @@ public class HeaderButtonGroup extends Control {
         HeaderBar.setPrefButtonHeight(stage, 0);
     }
 
+    //=========================================================================
+
     /**
      * Uninstalls this HeaderButtonGroup from the specified HeaderBar and Stage.
      *
@@ -191,38 +225,5 @@ public class HeaderButtonGroup extends Control {
         } else if (headerBar.getLeading() == this) {
             headerBar.setLeading(null);
         }
-    }
-
-    //=========================================================================
-
-    /**
-     * Creates a standard HeaderButtonGroup that includes minimize, maximize,
-     * and close buttons.
-     */
-    public static HeaderButtonGroup standardGroup() {
-        return new HeaderButtonGroup(
-            new HeaderButton(HeaderButtonType.ICONIFY),
-            new HeaderButton(HeaderButtonType.MAXIMIZE),
-            new HeaderButton(HeaderButtonType.CLOSE)
-        );
-    }
-
-    /**
-     * Creates a utility HeaderButtonGroup that includes minimize and close buttons.
-     */
-    public static HeaderButtonGroup utilityGroup() {
-        return new HeaderButtonGroup(
-            new HeaderButton(HeaderButtonType.ICONIFY),
-            new HeaderButton(HeaderButtonType.CLOSE)
-        );
-    }
-
-    /**
-     * Creates a HeaderButtonGroup consisting of a single close button.
-     */
-    public static HeaderButtonGroup closeOnlyGroup() {
-        return new HeaderButtonGroup(
-            new HeaderButton(HeaderButtonType.CLOSE)
-        );
     }
 }

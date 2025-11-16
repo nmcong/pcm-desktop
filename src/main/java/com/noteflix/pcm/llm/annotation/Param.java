@@ -45,74 +45,74 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Param {
 
-  /**
-   * Parameter description. Be clear about what the parameter does and expected values.
-   *
-   * @return Parameter description
-   */
-  String description();
+    /**
+     * Parameter description. Be clear about what the parameter does and expected values.
+     *
+     * @return Parameter description
+     */
+    String description();
 
-  /**
-   * Whether this parameter is required. If true, LLM must provide this parameter.
-   *
-   * @return true if required, false if optional (default)
-   */
-  boolean required() default false;
+    /**
+     * Whether this parameter is required. If true, LLM must provide this parameter.
+     *
+     * @return true if required, false if optional (default)
+     */
+    boolean required() default false;
 
-  /**
-   * Default value (as string). Used when parameter is optional and not provided. Will be converted
-   * to parameter type.
-   *
-   * @return Default value string
-   */
-  String defaultValue() default "";
+    /**
+     * Default value (as string). Used when parameter is optional and not provided. Will be converted
+     * to parameter type.
+     *
+     * @return Default value string
+     */
+    String defaultValue() default "";
 
-  /**
-   * Allowed enum values. If specified, parameter must be one of these values.
-   *
-   * @return Array of allowed values
-   */
-  String[] enumValues() default {};
+    /**
+     * Allowed enum values. If specified, parameter must be one of these values.
+     *
+     * @return Array of allowed values
+     */
+    String[] enumValues() default {};
 
-  /**
-   * Minimum value (for numeric parameters).
-   *
-   * @return Minimum value
-   */
-  double min() default Double.MIN_VALUE;
+    /**
+     * Minimum value (for numeric parameters).
+     *
+     * @return Minimum value
+     */
+    double min() default Double.MIN_VALUE;
 
-  /**
-   * Maximum value (for numeric parameters).
-   *
-   * @return Maximum value
-   */
-  double max() default Double.MAX_VALUE;
+    /**
+     * Maximum value (for numeric parameters).
+     *
+     * @return Maximum value
+     */
+    double max() default Double.MAX_VALUE;
 
-  /**
-   * Minimum length (for string/array parameters).
-   *
-   * @return Minimum length
-   */
-  int minLength() default 0;
+    /**
+     * Minimum length (for string/array parameters).
+     *
+     * @return Minimum length
+     */
+    int minLength() default 0;
 
-  /**
-   * Maximum length (for string/array parameters).
-   *
-   * @return Maximum length
-   */
-  int maxLength() default Integer.MAX_VALUE;
+    /**
+     * Maximum length (for string/array parameters).
+     *
+     * @return Maximum length
+     */
+    int maxLength() default Integer.MAX_VALUE;
 
-  /**
-   * Regex pattern (for string parameters).
-   *
-   * @return Regex pattern
-   */
-  String pattern() default "";
+    /**
+     * Regex pattern (for string parameters).
+     *
+     * @return Regex pattern
+     */
+    String pattern() default "";
 
-  /**
-   * Example value (for documentation).
-   *
-   * @return Example value
-   */
-  String example() default "";
+    /**
+     * Example value (for documentation).
+     *
+     * @return Example value
+     */
+    String example() default "";
 }

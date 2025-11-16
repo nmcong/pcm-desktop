@@ -17,15 +17,23 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ScoredDocument {
 
-  /** The document */
-  private RAGDocument document;
+    /**
+     * The document
+     */
+    private RAGDocument document;
 
-  /** Relevance score (0.0 to 1.0) */
-  private double score;
+    /**
+     * Relevance score (0.0 to 1.0)
+     */
+    private double score;
 
-  /** Rank in search results (1-based) */
-  private int rank;
+    /**
+     * Rank in search results (1-based)
+     */
+    private int rank;
 
-  /** Highlighted snippet (if available) */
-  private String snippet;
+    /**
+     * Highlighted snippet (if available)
+     */
+    private String snippet;
 }

@@ -67,20 +67,20 @@ public final class Bindings {
                     if (change.wasPermutated()) {
                         list.subList(change.getFrom(), change.getTo()).clear();
                         list.addAll(
-                            change.getFrom(),
-                            map(change.getList().subList(change.getFrom(), change.getTo()), mapper)
+                                change.getFrom(),
+                                map(change.getList().subList(change.getFrom(), change.getTo()), mapper)
                         );
                     } else {
                         if (change.wasRemoved()) {
                             list.subList(
-                                change.getFrom(),
-                                change.getFrom() + change.getRemovedSize()
+                                    change.getFrom(),
+                                    change.getFrom() + change.getRemovedSize()
                             ).clear();
                         }
                         if (change.wasAdded()) {
                             list.addAll(
-                                change.getFrom(),
-                                map(change.getAddedSubList(), mapper)
+                                    change.getFrom(),
+                                    map(change.getAddedSubList(), mapper)
                             );
                         }
                     }

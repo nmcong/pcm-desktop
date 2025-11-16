@@ -26,7 +26,7 @@ nav:
   - Theming: 'theming.md'
   - FXML: 'fxml.md'
   - Reference:
-    - API: 'apidocs/index.html'
-    - Global Colors: 'reference/global-colors.md'
-    - Typography: 'reference/typography.md'
-    - Controls: 'reference/controls.md'
+      - API: 'apidocs/index.html'
+      - Global Colors: 'reference/global-colors.md'
+      - Typography: 'reference/typography.md'
+      - Controls: 'reference/controls.md'

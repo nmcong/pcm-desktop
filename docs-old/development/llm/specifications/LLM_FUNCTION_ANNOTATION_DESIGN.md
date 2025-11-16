@@ -684,6 +684,7 @@ if (response.hasToolCalls()) {
 ## ✅ Benefits
 
 ### **1. Clean & Declarative**
+
 ```java
 // Before: Manual registration
 functions.register("search", new RegisteredFunction() {
@@ -696,6 +697,7 @@ public List<Project> search(@Param("query") String query) { ... }
 ```
 
 ### **2. DI Support**
+
 ```java
 @FunctionProvider
 public class ProjectFunctions {
@@ -709,6 +711,7 @@ public class ProjectFunctions {
 ```
 
 ### **3. Type Safety**
+
 ```java
 // Compile-time checking
 @LLMFunction(...)
@@ -718,6 +721,7 @@ public Project getProject(@Param("id") Long id) {  // Type-safe!
 ```
 
 ### **4. Auto Documentation**
+
 ```java
 // Generate OpenAPI/JSON Schema automatically
 Tool tool = function.toTool();
@@ -725,6 +729,7 @@ Tool tool = function.toTool();
 ```
 
 ### **5. Context Awareness**
+
 ```java
 // Functions execute in current context
 // Full access to:

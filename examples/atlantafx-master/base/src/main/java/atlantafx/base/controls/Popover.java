@@ -93,8 +93,57 @@ public class Popover extends PopupControl {
     private static final Duration DEFAULT_FADE_DURATION = Duration.seconds(.2);
 
     private final StackPane root = new StackPane();
+    private final ObjectProperty<Node> contentNode = new SimpleObjectProperty<>(this, "contentNode") {
+        @Override
+        public void setValue(Node node) {
+            NullSafetyHelper.assertNonNull(node, "Node Node");
+            this.set(node);
+        }
+    };
+    private final BooleanProperty headerAlwaysVisible = new SimpleBooleanProperty(this, "headerAlwaysVisible");
+    private final BooleanProperty closeButtonEnabled = new SimpleBooleanProperty(this, "closeButtonEnabled", true);
+    private final BooleanProperty detachable = new SimpleBooleanProperty(this, "detachable", true);
+    private final BooleanProperty detached = new SimpleBooleanProperty(this, "detached", false);
+    private final ChangeListener<Number> xListener = (value, oldX, newX) -> {
+        if (!isDetached()) {
+            setAnchorX(getAnchorX() + (newX.doubleValue() - oldX.doubleValue()));
+        }
+    };
+
+    ///////////////////////////////////////////////////////////////////////////
+    // Listeners                                                             //
+    /// ////////////////////////////////////////////////////////////////////////
+    private final WeakChangeListener<Number> weakXListener = new WeakChangeListener<>(xListener);
+    private final ChangeListener<Number> yListener = (value, oldY, newY) -> {
+        if (!isDetached()) {
+            setAnchorY(getAnchorY() + (newY.doubleValue() - oldY.doubleValue()));
+        }
+    };
+    private final WeakChangeListener<Number> weakYListener = new WeakChangeListener<>(yListener);
+    private final DoubleProperty arrowSize = new SimpleDoubleProperty(this, "arrowSize", 12);
+    private final DoubleProperty arrowIndent = new SimpleDoubleProperty(this, "arrowIndent", 12);
+    private final DoubleProperty cornerRadius = new SimpleDoubleProperty(this, "cornerRadius", 6);
+    private final StringProperty title = new SimpleStringProperty(this, "title", "Info");
+    private final ObjectProperty<ArrowLocation> arrowLocation =
+            new SimpleObjectProperty<>(this, "arrowLocation", ArrowLocation.LEFT_TOP);    private final EventHandler<WindowEvent> closePopoverOnOwnerWindowCloseLambda
+            = event -> ownerWindowHiding();
+    private final ObjectProperty<Duration> fadeInDuration = new SimpleObjectProperty<>(DEFAULT_FADE_DURATION);    private final WeakEventHandler<WindowEvent> closePopoverOnOwnerWindowClose =
+            new WeakEventHandler<>(closePopoverOnOwnerWindowCloseLambda);
+
+    ///////////////////////////////////////////////////////////////////////////
+    // API                                                                   //
+    ///////////////////////////////////////////////////////////////////////////
+    private final ObjectProperty<Duration> fadeOutDuration = new SimpleObjectProperty<>(DEFAULT_FADE_DURATION);
+    private final SimpleBooleanProperty animated = new SimpleBooleanProperty(true);
+    private final InvalidationListener hideListener = observable -> {
+        if (!isDetached()) {
+            hide(Duration.ZERO);
+        }
+    };
+    private final WeakInvalidationListener weakHideListener = new WeakInvalidationListener(hideListener);
     private double targetX;
     private double targetY;
+    private @Nullable Window ownerWindow;
 
     /**
      * Creates a popover with a label as the content node.
@@ -167,46 +216,6 @@ public class Popover extends PopupControl {
         return root;
     }
 
-    ///////////////////////////////////////////////////////////////////////////
-    // Listeners                                                             //
-    /// ////////////////////////////////////////////////////////////////////////
-
-    private final InvalidationListener hideListener = observable -> {
-        if (!isDetached()) {
-            hide(Duration.ZERO);
-        }
-    };
-
-    private final WeakInvalidationListener weakHideListener = new WeakInvalidationListener(hideListener);
-
-    private final ChangeListener<Number> xListener = (value, oldX, newX) -> {
-        if (!isDetached()) {
-            setAnchorX(getAnchorX() + (newX.doubleValue() - oldX.doubleValue()));
-        }
-    };
-
-    private final WeakChangeListener<Number> weakXListener = new WeakChangeListener<>(xListener);
-
-    private final ChangeListener<Number> yListener = (value, oldY, newY) -> {
-        if (!isDetached()) {
-            setAnchorY(getAnchorY() + (newY.doubleValue() - oldY.doubleValue()));
-        }
-    };
-
-    private final WeakChangeListener<Number> weakYListener = new WeakChangeListener<>(yListener);
-
-    private @Nullable Window ownerWindow;
-
-    private final EventHandler<WindowEvent> closePopoverOnOwnerWindowCloseLambda
-        = event -> ownerWindowHiding();
-
-    private final WeakEventHandler<WindowEvent> closePopoverOnOwnerWindowClose =
-        new WeakEventHandler<>(closePopoverOnOwnerWindowCloseLambda);
-
-    ///////////////////////////////////////////////////////////////////////////
-    // API                                                                   //
-    ///////////////////////////////////////////////////////////////////////////
-
     /**
      * Shows the popover in a position relative to the edges of the given owner
      * node. The position is dependent on the arrow location. If the arrow is
@@ -239,22 +248,22 @@ public class Popover extends PopupControl {
         Bounds bounds = owner.localToScreen(owner.getBoundsInLocal());
         if (bounds == null) {
             throw new IllegalStateException(
-                "The owner node is not added to the scene. It cannot be used as a popover anchor."
+                    "The owner node is not added to the scene. It cannot be used as a popover anchor."
             );
         }
 
         switch (getArrowLocation()) {
             case BOTTOM_CENTER, BOTTOM_LEFT, BOTTOM_RIGHT -> show(
-                owner, bounds.getMinX() + bounds.getWidth() / 2, bounds.getMinY() + offset
+                    owner, bounds.getMinX() + bounds.getWidth() / 2, bounds.getMinY() + offset
             );
             case LEFT_BOTTOM, LEFT_CENTER, LEFT_TOP -> show(
-                owner, bounds.getMaxX() - offset, bounds.getMinY() + bounds.getHeight() / 2
+                    owner, bounds.getMaxX() - offset, bounds.getMinY() + bounds.getHeight() / 2
             );
             case RIGHT_BOTTOM, RIGHT_CENTER, RIGHT_TOP -> show(
-                owner, bounds.getMinX() + offset, bounds.getMinY() + bounds.getHeight() / 2
+                    owner, bounds.getMinX() + offset, bounds.getMinY() + bounds.getHeight() / 2
             );
             case TOP_CENTER, TOP_LEFT, TOP_RIGHT -> show(
-                owner, bounds.getMinX() + bounds.getWidth() / 2, bounds.getMinY() + bounds.getHeight() - offset
+                    owner, bounds.getMinX() + bounds.getWidth() / 2, bounds.getMinY() + bounds.getHeight() - offset
             );
         }
     }
@@ -273,6 +282,10 @@ public class Popover extends PopupControl {
 
         ownerWindow.addEventFilter(WindowEvent.WINDOW_HIDING, closePopoverOnOwnerWindowClose);
     }
+
+    ///////////////////////////////////////////////////////////////////////////
+    // Properties                                                            //
+    ///////////////////////////////////////////////////////////////////////////
 
     /**
      * {@inheritDoc}
@@ -363,7 +376,7 @@ public class Popover extends PopupControl {
             // and then restore its visibility to hide window repositioning.
             // Still it's not a 100% guarantee, but better than nothing.
             int delay = Math.min(
-                (int) Objects.requireNonNullElse(fadeInDuration, DEFAULT_FADE_DURATION).toMillis() / 2, 250
+                    (int) Objects.requireNonNullElse(fadeInDuration, DEFAULT_FADE_DURATION).toMillis() / 2, 250
             );
 
             var timer = new Timeline(new KeyFrame(Duration.millis(delay)));
@@ -462,13 +475,13 @@ public class Popover extends PopupControl {
     private double computeXOffset() {
         return switch (getArrowLocation()) {
             case TOP_LEFT, BOTTOM_LEFT -> (
-                getCornerRadius() + getArrowIndent() + getArrowSize()
+                    getCornerRadius() + getArrowIndent() + getArrowSize()
             );
             case TOP_CENTER, BOTTOM_CENTER -> (
-                getContentNode().prefWidth(-1) / 2
+                    getContentNode().prefWidth(-1) / 2
             );
             case TOP_RIGHT, BOTTOM_RIGHT -> (
-                getContentNode().prefWidth(-1) - getArrowIndent() - getCornerRadius() - getArrowSize()
+                    getContentNode().prefWidth(-1) - getArrowIndent() - getCornerRadius() - getArrowSize()
             );
             default -> 0;
         };
@@ -480,11 +493,11 @@ public class Popover extends PopupControl {
         return switch (getArrowLocation()) {
             case LEFT_TOP, RIGHT_TOP -> getCornerRadius() + getArrowIndent() + getArrowSize();
             case LEFT_CENTER, RIGHT_CENTER -> Math.max(
-                prefContentHeight, 2 * (getCornerRadius() + getArrowIndent() + getArrowSize())
+                    prefContentHeight, 2 * (getCornerRadius() + getArrowIndent() + getArrowSize())
             ) / 2;
             case LEFT_BOTTOM, RIGHT_BOTTOM -> Math.max(
-                prefContentHeight - getCornerRadius() - getArrowIndent() - getArrowSize(),
-                getCornerRadius() + getArrowIndent() + getArrowSize()
+                    prefContentHeight - getCornerRadius() - getArrowIndent() - getArrowSize(),
+                    getCornerRadius() + getArrowIndent() + getArrowSize()
             );
             default -> 0;
         };
@@ -500,24 +513,12 @@ public class Popover extends PopupControl {
         }
     }
 
-    ///////////////////////////////////////////////////////////////////////////
-    // Properties                                                            //
-    ///////////////////////////////////////////////////////////////////////////
-
     /**
      * Specifies the content shown by the popover.
      */
     public final ObjectProperty<Node> contentNodeProperty() {
         return contentNode;
     }
-
-    private final ObjectProperty<Node> contentNode = new SimpleObjectProperty<>(this, "contentNode") {
-        @Override
-        public void setValue(Node node) {
-            NullSafetyHelper.assertNonNull(node, "Node Node");
-            this.set(node);
-        }
-    };
 
     /**
      * Returns the value of the content property.
@@ -547,7 +548,15 @@ public class Popover extends PopupControl {
         return headerAlwaysVisible;
     }
 
-    private final BooleanProperty headerAlwaysVisible = new SimpleBooleanProperty(this, "headerAlwaysVisible");
+    /**
+     * Returns the value of the detachable property.
+     *
+     * @return "true" if the header is visible even while attached
+     * @see #headerAlwaysVisibleProperty()
+     */
+    public final boolean isHeaderAlwaysVisible() {
+        return headerAlwaysVisible.getValue();
+    }
 
     /**
      * Sets the value of the headerAlwaysVisible property.
@@ -560,32 +569,10 @@ public class Popover extends PopupControl {
     }
 
     /**
-     * Returns the value of the detachable property.
-     *
-     * @return "true" if the header is visible even while attached
-     * @see #headerAlwaysVisibleProperty()
-     */
-    public final boolean isHeaderAlwaysVisible() {
-        return headerAlwaysVisible.getValue();
-    }
-
-    /**
      * Determines whether the header's close button should be available or not.
      */
     public final BooleanProperty closeButtonEnabledProperty() {
         return closeButtonEnabled;
-    }
-
-    private final BooleanProperty closeButtonEnabled = new SimpleBooleanProperty(this, "closeButtonEnabled", true);
-
-    /**
-     * Sets the value of the closeButtonEnabled property.
-     *
-     * @param enabled If "false", the popover will not be closeable by the header's close button.
-     * @see #closeButtonEnabledProperty()
-     */
-    public final void setCloseButtonEnabled(boolean enabled) {
-        closeButtonEnabled.setValue(enabled);
     }
 
     /**
@@ -599,22 +586,20 @@ public class Popover extends PopupControl {
     }
 
     /**
+     * Sets the value of the closeButtonEnabled property.
+     *
+     * @param enabled If "false", the popover will not be closeable by the header's close button.
+     * @see #closeButtonEnabledProperty()
+     */
+    public final void setCloseButtonEnabled(boolean enabled) {
+        closeButtonEnabled.setValue(enabled);
+    }
+
+    /**
      * Determines if the popover is detachable at all.
      */
     public final BooleanProperty detachableProperty() {
         return detachable;
-    }
-
-    private final BooleanProperty detachable = new SimpleBooleanProperty(this, "detachable", true);
-
-    /**
-     * Sets the value of the detachable property.
-     *
-     * @param detachable If "true" then the user can detach / tear off the popover.
-     * @see #detachableProperty()
-     */
-    public final void setDetachable(boolean detachable) {
-        detachableProperty().set(detachable);
     }
 
     /**
@@ -628,24 +613,22 @@ public class Popover extends PopupControl {
     }
 
     /**
+     * Sets the value of the detachable property.
+     *
+     * @param detachable If "true" then the user can detach / tear off the popover.
+     * @see #detachableProperty()
+     */
+    public final void setDetachable(boolean detachable) {
+        detachableProperty().set(detachable);
+    }
+
+    /**
      * Determines whether the popover is detached from the owning node or not.
      * A detached popover no longer shows an arrow pointing at the owner and
      * features its own title bar.
      */
     public final BooleanProperty detachedProperty() {
         return detached;
-    }
-
-    private final BooleanProperty detached = new SimpleBooleanProperty(this, "detached", false);
-
-    /**
-     * Sets the value of the detached property.
-     *
-     * @param detached If "true" the popover will change its appearance to "detached" mode.
-     * @see #detachedProperty()
-     */
-    public final void setDetached(boolean detached) {
-        detachedProperty().set(detached);
     }
 
     /**
@@ -659,14 +642,22 @@ public class Popover extends PopupControl {
     }
 
     /**
+     * Sets the value of the detached property.
+     *
+     * @param detached If "true" the popover will change its appearance to "detached" mode.
+     * @see #detachedProperty()
+     */
+    public final void setDetached(boolean detached) {
+        detachedProperty().set(detached);
+    }
+
+    /**
      * Controls the size of the arrow.
      * Default value is "12".
      */
     public final DoubleProperty arrowSizeProperty() {
         return arrowSize;
     }
-
-    private final DoubleProperty arrowSize = new SimpleDoubleProperty(this, "arrowSize", 12);
 
     /**
      * Returns the value of the arrow size property.
@@ -696,8 +687,6 @@ public class Popover extends PopupControl {
         return arrowIndent;
     }
 
-    private final DoubleProperty arrowIndent = new SimpleDoubleProperty(this, "arrowIndent", 12);
-
     /**
      * Returns the value of the arrow indent property.
      *
@@ -726,8 +715,6 @@ public class Popover extends PopupControl {
         return cornerRadius;
     }
 
-    private final DoubleProperty cornerRadius = new SimpleDoubleProperty(this, "cornerRadius", 6);
-
     /**
      * Returns the value of the corner radius property.
      *
@@ -754,8 +741,6 @@ public class Popover extends PopupControl {
     public final StringProperty titleProperty() {
         return title;
     }
-
-    private final StringProperty title = new SimpleStringProperty(this, "title", "Info");
 
     /**
      * Returns the value of the title property.
@@ -788,8 +773,15 @@ public class Popover extends PopupControl {
         return arrowLocation;
     }
 
-    private final ObjectProperty<ArrowLocation> arrowLocation =
-        new SimpleObjectProperty<>(this, "arrowLocation", ArrowLocation.LEFT_TOP);
+    /**
+     * Returns the value of the arrow location property.
+     *
+     * @return the preferred arrow location
+     * @see #arrowLocationProperty()
+     */
+    public final ArrowLocation getArrowLocation() {
+        return arrowLocationProperty().get();
+    }
 
     /**
      * Sets the value of the arrow location property.
@@ -802,41 +794,11 @@ public class Popover extends PopupControl {
     }
 
     /**
-     * Returns the value of the arrow location property.
-     *
-     * @return the preferred arrow location
-     * @see #arrowLocationProperty()
-     */
-    public final ArrowLocation getArrowLocation() {
-        return arrowLocationProperty().get();
-    }
-
-    /**
-     * All possible arrow locations.
-     */
-    public enum ArrowLocation {
-        LEFT_TOP,
-        LEFT_CENTER,
-        LEFT_BOTTOM,
-        RIGHT_TOP,
-        RIGHT_CENTER,
-        RIGHT_BOTTOM,
-        TOP_LEFT,
-        TOP_CENTER,
-        TOP_RIGHT,
-        BOTTOM_LEFT,
-        BOTTOM_CENTER,
-        BOTTOM_RIGHT
-    }
-
-    /**
      * Stores the fade-in duration. This should be set before calling <code>Popover.show(..)</code>.
      */
     public final ObjectProperty<Duration> fadeInDurationProperty() {
         return fadeInDuration;
     }
-
-    private final ObjectProperty<Duration> fadeInDuration = new SimpleObjectProperty<>(DEFAULT_FADE_DURATION);
 
     /**
      * Returns the value of the fade-in duration property.
@@ -866,8 +828,6 @@ public class Popover extends PopupControl {
         return fadeOutDuration;
     }
 
-    private final ObjectProperty<Duration> fadeOutDuration = new SimpleObjectProperty<>(DEFAULT_FADE_DURATION);
-
     /**
      * Returns the value of the fade-out duration property.
      *
@@ -896,8 +856,6 @@ public class Popover extends PopupControl {
         return animated;
     }
 
-    private final SimpleBooleanProperty animated = new SimpleBooleanProperty(true);
-
     /**
      * Returns the value of the "animated" property.
      *
@@ -917,4 +875,26 @@ public class Popover extends PopupControl {
     public final void setAnimated(boolean animated) {
         animatedProperty().set(animated);
     }
+
+    /**
+     * All possible arrow locations.
+     */
+    public enum ArrowLocation {
+        LEFT_TOP,
+        LEFT_CENTER,
+        LEFT_BOTTOM,
+        RIGHT_TOP,
+        RIGHT_CENTER,
+        RIGHT_BOTTOM,
+        TOP_LEFT,
+        TOP_CENTER,
+        TOP_RIGHT,
+        BOTTOM_LEFT,
+        BOTTOM_CENTER,
+        BOTTOM_RIGHT
+    }
+
+
+
+
 }

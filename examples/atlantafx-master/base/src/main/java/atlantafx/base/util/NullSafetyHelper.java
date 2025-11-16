@@ -31,13 +31,6 @@ public final class NullSafetyHelper {
     }
 
     /**
-     * See {@link #assertNonNull(Object, String)}.
-     */
-    public <T> void assertNonNull(@Nullable T t) {
-        assertNonNull(t, null);
-    }
-
-    /**
      * Throws {@code NullPointerException} if {@code T} is null.
      *
      * <p>This is used to avoid overly smart IDE warnings for non-values where we still
@@ -50,5 +43,12 @@ public final class NullSafetyHelper {
         if (t == null) {
             throw new NullPointerException(property != null ? property : "Object" + " cannot be null!");
         }
+    }
+
+    /**
+     * See {@link #assertNonNull(Object, String)}.
+     */
+    public <T> void assertNonNull(@Nullable T t) {
+        assertNonNull(t, null);
     }
 }

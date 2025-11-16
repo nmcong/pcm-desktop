@@ -13,25 +13,37 @@ import lombok.Data;
 @Builder
 public class RAGContext {
 
-  /** The scored document */
-  private ScoredDocument scoredDocument;
+    /**
+     * The scored document
+     */
+    private ScoredDocument scoredDocument;
 
-  /** Relevant text chunk */
-  private String chunk;
+    /**
+     * Relevant text chunk
+     */
+    private String chunk;
 
-  /** Position in original document */
-  private int chunkIndex;
+    /**
+     * Position in original document
+     */
+    private int chunkIndex;
 
-  /** Why this was retrieved (for debugging) */
-  private String reason;
+    /**
+     * Why this was retrieved (for debugging)
+     */
+    private String reason;
 
-  /** Convenience method to get document. */
-  public RAGDocument getDocument() {
-    return scoredDocument != null ? scoredDocument.getDocument() : null;
-  }
+    /**
+     * Convenience method to get document.
+     */
+    public RAGDocument getDocument() {
+        return scoredDocument != null ? scoredDocument.getDocument() : null;
+    }
 
-  /** Convenience method to get score. */
-  public double getScore() {
-    return scoredDocument != null ? scoredDocument.getScore() : 0.0;
-  }
+    /**
+     * Convenience method to get score.
+     */
+    public double getScore() {
+        return scoredDocument != null ? scoredDocument.getScore() : 0.0;
+    }
 }

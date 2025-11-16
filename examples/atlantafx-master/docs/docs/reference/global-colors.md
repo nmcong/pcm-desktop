@@ -2,7 +2,9 @@
 
 Global variables are defined at the Scene root level. You can preview all of them in the Sampler app on `Theme` page.
 
-AtlantaFX is based on GitHub Primer color system. You can check [GitHub Primer interface guidelines](https://primer.style/design/foundations/color) for more detailed instructions. There are functional color variables and color scale variables.
+AtlantaFX is based on GitHub Primer color system. You can
+check [GitHub Primer interface guidelines](https://primer.style/design/foundations/color) for more detailed
+instructions. There are functional color variables and color scale variables.
 
 ## Functional Colors
 
@@ -72,15 +74,21 @@ Danger colors. Use to inform of error or another negative message.
 * `-color-danger-muted`
 * `-color-danger-subtle`
 
-*Note that functional color values are not always picked from the color palette. They can have its own unique value, e.g. to add opacity.*
+*Note that functional color values are not always picked from the color palette. They can have its own unique value,
+e.g. to add opacity.*
 
 ### Chart Colors
 
-Chart colors are named as `-color-chart-[1-8]` and are used, well, for charts. The reason they are defined as global variables is to allow them to be used in controls that do not have `.chart` class, e.g. for drawing or diagrams.
+Chart colors are named as `-color-chart-[1-8]` and are used, well, for charts. The reason they are defined as global
+variables is to allow them to be used in controls that do not have `.chart` class, e.g. for drawing or diagrams.
 
 ## Color Scale
 
-Generally, scale variables only supposed to be used by theme devs as a replacement of dynamic brightness calculation functions. Avoid referencing them directly when building UI that needs to adapt to different color themes. Instead, use the functional variables listed above. All legitimate functional color combinations are guaranteed to look good in all color themes, because they need to maintain a certain amount of contrast. In rare cases, you may need to use scale variables to define custom functional variables in your application.
+Generally, scale variables only supposed to be used by theme devs as a replacement of dynamic brightness calculation
+functions. Avoid referencing them directly when building UI that needs to adapt to different color themes. Instead, use
+the functional variables listed above. All legitimate functional color combinations are guaranteed to look good in all
+color themes, because they need to maintain a certain amount of contrast. In rare cases, you may need to use scale
+variables to define custom functional variables in your application.
 
 Each color scale consists of 10 shades from 0 to 9.
 

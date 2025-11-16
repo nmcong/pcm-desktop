@@ -7,15 +7,23 @@ package com.noteflix.pcm.domain.chat;
  * @version 1.0.0
  */
 public enum MessageRole {
-  /** System message (instructions, context) */
-  SYSTEM,
+    /**
+     * System message (instructions, context)
+     */
+    SYSTEM,
 
-  /** User message (from human) */
-  USER,
+    /**
+     * User message (from human)
+     */
+    USER,
 
-  /** Assistant message (from AI) */
-  ASSISTANT,
+    /**
+     * Assistant message (from AI)
+     */
+    ASSISTANT,
 
-  /** Function result message (from function calling) */
-  FUNCTION
+    /**
+     * Function result message (from function calling)
+     */
+    FUNCTION
 }

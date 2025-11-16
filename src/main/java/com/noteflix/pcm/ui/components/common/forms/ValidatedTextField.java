@@ -19,92 +19,93 @@ import java.util.function.Predicate;
  */
 public class ValidatedTextField extends VBox {
 
-  @Getter private final TextField textField;
-  private final Label errorLabel;
-  private Predicate<String> validator;
+    @Getter
+    private final TextField textField;
+    private final Label errorLabel;
+    private Predicate<String> validator;
 
-  /**
-   * Create validated text field
-   */
-  public ValidatedTextField() {
-    super(LayoutConstants.SPACING_XS);
+    /**
+     * Create validated text field
+     */
+    public ValidatedTextField() {
+        super(LayoutConstants.SPACING_XS);
 
-    textField = new TextField();
-    errorLabel = new Label();
-    errorLabel.getStyleClass().addAll(Styles.DANGER, Styles.TEXT_SMALL);
-    errorLabel.setVisible(false);
-    errorLabel.setManaged(false);
+        textField = new TextField();
+        errorLabel = new Label();
+        errorLabel.getStyleClass().addAll(Styles.DANGER, Styles.TEXT_SMALL);
+        errorLabel.setVisible(false);
+        errorLabel.setManaged(false);
 
-    getChildren().addAll(textField, errorLabel);
-  }
-
-  /**
-   * Set validator
-   */
-  public ValidatedTextField withValidator(Predicate<String> validator) {
-    this.validator = validator;
-    return this;
-  }
-
-  /**
-   * Set placeholder
-   */
-  public ValidatedTextField withPlaceholder(String placeholder) {
-    textField.setPromptText(placeholder);
-    return this;
-  }
-
-  /**
-   * Validate
-   */
-  public boolean isValid() {
-    if (validator == null) {
-      return true;
+        getChildren().addAll(textField, errorLabel);
     }
-    
-    boolean valid = validator.test(textField.getText());
-    
-    if (!valid) {
-      textField.getStyleClass().add(Styles.DANGER);
-    } else {
-      textField.getStyleClass().remove(Styles.DANGER);
-      hideError();
+
+    /**
+     * Set validator
+     */
+    public ValidatedTextField withValidator(Predicate<String> validator) {
+        this.validator = validator;
+        return this;
     }
-    
-    return valid;
-  }
 
-  /**
-   * Show error
-   */
-  public void showError(String message) {
-    errorLabel.setText(message);
-    errorLabel.setVisible(true);
-    errorLabel.setManaged(true);
-    textField.getStyleClass().add(Styles.DANGER);
-  }
+    /**
+     * Set placeholder
+     */
+    public ValidatedTextField withPlaceholder(String placeholder) {
+        textField.setPromptText(placeholder);
+        return this;
+    }
 
-  /**
-   * Hide error
-   */
-  public void hideError() {
-    errorLabel.setVisible(false);
-    errorLabel.setManaged(false);
-    textField.getStyleClass().remove(Styles.DANGER);
-  }
+    /**
+     * Validate
+     */
+    public boolean isValid() {
+        if (validator == null) {
+            return true;
+        }
 
-  /**
-   * Get text
-   */
-  public String getText() {
-    return textField.getText();
-  }
+        boolean valid = validator.test(textField.getText());
 
-  /**
-   * Set text
-   */
-  public void setText(String text) {
-    textField.setText(text);
-  }
+        if (!valid) {
+            textField.getStyleClass().add(Styles.DANGER);
+        } else {
+            textField.getStyleClass().remove(Styles.DANGER);
+            hideError();
+        }
+
+        return valid;
+    }
+
+    /**
+     * Show error
+     */
+    public void showError(String message) {
+        errorLabel.setText(message);
+        errorLabel.setVisible(true);
+        errorLabel.setManaged(true);
+        textField.getStyleClass().add(Styles.DANGER);
+    }
+
+    /**
+     * Hide error
+     */
+    public void hideError() {
+        errorLabel.setVisible(false);
+        errorLabel.setManaged(false);
+        textField.getStyleClass().remove(Styles.DANGER);
+    }
+
+    /**
+     * Get text
+     */
+    public String getText() {
+        return textField.getText();
+    }
+
+    /**
+     * Set text
+     */
+    public void setText(String text) {
+        textField.setText(text);
+    }
 }
 

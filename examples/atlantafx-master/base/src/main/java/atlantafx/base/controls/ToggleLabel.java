@@ -3,6 +3,7 @@
 package atlantafx.base.controls;
 
 import java.util.Objects;
+
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.BooleanPropertyBase;
 import javafx.beans.property.ObjectProperty;
@@ -31,6 +32,8 @@ public class ToggleLabel extends Labeled implements Toggle {
 
     public static final String INDEX_PROPERTY = "index";
     protected static final PseudoClass PSEUDO_CLASS_SELECTED = PseudoClass.getPseudoClass("selected");
+    protected @Nullable BooleanProperty selected;
+    private @Nullable ObjectProperty<@Nullable ToggleGroup> toggleGroup;
 
     /**
      * Creates a toggle with an empty string for its label.
@@ -81,6 +84,10 @@ public class ToggleLabel extends Labeled implements Toggle {
         return new ToggleLabelSkin(this);
     }
 
+    //=========================================================================
+    // Properties
+    //=========================================================================
+
     /**
      * {@inheritDoc}
      */
@@ -103,10 +110,6 @@ public class ToggleLabel extends Labeled implements Toggle {
         }
         return -1;
     }
-
-    //=========================================================================
-    // Properties
-    //=========================================================================
 
     /**
      * Returns whether this toggle is selected.
@@ -152,8 +155,6 @@ public class ToggleLabel extends Labeled implements Toggle {
         }
         return selected;
     }
-
-    protected @Nullable BooleanProperty selected;
 
     @Override
     public boolean isSelected() {
@@ -205,15 +206,13 @@ public class ToggleLabel extends Labeled implements Toggle {
         return toggleGroup;
     }
 
-    private @Nullable ObjectProperty<@Nullable ToggleGroup> toggleGroup;
+    @Override
+    public final @Nullable ToggleGroup getToggleGroup() {
+        return toggleGroup == null ? null : toggleGroup.get();
+    }
 
     @Override
     public final void setToggleGroup(@Nullable ToggleGroup value) {
         toggleGroupProperty().set(value);
-    }
-
-    @Override
-    public final @Nullable ToggleGroup getToggleGroup() {
-        return toggleGroup == null ? null : toggleGroup.get();
     }
 }

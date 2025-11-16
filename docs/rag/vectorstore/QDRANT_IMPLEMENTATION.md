@@ -5,6 +5,7 @@
 **QdrantVectorStore** là production-ready implementation sử dụng Qdrant REST API để lưu trữ và tìm kiếm vectors.
 
 ### ✅ **Hoàn thành:**
+
 - ✅ Full REST API implementation (không cần external client)
 - ✅ Tất cả VectorStore interface methods
 - ✅ Batch processing (100 docs/batch)
@@ -22,6 +23,7 @@
 Lightweight HTTP client để gọi Qdrant REST API.
 
 **Features:**
+
 - Create/delete collections
 - Upsert/delete points (documents)
 - Vector similarity search
@@ -35,6 +37,7 @@ Lightweight HTTP client để gọi Qdrant REST API.
 Full implementation của `VectorStore` interface.
 
 **Methods:**
+
 ```java
 ✅ indexDocument(RAGDocument)          // Index single document
 ✅ indexDocuments(List<RAGDocument>)   // Batch indexing
@@ -124,6 +127,7 @@ VectorStore store = VectorStoreFactory.create(
 ### Benchmarks
 
 **Test setup:**
+
 - Hardware: Apple M2, 16GB RAM
 - Qdrant: Local (Docker)
 - Model: all-MiniLM-L6-v2 (384d)
@@ -131,15 +135,16 @@ VectorStore store = VectorStoreFactory.create(
 
 **Results:**
 
-| Operation | Time | Notes |
-|-----------|------|-------|
-| Index single doc | ~90ms | Including embedding (70ms) |
-| Index 100 docs (batch) | ~6.5s | Batched upsert |
-| Search (top 10) | ~85ms | Including query embedding |
-| Delete single | ~15ms | Fast |
-| Get document | ~12ms | Direct lookup |
+| Operation              | Time  | Notes                      |
+|------------------------|-------|----------------------------|
+| Index single doc       | ~90ms | Including embedding (70ms) |
+| Index 100 docs (batch) | ~6.5s | Batched upsert             |
+| Search (top 10)        | ~85ms | Including query embedding  |
+| Delete single          | ~15ms | Fast                       |
+| Get document           | ~12ms | Direct lookup              |
 
 **Scalability:**
+
 - ✅ Handles millions of documents
 - ✅ Sub-100ms search queries
 - ✅ Efficient batch operations
@@ -264,6 +269,7 @@ Error: Connection refused: localhost:6333
 ```
 
 **Solution:**
+
 ```bash
 # Check if Qdrant is running
 docker ps | grep qdrant
@@ -283,6 +289,7 @@ Error: Collection 'my_collection' not found
 ```
 
 **Solution:**
+
 ```java
 // Collections are auto-created in constructor
 // If issue persists, create manually:
@@ -296,6 +303,7 @@ Error: Embedding service not configured
 ```
 
 **Solution:**
+
 ```java
 // Use constructor with embedding service
 EmbeddingService embeddings = new DJLEmbeddingService(...);
@@ -309,12 +317,14 @@ QdrantVectorStore store = new QdrantVectorStore(
 ### Slow Performance
 
 **Check:**
+
 1. ✅ Using batch operations?
 2. ✅ Qdrant running locally?
 3. ✅ Network latency acceptable?
 4. ✅ Embedding service optimized?
 
 **Optimize:**
+
 ```java
 // Batch processing
 store.indexDocuments(docs);  // Instead of loop
@@ -368,6 +378,7 @@ qdrant.indexDocuments(documents);
 #### Methods
 
 **Collection Management:**
+
 ```java
 void createCollectionIfNotExists(String name, int vectorSize)
 boolean collectionExists(String name)
@@ -376,6 +387,7 @@ QdrantCollectionInfo getCollectionInfo(String name)
 ```
 
 **Point Operations:**
+
 ```java
 void upsertPoints(String collection, List<QdrantPoint> points)
 void deletePoints(String collection, List<String> ids)
@@ -383,6 +395,7 @@ QdrantPoint getPoint(String collection, String id)
 ```
 
 **Search:**
+
 ```java
 List<QdrantSearchResult> search(
     String collection,
@@ -532,6 +545,7 @@ java -cp "out:lib/javafx/*:lib/others/*:lib/rag/*" \
 **Date:** November 13, 2024
 
 **What's Working:**
+
 - ✅ All VectorStore methods implemented
 - ✅ REST API client (no external deps)
 - ✅ Batch operations optimized
@@ -541,6 +555,7 @@ java -cp "out:lib/javafx/*:lib/others/*:lib/rag/*" \
 - ✅ Ready for production use
 
 **Testing:**
+
 - ✅ Compilation successful
 - ⚠️ Integration tests pending (requires running Qdrant)
 - ⚠️ Load tests pending

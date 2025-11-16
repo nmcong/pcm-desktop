@@ -18,16 +18,16 @@ import java.util.List;
 @Controller
 @RequestMapping("/departments")
 public class DepartmentController {
-    
+
     private static final Logger logger = LoggerFactory.getLogger(DepartmentController.class);
-    
+
     private final DepartmentService departmentService;
-    
+
     @Autowired
     public DepartmentController(DepartmentService departmentService) {
         this.departmentService = departmentService;
     }
-    
+
     /**
      * List all departments
      */
@@ -37,7 +37,7 @@ public class DepartmentController {
         model.addAttribute("departments", departments);
         return "departments/list";
     }
-    
+
     /**
      * AJAX endpoint to get all departments
      */
@@ -52,7 +52,7 @@ public class DepartmentController {
             return ResponseEntity.internalServerError().build();
         }
     }
-    
+
     /**
      * AJAX endpoint to get department by ID
      */

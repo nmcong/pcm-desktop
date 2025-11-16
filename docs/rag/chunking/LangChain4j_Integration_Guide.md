@@ -2,7 +2,8 @@
 
 ## Tổng quan
 
-Tài liệu này cung cấp hướng dẫn chi tiết về việc tích hợp thư viện LangChain4j với hệ thống PCM Chunking. Tích hợp này cho phép sử dụng các text splitter chất lượng cao từ LangChain4j cùng với framework chunking mạnh mẽ của PCM.
+Tài liệu này cung cấp hướng dẫn chi tiết về việc tích hợp thư viện LangChain4j với hệ thống PCM Chunking. Tích hợp này
+cho phép sử dụng các text splitter chất lượng cao từ LangChain4j cùng với framework chunking mạnh mẽ của PCM.
 
 ## Mục lục
 
@@ -23,20 +24,22 @@ Tài liệu này cung cấp hướng dẫn chi tiết về việc tích hợp th
 
 ### LangChain4j là gì?
 
-LangChain4j là thư viện Java mã nguồn mở cung cấp các công cụ mạnh mẽ để xây dựng ứng dụng LLM. Thư viện này bao gồm các DocumentSplitter chất lượng cao đã được kiểm nghiệm qua hàng nghìn ứng dụng thực tế.
+LangChain4j là thư viện Java mã nguồn mở cung cấp các công cụ mạnh mẽ để xây dựng ứng dụng LLM. Thư viện này bao gồm các
+DocumentSplitter chất lượng cao đã được kiểm nghiệm qua hàng nghìn ứng dụng thực tế.
 
 ### Tại sao tích hợp LangChain4j?
 
 - **Chất lượng cao**: Algorithms đã được battle-tested
-- **Cộng đồng mạnh**: Hỗ trợ và cập nhật tích cực  
+- **Cộng đồng mạnh**: Hỗ trợ và cập nhật tích cực
 - **Tính tương thích**: Hoạt động tốt với LangChain ecosystem
 - **Đa dạng**: 7 loại splitter khác nhau cho các use case khác nhau
 
 ### Hybrid Approach
 
 PCM hiện tại cung cấp **15 chunking strategies**:
+
 - **4 PCM strategies** (custom implementation)
-- **4 LangChain strategies** (custom implementation) 
+- **4 LangChain strategies** (custom implementation)
 - **7 LangChain4j strategies** (real library)
 
 ---
@@ -46,6 +49,7 @@ PCM hiện tại cung cấp **15 chunking strategies**:
 ### Dependencies
 
 Hệ thống đã bao gồm các thư viện cần thiết:
+
 ```
 lib/langchain4j/
 ├── langchain4j-1.8.0.jar
@@ -102,6 +106,7 @@ lib/langchain4j/
 ### Core Components
 
 #### 1. LangChain4jAdapter
+
 ```java
 public class LangChain4jAdapter implements ChunkingStrategy {
     private final DocumentSplitter langchain4jSplitter;
@@ -112,6 +117,7 @@ public class LangChain4jAdapter implements ChunkingStrategy {
 ```
 
 #### 2. LangChain4jConfig
+
 ```java
 @Data @Builder(toBuilder = true)
 public class LangChain4jConfig {
@@ -124,6 +130,7 @@ public class LangChain4jConfig {
 ```
 
 #### 3. LangChain4jSplitterFactory
+
 ```java
 public class LangChain4jSplitterFactory {
     public static DocumentSplitter createSplitter(LangChain4jConfig config);
@@ -150,6 +157,7 @@ ChunkingStrategy strategy = ChunkingFactory.createStrategy(config);
 ```
 
 **Phù hợp với**:
+
 - Tài liệu kỹ thuật
 - Bài viết blog
 - Nội dung marketing
@@ -164,6 +172,7 @@ ChunkingStrategy strategy = ChunkingFactory.createStrategy(config);
 ```
 
 **Phù hợp với**:
+
 - Văn học, tiểu thuyết
 - Nội dung giáo dục
 - Phân tích ngữ nghĩa
@@ -177,6 +186,7 @@ ChunkingConfig config = ChunkingConfig.forLangChain4jWord();
 ```
 
 **Phù hợp với**:
+
 - Text classification
 - Sentiment analysis
 - Token counting cho LLM
@@ -190,6 +200,7 @@ ChunkingConfig config = ChunkingConfig.forLangChain4jLine();
 ```
 
 **Phù hợp với**:
+
 - Code files
 - Logs
 - Structured data
@@ -203,6 +214,7 @@ ChunkingConfig config = ChunkingConfig.forLangChain4jCharacter();
 ```
 
 **Phù hợp với**:
+
 - High precision chunking
 - Memory-constrained environments
 - Exact size requirements
@@ -216,6 +228,7 @@ ChunkingConfig config = ChunkingConfig.forLangChain4jRegex("\\n\\n");
 ```
 
 **Phù hợp với**:
+
 - Custom document formats
 - Structured text với delimiters đặc biệt
 - Domain-specific content
@@ -223,6 +236,7 @@ ChunkingConfig config = ChunkingConfig.forLangChain4jRegex("\\n\\n");
 ### 7. Hierarchical Splitter (`LANGCHAIN4J_HIERARCHICAL`)
 
 **Mô tả**: Splitter thông minh nhất, thử nhiều strategies theo thứ tự:
+
 1. Paragraph → 2. Sentence → 3. Word → 4. Character
 
 ```java
@@ -230,6 +244,7 @@ ChunkingConfig config = ChunkingConfig.forLangChain4jHierarchical();
 ```
 
 **Phù hợp với**:
+
 - General-purpose chunking
 - Mixed content types
 - Unknown document structures
@@ -300,18 +315,18 @@ LangChain4jAdapter adapter = new LangChain4jAdapter(splitter, customConfig);
 
 ### LangChain4jConfig Parameters
 
-| Parameter | Type | Default | Mô tả |
-|-----------|------|---------|--------|
-| `splitterType` | `SplitterType` | `BY_PARAGRAPH` | Loại splitter sử dụng |
-| `maxSegmentSizeInChars` | `int` | `1000` | Kích thước tối đa (ký tự) |
-| `maxOverlapSizeInChars` | `int` | `200` | Overlap giữa chunks (ký tự) |
-| `maxSegmentSizeInTokens` | `int` | `250` | Kích thước tối đa (tokens) |
-| `maxOverlapSizeInTokens` | `int` | `50` | Overlap (tokens) |
-| `useTokenizer` | `boolean` | `false` | Sử dụng token-based sizing |
-| `tokenizerModel` | `String` | `"gpt-3.5-turbo"` | Model cho tokenizer |
-| `includeSegmentMetadata` | `boolean` | `true` | Include metadata từ segments |
-| `preserveOriginalMetadata` | `boolean` | `true` | Preserve metadata gốc |
-| `calculateQualityScores` | `boolean` | `true` | Tính quality scores |
+| Parameter                  | Type           | Default           | Mô tả                        |
+|----------------------------|----------------|-------------------|------------------------------|
+| `splitterType`             | `SplitterType` | `BY_PARAGRAPH`    | Loại splitter sử dụng        |
+| `maxSegmentSizeInChars`    | `int`          | `1000`            | Kích thước tối đa (ký tự)    |
+| `maxOverlapSizeInChars`    | `int`          | `200`             | Overlap giữa chunks (ký tự)  |
+| `maxSegmentSizeInTokens`   | `int`          | `250`             | Kích thước tối đa (tokens)   |
+| `maxOverlapSizeInTokens`   | `int`          | `50`              | Overlap (tokens)             |
+| `useTokenizer`             | `boolean`      | `false`           | Sử dụng token-based sizing   |
+| `tokenizerModel`           | `String`       | `"gpt-3.5-turbo"` | Model cho tokenizer          |
+| `includeSegmentMetadata`   | `boolean`      | `true`            | Include metadata từ segments |
+| `preserveOriginalMetadata` | `boolean`      | `true`            | Preserve metadata gốc        |
+| `calculateQualityScores`   | `boolean`      | `true`            | Tính quality scores          |
 
 ### SplitterType Enum
 
@@ -348,15 +363,15 @@ LangChain4jConfig.forHierarchicalSplitter(maxChars, overlapChars)
 
 ### LangChain4j Specific Use Cases
 
-| Use Case | Strategy | Mô tả |
-|----------|----------|--------|
-| `LANGCHAIN4J_PARAGRAPH_FOCUSED` | `LANGCHAIN4J_PARAGRAPH` | Tập trung vào đoạn văn |
-| `LANGCHAIN4J_SENTENCE_PRECISE` | `LANGCHAIN4J_SENTENCE` | Chính xác đến câu |
-| `LANGCHAIN4J_WORD_GRANULAR` | `LANGCHAIN4J_WORD` | Control từng từ |
-| `LANGCHAIN4J_LINE_STRUCTURED` | `LANGCHAIN4J_LINE` | Theo cấu trúc dòng |
-| `LANGCHAIN4J_CHARACTER_EXACT` | `LANGCHAIN4J_CHARACTER` | Exact character count |
-| `LANGCHAIN4J_REGEX_PATTERN` | `LANGCHAIN4J_REGEX` | Pattern-based splitting |
-| `LANGCHAIN4J_HIERARCHICAL_SMART` | `LANGCHAIN4J_HIERARCHICAL` | Smart hierarchical |
+| Use Case                         | Strategy                   | Mô tả                   |
+|----------------------------------|----------------------------|-------------------------|
+| `LANGCHAIN4J_PARAGRAPH_FOCUSED`  | `LANGCHAIN4J_PARAGRAPH`    | Tập trung vào đoạn văn  |
+| `LANGCHAIN4J_SENTENCE_PRECISE`   | `LANGCHAIN4J_SENTENCE`     | Chính xác đến câu       |
+| `LANGCHAIN4J_WORD_GRANULAR`      | `LANGCHAIN4J_WORD`         | Control từng từ         |
+| `LANGCHAIN4J_LINE_STRUCTURED`    | `LANGCHAIN4J_LINE`         | Theo cấu trúc dòng      |
+| `LANGCHAIN4J_CHARACTER_EXACT`    | `LANGCHAIN4J_CHARACTER`    | Exact character count   |
+| `LANGCHAIN4J_REGEX_PATTERN`      | `LANGCHAIN4J_REGEX`        | Pattern-based splitting |
+| `LANGCHAIN4J_HIERARCHICAL_SMART` | `LANGCHAIN4J_HIERARCHICAL` | Smart hierarchical      |
 
 ### Sử dụng Use Cases
 
@@ -380,29 +395,32 @@ ChunkingStrategy strategy = ChunkingFactory.createForUseCase(
 
 ### Comparison Table
 
-| Feature | PCM Strategies | LangChain Strategies | LangChain4j Strategies |
-|---------|----------------|---------------------|----------------------|
-| **Implementation** | Custom PCM | Custom PCM | Real LangChain4j Library |
-| **Quality** | High | High | Battle-tested |
-| **Maintenance** | PCM Team | PCM Team | LangChain4j Community |
-| **Updates** | PCM Release | PCM Release | Library Updates |
-| **Customization** | Full Control | Full Control | Library API |
-| **Performance** | Optimized for PCM | Optimized for PCM | LangChain4j Optimized |
-| **Ecosystem** | PCM Native | PCM + LangChain Style | LangChain Ecosystem |
+| Feature            | PCM Strategies    | LangChain Strategies  | LangChain4j Strategies   |
+|--------------------|-------------------|-----------------------|--------------------------|
+| **Implementation** | Custom PCM        | Custom PCM            | Real LangChain4j Library |
+| **Quality**        | High              | High                  | Battle-tested            |
+| **Maintenance**    | PCM Team          | PCM Team              | LangChain4j Community    |
+| **Updates**        | PCM Release       | PCM Release           | Library Updates          |
+| **Customization**  | Full Control      | Full Control          | Library API              |
+| **Performance**    | Optimized for PCM | Optimized for PCM     | LangChain4j Optimized    |
+| **Ecosystem**      | PCM Native        | PCM + LangChain Style | LangChain Ecosystem      |
 
 ### Performance Characteristics
 
 #### PCM Strategies
+
 - **Pros**: Tối ưu cho PCM, full customization, semantic chunking
 - **Cons**: Limited ecosystem support
 - **Best for**: PCM-specific requirements, semantic analysis
 
 #### LangChain Strategies (Custom)
+
 - **Pros**: LangChain compatibility, PCM integration
 - **Cons**: Custom implementation, maintenance overhead
 - **Best for**: LangChain-style processing with PCM control
 
 #### LangChain4j Strategies
+
 - **Pros**: Battle-tested, community support, regular updates
 - **Cons**: Limited customization, library dependency
 - **Best for**: Production reliability, standard text processing
@@ -503,11 +521,13 @@ if (avgQuality < 0.7) {
 ### Common Issues
 
 #### 1. LangChain4j Library Not Found
+
 ```
 Error: java.lang.ClassNotFoundException: dev.langchain4j.data.document.DocumentSplitter
 ```
 
 **Solution**:
+
 ```bash
 # Verify libraries exist
 ls -la lib/langchain4j/
@@ -517,11 +537,13 @@ ls -la lib/langchain4j/
 ```
 
 #### 2. Configuration Validation Errors
+
 ```
 Error: IllegalArgumentException: maxSegmentSizeInChars must be positive
 ```
 
 **Solution**:
+
 ```java
 // Validate configuration before use
 try {
@@ -536,11 +558,13 @@ try {
 ```
 
 #### 3. Memory Issues với Large Documents
+
 ```
 Error: OutOfMemoryError when processing large documents
 ```
 
 **Solution**:
+
 ```java
 // Use smaller chunks for large documents
 LangChain4jConfig memoryFriendlyConfig = LangChain4jConfig.builder()
@@ -551,11 +575,13 @@ LangChain4jConfig memoryFriendlyConfig = LangChain4jConfig.builder()
 ```
 
 #### 4. Poor Chunking Quality
+
 ```
 Warning: Average quality score below threshold
 ```
 
 **Solution**:
+
 ```java
 // Try hierarchical splitter
 ChunkingConfig betterConfig = ChunkingConfig.forLangChain4jHierarchical();
@@ -570,12 +596,14 @@ ChunkingStrategy bestStrategy = recommendations.get(0).strategy;
 ### Debug Tips
 
 #### 1. Enable Detailed Logging
+
 ```java
 // Add to logback.xml
 <logger name="com.noteflix.pcm.rag.chunking.langchain4j" level="DEBUG"/>
 ```
 
 #### 2. Inspect Chunk Metadata
+
 ```java
 for (DocumentChunk chunk : chunks) {
     System.out.println("Splitter: " + chunk.getMetadata().get("langchain4j_splitter"));
@@ -585,6 +613,7 @@ for (DocumentChunk chunk : chunks) {
 ```
 
 #### 3. Test Different Configurations
+
 ```java
 LangChain4jConfig[] testConfigs = {
     LangChain4jConfig.forCharacterParagraphSplitter(800, 100),
@@ -682,6 +711,8 @@ Tích hợp LangChain4j với PCM chunking system mang lại:
 5. **Rich configuration options** cho fine-tuning
 6. **Battle-tested algorithms** từ LangChain community
 
-Việc tích hợp này cho phép users chọn strategy tốt nhất cho từng use case cụ thể, từ high-performance chunking đến precise semantic analysis.
+Việc tích hợp này cho phép users chọn strategy tốt nhất cho từng use case cụ thể, từ high-performance chunking đến
+precise semantic analysis.
 
-**Recommendation**: Bắt đầu với `LANGCHAIN4J_HIERARCHICAL` cho general-purpose chunking, sau đó tune configuration theo requirements cụ thể.
+**Recommendation**: Bắt đầu với `LANGCHAIN4J_HIERARCHICAL` cho general-purpose chunking, sau đó tune configuration theo
+requirements cụ thể.

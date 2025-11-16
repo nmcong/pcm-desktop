@@ -42,7 +42,7 @@ public abstract class TileSkinBase<T extends TileBase> extends SkinBase<T> {
         graphicSlot = new StackPane();
         graphicSlot.getStyleClass().add("graphic");
         graphicSlotListener = new SlotListener(
-            graphicSlot, (n, active) -> getSkinnable().pseudoClassStateChanged(HAS_GRAPHIC, active)
+                graphicSlot, (n, active) -> getSkinnable().pseudoClassStateChanged(HAS_GRAPHIC, active)
         );
         control.graphicProperty().addListener(graphicSlotListener);
         graphicSlotListener.changed(control.graphicProperty(), null, control.getGraphic());
@@ -87,7 +87,7 @@ public abstract class TileSkinBase<T extends TileBase> extends SkinBase<T> {
         actionSlot = new StackPane();
         actionSlot.getStyleClass().add("action");
         actionSlotListener = new SlotListener(
-            actionSlot, (n, active) -> getSkinnable().pseudoClassStateChanged(HAS_ACTION, active)
+                actionSlot, (n, active) -> getSkinnable().pseudoClassStateChanged(HAS_ACTION, active)
         );
 
         // use pref size for slots, or they will be resized
@@ -119,14 +119,14 @@ public abstract class TileSkinBase<T extends TileBase> extends SkinBase<T> {
 
     protected double calcHeight() {
         var headerHeight = headerBox.getSpacing()
-            + headerBox.getInsets().getTop()
-            + headerBox.getInsets().getBottom()
-            + titleLbl.getBoundsInLocal().getHeight()
-            + (descriptionText.isManaged() ? descriptionText.getBoundsInLocal().getHeight() : 0);
+                + headerBox.getInsets().getTop()
+                + headerBox.getInsets().getBottom()
+                + titleLbl.getBoundsInLocal().getHeight()
+                + (descriptionText.isManaged() ? descriptionText.getBoundsInLocal().getHeight() : 0);
 
         return Math.max(Math.max(graphicSlot.getHeight(), actionSlot.getHeight()), headerHeight)
-            + container.getPadding().getTop()
-            + container.getPadding().getBottom();
+                + container.getPadding().getTop()
+                + container.getPadding().getBottom();
     }
 
     @Override

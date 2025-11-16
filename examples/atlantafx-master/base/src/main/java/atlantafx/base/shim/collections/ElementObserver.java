@@ -26,7 +26,9 @@
 package atlantafx.base.shim.collections;
 
 import javafx.collections.ObservableListBase;
+
 import java.util.IdentityHashMap;
+
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
 import javafx.util.Callback;
@@ -34,40 +36,16 @@ import javafx.util.Callback;
 @SuppressWarnings("all")
 final class ElementObserver<E> {
 
-    private static class ElementsMapElement {
-        InvalidationListener listener;
-        int counter;
-
-        public ElementsMapElement(InvalidationListener listener) {
-            this.listener = listener;
-            this.counter = 1;
-        }
-
-        public void increment() {
-            counter++;
-        }
-
-        public int decrement() {
-            return --counter;
-        }
-
-        private InvalidationListener getListener() {
-            return listener;
-        }
-    }
-
-    private Callback<E, Observable[]> extractor;
     private final Callback<E, InvalidationListener> listenerGenerator;
     private final ObservableListBase<E> list;
+    private Callback<E, Observable[]> extractor;
     private IdentityHashMap<E, ElementsMapElement> elementsMap =
             new IdentityHashMap<>();
-
     ElementObserver(Callback<E, Observable[]> extractor, Callback<E, InvalidationListener> listenerGenerator, ObservableListBase<E> list) {
         this.extractor = extractor;
         this.listenerGenerator = listenerGenerator;
         this.list = list;
     }
-
 
     void attachListener(final E e) {
         if (elementsMap != null && e != null) {
@@ -92,6 +70,28 @@ final class ElementObserver<E> {
             if (el.decrement() == 0) {
                 elementsMap.remove(e);
             }
+        }
+    }
+
+    private static class ElementsMapElement {
+        InvalidationListener listener;
+        int counter;
+
+        public ElementsMapElement(InvalidationListener listener) {
+            this.listener = listener;
+            this.counter = 1;
+        }
+
+        public void increment() {
+            counter++;
+        }
+
+        public int decrement() {
+            return --counter;
+        }
+
+        private InvalidationListener getListener() {
+            return listener;
         }
     }
 

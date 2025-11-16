@@ -27,47 +27,53 @@ import lombok.Data;
 @Builder
 public class LLMChunk {
 
-  /** Chunk ID */
-  private String id;
+    /**
+     * Chunk ID
+     */
+    private String id;
 
-  /** Model that generated this chunk */
-  private String model;
+    /**
+     * Model that generated this chunk
+     */
+    private String model;
 
-  /**
-   * Content delta (new text in this chunk) Append this to previous chunks to build full response
-   */
-  private String content;
+    /**
+     * Content delta (new text in this chunk) Append this to previous chunks to build full response
+     */
+    private String content;
 
-  /**
-   * Finish reason (only on last chunk) - "stop": Natural completion - "length": Hit max tokens -
-   * null: More chunks coming
-   */
-  private String finishReason;
+    /**
+     * Finish reason (only on last chunk) - "stop": Natural completion - "length": Hit max tokens -
+     * null: More chunks coming
+     */
+    private String finishReason;
 
-  /**
-   * Function call (for function calling with streaming) May be present on last chunk if LLM wants
-   * to call a function
-   */
-  private FunctionCall functionCall;
+    /**
+     * Function call (for function calling with streaming) May be present on last chunk if LLM wants
+     * to call a function
+     */
+    private FunctionCall functionCall;
 
-  /** Chunk index (0-based) First chunk is 0, second is 1, etc. */
-  private Integer index;
+    /**
+     * Chunk index (0-based) First chunk is 0, second is 1, etc.
+     */
+    private Integer index;
 
-  /**
-   * Check if this is the last chunk
-   *
-   * @return true if this is the final chunk
-   */
-  public boolean isLast() {
-    return finishReason != null;
-  }
+    /**
+     * Check if this is the last chunk
+     *
+     * @return true if this is the final chunk
+     */
+    public boolean isLast() {
+        return finishReason != null;
+    }
 
-  /**
-   * Check if chunk contains content
-   *
-   * @return true if content is not empty
-   */
-  public boolean hasContent() {
-    return content != null && !content.isEmpty();
-  }
+    /**
+     * Check if chunk contains content
+     *
+     * @return true if content is not empty
+     */
+    public boolean hasContent() {
+        return content != null && !content.isEmpty();
+    }
 }

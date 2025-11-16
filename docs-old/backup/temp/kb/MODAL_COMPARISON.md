@@ -3,7 +3,7 @@
 ## 📊 Comparison Overview
 
 | Feature             | Before (v1)          | After (v2)                            |
-| ------------------- | -------------------- | ------------------------------------- |
+|---------------------|----------------------|---------------------------------------|
 | **Form Layout**     | Basic 2-column       | Enhanced with gradient header         |
 | **Tags Input**      | Comma-separated text | Interactive chips with remove buttons |
 | **Validation**      | Browser alerts       | Inline field-specific errors          |
@@ -204,7 +204,7 @@ if (!title) {
 ## ⚡ Performance Comparison
 
 | Metric              | Before    | After                          |
-| ------------------- | --------- | ------------------------------ |
+|---------------------|-----------|--------------------------------|
 | **Initial Render**  | ~50ms     | ~60ms                          |
 | **Re-renders**      | Full form | Only changed sections          |
 | **DOM Nodes**       | ~45       | ~65                            |
@@ -232,9 +232,9 @@ if (!title) {
 
 1. Click Create
 2. All errors show at once:
-   - Category: "Please select a category"
-   - Title: "Title is required"
-   - Problem: "Problem description is required"
+    - Category: "Please select a category"
+    - Title: "Title is required"
+    - Problem: "Problem description is required"
 3. Fix all and resubmit ✅
 
 ### Tag Management Test
@@ -272,7 +272,8 @@ Visual chips: ✅
 
 ### Developer B (Before)
 
-> "Got confused when alert said 'select category' but I already did. Turns out it wasn't saved because I clicked outside the select."
+> "Got confused when alert said 'select category' but I already did. Turns out it wasn't saved because I clicked outside
+> the select."
 
 ### Developer B (After)
 

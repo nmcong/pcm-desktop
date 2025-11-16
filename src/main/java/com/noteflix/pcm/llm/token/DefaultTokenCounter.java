@@ -2,7 +2,9 @@ package com.noteflix.pcm.llm.token;
 
 import com.noteflix.pcm.llm.api.TokenCounter;
 import com.noteflix.pcm.llm.model.Message;
+
 import java.util.List;
+
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -17,59 +19,59 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class DefaultTokenCounter implements TokenCounter {
 
-  private static final double CHARS_PER_TOKEN = 4.0;
-  private static final int MESSAGE_OVERHEAD = 4; // Tokens per message for formatting
+    private static final double CHARS_PER_TOKEN = 4.0;
+    private static final int MESSAGE_OVERHEAD = 4; // Tokens per message for formatting
 
-  @Override
-  public int count(String text) {
-    if (text == null || text.isEmpty()) {
-      return 0;
+    @Override
+    public int count(String text) {
+        if (text == null || text.isEmpty()) {
+            return 0;
+        }
+
+        // Character-based approximation
+        int estimate = (int) Math.ceil(text.length() / CHARS_PER_TOKEN);
+
+        log.trace("Token count for text ({} chars): ~{} tokens", text.length(), estimate);
+
+        return estimate;
     }
 
-    // Character-based approximation
-    int estimate = (int) Math.ceil(text.length() / CHARS_PER_TOKEN);
+    @Override
+    public int count(List<Message> messages) {
+        if (messages == null || messages.isEmpty()) {
+            return 0;
+        }
 
-    log.trace("Token count for text ({} chars): ~{} tokens", text.length(), estimate);
+        int totalTokens = 0;
 
-    return estimate;
-  }
+        for (Message message : messages) {
+            // Count content tokens
+            if (message.getContent() != null) {
+                totalTokens += count(message.getContent());
+            }
 
-  @Override
-  public int count(List<Message> messages) {
-    if (messages == null || messages.isEmpty()) {
-      return 0;
+            // Count name tokens if present
+            if (message.getName() != null) {
+                totalTokens += count(message.getName());
+            }
+
+            // Add message overhead (role, formatting, etc.)
+            totalTokens += MESSAGE_OVERHEAD;
+        }
+
+        log.debug("Total token count for {} messages: ~{} tokens", messages.size(), totalTokens);
+
+        return totalTokens;
     }
 
-    int totalTokens = 0;
-
-    for (Message message : messages) {
-      // Count content tokens
-      if (message.getContent() != null) {
-        totalTokens += count(message.getContent());
-      }
-
-      // Count name tokens if present
-      if (message.getName() != null) {
-        totalTokens += count(message.getName());
-      }
-
-      // Add message overhead (role, formatting, etc.)
-      totalTokens += MESSAGE_OVERHEAD;
+    @Override
+    public int estimate(String text) {
+        // For default counter, estimate is same as count
+        return count(text);
     }
 
-    log.debug("Total token count for {} messages: ~{} tokens", messages.size(), totalTokens);
-
-    return totalTokens;
-  }
-
-  @Override
-  public int estimate(String text) {
-    // For default counter, estimate is same as count
-    return count(text);
-  }
-
-  @Override
-  public String getName() {
-    return "default";
-  }
+    @Override
+    public String getName() {
+        return "default";
+    }
 }

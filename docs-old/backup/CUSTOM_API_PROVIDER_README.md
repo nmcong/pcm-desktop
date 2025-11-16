@@ -9,31 +9,37 @@
 ## 📋 **Tính Năng**
 
 ✅ **Conversation Management**
+
 - Tự động tạo conversation ID qua `/api/chat/create`
 - Cache conversation IDs để reuse
 - Clear cache khi cần
 
 ✅ **SSE Streaming**
+
 - Real-time streaming qua `/api/chat/stream`
 - Parse SSE format: `data: {...}`
 - Support [DONE] marker
 
 ✅ **Thinking Mode (Built-in!)**
+
 - Detect `"type": "thinking"` trong SSE
 - Trigger `onThinking()` callback
 - Hiển thị riêng trong UI (thinking indicator)
 
 ✅ **Function Calling (Injected)**
+
 - Inject function definitions vào content
 - Format XML-style: `<function_call>...</function_call>`
 - LLM response theo format để execute functions
 
 ✅ **Token Tracking**
+
 - API `/api/chat/tokens/{conversationId}`
 - Check remaining tokens
 - Alert khi sắp hết
 
 ✅ **Error Handling**
+
 - Retry logic với exponential backoff (3 retries)
 - Comprehensive error messages
 - `onError()` callback
@@ -43,16 +49,16 @@
 ## 📁 **Files Created**
 
 1. **CustomAPIProvider.java** (512 lines)
-   - Location: `src/main/java/com/noteflix/pcm/llm/provider/`
-   - Main provider implementation
+    - Location: `src/main/java/com/noteflix/pcm/llm/provider/`
+    - Main provider implementation
 
 2. **CustomAPIUsageExample.java** (250 lines)
-   - Location: `src/main/java/com/noteflix/pcm/llm/examples/`
-   - 4 complete examples
+    - Location: `src/main/java/com/noteflix/pcm/llm/examples/`
+    - 4 complete examples
 
 3. **CUSTOM_API_PROVIDER_GUIDE.md**
-   - Location: `docs/development/llm/`
-   - Comprehensive usage guide
+    - Location: `docs/development/llm/`
+    - Comprehensive usage guide
 
 ---
 
@@ -95,12 +101,14 @@ provider.chatStream(messages, ChatOptions.defaults(), new ChatEventAdapter() {
 ## 🎯 **Your 3 APIs**
 
 ### 1. Create Conversation
+
 ```
 POST /api/chat/create
 Response: {"id": "conv_123"} or "conv_123"
 ```
 
 ### 2. Stream Chat (SSE)
+
 ```
 POST /api/chat/stream
 Body: {"conversation_id": "...", "content": "...", "model": "..."}
@@ -111,6 +119,7 @@ Response:
 ```
 
 ### 3. Remaining Tokens
+
 ```
 GET /api/chat/tokens/{conversationId}
 Response: {"remaining_tokens": 1500} or 1500
@@ -123,6 +132,7 @@ Response: {"remaining_tokens": 1500} or 1500
 Nếu format API của bạn khác, cần sửa:
 
 ### SSE Response Format
+
 File: `CustomAPIProvider.java`  
 Method: `streamChat()` (line ~330)
 
@@ -134,6 +144,7 @@ if (type.equals("your_type")) {
 ```
 
 ### Create Conversation Format
+
 File: `CustomAPIProvider.java`  
 Method: `getOrCreateConversation()` (line ~145)
 
@@ -144,6 +155,7 @@ requestBody.put("metadata", "...");
 ```
 
 ### Token API Format
+
 File: `CustomAPIProvider.java`  
 Method: `getRemainingTokens()` (line ~420)
 
@@ -170,7 +182,7 @@ if (root.has("your_field_name")) {
 ✅ **Class Files:** 224  
 ✅ **Provider:** CustomAPIProvider  
 ✅ **Examples:** 4 complete examples  
-✅ **Documentation:** Complete  
+✅ **Documentation:** Complete
 
 ---
 
@@ -189,6 +201,7 @@ if (root.has("your_field_name")) {
 CustomAPIProvider is production-ready and waiting for your API details!
 
 Just set:
+
 - `baseUrl` = Your API base URL
 - `apiKey` = Your API key (if needed)
 

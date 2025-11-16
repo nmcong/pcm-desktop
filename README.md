@@ -4,7 +4,8 @@
 
 ## 📋 Overview
 
-Project Cognition Mentor là ứng dụng desktop AI-powered sử dụng Large Language Models (LLM) để phân tích và quản lý toàn bộ hệ thống
+Project Cognition Mentor là ứng dụng desktop AI-powered sử dụng Large Language Models (LLM) để phân tích và quản lý toàn
+bộ hệ thống
 phần mềm doanh nghiệp. Ứng dụng cho phép người dùng đặt câu hỏi và nhận được phân tích chi tiết về source code, nghiệp
 vụ, database, và các thành phần hệ thống.
 
@@ -387,7 +388,8 @@ Complete documentation is organized in the `docs/` folder:
 - **[Troubleshooting Guide](docs/troubleshooting/README.md)** - Common issues and solutions
 - **[Quick Reference](docs/troubleshooting/QUICK_REFERENCE.md)** - Fast solutions for common problems
 - **[Runtime Issues](docs/troubleshooting/runtime/README.md)** - Application startup and runtime problems
-  - **[JavaFX Startup Issue (macOS/Linux)](docs/troubleshooting/runtime/javafx-application-startup-issue.md)** ⭐ Most Common
+    - **[JavaFX Startup Issue (macOS/Linux)](docs/troubleshooting/runtime/javafx-application-startup-issue.md)** ⭐ Most
+      Common
 
 ## 🏃 Run from Command Line
 
@@ -433,7 +435,8 @@ java --module-path lib/javafx ^
 
 ## 🎨 Code Formatting
 
-PCM Desktop sử dụng **[Google Java Format](https://github.com/google/google-java-format)** để đảm bảo code style nhất quán.
+PCM Desktop sử dụng **[Google Java Format](https://github.com/google/google-java-format)** để đảm bảo code style nhất
+quán.
 
 ### Format All Files
 
@@ -458,6 +461,7 @@ PCM Desktop sử dụng **[Google Java Format](https://github.com/google/google-
 ### More Information
 
 Xem **[Code Formatting Guide](docs/guides/CODE_FORMATTING_GUIDE.md)** để biết thêm chi tiết về:
+
 - IDE integration (IntelliJ, Eclipse, VS Code)
 - Pre-commit hooks
 - CI/CD integration
@@ -524,15 +528,15 @@ jpackage \
 
 ## 🔧 Library Versions
 
-| Library            | Version  | Java Compatibility  | Download                                      |
-|--------------------|----------|---------------------|-----------------------------------------------|
-| JavaFX             | 21.0.9   | Java 21 ✅           | https://gluonhq.com/products/javafx/          |
-| Lombok             | 1.18.34  | All Java versions ✅ | https://projectlombok.org/                    |
-| Jackson            | 2.18.2   | All Java versions ✅ | https://github.com/FasterXML/jackson          |
-| SLF4J              | 2.0.16   | All Java versions ✅ | https://www.slf4j.org/                        |
-| Logback            | 1.5.12   | All Java versions ✅ | https://logback.qos.ch/                       |
-| SQLite JDBC        | 3.47.1.0 | All Java versions ✅ | https://github.com/xerial/sqlite-jdbc         |
-| Google Java Format | 1.32.0   | Java 21+ ✅          | https://github.com/google/google-java-format  |
+| Library            | Version  | Java Compatibility  | Download                                     |
+|--------------------|----------|---------------------|----------------------------------------------|
+| JavaFX             | 21.0.9   | Java 21 ✅           | https://gluonhq.com/products/javafx/         |
+| Lombok             | 1.18.34  | All Java versions ✅ | https://projectlombok.org/                   |
+| Jackson            | 2.18.2   | All Java versions ✅ | https://github.com/FasterXML/jackson         |
+| SLF4J              | 2.0.16   | All Java versions ✅ | https://www.slf4j.org/                       |
+| Logback            | 1.5.12   | All Java versions ✅ | https://logback.qos.ch/                      |
+| SQLite JDBC        | 3.47.1.0 | All Java versions ✅ | https://github.com/xerial/sqlite-jdbc        |
+| Google Java Format | 1.32.0   | Java 21+ ✅          | https://github.com/google/google-java-format |
 
 **Note:** This project uses **Java 21** and **JavaFX 21.0.9** (not JavaFX 23/25) for compatibility.
 
@@ -630,7 +634,8 @@ See **[docs/LIBRARY_SETUP.md](docs/LIBRARY_SETUP.md)** for complete troubleshoot
 4. Test thoroughly
 5. Submit pull request
 
-**Note**: All code must be formatted with Google Java Format before submitting. See [Code Formatting Guide](docs/guides/CODE_FORMATTING_GUIDE.md).
+**Note**: All code must be formatted with Google Java Format before submitting.
+See [Code Formatting Guide](docs/guides/CODE_FORMATTING_GUIDE.md).
 
 ## 📄 License
 

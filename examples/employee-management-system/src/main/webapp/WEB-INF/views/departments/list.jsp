@@ -44,7 +44,7 @@
                             </p>
                         </div>
                         <div class="card-footer bg-transparent">
-                            <a href="<c:url value='/employees?departmentId=${dept.id}'/>" 
+                            <a href="<c:url value='/employees?departmentId=${dept.id}'/>"
                                class="btn btn-sm btn-primary">
                                 <i class="bi bi-people"></i> Xem nhân viên
                             </a>
@@ -57,14 +57,14 @@
 </div>
 
 <style>
-.department-card {
-    transition: transform 0.2s, box-shadow 0.2s;
-}
+    .department-card {
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
 
-.department-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
-}
+    .department-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+    }
 </style>
 
 <jsp:include page="../common/footer.jsp"/>

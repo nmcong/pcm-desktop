@@ -4,14 +4,14 @@
 @use "../settings/effects";
 @use "../settings/icons";
 
-$padding-x:       20px !default;
+$padding-x: 20px !default;
 $padding-x-dense: 10px !default;
-$padding-y:       10px !default;
-$padding-y-dense: 5px  !default;
+$padding-y: 10px !default;
+$padding-y-dense: 5px !default;
 
-$margin-arrow:         10px !default;
-$margin-arrow-dense:   10px !default;
-$margin-content:       20px !default;
+$margin-arrow: 10px !default;
+$margin-arrow-dense: 10px !default;
+$margin-content: 20px !default;
 $margin-content-dense: 10px !default;
 
 .titled-pane {
@@ -25,21 +25,21 @@ $margin-content-dense: 10px !default;
     }
   }
 
-  >.title {
+  > .title {
     -fx-background-color: -color-border-default, -color-bg-default;
     -fx-padding: $padding-y $padding-x $padding-y $padding-x;
 
-    >.text {
+    > .text {
       -fx-font-size: cfg.$font-title-4;
     }
 
-    >.arrow-button {
+    > .arrow-button {
       -fx-background-color: none;
       -fx-background-insets: 0;
       -fx-background-radius: 0;
       -fx-padding: 0 $margin-arrow 0 0; // distance between icon and text
 
-      >.arrow {
+      > .arrow {
         @include icons.get("expand-more", false);
         -fx-background-color: -color-fg-default;
         -fx-padding: 4px 5px 4px 5px;
@@ -47,7 +47,7 @@ $margin-content-dense: 10px !default;
     }
   }
 
-  >.content {
+  > .content {
     -fx-border-color: -color-border-default;
     -fx-border-width: 0 cfg.$border-width cfg.$border-width cfg.$border-width;
     -fx-border-radius: 0 0 cfg.$border-radius cfg.$border-radius;
@@ -64,8 +64,8 @@ $margin-content-dense: 10px !default;
   &:disabled {
     // opacity shouldn't be applied to the titled pane borders,
     // otherwise disabled accordion blocks would look weird
-    >.title > *,
-    >.content > * {
+    > .title > *,
+    > .content > * {
       -fx-opacity: cfg.$opacity-disabled;
     }
   }
@@ -76,14 +76,14 @@ $margin-content-dense: 10px !default;
   // accordion height calc problem. Instead we have to draw the borders around the '.title'
   // and '.content' and then remove one of those adjacent borders.
   &:expanded {
-    >.title {
+    > .title {
       -fx-background-radius: cfg.$border-radius cfg.$border-radius 0 0, cfg.$inner-border-radius cfg.$inner-border-radius 0 0;
       -fx-background-insets: 0, cfg.$border-width cfg.$border-width 0 cfg.$border-width;
     }
   }
 
   &:collapsed {
-    >.title {
+    > .title {
       -fx-background-insets: 0, cfg.$border-width;
       -fx-background-radius: cfg.$border-radius, cfg.$inner-border-radius;
     }
@@ -93,32 +93,32 @@ $margin-content-dense: 10px !default;
     @include effects.shadow(cfg.$elevation-color, cfg.$elevation-interactive);
   }
 
-  &:show-mnemonics>.mnemonic-underline {
+  &:show-mnemonics > .mnemonic-underline {
     -fx-stroke: -color-fg-default;
   }
 
   &.dense {
-    >.title {
+    > .title {
       -fx-padding: $padding-y-dense $padding-x-dense $padding-y-dense $padding-x-dense;
 
-      >.text {
+      > .text {
         -fx-font-size: 1.1em;
       }
 
-      >.arrow-button {
+      > .arrow-button {
         -fx-padding: 0 $margin-arrow-dense 0 0;
       }
     }
 
-    >.content {
+    > .content {
       -fx-padding: $margin-content-dense $padding-x-dense $padding-y-dense $padding-x-dense;
     }
   }
 
   &.alt-icon {
-    >.title {
-      >.arrow-button {
-        >.arrow {
+    > .title {
+      > .arrow-button {
+        > .arrow {
           @include icons.get("arrow-drop-down", false);
         }
       }

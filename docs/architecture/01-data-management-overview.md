@@ -9,6 +9,7 @@
 ## 1. Tổng quan
 
 PCM Desktop là một hệ thống **Requirement Analysis & Code Intelligence Platform** quản lý và phân tích:
+
 - Phân cấp tổ chức (Systems, Subsystems, Projects, Batches)
 - Mã nguồn và AST (Abstract Syntax Tree)
 - Knowledge base (Documentation, CHM files)
@@ -22,13 +23,16 @@ PCM Desktop là một hệ thống **Requirement Analysis & Code Intelligence Pl
 ### 2.1 System Hierarchy (Phân cấp hệ thống)
 
 #### **System (Hệ thống)**
+
 **Input Fields:**
+
 - ✏️ `code` - Mã định danh (VD: "ERP", "CRM") - **Required, Unique**
 - ✏️ `name` - Tên hệ thống (VD: "Enterprise Resource Planning") - **Required**
 - ✏️ `description` - Mô tả chi tiết - Optional
 - ✏️ `owner` - Người chịu trách nhiệm - Optional
 
 **User Actions:**
+
 - Create new System
 - Edit existing System
 - Delete System (cascade delete subsystems)
@@ -37,7 +41,9 @@ PCM Desktop là một hệ thống **Requirement Analysis & Code Intelligence Pl
 ---
 
 #### **Subsystem (Hệ thống con)**
+
 **Input Fields:**
+
 - 🔗 `system_id` - Thuộc System nào - **Required, Dropdown**
 - ✏️ `code` - Mã định danh (unique trong System) - **Required**
 - ✏️ `name` - Tên subsystem (VD: "Human Resources") - **Required**
@@ -46,6 +52,7 @@ PCM Desktop là một hệ thống **Requirement Analysis & Code Intelligence Pl
 - 🎚️ `status` - Trạng thái - **Dropdown: active, deprecated, archived**
 
 **User Actions:**
+
 - Create new Subsystem under System
 - Edit Subsystem
 - Delete Subsystem (cascade delete projects/batches)
@@ -55,7 +62,9 @@ PCM Desktop là một hệ thống **Requirement Analysis & Code Intelligence Pl
 ---
 
 #### **Project (Dự án)**
+
 **Input Fields:**
+
 - 🔗 `subsystem_id` - Thuộc Subsystem nào - **Required, Dropdown**
 - ✏️ `code` - Mã dự án (unique trong Subsystem) - **Required**
 - ✏️ `name` - Tên dự án (VD: "Payroll System") - **Required**
@@ -66,6 +75,7 @@ PCM Desktop là một hệ thống **Requirement Analysis & Code Intelligence Pl
 - 📅 `end_date` - Ngày kết thúc - Optional, Date picker
 
 **User Actions:**
+
 - Create new Project under Subsystem
 - Edit Project
 - Delete Project
@@ -75,7 +85,9 @@ PCM Desktop là một hệ thống **Requirement Analysis & Code Intelligence Pl
 ---
 
 #### **Batch Job (Công việc batch)**
+
 **Input Fields:**
+
 - 🔗 `subsystem_id` - Thuộc Subsystem nào - **Required, Dropdown**
 - ✏️ `code` - Mã batch (unique trong Subsystem) - **Required**
 - ✏️ `name` - Tên batch job - **Required**
@@ -84,6 +96,7 @@ PCM Desktop là một hệ thống **Requirement Analysis & Code Intelligence Pl
 - 🎚️ `status` - Trạng thái - **Dropdown: idle, running, failed, disabled**
 
 **User Actions:**
+
 - Create new Batch under Subsystem
 - Edit Batch
 - Delete Batch
@@ -95,7 +108,9 @@ PCM Desktop là một hệ thống **Requirement Analysis & Code Intelligence Pl
 ### 2.2 Source Code Management
 
 #### **Project Source (Nguồn mã)**
+
 **Input Fields:**
+
 - 🔗 `project_id` - Thuộc Project nào - **Required, Dropdown**
 - 📁 `root_path` - Đường dẫn thư mục gốc - **Required, Directory Picker**
 - 🎚️ `vcs_type` - Loại version control - **Dropdown: git, svn, none**
@@ -104,6 +119,7 @@ PCM Desktop là một hệ thống **Requirement Analysis & Code Intelligence Pl
 - ✏️ `language` - Ngôn ngữ chính (VD: "Java") - Auto-detected
 
 **User Actions:**
+
 - Add source root to Project
 - Select directory via file browser
 - Trigger manual scan
@@ -111,6 +127,7 @@ PCM Desktop là một hệ thống **Requirement Analysis & Code Intelligence Pl
 - View scan status và statistics
 
 **Auto-populated:**
+
 - `scan_status` - pending → scanning → complete/failed
 - `last_scanned_at` - Timestamp
 
@@ -119,7 +136,9 @@ PCM Desktop là một hệ thống **Requirement Analysis & Code Intelligence Pl
 ### 2.3 Knowledge Management
 
 #### **CHM Import (Nhập tài liệu CHM)**
+
 **Input Fields:**
+
 - 🔗 `project_id` - Thuộc Project nào - Optional, Dropdown
 - 🔗 `subsystem_id` - Hoặc Subsystem - Optional, Dropdown
 - 🔗 `system_id` - Hoặc System - Optional, Dropdown
@@ -127,6 +146,7 @@ PCM Desktop là một hệ thống **Requirement Analysis & Code Intelligence Pl
 - ✏️ `notes` - Ghi chú về tài liệu - Optional, Text Area
 
 **User Actions:**
+
 - Upload CHM file
 - Select scope (System/Subsystem/Project)
 - Monitor import progress
@@ -134,6 +154,7 @@ PCM Desktop là một hệ thống **Requirement Analysis & Code Intelligence Pl
 - Delete import
 
 **Auto-populated:**
+
 - `status` - pending → extracting → parsing → indexing → complete/failed
 - `imported_at` - Timestamp
 - `chm_checksum` - MD5/SHA256 hash
@@ -142,7 +163,9 @@ PCM Desktop là một hệ thống **Requirement Analysis & Code Intelligence Pl
 ---
 
 #### **Knowledge Chunk (Tài liệu tùy chỉnh)**
+
 **Input Fields:**
+
 - 🔗 `project_id` - Thuộc Project nào - Optional, Dropdown
 - 🎚️ `source_type` - Loại nguồn - **Dropdown: doc, kb_article, chm_doc, code, response**
 - ✏️ `label` - Tiêu đề/nhãn - **Required**
@@ -150,6 +173,7 @@ PCM Desktop là một hệ thống **Requirement Analysis & Code Intelligence Pl
 - 🏷️ `tags` - Tags (comma-separated) - Optional
 
 **User Actions:**
+
 - Create custom knowledge article
 - Import Markdown/HTML files
 - Edit content
@@ -160,7 +184,9 @@ PCM Desktop là một hệ thống **Requirement Analysis & Code Intelligence Pl
 ### 2.4 User Requests & Interactions
 
 #### **User Request (Yêu cầu/Câu hỏi)**
+
 **Input Fields:**
+
 - 🔗 `project_id` - Scope Project - Optional, Dropdown
 - 🔗 `subsystem_id` - Scope Subsystem - Optional, Dropdown
 - ✏️ `title` - Tiêu đề ngắn gọn - Optional
@@ -170,6 +196,7 @@ PCM Desktop là một hệ thống **Requirement Analysis & Code Intelligence Pl
 - 📎 `attachments` - File đính kèm - Optional, File Upload
 
 **User Actions:**
+
 - Submit new request/question
 - Type in chat interface
 - Attach files (code snippets, screenshots)
@@ -177,6 +204,7 @@ PCM Desktop là một hệ thống **Requirement Analysis & Code Intelligence Pl
 - Re-submit similar requests
 
 **Auto-populated:**
+
 - `user_id` - Current user
 - `status` - received → processing → answered → resolved
 - `created_at` - Timestamp
@@ -184,11 +212,14 @@ PCM Desktop là một hệ thống **Requirement Analysis & Code Intelligence Pl
 ---
 
 #### **Answer Feedback (Đánh giá phản hồi)**
+
 **Input Fields:**
+
 - ⭐ `rating` - Đánh giá 1-5 sao - **Required, Star Rating Widget**
 - 💬 `comment` - Nhận xét chi tiết - Optional, Text Area
 
 **User Actions:**
+
 - Rate AI response (thumb up/down or stars)
 - Provide feedback comments
 - Submit feedback
@@ -200,12 +231,14 @@ PCM Desktop là một hệ thống **Requirement Analysis & Code Intelligence Pl
 #### **Review Comment (Nhận xét review)**
 
 **Auto-generated** bởi hệ thống, nhưng user có thể:
+
 - ✅ Mark as resolved
 - ❌ Dismiss comment
 - 💬 Add reply/notes
 - 🔗 Link to related task
 
 **Display Fields:**
+
 - `severity` - info, warning, error, critical
 - `category` - naming, null_safety, security, i18n, performance, etc.
 - `message` - Nội dung nhận xét
@@ -217,7 +250,9 @@ PCM Desktop là một hệ thống **Requirement Analysis & Code Intelligence Pl
 ### 2.6 Test Management
 
 #### **Test Case (Manual Entry)**
+
 **Input Fields:**
+
 - ✏️ `name` - Tên test case - **Required**
 - 📝 `description` - Mô tả test - **Required**
 - 🎚️ `scope` - Phạm vi - **Dropdown: unit, integration, e2e, performance**
@@ -226,6 +261,7 @@ PCM Desktop là một hệ thống **Requirement Analysis & Code Intelligence Pl
 - 🏷️ `tags` - Tags (VD: security, i18n) - Optional
 
 **User Actions:**
+
 - Create manual test case
 - Link to code symbols
 - Update test status
@@ -236,23 +272,27 @@ PCM Desktop là một hệ thống **Requirement Analysis & Code Intelligence Pl
 ## 3. Dữ liệu Auto-generated (Không nhập trực tiếp)
 
 ### 3.1 Source Analysis
+
 - **Source Files** - Tự động scan từ file system
 - **AST Nodes** - Tự động parse từ source code
 - **AST Relationships** - Tự động extract (call graph, inheritance)
 - **File Dependencies** - Tự động phát hiện imports/includes
 
 ### 3.2 Search & Indexing
+
 - **Search Corpus** - Tự động từ source files + documents
 - **Search Index (FTS5)** - Tự động build từ search_corpus
 - **Vector Documents** - Tự động chunk + embed
 - **Embeddings** - Tự động generate và cache
 
 ### 3.3 AI Responses
+
 - **Agent Responses** - Tự động generate từ LLM
 - **Request Artifacts** - Tự động log retrieved chunks
 - **Citations** - Tự động extract từ response
 
 ### 3.4 Recommendations
+
 - **Test Recommendations** - Tự động generate từ impact analysis
 - **Review Comments** - Tự động từ heuristic rules + LLM
 
@@ -261,6 +301,7 @@ PCM Desktop là một hệ thống **Requirement Analysis & Code Intelligence Pl
 ## 4. Quy trình nhập liệu chính
 
 ### 4.1 Setup Project (Lần đầu)
+
 ```
 1. Create System
    ↓
@@ -274,6 +315,7 @@ PCM Desktop là một hệ thống **Requirement Analysis & Code Intelligence Pl
 ```
 
 ### 4.2 Import Documentation
+
 ```
 1. Upload CHM file
    → OR →
@@ -287,6 +329,7 @@ PCM Desktop là một hệ thống **Requirement Analysis & Code Intelligence Pl
 ```
 
 ### 4.3 Ask Question
+
 ```
 1. Type question in chat
    ↓
@@ -302,6 +345,7 @@ PCM Desktop là một hệ thống **Requirement Analysis & Code Intelligence Pl
 ```
 
 ### 4.4 Code Review
+
 ```
 1. System detects code changes (git diff or AST diff)
    ↓
@@ -313,6 +357,7 @@ PCM Desktop là một hệ thống **Requirement Analysis & Code Intelligence Pl
 ```
 
 ### 4.5 Test Planning
+
 ```
 1. User submits change request
    ↓
@@ -328,22 +373,26 @@ PCM Desktop là một hệ thống **Requirement Analysis & Code Intelligence Pl
 ## 5. Validation Rules
 
 ### 5.1 System Hierarchy
+
 - ✅ `code` must be unique per scope (System code globally unique, Subsystem code unique per System)
 - ✅ `name` is required
 - ✅ Cannot delete if has children (unless cascade)
 - ✅ Status must be valid enum value
 
 ### 5.2 Source Management
+
 - ✅ `root_path` must exist and be readable
 - ✅ Cannot add duplicate source root for same project
 - ✅ VCS type must be git, svn, or none
 
 ### 5.3 User Requests
+
 - ✅ `description` cannot be empty
 - ✅ Either project_id or subsystem_id must be set (for scoping)
 - ✅ Priority and request_type must be valid enum
 
 ### 5.4 Feedback
+
 - ✅ Rating must be 1-5
 - ✅ Must have associated response_id
 
@@ -368,17 +417,20 @@ System (1) ──< (N) Subsystem
 ## 7. Storage & Persistence
 
 ### 7.1 Primary Database (SQLite)
+
 - All user input data
 - System hierarchy
 - Metadata (files, AST, requests)
 - ~18 core tables
 
 ### 7.2 Vector Store (Qdrant)
+
 - Embeddings for semantic search
 - Payload với metadata
 - Không nhập trực tiếp (auto-sync từ SQLite)
 
 ### 7.3 File System
+
 - Source code files (read-only)
 - Extracted CHM files (temp)
 - Uploaded attachments
@@ -389,6 +441,7 @@ System (1) ──< (N) Subsystem
 ## 8. Import/Export Capabilities
 
 ### 8.1 Import
+
 - ✅ CHM files → Documentation
 - ✅ Source code directories → AST + Index
 - ✅ Markdown/HTML files → Knowledge Base
@@ -397,6 +450,7 @@ System (1) ──< (N) Subsystem
 - 🔮 Git repository URLs → Auto-clone and scan (future)
 
 ### 8.2 Export
+
 - ✅ Request history → Markdown/PDF
 - ✅ Test recommendations → CSV
 - ✅ Review comments → HTML report
@@ -412,6 +466,7 @@ Current: Single-user desktop app
 Future: Multi-user with permissions
 
 **Planned roles:**
+
 - **Admin**: Full access, manage all entities
 - **Developer**: Create/edit projects, submit requests, view all
 - **QA**: View projects, create test cases, submit bug reports
@@ -421,17 +476,17 @@ Future: Multi-user with permissions
 
 ## 10. Summary: User Input Points
 
-| Category | Entities | Input Method | Frequency |
-|----------|----------|--------------|-----------|
-| **Hierarchy** | System, Subsystem, Project, Batch | Forms | Setup (rare) |
-| **Source** | ProjectSource | Directory picker | Setup + updates |
-| **Knowledge** | ChmImport, KnowledgeChunk | File upload, Editor | Occasional |
-| **Requests** | UserRequest | Chat interface | Daily (frequent) |
-| **Feedback** | AnswerFeedback | Rating widget | After each response |
-| **Tests** | TestCase (manual) | Form | Occasional |
+| Category      | Entities                          | Input Method        | Frequency           |
+|---------------|-----------------------------------|---------------------|---------------------|
+| **Hierarchy** | System, Subsystem, Project, Batch | Forms               | Setup (rare)        |
+| **Source**    | ProjectSource                     | Directory picker    | Setup + updates     |
+| **Knowledge** | ChmImport, KnowledgeChunk         | File upload, Editor | Occasional          |
+| **Requests**  | UserRequest                       | Chat interface      | Daily (frequent)    |
+| **Feedback**  | AnswerFeedback                    | Rating widget       | After each response |
+| **Tests**     | TestCase (manual)                 | Form                | Occasional          |
 
 **Total user input entities:** ~10 main types  
-**Auto-generated entities:** ~20 types  
+**Auto-generated entities:** ~20 types
 
 ---
 

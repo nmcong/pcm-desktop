@@ -67,7 +67,7 @@ public class BBCodeParserTest {
 
         handler = BBCodeMockHandler.testString("[b]This_is_a_[foo]bold[/bar]_text[/b]");
         assertThat(handler.tags()).containsExactly(
-            new MockTag("b", null, "This_is_a_[foo]bold[/bar]_text")
+                new MockTag("b", null, "This_is_a_[foo]bold[/bar]_text")
         );
         assertThat(handler.text()).isEmpty();
     }
@@ -132,7 +132,7 @@ public class BBCodeParserTest {
     public void testMultipleTagParams() {
         var handler = BBCodeMockHandler.testString("[b param1=foo param2=bar param3=baz]bold[/b]");
         assertThat(handler.tags()).containsExactlyInAnyOrder(new MockTag(
-            "b", Map.of("param1", "foo", "param2", "bar", "param3", "baz"), "bold")
+                "b", Map.of("param1", "foo", "param2", "bar", "param3", "baz"), "bold")
         );
         assertThat(handler.text()).isEmpty();
     }
@@ -141,7 +141,7 @@ public class BBCodeParserTest {
     public void testMultipleTagParamsWithQuotes() {
         var handler = BBCodeMockHandler.testString("[b param1=foo param2=\"a b\" param3='c d']bold[/b]");
         assertThat(handler.tags()).containsExactlyInAnyOrder(new MockTag(
-            "b", Map.of("param1", "foo", "param2", "a b", "param3", "c d"), "bold")
+                "b", Map.of("param1", "foo", "param2", "a b", "param3", "c d"), "bold")
         );
         assertThat(handler.text()).isEmpty();
     }
@@ -150,9 +150,9 @@ public class BBCodeParserTest {
     public void testSiblingTags() {
         var handler = BBCodeMockHandler.testString("This_[i]is[/i]_a_[b]bold[/b]_[s]text[/s]");
         assertThat(handler.tags()).containsExactly(
-            new MockTag("i", null, "is"),
-            new MockTag("b", null, "bold"),
-            new MockTag("s", null, "text")
+                new MockTag("i", null, "is"),
+                new MockTag("b", null, "bold"),
+                new MockTag("s", null, "text")
         );
         assertThat(handler.text()).containsExactly("This_", "_a_", "_");
     }
@@ -162,9 +162,9 @@ public class BBCodeParserTest {
         var handler = BBCodeMockHandler.testString("This_[i][s]is_[b]a[/b]_bold[/s]_text[/i]");
         assertThat(handler.text()).containsExactly("This_");
         assertThat(handler.tags()).containsExactly(
-            new MockTag("b", null, "a"),
-            new MockTag("s", null, "is_[b]a[/b]_bold"),
-            new MockTag("i", null, "[s]is_[b]a[/b]_bold[/s]_text")
+                new MockTag("b", null, "a"),
+                new MockTag("s", null, "is_[b]a[/b]_bold"),
+                new MockTag("i", null, "[s]is_[b]a[/b]_bold[/s]_text")
         );
     }
 
@@ -173,8 +173,8 @@ public class BBCodeParserTest {
         var handler = BBCodeMockHandler.testString("This_[b]is_[b]a[/b]_bold[/b]_text");
         assertThat(handler.text()).containsExactly("This_", "_text");
         assertThat(handler.tags()).containsExactly(
-            new MockTag("b", null, "a"),
-            new MockTag("b", null, "is_[b]a[/b]_bold")
+                new MockTag("b", null, "a"),
+                new MockTag("b", null, "is_[b]a[/b]_bold")
         );
     }
 
@@ -183,55 +183,55 @@ public class BBCodeParserTest {
         var handler = BBCodeMockHandler.testString("This_[i=foo][s]is_[b bar=baz]a[/b]_bold[/s]_text[/i]");
         assertThat(handler.text()).containsExactly("This_");
         assertThat(handler.tags()).containsExactly(
-            new MockTag("b", Map.of("bar", "baz"), "a"),
-            new MockTag("s", null, "is_[b bar=baz]a[/b]_bold"),
-            new MockTag("i", Map.of("i", "foo"), "[s]is_[b bar=baz]a[/b]_bold[/s]_text")
+                new MockTag("b", Map.of("bar", "baz"), "a"),
+                new MockTag("s", null, "is_[b bar=baz]a[/b]_bold"),
+                new MockTag("i", Map.of("i", "foo"), "[s]is_[b bar=baz]a[/b]_bold[/s]_text")
         );
     }
 
     @Test
     public void testUnclosedTagThrowsException() {
         assertThatThrownBy(() -> BBCodeMockHandler.testString("This_is_[b]a_bold_text"))
-            .isInstanceOf(IllegalStateException.class);
+                .isInstanceOf(IllegalStateException.class);
     }
 
     @Test
     public void testNestedUnclosedTagThrowsException() {
         assertThatThrownBy(() -> BBCodeMockHandler.testString("This_is_[b]a_[i]bold_[/b]text"))
-            .isInstanceOf(IllegalStateException.class);
+                .isInstanceOf(IllegalStateException.class);
     }
 
     @Test
     public void testUnopenedTagThrowsException() {
         assertThatThrownBy(() -> BBCodeMockHandler.testString("This_is_[/b]a_bold_text"))
-            .isInstanceOf(IllegalStateException.class);
+                .isInstanceOf(IllegalStateException.class);
     }
 
     @Test
     public void testNestedUnopenedTagThrowsException() {
         assertThatThrownBy(() -> BBCodeMockHandler.testString("This_is_[b]a_[/i]bold_[/b]text"))
-            .isInstanceOf(IllegalStateException.class);
+                .isInstanceOf(IllegalStateException.class);
     }
 
     @Test
     public void testNotMatchingClosingTagThrowsException() {
         assertThatThrownBy(() -> BBCodeMockHandler.testString("This_is_[b]a_bold_[/i]text"))
-            .isInstanceOf(IllegalStateException.class);
+                .isInstanceOf(IllegalStateException.class);
     }
 
     @Test
     public void testTagInsideDoubleBracesThrowsException() {
         // this is known and won't be fixed
         assertThatThrownBy(() -> BBCodeMockHandler.testString("This_is_[[url=link]a_bold[/url]]_text"))
-            .isInstanceOf(IllegalStateException.class);
+                .isInstanceOf(IllegalStateException.class);
     }
 
     @Test
     public void testSelfCloseTag() {
         var handler = BBCodeMockHandler.testString("This_[hr/]is_a_[hr=5/]bold_text");
         assertThat(handler.tags()).containsExactly(
-            new MockTag("hr", null, null),
-            new MockTag("hr", Map.of("hr", "5"), null)
+                new MockTag("hr", null, null),
+                new MockTag("hr", Map.of("hr", "5"), null)
         );
         assertThat(handler.text()).containsExactlyInAnyOrder("This_", "is_a_", "bold_text");
     }
@@ -254,7 +254,14 @@ public class BBCodeParserTest {
         private final List<String> text = new ArrayList<>();
         private final Deque<Integer> textStart = new ArrayDeque<>();
         private final Deque<Map<String, String>> tagParams = new ArrayDeque<>();
-        private char @Nullable[] doc;
+        private char @Nullable [] doc;
+
+        public static BBCodeMockHandler testString(String input) {
+            var handler = new BBCodeMockHandler();
+            var parser = new BBCodeParser(input, handler);
+            parser.parse();
+            return handler;
+        }
 
         @Override
         public void startDocument(char[] doc) {
@@ -288,9 +295,9 @@ public class BBCodeParserTest {
             var params = tagParams.pop();
             var openTagTextStart = textStart.pop();
             tags.add(new MockTag(
-                name,
-                params != PARAMS_PLACEHOLDER ? params : null,
-                new String(doc, openTagTextStart, start - openTagTextStart))
+                    name,
+                    params != PARAMS_PLACEHOLDER ? params : null,
+                    new String(doc, openTagTextStart, start - openTagTextStart))
             );
         }
 
@@ -320,16 +327,9 @@ public class BBCodeParserTest {
 
         public @Nullable MockTag get(String name) {
             return tags.stream()
-                .filter(tag -> name.equals(tag.name()))
-                .findFirst()
-                .orElse(null);
-        }
-
-        public static BBCodeMockHandler testString(String input) {
-            var handler = new BBCodeMockHandler();
-            var parser = new BBCodeParser(input, handler);
-            parser.parse();
-            return handler;
+                    .filter(tag -> name.equals(tag.name()))
+                    .findFirst()
+                    .orElse(null);
         }
     }
 }

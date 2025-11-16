@@ -33,21 +33,25 @@
 ### 🎯 Chức Năng Chính
 
 #### 1. **Source Code Parsing**
+
 - Parse Java source code thành Abstract Syntax Tree (AST)
 - Support Java 17+ syntax (records, sealed classes, pattern matching, etc.)
 - Xử lý incomplete hoặc invalid code một cách graceful
 
 #### 2. **AST Navigation & Analysis**
+
 - Traverse AST bằng Visitor pattern
 - Query nodes với XPath-like queries
 - Extract thông tin về classes, methods, fields, annotations
 
 #### 3. **Symbol Resolution**
+
 - Resolve types, methods, variables
 - Understand imports và dependencies
 - Link method calls đến declarations (qua symbol-solver)
 
 #### 4. **Code Generation & Transformation**
+
 - Modify existing AST
 - Generate new code programmatically
 - Preserve formatting và comments
@@ -55,18 +59,22 @@
 ### 📦 Thư Viện Liên Quan
 
 #### `javaparser-core-3.26.3.jar` (~2.5MB)
+
 **Chức năng:**
+
 - Core parsing engine
 - AST representation
 - Visitor pattern implementation
 - Basic analysis capabilities
 
 **Khi nào dùng:**
+
 - Parse Java code
 - Navigate AST structure
 - Extract basic information (classes, methods, fields)
 
 **Ví dụ trong project:**
+
 ```java
 JavaParser javaParser = new JavaParser();
 ParseResult<CompilationUnit> result = javaParser.parse(sourceCode);
@@ -74,19 +82,23 @@ CompilationUnit cu = result.getResult().get();
 ```
 
 #### `javaparser-symbol-solver-core-3.26.3.jar` (~500KB)
+
 **Chức năng:**
+
 - Advanced type resolution
 - Resolve fully qualified names
 - Understand inheritance hierarchies
 - Link method calls to declarations
 
 **Khi nào dùng:**
+
 - Cần resolve types chính xác
 - Analyze dependencies giữa classes
 - Build call graphs
 - Code refactoring tools
 
 **Ví dụ use cases:**
+
 - "Find all callers of method X"
 - "What's the actual type of this variable?"
 - "List all implementations of interface Y"
@@ -121,16 +133,19 @@ CompilationUnit (root)
 ### 💡 Core Concepts
 
 #### 1. **CompilationUnit**
+
 - Đại diện cho một Java source file
 - Root node của AST
 - Chứa package, imports, type declarations
 
 #### 2. **Node**
+
 - Base class cho tất cả AST nodes
 - Có position information (line, column)
 - Support visitor pattern
 
 #### 3. **Visitor Pattern**
+
 ```java
 // VoidVisitor - không return value
 public class MyVisitor extends VoidVisitorAdapter<Void> {
@@ -153,79 +168,103 @@ public class MyCollector extends GenericVisitorAdapter<List<String>, Void> {
 ```
 
 #### 4. **Range & Position**
+
 Mỗi node có thông tin vị trí:
+
 ```java
 Optional<Range> range = node.getRange();
-if (range.isPresent()) {
-    Range r = range.get();
-    int startLine = r.begin.line;
-    int startCol = r.begin.column;
-    int endLine = r.end.line;
-    int endCol = r.end.column;
+if(range.
+
+isPresent()){
+Range r = range.get();
+int startLine = r.begin.line;
+int startCol = r.begin.column;
+int endLine = r.end.line;
+int endCol = r.end.column;
 }
 ```
 
 ### 🛠️ Common Operations
 
 #### Parse Code
+
 ```java
 JavaParser parser = new JavaParser();
 ParseResult<CompilationUnit> result = parser.parse(sourceCode);
 
-if (result.isSuccessful()) {
-    CompilationUnit cu = result.getResult().get();
-    // Use cu...
-} else {
-    System.out.println("Errors: " + result.getProblems());
-}
+if(result.
+
+isSuccessful()){
+CompilationUnit cu = result.getResult().get();
+// Use cu...
+}else{
+        System.out.
+
+println("Errors: "+result.getProblems());
+        }
 ```
 
 #### Extract Package
+
 ```java
-cu.getPackageDeclaration().ifPresent(pkg -> {
-    String packageName = pkg.getNameAsString();
+cu.getPackageDeclaration().
+
+ifPresent(pkg ->{
+String packageName = pkg.getNameAsString();
 });
 ```
 
 #### Find All Classes
+
 ```java
 List<ClassOrInterfaceDeclaration> classes = cu.findAll(ClassOrInterfaceDeclaration.class);
-for (ClassOrInterfaceDeclaration cls : classes) {
-    String name = cls.getNameAsString();
-    boolean isInterface = cls.isInterface();
+for(
+ClassOrInterfaceDeclaration cls :classes){
+String name = cls.getNameAsString();
+boolean isInterface = cls.isInterface();
 }
 ```
 
 #### Find All Methods
+
 ```java
 List<MethodDeclaration> methods = cu.findAll(MethodDeclaration.class);
-for (MethodDeclaration method : methods) {
-    String name = method.getNameAsString();
-    String returnType = method.getTypeAsString();
-    int paramCount = method.getParameters().size();
+for(
+MethodDeclaration method :methods){
+String name = method.getNameAsString();
+String returnType = method.getTypeAsString();
+int paramCount = method.getParameters().size();
 }
 ```
 
 #### Walk AST
+
 ```java
-cu.walk(node -> {
-    System.out.println(node.getClass().getSimpleName());
-});
+cu.walk(node ->{
+        System.out.
+
+println(node.getClass().
+
+getSimpleName());
+        });
 ```
 
 ### ⚡ Performance Considerations
 
 #### Memory
+
 - AST có thể lớn (1 line code ≈ nhiều AST nodes)
 - Large files (>5000 lines) có thể tốn nhiều memory
 - Consider streaming hoặc selective parsing
 
 #### Speed
+
 - Parsing nhanh (~1000 lines/ms trên hardware hiện đại)
 - Symbol resolution chậm hơn (cần resolve dependencies)
 - Cache results khi có thể
 
 #### Best Practices
+
 ```java
 // ✅ Good - Cache parser nếu parse nhiều files
 JavaParser parser = new JavaParser();
@@ -264,23 +303,28 @@ cu.walk(node -> {
 Project sử dụng JavaParser trong 2 modules:
 
 #### 1. **AST Module** (`com.noteflix.pcm.ast`)
+
 **Mục đích:** Deep code analysis cho AI features
 
 **Components:**
+
 - `ASTParser` - Basic parsing và analysis
 - `EnhancedASTAnalyzer` - Advanced analysis với metadata
 - `ASTService` - Service layer với caching
 
 **Use Cases:**
+
 - Code understanding cho AI assistant
 - Generate code representations cho LLM
 - Extract method signatures cho function calling
 - Calculate code metrics (complexity, LOC)
 
 #### 2. **RAG Parser** (`com.noteflix.pcm.rag.parser.core.JavaParser`)
+
 **Mục đích:** Parse Java files cho RAG indexing
 
 **Use Cases:**
+
 - Index Java source code vào vector store
 - Enable semantic search trong codebase
 - Extract code snippets cho context
@@ -288,6 +332,7 @@ Project sử dụng JavaParser trong 2 modules:
 ### 📊 Current Usage
 
 #### ASTParser.java
+
 ```java
 // Simple parsing
 Optional<CompilationUnit> cu = parseJavaCode(code);
@@ -304,6 +349,7 @@ List<Node> nodes = getAllNodes(code);
 ```
 
 #### EnhancedASTAnalyzer.java
+
 ```java
 // Comprehensive analysis
 Optional<CodeMetadata> metadata = analyzeFile(filePath);
@@ -319,6 +365,7 @@ Optional<CodeMetadata> metadata = analyzeFile(filePath);
 ```
 
 #### ASTService.java
+
 ```java
 // High-level service
 ASTAnalysisResult result = analyzeJavaFile(filePath);
@@ -333,54 +380,58 @@ String json = getAnalysisAsJson(code);
 ### 🎯 Features Implemented
 
 #### ✅ Currently Available
+
 1. **Package & Import Extraction**
 2. **Class/Interface Detection**
-   - Name, modifiers (public, abstract, final)
-   - Superclass & implemented interfaces
-   - Inner classes
-   - Annotations
+    - Name, modifiers (public, abstract, final)
+    - Superclass & implemented interfaces
+    - Inner classes
+    - Annotations
 3. **Method Analysis**
-   - Signature, return type, parameters
-   - Modifiers, annotations, Javadoc
-   - Control flow (if, while, for)
-   - Method calls & field accesses
-   - Local variables
-   - Try-catch blocks
-   - Cyclomatic complexity
+    - Signature, return type, parameters
+    - Modifiers, annotations, Javadoc
+    - Control flow (if, while, for)
+    - Method calls & field accesses
+    - Local variables
+    - Try-catch blocks
+    - Cyclomatic complexity
 4. **Field Analysis**
-   - Type, modifiers, initial value
-   - Annotations, Javadoc
+    - Type, modifiers, initial value
+    - Annotations, Javadoc
 5. **Constructor Analysis**
 6. **Code Metrics**
-   - Total lines, LOC, comments, blank lines
-   - Method count, field count
+    - Total lines, LOC, comments, blank lines
+    - Method count, field count
 
 #### 🚀 Potential Enhancements
+
 1. **Symbol Resolution** (using symbol-solver)
-   - Resolve fully qualified names
-   - Build dependency graphs
-   - Find all implementations/callers
+    - Resolve fully qualified names
+    - Build dependency graphs
+    - Find all implementations/callers
 2. **Data Flow Analysis**
-   - Track variable usage
-   - Find unused code
-   - Detect potential NPEs
+    - Track variable usage
+    - Find unused code
+    - Detect potential NPEs
 3. **Code Smells Detection**
-   - Long methods
-   - God classes
-   - Duplicate code
+    - Long methods
+    - God classes
+    - Duplicate code
 4. **Refactoring Suggestions**
-   - Extract method opportunities
-   - Simplify conditions
+    - Extract method opportunities
+    - Simplify conditions
 5. **Test Coverage Mapping**
 
 ### 💾 Storage Strategy
 
 **CodeMetadata** được store vào:
+
 - SQLite database (via `CodeMetadataStorage`)
 - Indexed với file path
 - Serialized as JSON
 
 **Benefits:**
+
 - Fast retrieval cho analyzed files
 - Avoid re-parsing unchanged files
 - Enable project-wide queries
@@ -395,6 +446,7 @@ String json = getAnalysisAsJson(code);
 **JSP** (Java Server Pages) là technology để create dynamic web pages bằng cách embed Java code trong HTML.
 
 **Đặc điểm:**
+
 - Mix HTML, XML, và Java code
 - JSP tags: `<% %>`, `<%= %>`, `<%@ %>`
 - JSTL (JSP Standard Tag Library)
@@ -402,6 +454,7 @@ String json = getAnalysisAsJson(code);
 - Custom tags
 
 **Ví dụ từ project:**
+
 ```jsp
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -425,9 +478,11 @@ String json = getAnalysisAsJson(code);
 ### 🔧 Parser Options
 
 #### Option 1: **Jsoup** ⭐⭐⭐⭐⭐ RECOMMENDED
+
 **Library:** `org.jsoup:jsoup:1.17.2`
 
 **Pros:**
+
 - ✅ Best HTML/XML parser cho Java
 - ✅ Robust error handling (handles malformed HTML)
 - ✅ CSS selectors support
@@ -437,16 +492,19 @@ String json = getAnalysisAsJson(code);
 - ✅ ~500KB
 
 **Cons:**
+
 - ❌ Không parse Java code trong JSP
 - ❌ Không understand JSP tags semantics
 
 **Best For:**
+
 - Extract HTML structure
 - Get text content
 - Find specific elements
 - Clean/sanitize HTML
 
 **Maven:**
+
 ```xml
 <dependency>
     <groupId>org.jsoup</groupId>
@@ -456,6 +514,7 @@ String json = getAnalysisAsJson(code);
 ```
 
 **Example Usage:**
+
 ```java
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -477,25 +536,30 @@ Elements jstlVars = doc.select("[*^=\\$]"); // Elements with ${...}
 ```
 
 #### Option 2: **Custom Regex Parser** ⭐⭐⭐
+
 **Approach:** Pattern matching cho JSP-specific constructs
 
 **Pros:**
+
 - ✅ No dependencies
 - ✅ Lightweight
 - ✅ Fast cho simple cases
 - ✅ Full control
 
 **Cons:**
+
 - ❌ Fragile (break với complex JSP)
 - ❌ Hard to maintain
 - ❌ Không handle nested structures well
 
 **Best For:**
+
 - Extract JSP directives (`<%@ %>`)
 - Find scriptlets (`<% %>`)
 - Extract EL expressions (`${...}`)
 
 **Example:**
+
 ```java
 public class JSPParser {
     private static final Pattern DIRECTIVE = Pattern.compile("<%@\\s*(\\w+)([^%]*)%>");
@@ -524,20 +588,24 @@ public class JSPParser {
 ```
 
 #### Option 3: **Jasper** ⭐⭐
+
 **Library:** Apache Tomcat's JSP engine
 
 **Pros:**
+
 - ✅ Official JSP compiler
 - ✅ Complete JSP understanding
 - ✅ Can generate Java from JSP
 
 **Cons:**
+
 - ❌ Heavy dependency (~5-10MB)
 - ❌ Complex API
 - ❌ Overkill cho parsing only
 - ❌ Requires Tomcat libraries
 
 **Best For:**
+
 - Validate JSP syntax
 - Generate Java servlet code
 - Deploy JSP applications
@@ -545,19 +613,23 @@ public class JSPParser {
 **Not Recommended For:** Static analysis/parsing
 
 #### Option 4: **DOM4J + XPath** ⭐⭐⭐
+
 **Library:** `org.dom4j:dom4j:2.1.4`
 
 **Pros:**
+
 - ✅ Powerful XML parsing
 - ✅ XPath queries
 - ✅ Good for structured XML-like JSP
 
 **Cons:**
+
 - ❌ Strict XML requirements (break với malformed HTML)
 - ❌ Không handle JSP directives
 - ❌ Less user-friendly than Jsoup
 
 **Best For:**
+
 - JSP với valid XML structure
 - JSPX (JSP XML syntax)
 
@@ -626,6 +698,7 @@ public class JSPParser implements DocumentParser {
 JavaScript là scripting language phổ biến cho web development.
 
 **Use Cases trong Project:**
+
 - Frontend logic trong JSP pages
 - Standalone `.js` files
 - Embedded scripts trong HTML
@@ -633,14 +706,17 @@ JavaScript là scripting language phổ biến cho web development.
 ### 🔧 Parser Options
 
 #### Option 1: **Nashorn** ⭐⭐ (Legacy)
+
 **Built-in:** Java's JavaScript engine (deprecated in Java 15, removed in Java 17)
 
 **Status:** ❌ **NOT AVAILABLE** - Project uses Java 21
 
 #### Option 2: **GraalVM JavaScript** ⭐⭐⭐⭐
+
 **Library:** `org.graalvm.js:js:23.1.1` + `org.graalvm.js:js-scriptengine:23.1.1`
 
 **Pros:**
+
 - ✅ Modern ES6+ support
 - ✅ High performance
 - ✅ ECMAScript 2023 compliant
@@ -648,16 +724,19 @@ JavaScript là scripting language phổ biến cho web development.
 - ✅ Active development
 
 **Cons:**
+
 - ❌ Large dependency (~30MB+)
 - ❌ Complex setup
 - ❌ Overkill cho static parsing
 
 **Best For:**
+
 - Execute JavaScript code
 - Full ES6+ compatibility needed
 - Dynamic analysis
 
 **Maven:**
+
 ```xml
 <dependency>
     <groupId>org.graalvm.js</groupId>
@@ -667,9 +746,11 @@ JavaScript là scripting language phổ biến cho web development.
 ```
 
 #### Option 3: **Rhino** ⭐⭐⭐
+
 **Library:** `org.mozilla:rhino:1.7.15`
 
 **Pros:**
+
 - ✅ Mature và stable
 - ✅ Reasonable size (~1.5MB)
 - ✅ Pure Java
@@ -677,16 +758,19 @@ JavaScript là scripting language phổ biến cho web development.
 - ✅ AST access available
 
 **Cons:**
+
 - ❌ ES5 primarily (limited ES6)
 - ❌ Slower than modern engines
 - ❌ Less active development
 
 **Best For:**
+
 - Parse ES5 JavaScript
 - Simple AST analysis
 - Lightweight solution
 
 **Maven:**
+
 ```xml
 <dependency>
     <groupId>org.mozilla</groupId>
@@ -696,6 +780,7 @@ JavaScript là scripting language phổ biến cho web development.
 ```
 
 **Example:**
+
 ```java
 import org.mozilla.javascript.*;
 import org.mozilla.javascript.ast.*;
@@ -724,25 +809,30 @@ try {
 ```
 
 #### Option 4: **Regex-Based Parser** ⭐⭐⭐⭐ RECOMMENDED
+
 **For RAG Use Case**
 
 **Pros:**
+
 - ✅ No dependencies
 - ✅ Very fast
 - ✅ Simple implementation
 - ✅ Good enough for text extraction
 
 **Cons:**
+
 - ❌ Not a true parser
 - ❌ Can't handle complex syntax
 - ❌ No AST
 
 **Best For:**
+
 - Extract functions, variables, comments
 - Get text content cho RAG
 - Lightweight analysis
 
 **Example:**
+
 ```java
 public class JavaScriptParser implements DocumentParser {
     
@@ -803,16 +893,19 @@ public class JavaScriptParser implements DocumentParser {
 ```
 
 #### Option 5: **Node.js + Babel Parser** ⭐⭐
+
 **External Tool**
 
 **Approach:** Use Node.js subprocess to parse with Babel
 
 **Pros:**
+
 - ✅ Perfect JavaScript parsing
 - ✅ Full ES2024 support
 - ✅ TypeScript support
 
 **Cons:**
+
 - ❌ Requires Node.js installed
 - ❌ Slower (subprocess overhead)
 - ❌ Complex integration
@@ -824,6 +917,7 @@ public class JavaScriptParser implements DocumentParser {
 **For PCM Desktop RAG Use Case:**
 
 Use **Regex-Based Parser** because:
+
 1. ✅ No additional dependencies
 2. ✅ Fast và simple
 3. ✅ Adequate cho text extraction
@@ -843,9 +937,11 @@ HTML (HyperText Markup Language) là markup language cho web pages.
 ### 🔧 Parser Options
 
 #### Option 1: **Jsoup** ⭐⭐⭐⭐⭐ RECOMMENDED
+
 **Library:** `org.jsoup:jsoup:1.17.2`
 
 **Pros:**
+
 - ✅ Industry standard cho HTML parsing trong Java
 - ✅ Best-in-class error handling
 - ✅ Clean API với jQuery-like selectors
@@ -856,9 +952,11 @@ HTML (HyperText Markup Language) là markup language cho web pages.
 - ✅ XSS prevention
 
 **Cons:**
+
 - (None significant)
 
 **Features:**
+
 - Parse HTML từ String, File, URL
 - CSS selectors: `doc.select("div.class")`
 - DOM manipulation
@@ -866,6 +964,7 @@ HTML (HyperText Markup Language) là markup language cho web pages.
 - Clean unsafe HTML
 
 **Maven:**
+
 ```xml
 <dependency>
     <groupId>org.jsoup</groupId>
@@ -875,6 +974,7 @@ HTML (HyperText Markup Language) là markup language cho web pages.
 ```
 
 **Example:**
+
 ```java
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -912,30 +1012,37 @@ for (Element header : headers) {
 ```
 
 #### Option 2: **NekoHTML** ⭐⭐⭐
+
 **Library:** `net.sourceforge.nekohtml:nekohtml:1.9.22`
 
 **Pros:**
+
 - ✅ Lenient HTML parser
 - ✅ Converts HTML to well-formed XML
 - ✅ Good cho malformed HTML
 
 **Cons:**
+
 - ❌ Less intuitive API
 - ❌ Older project (less active)
 - ❌ Jsoup is better trong most cases
 
 **Best For:**
+
 - Legacy projects đã dùng NekoHTML
 - Need strict XML output
 
 #### Option 3: **JTidy** ⭐⭐
+
 **Library:** `net.sf.jtidy:jtidy:r938`
 
 **Pros:**
+
 - ✅ Port of HTML Tidy
 - ✅ Clean/validate HTML
 
 **Cons:**
+
 - ❌ Old project (not maintained)
 - ❌ Limited features vs Jsoup
 - ❌ Less robust error handling
@@ -1045,6 +1152,7 @@ public class HTMLParser implements DocumentParser {
 **XFDL** là XML-based language để định nghĩa electronic forms.
 
 **Đặc điểm:**
+
 - Based on XML
 - Used trong government, military, healthcare
 - Complex form logic và validation
@@ -1052,6 +1160,7 @@ public class HTMLParser implements DocumentParser {
 - Originated from PureEdge (now IBM)
 
 **Ví dụ XFDL:**
+
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <XFDL xmlns="http://www.xfdl.org/2004/xfdl">
@@ -1075,24 +1184,29 @@ public class HTMLParser implements DocumentParser {
 ### 🔧 Parser Options
 
 #### Option 1: **Standard XML Parsers** ⭐⭐⭐⭐⭐ RECOMMENDED
+
 **Built-in:** Java's DOM/SAX/StAX parsers
 
 **Pros:**
+
 - ✅ No dependencies (built into Java)
 - ✅ Standard XML parsing
 - ✅ Well documented
 - ✅ Multiple APIs (DOM, SAX, StAX)
 
 **Cons:**
+
 - ❌ Không hiểu XFDL semantics
 - ❌ Cần manually interpret structure
 
 **Best For:**
+
 - Parse XFDL as XML
 - Extract fields, values, labels
 - Get form structure
 
 **Example with DOM:**
+
 ```java
 import javax.xml.parsers.*;
 import org.w3c.dom.*;
@@ -1188,6 +1302,7 @@ public class XFDLParser implements DocumentParser {
 ```
 
 **Example with StAX (streaming):**
+
 ```java
 import javax.xml.stream.*;
 
@@ -1254,18 +1369,22 @@ public class XFDLStreamParser {
 ```
 
 #### Option 2: **JDOM2** ⭐⭐⭐⭐
+
 **Library:** `org.jdom:jdom2:2.0.6.1`
 
 **Pros:**
+
 - ✅ Cleaner API than DOM
 - ✅ Easy to use
 - ✅ Good for complex XML
 
 **Cons:**
+
 - ❌ Additional dependency (~150KB)
 - ❌ Built-in DOM is sufficient
 
 **Example:**
+
 ```java
 import org.jdom2.*;
 import org.jdom2.input.SAXBuilder;
@@ -1283,20 +1402,25 @@ for (Element field : fields) {
 ```
 
 #### Option 3: **DOM4J** ⭐⭐⭐
+
 **Library:** `org.dom4j:dom4j:2.1.4`
 
 **Pros:**
+
 - ✅ XPath support
 - ✅ Flexible API
 
 **Cons:**
+
 - ❌ Additional dependency
 - ❌ Less modern than JDOM2
 
 #### Option 4: **XPath Queries** ⭐⭐⭐⭐⭐
+
 **Built-in:** Java's XPath API
 
 **Best for complex queries:**
+
 ```java
 import javax.xml.xpath.*;
 
@@ -1308,7 +1432,10 @@ XPathExpression expr = xpath.compile("//field/label/text()");
 NodeList nodes = (NodeList) expr.evaluate(doc, XPathConstants.NODESET);
 
 // Find field by sid
-expr = xpath.compile("//field[@sid='FIELD1']/label");
+expr =xpath.
+
+compile("//field[@sid='FIELD1']/label");
+
 String label = (String) expr.evaluate(doc, XPathConstants.STRING);
 ```
 
@@ -1317,12 +1444,14 @@ String label = (String) expr.evaluate(doc, XPathConstants.STRING);
 **For XFDL Parsing:**
 
 Use **built-in DOM parser with XPath** because:
+
 1. ✅ No dependencies
 2. ✅ Sufficient cho XFDL structure
 3. ✅ XPath makes queries easy
 4. ✅ Standard Java APIs
 
 Only add JDOM2 if:
+
 - Need significantly cleaner code
 - Working with many XML files
 - Team preference
@@ -1334,6 +1463,7 @@ Only add JDOM2 if:
 ### 🏗️ Architecture
 
 #### Current Pattern
+
 ```
 DocumentParser (interface)
     ├── JavaParser
@@ -1343,6 +1473,7 @@ DocumentParser (interface)
 ```
 
 #### Extended Pattern
+
 ```
 DocumentParser (interface)
     ├── JavaParser (existing)
@@ -1378,17 +1509,20 @@ DocumentParser (interface)
 ```
 
 **If adding manually to `lib/`:**
+
 - Download `jsoup-1.17.2.jar` (~500KB)
 - Optionally `rhino-1.7.15.jar` (~1.5MB)
 
 ### 🎯 Implementation Priority
 
 #### Phase 1: Essential (Week 1)
+
 1. **HTMLParser** - Most common, uses Jsoup
 2. **JSPParser** - For web apps, uses Jsoup + regex
 3. **JavaScriptParser** - Regex-based, no dependencies
 
 #### Phase 2: Specialized (Week 2)
+
 4. **XFDLParser** - If project has XFDL forms
 
 ### 📝 Code Template
@@ -1536,38 +1670,41 @@ class HTMLParserTest {
 
 ### 📊 Parser Options Summary
 
-| Language | Recommended Parser | Size | Complexity | AST Support | Dependencies |
-|----------|-------------------|------|------------|-------------|--------------|
-| **Java** | JavaParser | 3MB | Medium | ✅ Full | javaparser-core |
-| **JSP** | Jsoup + Regex | 500KB | Low | ❌ No | jsoup |
-| **JavaScript** | Regex | 0 | Very Low | ❌ No | None |
-| **JavaScript** | Rhino (alt) | 1.5MB | Medium | ✅ Yes | rhino |
-| **HTML** | Jsoup | 500KB | Low | ✅ DOM | jsoup |
-| **XFDL** | Built-in DOM | 0 | Low | ✅ DOM | None |
-| **Markdown** | Regex (current) | 0 | Very Low | ❌ No | None |
-| **SQL** | Regex (current) | 0 | Very Low | ❌ No | None |
+| Language       | Recommended Parser | Size  | Complexity | AST Support | Dependencies    |
+|----------------|--------------------|-------|------------|-------------|-----------------|
+| **Java**       | JavaParser         | 3MB   | Medium     | ✅ Full      | javaparser-core |
+| **JSP**        | Jsoup + Regex      | 500KB | Low        | ❌ No        | jsoup           |
+| **JavaScript** | Regex              | 0     | Very Low   | ❌ No        | None            |
+| **JavaScript** | Rhino (alt)        | 1.5MB | Medium     | ✅ Yes       | rhino           |
+| **HTML**       | Jsoup              | 500KB | Low        | ✅ DOM       | jsoup           |
+| **XFDL**       | Built-in DOM       | 0     | Low        | ✅ DOM       | None            |
+| **Markdown**   | Regex (current)    | 0     | Very Low   | ❌ No        | None            |
+| **SQL**        | Regex (current)    | 0     | Very Low   | ❌ No        | None            |
 
 ### 🎯 Feature Comparison
 
-| Parser | Parse Speed | Memory | Accuracy | Maintenance | Use Case |
-|--------|-------------|--------|----------|-------------|----------|
-| **JavaParser** | Fast | Medium | 100% | Easy | Production Java analysis |
-| **Jsoup** | Very Fast | Low | 99%+ | Easy | HTML/JSP parsing |
-| **Regex** | Very Fast | Very Low | 70-90% | Medium | Quick extraction |
-| **Rhino** | Medium | Medium | 95%+ | Medium | ES5 JS parsing |
-| **DOM/SAX** | Fast | Low | 100% | Easy | XML/XFDL |
+| Parser         | Parse Speed | Memory   | Accuracy | Maintenance | Use Case                 |
+|----------------|-------------|----------|----------|-------------|--------------------------|
+| **JavaParser** | Fast        | Medium   | 100%     | Easy        | Production Java analysis |
+| **Jsoup**      | Very Fast   | Low      | 99%+     | Easy        | HTML/JSP parsing         |
+| **Regex**      | Very Fast   | Very Low | 70-90%   | Medium      | Quick extraction         |
+| **Rhino**      | Medium      | Medium   | 95%+     | Medium      | ES5 JS parsing           |
+| **DOM/SAX**    | Fast        | Low      | 100%     | Easy        | XML/XFDL                 |
 
 ### 💰 Cost-Benefit Analysis
 
 #### Option A: Minimal (Regex-based)
+
 **Dependencies:** None  
 **Total Size:** 0 MB  
 **Pros:**
+
 - ✅ No setup
 - ✅ Fast
 - ✅ Simple
 
 **Cons:**
+
 - ❌ Limited accuracy
 - ❌ Fragile
 - ❌ Hard to extend
@@ -1575,28 +1712,34 @@ class HTMLParserTest {
 **Best For:** Quick prototypes, simple extraction
 
 #### Option B: Jsoup-based (Recommended)
+
 **Dependencies:** Jsoup  
 **Total Size:** ~500 KB  
 **Pros:**
+
 - ✅ Professional quality
 - ✅ Robust
 - ✅ Easy to use
 - ✅ Handles edge cases
 
 **Cons:**
+
 - ❌ One dependency to add
 
 **Best For:** Production use, web content parsing
 
 #### Option C: Full-featured
+
 **Dependencies:** Jsoup + Rhino  
 **Total Size:** ~2 MB  
 **Pros:**
+
 - ✅ Complete parsing
 - ✅ JavaScript AST
 - ✅ All features
 
 **Cons:**
+
 - ❌ Larger size
 - ❌ More complex
 
@@ -1611,25 +1754,27 @@ class HTMLParserTest {
 **For PCM Desktop Project:**
 
 #### Tier 1: Core Parsers (Add Now)
+
 1. **HTMLParser** - Jsoup-based
-   - Essential for web content
-   - Used in JSP support
-   - ~500KB dependency
+    - Essential for web content
+    - Used in JSP support
+    - ~500KB dependency
 
 2. **JSPParser** - Jsoup + Regex hybrid
-   - Parse HTML structure with Jsoup
-   - Extract JSP constructs with regex
-   - Reuses Jsoup dependency
+    - Parse HTML structure with Jsoup
+    - Extract JSP constructs with regex
+    - Reuses Jsoup dependency
 
 3. **JavaScriptParser** - Regex-based
-   - No dependencies
-   - Good enough cho RAG use case
-   - Can upgrade to Rhino later if needed
+    - No dependencies
+    - Good enough cho RAG use case
+    - Can upgrade to Rhino later if needed
 
 #### Tier 2: Specialized (Add If Needed)
+
 4. **XFDLParser** - Built-in DOM
-   - Only if project has XFDL forms
-   - No dependencies
+    - Only if project has XFDL forms
+    - No dependencies
 
 ### 📦 Dependency Plan
 
@@ -1651,24 +1796,28 @@ Optional Future:
 ### 🚀 Implementation Roadmap
 
 #### Week 1: Foundation
+
 - [x] Research parsers
 - [ ] Create parser interfaces
 - [ ] Implement HTMLParser
 - [ ] Unit tests
 
 #### Week 2: Web Support
+
 - [ ] Implement JSPParser
 - [ ] Implement JavaScriptParser
 - [ ] Integration tests
 - [ ] Update RAG pipeline
 
 #### Week 3: Polish
+
 - [ ] Performance optimization
 - [ ] Error handling
 - [ ] Documentation
 - [ ] Update examples
 
 #### Optional: Advanced
+
 - [ ] Implement XFDLParser (if needed)
 - [ ] Upgrade JS parser to Rhino (if needed)
 - [ ] Add symbol resolution for JS
@@ -1723,12 +1872,14 @@ src/test/resources/parser/
 ## ✅ Action Items
 
 ### Immediate (This Week)
+
 1. ✅ Research completed - This document
 2. [ ] Review với team
 3. [ ] Approve dependency: Jsoup
 4. [ ] Download jsoup-1.17.2.jar
 
 ### Short-term (Next 2 Weeks)
+
 1. [ ] Implement HTMLParser
 2. [ ] Implement JSPParser
 3. [ ] Implement JavaScriptParser
@@ -1736,12 +1887,14 @@ src/test/resources/parser/
 5. [ ] Update build scripts
 
 ### Medium-term (Next Month)
+
 1. [ ] Integration with RAG pipeline
 2. [ ] Test với real examples/
 3. [ ] Performance benchmarks
 4. [ ] Documentation updates
 
 ### Long-term (Future)
+
 1. [ ] Consider XFDLParser nếu cần
 2. [ ] Upgrade to Rhino for JS nếu cần advanced features
 3. [ ] Add TypeScript support
@@ -1752,6 +1905,7 @@ src/test/resources/parser/
 ## 📚 References
 
 ### Official Documentation
+
 - **JavaParser:** https://javaparser.org/
 - **Jsoup:** https://jsoup.org/
 - **Rhino:** https://github.com/mozilla/rhino
@@ -1759,17 +1913,21 @@ src/test/resources/parser/
 - **Java XML:** https://docs.oracle.com/javase/tutorial/jaxp/
 
 ### Tutorials
+
 - JavaParser Getting Started: https://javaparser.org/getting-started
 - Jsoup Cookbook: https://jsoup.org/cookbook/
 - Java XML Processing: https://www.baeldung.com/java-xml
 
 ### API Documentation
+
 - JavaParser JavaDocs: https://javadoc.io/doc/com.github.javaparser/javaparser-core
 - Jsoup API: https://jsoup.org/apidocs/
 - Java XML APIs: https://docs.oracle.com/en/java/javase/21/docs/api/java.xml/module-summary.html
 
 ### Examples
-- JavaParser Examples: https://github.com/javaparser/javaparser/tree/master/javaparser-core-testing/src/test/java/com/github/javaparser
+
+- JavaParser
+  Examples: https://github.com/javaparser/javaparser/tree/master/javaparser-core-testing/src/test/java/com/github/javaparser
 - Jsoup Examples: https://jsoup.org/cookbook/
 - JSP Specification: https://jakarta.ee/specifications/pages/
 
@@ -1787,6 +1945,7 @@ src/test/resources/parser/
 ### Adding Jsoup to Project
 
 **Manual (lib/ directory):**
+
 ```bash
 cd lib/
 mkdir -p parsers/
@@ -1795,6 +1954,7 @@ curl -O https://repo1.maven.org/maven2/org/jsoup/jsoup/1.17.2/jsoup-1.17.2.jar
 ```
 
 **Update build.sh:**
+
 ```bash
 # Add Parser libraries (line ~260)
 for jar in lib/parsers/*.jar; do
@@ -1808,11 +1968,14 @@ done
 
 ```java
 // Test Jsoup
+
 import org.jsoup.Jsoup;
 
 String html = "<html><body><h1>Test</h1></body></html>";
 Document doc = Jsoup.parse(html);
-System.out.println(doc.title());
+System.out.
+
+println(doc.title());
 ```
 
 ### Common Issues

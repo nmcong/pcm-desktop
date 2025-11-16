@@ -48,24 +48,24 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface FunctionProvider {
 
-  /**
-   * Provider name (for identification). If empty, uses class name.
-   *
-   * @return Provider name
-   */
-  String value() default "";
+    /**
+     * Provider name (for identification). If empty, uses class name.
+     *
+     * @return Provider name
+     */
+    String value() default "";
 
-  /**
-   * Whether this provider is enabled. Disabled providers are not scanned.
-   *
-   * @return true if enabled (default), false if disabled
-   */
-  boolean enabled() default true;
+    /**
+     * Whether this provider is enabled. Disabled providers are not scanned.
+     *
+     * @return true if enabled (default), false if disabled
+     */
+    boolean enabled() default true;
 
-  /**
-   * Priority for provider loading. Higher priority providers are loaded first.
-   *
-   * @return Priority (default 0)
-   */
-  int priority() default 0;
+    /**
+     * Priority for provider loading. Higher priority providers are loaded first.
+     *
+     * @return Priority (default 0)
+     */
+    int priority() default 0;
 }

@@ -1,6 +1,7 @@
 # Code Review & Testing - Detailed Design Specification
 
 **Tạo từ các file nguồn:**
+
 - `docs/RaD/ideas/code-review-strategy.md`
 - `docs/RaD/ideas/testcase-strategy.md`
 
@@ -12,6 +13,7 @@
 ## 1. Tổng quan
 
 Tài liệu này mô tả chi tiết hai chức năng quan trọng của PCM Desktop:
+
 1. **Automated Code Review**: Tự động review code changes và highlight risks
 2. **Test Case Generation**: Tự động sinh test cases dựa trên impact analysis
 
@@ -73,6 +75,7 @@ CREATE INDEX idx_review_comments_category ON review_comments(category);
 ```
 
 **Categories:**
+
 - `naming`: Naming conventions
 - `null_safety`: Null checks, NPE risks
 - `security`: SQL injection, XSS, auth issues
@@ -882,6 +885,7 @@ public class ReviewCommentsPanel extends VBox {
 ### 5.1 Code Review
 
 ✅ **DO:**
+
 - Run automated checks before manual review
 - Provide actionable suggestions with code examples
 - Link to coding standards/guidelines
@@ -889,6 +893,7 @@ public class ReviewCommentsPanel extends VBox {
 - Log all review actions for audit
 
 ❌ **DON'T:**
+
 - Fail build on minor style issues (use warnings)
 - Generate too many false positives
 - Review auto-generated code
@@ -897,6 +902,7 @@ public class ReviewCommentsPanel extends VBox {
 ### 5.2 Test Generation
 
 ✅ **DO:**
+
 - Generate tests for edge cases and boundaries
 - Include locale-specific test data (CJK, emojis)
 - Suggest integration tests for multi-file changes
@@ -904,6 +910,7 @@ public class ReviewCommentsPanel extends VBox {
 - Provide sample test data in recommendations
 
 ❌ **DON'T:**
+
 - Generate tests for trivial getters/setters
 - Duplicate existing test cases
 - Skip performance tests for critical paths
@@ -914,12 +921,14 @@ public class ReviewCommentsPanel extends VBox {
 ## 6. Future Enhancements
 
 ### 6.1 Code Review
+
 - **Machine learning**: Train model on past review comments
 - **Auto-fix**: Generate patches for simple issues
 - **Diff visualization**: Show before/after in UI
 - **Team standards**: Customizable rule sets per project
 
 ### 6.2 Testing
+
 - **Auto-generate test code**: Produce actual JUnit/TestNG code
 - **Mutation testing**: Suggest mutation operators
 - **Test prioritization**: Run high-risk tests first

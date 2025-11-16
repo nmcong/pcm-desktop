@@ -2,6 +2,7 @@ package com.noteflix.pcm.llm.prompt;
 
 import java.util.Map;
 import java.util.Set;
+
 import lombok.Builder;
 import lombok.Data;
 
@@ -30,29 +31,30 @@ import lombok.Data;
 @Builder
 public class SimplePromptTemplate implements PromptTemplate {
 
-  private String name;
-  private String description;
-  private String template;
+    private String name;
+    private String description;
+    private String template;
 
-  @Builder.Default private Set<String> requiredVariables = Set.of();
+    @Builder.Default
+    private Set<String> requiredVariables = Set.of();
 
-  @Override
-  public String render(Map<String, Object> variables) {
-    // Validate required variables
-    for (String required : requiredVariables) {
-      if (!variables.containsKey(required)) {
-        throw new IllegalArgumentException("Missing required variable: " + required);
-      }
+    @Override
+    public String render(Map<String, Object> variables) {
+        // Validate required variables
+        for (String required : requiredVariables) {
+            if (!variables.containsKey(required)) {
+                throw new IllegalArgumentException("Missing required variable: " + required);
+            }
+        }
+
+        // Simple string replacement
+        String result = template;
+        for (Map.Entry<String, Object> entry : variables.entrySet()) {
+            String placeholder = "{" + entry.getKey() + "}";
+            String value = String.valueOf(entry.getValue());
+            result = result.replace(placeholder, value);
+        }
+
+        return result;
     }
-
-    // Simple string replacement
-    String result = template;
-    for (Map.Entry<String, Object> entry : variables.entrySet()) {
-      String placeholder = "{" + entry.getKey() + "}";
-      String value = String.valueOf(entry.getValue());
-      result = result.replace(placeholder, value);
-    }
-
-    return result;
-  }
 }

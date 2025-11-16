@@ -69,7 +69,7 @@ public abstract class BasicEventDispatcher implements EventDispatcher {
     }
 
     public final void insertNextDispatcher(
-        final BasicEventDispatcher newDispatcher) {
+            final BasicEventDispatcher newDispatcher) {
         if (nextDispatcher != null) {
             nextDispatcher.previousDispatcher = newDispatcher;
         }

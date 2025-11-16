@@ -17,7 +17,8 @@
 
 ### ONNX là gì?
 
-**ONNX (Open Neural Network Exchange)** là một định dạng mở để biểu diễn các mô hình machine learning. Nó cho phép chuyển đổi mô hình giữa các framework khác nhau như PyTorch, TensorFlow, scikit-learn.
+**ONNX (Open Neural Network Exchange)** là một định dạng mở để biểu diễn các mô hình machine learning. Nó cho phép
+chuyển đổi mô hình giữa các framework khác nhau như PyTorch, TensorFlow, scikit-learn.
 
 ### Tại sao chọn ONNX cho PCM Desktop?
 
@@ -32,6 +33,7 @@ graph TD
 ```
 
 **Ưu điểm:**
+
 - ✅ **Cross-platform**: Chạy trên mọi hệ điều hành
 - ✅ **Language agnostic**: Không phụ thuộc Python
 - ✅ **Production-ready**: Tối ưu cho deployment
@@ -68,11 +70,11 @@ return embedding;
 
 PCM Desktop hỗ trợ nhiều loại embedding models thông qua ONNX:
 
-| Model | Dimension | Use Case | File Size |
-|-------|-----------|----------|-----------|
-| all-MiniLM-L6-v2 | 384 | General purpose, fast | ~90MB |
-| all-mpnet-base-v2 | 768 | High quality | ~420MB |
-| multilingual-mpnet | 768 | Multi-language support | ~1GB |
+| Model              | Dimension | Use Case               | File Size |
+|--------------------|-----------|------------------------|-----------|
+| all-MiniLM-L6-v2   | 384       | General purpose, fast  | ~90MB     |
+| all-mpnet-base-v2  | 768       | High quality           | ~420MB    |
+| multilingual-mpnet | 768       | Multi-language support | ~1GB      |
 
 ### 3. Integration Points
 
@@ -252,6 +254,7 @@ fi
 **Location**: `src/main/java/com/noteflix/pcm/rag/embedding/core/DJLEmbeddingService.java`
 
 **Key Features:**
+
 - ThreadLocal ONNX sessions for concurrency
 - Memory management và resource cleanup
 - Batch processing optimization
@@ -367,12 +370,12 @@ float similarity = cosineSimilarity(embedding1, embedding2);
 
 ### Benchmark Results
 
-| Operation | Time (ms) | Memory (MB) | Notes |
-|-----------|-----------|-------------|-------|
-| Model loading | 500 | 300 | One-time startup cost |
-| First inference | 100 | +50 | JVM warmup |
-| Subsequent inference | 15-25 | Stable | Optimized performance |
-| Batch (10 items) | 80 | Stable | 8x efficiency gain |
+| Operation            | Time (ms) | Memory (MB) | Notes                 |
+|----------------------|-----------|-------------|-----------------------|
+| Model loading        | 500       | 300         | One-time startup cost |
+| First inference      | 100       | +50         | JVM warmup            |
+| Subsequent inference | 15-25     | Stable      | Optimized performance |
+| Batch (10 items)     | 80        | Stable      | 8x efficiency gain    |
 
 ### Thread Safety Performance
 
@@ -385,6 +388,7 @@ private final ThreadLocal<HuggingFaceTokenizer> tokenizerPool =
 ```
 
 **Benefits:**
+
 - No synchronization bottlenecks
 - True concurrent execution
 - Linear scaling with thread count
@@ -509,11 +513,13 @@ fi
 #### 1. UnsatisfiedLinkError (Windows)
 
 **Error:**
+
 ```
 java.lang.UnsatisfiedLinkError: C:\Users\...\onnxruntime_providers_shared.dll: Can't find dependent libraries
 ```
 
 **Solution:**
+
 ```bash
 # Install Visual C++ Redistributable
 # Download from: https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist
@@ -523,11 +529,13 @@ java.lang.UnsatisfiedLinkError: C:\Users\...\onnxruntime_providers_shared.dll: C
 #### 2. OutOfMemoryError
 
 **Error:**
+
 ```
 java.lang.OutOfMemoryError: Java heap space
 ```
 
 **Solution:**
+
 ```bash
 # Increase heap size
 export JAVA_OPTS="-Xmx4g -Xms1g"
@@ -540,11 +548,13 @@ export JAVA_OPTS="-Xmx8g -Xms2g -XX:+UseG1GC"
 #### 3. Model Loading Failed
 
 **Error:**
+
 ```
 IOException: Model file not found: model.onnx
 ```
 
 **Solution:**
+
 ```bash
 # Re-download models
 rm -rf data/models/*
@@ -558,11 +568,13 @@ ls -la data/models/all-MiniLM-L6-v2/
 #### 4. Threading Issues
 
 **Error:**
+
 ```
 OrtException: Session is already released
 ```
 
 **Solution:**
+
 ```java
 // Always use try-with-resources or proper cleanup
 try (DJLEmbeddingService service = new DJLEmbeddingService("...")) {
@@ -735,7 +747,8 @@ ONNX Runtime đóng vai trò then chốt trong PCM Desktop như backbone của h
 4. **Reliability**: Production-ready stability
 5. **Security**: Input validation và path protection
 
-Với implementation hiện tại, PCM Desktop có thể xử lý hàng ngàn queries đồng thời với latency thấp và resource usage tối ưu.
+Với implementation hiện tại, PCM Desktop có thể xử lý hàng ngàn queries đồng thời với latency thấp và resource usage tối
+ưu.
 
 ---
 

@@ -2,6 +2,7 @@ package com.noteflix.pcm.llm.logging;
 
 import java.time.LocalDateTime;
 import java.util.Map;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,46 +20,69 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ToolCallLog {
 
-  // ========== Identification ==========
+    // ========== Identification ==========
 
-  /** Unique tool call ID */
-  private String id;
+    /**
+     * Unique tool call ID
+     */
+    private String id;
 
-  /** Parent LLM call ID */
-  private String llmCallId;
+    /**
+     * Parent LLM call ID
+     */
+    private String llmCallId;
 
-  /** Tool/function name */
-  private String toolName;
+    /**
+     * Tool/function name
+     */
+    private String toolName;
 
-  // ========== Timing ==========
+    // ========== Timing ==========
 
-  /** When execution started */
-  @Builder.Default private LocalDateTime timestamp = LocalDateTime.now();
+    /**
+     * When execution started
+     */
+    @Builder.Default
+    private LocalDateTime timestamp = LocalDateTime.now();
 
-  /** Execution duration (milliseconds) */
-  private long executionMs;
+    /**
+     * Execution duration (milliseconds)
+     */
+    private long executionMs;
 
-  // ========== Input ==========
+    // ========== Input ==========
 
-  /** Function arguments */
-  private Map<String, Object> arguments;
+    /**
+     * Function arguments
+     */
+    private Map<String, Object> arguments;
 
-  // ========== Output ==========
+    // ========== Output ==========
 
-  /** Whether execution succeeded */
-  private boolean success;
+    /**
+     * Whether execution succeeded
+     */
+    private boolean success;
 
-  /** Function result (if successful) */
-  private Object result;
+    /**
+     * Function result (if successful)
+     */
+    private Object result;
 
-  /** Error message (if failed) */
-  private String errorMessage;
+    /**
+     * Error message (if failed)
+     */
+    private String errorMessage;
 
-  // ========== Metadata ==========
+    // ========== Metadata ==========
 
-  /** Provider that registered this function */
-  private String provider;
+    /**
+     * Provider that registered this function
+     */
+    private String provider;
 
-  /** Order in sequence (0-based) */
-  private int executionOrder;
+    /**
+     * Order in sequence (0-based)
+     */
+    private int executionOrder;
 }

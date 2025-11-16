@@ -12,15 +12,15 @@ $button-radius: 10em !default;
   -fx-page-information-visible: true;
   -fx-page-information-alignment: bottom;
 
-  >.page {
+  > .page {
     -fx-background-color: transparent;
   }
 
-  >.pagination-control {
+  > .pagination-control {
     -fx-background-color: transparent;
     -fx-font-size: 1em;
 
-    >.control-box {
+    > .control-box {
       -fx-padding: 0.5em 0 0 0;
       -fx-spacing: 2px;
       -fx-alignment: CENTER;
@@ -29,44 +29,44 @@ $button-radius: 10em !default;
         -fx-padding: 0;
       }
 
-      >.left-arrow-button {
-        >.left-arrow {
+      > .left-arrow-button {
+        > .left-arrow {
           @include icons.get("arrow-left", false);
           -fx-background-color: -color-fg-default;
         }
       }
 
-      >.right-arrow-button {
-        >.right-arrow {
+      > .right-arrow-button {
+        > .right-arrow {
           @include icons.get("arrow-right", false);
           -fx-background-color: -color-fg-default;
         }
       }
     }
 
-    >.page-information {
+    > .page-information {
       -fx-padding: 0.5em 0 0 0;
     }
   }
 
   // Pagination.STYLE_CLASS_BULLET
   &.bullet {
-    >.pagination-control {
+    > .pagination-control {
 
-      >.control-box {
+      > .control-box {
         -fx-spacing: 0;
 
-        >.left-arrow-button {
+        > .left-arrow-button {
           -fx-background-radius: $button-radius;
           -fx-padding: 0 0.25em 0 0.083em; // center arrow inside the circle
         }
 
-        >.right-arrow-button {
+        > .right-arrow-button {
           -fx-background-radius: $button-radius;
           -fx-padding: 0 0.083em 0 0.25em; // center arrow inside the circle
         }
 
-        >.bullet-button {
+        > .bullet-button {
           -fx-background-radius: 0, $button-radius, $button-radius;
           -fx-background-color: transparent, -color-border-default, -color-bg-subtle;
           -fx-background-insets: 0, 5, 6;

@@ -39,19 +39,19 @@
                         <span class="badge bg-primary fs-6">${employee.employeeCode}</span>
                     </div>
                 </div>
-                
+
                 <div class="row mb-3">
                     <div class="col-4 fw-bold">Họ và tên:</div>
                     <div class="col-8 fs-5 text-primary">${employee.fullName}</div>
                 </div>
-                
+
                 <div class="row mb-3">
                     <div class="col-4 fw-bold">Email:</div>
                     <div class="col-8">
                         <a href="mailto:${employee.email}">${employee.email}</a>
                     </div>
                 </div>
-                
+
                 <div class="row mb-3">
                     <div class="col-4 fw-bold">Số điện thoại:</div>
                     <div class="col-8">
@@ -65,7 +65,7 @@
                         </c:choose>
                     </div>
                 </div>
-                
+
                 <div class="row mb-3">
                     <div class="col-4 fw-bold">Ngày sinh:</div>
                     <div class="col-8">
@@ -79,7 +79,7 @@
                         </c:choose>
                     </div>
                 </div>
-                
+
                 <div class="row mb-3">
                     <div class="col-4 fw-bold">Trạng thái:</div>
                     <div class="col-8">
@@ -102,7 +102,7 @@
             </div>
         </div>
     </div>
-    
+
     <!-- Right Column - Work Info -->
     <div class="col-md-6 mb-4">
         <div class="card h-100">
@@ -125,7 +125,7 @@
                         </c:choose>
                     </div>
                 </div>
-                
+
                 <div class="row mb-3">
                     <div class="col-4 fw-bold">Chức vụ:</div>
                     <div class="col-8">
@@ -139,22 +139,22 @@
                         </c:choose>
                     </div>
                 </div>
-                
+
                 <div class="row mb-3">
                     <div class="col-4 fw-bold">Ngày vào làm:</div>
                     <div class="col-8">
                         ${custom:formatDate(employee.hireDate)}
                     </div>
                 </div>
-                
+
                 <div class="row mb-3">
                     <div class="col-4 fw-bold">Lương:</div>
                     <div class="col-8">
                         <c:choose>
                             <c:when test="${not empty employee.salary}">
                                 <span class="text-success fw-bold">
-                                    <fmt:formatNumber value="${employee.salary}" type="currency" 
-                                                     currencySymbol="₫" groupingUsed="true"/>
+                                    <fmt:formatNumber value="${employee.salary}" type="currency"
+                                                      currencySymbol="₫" groupingUsed="true"/>
                                 </span>
                             </c:when>
                             <c:otherwise>
@@ -191,11 +191,11 @@
                         </c:choose>
                     </div>
                 </div>
-                
+
                 <div class="row mb-3">
                     <div class="col-md-2 fw-bold">Thành phố:</div>
                     <div class="col-md-4">${not empty employee.city ? employee.city : '<span class="text-muted">Chưa có</span>'}</div>
-                    
+
                     <div class="col-md-2 fw-bold">Quốc gia:</div>
                     <div class="col-md-4">${not empty employee.country ? employee.country : '<span class="text-muted">Chưa có</span>'}</div>
                 </div>
@@ -212,13 +212,13 @@
                 <div class="row">
                     <div class="col-md-6">
                         <small class="text-muted">
-                            <i class="bi bi-calendar-plus"></i> Ngày tạo: 
+                            <i class="bi bi-calendar-plus"></i> Ngày tạo:
                             ${custom:formatDateTime(employee.createdAt)}
                         </small>
                     </div>
                     <div class="col-md-6 text-end">
                         <small class="text-muted">
-                            <i class="bi bi-calendar-check"></i> Cập nhật lần cuối: 
+                            <i class="bi bi-calendar-check"></i> Cập nhật lần cuối:
                             ${custom:formatDateTime(employee.updatedAt)}
                         </small>
                     </div>

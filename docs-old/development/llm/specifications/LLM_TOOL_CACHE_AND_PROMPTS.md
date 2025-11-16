@@ -18,11 +18,13 @@
 Khi LLM gọi tool và nhận kết quả, chúng ta có 2 chiến lược:
 
 **Option A: Gửi nguyên bản (No Summarization)**
+
 - ✅ Giữ nguyên toàn bộ context, chính xác 100%
 - ❌ Token cost cao khi kết quả lớn
 - ❌ Có thể vượt quá context window
 
 **Option B: Summarize trước khi gửi**
+
 - ✅ Tiết kiệm tokens
 - ✅ Fit được nhiều tool calls hơn trong context
 - ❌ Có thể mất thông tin quan trọng
@@ -411,6 +413,7 @@ public abstract class BaseProvider implements LLMProvider {
 ### **Why Templates?**
 
 Hiện tại các prompts bị hardcode:
+
 - ❌ Không thể customize
 - ❌ Không có i18n support
 - ❌ Khó maintain khi thay đổi
@@ -900,6 +903,7 @@ llm/
 ## ✅ Benefits
 
 ### **Tool Result Caching:**
+
 1. ✅ **Flexibility** - Choose strategy per use case
 2. ✅ **Cost Control** - Smart summarization saves tokens
 3. ✅ **Performance** - Cache reuse avoids redundant execution
@@ -907,6 +911,7 @@ llm/
 5. ✅ **Adaptive** - Learn from usage patterns
 
 ### **Prompt Templates:**
+
 1. ✅ **Maintainability** - Centralized prompt management
 2. ✅ **Customization** - Easy to modify without code changes
 3. ✅ **i18n Support** - Multi-language prompts

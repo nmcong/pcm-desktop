@@ -31,6 +31,13 @@ public class TabsContainer extends StackPane {
     protected final TabsDragHandler tabsDragHandler;
     protected final ChangeListener<Tab.@Nullable ClosingPolicy> closingPolicyListener;
     protected final ChangeListener<Tab.@Nullable ResizePolicy> resizePolicyListener;
+    protected boolean measuringTabs = false;
+    protected double scrollOffset;
+
+    //=========================================================================
+    // Layout
+    //=========================================================================
+    protected boolean scrollOffsetDirty = true;
 
     public TabsContainer(TabLine control, TabLineBehavior behavior) {
         this.control = control;
@@ -80,17 +87,11 @@ public class TabsContainer extends StackPane {
         tabsDragHandler.dispose();
     }
 
-    //=========================================================================
-    // Layout
-    //=========================================================================
-
-    protected boolean measuringTabs = false;
-
     @Override
     protected double computePrefWidth(double height) {
         return DoubleStream.of(computeTabsWidths()).sum()
-            + snappedLeftInset()
-            + snappedRightInset();
+                + snappedLeftInset()
+                + snappedRightInset();
     }
 
     @Override
@@ -102,8 +103,8 @@ public class TabsContainer extends StackPane {
         }
 
         return snapSizeY(height)
-            + snappedTopInset()
-            + snappedBottomInset();
+                + snappedTopInset()
+                + snappedBottomInset();
     }
 
     @Override
@@ -177,14 +178,18 @@ public class TabsContainer extends StackPane {
             // compute pref width with isTabsFit=true, actual value doesn't matter
             // this gives us minimal pref tab size
             double tabWidth = normalizeWidth(
-                resizePolicy.computePrefWidth(availableWidth, tabCount, true),
-                node.prefWidth(-1)
+                    resizePolicy.computePrefWidth(availableWidth, tabCount, true),
+                    node.prefWidth(-1)
             );
 
             prefWidth += tabWidth;
         }
         return snapSizeX(prefWidth);
     }
+
+    //=========================================================================
+    // Scroll
+    //=========================================================================
 
     /**
      * Compute tabs widths according to the {@link ResizePolicy}.
@@ -204,8 +209,8 @@ public class TabsContainer extends StackPane {
             TabSkin tabSkin = (TabSkin) node;
 
             double tabWidth = normalizeWidth(
-                resizePolicy.computePrefWidth(availableWidth, tabCount, isTabsFit),
-                tabSkin.prefWidth(-1)
+                    resizePolicy.computePrefWidth(availableWidth, tabCount, isTabsFit),
+                    tabSkin.prefWidth(-1)
             );
 
             tabWidth = snapSizeX(tabWidth);
@@ -247,13 +252,6 @@ public class TabsContainer extends StackPane {
 
         return constrainedWidth;
     }
-
-    //=========================================================================
-    // Scroll
-    //=========================================================================
-
-    protected double scrollOffset;
-    protected boolean scrollOffsetDirty = true;
 
     protected void setScrollOffset(double scrollOffset) {
         double availableWidth = snapSizeX(getWidth());

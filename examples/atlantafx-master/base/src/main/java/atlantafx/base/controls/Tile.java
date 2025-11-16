@@ -16,6 +16,10 @@ import org.jspecify.annotations.Nullable;
  */
 public class Tile extends TileBase {
 
+    private final ObjectProperty<Node> action = new SimpleObjectProperty<>(this, "action");
+    private final ObjectProperty<@Nullable Runnable> actionHandler
+            = new SimpleObjectProperty<>(this, "actionHandler");
+
     /**
      * Creates a new empty Tile.
      */
@@ -33,6 +37,10 @@ public class Tile extends TileBase {
                 @Nullable @NamedArg("description") String description) {
         this(title, description, null);
     }
+
+    ///////////////////////////////////////////////////////////////////////////
+    // Properties                                                            //
+    ///////////////////////////////////////////////////////////////////////////
 
     /**
      * Creates a new Tile with an initial title, description and graphic.
@@ -56,10 +64,6 @@ public class Tile extends TileBase {
         return new TileSkin(this);
     }
 
-    ///////////////////////////////////////////////////////////////////////////
-    // Properties                                                            //
-    ///////////////////////////////////////////////////////////////////////////
-
     /**
      * Represents the node to be placed in the tile’s action slot. It is commonly
      * used to place action controls that are associated with the tile.
@@ -67,8 +71,6 @@ public class Tile extends TileBase {
     public ObjectProperty<Node> actionProperty() {
         return action;
     }
-
-    private final ObjectProperty<Node> action = new SimpleObjectProperty<>(this, "action");
 
     public Node getAction() {
         return action.get();
@@ -87,9 +89,6 @@ public class Tile extends TileBase {
     public ObjectProperty<@Nullable Runnable> actionHandlerProperty() {
         return actionHandler;
     }
-
-    private final ObjectProperty<@Nullable Runnable> actionHandler
-        = new SimpleObjectProperty<>(this, "actionHandler");
 
     public @Nullable Runnable getActionHandler() {
         return actionHandler.get();

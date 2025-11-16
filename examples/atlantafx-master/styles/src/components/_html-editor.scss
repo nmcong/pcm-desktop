@@ -3,7 +3,7 @@
 @use "../settings/config" as cfg;
 @use "sass:math";
 
-$color-picker-rect-size:   8px !default;
+$color-picker-rect-size: 8px !default;
 $color-button-bg-selected: if(cfg.$darkMode, -color-base-6, -color-base-1) !default;
 
 .html-editor {
@@ -47,8 +47,8 @@ $color-button-bg-selected: if(cfg.$darkMode, -color-base-6, -color-base-1) !defa
     -fx-color-label-visible: false;
   }
 
-  &.html-editor-foreground>.color-picker-label>.picker-color>.picker-color-rect,
-  &.html-editor-background>.color-picker-label>.picker-color>.picker-color-rect {
+  &.html-editor-foreground > .color-picker-label > .picker-color > .picker-color-rect,
+  &.html-editor-background > .color-picker-label > .picker-color > .picker-color-rect {
     -fx-stroke: none;
   }
 }

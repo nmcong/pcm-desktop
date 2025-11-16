@@ -46,6 +46,7 @@ PCM Desktop follow **Clean Architecture** pattern với 4 layers chính:
 ```
 
 **Dependency Rules:**
+
 - UI → Application → Domain
 - Infrastructure → Domain (implements interfaces)
 - Domain depends on nothing (pure business logic)
@@ -106,6 +107,7 @@ com.noteflix.pcm/
 Entities represent core domain concepts with identity.
 
 #### **System Entity**
+
 ```java
 @Entity
 @Table(name = "systems")
@@ -137,6 +139,7 @@ public class System {
 ```
 
 #### **Subsystem Entity**
+
 ```java
 @Entity
 @Table(name = "subsystems",
@@ -179,6 +182,7 @@ public class Subsystem {
 ```
 
 #### **Project Entity**
+
 ```java
 @Entity
 @Table(name = "projects")
@@ -221,6 +225,7 @@ public class Project {
 ```
 
 #### **ProjectSource Entity**
+
 ```java
 @Entity
 @Table(name = "project_sources")
@@ -265,6 +270,7 @@ public class ProjectSource {
 ```
 
 #### **SourceFile Entity**
+
 ```java
 @Entity
 @Table(name = "source_files",
@@ -302,6 +308,7 @@ public class SourceFile {
 ```
 
 #### **AstSnapshot Entity**
+
 ```java
 @Entity
 @Table(name = "ast_snapshots")
@@ -332,6 +339,7 @@ public class AstSnapshot {
 ```
 
 #### **AstNode Entity**
+
 ```java
 @Entity
 @Table(name = "ast_nodes")
@@ -372,6 +380,7 @@ public class AstNode {
 ```
 
 #### **UserRequest Entity**
+
 ```java
 @Entity
 @Table(name = "user_requests")
@@ -421,6 +430,7 @@ public class UserRequest {
 ```
 
 #### **AgentResponse Entity**
+
 ```java
 @Entity
 @Table(name = "agent_responses")
@@ -1225,41 +1235,41 @@ public class FusionService {
 
 ### 6.1 Entity Summary
 
-| Entity | Package | Purpose | Key Relationships |
-|--------|---------|---------|-------------------|
-| System | domain.entity | Top-level hierarchy | → Subsystem (1:N) |
-| Subsystem | domain.entity | Mid-level grouping | → Project (1:N), → Batch (1:N) |
-| Project | domain.entity | Work item | → ProjectSource (1:N), → UserRequest (1:N) |
-| ProjectSource | domain.entity | Code repository | → SourceFile (1:N), → AstSnapshot (1:N) |
-| SourceFile | domain.entity | File metadata | → AstNode (1:N) |
-| AstNode | domain.entity | Code symbol | → AstRelationship (N:N) |
-| UserRequest | domain.entity | User question | → AgentResponse (1:N), → RequestArtifact (1:N) |
-| AgentResponse | domain.entity | AI answer | → AnswerFeedback (1:N) |
+| Entity        | Package       | Purpose             | Key Relationships                              |
+|---------------|---------------|---------------------|------------------------------------------------|
+| System        | domain.entity | Top-level hierarchy | → Subsystem (1:N)                              |
+| Subsystem     | domain.entity | Mid-level grouping  | → Project (1:N), → Batch (1:N)                 |
+| Project       | domain.entity | Work item           | → ProjectSource (1:N), → UserRequest (1:N)     |
+| ProjectSource | domain.entity | Code repository     | → SourceFile (1:N), → AstSnapshot (1:N)        |
+| SourceFile    | domain.entity | File metadata       | → AstNode (1:N)                                |
+| AstNode       | domain.entity | Code symbol         | → AstRelationship (N:N)                        |
+| UserRequest   | domain.entity | User question       | → AgentResponse (1:N), → RequestArtifact (1:N) |
+| AgentResponse | domain.entity | AI answer           | → AnswerFeedback (1:N)                         |
 
 ### 6.2 DTO Summary
 
-| DTO | Purpose | Used By |
-|-----|---------|---------|
-| SystemDTO | System data transfer | UI, API |
-| CreateSystemRequest | System creation | Use cases |
-| ProjectDTO | Project data transfer | UI, API |
-| UserRequestDTO | Request data transfer | UI, API |
-| ChunkHitDTO | Search result | Retrieval use cases |
-| CodeSnippetDTO | Code display | UI |
-| AstNodeDTO | AST node data | UI, AST Explorer |
+| DTO                 | Purpose               | Used By             |
+|---------------------|-----------------------|---------------------|
+| SystemDTO           | System data transfer  | UI, API             |
+| CreateSystemRequest | System creation       | Use cases           |
+| ProjectDTO          | Project data transfer | UI, API             |
+| UserRequestDTO      | Request data transfer | UI, API             |
+| ChunkHitDTO         | Search result         | Retrieval use cases |
+| CodeSnippetDTO      | Code display          | UI                  |
+| AstNodeDTO          | AST node data         | UI, AST Explorer    |
 
 ### 6.3 Service Summary
 
-| Service | Layer | Purpose |
-|---------|-------|---------|
-| SystemManagementService | Application | CRUD for hierarchy |
-| ScanProjectSourceUseCase | Application | Source scanning |
-| HybridRetrievalUseCase | Application | Search orchestration |
-| EmbeddingService | Infrastructure | Generate/cache embeddings |
-| VectorSearchService | Infrastructure | Qdrant integration |
-| LexicalSearchService | Infrastructure | FTS5 integration |
-| FusionService | Infrastructure | Combine search results |
-| AstParserService | Infrastructure | Parse source to AST |
+| Service                  | Layer          | Purpose                   |
+|--------------------------|----------------|---------------------------|
+| SystemManagementService  | Application    | CRUD for hierarchy        |
+| ScanProjectSourceUseCase | Application    | Source scanning           |
+| HybridRetrievalUseCase   | Application    | Search orchestration      |
+| EmbeddingService         | Infrastructure | Generate/cache embeddings |
+| VectorSearchService      | Infrastructure | Qdrant integration        |
+| LexicalSearchService     | Infrastructure | FTS5 integration          |
+| FusionService            | Infrastructure | Combine search results    |
+| AstParserService         | Infrastructure | Parse source to AST       |
 
 ---
 

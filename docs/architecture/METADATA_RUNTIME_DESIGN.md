@@ -1,6 +1,7 @@
 # PCM Desktop – Metadata & LLM Runtime Design (SQLite as Source of Truth)
 
-Tài liệu này mô tả chi tiết kiến trúc runtime khi **SQLite là nguồn dữ liệu chuẩn** cho metadata màn hình/hệ thống, và LLM chỉ truy cập thông tin qua **Metadata Service + RAG + LLM Client**.
+Tài liệu này mô tả chi tiết kiến trúc runtime khi **SQLite là nguồn dữ liệu chuẩn** cho metadata màn hình/hệ thống, và
+LLM chỉ truy cập thông tin qua **Metadata Service + RAG + LLM Client**.
 
 Tài liệu này bổ sung cho `docs/SCREEN_METADATA_SPEC.md` (định nghĩa schema logic + bảng SQLite/Index).
 
@@ -9,14 +10,16 @@ Tài liệu này bổ sung cho `docs/SCREEN_METADATA_SPEC.md` (định nghĩa sc
 ## 1. Mục tiêu & Phạm vi
 
 **Mục tiêu chính**
+
 - LLM có thể:
-  - Hiểu mối quan hệ giữa **Screen ↔ Code ↔ Database ↔ Rules ↔ Events**.
-  - Trả lời chính xác câu hỏi dạng:
-    - “Approve diễn ra như nào, lưu vào cột nào?”
-    - “Thay đổi cột ngày hết hạn thì ảnh hưởng đến nghiệp vụ nào (screen, batch, report, rules)?”
+    - Hiểu mối quan hệ giữa **Screen ↔ Code ↔ Database ↔ Rules ↔ Events**.
+    - Trả lời chính xác câu hỏi dạng:
+        - “Approve diễn ra như nào, lưu vào cột nào?”
+        - “Thay đổi cột ngày hết hạn thì ảnh hưởng đến nghiệp vụ nào (screen, batch, report, rules)?”
 - Dữ liệu metadata được lưu **trực tiếp trong SQLite**, không phụ thuộc YAML.
 
 **Phạm vi**
+
 - Thiết kế **service layer** trong Java để đọc/ghi metadata.
 - Thiết kế **RAG Index** dựa trên metadata + source code.
 - Thiết kế luồng **trả lời câu hỏi** trong Chat UI sử dụng LLM Client hiện có.
@@ -26,34 +29,35 @@ Tài liệu này bổ sung cho `docs/SCREEN_METADATA_SPEC.md` (định nghĩa sc
 ## 2. Kiến trúc tổng thể
 
 Các thành phần chính (logic):
+
 - **SQLite Metadata DB**
-  - Schema chi tiết tại `SCREEN_METADATA_SPEC.md` (mục 10, 11).
-  - Lưu screens, workflows, db tables/columns, rules, events, impacts, KB, documents, embeddings.
+    - Schema chi tiết tại `SCREEN_METADATA_SPEC.md` (mục 10, 11).
+    - Lưu screens, workflows, db tables/columns, rules, events, impacts, KB, documents, embeddings.
 
 - **Metadata Repository (DAO)**
-  - Lớp Java đọc/ghi thẳng vào SQLite (JDBC hoặc abstraction hiện có).
-  - Cung cấp các truy vấn mức thấp (per-table).
+    - Lớp Java đọc/ghi thẳng vào SQLite (JDBC hoặc abstraction hiện có).
+    - Cung cấp các truy vấn mức thấp (per-table).
 
 - **Metadata Service (Domain API)**
-  - Cung cấp hàm domain-friendly cho phần còn lại của hệ thống (UI, RAG, LLM tools).
+    - Cung cấp hàm domain-friendly cho phần còn lại của hệ thống (UI, RAG, LLM tools).
 
 - **RAG Index Service**
-  - Xây dựng các “fact documents” từ metadata + source code.
-  - Quản lý index trong `rag_documents` + `rag_embeddings`.
+    - Xây dựng các “fact documents” từ metadata + source code.
+    - Quản lý index trong `rag_documents` + `rag_embeddings`.
 
 - **LLM Orchestrator**
-  - Đứng trước `LLMClient` hiện có.
-  - Chịu trách nhiệm:
-    - Lấy context từ RAG/Metadata.
-    - Gộp context + câu hỏi → prompt.
-    - (Option) cho LLM sử dụng tools để truy vấn thêm từ SQLite.
+    - Đứng trước `LLMClient` hiện có.
+    - Chịu trách nhiệm:
+        - Lấy context từ RAG/Metadata.
+        - Gộp context + câu hỏi → prompt.
+        - (Option) cho LLM sử dụng tools để truy vấn thêm từ SQLite.
 
 - **Chat UI**
-  - Màn hình chat hiện có.
-  - Cung cấp:
-    - Context màn hình hiện tại (`currentScreenId`).
-    - Các filter (dùng context màn hình, hay toàn hệ thống).
-    - Hiển thị “nguồn tham chiếu” (screen, bảng/cột, class/method).
+    - Màn hình chat hiện có.
+    - Cung cấp:
+        - Context màn hình hiện tại (`currentScreenId`).
+        - Các filter (dùng context màn hình, hay toàn hệ thống).
+        - Hiển thị “nguồn tham chiếu” (screen, bảng/cột, class/method).
 
 ---
 
@@ -133,31 +137,32 @@ interface MetadataService {
 ```
 
 Gợi ý các DTO:
+
 - `ScreenDetails`
-  - `Screen screen`
-  - `List<ScreenComponent> components`
-  - `List<Workflow> workflows`
-  - `List<BusinessRule> rules`
+    - `Screen screen`
+    - `List<ScreenComponent> components`
+    - `List<Workflow> workflows`
+    - `List<BusinessRule> rules`
 
 - `ColumnDetails`
-  - `DbColumn column`
-  - `List<ColumnUsage> reads`
-  - `List<ColumnUsage> writes`
-  - `List<BusinessRule> rules`
+    - `DbColumn column`
+    - `List<ColumnUsage> reads`
+    - `List<ColumnUsage> writes`
+    - `List<BusinessRule> rules`
 
 - `ImpactSummary`
-  - `List<Screen> screens`
-  - `List<String> batchIds`
-  - `List<String> reportIds`
-  - `List<BusinessRule> rules`
+    - `List<Screen> screens`
+    - `List<String> batchIds`
+    - `List<String> reportIds`
+    - `List<BusinessRule> rules`
 
 - `ApprovalFlowDetails`
-  - `Screen screen`
-  - `Workflow workflow`
-  - `List<WorkflowStep> steps`
-  - `List<ColumnUsage> statusUpdates` (ví dụ: `APPROVAL_STATUS`)
-  - `List<AuditLog> auditLogs`
-  - `List<Event> events`
+    - `Screen screen`
+    - `Workflow workflow`
+    - `List<WorkflowStep> steps`
+    - `List<ColumnUsage> statusUpdates` (ví dụ: `APPROVAL_STATUS`)
+    - `List<AuditLog> auditLogs`
+    - `List<Event> events`
 
 ---
 
@@ -183,6 +188,7 @@ interface RagIndexRepository {
 ### 4.2. RagIndexService
 
 Trách nhiệm:
+
 - Build index từ SQLite metadata + source code.
 - Tìm context theo câu hỏi + context màn hình.
 
@@ -198,27 +204,30 @@ interface RagIndexService {
 ```
 
 `rebuildIndex` gợi ý các bước:
+
 1. Xoá documents/embeddings cũ cho project hiện tại (nếu cần).
 2. Sinh **fact documents** từ SQLite:
-   - Cho mỗi screen:
-     - Fact: “Screen {id} {name} thuộc module {module}, dùng bảng X, cột Y.”
-   - Cho mỗi column:
-     - Fact: “Column {table}.{column} được cập nhật bởi {class.method}, ảnh hưởng tới screens/batch/report/rules…”
-   - Cho mỗi workflow, rule, event, KB.
+    - Cho mỗi screen:
+        - Fact: “Screen {id} {name} thuộc module {module}, dùng bảng X, cột Y.”
+    - Cho mỗi column:
+        - Fact: “Column {table}.{column} được cập nhật bởi {class.method}, ảnh hưởng tới screens/batch/report/rules…”
+    - Cho mỗi workflow, rule, event, KB.
 3. Index source code:
-   - Chunk theo class/method (sử dụng `rag.chunking` hiện có).
-   - Mỗi chunk có metadata: `path`, `symbol`, `screen_id` (nếu có link), `table_name`, `column_name` (nếu parse được).
+    - Chunk theo class/method (sử dụng `rag.chunking` hiện có).
+    - Mỗi chunk có metadata: `path`, `symbol`, `screen_id` (nếu có link), `table_name`, `column_name` (nếu parse được).
 4. Gọi `LLMClient` (embedding API) hoặc Embedding Service nội bộ để sinh embedding cho mỗi document.
 5. Lưu embedding vào `rag_embeddings`.
 
 `search` gợi ý:
+
 - Tạo embedding cho câu hỏi.
-- Query top-k embeddings (cách thực hiện tuỳ engine bạn dùng; với SQLite có thể lưu vector dạng BLOB và dùng approximate search).
+- Query top-k embeddings (cách thực hiện tuỳ engine bạn dùng; với SQLite có thể lưu vector dạng BLOB và dùng approximate
+  search).
 - Áp dụng filter:
-  - Nếu có `currentScreenId` → ưu tiên documents cùng screen + các `column_impacts` liên quan.
-  - Nếu nhận diện được tên bảng/cột từ câu hỏi → filter thêm theo `table_name`, `column_name`.
+    - Nếu có `currentScreenId` → ưu tiên documents cùng screen + các `column_impacts` liên quan.
+    - Nếu nhận diện được tên bảng/cột từ câu hỏi → filter thêm theo `table_name`, `column_name`.
 - Trả về `RagSearchResult`:
-  - `List<RagContextChunk> chunks` (mỗi chunk chứa `content` + metadata).
+    - `List<RagContextChunk> chunks` (mỗi chunk chứa `content` + metadata).
 
 ---
 
@@ -235,15 +244,16 @@ interface LlmContextBuilder {
 ```
 
 `buildContext` gợi ý:
+
 1. Gọi `RagIndexService.search(question, currentScreenId)` để lấy top-k chunks.
 2. Nếu câu hỏi chứa tên bảng/cột:
-   - Gọi `MetadataService.getColumnDetails(table, column)` + `getImpactsForColumn(...)`.
+    - Gọi `MetadataService.getColumnDetails(table, column)` + `getImpactsForColumn(...)`.
 3. Nếu câu hỏi liên quan đến approve/flow:
-   - Gọi `MetadataService.getApprovalFlowForScreen(currentScreenId)` (nếu có).
+    - Gọi `MetadataService.getApprovalFlowForScreen(currentScreenId)` (nếu có).
 4. Kết hợp:
-   - Một đoạn **system context** ngắn mô tả hệ thống.
-   - Một đoạn **structured summary** (tự format bằng code từ DTO).
-   - Các **chunks text** từ RAG (giới hạn token, ví dụ 4–10 chunk).
+    - Một đoạn **system context** ngắn mô tả hệ thống.
+    - Một đoạn **structured summary** (tự format bằng code từ DTO).
+    - Các **chunks text** từ RAG (giới hạn token, ví dụ 4–10 chunk).
 
 ### 5.2. LlmOrchestrator
 
@@ -256,17 +266,18 @@ interface LlmOrchestrator {
 ```
 
 Luồng:
+
 1. Gọi `LlmContextBuilder.buildContext(...)`.
 2. Tạo prompt:
-   - `system`: Mô tả vai trò (“Bạn là kiến trúc sư hệ thống của PCM Desktop…”).
-   - `context`: context structured + chunks.
-   - `user`: câu hỏi gốc.
+    - `system`: Mô tả vai trò (“Bạn là kiến trúc sư hệ thống của PCM Desktop…”).
+    - `context`: context structured + chunks.
+    - `user`: câu hỏi gốc.
 3. Gọi `LLMClient` với mode chat/complete.
 4. (Tùy chọn) Cho phép LLM dùng tools:
-   - `getImpactsForColumn`, `getScreenDetails`,… thông qua `MetadataService`.
+    - `getImpactsForColumn`, `getScreenDetails`,… thông qua `MetadataService`.
 5. Trả về `LlmAnswer`:
-   - `String text` – câu trả lời.
-   - `List<Reference>` – danh sách screen/table/column/method mà câu trả lời dựa vào.
+    - `String text` – câu trả lời.
+    - `List<Reference>` – danh sách screen/table/column/method mà câu trả lời dựa vào.
 
 ---
 
@@ -276,54 +287,55 @@ Luồng:
 
 1. User chọn project source folder + DB metadata trong Settings.
 2. App chạy job:
-   - Scan DB/schema, insert vào `db_tables`, `db_columns`.
-   - (Tùy cách nhập) Admin update screen/workflow/rules/events trong “Metadata Admin UI”.
+    - Scan DB/schema, insert vào `db_tables`, `db_columns`.
+    - (Tùy cách nhập) Admin update screen/workflow/rules/events trong “Metadata Admin UI”.
 3. Gọi `RagIndexService.rebuildIndex(config)`:
-   - Sinh fact documents từ SQLite + source code.
-   - Lưu documents + embeddings.
+    - Sinh fact documents từ SQLite + source code.
+    - Lưu documents + embeddings.
 
 ### 6.2. Luồng 2 – User hỏi về màn hình đang mở
 
 1. Chat UI gửi:
-   - `question`
-   - `currentScreenId` (ví dụ `AR-APPROVAL-001`).
+    - `question`
+    - `currentScreenId` (ví dụ `AR-APPROVAL-001`).
 2. `LlmOrchestrator.answerUserQuestion(question, currentScreenId)`:
-   - `LlmContextBuilder.buildContext(...)`:
-     - `RagIndexService.search(question, currentScreenId)`.
-     - `MetadataService.getScreenDetails(currentScreenId)`.
-     - Nếu có từ khóa cột (vd. `EXPIRY_DATE`) → `getColumnDetails` + `getImpactsForColumn`.
-   - Gọi `LLMClient` với context đó.
+    - `LlmContextBuilder.buildContext(...)`:
+        - `RagIndexService.search(question, currentScreenId)`.
+        - `MetadataService.getScreenDetails(currentScreenId)`.
+        - Nếu có từ khóa cột (vd. `EXPIRY_DATE`) → `getColumnDetails` + `getImpactsForColumn`.
+    - Gọi `LLMClient` với context đó.
 3. Chat UI hiển thị:
-   - Câu trả lời.
-   - Danh sách reference (screen, bảng/cột, method, workflow) để user nhảy tới.
+    - Câu trả lời.
+    - Danh sách reference (screen, bảng/cột, method, workflow) để user nhảy tới.
 
 ### 6.3. Luồng 3 – User hỏi về cột/bảng/impact tổng quát
 
 1. Chat UI gửi chỉ `question` (không có `currentScreenId`).
 2. `LlmContextBuilder`:
-   - Dùng `RagIndexService.search(question, Optional.empty())`.
-   - Parse câu hỏi để tìm bảng/cột (regex/heuristic).
-   - Gọi `MetadataService.getColumnDetails` + `getImpactsForColumn`.
+    - Dùng `RagIndexService.search(question, Optional.empty())`.
+    - Parse câu hỏi để tìm bảng/cột (regex/heuristic).
+    - Gọi `MetadataService.getColumnDetails` + `getImpactsForColumn`.
 3. LLM trả lời với focus vào impacts:
-   - Screens nào bị ảnh hưởng.
-   - Batch jobs nào.
-   - Reports nào.
-   - Rules nào.
+    - Screens nào bị ảnh hưởng.
+    - Batch jobs nào.
+    - Reports nào.
+    - Rules nào.
 
 ---
 
 ## 7. Hướng phát triển tiếp
 
 - Xây dựng **Metadata Admin UI**:
-  - Tabs: Screens, DB Schema, Workflows, Rules, Events, KB.
-  - Mỗi tab bind vào `MetadataService` để CRUD.
+    - Tabs: Screens, DB Schema, Workflows, Rules, Events, KB.
+    - Mỗi tab bind vào `MetadataService` để CRUD.
 - Thêm **tools** cho LLM:
-  - Cho phép LLM gọi `getImpactsForColumn`, `getScreenDetails`, `getRulesForScreen`,… khi cần chi tiết.
+    - Cho phép LLM gọi `getImpactsForColumn`, `getScreenDetails`, `getRulesForScreen`,… khi cần chi tiết.
 - Cải thiện **prompt templates**:
-  - Template riêng cho:
-    - Câu hỏi về flow (approve, process).
-    - Câu hỏi về impact (change field/column).
-    - Câu hỏi về architecture (mối quan hệ module/screen).
+    - Template riêng cho:
+        - Câu hỏi về flow (approve, process).
+        - Câu hỏi về impact (change field/column).
+        - Câu hỏi về architecture (mối quan hệ module/screen).
 
-Với kiến trúc này, chỉ cần SQLite được cập nhật đầy đủ, LLM + RAG + LLMClient hiện có sẽ có đủ thông tin để trả lời các câu hỏi nghiệp vụ phức tạp một cách chính xác, có dẫn chiếu tới bảng/cột/method/screen cụ thể. 
+Với kiến trúc này, chỉ cần SQLite được cập nhật đầy đủ, LLM + RAG + LLMClient hiện có sẽ có đủ thông tin để trả lời các
+câu hỏi nghiệp vụ phức tạp một cách chính xác, có dẫn chiếu tới bảng/cột/method/screen cụ thể. 
 

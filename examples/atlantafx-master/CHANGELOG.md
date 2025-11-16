@@ -6,7 +6,8 @@
 
 ### Added
 
-- (Base) 🚀 `TabLine` component is an alternative `TabPane` control with custom slots, resize policies, tabs pinning and more.
+- (Base) 🚀 `TabLine` component is an alternative `TabPane` control with custom slots, resize policies, tabs pinning and
+  more.
 - (Base) 🚀 `SegmentedControl` is another tabs component flavor for a limited number of fixed tabs.
 - (Base) 🚀 `SelectableTextFlow` is a `TextFlow` that supports text selection.
 - (Base) Label graphic support in the `ToggleSwitch` (thanks to **crschnick**).
@@ -77,14 +78,17 @@
 - (CSS) An utility CSS classes for setting background colors.
 - (CSS) Distinctive background color for the readonly text input state.
 - (CSS) Breadcrumbs support for the `Toolbar`.
-- (CSS) `Button` shadow effect support (`-color-button-shadow`). Only for themes compiled with the `button.$use-shadow` flag enabled.
+- (CSS) `Button` shadow effect support (`-color-button-shadow`). Only for themes compiled with the `button.$use-shadow`
+  flag enabled.
 - (Sampler) 🚀 The Sampler app is completely rewritten to give it a more modern look and feel.
-- (Sampler) 🚀 SceneBuilder integration. AtlantaFX themes can be installed (or updated, or uninstalled) directly from the Sampler app.
+- (Sampler) 🚀 SceneBuilder integration. AtlantaFX themes can be installed (or updated, or uninstalled) directly from the
+  Sampler app.
 
 ### Improved
 
 - (Build) JavaFX version bump to 20 (March 2023).
-- (Base) A proper [Javadoc](https://mkpaz.github.io/atlantafx/apidocs/atlantafx.base/module-summary.html) for all controls.
+- (Base) A proper [Javadoc](https://mkpaz.github.io/atlantafx/apidocs/atlantafx.base/module-summary.html) for all
+  controls.
 - (Base) All controls are now more FXML-friendly.
 - (CSS) Looked-up color variables for `Separator` and the selected `TabPane` tab..
 - (CSS) Border radius and shadow effect to popup menu for `ComboBox` and all `ComboBox`-based controls.
@@ -92,7 +96,8 @@
 - (CSS) Icon buttons are now use `-fx-content-display: graphic-only` as the default.
 - (CSS) Better `TreeView` alt icon. It's chevron character instead of `+/-`.
 - (CSS) Better toolbar buttons styling.
-- (CSS) Baseline-left is the default alignment for virtualized controls, because center-left sometimes lags on scrolling in large tables.
+- (CSS) Baseline-left is the default alignment for virtualized controls, because center-left sometimes lags on scrolling
+  in large tables.
 
 ### Fixed
 
@@ -100,7 +105,8 @@
 - (Base) NPE when the Popover owner is not added to the scene.
 - (CSS) `Popover` arrow background color.
 - (CSS) `ListView` with `.bordered` class displays borders on empty cells.
-- (CSS) Baseline-left is now the default alignment for virtualized controls. This change was made because center-left alignment can lead to scrolling lags in large tables.
+- (CSS) Baseline-left is now the default alignment for virtualized controls. This change was made because center-left
+  alignment can lead to scrolling lags in large tables.
 - (CSS) Tooltip inherits font properties from parent node.
 - (CSS) Double-opacity in disabled `ChoiceBox`.
 
@@ -140,22 +146,27 @@ This is a bugfix/maintenance release that also contains a few style improvements
 - (Sampler) 🚀 External themes support. Sampler can now be used to develop custom themes.
 - (Sampler) 🚀 Brand new improved user interface.
 - (Sampler) Widget page that aims to provide examples of some well-known components.
-- (Base) `RingProgressIndicator` control. Like `ProgressIndicator`, but fully customizable and uses arc instead of fill to indicate the progress value.
+- (Base) `RingProgressIndicator` control. Like `ProgressIndicator`, but fully customizable and uses arc instead of fill
+  to indicate the progress value.
 - (Base) `ProgressSliderSkin` skin. A slider with color track.
 - (Base) `Breadcrumbs` API to provide more control customization:
-  - Anything that extends `ButtonBase` can be used as `Breadcrumbs` item.
-  - Divider is now customizable via corresponding factory.
-- (Base) `PasswordTextFormatter` utility. An alternative to the `PasswordField`, the formatter that masks or unmasks `TextField` content based on boolean property.
-- (Base) Properties for setting the top and bottom node for `DatePicker`. E.g. those can be a clock widget or event list.
+    - Anything that extends `ButtonBase` can be used as `Breadcrumbs` item.
+    - Divider is now customizable via corresponding factory.
+- (Base) `PasswordTextFormatter` utility. An alternative to the `PasswordField`, the formatter that masks or
+  unmasks `TextField` content based on boolean property.
+- (Base) Properties for setting the top and bottom node for `DatePicker`. E.g. those can be a clock widget or event
+  list.
 - (CSS) Size style support for the `TextField`, `Button`, `Slider`.
 - (CSS) Rounded style support for the`TextField`, `Button`.
 - (CSS) Dense style support for the `TabPane`, `TitledPane`, `Accordion`.
 - (CSS) `.alt-icon` tweak support for the `TreeView`, `TitledPane`, `Accordion`.
-- (CSS) Input group support for the `Label`. `Label` graphic property can be used to add arbitrary node to the input group.
+- (CSS) Input group support for the `Label`. `Label` graphic property can be used to add arbitrary node to the input
+  group.
 - (CSS) Utility classes for muted and subtle text style.
 - (CSS) Utility classes for box elevation effect: `.elevated-[1-4]`.
 - (CSS) New global looked-up color variable `-color-shadow-default` for creating shadow effects.
-- 
+-
+
 ### Improved
 
 - (CSS) 🚀 Nord light and dark themes rewamp with better color contrast and improved design.

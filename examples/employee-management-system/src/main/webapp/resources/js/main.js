@@ -2,67 +2,67 @@
  * Main JavaScript file for Employee Management System
  */
 
-$(document).ready(function() {
+$(document).ready(function () {
     console.log('Employee Management System initialized');
-    
+
     // Auto-hide alerts after 5 seconds
-    setTimeout(function() {
-        $('.alert').fadeOut('slow', function() {
+    setTimeout(function () {
+        $('.alert').fadeOut('slow', function () {
             $(this).remove();
         });
     }, 5000);
-    
+
     // Initialize tooltips
     var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
     tooltipTriggerList.map(function (tooltipTriggerEl) {
         return new bootstrap.Tooltip(tooltipTriggerEl);
     });
-    
+
     // Confirm before leaving form with unsaved changes
     var formChanged = false;
-    $('form input, form select, form textarea').on('change', function() {
+    $('form input, form select, form textarea').on('change', function () {
         formChanged = true;
     });
-    
-    $('form').on('submit', function() {
+
+    $('form').on('submit', function () {
         formChanged = false;
     });
-    
-    $(window).on('beforeunload', function() {
+
+    $(window).on('beforeunload', function () {
         if (formChanged) {
             return 'Bạn có thay đổi chưa được lưu. Bạn có chắc muốn rời khỏi trang?';
         }
     });
-    
+
     // Format currency inputs
-    $('input[type="number"][name="salary"]').on('blur', function() {
+    $('input[type="number"][name="salary"]').on('blur', function () {
         var value = $(this).val();
         if (value) {
             $(this).val(Math.round(value));
         }
     });
-    
+
     // Disable submit button after first click to prevent double submission
-    $('form').on('submit', function() {
+    $('form').on('submit', function () {
         $(this).find('button[type="submit"]').prop('disabled', true);
     });
-    
+
     // Search functionality with debounce
     var searchTimeout;
-    $('#searchInput').on('keyup', function() {
+    $('#searchInput').on('keyup', function () {
         clearTimeout(searchTimeout);
         var keyword = $(this).val();
-        
-        searchTimeout = setTimeout(function() {
+
+        searchTimeout = setTimeout(function () {
             if (keyword.length >= 3 || keyword.length === 0) {
                 // Perform search via AJAX
                 performSearch(keyword);
             }
         }, 500);
     });
-    
+
     // Table row click handler
-    $('.table tbody tr').on('click', function(e) {
+    $('.table tbody tr').on('click', function (e) {
         // Don't trigger if clicking on buttons
         if ($(e.target).closest('.btn').length === 0) {
             var viewUrl = $(this).find('.btn-info').attr('href');
@@ -71,16 +71,16 @@ $(document).ready(function() {
             }
         }
     });
-    
+
     // Highlight search terms
     function highlightSearchTerm(text, term) {
         if (!term) return text;
         var regex = new RegExp('(' + term + ')', 'gi');
         return text.replace(regex, '<mark>$1</mark>');
     }
-    
+
     // Format date inputs to Vietnamese format
-    $('input[type="date"]').each(function() {
+    $('input[type="date"]').each(function () {
         var input = $(this);
         if (input.val()) {
             // Already has a value, keep it
@@ -92,17 +92,17 @@ $(document).ready(function() {
             }
         }
     });
-    
+
     // Add loading spinner for long operations
     function showLoadingSpinner() {
         var spinner = '<div class="spinner-overlay"><div class="spinner-border spinner-border-lg text-light" role="status"><span class="visually-hidden">Loading...</span></div></div>';
         $('body').append(spinner);
     }
-    
+
     function hideLoadingSpinner() {
         $('.spinner-overlay').remove();
     }
-    
+
     // AJAX search function
     function performSearch(keyword) {
         if (!keyword) {
@@ -110,35 +110,35 @@ $(document).ready(function() {
             window.location.href = window.location.pathname;
             return;
         }
-        
+
         // Perform search
         window.location.href = window.location.pathname + '?search=' + encodeURIComponent(keyword);
     }
-    
+
     // Print functionality
-    window.printPage = function() {
+    window.printPage = function () {
         window.print();
     };
-    
+
     // Export to CSV (simple implementation)
-    window.exportToCSV = function() {
+    window.exportToCSV = function () {
         var table = document.querySelector('table');
         if (!table) return;
-        
+
         var csv = [];
         var rows = table.querySelectorAll('tr');
-        
+
         for (var i = 0; i < rows.length; i++) {
             var row = [], cols = rows[i].querySelectorAll('td, th');
-            
+
             for (var j = 0; j < cols.length - 1; j++) { // Skip last column (actions)
                 var text = cols[j].innerText.replace(/"/g, '""');
                 row.push('"' + text + '"');
             }
-            
+
             csv.push(row.join(','));
         }
-        
+
         // Download CSV
         var csvContent = 'data:text/csv;charset=utf-8,' + csv.join('\n');
         var encodedUri = encodeURI(csvContent);
@@ -149,17 +149,17 @@ $(document).ready(function() {
         link.click();
         document.body.removeChild(link);
     };
-    
+
     // Validate phone number format
-    $('input[type="tel"]').on('keypress', function(e) {
+    $('input[type="tel"]').on('keypress', function (e) {
         // Only allow numbers
         if (e.which < 48 || e.which > 57) {
             e.preventDefault();
         }
     });
-    
+
     // Auto-uppercase first letter
-    $('input[name="firstName"], input[name="lastName"]').on('blur', function() {
+    $('input[name="firstName"], input[name="lastName"]').on('blur', function () {
         var value = $(this).val();
         if (value) {
             $(this).val(value.charAt(0).toUpperCase() + value.slice(1));

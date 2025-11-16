@@ -40,32 +40,32 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface LLMFunction {
 
-  /**
-   * Function name (unique identifier). If empty, uses method name converted to snake_case.
-   *
-   * @return Function name
-   */
-  String name() default "";
+    /**
+     * Function name (unique identifier). If empty, uses method name converted to snake_case.
+     *
+     * @return Function name
+     */
+    String name() default "";
 
-  /**
-   * Function description. This helps the LLM understand when to use this function. Be clear and
-   * descriptive.
-   *
-   * @return Function description
-   */
-  String description();
+    /**
+     * Function description. This helps the LLM understand when to use this function. Be clear and
+     * descriptive.
+     *
+     * @return Function description
+     */
+    String description();
 
-  /**
-   * Whether this function is enabled. Disabled functions are not registered.
-   *
-   * @return true if enabled (default), false if disabled
-   */
-  boolean enabled() default true;
+    /**
+     * Whether this function is enabled. Disabled functions are not registered.
+     *
+     * @return true if enabled (default), false if disabled
+     */
+    boolean enabled() default true;
 
-  /**
-   * Categories/tags for this function. Can be used for filtering or grouping.
-   *
-   * @return Function categories
-   */
-  String[] categories() default {};
+    /**
+     * Categories/tags for this function. Can be used for filtering or grouping.
+     *
+     * @return Function categories
+     */
+    String[] categories() default {};
 }

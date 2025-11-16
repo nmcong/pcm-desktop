@@ -42,7 +42,7 @@ import org.jspecify.annotations.Nullable;
 public class PasswordTextField extends CustomTextField {
 
     protected final ReadOnlyObjectWrapper<PasswordTextFormatter> formatter
-        = new ReadOnlyObjectWrapper<>(this, "formatter");
+            = new ReadOnlyObjectWrapper<>(this, "formatter");
 
     /**
      * Creates an empty PasswordTextField.

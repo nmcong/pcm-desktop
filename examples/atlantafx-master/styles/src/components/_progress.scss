@@ -7,35 +7,35 @@
 //  ProgressBar                                                              //
 ///////////////////////////////////////////////////////////////////////////////
 
-$color-bar-track: -color-bg-subtle       !default;
-$color-bar-fill:  -color-accent-emphasis !default;
+$color-bar-track: -color-bg-subtle !default;
+$color-bar-fill: -color-accent-emphasis !default;
 
 $color-ring-indicator-track: -color-bg-subtle !default;
-$color-ring-indicator-fill:  -color-accent-emphasis !default;
+$color-ring-indicator-fill: -color-accent-emphasis !default;
 
 $size: (
-  "small":  2px,
+  "small": 2px,
   "medium": 0.4em,
-  "large":  0.8em
+  "large": 0.8em
 ) !default;
 
 .progress-bar {
 
   -color-progress-bar-track: $color-bar-track;
-  -color-progress-bar-fill:  $color-bar-fill;
+  -color-progress-bar-fill: $color-bar-fill;
 
   -fx-indeterminate-bar-length: 60;
   -fx-indeterminate-bar-escape: true;
   -fx-indeterminate-bar-flip: true;
   -fx-indeterminate-bar-animation-time: 2;
 
-  >.track {
+  > .track {
     -fx-background-color: -color-progress-bar-track;
     -fx-background-insets: 0;
     -fx-background-radius: cfg.$border-radius;
   }
 
-  >.bar {
+  > .bar {
     -fx-background-color: -color-progress-bar-fill;
     -fx-background-insets: 0;
     -fx-background-radius: cfg.$border-radius;
@@ -43,19 +43,19 @@ $size: (
   }
 
   &.small {
-    >.bar {
+    > .bar {
       -fx-padding: map-get($size, "small");
     }
   }
 
   &.medium {
-    >.bar {
+    > .bar {
       -fx-padding: map-get($size, "medium");
     }
   }
 
   &.large {
-    >.bar {
+    > .bar {
       -fx-padding: map-get($size, "large");
     }
   }
@@ -74,24 +74,24 @@ $size: (
   -fx-indeterminate-segment-count: 12;
   -fx-spin-enabled: true;
 
-  >.determinate-indicator {
-    >.indicator {
+  > .determinate-indicator {
+    > .indicator {
       -fx-background-color: -color-border-default, -color-bg-default;
       -fx-background-insets: 0, 1;
     }
 
-    >.progress {
+    > .progress {
       -fx-background-color: -color-accent-emphasis;
       -fx-padding: 0.6em; // limits tick size
     }
 
-    >.tick {
+    > .tick {
       -fx-background-color: -color-fg-emphasis;
       -fx-background-insets: 0;
       @include icons.get("check");
     }
 
-    >.percentage {
+    > .percentage {
       -fx-font-size: cfg.$font-small;
       -fx-fill: -color-fg-default;
     }
@@ -102,7 +102,7 @@ $size: (
   }
 
   &:indeterminate {
-    >.spinner {
+    > .spinner {
       // undo styling from .spinner
       -fx-background-color: transparent;
       -fx-background-insets: 0;
@@ -170,33 +170,33 @@ $size: (
 .ring-progress-indicator {
   -fx-indeterminate-animation-time: 3;
   -color-progress-indicator-track: $color-ring-indicator-track;
-  -color-progress-indicator-fill:  $color-ring-indicator-fill;
+  -color-progress-indicator-fill: $color-ring-indicator-fill;
 
-  >.container {
+  > .container {
     // for extra small/large indicators you should also change the stroke width
     -fx-min-width: 4em;
 
-    >.track {
+    > .track {
       -fx-stroke: -color-progress-indicator-track;
       -fx-stroke-width: 5px;
     }
 
-    >.ring {
+    > .ring {
       -fx-stroke: -color-progress-indicator-fill;
       -fx-stroke-width: 5px;
     }
   }
 
   &:indeterminate {
-    >.container {
+    > .container {
       // for extra small/large indicators you should also change the stroke width
       -fx-min-width: 1.5em;
 
-      >.track {
+      > .track {
         visibility: hidden;
       }
 
-      >.ring {
+      > .ring {
         -fx-stroke: linear-gradient(-color-bg-default, -color-progress-indicator-fill);
         -fx-stroke-width: 2px;
       }

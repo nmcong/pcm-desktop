@@ -39,6 +39,7 @@
 ### 2.1 Main Menu Bar
 
 #### **File Menu**
+
 ```
 File
 ├─ New
@@ -60,6 +61,7 @@ File
 ```
 
 #### **Edit Menu**
+
 ```
 Edit
 ├─ Undo                   Ctrl+Z
@@ -75,6 +77,7 @@ Edit
 ```
 
 #### **View Menu**
+
 ```
 View
 ├─ Navigation Sidebar     [ √ ]
@@ -92,6 +95,7 @@ View
 ```
 
 #### **Navigate Menu**
+
 ```
 Navigate
 ├─ Go to AI Assistant     Ctrl+1
@@ -108,6 +112,7 @@ Navigate
 ```
 
 #### **Tools Menu**
+
 ```
 Tools
 ├─ Trigger Source Scan
@@ -126,6 +131,7 @@ Tools
 ```
 
 #### **Help Menu**
+
 ```
 Help
 ├─ Documentation          F1
@@ -176,6 +182,7 @@ Help
 **Default:** Yes (home screen)
 
 **Layout:**
+
 ```
 ┌────────────────────────────────────────────────────────────┐
 │  AI Assistant                            [New Chat] [⋮]    │
@@ -207,28 +214,30 @@ Help
 ```
 
 **Components:**
+
 - **Conversation List** (Left sidebar)
-  - New chat button
-  - Search conversations
-  - Conversation items (title, date, token count)
+    - New chat button
+    - Search conversations
+    - Conversation items (title, date, token count)
 - **Chat Area** (Center)
-  - Message list (scrollable)
-  - User message bubbles (right-aligned)
-  - Assistant message bubbles (left-aligned)
-  - Code snippets (syntax highlighted)
-  - Citations (clickable links to sources)
-  - Feedback buttons (👍 👎)
+    - Message list (scrollable)
+    - User message bubbles (right-aligned)
+    - Assistant message bubbles (left-aligned)
+    - Code snippets (syntax highlighted)
+    - Citations (clickable links to sources)
+    - Feedback buttons (👍 👎)
 - **Input Area** (Bottom)
-  - Multi-line text input
-  - Attach file button
-  - Voice input button (future)
-  - Send button
+    - Multi-line text input
+    - Attach file button
+    - Voice input button (future)
+    - Send button
 - **Context Panel** (Collapsible, right side)
-  - Project selector dropdown
-  - Retrieved sources list
-  - Source preview
+    - Project selector dropdown
+    - Retrieved sources list
+    - Source preview
 
 **Modals:**
+
 - `NewConversationDialog` - Choose project scope
 - `AttachmentDialog` - Upload files, select existing code
 - `SourcePreviewDialog` - View full source code
@@ -242,6 +251,7 @@ Help
 **Shortcut:** `Ctrl+2`
 
 **Layout:**
+
 ```
 ┌────────────────────────────────────────────────────────────┐
 │  System Manager                     [+ Add] [Refresh]      │
@@ -271,21 +281,23 @@ Help
 ```
 
 **Components:**
+
 - **Hierarchy Tree** (Left)
-  - Expandable tree view
-  - Icons for each type (System, Subsystem, Project, Batch)
-  - Context menu (right-click)
-  - Drag-and-drop reorder (future)
+    - Expandable tree view
+    - Icons for each type (System, Subsystem, Project, Batch)
+    - Context menu (right-click)
+    - Drag-and-drop reorder (future)
 - **Detail Panel** (Right)
-  - Form fields (dynamic based on selection)
-  - Save/Cancel/Delete buttons
-  - Statistics box
+    - Form fields (dynamic based on selection)
+    - Save/Cancel/Delete buttons
+    - Statistics box
 - **Toolbar** (Top)
-  - Add dropdown (System/Subsystem/Project/Batch)
-  - Refresh button
-  - Search/filter box
+    - Add dropdown (System/Subsystem/Project/Batch)
+    - Refresh button
+    - Search/filter box
 
 **Modals:**
+
 - `AddSystemDialog` - Create new System
 - `AddSubsystemDialog` - Create new Subsystem (select parent)
 - `AddProjectDialog` - Create new Project (select parent)
@@ -293,37 +305,38 @@ Help
 - `DeleteConfirmDialog` - Confirm delete with cascade warning
 
 **Forms:**
+
 - `SystemForm`
-  - code: TextField (required, unique)
-  - name: TextField (required)
-  - description: TextArea
-  - owner: TextField
-  
+    - code: TextField (required, unique)
+    - name: TextField (required)
+    - description: TextArea
+    - owner: TextField
+
 - `SubsystemForm`
-  - system_id: ComboBox (required)
-  - code: TextField (required, unique per system)
-  - name: TextField (required)
-  - description: TextArea
-  - tech_stack: TextField
-  - status: ComboBox (active, deprecated, archived)
-  
+    - system_id: ComboBox (required)
+    - code: TextField (required, unique per system)
+    - name: TextField (required)
+    - description: TextArea
+    - tech_stack: TextField
+    - status: ComboBox (active, deprecated, archived)
+
 - `ProjectForm`
-  - subsystem_id: ComboBox (required)
-  - code: TextField (required)
-  - name: TextField (required)
-  - description: TextArea
-  - lead: TextField
-  - status: ComboBox (draft, active, completed, cancelled)
-  - start_date: DatePicker
-  - end_date: DatePicker
-  
+    - subsystem_id: ComboBox (required)
+    - code: TextField (required)
+    - name: TextField (required)
+    - description: TextArea
+    - lead: TextField
+    - status: ComboBox (draft, active, completed, cancelled)
+    - start_date: DatePicker
+    - end_date: DatePicker
+
 - `BatchForm`
-  - subsystem_id: ComboBox (required)
-  - code: TextField (required)
-  - name: TextField (required)
-  - description: TextArea
-  - schedule_cron: TextField (with validator)
-  - status: ComboBox (idle, running, failed, disabled)
+    - subsystem_id: ComboBox (required)
+    - code: TextField (required)
+    - name: TextField (required)
+    - description: TextArea
+    - schedule_cron: TextField (with validator)
+    - status: ComboBox (idle, running, failed, disabled)
 
 ---
 
@@ -333,6 +346,7 @@ Help
 **Shortcut:** `Ctrl+3`
 
 **Layout:**
+
 ```
 ┌────────────────────────────────────────────────────────────┐
 │  Source Manager                [+ Add Source] [Scan All]   │
@@ -364,40 +378,42 @@ Help
 ```
 
 **Components:**
+
 - **Filter Bar** (Top)
-  - Project dropdown
-  - Status filter
-  - Search box
+    - Project dropdown
+    - Status filter
+    - Search box
 - **Sources Table**
-  - Project name
-  - Root path
-  - VCS type
-  - Scan status (with icon)
-  - Last scanned timestamp
-  - Action buttons (Scan, View, Remove)
+    - Project name
+    - Root path
+    - VCS type
+    - Scan status (with icon)
+    - Last scanned timestamp
+    - Action buttons (Scan, View, Remove)
 - **Detail Panel** (Bottom)
-  - Source statistics
-  - Action buttons
+    - Source statistics
+    - Action buttons
 
 **Modals:**
+
 - `AddSourceDialog`
-  - Project selector (dropdown)
-  - Directory picker (browse button)
-  - VCS type selector (git/svn/none)
-  - Branch name (if git)
-  - Scan immediately? (checkbox)
-  
+    - Project selector (dropdown)
+    - Directory picker (browse button)
+    - VCS type selector (git/svn/none)
+    - Branch name (if git)
+    - Scan immediately? (checkbox)
+
 - `ScanProgressDialog`
-  - Progress bar
-  - Current file being processed
-  - Statistics (files scanned, nodes created)
-  - Cancel button
-  
+    - Progress bar
+    - Current file being processed
+    - Statistics (files scanned, nodes created)
+    - Cancel button
+
 - `FileListDialog`
-  - Tree view of all source files
-  - Language filter
-  - Search box
-  - Jump to file action
+    - Tree view of all source files
+    - Language filter
+    - Search box
+    - Jump to file action
 
 ---
 
@@ -407,6 +423,7 @@ Help
 **Shortcut:** `Ctrl+4`
 
 **Layout:**
+
 ```
 ┌────────────────────────────────────────────────────────────┐
 │  AST Explorer                        [Search: symbol...▾]  │
@@ -442,39 +459,41 @@ Help
 ```
 
 **Components:**
+
 - **Search Bar** (Top)
-  - Symbol search
-  - Type filter (class, method, field, etc.)
-  - Scope filter (project selector)
+    - Symbol search
+    - Type filter (class, method, field, etc.)
+    - Scope filter (project selector)
 - **AST Tree** (Left)
-  - Hierarchical tree
-  - Icons for node types
-  - Expandable/collapsible
+    - Hierarchical tree
+    - Icons for node types
+    - Expandable/collapsible
 - **Code View** (Top right)
-  - Syntax highlighted source
-  - Line numbers
-  - Current node highlighted
+    - Syntax highlighted source
+    - Line numbers
+    - Current node highlighted
 - **Properties & Relationships** (Bottom right)
-  - Tabs: Properties, Relationships, Dependencies
-  - Node metadata
-  - Call graph (clickable links)
+    - Tabs: Properties, Relationships, Dependencies
+    - Node metadata
+    - Call graph (clickable links)
 
 **Modals:**
+
 - `SearchSymbolDialog`
-  - Advanced search options
-  - Regex support
-  - Result list
-  
+    - Advanced search options
+    - Regex support
+    - Result list
+
 - `CallGraphDialog`
-  - Visual graph (D3.js or similar)
-  - Zoom/pan controls
-  - Export as image
-  
+    - Visual graph (D3.js or similar)
+    - Zoom/pan controls
+    - Export as image
+
 - `ImpactAnalysisDialog`
-  - Select node
-  - Show impacted files
-  - Show impacted tests
-  - Export report
+    - Select node
+    - Show impacted files
+    - Show impacted tests
+    - Export report
 
 ---
 
@@ -484,6 +503,7 @@ Help
 **Shortcut:** `Ctrl+5`
 
 **Layout:**
+
 ```
 ┌────────────────────────────────────────────────────────────┐
 │  Search Console                                            │
@@ -513,42 +533,44 @@ Help
 ```
 
 **Components:**
+
 - **Search Bar** (Top)
-  - Query input (with autocomplete)
-  - Search button
-  - Mode toggle (Hybrid on/off)
+    - Query input (with autocomplete)
+    - Search button
+    - Mode toggle (Hybrid on/off)
 - **Filters** (Below search)
-  - Project selector
-  - Source type checkboxes
-  - Date range (advanced)
+    - Project selector
+    - Source type checkboxes
+    - Date range (advanced)
 - **Results List**
-  - Score/relevance
-  - Source type badge
-  - File path / document title
-  - Preview snippet (highlighted)
-  - View button
+    - Score/relevance
+    - Source type badge
+    - File path / document title
+    - Preview snippet (highlighted)
+    - View button
 - **Actions Bar**
-  - Export button
-  - Send to AI button (pre-populate context)
-  - Pagination
+    - Export button
+    - Send to AI button (pre-populate context)
+    - Pagination
 
 **Modals:**
+
 - `AdvancedSearchDialog`
-  - Boolean operators (AND/OR/NOT)
-  - Phrase search
-  - Field-specific search
-  - Regular expressions
-  
+    - Boolean operators (AND/OR/NOT)
+    - Phrase search
+    - Field-specific search
+    - Regular expressions
+
 - `ResultPreviewDialog`
-  - Full content view
-  - Syntax highlighting (for code)
-  - Copy button
-  - Open in editor button
-  
+    - Full content view
+    - Syntax highlighting (for code)
+    - Copy button
+    - Open in editor button
+
 - `ExportDialog`
-  - Format selection (CSV, JSON, Markdown)
-  - Fields to include
-  - Save location
+    - Format selection (CSV, JSON, Markdown)
+    - Fields to include
+    - Save location
 
 ---
 
@@ -558,6 +580,7 @@ Help
 **Shortcut:** `Ctrl+6`
 
 **Layout:**
+
 ```
 ┌────────────────────────────────────────────────────────────┐
 │  Knowledge Center           [+ Import CHM] [+ New Article] │
@@ -592,36 +615,38 @@ Help
 ```
 
 **Components:**
+
 - **Imports List** (Left)
-  - Filter checkboxes
-  - Import cards (name, status, doc count)
-  - Progress indicator for pending
+    - Filter checkboxes
+    - Import cards (name, status, doc count)
+    - Progress indicator for pending
 - **Import Details** (Top right)
-  - Metadata
-  - Statistics
-  - Action buttons
+    - Metadata
+    - Statistics
+    - Action buttons
 - **TOC Browser** (Bottom right)
-  - Hierarchical tree
-  - Document preview
+    - Hierarchical tree
+    - Document preview
 
 **Modals:**
+
 - `ImportChmDialog`
-  - File picker (*.chm)
-  - Project selector
-  - Notes field
-  - Import button → shows progress
-  
+    - File picker (*.chm)
+    - Project selector
+    - Notes field
+    - Import button → shows progress
+
 - `DocumentPreviewDialog`
-  - WebView with rendered HTML
-  - Navigation (prev/next)
-  - Full-screen mode
-  
+    - WebView with rendered HTML
+    - Navigation (prev/next)
+    - Full-screen mode
+
 - `NewArticleDialog`
-  - Title field
-  - Rich text editor (Markdown)
-  - Tags field
-  - Project selector
-  - Save button
+    - Title field
+    - Rich text editor (Markdown)
+    - Tags field
+    - Project selector
+    - Save button
 
 ---
 
@@ -631,6 +656,7 @@ Help
 **Shortcut:** `Ctrl+7`
 
 **Layout:**
+
 ```
 ┌────────────────────────────────────────────────────────────┐
 │  Request History                          [Export] [Clear] │
@@ -664,38 +690,40 @@ Help
 ```
 
 **Components:**
+
 - **Filter Bar** (Top)
-  - Date range picker
-  - Project filter
-  - Status filter
-  - Search box
+    - Date range picker
+    - Project filter
+    - Status filter
+    - Search box
 - **Requests Table**
-  - ID, Title, Project, Status, Rating
-  - Sort by any column
-  - Multi-select for batch operations
+    - ID, Title, Project, Status, Rating
+    - Sort by any column
+    - Multi-select for batch operations
 - **Detail Panel** (Bottom)
-  - Full request details
-  - Response preview
-  - Artifacts list
-  - Feedback
-  - Action buttons
+    - Full request details
+    - Response preview
+    - Artifacts list
+    - Feedback
+    - Action buttons
 
 **Modals:**
+
 - `RequestDetailDialog`
-  - Full conversation view
-  - Retrieved sources
-  - Code snippets
-  - Timeline
-  
+    - Full conversation view
+    - Retrieved sources
+    - Code snippets
+    - Timeline
+
 - `ExportDialog`
-  - Format (PDF, Markdown, HTML)
-  - Include sources? (checkbox)
-  - Include code snippets? (checkbox)
-  
+    - Format (PDF, Markdown, HTML)
+    - Include sources? (checkbox)
+    - Include code snippets? (checkbox)
+
 - `ReanalyzeDialog`
-  - Confirm re-analysis
-  - Select different scope?
-  - Keep old response? (checkbox)
+    - Confirm re-analysis
+    - Select different scope?
+    - Keep old response? (checkbox)
 
 ---
 
@@ -705,6 +733,7 @@ Help
 **Shortcut:** `Ctrl+8`
 
 **Layout:**
+
 ```
 ┌────────────────────────────────────────────────────────────┐
 │  Settings                                   [Save] [Cancel]│
@@ -739,50 +768,51 @@ Help
 **Tabs:**
 
 1. **General**
-   - Theme (Light/Dark)
-   - Language (English, Vietnamese, Korean, etc.)
-   - Default project
-   - Auto-save interval
-   - Keyboard shortcuts
+    - Theme (Light/Dark)
+    - Language (English, Vietnamese, Korean, etc.)
+    - Default project
+    - Auto-save interval
+    - Keyboard shortcuts
 
 2. **AI Configuration**
-   - LLM provider (OpenAI, Anthropic, Local)
-   - API key
-   - Model selection
-   - Temperature slider
-   - Max tokens
-   - Streaming toggle
-   - Embedding model
-   - Cache settings
+    - LLM provider (OpenAI, Anthropic, Local)
+    - API key
+    - Model selection
+    - Temperature slider
+    - Max tokens
+    - Streaming toggle
+    - Embedding model
+    - Cache settings
 
 3. **Search**
-   - Vector search top-k
-   - Lexical search top-k
-   - Fusion strategy (RRF, Weighted)
-   - Qdrant URL
-   - Index optimization schedule
+    - Vector search top-k
+    - Lexical search top-k
+    - Fusion strategy (RRF, Weighted)
+    - Qdrant URL
+    - Index optimization schedule
 
 4. **Analytics**
-   - Request volume chart (last 30 days)
-   - Average rating chart
-   - Retrieval latency histogram
-   - Popular topics word cloud
-   - Export analytics button
+    - Request volume chart (last 30 days)
+    - Average rating chart
+    - Retrieval latency histogram
+    - Popular topics word cloud
+    - Export analytics button
 
 **Modals:**
+
 - `TestConnectionDialog`
-  - Progress spinner
-  - Connection status
-  - Error messages (if fail)
-  
+    - Progress spinner
+    - Connection status
+    - Error messages (if fail)
+
 - `ResetDefaultsDialog`
-  - Confirm reset
-  - Which sections? (checkboxes)
-  
+    - Confirm reset
+    - Which sections? (checkboxes)
+
 - `ExportAnalyticsDialog`
-  - Date range
-  - Metrics to include
-  - Format (CSV, JSON)
+    - Date range
+    - Metrics to include
+    - Format (CSV, JSON)
 
 ---
 
@@ -791,12 +821,14 @@ Help
 ### 4.1 Shared Modals
 
 **ConfirmDialog**
+
 - Title
 - Message
 - Yes/No buttons
 - Optional "Don't show again" checkbox
 
 **ErrorDialog**
+
 - Error title
 - Error message
 - Stack trace (collapsible, for developers)
@@ -804,12 +836,14 @@ Help
 - OK button
 
 **ProgressDialog**
+
 - Task description
 - Progress bar (determinate or indeterminate)
 - Current operation label
 - Cancel button (if cancellable)
 
 **NotificationToast**
+
 - Type (info, success, warning, error)
 - Message
 - Auto-dismiss (3-5 seconds)
@@ -820,27 +854,32 @@ Help
 ### 4.2 Shared Components
 
 **ProjectSelector**
+
 - ComboBox with hierarchy
 - Format: "System > Subsystem > Project"
 - Search/filter capability
 
 **CodeSnippet**
+
 - Syntax highlighted
 - Line numbers
 - Copy button
 - Open in editor button
 
 **FilePathBreadcrumb**
+
 - Clickable path segments
 - Copy full path button
 
 **RatingWidget**
+
 - 5 stars
 - Click to rate
 - Hover preview
 - Display current rating
 
 **TagInput**
+
 - Comma-separated tags
 - Autocomplete from existing tags
 - Remove tag (× button)
@@ -852,6 +891,7 @@ Help
 ### 5.1 Typical User Journeys
 
 **Setup New Project:**
+
 ```
 1. Systems Page → Add System
 2. Systems Page → Add Subsystem
@@ -861,6 +901,7 @@ Help
 ```
 
 **Ask Question:**
+
 ```
 1. AI Assistant (default home)
 2. Type question
@@ -871,6 +912,7 @@ Help
 ```
 
 **Import Documentation:**
+
 ```
 1. Knowledge Center → Import CHM
 2. Select file → Choose project
@@ -879,6 +921,7 @@ Help
 ```
 
 **Review Code:**
+
 ```
 1. Tools → Run Code Review
 2. View review comments

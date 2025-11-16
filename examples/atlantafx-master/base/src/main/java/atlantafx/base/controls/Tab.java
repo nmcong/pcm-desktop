@@ -23,31 +23,49 @@ import java.util.List;
 
 public class Tab implements EventTarget, Styleable {
 
-    protected static final String DEFAULT_STYLE_CLASS = "tab";
-
     /**
      * Called when the tab becomes selected or unselected.
      */
     public static final EventType<Event> SELECTION_CHANGED_EVENT = new EventType<>(
-        // this and the following event names MUST be different from used by the TabPane
-        // otherwise these two controls can't co-exist in the same scene-graph
-        Event.ANY, "TAB_LINE$SELECTION_CHANGED_EVENT"
+            // this and the following event names MUST be different from used by the TabPane
+            // otherwise these two controls can't co-exist in the same scene-graph
+            Event.ANY, "TAB_LINE$SELECTION_CHANGED_EVENT"
     );
-
     /**
      * Called when a user closes this tab.
      */
     public static final EventType<Event> CLOSED_EVENT = new EventType<>(
-        Event.ANY, "TAB_LINE$TAB_CLOSED"
+            Event.ANY, "TAB_LINE$TAB_CLOSED"
     );
-
     /**
      * Called when there is an external request to close this {@code Tab}.
      * The installed event handler thus can prevent tab closing by consuming the received event.
      */
     public static final EventType<Event> TAB_CLOSE_REQUEST_EVENT = new EventType<>(
-        Event.ANY, "TAB_LINE$TAB_CLOSE_REQUEST_EVENT"
+            Event.ANY, "TAB_LINE$TAB_CLOSE_REQUEST_EVENT"
     );
+    protected static final String DEFAULT_STYLE_CLASS = "tab";
+    protected static final Object USER_DATA_KEY = new Object();
+    protected final EventHandlerManager eventHandlerManager = new EventHandlerManager(this);
+    protected final ObservableList<String> styleClass = FXCollections.observableArrayList();
+    protected @Nullable StringProperty id;
+
+    //=========================================================================
+    // Properties
+    //=========================================================================
+    protected @Nullable StringProperty style;
+    protected @Nullable ReadOnlyBooleanWrapper selected;
+    protected @Nullable StringProperty text;
+    protected @Nullable ObjectProperty<@Nullable Node> graphic;
+    protected @Nullable ObjectProperty<@Nullable ContextMenu> contextMenu;
+    protected @Nullable BooleanProperty pinned;
+    protected @Nullable ObjectProperty<@Nullable EventHandler<Event>> onSelectionChanged;
+    protected @Nullable ObjectProperty<@Nullable EventHandler<Event>> onClosed;
+    protected @Nullable ObjectProperty<@Nullable Tooltip> tooltip;
+    protected @Nullable ObjectProperty<@Nullable EventHandler<Event>> onCloseRequest;
+    // a map containing a set of properties for this Tab
+    protected @Nullable ObservableMap<Object, Object> properties;
+    private @Nullable ReadOnlyObjectWrapper<@Nullable TabLine> tabLine;
 
     /**
      * Creates an empty tab.
@@ -84,9 +102,13 @@ public class Tab implements EventTarget, Styleable {
         styleClass.addAll(DEFAULT_STYLE_CLASS);
     }
 
-    //=========================================================================
-    // Properties
-    //=========================================================================
+    /**
+     * Gets the {@code CssMetaData} associated with this class,
+     * which may include the {@code CssMetaData} of its superclasses.
+     */
+    public static List<CssMetaData<? extends Styleable, ?>> getClassCssMetaData() {
+        return Collections.emptyList();
+    }
 
     /**
      * The simple string identifier for finding a specific tab.
@@ -98,8 +120,6 @@ public class Tab implements EventTarget, Styleable {
         }
         return id;
     }
-
-    protected @Nullable StringProperty id;
 
     @Override
     public @Nullable String getId() {
@@ -120,8 +140,6 @@ public class Tab implements EventTarget, Styleable {
         return style;
     }
 
-    protected @Nullable StringProperty style;
-
     @Override
     public @Nullable String getStyle() {
         return style != null ? style.get() : null;
@@ -137,8 +155,6 @@ public class Tab implements EventTarget, Styleable {
     public final ReadOnlyBooleanProperty selectedProperty() {
         return selectedPropertyImpl().getReadOnlyProperty();
     }
-
-    protected @Nullable ReadOnlyBooleanWrapper selected;
 
     protected ReadOnlyBooleanWrapper selectedPropertyImpl() {
         if (selected == null) {
@@ -185,8 +201,6 @@ public class Tab implements EventTarget, Styleable {
         return text;
     }
 
-    protected @Nullable StringProperty text;
-
     public @Nullable String getText() {
         return text != null ? text.get() : null;
     }
@@ -206,8 +220,6 @@ public class Tab implements EventTarget, Styleable {
         return graphic;
     }
 
-    protected @Nullable ObjectProperty<@Nullable Node> graphic;
-
     public @Nullable Node getGraphic() {
         return graphic != null ? graphic.get() : null;
     }
@@ -225,8 +237,6 @@ public class Tab implements EventTarget, Styleable {
         }
         return contextMenu;
     }
-
-    protected @Nullable ObjectProperty<@Nullable ContextMenu> contextMenu;
 
     public @Nullable ContextMenu getContextMenu() {
         return contextMenu != null ? contextMenu.get() : null;
@@ -254,8 +264,6 @@ public class Tab implements EventTarget, Styleable {
         }
         return pinned;
     }
-
-    protected @Nullable BooleanProperty pinned;
 
     public boolean isPinned() {
         return pinned != null && pinned.get();
@@ -290,8 +298,6 @@ public class Tab implements EventTarget, Styleable {
         return onSelectionChanged;
     }
 
-    protected @Nullable ObjectProperty<@Nullable EventHandler<Event>> onSelectionChanged;
-
     public @Nullable EventHandler<Event> getOnSelectionChanged() {
         return onSelectionChanged != null ? onSelectionChanged.get() : null;
     }
@@ -325,8 +331,6 @@ public class Tab implements EventTarget, Styleable {
         return onClosed;
     }
 
-    protected @Nullable ObjectProperty<@Nullable EventHandler<Event>> onClosed;
-
     public @Nullable EventHandler<Event> getOnClosed() {
         return onClosed != null ? onClosed.get() : null;
     }
@@ -344,8 +348,6 @@ public class Tab implements EventTarget, Styleable {
         }
         return tooltip;
     }
-
-    protected @Nullable ObjectProperty<@Nullable Tooltip> tooltip;
 
     public @Nullable Tooltip getTooltip() {
         return tooltip != null ? tooltip.getValue() : null;
@@ -381,14 +383,16 @@ public class Tab implements EventTarget, Styleable {
         return onCloseRequest;
     }
 
-    protected @Nullable ObjectProperty<@Nullable EventHandler<Event>> onCloseRequest;
-
     public @Nullable EventHandler<Event> getOnCloseRequest() {
         if (onCloseRequest == null) {
             return null;
         }
         return onCloseRequest.get();
     }
+
+    //=========================================================================
+    // User Data
+    //=========================================================================
 
     public void setOnCloseRequest(@Nullable EventHandler<Event> value) {
         onCloseRequestProperty().set(value);
@@ -400,8 +404,6 @@ public class Tab implements EventTarget, Styleable {
     public final ReadOnlyObjectProperty<@Nullable TabLine> tabLineProperty() {
         return tabLinePropertyImpl().getReadOnlyProperty();
     }
-
-    private @Nullable ReadOnlyObjectWrapper<@Nullable TabLine> tabLine;
 
     private ReadOnlyObjectWrapper<@Nullable TabLine> tabLinePropertyImpl() {
         if (tabLine == null) {
@@ -418,15 +420,6 @@ public class Tab implements EventTarget, Styleable {
         tabLinePropertyImpl().set(value);
     }
 
-    //=========================================================================
-    // User Data
-    //=========================================================================
-
-    protected static final Object USER_DATA_KEY = new Object();
-
-    // a map containing a set of properties for this Tab
-    protected @Nullable ObservableMap<Object, Object> properties;
-
     /**
      * Returns an observable map of properties on this Tab for use primarily
      * by application developers.
@@ -437,6 +430,10 @@ public class Tab implements EventTarget, Styleable {
         }
         return properties;
     }
+
+    //=========================================================================
+    // Events
+    //=========================================================================
 
     /**
      * Tests if this Tab has properties.
@@ -463,12 +460,6 @@ public class Tab implements EventTarget, Styleable {
         getProperties().put(USER_DATA_KEY, value);
     }
 
-    //=========================================================================
-    // Events
-    //=========================================================================
-
-    protected final EventHandlerManager eventHandlerManager = new EventHandlerManager(this);
-
     @Override
     public EventDispatchChain buildEventDispatchChain(EventDispatchChain chain) {
         return chain.prepend(eventHandlerManager);
@@ -492,6 +483,10 @@ public class Tab implements EventTarget, Styleable {
         eventHandlerManager.addEventFilter(eventType, eventFilter);
     }
 
+    //=========================================================================
+    // Stylesheet Handling
+    //=========================================================================
+
     @Override
     public final <E extends Event> void removeEventFilter(EventType<E> eventType,
                                                           EventHandler<? super E> eventFilter) {
@@ -502,12 +497,6 @@ public class Tab implements EventTarget, Styleable {
                                                      @Nullable EventHandler<E> eventHandler) {
         eventHandlerManager.setEventHandler(eventType, eventHandler);
     }
-
-    //=========================================================================
-    // Stylesheet Handling
-    //=========================================================================
-
-    protected final ObservableList<String> styleClass = FXCollections.observableArrayList();
 
     /**
      * {@inheritDoc}
@@ -547,14 +536,6 @@ public class Tab implements EventTarget, Styleable {
     @Override
     public @Nullable Styleable getStyleableParent() {
         return getTabLine();
-    }
-
-    /**
-     * Gets the {@code CssMetaData} associated with this class,
-     * which may include the {@code CssMetaData} of its superclasses.
-     */
-    public static List<CssMetaData<? extends Styleable, ?>> getClassCssMetaData() {
-        return Collections.emptyList();
     }
 
     //=========================================================================
@@ -621,6 +602,56 @@ public class Tab implements EventTarget, Styleable {
         String getStyleClass();
     }
 
+    /**
+     * The {@link ResizePolicy} interface defines the strategy for calculating the width of tabs
+     * in the {@link TabLine} control. Implementations of this interface are responsible for
+     * determining the width of each tab based on the available space.
+     */
+    public interface ResizePolicy {
+
+        /**
+         * Specifies that the tab width should be determined by the
+         * {@code -fx-fixed-tab-width} CSS property.
+         */
+        double USE_FIXED_SIZE = -1;
+
+        /**
+         * Specifies that the tab width should be based on the computed content width.
+         */
+        double USE_COMPUTED_SIZE = Double.NEGATIVE_INFINITY;
+
+        /**
+         * See {@link FixedWidthResizePolicy}.
+         */
+        ResizePolicy FIXED_WIDTH = new FixedWidthResizePolicy();
+
+        /**
+         * See {@link ComputedWidthResizePolicy}.
+         */
+        ResizePolicy COMPUTED_WIDTH = new ComputedWidthResizePolicy();
+
+        /**
+         * See {@link AdaptiveResizePolicy}.
+         */
+        ResizePolicy ADAPTIVE = new AdaptiveResizePolicy();
+
+        /**
+         * See {@link StretchingResizePolicy}.
+         */
+        ResizePolicy STRETCH = new StretchingResizePolicy();
+
+        /**
+         * Computes the tab width.
+         *
+         * @param availableWidth the visible width of the {@link TabLine}
+         * @param tabCount       the numbers of tabs in the {@link TabLine}
+         * @param isTabsFit      whether the summary tabs width fits the visible width of the {@link TabLine}
+         */
+        double computePrefWidth(double availableWidth, int tabCount, boolean isTabsFit);
+
+        boolean isScrollable();
+    }
+
     public static class AllTabsClosingPolicy implements ClosingPolicy {
 
         @Override
@@ -673,56 +704,6 @@ public class Tab implements EventTarget, Styleable {
         public String getStyleClass() {
             return "no-tabs-closable";
         }
-    }
-
-    /**
-     * The {@link ResizePolicy} interface defines the strategy for calculating the width of tabs
-     * in the {@link TabLine} control. Implementations of this interface are responsible for
-     * determining the width of each tab based on the available space.
-     */
-    public interface ResizePolicy {
-
-        /**
-         * Specifies that the tab width should be determined by the
-         * {@code -fx-fixed-tab-width} CSS property.
-         */
-        double USE_FIXED_SIZE = -1;
-
-        /**
-         * Specifies that the tab width should be based on the computed content width.
-         */
-        double USE_COMPUTED_SIZE = Double.NEGATIVE_INFINITY;
-
-        /**
-         * See {@link FixedWidthResizePolicy}.
-         */
-        ResizePolicy FIXED_WIDTH = new FixedWidthResizePolicy();
-
-        /**
-         * See {@link ComputedWidthResizePolicy}.
-         */
-        ResizePolicy COMPUTED_WIDTH = new ComputedWidthResizePolicy();
-
-        /**
-         * See {@link AdaptiveResizePolicy}.
-         */
-        ResizePolicy ADAPTIVE = new AdaptiveResizePolicy();
-
-        /**
-         * See {@link StretchingResizePolicy}.
-         */
-        ResizePolicy STRETCH = new StretchingResizePolicy();
-
-        /**
-         * Computes the tab width.
-         *
-         * @param availableWidth the visible width of the {@link TabLine}
-         * @param tabCount       the numbers of tabs in the {@link TabLine}
-         * @param isTabsFit      whether the summary tabs width fits the visible width of the {@link TabLine}
-         */
-        double computePrefWidth(double availableWidth, int tabCount, boolean isTabsFit);
-
-        boolean isScrollable();
     }
 
     /**
@@ -790,8 +771,8 @@ public class Tab implements EventTarget, Styleable {
         @Override
         public double computePrefWidth(double availableWidth, int tabCount, boolean isTabsFit) {
             return isTabsFit
-                ? ResizePolicy.USE_FIXED_SIZE
-                : availableWidth / tabCount;
+                    ? ResizePolicy.USE_FIXED_SIZE
+                    : availableWidth / tabCount;
         }
 
         @Override

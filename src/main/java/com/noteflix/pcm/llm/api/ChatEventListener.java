@@ -39,40 +39,40 @@ import com.noteflix.pcm.llm.model.ToolCall;
  */
 public interface ChatEventListener {
 
-  /**
-   * Called when a new token is received from the LLM. Only called during streaming responses.
-   *
-   * @param token The text token received
-   */
-  void onToken(String token);
+    /**
+     * Called when a new token is received from the LLM. Only called during streaming responses.
+     *
+     * @param token The text token received
+     */
+    void onToken(String token);
 
-  /**
-   * Called when a thinking token is received (for reasoning models). This is the internal reasoning
-   * process, not the final answer.
-   *
-   * @param thinkingToken The thinking/reasoning text
-   */
-  void onThinking(String thinkingToken);
+    /**
+     * Called when a thinking token is received (for reasoning models). This is the internal reasoning
+     * process, not the final answer.
+     *
+     * @param thinkingToken The thinking/reasoning text
+     */
+    void onThinking(String thinkingToken);
 
-  /**
-   * Called when the LLM requests a tool/function call. May be called multiple times if LLM requests
-   * multiple tools.
-   *
-   * @param toolCall The tool call details (name, arguments, etc.)
-   */
-  void onToolCall(ToolCall toolCall);
+    /**
+     * Called when the LLM requests a tool/function call. May be called multiple times if LLM requests
+     * multiple tools.
+     *
+     * @param toolCall The tool call details (name, arguments, etc.)
+     */
+    void onToolCall(ToolCall toolCall);
 
-  /**
-   * Called when the LLM response is complete. Contains the full response with all metadata.
-   *
-   * @param response The complete chat response
-   */
-  void onComplete(ChatResponse response);
+    /**
+     * Called when the LLM response is complete. Contains the full response with all metadata.
+     *
+     * @param response The complete chat response
+     */
+    void onComplete(ChatResponse response);
 
-  /**
-   * Called when an error occurs during the LLM interaction.
-   *
-   * @param error The error that occurred
-   */
-  void onError(Throwable error);
+    /**
+     * Called when an error occurs during the LLM interaction.
+     *
+     * @param error The error that occurred
+     */
+    void onError(Throwable error);
 }

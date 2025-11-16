@@ -11,7 +11,8 @@
 
 ## 🔴 Problem Description
 
-When running the PCM Desktop application on macOS/Linux using the `run.sh` script, the application fails to start with the following error:
+When running the PCM Desktop application on macOS/Linux using the `run.sh` script, the application fails to start with
+the following error:
 
 ```
 Missing JavaFX application class com.noteflix.pcm.PCMApplication
@@ -34,7 +35,8 @@ Shell: /bin/zsh
 
 ## 🔍 Root Cause Analysis
 
-The issue was **NOT** related to JavaFX module system configuration or differences between macOS and Windows. The actual root cause was:
+The issue was **NOT** related to JavaFX module system configuration or differences between macOS and Windows. The actual
+root cause was:
 
 ### **Duplicate Library JARs in `lib/others/`**
 
@@ -56,14 +58,18 @@ Multiple versions of the same libraries existed in the `lib/others/` directory:
 
 ### Why Did This Cause the Issue?
 
-1. **Module System Conflict**: When JavaFX is loaded via `--module-path`, Java's module system performs strict validation
+1. **Module System Conflict**: When JavaFX is loaded via `--module-path`, Java's module system performs strict
+   validation
 2. **Classpath Scanning**: Multiple versions of the same module caused conflicts during classpath scanning
-3. **Initialization Failure**: The JavaFX launcher couldn't properly initialize the application class due to module conflicts
-4. **Silent Failure**: The error message was misleading - it appeared to be a JavaFX issue but was actually a library conflict
+3. **Initialization Failure**: The JavaFX launcher couldn't properly initialize the application class due to module
+   conflicts
+4. **Silent Failure**: The error message was misleading - it appeared to be a JavaFX issue but was actually a library
+   conflict
 
 ### Why Did Windows Work?
 
 Windows might have:
+
 - Different file system ordering that loaded the correct version first
 - Different classloader behavior
 - Libraries installed in a different order
@@ -114,6 +120,7 @@ CLASSPATH="out:lib/javafx/*:lib/others/*:lib/rag/*"
 ```
 
 Expected output:
+
 ```
 ✅ Application started successfully
 🎨 UI built with pure Java code following AtlantaFX Sampler patterns

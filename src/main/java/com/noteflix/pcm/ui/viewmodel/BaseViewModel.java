@@ -1,14 +1,15 @@
 package com.noteflix.pcm.ui.viewmodel;
 
 import com.noteflix.pcm.core.utils.Asyncs;
-import java.util.concurrent.Callable;
-import java.util.concurrent.CompletableFuture;
-import java.util.function.Consumer;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import lombok.extern.slf4j.Slf4j;
+
+import java.util.concurrent.Callable;
+import java.util.concurrent.CompletableFuture;
+import java.util.function.Consumer;
 
 /**
  * Base ViewModel for all ViewModels
@@ -24,72 +25,78 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public abstract class BaseViewModel {
 
-  // Common state properties
-  private final BooleanProperty busy = new SimpleBooleanProperty(false);
-  private final StringProperty errorMessage = new SimpleStringProperty(null);
+    // Common state properties
+    private final BooleanProperty busy = new SimpleBooleanProperty(false);
+    private final StringProperty errorMessage = new SimpleStringProperty(null);
 
-  /** Called when ViewModel is activated (page shown) */
-  public void onActivate() {
-    clearError();
-    log.debug("{} activated", getClass().getSimpleName());
-  }
-
-  /** Called when ViewModel is deactivated (page hidden) */
-  public void onDeactivate() {
-    clearError();
-    log.debug("{} deactivated", getClass().getSimpleName());
-  }
-
-  // ========== Common Property Accessors ==========
-
-  public BooleanProperty busyProperty() {
-    return busy;
-  }
-
-  public boolean isBusy() {
-    return busy.get();
-  }
-
-  protected void setBusy(boolean value) {
-    busy.set(value);
-  }
-
-  public StringProperty errorMessageProperty() {
-    return errorMessage;
-  }
-
-  public String getErrorMessage() {
-    return errorMessage.get();
-  }
-
-  public boolean hasError() {
-    return errorMessage.get() != null && !errorMessage.get().isEmpty();
-  }
-
-  protected void setError(String message) {
-    errorMessage.set(message);
-    log.error("ViewModel error: {}", message);
-  }
-
-  protected void setError(String message, Throwable error) {
-    errorMessage.set(message + ": " + error.getMessage());
-    log.error(message, error);
-  }
-
-  protected void setErrorMessage(String message) {
-    errorMessage.set(message);
-    if (message != null) {
-      log.error("ViewModel error: {}", message);
+    /**
+     * Called when ViewModel is activated (page shown)
+     */
+    public void onActivate() {
+        clearError();
+        log.debug("{} activated", getClass().getSimpleName());
     }
-  }
 
-  protected void clearError() {
-    errorMessage.set(null);
-  }
+    /**
+     * Called when ViewModel is deactivated (page hidden)
+     */
+    public void onDeactivate() {
+        clearError();
+        log.debug("{} deactivated", getClass().getSimpleName());
+    }
 
-  /** Run async task with success and error handlers */
-  protected <T> CompletableFuture<T> runAsync(
-      Callable<T> task, Consumer<T> onSuccess, Consumer<Throwable> onError) {
-    return Asyncs.runAsync(task, onSuccess, onError);
-  }
+    // ========== Common Property Accessors ==========
+
+    public BooleanProperty busyProperty() {
+        return busy;
+    }
+
+    public boolean isBusy() {
+        return busy.get();
+    }
+
+    protected void setBusy(boolean value) {
+        busy.set(value);
+    }
+
+    public StringProperty errorMessageProperty() {
+        return errorMessage;
+    }
+
+    public String getErrorMessage() {
+        return errorMessage.get();
+    }
+
+    protected void setErrorMessage(String message) {
+        errorMessage.set(message);
+        if (message != null) {
+            log.error("ViewModel error: {}", message);
+        }
+    }
+
+    public boolean hasError() {
+        return errorMessage.get() != null && !errorMessage.get().isEmpty();
+    }
+
+    protected void setError(String message) {
+        errorMessage.set(message);
+        log.error("ViewModel error: {}", message);
+    }
+
+    protected void setError(String message, Throwable error) {
+        errorMessage.set(message + ": " + error.getMessage());
+        log.error(message, error);
+    }
+
+    protected void clearError() {
+        errorMessage.set(null);
+    }
+
+    /**
+     * Run async task with success and error handlers
+     */
+    protected <T> CompletableFuture<T> runAsync(
+            Callable<T> task, Consumer<T> onSuccess, Consumer<Throwable> onError) {
+        return Asyncs.runAsync(task, onSuccess, onError);
+    }
 }

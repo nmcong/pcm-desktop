@@ -3,10 +3,10 @@
 @use "../settings/config" as cfg;
 @use "../settings/effects";
 
-$color-bg:     -color-bg-overlay     !default;
-$color-fg:     -color-fg-default     !default;
+$color-bg: -color-bg-overlay !default;
+$color-fg: -color-fg-default !default;
 $color-border: -color-border-default !default;
-$opacity:      0.85 !default;
+$opacity: 0.85 !default;
 
 $padding-x: cfg.$padding-x !default;
 $padding-y: cfg.$padding-y !default;

@@ -30,6 +30,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.RandomAccess;
+
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
 import javafx.collections.ModifiableObservableListBase;
@@ -37,7 +38,7 @@ import javafx.util.Callback;
 
 @SuppressWarnings("all")
 public class ObservableListWrapper<E> extends ModifiableObservableListBase<E>
-    implements /*SortableList<E>,*/ RandomAccess {
+        implements /*SortableList<E>,*/ RandomAccess {
 
     private final List<E> backingList;
     private final ElementObserver<E> elementObserver;

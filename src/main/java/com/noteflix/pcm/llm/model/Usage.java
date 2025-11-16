@@ -17,26 +17,39 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Usage {
 
-  /** Tokens in the prompt (input). */
-  private int promptTokens;
+    /**
+     * Tokens in the prompt (input).
+     */
+    private int promptTokens;
 
-  /** Tokens in the completion (output). */
-  private int completionTokens;
+    /**
+     * Tokens in the completion (output).
+     */
+    private int completionTokens;
 
-  /** Total tokens (prompt + completion + thinking). */
-  private int totalTokens;
+    /**
+     * Total tokens (prompt + completion + thinking).
+     */
+    private int totalTokens;
 
-  /** Thinking/reasoning tokens (for o1/o3 models). Only present in models with thinking mode. */
-  @Builder.Default private int thinkingTokens = 0;
+    /**
+     * Thinking/reasoning tokens (for o1/o3 models). Only present in models with thinking mode.
+     */
+    @Builder.Default
+    private int thinkingTokens = 0;
 
-  /** Estimated cost in USD. Calculated based on model pricing. */
-  private Double estimatedCost;
+    /**
+     * Estimated cost in USD. Calculated based on model pricing.
+     */
+    private Double estimatedCost;
 
-  /** Calculate total tokens if not provided. */
-  public int getTotalTokens() {
-    if (totalTokens > 0) {
-      return totalTokens;
+    /**
+     * Calculate total tokens if not provided.
+     */
+    public int getTotalTokens() {
+        if (totalTokens > 0) {
+            return totalTokens;
+        }
+        return promptTokens + completionTokens + thinkingTokens;
     }
-    return promptTokens + completionTokens + thinkingTokens;
-  }
 }

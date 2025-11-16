@@ -8,7 +8,6 @@ import javafx.scene.control.Alert;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.concurrent.CompletableFuture;
-import java.util.function.Consumer;
 
 /**
  * Handles navigation logic for the sidebar
@@ -16,42 +15,42 @@ import java.util.function.Consumer;
  */
 @Slf4j
 public class SidebarNavigationHandler {
-    
+
     private final PageNavigator pageNavigator;
     private final IProjectService projectService;
     private final ProjectHighlightManager highlightManager;
     private final Runnable onClearMenuHighlight; // Callback to clear menu highlighting
-    
+
     // Navigation cancellation support
     private CompletableFuture<?> currentNavigationTask = null;
-    
-    public SidebarNavigationHandler(PageNavigator pageNavigator, 
-                                   IProjectService projectService,
-                                   ProjectHighlightManager highlightManager,
-                                   Runnable onClearMenuHighlight) {
+
+    public SidebarNavigationHandler(PageNavigator pageNavigator,
+                                    IProjectService projectService,
+                                    ProjectHighlightManager highlightManager,
+                                    Runnable onClearMenuHighlight) {
         this.pageNavigator = pageNavigator;
         this.projectService = projectService;
         this.highlightManager = highlightManager;
         this.onClearMenuHighlight = onClearMenuHighlight;
     }
-    
+
     /**
      * Handle project click navigation
      */
     public void handleProjectClick(String projectName) {
         log.info("Opening project: {}", projectName);
-        
+
         // Clear menu highlighting when clicking on project
         if (onClearMenuHighlight != null) {
             onClearMenuHighlight.run();
         }
-        
+
         // Store active project name for highlighting
         highlightManager.setActiveProjectName(projectName);
-        
+
         // Try to highlight immediately if possible
         highlightManager.updateActiveProjectItem(projectName);
-        
+
         // Navigate directly without cancellation wrapper for immediate response
         if (pageNavigator != null) {
             String projectCode = getProjectCodeFromName(projectName);
@@ -67,20 +66,20 @@ public class SidebarNavigationHandler {
             showInfo("Project", "View details for: " + projectName);
         }
     }
-    
+
     /**
      * Safe navigation that cancels previous navigation
      */
     public void navigateWithCancellation(Runnable navigationAction) {
         // Cancel any ongoing navigation
         cancelCurrentNavigation();
-        
+
         // Execute navigation immediately for UI components (menu items)
         currentNavigationTask = CompletableFuture.runAsync(() -> {
             try {
                 // Small delay to simulate async operation
                 Thread.sleep(100);
-                
+
                 // Check if not cancelled before proceeding
                 if (!Thread.currentThread().isInterrupted()) {
                     javafx.application.Platform.runLater(navigationAction);
@@ -91,7 +90,7 @@ public class SidebarNavigationHandler {
             }
         });
     }
-    
+
     /**
      * Cancel current navigation task if any
      */
@@ -102,25 +101,25 @@ public class SidebarNavigationHandler {
             currentNavigationTask = null;
         }
     }
-    
+
     /**
      * Clear project highlighting for menu navigation
      */
     public void clearProjectHighlightingForMenuNavigation() {
         highlightManager.updateActiveProjectItem(null);
     }
-    
+
     /**
      * Get project code from project name
      */
     private String getProjectCodeFromName(String projectName) {
         return projectService.getAllProjects().stream()
-            .filter(project -> project.getName().equals(projectName))
-            .map(Project::getCode)
-            .findFirst()
-            .orElse(null);
+                .filter(project -> project.getName().equals(projectName))
+                .map(Project::getCode)
+                .findFirst()
+                .orElse(null);
     }
-    
+
     /**
      * Show info dialog
      */
@@ -131,7 +130,7 @@ public class SidebarNavigationHandler {
         alert.setContentText(content);
         alert.showAndWait();
     }
-    
+
     /**
      * Cleanup navigation resources
      */

@@ -10,7 +10,6 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import lombok.Getter;
-import org.kordamp.ikonli.Ikon;
 import org.kordamp.ikonli.octicons.Octicons;
 
 import java.util.function.Consumer;
@@ -28,123 +27,124 @@ import java.util.function.Consumer;
  */
 public class ChatInputArea extends VBox {
 
-  @Getter private final TextArea inputField;
-  private PrimaryButton sendButton;  // Not final to allow initialization in method
-  private Consumer<String> onSend;
+    @Getter
+    private final TextArea inputField;
+    private PrimaryButton sendButton;  // Not final to allow initialization in method
+    private Consumer<String> onSend;
 
-  /**
-   * Create chat input area
-   */
-  public ChatInputArea() {
-    super(LayoutConstants.SPACING_SM);
-    getStyleClass().add("chat-input-area");
-    setPadding(LayoutConstants.PADDING_DEFAULT);
+    /**
+     * Create chat input area
+     */
+    public ChatInputArea() {
+        super(LayoutConstants.SPACING_SM);
+        getStyleClass().add("chat-input-area");
+        setPadding(LayoutConstants.PADDING_DEFAULT);
 
-    // Input field
-    inputField = new TextArea();
-    inputField.setPromptText("Type your message... (Shift+Enter for new line, Enter to send)");
-    inputField.setWrapText(true);
-    inputField.setPrefRowCount(3);
-    inputField.getStyleClass().add("chat-input");
+        // Input field
+        inputField = new TextArea();
+        inputField.setPromptText("Type your message... (Shift+Enter for new line, Enter to send)");
+        inputField.setWrapText(true);
+        inputField.setPrefRowCount(3);
+        inputField.getStyleClass().add("chat-input");
 
-    // Handle Enter key
-    inputField.setOnKeyPressed(e -> {
-      if (e.getCode() == KeyCode.ENTER && !e.isShiftDown()) {
-        e.consume();
-        handleSend();
-      }
-    });
+        // Handle Enter key
+        inputField.setOnKeyPressed(e -> {
+            if (e.getCode() == KeyCode.ENTER && !e.isShiftDown()) {
+                e.consume();
+                handleSend();
+            }
+        });
 
-    // Action buttons
-    HBox actions = createActionButtons();
+        // Action buttons
+        HBox actions = createActionButtons();
 
-    getChildren().addAll(inputField, actions);
-  }
-
-  /**
-   * Create action buttons
-   */
-  private HBox createActionButtons() {
-    HBox actions = LayoutHelper.createHBox(
-        Pos.CENTER_LEFT,
-        LayoutConstants.SPACING_SM
-    );
-
-    // Additional action buttons
-    IconButton attachBtn = new IconButton((Ikon)Octicons.CLIPPY_16, "Attach file");
-    IconButton voiceBtn = new IconButton((Ikon)Octicons.UNMUTE_16, "Voice input");
-
-    // Send button
-    sendButton = new PrimaryButton("Send", (Ikon)Octicons.PAPER_AIRPLANE_16)
-        .withAction(this::handleSend);
-
-    // Spacer
-    HBox spacer = new HBox();
-    LayoutHelper.setHGrow(spacer);
-    
-    actions.getChildren().addAll(
-        attachBtn,
-        voiceBtn,
-        spacer,
-        sendButton
-    );
-
-    return actions;
-  }
-
-  /**
-   * Handle send action
-   */
-  private void handleSend() {
-    String text = inputField.getText().trim();
-    if (!text.isEmpty() && onSend != null) {
-      onSend.accept(text);
-      inputField.clear();
+        getChildren().addAll(inputField, actions);
     }
-  }
 
-  /**
-   * Set send handler
-   *
-   * @param handler Send handler
-   * @return this for chaining
-   */
-  public ChatInputArea withSendHandler(Consumer<String> handler) {
-    this.onSend = handler;
-    return this;
-  }
+    /**
+     * Create action buttons
+     */
+    private HBox createActionButtons() {
+        HBox actions = LayoutHelper.createHBox(
+                Pos.CENTER_LEFT,
+                LayoutConstants.SPACING_SM
+        );
 
-  /**
-   * Set input text
-   *
-   * @param text Text to set
-   */
-  public void setText(String text) {
-    inputField.setText(text);
-  }
+        // Additional action buttons
+        IconButton attachBtn = new IconButton(Octicons.CLIPPY_16, "Attach file");
+        IconButton voiceBtn = new IconButton(Octicons.UNMUTE_16, "Voice input");
 
-  /**
-   * Clear input
-   */
-  public void clear() {
-    inputField.clear();
-  }
+        // Send button
+        sendButton = new PrimaryButton("Send", Octicons.PAPER_AIRPLANE_16)
+                .withAction(this::handleSend);
 
-  /**
-   * Set disabled state
-   *
-   * @param disabled true to disable
-   */
-  public void setInputDisabled(boolean disabled) {
-    inputField.setDisable(disabled);
-    sendButton.setDisable(disabled);
-  }
+        // Spacer
+        HBox spacer = new HBox();
+        LayoutHelper.setHGrow(spacer);
 
-  /**
-   * Focus input field
-   */
-  public void requestInputFocus() {
-    inputField.requestFocus();
-  }
+        actions.getChildren().addAll(
+                attachBtn,
+                voiceBtn,
+                spacer,
+                sendButton
+        );
+
+        return actions;
+    }
+
+    /**
+     * Handle send action
+     */
+    private void handleSend() {
+        String text = inputField.getText().trim();
+        if (!text.isEmpty() && onSend != null) {
+            onSend.accept(text);
+            inputField.clear();
+        }
+    }
+
+    /**
+     * Set send handler
+     *
+     * @param handler Send handler
+     * @return this for chaining
+     */
+    public ChatInputArea withSendHandler(Consumer<String> handler) {
+        this.onSend = handler;
+        return this;
+    }
+
+    /**
+     * Set input text
+     *
+     * @param text Text to set
+     */
+    public void setText(String text) {
+        inputField.setText(text);
+    }
+
+    /**
+     * Clear input
+     */
+    public void clear() {
+        inputField.clear();
+    }
+
+    /**
+     * Set disabled state
+     *
+     * @param disabled true to disable
+     */
+    public void setInputDisabled(boolean disabled) {
+        inputField.setDisable(disabled);
+        sendButton.setDisable(disabled);
+    }
+
+    /**
+     * Focus input field
+     */
+    public void requestInputFocus() {
+        inputField.requestFocus();
+    }
 }
 

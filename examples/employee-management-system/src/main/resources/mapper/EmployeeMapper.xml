@@ -45,107 +45,117 @@
     </sql>
 
     <select id="findAll" resultMap="EmployeeResultMap">
-        SELECT <include refid="employeeColumns"/>
+        SELECT
+        <include refid="employeeColumns"/>
         FROM employees e
         ORDER BY e.employee_code
     </select>
 
     <select id="findAllWithDepartment" resultMap="EmployeeWithDepartmentResultMap">
-        SELECT <include refid="employeeWithDepartmentColumns"/>
+        SELECT
+        <include refid="employeeWithDepartmentColumns"/>
         FROM employees e
         LEFT JOIN departments d ON e.department_id = d.id
         ORDER BY e.employee_code
     </select>
 
     <select id="findById" resultMap="EmployeeResultMap">
-        SELECT <include refid="employeeColumns"/>
+        SELECT
+        <include refid="employeeColumns"/>
         FROM employees e
         WHERE e.id = #{id}
     </select>
 
     <select id="findByIdWithDepartment" resultMap="EmployeeWithDepartmentResultMap">
-        SELECT <include refid="employeeWithDepartmentColumns"/>
+        SELECT
+        <include refid="employeeWithDepartmentColumns"/>
         FROM employees e
         LEFT JOIN departments d ON e.department_id = d.id
         WHERE e.id = #{id}
     </select>
 
     <select id="findByEmployeeCode" resultMap="EmployeeResultMap">
-        SELECT <include refid="employeeColumns"/>
+        SELECT
+        <include refid="employeeColumns"/>
         FROM employees e
         WHERE e.employee_code = #{employeeCode}
     </select>
 
     <select id="findByEmail" resultMap="EmployeeResultMap">
-        SELECT <include refid="employeeColumns"/>
+        SELECT
+        <include refid="employeeColumns"/>
         FROM employees e
         WHERE e.email = #{email}
     </select>
 
     <select id="findByDepartmentId" resultMap="EmployeeResultMap">
-        SELECT <include refid="employeeColumns"/>
+        SELECT
+        <include refid="employeeColumns"/>
         FROM employees e
         WHERE e.department_id = #{departmentId}
         ORDER BY e.employee_code
     </select>
 
     <select id="findByStatus" resultMap="EmployeeResultMap">
-        SELECT <include refid="employeeColumns"/>
+        SELECT
+        <include refid="employeeColumns"/>
         FROM employees e
         WHERE e.status = #{status}
         ORDER BY e.employee_code
     </select>
 
     <select id="search" resultMap="EmployeeResultMap">
-        SELECT <include refid="employeeColumns"/>
+        SELECT
+        <include refid="employeeColumns"/>
         FROM employees e
         WHERE LOWER(e.first_name) LIKE LOWER(CONCAT('%', #{keyword}, '%'))
-           OR LOWER(e.last_name) LIKE LOWER(CONCAT('%', #{keyword}, '%'))
-           OR LOWER(e.email) LIKE LOWER(CONCAT('%', #{keyword}, '%'))
-           OR LOWER(e.employee_code) LIKE LOWER(CONCAT('%', #{keyword}, '%'))
+        OR LOWER(e.last_name) LIKE LOWER(CONCAT('%', #{keyword}, '%'))
+        OR LOWER(e.email) LIKE LOWER(CONCAT('%', #{keyword}, '%'))
+        OR LOWER(e.employee_code) LIKE LOWER(CONCAT('%', #{keyword}, '%'))
         ORDER BY e.employee_code
     </select>
 
     <select id="searchWithDepartment" resultMap="EmployeeWithDepartmentResultMap">
-        SELECT <include refid="employeeWithDepartmentColumns"/>
+        SELECT
+        <include refid="employeeWithDepartmentColumns"/>
         FROM employees e
         LEFT JOIN departments d ON e.department_id = d.id
         WHERE LOWER(e.first_name) LIKE LOWER(CONCAT('%', #{keyword}, '%'))
-           OR LOWER(e.last_name) LIKE LOWER(CONCAT('%', #{keyword}, '%'))
-           OR LOWER(e.email) LIKE LOWER(CONCAT('%', #{keyword}, '%'))
-           OR LOWER(e.employee_code) LIKE LOWER(CONCAT('%', #{keyword}, '%'))
+        OR LOWER(e.last_name) LIKE LOWER(CONCAT('%', #{keyword}, '%'))
+        OR LOWER(e.email) LIKE LOWER(CONCAT('%', #{keyword}, '%'))
+        OR LOWER(e.employee_code) LIKE LOWER(CONCAT('%', #{keyword}, '%'))
         ORDER BY e.employee_code
     </select>
 
     <insert id="insert" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
         INSERT INTO employees (
-            employee_code, first_name, last_name, email, phone,
-            date_of_birth, hire_date, salary, department_id, position,
-            status, address, city, country, created_at, updated_at
+        employee_code, first_name, last_name, email, phone,
+        date_of_birth, hire_date, salary, department_id, position,
+        status, address, city, country, created_at, updated_at
         ) VALUES (
-            #{employeeCode}, #{firstName}, #{lastName}, #{email}, #{phone},
-            #{dateOfBirth}, #{hireDate}, #{salary}, #{departmentId}, #{position},
-            #{status}, #{address}, #{city}, #{country}, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
+        #{employeeCode}, #{firstName}, #{lastName}, #{email}, #{phone},
+        #{dateOfBirth}, #{hireDate}, #{salary}, #{departmentId}, #{position},
+        #{status}, #{address}, #{city}, #{country}, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
         )
     </insert>
 
     <update id="update">
         UPDATE employees
         SET employee_code = #{employeeCode},
-            first_name = #{firstName},
-            last_name = #{lastName},
-            email = #{email},
-            phone = #{phone},
-            date_of_birth = #{dateOfBirth},
-            hire_date = #{hireDate},
-            salary = #{salary},
-            department_id = #{departmentId},
-            position = #{position},
-            status = #{status},
-            address = #{address},
-            city = #{city},
-            country = #{country},
-            updated_at = CURRENT_TIMESTAMP
+        first_name = #{firstName},
+        last_name = #{lastName},
+        email = #{email},
+        phone = #{phone},
+        date_of_birth = #{dateOfBirth},
+        hire_date = #{hireDate},
+        salary = #{salary},
+        department_id = #{departmentId},
+        position = #{position},
+        status = #{status},
+        address = #{address},
+        city = #{city},
+        country = #{country},
+        updated_at = CURRENT_TIMESTAMP
         WHERE id = #{id}
     </update>
 

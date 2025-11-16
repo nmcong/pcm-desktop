@@ -1,6 +1,7 @@
 # 📋 DJLEmbeddingService - Tài liệu kỹ thuật chi tiết
 
 ## 📑 Mục lục
+
 1. [Tổng quan](#1-tổng-quan)
 2. [Kiến trúc hệ thống](#2-kiến-trúc-hệ-thống)
 3. [ThreadLocal Pattern](#3-threadlocal-pattern)
@@ -16,12 +17,15 @@
 ## 1. Tổng quan
 
 ### 🎯 Mục đích
+
 `DJLEmbeddingService` là service chuyển đổi text thành vector embeddings sử dụng:
+
 - **Deep Java Library (DJL)** - Framework AI cho Java
 - **ONNX Runtime** - Engine chạy AI models
 - **HuggingFace models** - Pre-trained sentence transformer models
 
 ### 📊 Input/Output
+
 ```java
 // Input: Text
 String text = "How to validate customers?";
@@ -31,6 +35,7 @@ float[] vector = [0.234, -0.567, 0.891, ...]; // 384 hoặc 768 dimensions
 ```
 
 ### 🏗️ Vai trò trong hệ thống
+
 ```
 User Query → DJLEmbeddingService → Vector → Vector Database → Search Results
 ```
@@ -76,6 +81,7 @@ public class DJLEmbeddingService implements EmbeddingService {
 ### 🤔 Tại sao cần ThreadLocal?
 
 **Vấn đề với synchronized approach:**
+
 ```java
 // ❌ Cách cũ: Tất cả threads phải chờ nhau
 public synchronized float[] embed(String text) {
@@ -85,6 +91,7 @@ public synchronized float[] embed(String text) {
 ```
 
 **Giải pháp ThreadLocal:**
+
 ```java
 // ✅ Cách mới: Mỗi thread có resources riêng
 private final ThreadLocal<OrtSession> sessionPool = 
@@ -201,6 +208,7 @@ public float[] embed(String text) {
 ### 🔍 Chi tiết các bước quan trọng
 
 #### Tokenization
+
 ```java
 Input: "How to validate customers?"
 ↓
@@ -212,7 +220,8 @@ attentionMask: [1, 1, 1, 1, 1, 1, 1, 0, 0, ...]
                 attend ← real tokens  ignore ← padding
 ```
 
-#### ONNX Inference  
+#### ONNX Inference
+
 ```java
 Input Shape: [batch_size=1, seq_len=512]
 ↓
@@ -222,6 +231,7 @@ Output Shape: [batch_size=1, seq_len=512, hidden_size=384]
 ```
 
 #### Mean Pooling
+
 ```java
 // Trước pooling: [1, 512, 384] - mỗi token có 1 vector
 // Sau pooling: [384] - 1 vector duy nhất cho cả sentence
@@ -243,6 +253,7 @@ for (int i = 0; i < seqLen; i++) {
 ### 🚀 True Batch vs Sequential Processing
 
 **Sequential (cách cũ):**
+
 ```java
 // ❌ Inefficient: N lần ONNX inference calls
 for (String text : texts) {
@@ -251,6 +262,7 @@ for (String text : texts) {
 ```
 
 **True Batch (cách mới):**
+
 ```java
 // ✅ Efficient: 1 lần ONNX inference call cho all texts
 public float[][] embedBatch(String[] texts) {
@@ -283,6 +295,7 @@ public float[][] embedBatch(String[] texts) {
 ```
 
 ### 📈 Performance Comparison
+
 ```
 Sequential: 10 texts × 50ms = 500ms
 Batch:      10 texts ÷ 1 call = 80ms  → 6x faster!
@@ -457,6 +470,7 @@ Total: ~350MB
 ### ❌ Common Issues & Solutions
 
 #### Issue 1: OutOfMemoryError
+
 ```java
 // 🚨 Problem
 Exception in thread "main" java.lang.OutOfMemoryError: Java heap space
@@ -474,6 +488,7 @@ Exception in thread "main" java.lang.OutOfMemoryError: Java heap space
 ```
 
 #### Issue 2: ONNX Runtime errors
+
 ```java
 // 🚨 Problem
 OrtException: Failed to create session
@@ -490,6 +505,7 @@ OrtException: Failed to create session
 ```
 
 #### Issue 3: Thread safety violations
+
 ```java
 // 🚨 Problem
 Random crashes, incorrect embeddings
@@ -544,19 +560,22 @@ public boolean isHealthy() {
 ## 📚 Tổng kết
 
 ### 🎯 Key Concepts
+
 - **ThreadLocal**: Mỗi thread có resources riêng → thread safety without locking
-- **ONNX Runtime**: Engine chạy AI models efficiently  
+- **ONNX Runtime**: Engine chạy AI models efficiently
 - **Batch Processing**: 1 inference call cho nhiều texts → better performance
 - **Resource Management**: Proper cleanup để tránh memory leaks
 
-### 🚀 Performance Highlights  
+### 🚀 Performance Highlights
+
 - **Concurrency**: True parallel execution
 - **Batching**: 6x faster for multiple texts
 - **Memory**: Efficient resource sharing + isolation
 
 ### 🛡️ Security Features
+
 - Path traversal prevention
-- Input validation & sanitization  
+- Input validation & sanitization
 - Error message sanitization
 
 **Code này production-ready cho high-throughput embedding service!** 🎉
@@ -566,16 +585,19 @@ public boolean isHealthy() {
 ## 📖 References
 
 ### Related Documentation
+
 - [Embedding Overview](./README.md)
 - [Model Selection Guide](./MODEL_SELECTION_GUIDE.md)
 - [DJL Overview](./DJL_OVERVIEW.md)
 
 ### External Links
+
 - [Deep Java Library Documentation](https://djl.ai/)
 - [ONNX Runtime Java API](https://onnxruntime.ai/docs/api/java/)
 - [HuggingFace Sentence Transformers](https://huggingface.co/sentence-transformers)
 
 ### Source Code Location
+
 ```
 src/main/java/com/noteflix/pcm/rag/embedding/DJLEmbeddingService.java
 ```

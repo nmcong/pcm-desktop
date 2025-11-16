@@ -78,7 +78,7 @@ public class SegmentedControlSkin extends BehaviorSkinBase<SegmentedControl, Seg
         control.getToggleGroup().selectedToggleProperty().addListener(selectionListener);
 
         toggleGroupListener = (obs, old, val) ->
-                                  control.getSegments().forEach(btn -> btn.setToggleGroup(val));
+                control.getSegments().forEach(btn -> btn.setToggleGroup(val));
         control.toggleGroupProperty().addListener(toggleGroupListener);
 
         // populate container and watch for changes
@@ -125,13 +125,13 @@ public class SegmentedControlSkin extends BehaviorSkinBase<SegmentedControl, Seg
 
         animating = true;
         var timeline = new Timeline(
-            new KeyFrame(
-                getSkinnable().getAnimationDuration(),
-                new KeyValue(indicator.layoutXProperty(), dest.getLayoutX()),
-                new KeyValue(indicator.layoutYProperty(), dest.getLayoutY()),
-                new KeyValue(indicator.prefWidthProperty(), dest.getWidth()),
-                new KeyValue(indicator.prefHeightProperty(), dest.getHeight())
-            )
+                new KeyFrame(
+                        getSkinnable().getAnimationDuration(),
+                        new KeyValue(indicator.layoutXProperty(), dest.getLayoutX()),
+                        new KeyValue(indicator.layoutYProperty(), dest.getLayoutY()),
+                        new KeyValue(indicator.prefWidthProperty(), dest.getWidth()),
+                        new KeyValue(indicator.prefHeightProperty(), dest.getHeight())
+                )
         );
         timeline.setOnFinished(event -> {
             moveIndicator(dest);
@@ -142,9 +142,9 @@ public class SegmentedControlSkin extends BehaviorSkinBase<SegmentedControl, Seg
 
     protected void moveIndicator(ToggleLabel dest) {
         if (dest.getLayoutX() == indicator.getLayoutX()
-            && dest.getLayoutY() == indicator.getLayoutY()
-            && dest.getWidth() == indicator.getWidth()
-            && dest.getHeight() == indicator.getHeight()
+                && dest.getLayoutY() == indicator.getLayoutY()
+                && dest.getWidth() == indicator.getWidth()
+                && dest.getHeight() == indicator.getHeight()
         ) {
             return;
         }

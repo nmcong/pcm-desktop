@@ -7,27 +7,27 @@ $title-font-size: 1.05em !default; // semibold would be much better, but it's Ja
 
 .tile-base {
 
-  >.container {
+  > .container {
     -fx-padding: 1em;
     -fx-alignment: CENTER_LEFT;
     -fx-background-radius: cfg.$border-radius;
     -fx-spacing: 1em;
 
-    >.graphic {
+    > .graphic {
       &:disabled {
         -fx-opacity: cfg.$opacity-disabled;
       }
     }
 
-    >.header {
+    > .header {
       -fx-alignment: CENTER_LEFT;
       -fx-padding: 0;
 
-      >.title {
+      > .title {
         -fx-font-size: $title-font-size;
       }
 
-      >.description {
+      > .description {
         Text {
           &:disabled {
             -fx-opacity: cfg.$opacity-disabled;
@@ -40,11 +40,11 @@ $title-font-size: 1.05em !default; // semibold would be much better, but it's Ja
   }
 
   &:has-title:has-description {
-    >.container >.header {
+    > .container > .header {
       -fx-spacing: 0.5em;
       -fx-alignment: TOP_LEFT;
 
-      >.description {
+      > .description {
         Text {
           -fx-fill: -color-fg-muted;
         }
@@ -56,7 +56,7 @@ $title-font-size: 1.05em !default; // semibold would be much better, but it's Ja
 .tile {
 
   &:hover:interactive {
-    >.container {
+    > .container {
       -fx-background-color: $color-interactive;
       -fx-cursor: hand;
     }

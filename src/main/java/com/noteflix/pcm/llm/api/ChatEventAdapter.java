@@ -23,28 +23,28 @@ import com.noteflix.pcm.llm.model.ToolCall;
  */
 public class ChatEventAdapter implements ChatEventListener {
 
-  @Override
-  public void onToken(String token) {
-    // No-op by default
-  }
+    @Override
+    public void onToken(String token) {
+        // No-op by default
+    }
 
-  @Override
-  public void onThinking(String thinkingToken) {
-    // No-op by default
-  }
+    @Override
+    public void onThinking(String thinkingToken) {
+        // No-op by default
+    }
 
-  @Override
-  public void onToolCall(ToolCall toolCall) {
-    // No-op by default
-  }
+    @Override
+    public void onToolCall(ToolCall toolCall) {
+        // No-op by default
+    }
 
-  @Override
-  public void onComplete(ChatResponse response) {
-    // No-op by default
-  }
+    @Override
+    public void onComplete(ChatResponse response) {
+        // No-op by default
+    }
 
-  @Override
-  public void onError(Throwable error) {
-    // No-op by default
-  }
+    @Override
+    public void onError(Throwable error) {
+        // No-op by default
+    }
 }

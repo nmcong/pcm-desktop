@@ -1,6 +1,7 @@
 # Integration Flow & System Architecture - Detailed Design Specification
 
 **Tạo từ các file nguồn:**
+
 - `docs/RaD/ideas/request-to-code-flow.md`
 - `docs/RaD/ideas/function-calling-spec.md`
 - `docs/RaD/ideas/project-structure.md`
@@ -13,6 +14,7 @@
 ## 1. Tổng quan
 
 Tài liệu này mô tả chi tiết:
+
 1. **Request-to-Code Flow**: Pipeline xử lý từ user request đến code location
 2. **Function Calling Specification**: API endpoints và service contracts
 3. **Project Structure**: Clean Architecture organization
@@ -78,13 +80,13 @@ Map user requirement/question to **exact source code location(s)** cần investi
 
 ### 2.3 Module Overview
 
-| Module | Responsibility |
-|--------|----------------|
-| `RequestService` | Persist user requests, kick off analysis |
-| `RetrievalService` | Hybrid retrieval (vector + FTS), ranking |
-| `AstContextService` | Map chunk hits → AST nodes/relationships |
-| `ImpactAnalyzer` | Expand context to related files/symbols |
-| `SnippetFormatter` | Read file segments, format markdown snippets |
+| Module                 | Responsibility                                     |
+|------------------------|----------------------------------------------------|
+| `RequestService`       | Persist user requests, kick off analysis           |
+| `RetrievalService`     | Hybrid retrieval (vector + FTS), ranking           |
+| `AstContextService`    | Map chunk hits → AST nodes/relationships           |
+| `ImpactAnalyzer`       | Expand context to related files/symbols            |
+| `SnippetFormatter`     | Read file segments, format markdown snippets       |
 | `AgentResponseService` | Orchestrate LLM call, log artifacts, stream result |
 
 ### 2.4 Sequence Diagram
@@ -464,21 +466,21 @@ public class SnippetFormatter {
 
 ### 3.1 API Endpoints
 
-| Function | Purpose | Entities |
-|----------|---------|----------|
-| `registerSystem` | Create/update System/Subsystem/Project tree | `systems`, `subsystems`, `projects` |
-| `attachSourceRoot` | Map project to source path, schedule scan | `project_sources` |
-| `triggerSourceScan` | Run checksum diff, AST rebuild, reindex | `source_files`, `ast_snapshots` |
-| `ingestChmPackage` | Import CHM into knowledge base | `chm_imports`, `chm_documents` |
-| `upsertKnowledgeChunk` | Register arbitrary doc chunk | `search_corpus`, `vector_documents` |
-| `runSemanticSearch` | Execute FTS5/BM25 query | `search_index` |
-| `runVectorSearch` | Query Qdrant for embeddings | Qdrant |
-| `hybridRetrieve` | Combine lexical + vector | retrieval layer |
-| `submitUserRequest` | Persist requirement, start analysis | `user_requests` |
-| `streamAgentResponse` | Stream LLM answer, log context | `agent_responses` |
-| `recordFeedback` | Store rating/comments | `answer_feedback` |
-| `getAstNodeDetail` | Return AST info for symbol/node | `ast_nodes` |
-| `listRequests` | Filter/search historical requests | `user_requests` |
+| Function               | Purpose                                     | Entities                            |
+|------------------------|---------------------------------------------|-------------------------------------|
+| `registerSystem`       | Create/update System/Subsystem/Project tree | `systems`, `subsystems`, `projects` |
+| `attachSourceRoot`     | Map project to source path, schedule scan   | `project_sources`                   |
+| `triggerSourceScan`    | Run checksum diff, AST rebuild, reindex     | `source_files`, `ast_snapshots`     |
+| `ingestChmPackage`     | Import CHM into knowledge base              | `chm_imports`, `chm_documents`      |
+| `upsertKnowledgeChunk` | Register arbitrary doc chunk                | `search_corpus`, `vector_documents` |
+| `runSemanticSearch`    | Execute FTS5/BM25 query                     | `search_index`                      |
+| `runVectorSearch`      | Query Qdrant for embeddings                 | Qdrant                              |
+| `hybridRetrieve`       | Combine lexical + vector                    | retrieval layer                     |
+| `submitUserRequest`    | Persist requirement, start analysis         | `user_requests`                     |
+| `streamAgentResponse`  | Stream LLM answer, log context              | `agent_responses`                   |
+| `recordFeedback`       | Store rating/comments                       | `answer_feedback`                   |
+| `getAstNodeDetail`     | Return AST info for symbol/node             | `ast_nodes`                         |
+| `listRequests`         | Filter/search historical requests           | `user_requests`                     |
 
 ### 3.2 REST API Design
 
@@ -808,6 +810,7 @@ com.noteflix.pcm.shared/
 ```
 
 **Rules:**
+
 1. `application` depends on `domain` abstractions only
 2. `domain` depends on nothing (pure domain logic)
 3. `infrastructure` depends on `domain` to implement interfaces

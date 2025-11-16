@@ -6,15 +6,18 @@
 
 ## 📚 Tài Liệu Tổng Quan
 
-Đây là trang chủ tài liệu cho UI Module của PCM Desktop. Module này chứa toàn bộ presentation layer của ứng dụng, được xây dựng theo kiến trúc MVVM với JavaFX.
+Đây là trang chủ tài liệu cho UI Module của PCM Desktop. Module này chứa toàn bộ presentation layer của ứng dụng, được
+xây dựng theo kiến trúc MVVM với JavaFX.
 
 ---
 
 ## 📋 Danh Sách Tài Liệu
 
 ### 1. [README.md](README.md) - Getting Started Guide
+
 **Đối tượng**: Developers mới bắt đầu với UI module  
 **Nội dung**:
+
 - Tổng quan về UI module
 - Kiến trúc MVVM overview
 - Cấu trúc package
@@ -28,8 +31,10 @@
 ---
 
 ### 2. [ARCHITECTURE.md](ARCHITECTURE.md) - Architecture Deep Dive
+
 **Đối tượng**: Developers cần hiểu sâu về kiến trúc  
 **Nội dung**:
+
 - MVVM architecture chi tiết
 - Component architecture
 - Navigation system
@@ -44,8 +49,10 @@
 ---
 
 ### 3. [UI_REFACTORING_PLAN.md](UI_REFACTORING_PLAN.md) - Refactoring Master Plan
+
 **Đối tượng**: Team leads, architects, contributors  
 **Nội dung**:
+
 - Phân tích hiện trạng UI module
 - Các vấn đề và điểm yếu đã phát hiện
 - Mục tiêu refactoring
@@ -55,7 +62,8 @@
 - Testing strategy
 - Success metrics
 
-**Đọc khi**: 
+**Đọc khi**:
+
 - Muốn hiểu toàn bộ kế hoạch refactoring
 - Tham gia vào refactoring process
 - Cần context về architectural decisions
@@ -63,8 +71,10 @@
 ---
 
 ### 4. [COMPONENT_LIBRARY.md](COMPONENT_LIBRARY.md) - Component Reference
+
 **Đối tượng**: Developers xây dựng UI  
 **Nội dung**:
+
 - Danh sách đầy đủ components có sẵn
 - API reference cho mỗi component
 - Usage examples
@@ -73,6 +83,7 @@
 - Contribution guide
 
 **Categories**:
+
 - Buttons (IconButton, PrimaryButton, SecondaryButton)
 - Cards (Card, StatCard, InfoCard)
 - Forms (FormField, ValidatedTextField, FormBuilder)
@@ -83,7 +94,8 @@
 - Widgets (SearchBox, LoadingIndicator, StatusBadge, ThemeToggle)
 - Layouts (TwoColumnLayout, ThreeColumnLayout, HeaderContentLayout)
 
-**Đọc khi**: 
+**Đọc khi**:
+
 - Cần sử dụng UI component
 - Tìm component phù hợp cho use case
 - Tạo component mới
@@ -91,8 +103,10 @@
 ---
 
 ### 5. [BEST_PRACTICES.md](BEST_PRACTICES.md) - Coding Standards
+
 **Đối tượng**: Tất cả developers  
 **Nội dung**:
+
 - SOLID principles áp dụng cho UI
 - MVVM best practices
 - Component development guidelines
@@ -104,7 +118,8 @@
 - Common mistakes và cách tránh
 - Code review checklist
 
-**Đọc khi**: 
+**Đọc khi**:
+
 - Viết code mới
 - Code review
 - Muốn cải thiện code quality
@@ -116,34 +131,40 @@
 ### Tôi muốn...
 
 #### ...bắt đầu với UI module
+
 1. Đọc [README.md](README.md) - Getting Started
 2. Xem examples trong [COMPONENT_LIBRARY.md](COMPONENT_LIBRARY.md)
 3. Follow [BEST_PRACTICES.md](BEST_PRACTICES.md) khi code
 
 #### ...hiểu cách hoạt động của hệ thống
+
 1. Đọc [ARCHITECTURE.md](ARCHITECTURE.md) - MVVM section
 2. Đọc [ARCHITECTURE.md](ARCHITECTURE.md) - Component Architecture
 3. Đọc [ARCHITECTURE.md](ARCHITECTURE.md) - Navigation & State Management
 
 #### ...tạo một page mới
+
 1. Đọc [README.md](README.md) - "Tạo Page Mới" section
 2. Xem [COMPONENT_LIBRARY.md](COMPONENT_LIBRARY.md) - Usage Examples
 3. Follow [BEST_PRACTICES.md](BEST_PRACTICES.md) - MVVM Best Practices
 4. Check [BEST_PRACTICES.md](BEST_PRACTICES.md) - Checklist before committing
 
 #### ...tạo một component mới
+
 1. Đọc [COMPONENT_LIBRARY.md](COMPONENT_LIBRARY.md) - Overview
 2. Xem similar components để reference
 3. Follow [BEST_PRACTICES.md](BEST_PRACTICES.md) - Component Development
 4. Update [COMPONENT_LIBRARY.md](COMPONENT_LIBRARY.md) với component mới
 
 #### ...tham gia refactoring
+
 1. Đọc [UI_REFACTORING_PLAN.md](UI_REFACTORING_PLAN.md) - toàn bộ
 2. Hiểu [ARCHITECTURE.md](ARCHITECTURE.md) - kiến trúc mới
 3. Follow [BEST_PRACTICES.md](BEST_PRACTICES.md) khi refactor
 4. Check [UI_REFACTORING_PLAN.md](UI_REFACTORING_PLAN.md) - Migration Guide
 
 #### ...fix bugs
+
 1. Hiểu bug context
 2. Check [ARCHITECTURE.md](ARCHITECTURE.md) cho relevant section
 3. Check [BEST_PRACTICES.md](BEST_PRACTICES.md) - Common Mistakes
@@ -151,6 +172,7 @@
 5. Add tests
 
 #### ...review code
+
 1. Use [BEST_PRACTICES.md](BEST_PRACTICES.md) - Code Review Checklist
 2. Verify MVVM pattern được follow
 3. Check component reusability
@@ -161,16 +183,19 @@
 ## 📊 Phân Loại Theo Level
 
 ### Beginner (Mới bắt đầu)
+
 1. ⭐ [README.md](README.md)
 2. ⭐ [COMPONENT_LIBRARY.md](COMPONENT_LIBRARY.md) - Usage Examples
 3. ⭐ [BEST_PRACTICES.md](BEST_PRACTICES.md) - General Guidelines
 
 ### Intermediate (Đã có kinh nghiệm)
+
 1. ⭐⭐ [ARCHITECTURE.md](ARCHITECTURE.md) - MVVM Architecture
 2. ⭐⭐ [BEST_PRACTICES.md](BEST_PRACTICES.md) - MVVM Best Practices
 3. ⭐⭐ [COMPONENT_LIBRARY.md](COMPONENT_LIBRARY.md) - Full Reference
 
 ### Advanced (Expert)
+
 1. ⭐⭐⭐ [ARCHITECTURE.md](ARCHITECTURE.md) - Full document
 2. ⭐⭐⭐ [UI_REFACTORING_PLAN.md](UI_REFACTORING_PLAN.md)
 3. ⭐⭐⭐ [BEST_PRACTICES.md](BEST_PRACTICES.md) - Design Patterns
@@ -224,26 +249,27 @@ ui/
 
 ### Common Components
 
-| Component | Usage | Reference |
-|-----------|-------|-----------|
-| PrimaryButton | Main actions | [COMPONENT_LIBRARY.md#primarybutton](COMPONENT_LIBRARY.md#primarybutton) |
-| Card | Content containers | [COMPONENT_LIBRARY.md#card](COMPONENT_LIBRARY.md#card) |
-| FormBuilder | Form creation | [COMPONENT_LIBRARY.md#formbuilder](COMPONENT_LIBRARY.md#formbuilder) |
-| DialogBuilder | Dialogs | [COMPONENT_LIBRARY.md#dialogbuilder](COMPONENT_LIBRARY.md#dialogbuilder) |
+| Component     | Usage              | Reference                                                                |
+|---------------|--------------------|--------------------------------------------------------------------------|
+| PrimaryButton | Main actions       | [COMPONENT_LIBRARY.md#primarybutton](COMPONENT_LIBRARY.md#primarybutton) |
+| Card          | Content containers | [COMPONENT_LIBRARY.md#card](COMPONENT_LIBRARY.md#card)                   |
+| FormBuilder   | Form creation      | [COMPONENT_LIBRARY.md#formbuilder](COMPONENT_LIBRARY.md#formbuilder)     |
+| DialogBuilder | Dialogs            | [COMPONENT_LIBRARY.md#dialogbuilder](COMPONENT_LIBRARY.md#dialogbuilder) |
 
 ---
 
 ## 📝 Document Status
 
-| Document | Status | Last Updated | Completeness |
-|----------|--------|--------------|--------------|
-| README.md | ✅ Complete | 2025-11-15 | 100% |
-| ARCHITECTURE.md | ✅ Complete | 2025-11-15 | 100% |
-| UI_REFACTORING_PLAN.md | ✅ Complete | 2025-11-15 | 100% |
-| COMPONENT_LIBRARY.md | 🔄 In Progress | 2025-11-15 | 80% |
-| BEST_PRACTICES.md | ✅ Complete | 2025-11-15 | 100% |
+| Document               | Status         | Last Updated | Completeness |
+|------------------------|----------------|--------------|--------------|
+| README.md              | ✅ Complete     | 2025-11-15   | 100%         |
+| ARCHITECTURE.md        | ✅ Complete     | 2025-11-15   | 100%         |
+| UI_REFACTORING_PLAN.md | ✅ Complete     | 2025-11-15   | 100%         |
+| COMPONENT_LIBRARY.md   | 🔄 In Progress | 2025-11-15   | 80%          |
+| BEST_PRACTICES.md      | ✅ Complete     | 2025-11-15   | 100%         |
 
 **Legend:**
+
 - ✅ Complete: Document hoàn thiện, có thể sử dụng
 - 🔄 In Progress: Document đang được cập nhật khi components được tạo
 - ⏸️ Draft: Nháp, chưa hoàn thiện
@@ -348,18 +374,22 @@ ui/
 ## 📚 External Resources
 
 ### JavaFX:
+
 - [JavaFX Documentation](https://openjfx.io/)
 - [JavaFX Tutorial](https://code.makery.ch/library/javafx-tutorial/)
 
 ### AtlantaFX:
+
 - [AtlantaFX GitHub](https://github.com/mkpaz/atlantafx)
 - [AtlantaFX Sampler](https://mkpaz.github.io/atlantafx/)
 
 ### Design Patterns:
+
 - [Refactoring Guru](https://refactoring.guru/)
 - [MVVM Pattern](https://en.wikipedia.org/wiki/Model–view–viewmodel)
 
 ### Best Practices:
+
 - [Clean Code Book](https://www.amazon.com/Clean-Code-Handbook-Software-Craftsmanship/dp/0132350882)
 - [SOLID Principles](https://en.wikipedia.org/wiki/SOLID)
 
@@ -367,10 +397,10 @@ ui/
 
 ## 📈 Version History
 
-| Version | Date | Changes |
-|---------|------|---------|
-| 2.0.0 | 2025-11-15 | Initial complete documentation set |
-| 1.0.0 | - | Legacy (no comprehensive docs) |
+| Version | Date       | Changes                            |
+|---------|------------|------------------------------------|
+| 2.0.0   | 2025-11-15 | Initial complete documentation set |
+| 1.0.0   | -          | Legacy (no comprehensive docs)     |
 
 ---
 

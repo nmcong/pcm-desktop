@@ -12,6 +12,7 @@
 package atlantafx.base.util;
 
 import java.util.Objects;
+
 import javafx.animation.Animation;
 import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
@@ -27,7 +28,9 @@ import javafx.util.Duration;
  */
 public final class Animations {
 
-    /** The default interpolator value that is used across all animations. */
+    /**
+     * The default interpolator value that is used across all animations.
+     */
     public static final Interpolator EASE = Interpolator.SPLINE(0.25, 0.1, 0.25, 1);
 
     ///////////////////////////////////////////////////////////////////////////
@@ -44,21 +47,21 @@ public final class Animations {
         Objects.requireNonNull(node, "Node cannot be null!");
 
         var t = new Timeline(
-            new KeyFrame(Duration.ZERO,
-                new KeyValue(node.opacityProperty(), 1, EASE)
-            ),
-            new KeyFrame(Duration.millis(250),
-                new KeyValue(node.opacityProperty(), 0, EASE)
-            ),
-            new KeyFrame(Duration.millis(500),
-                new KeyValue(node.opacityProperty(), 1, EASE)
-            ),
-            new KeyFrame(Duration.millis(750),
-                new KeyValue(node.opacityProperty(), 0, EASE)
-            ),
-            new KeyFrame(Duration.millis(1000),
-                new KeyValue(node.opacityProperty(), 1, EASE)
-            )
+                new KeyFrame(Duration.ZERO,
+                        new KeyValue(node.opacityProperty(), 1, EASE)
+                ),
+                new KeyFrame(Duration.millis(250),
+                        new KeyValue(node.opacityProperty(), 0, EASE)
+                ),
+                new KeyFrame(Duration.millis(500),
+                        new KeyValue(node.opacityProperty(), 1, EASE)
+                ),
+                new KeyFrame(Duration.millis(750),
+                        new KeyValue(node.opacityProperty(), 0, EASE)
+                ),
+                new KeyFrame(Duration.millis(1000),
+                        new KeyValue(node.opacityProperty(), 1, EASE)
+                )
         );
 
         t.statusProperty().addListener((obs, old, val) -> {
@@ -88,21 +91,21 @@ public final class Animations {
         Objects.requireNonNull(node, "Node cannot be null!");
 
         var t = new Timeline(
-            new KeyFrame(Duration.ZERO,
-                new KeyValue(node.scaleXProperty(), 1, EASE),
-                new KeyValue(node.scaleYProperty(), 1, EASE),
-                new KeyValue(node.scaleZProperty(), 1, EASE)
-            ),
-            new KeyFrame(Duration.millis(500),
-                new KeyValue(node.scaleXProperty(), scale, EASE),
-                new KeyValue(node.scaleYProperty(), scale, EASE),
-                new KeyValue(node.scaleZProperty(), scale, EASE)
-            ),
-            new KeyFrame(Duration.millis(1000),
-                new KeyValue(node.scaleXProperty(), 1, EASE),
-                new KeyValue(node.scaleYProperty(), 1, EASE),
-                new KeyValue(node.scaleZProperty(), 1, EASE)
-            )
+                new KeyFrame(Duration.ZERO,
+                        new KeyValue(node.scaleXProperty(), 1, EASE),
+                        new KeyValue(node.scaleYProperty(), 1, EASE),
+                        new KeyValue(node.scaleZProperty(), 1, EASE)
+                ),
+                new KeyFrame(Duration.millis(500),
+                        new KeyValue(node.scaleXProperty(), scale, EASE),
+                        new KeyValue(node.scaleYProperty(), scale, EASE),
+                        new KeyValue(node.scaleZProperty(), scale, EASE)
+                ),
+                new KeyFrame(Duration.millis(1000),
+                        new KeyValue(node.scaleXProperty(), 1, EASE),
+                        new KeyValue(node.scaleYProperty(), 1, EASE),
+                        new KeyValue(node.scaleZProperty(), 1, EASE)
+                )
         );
 
         t.statusProperty().addListener((obs, old, val) -> {
@@ -134,39 +137,39 @@ public final class Animations {
         Objects.requireNonNull(node, "Node cannot be null!");
 
         var t = new Timeline(
-            new KeyFrame(Duration.ZERO,
-                new KeyValue(node.translateXProperty(), 0, EASE)
-            ),
-            new KeyFrame(Duration.millis(100),
-                new KeyValue(node.translateXProperty(), -offset, EASE)
-            ),
-            new KeyFrame(Duration.millis(200),
-                new KeyValue(node.translateXProperty(), offset, EASE)
-            ),
-            new KeyFrame(Duration.millis(300),
-                new KeyValue(node.translateXProperty(), -offset, EASE)
-            ),
-            new KeyFrame(Duration.millis(400),
-                new KeyValue(node.translateXProperty(), offset, EASE)
-            ),
-            new KeyFrame(Duration.millis(500),
-                new KeyValue(node.translateXProperty(), -offset, EASE)
-            ),
-            new KeyFrame(Duration.millis(600),
-                new KeyValue(node.translateXProperty(), offset, EASE)
-            ),
-            new KeyFrame(Duration.millis(700),
-                new KeyValue(node.translateXProperty(), -offset, EASE)
-            ),
-            new KeyFrame(Duration.millis(800),
-                new KeyValue(node.translateXProperty(), offset, EASE)
-            ),
-            new KeyFrame(Duration.millis(900),
-                new KeyValue(node.translateXProperty(), -offset, EASE)
-            ),
-            new KeyFrame(Duration.millis(1000),
-                new KeyValue(node.translateXProperty(), 0, EASE)
-            )
+                new KeyFrame(Duration.ZERO,
+                        new KeyValue(node.translateXProperty(), 0, EASE)
+                ),
+                new KeyFrame(Duration.millis(100),
+                        new KeyValue(node.translateXProperty(), -offset, EASE)
+                ),
+                new KeyFrame(Duration.millis(200),
+                        new KeyValue(node.translateXProperty(), offset, EASE)
+                ),
+                new KeyFrame(Duration.millis(300),
+                        new KeyValue(node.translateXProperty(), -offset, EASE)
+                ),
+                new KeyFrame(Duration.millis(400),
+                        new KeyValue(node.translateXProperty(), offset, EASE)
+                ),
+                new KeyFrame(Duration.millis(500),
+                        new KeyValue(node.translateXProperty(), -offset, EASE)
+                ),
+                new KeyFrame(Duration.millis(600),
+                        new KeyValue(node.translateXProperty(), offset, EASE)
+                ),
+                new KeyFrame(Duration.millis(700),
+                        new KeyValue(node.translateXProperty(), -offset, EASE)
+                ),
+                new KeyFrame(Duration.millis(800),
+                        new KeyValue(node.translateXProperty(), offset, EASE)
+                ),
+                new KeyFrame(Duration.millis(900),
+                        new KeyValue(node.translateXProperty(), -offset, EASE)
+                ),
+                new KeyFrame(Duration.millis(1000),
+                        new KeyValue(node.translateXProperty(), 0, EASE)
+                )
         );
 
         t.statusProperty().addListener((obs, old, val) -> {
@@ -193,39 +196,39 @@ public final class Animations {
         Objects.requireNonNull(node, "Node cannot be null!");
 
         var t = new Timeline(
-            new KeyFrame(Duration.ZERO,
-                new KeyValue(node.translateYProperty(), 0, EASE)
-            ),
-            new KeyFrame(Duration.millis(100),
-                new KeyValue(node.translateYProperty(), -offset, EASE)
-            ),
-            new KeyFrame(Duration.millis(200),
-                new KeyValue(node.translateYProperty(), offset, EASE)
-            ),
-            new KeyFrame(Duration.millis(300),
-                new KeyValue(node.translateYProperty(), -offset, EASE)
-            ),
-            new KeyFrame(Duration.millis(400),
-                new KeyValue(node.translateYProperty(), offset, EASE)
-            ),
-            new KeyFrame(Duration.millis(500),
-                new KeyValue(node.translateYProperty(), -offset, EASE)
-            ),
-            new KeyFrame(Duration.millis(600),
-                new KeyValue(node.translateYProperty(), offset, EASE)
-            ),
-            new KeyFrame(Duration.millis(700),
-                new KeyValue(node.translateYProperty(), -offset, EASE)
-            ),
-            new KeyFrame(Duration.millis(800),
-                new KeyValue(node.translateYProperty(), offset, EASE)
-            ),
-            new KeyFrame(Duration.millis(900),
-                new KeyValue(node.translateYProperty(), -offset, EASE)
-            ),
-            new KeyFrame(Duration.millis(1000),
-                new KeyValue(node.translateYProperty(), 0, EASE)
-            )
+                new KeyFrame(Duration.ZERO,
+                        new KeyValue(node.translateYProperty(), 0, EASE)
+                ),
+                new KeyFrame(Duration.millis(100),
+                        new KeyValue(node.translateYProperty(), -offset, EASE)
+                ),
+                new KeyFrame(Duration.millis(200),
+                        new KeyValue(node.translateYProperty(), offset, EASE)
+                ),
+                new KeyFrame(Duration.millis(300),
+                        new KeyValue(node.translateYProperty(), -offset, EASE)
+                ),
+                new KeyFrame(Duration.millis(400),
+                        new KeyValue(node.translateYProperty(), offset, EASE)
+                ),
+                new KeyFrame(Duration.millis(500),
+                        new KeyValue(node.translateYProperty(), -offset, EASE)
+                ),
+                new KeyFrame(Duration.millis(600),
+                        new KeyValue(node.translateYProperty(), offset, EASE)
+                ),
+                new KeyFrame(Duration.millis(700),
+                        new KeyValue(node.translateYProperty(), -offset, EASE)
+                ),
+                new KeyFrame(Duration.millis(800),
+                        new KeyValue(node.translateYProperty(), offset, EASE)
+                ),
+                new KeyFrame(Duration.millis(900),
+                        new KeyValue(node.translateYProperty(), -offset, EASE)
+                ),
+                new KeyFrame(Duration.millis(1000),
+                        new KeyValue(node.translateYProperty(), 0, EASE)
+                )
         );
 
         t.statusProperty().addListener((obs, old, val) -> {
@@ -247,34 +250,34 @@ public final class Animations {
         Objects.requireNonNull(node, "Node cannot be null!");
 
         var t = new Timeline(
-            new KeyFrame(Duration.ZERO,
-                new KeyValue(node.translateXProperty(), 0, EASE),
-                new KeyValue(node.rotateProperty(), -0, EASE)
-            ),
-            new KeyFrame(Duration.millis(150),
-                new KeyValue(node.translateXProperty(), -0.25 * node.getBoundsInParent().getWidth(), EASE),
-                new KeyValue(node.rotateProperty(), -5, EASE)
-            ),
-            new KeyFrame(Duration.millis(300),
-                new KeyValue(node.translateXProperty(), 0.2 * node.getBoundsInParent().getWidth(), EASE),
-                new KeyValue(node.rotateProperty(), 3, EASE)
-            ),
-            new KeyFrame(Duration.millis(450),
-                new KeyValue(node.translateXProperty(), -0.15 * node.getBoundsInParent().getWidth(), EASE),
-                new KeyValue(node.rotateProperty(), -3, EASE)
-            ),
-            new KeyFrame(Duration.millis(600),
-                new KeyValue(node.translateXProperty(), 0.1 * node.getBoundsInParent().getWidth(), EASE),
-                new KeyValue(node.rotateProperty(), 2, EASE)
-            ),
-            new KeyFrame(Duration.millis(750),
-                new KeyValue(node.translateXProperty(), -0.05 * node.getBoundsInParent().getWidth(), EASE),
-                new KeyValue(node.rotateProperty(), -1, EASE)
-            ),
-            new KeyFrame(Duration.millis(1000),
-                new KeyValue(node.translateXProperty(), 0, EASE),
-                new KeyValue(node.rotateProperty(), 0, EASE)
-            )
+                new KeyFrame(Duration.ZERO,
+                        new KeyValue(node.translateXProperty(), 0, EASE),
+                        new KeyValue(node.rotateProperty(), -0, EASE)
+                ),
+                new KeyFrame(Duration.millis(150),
+                        new KeyValue(node.translateXProperty(), -0.25 * node.getBoundsInParent().getWidth(), EASE),
+                        new KeyValue(node.rotateProperty(), -5, EASE)
+                ),
+                new KeyFrame(Duration.millis(300),
+                        new KeyValue(node.translateXProperty(), 0.2 * node.getBoundsInParent().getWidth(), EASE),
+                        new KeyValue(node.rotateProperty(), 3, EASE)
+                ),
+                new KeyFrame(Duration.millis(450),
+                        new KeyValue(node.translateXProperty(), -0.15 * node.getBoundsInParent().getWidth(), EASE),
+                        new KeyValue(node.rotateProperty(), -3, EASE)
+                ),
+                new KeyFrame(Duration.millis(600),
+                        new KeyValue(node.translateXProperty(), 0.1 * node.getBoundsInParent().getWidth(), EASE),
+                        new KeyValue(node.rotateProperty(), 2, EASE)
+                ),
+                new KeyFrame(Duration.millis(750),
+                        new KeyValue(node.translateXProperty(), -0.05 * node.getBoundsInParent().getWidth(), EASE),
+                        new KeyValue(node.rotateProperty(), -1, EASE)
+                ),
+                new KeyFrame(Duration.millis(1000),
+                        new KeyValue(node.translateXProperty(), 0, EASE),
+                        new KeyValue(node.rotateProperty(), 0, EASE)
+                )
         );
 
         t.statusProperty().addListener((obs, old, val) -> {
@@ -303,12 +306,12 @@ public final class Animations {
         Objects.requireNonNull(duration, "Duration cannot be null!");
 
         var t = new Timeline(
-            new KeyFrame(Duration.ZERO,
-                new KeyValue(node.opacityProperty(), 0, EASE)
-            ),
-            new KeyFrame(duration,
-                new KeyValue(node.opacityProperty(), 1, EASE)
-            )
+                new KeyFrame(Duration.ZERO,
+                        new KeyValue(node.opacityProperty(), 0, EASE)
+                ),
+                new KeyFrame(duration,
+                        new KeyValue(node.opacityProperty(), 1, EASE)
+                )
         );
 
         t.statusProperty().addListener((obs, old, val) -> {
@@ -332,12 +335,12 @@ public final class Animations {
         Objects.requireNonNull(duration, "Duration cannot be null!");
 
         var t = new Timeline(
-            new KeyFrame(Duration.ZERO,
-                new KeyValue(node.opacityProperty(), 1, EASE)
-            ),
-            new KeyFrame(duration,
-                new KeyValue(node.opacityProperty(), 0, EASE)
-            )
+                new KeyFrame(Duration.ZERO,
+                        new KeyValue(node.opacityProperty(), 1, EASE)
+                ),
+                new KeyFrame(duration,
+                        new KeyValue(node.opacityProperty(), 0, EASE)
+                )
         );
 
         t.statusProperty().addListener((obs, old, val) -> {
@@ -361,15 +364,15 @@ public final class Animations {
         Objects.requireNonNull(duration, "Duration cannot be null!");
 
         var t = new Timeline(
-            new KeyFrame(Duration.ZERO,
-                new KeyValue(node.opacityProperty(), 0, EASE),
-                new KeyValue(node.translateYProperty(), -node.getBoundsInParent().getHeight(), EASE)
-            ),
+                new KeyFrame(Duration.ZERO,
+                        new KeyValue(node.opacityProperty(), 0, EASE),
+                        new KeyValue(node.translateYProperty(), -node.getBoundsInParent().getHeight(), EASE)
+                ),
 
-            new KeyFrame(duration,
-                new KeyValue(node.opacityProperty(), 1, EASE),
-                new KeyValue(node.translateYProperty(), 0, EASE)
-            )
+                new KeyFrame(duration,
+                        new KeyValue(node.opacityProperty(), 1, EASE),
+                        new KeyValue(node.translateYProperty(), 0, EASE)
+                )
         );
 
         t.statusProperty().addListener((obs, old, val) -> {
@@ -394,14 +397,14 @@ public final class Animations {
         Objects.requireNonNull(duration, "Duration cannot be null!");
 
         var t = new Timeline(
-            new KeyFrame(Duration.ZERO,
-                new KeyValue(node.opacityProperty(), 1, EASE),
-                new KeyValue(node.translateYProperty(), 0, EASE)
-            ),
-            new KeyFrame(duration,
-                new KeyValue(node.opacityProperty(), 0, EASE),
-                new KeyValue(node.translateYProperty(), node.getBoundsInParent().getHeight(), EASE)
-            )
+                new KeyFrame(Duration.ZERO,
+                        new KeyValue(node.opacityProperty(), 1, EASE),
+                        new KeyValue(node.translateYProperty(), 0, EASE)
+                ),
+                new KeyFrame(duration,
+                        new KeyValue(node.opacityProperty(), 0, EASE),
+                        new KeyValue(node.translateYProperty(), node.getBoundsInParent().getHeight(), EASE)
+                )
         );
 
         t.statusProperty().addListener((obs, old, val) -> {
@@ -426,14 +429,14 @@ public final class Animations {
         Objects.requireNonNull(duration, "Duration cannot be null!");
 
         var t = new Timeline(
-            new KeyFrame(Duration.ZERO,
-                new KeyValue(node.opacityProperty(), 0, EASE),
-                new KeyValue(node.translateXProperty(), -node.getBoundsInParent().getWidth(), EASE)
-            ),
-            new KeyFrame(duration,
-                new KeyValue(node.opacityProperty(), 1, EASE),
-                new KeyValue(node.translateXProperty(), 0, EASE)
-            )
+                new KeyFrame(Duration.ZERO,
+                        new KeyValue(node.opacityProperty(), 0, EASE),
+                        new KeyValue(node.translateXProperty(), -node.getBoundsInParent().getWidth(), EASE)
+                ),
+                new KeyFrame(duration,
+                        new KeyValue(node.opacityProperty(), 1, EASE),
+                        new KeyValue(node.translateXProperty(), 0, EASE)
+                )
         );
 
         t.statusProperty().addListener((obs, old, val) -> {
@@ -458,14 +461,14 @@ public final class Animations {
         Objects.requireNonNull(duration, "Duration cannot be null!");
 
         var t = new Timeline(
-            new KeyFrame(Duration.ZERO,
-                new KeyValue(node.opacityProperty(), 1, EASE),
-                new KeyValue(node.translateXProperty(), 0, EASE)
-            ),
-            new KeyFrame(duration,
-                new KeyValue(node.opacityProperty(), 0, EASE),
-                new KeyValue(node.translateXProperty(), -node.getBoundsInParent().getWidth(), EASE)
-            )
+                new KeyFrame(Duration.ZERO,
+                        new KeyValue(node.opacityProperty(), 1, EASE),
+                        new KeyValue(node.translateXProperty(), 0, EASE)
+                ),
+                new KeyFrame(duration,
+                        new KeyValue(node.opacityProperty(), 0, EASE),
+                        new KeyValue(node.translateXProperty(), -node.getBoundsInParent().getWidth(), EASE)
+                )
         );
 
         t.statusProperty().addListener((obs, old, val) -> {
@@ -490,14 +493,14 @@ public final class Animations {
         Objects.requireNonNull(duration, "Duration cannot be null!");
 
         var t = new Timeline(
-            new KeyFrame(Duration.ZERO,
-                new KeyValue(node.opacityProperty(), 0, EASE),
-                new KeyValue(node.translateXProperty(), node.getBoundsInParent().getWidth(), EASE)
-            ),
-            new KeyFrame(duration,
-                new KeyValue(node.opacityProperty(), 1, EASE),
-                new KeyValue(node.translateXProperty(), 0, EASE)
-            )
+                new KeyFrame(Duration.ZERO,
+                        new KeyValue(node.opacityProperty(), 0, EASE),
+                        new KeyValue(node.translateXProperty(), node.getBoundsInParent().getWidth(), EASE)
+                ),
+                new KeyFrame(duration,
+                        new KeyValue(node.opacityProperty(), 1, EASE),
+                        new KeyValue(node.translateXProperty(), 0, EASE)
+                )
         );
 
         t.statusProperty().addListener((obs, old, val) -> {
@@ -522,14 +525,14 @@ public final class Animations {
         Objects.requireNonNull(duration, "Duration cannot be null!");
 
         var t = new Timeline(
-            new KeyFrame(Duration.ZERO,
-                new KeyValue(node.opacityProperty(), 1, EASE),
-                new KeyValue(node.translateXProperty(), 0, EASE)
-            ),
-            new KeyFrame(duration,
-                new KeyValue(node.opacityProperty(), 0, EASE),
-                new KeyValue(node.translateXProperty(), node.getBoundsInParent().getWidth(), EASE)
-            )
+                new KeyFrame(Duration.ZERO,
+                        new KeyValue(node.opacityProperty(), 1, EASE),
+                        new KeyValue(node.translateXProperty(), 0, EASE)
+                ),
+                new KeyFrame(duration,
+                        new KeyValue(node.opacityProperty(), 0, EASE),
+                        new KeyValue(node.translateXProperty(), node.getBoundsInParent().getWidth(), EASE)
+                )
         );
 
         t.statusProperty().addListener((obs, old, val) -> {
@@ -554,14 +557,14 @@ public final class Animations {
         Objects.requireNonNull(duration, "Duration cannot be null!");
 
         var t = new Timeline(
-            new KeyFrame(Duration.ZERO,
-                new KeyValue(node.opacityProperty(), 0, EASE),
-                new KeyValue(node.translateYProperty(), node.getBoundsInParent().getHeight(), EASE)
-            ),
-            new KeyFrame(duration,
-                new KeyValue(node.opacityProperty(), 1, EASE),
-                new KeyValue(node.translateYProperty(), 0, EASE)
-            )
+                new KeyFrame(Duration.ZERO,
+                        new KeyValue(node.opacityProperty(), 0, EASE),
+                        new KeyValue(node.translateYProperty(), node.getBoundsInParent().getHeight(), EASE)
+                ),
+                new KeyFrame(duration,
+                        new KeyValue(node.opacityProperty(), 1, EASE),
+                        new KeyValue(node.translateYProperty(), 0, EASE)
+                )
         );
 
         t.statusProperty().addListener((obs, old, val) -> {
@@ -586,14 +589,14 @@ public final class Animations {
         Objects.requireNonNull(duration, "Duration cannot be null!");
 
         var t = new Timeline(
-            new KeyFrame(Duration.ZERO,
-                new KeyValue(node.opacityProperty(), 1, EASE),
-                new KeyValue(node.translateYProperty(), 0, EASE)
-            ),
-            new KeyFrame(duration,
-                new KeyValue(node.opacityProperty(), 0, EASE),
-                new KeyValue(node.translateYProperty(), -node.getBoundsInParent().getHeight(), EASE)
-            )
+                new KeyFrame(Duration.ZERO,
+                        new KeyValue(node.opacityProperty(), 1, EASE),
+                        new KeyValue(node.translateYProperty(), 0, EASE)
+                ),
+                new KeyFrame(duration,
+                        new KeyValue(node.opacityProperty(), 0, EASE),
+                        new KeyValue(node.translateYProperty(), -node.getBoundsInParent().getHeight(), EASE)
+                )
         );
 
         t.statusProperty().addListener((obs, old, val) -> {
@@ -622,16 +625,16 @@ public final class Animations {
         Objects.requireNonNull(duration, "Duration cannot be null!");
 
         var t = new Timeline(
-            new KeyFrame(Duration.ZERO,
-                new KeyValue(node.opacityProperty(), 0, EASE),
-                new KeyValue(node.translateXProperty(), -node.getBoundsInLocal().getWidth(), EASE),
-                new KeyValue(node.rotateProperty(), -120, EASE)
-            ),
-            new KeyFrame(duration,
-                new KeyValue(node.opacityProperty(), 1, EASE),
-                new KeyValue(node.translateXProperty(), 0, EASE),
-                new KeyValue(node.rotateProperty(), 0, EASE)
-            )
+                new KeyFrame(Duration.ZERO,
+                        new KeyValue(node.opacityProperty(), 0, EASE),
+                        new KeyValue(node.translateXProperty(), -node.getBoundsInLocal().getWidth(), EASE),
+                        new KeyValue(node.rotateProperty(), -120, EASE)
+                ),
+                new KeyFrame(duration,
+                        new KeyValue(node.opacityProperty(), 1, EASE),
+                        new KeyValue(node.translateXProperty(), 0, EASE),
+                        new KeyValue(node.rotateProperty(), 0, EASE)
+                )
         );
 
         t.statusProperty().addListener((obs, old, val) -> {
@@ -657,16 +660,16 @@ public final class Animations {
         Objects.requireNonNull(duration, "Duration cannot be null!");
 
         var t = new Timeline(
-            new KeyFrame(Duration.ZERO,
-                new KeyValue(node.opacityProperty(), 1, EASE),
-                new KeyValue(node.translateXProperty(), 0, EASE),
-                new KeyValue(node.rotateProperty(), 0, EASE)
-            ),
-            new KeyFrame(duration,
-                new KeyValue(node.opacityProperty(), 0, EASE),
-                new KeyValue(node.translateXProperty(), node.getBoundsInLocal().getWidth(), EASE),
-                new KeyValue(node.rotateProperty(), 120, EASE)
-            )
+                new KeyFrame(Duration.ZERO,
+                        new KeyValue(node.opacityProperty(), 1, EASE),
+                        new KeyValue(node.translateXProperty(), 0, EASE),
+                        new KeyValue(node.rotateProperty(), 0, EASE)
+                ),
+                new KeyFrame(duration,
+                        new KeyValue(node.opacityProperty(), 0, EASE),
+                        new KeyValue(node.translateXProperty(), node.getBoundsInLocal().getWidth(), EASE),
+                        new KeyValue(node.rotateProperty(), 120, EASE)
+                )
         );
 
         t.statusProperty().addListener((obs, old, val) -> {
@@ -698,14 +701,14 @@ public final class Animations {
         node.setRotationAxis(Rotate.Z_AXIS);
 
         var t = new Timeline(
-            new KeyFrame(Duration.ZERO,
-                new KeyValue(node.rotateProperty(), -200, EASE),
-                new KeyValue(node.opacityProperty(), 0, EASE)
-            ),
-            new KeyFrame(duration,
-                new KeyValue(node.rotateProperty(), 0, EASE),
-                new KeyValue(node.opacityProperty(), 1, EASE)
-            )
+                new KeyFrame(Duration.ZERO,
+                        new KeyValue(node.rotateProperty(), -200, EASE),
+                        new KeyValue(node.opacityProperty(), 0, EASE)
+                ),
+                new KeyFrame(duration,
+                        new KeyValue(node.rotateProperty(), 0, EASE),
+                        new KeyValue(node.opacityProperty(), 1, EASE)
+                )
         );
 
         t.statusProperty().addListener((obs, old, val) -> {
@@ -732,14 +735,14 @@ public final class Animations {
         node.setRotationAxis(Rotate.Z_AXIS);
 
         var t = new Timeline(
-            new KeyFrame(Duration.ZERO,
-                new KeyValue(node.rotateProperty(), 0, EASE),
-                new KeyValue(node.opacityProperty(), 1, EASE)
-            ),
-            new KeyFrame(duration,
-                new KeyValue(node.rotateProperty(), 200, EASE),
-                new KeyValue(node.opacityProperty(), 0, EASE)
-            )
+                new KeyFrame(Duration.ZERO,
+                        new KeyValue(node.rotateProperty(), 0, EASE),
+                        new KeyValue(node.opacityProperty(), 1, EASE)
+                ),
+                new KeyFrame(duration,
+                        new KeyValue(node.rotateProperty(), 200, EASE),
+                        new KeyValue(node.opacityProperty(), 0, EASE)
+                )
         );
 
         t.statusProperty().addListener((obs, old, val) -> {
@@ -769,14 +772,14 @@ public final class Animations {
         node.getTransforms().add(rotate);
 
         var t = new Timeline(
-            new KeyFrame(Duration.ZERO,
-                new KeyValue(rotate.angleProperty(), -45, EASE),
-                new KeyValue(node.opacityProperty(), 0, EASE)
-            ),
-            new KeyFrame(duration,
-                new KeyValue(rotate.angleProperty(), 0, EASE),
-                new KeyValue(node.opacityProperty(), 1, EASE)
-            )
+                new KeyFrame(Duration.ZERO,
+                        new KeyValue(rotate.angleProperty(), -45, EASE),
+                        new KeyValue(node.opacityProperty(), 0, EASE)
+                ),
+                new KeyFrame(duration,
+                        new KeyValue(rotate.angleProperty(), 0, EASE),
+                        new KeyValue(node.opacityProperty(), 1, EASE)
+                )
         );
 
         t.statusProperty().addListener((obs, old, val) -> {
@@ -806,14 +809,14 @@ public final class Animations {
         node.getTransforms().add(rotate);
 
         var t = new Timeline(
-            new KeyFrame(Duration.ZERO,
-                new KeyValue(rotate.angleProperty(), 0, EASE),
-                new KeyValue(node.opacityProperty(), 1, EASE)
-            ),
-            new KeyFrame(duration,
-                new KeyValue(rotate.angleProperty(), 45, EASE),
-                new KeyValue(node.opacityProperty(), 0, EASE)
-            )
+                new KeyFrame(Duration.ZERO,
+                        new KeyValue(rotate.angleProperty(), 0, EASE),
+                        new KeyValue(node.opacityProperty(), 1, EASE)
+                ),
+                new KeyFrame(duration,
+                        new KeyValue(rotate.angleProperty(), 45, EASE),
+                        new KeyValue(node.opacityProperty(), 0, EASE)
+                )
         );
 
         t.statusProperty().addListener((obs, old, val) -> {
@@ -839,21 +842,21 @@ public final class Animations {
         Objects.requireNonNull(duration, "Duration cannot be null!");
 
         final var rotate = new Rotate(0,
-            node.getBoundsInLocal().getWidth(),
-            node.getBoundsInLocal().getHeight()
+                node.getBoundsInLocal().getWidth(),
+                node.getBoundsInLocal().getHeight()
         );
         node.setRotationAxis(Rotate.Z_AXIS);
         node.getTransforms().add(rotate);
 
         var t = new Timeline(
-            new KeyFrame(Duration.ZERO,
-                new KeyValue(rotate.angleProperty(), 45, EASE),
-                new KeyValue(node.opacityProperty(), 0, EASE)
-            ),
-            new KeyFrame(duration,
-                new KeyValue(rotate.angleProperty(), 0, EASE),
-                new KeyValue(node.opacityProperty(), 1, EASE)
-            )
+                new KeyFrame(Duration.ZERO,
+                        new KeyValue(rotate.angleProperty(), 45, EASE),
+                        new KeyValue(node.opacityProperty(), 0, EASE)
+                ),
+                new KeyFrame(duration,
+                        new KeyValue(rotate.angleProperty(), 0, EASE),
+                        new KeyValue(node.opacityProperty(), 1, EASE)
+                )
         );
 
         t.statusProperty().addListener((obs, old, val) -> {
@@ -879,21 +882,21 @@ public final class Animations {
         Objects.requireNonNull(duration, "Duration cannot be null!");
 
         final var rotate = new Rotate(0,
-            node.getBoundsInLocal().getWidth(),
-            node.getBoundsInLocal().getHeight()
+                node.getBoundsInLocal().getWidth(),
+                node.getBoundsInLocal().getHeight()
         );
         node.setRotationAxis(Rotate.Z_AXIS);
         node.getTransforms().add(rotate);
 
         var t = new Timeline(
-            new KeyFrame(Duration.ZERO,
-                new KeyValue(rotate.angleProperty(), 0, EASE),
-                new KeyValue(node.opacityProperty(), 1, EASE)
-            ),
-            new KeyFrame(duration,
-                new KeyValue(rotate.angleProperty(), -45, EASE),
-                new KeyValue(node.opacityProperty(), 0, EASE)
-            )
+                new KeyFrame(Duration.ZERO,
+                        new KeyValue(rotate.angleProperty(), 0, EASE),
+                        new KeyValue(node.opacityProperty(), 1, EASE)
+                ),
+                new KeyFrame(duration,
+                        new KeyValue(rotate.angleProperty(), -45, EASE),
+                        new KeyValue(node.opacityProperty(), 0, EASE)
+                )
         );
 
         t.statusProperty().addListener((obs, old, val) -> {
@@ -923,14 +926,14 @@ public final class Animations {
         node.getTransforms().add(rotate);
 
         var t = new Timeline(
-            new KeyFrame(Duration.ZERO,
-                new KeyValue(rotate.angleProperty(), 45, EASE),
-                new KeyValue(node.opacityProperty(), 0, EASE)
-            ),
-            new KeyFrame(duration,
-                new KeyValue(rotate.angleProperty(), 0, EASE),
-                new KeyValue(node.opacityProperty(), 1, EASE)
-            )
+                new KeyFrame(Duration.ZERO,
+                        new KeyValue(rotate.angleProperty(), 45, EASE),
+                        new KeyValue(node.opacityProperty(), 0, EASE)
+                ),
+                new KeyFrame(duration,
+                        new KeyValue(rotate.angleProperty(), 0, EASE),
+                        new KeyValue(node.opacityProperty(), 1, EASE)
+                )
         );
 
         t.statusProperty().addListener((obs, old, val) -> {
@@ -960,14 +963,14 @@ public final class Animations {
         node.getTransforms().add(rotate);
 
         var t = new Timeline(
-            new KeyFrame(Duration.ZERO,
-                new KeyValue(rotate.angleProperty(), 0, EASE),
-                new KeyValue(node.opacityProperty(), 1, EASE)
-            ),
-            new KeyFrame(duration,
-                new KeyValue(rotate.angleProperty(), -45, EASE),
-                new KeyValue(node.opacityProperty(), 0, EASE)
-            )
+                new KeyFrame(Duration.ZERO,
+                        new KeyValue(rotate.angleProperty(), 0, EASE),
+                        new KeyValue(node.opacityProperty(), 1, EASE)
+                ),
+                new KeyFrame(duration,
+                        new KeyValue(rotate.angleProperty(), -45, EASE),
+                        new KeyValue(node.opacityProperty(), 0, EASE)
+                )
         );
 
         t.statusProperty().addListener((obs, old, val) -> {
@@ -993,21 +996,21 @@ public final class Animations {
         Objects.requireNonNull(duration, "Duration cannot be null!");
 
         final var rotate = new Rotate(0,
-            node.getBoundsInLocal().getWidth(),
-            node.getBoundsInLocal().getHeight()
+                node.getBoundsInLocal().getWidth(),
+                node.getBoundsInLocal().getHeight()
         );
         node.setRotationAxis(Rotate.Z_AXIS);
         node.getTransforms().add(rotate);
 
         var t = new Timeline(
-            new KeyFrame(Duration.ZERO,
-                new KeyValue(rotate.angleProperty(), -45, EASE),
-                new KeyValue(node.opacityProperty(), 0, EASE)
-            ),
-            new KeyFrame(duration,
-                new KeyValue(rotate.angleProperty(), 0, EASE),
-                new KeyValue(node.opacityProperty(), 1, EASE)
-            )
+                new KeyFrame(Duration.ZERO,
+                        new KeyValue(rotate.angleProperty(), -45, EASE),
+                        new KeyValue(node.opacityProperty(), 0, EASE)
+                ),
+                new KeyFrame(duration,
+                        new KeyValue(rotate.angleProperty(), 0, EASE),
+                        new KeyValue(node.opacityProperty(), 1, EASE)
+                )
         );
 
         t.statusProperty().addListener((obs, old, val) -> {
@@ -1033,21 +1036,21 @@ public final class Animations {
         Objects.requireNonNull(duration, "Duration cannot be null!");
 
         final var rotate = new Rotate(0,
-            node.getBoundsInLocal().getWidth(),
-            node.getBoundsInLocal().getHeight()
+                node.getBoundsInLocal().getWidth(),
+                node.getBoundsInLocal().getHeight()
         );
         node.setRotationAxis(Rotate.Z_AXIS);
         node.getTransforms().add(rotate);
 
         var t = new Timeline(
-            new KeyFrame(Duration.ZERO,
-                new KeyValue(rotate.angleProperty(), 0, EASE),
-                new KeyValue(node.opacityProperty(), 1, EASE)
-            ),
-            new KeyFrame(duration,
-                new KeyValue(rotate.angleProperty(), 45, EASE),
-                new KeyValue(node.opacityProperty(), 0, EASE)
-            )
+                new KeyFrame(Duration.ZERO,
+                        new KeyValue(rotate.angleProperty(), 0, EASE),
+                        new KeyValue(node.opacityProperty(), 1, EASE)
+                ),
+                new KeyFrame(duration,
+                        new KeyValue(rotate.angleProperty(), 45, EASE),
+                        new KeyValue(node.opacityProperty(), 0, EASE)
+                )
         );
 
         t.statusProperty().addListener((obs, old, val) -> {
@@ -1076,12 +1079,12 @@ public final class Animations {
         Objects.requireNonNull(duration, "Duration cannot be null!");
 
         var t = new Timeline(
-            new KeyFrame(Duration.ZERO,
-                new KeyValue(node.translateYProperty(), -node.getBoundsInParent().getHeight(), EASE)
-            ),
-            new KeyFrame(duration,
-                new KeyValue(node.translateYProperty(), 0, EASE)
-            )
+                new KeyFrame(Duration.ZERO,
+                        new KeyValue(node.translateYProperty(), -node.getBoundsInParent().getHeight(), EASE)
+                ),
+                new KeyFrame(duration,
+                        new KeyValue(node.translateYProperty(), 0, EASE)
+                )
         );
 
         t.statusProperty().addListener((obs, old, val) -> {
@@ -1105,12 +1108,12 @@ public final class Animations {
         Objects.requireNonNull(duration, "Duration cannot be null!");
 
         var t = new Timeline(
-            new KeyFrame(Duration.ZERO,
-                new KeyValue(node.translateYProperty(), 0, EASE)
-            ),
-            new KeyFrame(duration,
-                new KeyValue(node.translateYProperty(), node.getBoundsInParent().getHeight(), EASE)
-            )
+                new KeyFrame(Duration.ZERO,
+                        new KeyValue(node.translateYProperty(), 0, EASE)
+                ),
+                new KeyFrame(duration,
+                        new KeyValue(node.translateYProperty(), node.getBoundsInParent().getHeight(), EASE)
+                )
         );
 
         t.statusProperty().addListener((obs, old, val) -> {
@@ -1134,12 +1137,12 @@ public final class Animations {
         Objects.requireNonNull(duration, "Duration cannot be null!");
 
         var t = new Timeline(
-            new KeyFrame(Duration.ZERO,
-                new KeyValue(node.translateXProperty(), -node.getBoundsInParent().getWidth(), EASE)
-            ),
-            new KeyFrame(duration,
-                new KeyValue(node.translateXProperty(), 0, EASE)
-            )
+                new KeyFrame(Duration.ZERO,
+                        new KeyValue(node.translateXProperty(), -node.getBoundsInParent().getWidth(), EASE)
+                ),
+                new KeyFrame(duration,
+                        new KeyValue(node.translateXProperty(), 0, EASE)
+                )
         );
 
         t.statusProperty().addListener((obs, old, val) -> {
@@ -1163,12 +1166,12 @@ public final class Animations {
         Objects.requireNonNull(duration, "Duration cannot be null!");
 
         var t = new Timeline(
-            new KeyFrame(Duration.ZERO,
-                new KeyValue(node.translateXProperty(), 0, EASE)
-            ),
-            new KeyFrame(duration,
-                new KeyValue(node.translateXProperty(), -node.getBoundsInParent().getWidth(), EASE)
-            )
+                new KeyFrame(Duration.ZERO,
+                        new KeyValue(node.translateXProperty(), 0, EASE)
+                ),
+                new KeyFrame(duration,
+                        new KeyValue(node.translateXProperty(), -node.getBoundsInParent().getWidth(), EASE)
+                )
         );
 
         t.statusProperty().addListener((obs, old, val) -> {
@@ -1192,12 +1195,12 @@ public final class Animations {
         Objects.requireNonNull(duration, "Duration cannot be null!");
 
         var t = new Timeline(
-            new KeyFrame(Duration.ZERO,
-                new KeyValue(node.translateXProperty(), node.getBoundsInParent().getWidth(), EASE)
-            ),
-            new KeyFrame(duration,
-                new KeyValue(node.translateXProperty(), 0, EASE)
-            )
+                new KeyFrame(Duration.ZERO,
+                        new KeyValue(node.translateXProperty(), node.getBoundsInParent().getWidth(), EASE)
+                ),
+                new KeyFrame(duration,
+                        new KeyValue(node.translateXProperty(), 0, EASE)
+                )
         );
 
         t.statusProperty().addListener((obs, old, val) -> {
@@ -1221,12 +1224,12 @@ public final class Animations {
         Objects.requireNonNull(duration, "Duration cannot be null!");
 
         var t = new Timeline(
-            new KeyFrame(Duration.ZERO,
-                new KeyValue(node.translateXProperty(), 0, EASE)
-            ),
-            new KeyFrame(duration,
-                new KeyValue(node.translateXProperty(), node.getBoundsInParent().getWidth(), EASE)
-            )
+                new KeyFrame(Duration.ZERO,
+                        new KeyValue(node.translateXProperty(), 0, EASE)
+                ),
+                new KeyFrame(duration,
+                        new KeyValue(node.translateXProperty(), node.getBoundsInParent().getWidth(), EASE)
+                )
         );
 
         t.statusProperty().addListener((obs, old, val) -> {
@@ -1250,12 +1253,12 @@ public final class Animations {
         Objects.requireNonNull(duration, "Duration cannot be null!");
 
         var t = new Timeline(
-            new KeyFrame(Duration.ZERO,
-                new KeyValue(node.translateYProperty(), node.getBoundsInParent().getHeight(), EASE)
-            ),
-            new KeyFrame(duration,
-                new KeyValue(node.translateYProperty(), 0, EASE)
-            )
+                new KeyFrame(Duration.ZERO,
+                        new KeyValue(node.translateYProperty(), node.getBoundsInParent().getHeight(), EASE)
+                ),
+                new KeyFrame(duration,
+                        new KeyValue(node.translateYProperty(), 0, EASE)
+                )
         );
 
         t.statusProperty().addListener((obs, old, val) -> {
@@ -1279,12 +1282,12 @@ public final class Animations {
         Objects.requireNonNull(duration, "Duration cannot be null!");
 
         var t = new Timeline(
-            new KeyFrame(Duration.ZERO,
-                new KeyValue(node.translateYProperty(), 0, EASE)
-            ),
-            new KeyFrame(duration,
-                new KeyValue(node.translateYProperty(), -node.getBoundsInParent().getHeight(), EASE)
-            )
+                new KeyFrame(Duration.ZERO,
+                        new KeyValue(node.translateYProperty(), 0, EASE)
+                ),
+                new KeyFrame(duration,
+                        new KeyValue(node.translateYProperty(), -node.getBoundsInParent().getHeight(), EASE)
+                )
         );
 
         t.statusProperty().addListener((obs, old, val) -> {
@@ -1320,16 +1323,16 @@ public final class Animations {
         Objects.requireNonNull(duration, "Duration cannot be null!");
 
         var t = new Timeline(
-            new KeyFrame(Duration.ZERO,
-                new KeyValue(node.scaleXProperty(), startValue, EASE),
-                new KeyValue(node.scaleYProperty(), startValue, EASE),
-                new KeyValue(node.scaleZProperty(), startValue, EASE)
-            ),
-            new KeyFrame(duration,
-                new KeyValue(node.scaleXProperty(), 1, EASE),
-                new KeyValue(node.scaleYProperty(), 1, EASE),
-                new KeyValue(node.scaleZProperty(), 1, EASE)
-            )
+                new KeyFrame(Duration.ZERO,
+                        new KeyValue(node.scaleXProperty(), startValue, EASE),
+                        new KeyValue(node.scaleYProperty(), startValue, EASE),
+                        new KeyValue(node.scaleZProperty(), startValue, EASE)
+                ),
+                new KeyFrame(duration,
+                        new KeyValue(node.scaleXProperty(), 1, EASE),
+                        new KeyValue(node.scaleYProperty(), 1, EASE),
+                        new KeyValue(node.scaleZProperty(), 1, EASE)
+                )
         );
 
         t.statusProperty().addListener((obs, old, val) -> {
@@ -1364,16 +1367,16 @@ public final class Animations {
         Objects.requireNonNull(duration, "Duration cannot be null!");
 
         var t = new Timeline(
-            new KeyFrame(Duration.ZERO,
-                new KeyValue(node.scaleXProperty(), 1, EASE),
-                new KeyValue(node.scaleYProperty(), 1, EASE),
-                new KeyValue(node.scaleZProperty(), 1, EASE)
-            ),
-            new KeyFrame(duration,
-                new KeyValue(node.scaleXProperty(), endValue, EASE),
-                new KeyValue(node.scaleYProperty(), endValue, EASE),
-                new KeyValue(node.scaleZProperty(), endValue, EASE)
-            )
+                new KeyFrame(Duration.ZERO,
+                        new KeyValue(node.scaleXProperty(), 1, EASE),
+                        new KeyValue(node.scaleYProperty(), 1, EASE),
+                        new KeyValue(node.scaleZProperty(), 1, EASE)
+                ),
+                new KeyFrame(duration,
+                        new KeyValue(node.scaleXProperty(), endValue, EASE),
+                        new KeyValue(node.scaleYProperty(), endValue, EASE),
+                        new KeyValue(node.scaleZProperty(), endValue, EASE)
+                )
         );
 
         t.statusProperty().addListener((obs, old, val) -> {

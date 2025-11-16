@@ -34,10 +34,10 @@ public class Employee {
     private String country;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-    
+
     // Transient field for department info
     private Department department;
-    
+
     /**
      * Get full name of employee
      */

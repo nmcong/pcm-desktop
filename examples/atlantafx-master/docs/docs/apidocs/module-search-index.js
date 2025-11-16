@@ -1,1 +1,2 @@
-moduleSearchIndex = [{"l":"atlantafx.base"}];updateSearchResults();
+moduleSearchIndex = [{"l": "atlantafx.base"}];
+updateSearchResults();

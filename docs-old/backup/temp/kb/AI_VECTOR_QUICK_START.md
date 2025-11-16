@@ -5,22 +5,22 @@
 ### 📦 Services
 
 1. **KnowledgeVectorService** (`services/KnowledgeVectorService.js`)
-   - Vector indexing for knowledge items
-   - Semantic search
-   - Batch operations with progress tracking
-   - Web Worker support (auto-detect)
+    - Vector indexing for knowledge items
+    - Semantic search
+    - Batch operations with progress tracking
+    - Web Worker support (auto-detect)
 
 2. **AIExtractionService** (`services/AIExtractionService.js`)
-   - LLM text extraction
-   - JSON parsing & validation
-   - Batch processing
-   - Mock mode for testing
+    - LLM text extraction
+    - JSON parsing & validation
+    - Batch processing
+    - Mock mode for testing
 
 3. **Web Worker** (`workers/knowledge-vector-worker.js`)
-   - Background vector generation
-   - Non-blocking UI
-   - Progress reporting
-   - Auto-fallback to main thread
+    - Background vector generation
+    - Non-blocking UI
+    - Progress reporting
+    - Auto-fallback to main thread
 
 ---
 
@@ -472,30 +472,30 @@ const results = await knowledgeVectorService.searchSemantic(query, {
 ### To Complete the Feature:
 
 1. **Create AITextExtractorModal UI** ⏳
-   - Large textarea for text input
-   - LLM configuration options
-   - Preview extracted items
-   - Edit/remove before import
+    - Large textarea for text input
+    - LLM configuration options
+    - Preview extracted items
+    - Edit/remove before import
 
 2. **Enhance Search UI** ⏳
-   - Add semantic/keyword toggle
-   - Show similarity scores
-   - Highlight matching sections
+    - Add semantic/keyword toggle
+    - Show similarity scores
+    - Highlight matching sections
 
 3. **Integrate with Existing Pages** ⏳
-   - Add AI Extract button
-   - Auto-index new items
-   - Show vector status
+    - Add AI Extract button
+    - Auto-index new items
+    - Show vector status
 
 4. **Connect Real LLM** ⏳
-   - Replace mock in `AIExtractionService`
-   - Configure API endpoint
-   - Handle errors
+    - Replace mock in `AIExtractionService`
+    - Configure API endpoint
+    - Handle errors
 
 5. **Testing** ⏳
-   - Test with real data
-   - Performance optimization
-   - Error handling
+    - Test with real data
+    - Performance optimization
+    - Error handling
 
 ---
 

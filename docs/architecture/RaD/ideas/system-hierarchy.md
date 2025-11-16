@@ -1,6 +1,7 @@
 # System Hierarchy Data Model
 
-This document describes the standard database schema for managing enterprise systems, their subsystems, and the work items (projects and batch jobs) that belong to them.
+This document describes the standard database schema for managing enterprise systems, their subsystems, and the work
+items (projects and batch jobs) that belong to them.
 
 ---
 
@@ -88,6 +89,7 @@ CREATE TABLE batches (
 - **Timestamps** enable auditing; `updated_at` should be maintained via triggers or application logic.
 - **CASCADE deletes** guarantee referential integrity, automatically removing descendants when a parent is deleted.
 - **Indexes** on `system_id` / `subsystem_id` should be added depending on query patterns.
-- Future extensions can add bridge tables for relationships such as batches tied to specific projects or ownership assignments.
+- Future extensions can add bridge tables for relationships such as batches tied to specific projects or ownership
+  assignments.
 
 Use this schema as the baseline for all environments so tooling, migrations, and documentation stay consistent.

@@ -27,6 +27,7 @@ package atlantafx.base.shim.event;
 
 import java.util.HashMap;
 import java.util.Map;
+
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.event.EventType;
@@ -45,11 +46,38 @@ public class EventHandlerManager extends BasicEventDispatcher {
         eventHandlerMap = new HashMap<>();
     }
 
+    private static Event fixEventSource(final Event event,
+                                        final Object eventSource) {
+        return (event.getSource() != eventSource)
+                ? event.copyFor(eventSource, event.getTarget())
+                : event;
+    }
+
+    private static void validateEventType(final EventType<?> eventType) {
+        if (eventType == null) {
+            throw new NullPointerException("Event type must not be null");
+        }
+    }
+
+    private static void validateEventHandler(
+            final EventHandler<?> eventHandler) {
+        if (eventHandler == null) {
+            throw new NullPointerException("Event handler must not be null");
+        }
+    }
+
+    private static void validateEventFilter(
+            final EventHandler<?> eventFilter) {
+        if (eventFilter == null) {
+            throw new NullPointerException("Event filter must not be null");
+        }
+    }
+
     /**
      * Registers an event handler in {@code EventHandlerManager}.
      *
-     * @param <T> the specific event class of the handler
-     * @param eventType the type of the events to receive by the handler
+     * @param <T>          the specific event class of the handler
+     * @param eventType    the type of the events to receive by the handler
      * @param eventHandler the handler to register
      * @throws NullPointerException if the event type or handler is null
      */
@@ -68,8 +96,8 @@ public class EventHandlerManager extends BasicEventDispatcher {
     /**
      * Unregisters a previously registered event handler.
      *
-     * @param <T> the specific event class of the handler
-     * @param eventType the event type from which to unregister
+     * @param <T>          the specific event class of the handler
+     * @param eventType    the event type from which to unregister
      * @param eventHandler the handler to unregister
      * @throws NullPointerException if the event type or handler is null
      */
@@ -81,7 +109,7 @@ public class EventHandlerManager extends BasicEventDispatcher {
         validateEventHandler(eventHandler);
 
         final CompositeEventHandler<T> compositeEventHandler =
-            (CompositeEventHandler<T>) eventHandlerMap.get(eventType);
+                (CompositeEventHandler<T>) eventHandlerMap.get(eventType);
 
         if (compositeEventHandler != null) {
             compositeEventHandler.removeEventHandler(eventHandler);
@@ -91,8 +119,8 @@ public class EventHandlerManager extends BasicEventDispatcher {
     /**
      * Registers an event filter in {@code EventHandlerManager}.
      *
-     * @param <T> the specific event class of the filter
-     * @param eventType the type of the events to receive by the filter
+     * @param <T>         the specific event class of the filter
+     * @param eventType   the type of the events to receive by the filter
      * @param eventFilter the filter to register
      * @throws NullPointerException if the event type or filter is null
      */
@@ -111,8 +139,8 @@ public class EventHandlerManager extends BasicEventDispatcher {
     /**
      * Unregisters a previously registered event filter.
      *
-     * @param <T> the specific event class of the filter
-     * @param eventType the event type from which to unregister
+     * @param <T>         the specific event class of the filter
+     * @param eventType   the event type from which to unregister
      * @param eventFilter the filter to unregister
      * @throws NullPointerException if the event type or filter is null
      */
@@ -135,8 +163,8 @@ public class EventHandlerManager extends BasicEventDispatcher {
      * Sets the specified singleton handler. There can only be one such handler
      * specified at a time.
      *
-     * @param <T> the specific event class of the handler
-     * @param eventType the event type to associate with the given eventHandler
+     * @param <T>          the specific event class of the handler
+     * @param eventType    the event type to associate with the given eventHandler
      * @param eventHandler the handler to register, or null to unregister
      * @throws NullPointerException if the event type is null
      */
@@ -166,8 +194,8 @@ public class EventHandlerManager extends BasicEventDispatcher {
                 (CompositeEventHandler<T>) eventHandlerMap.get(eventType);
 
         return (compositeEventHandler != null)
-                       ? compositeEventHandler.getEventHandler()
-                       : null;
+                ? compositeEventHandler.getEventHandler()
+                : null;
     }
 
     @Override
@@ -194,7 +222,7 @@ public class EventHandlerManager extends BasicEventDispatcher {
 
     @SuppressWarnings("unchecked")
     private <T extends Event> CompositeEventHandler<T>
-            createGetCompositeEventHandler(final EventType<T> eventType) {
+    createGetCompositeEventHandler(final EventType<T> eventType) {
         CompositeEventHandler<T> compositeEventHandler =
                 (CompositeEventHandler<T>) eventHandlerMap.get(eventType);
         if (compositeEventHandler == null) {
@@ -233,32 +261,5 @@ public class EventHandlerManager extends BasicEventDispatcher {
         }
 
         return event;
-    }
-
-    private static Event fixEventSource(final Event event,
-                                        final Object eventSource) {
-        return (event.getSource() != eventSource)
-                ? event.copyFor(eventSource, event.getTarget())
-                : event;
-    }
-
-    private static void validateEventType(final EventType<?> eventType) {
-        if (eventType == null) {
-            throw new NullPointerException("Event type must not be null");
-        }
-    }
-
-    private static void validateEventHandler(
-            final EventHandler<?> eventHandler) {
-        if (eventHandler == null) {
-            throw new NullPointerException("Event handler must not be null");
-        }
-    }
-
-    private static void validateEventFilter(
-            final EventHandler<?> eventFilter) {
-        if (eventFilter == null) {
-            throw new NullPointerException("Event filter must not be null");
-        }
     }
 }

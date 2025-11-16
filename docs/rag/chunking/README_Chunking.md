@@ -2,7 +2,8 @@
 
 ## 🎯 Tổng Quan
 
-Hệ thống chunking của PCM Desktop cung cấp 4 chiến thuật chunking tiên tiến để tối ưu hóa hiệu suất RAG (Retrieval Augmented Generation):
+Hệ thống chunking của PCM Desktop cung cấp 4 chiến thuật chunking tiên tiến để tối ưu hóa hiệu suất RAG (Retrieval
+Augmented Generation):
 
 - **FixedSizeChunking**: Nhanh chóng, kích thước dự đoán được
 - **SentenceAwareChunking**: Bảo toàn cấu trúc câu, chất lượng cao
@@ -153,18 +154,21 @@ public class DocumentChunk {
 ### 1. FixedSizeChunking
 
 **Characteristics:**
+
 - ⚡ Fastest performance
 - 📏 Predictable chunk sizes
 - 🚀 Best for high-volume processing
 - ⚠️ May break sentences/context
 
 **Usage:**
+
 ```java
 FixedSizeChunking strategy = new FixedSizeChunking(1000, 200);
 // chunkSize=1000, overlapSize=200
 ```
 
 **Best for:**
+
 - Bulk document processing
 - Real-time applications
 - Simple text without structure
@@ -172,12 +176,14 @@ FixedSizeChunking strategy = new FixedSizeChunking(1000, 200);
 ### 2. SentenceAwareChunking
 
 **Characteristics:**
+
 - 📝 Preserves sentence boundaries
 - ⚖️ Balanced quality/performance
 - 🎯 Good for narrative content
 - 🔧 Configurable size tolerance
 
 **Usage:**
+
 ```java
 // Default configuration
 SentenceAwareChunking strategy = SentenceAwareChunking.defaults();
@@ -195,6 +201,7 @@ SentenceAwareChunking.flexible();  // High tolerance
 ```
 
 **Advanced Features:**
+
 - Regex-based sentence detection
 - Abbreviation protection (Dr., Mr., etc.)
 - Punctuation handling
@@ -203,12 +210,14 @@ SentenceAwareChunking.flexible();  // High tolerance
 ### 3. SemanticChunking
 
 **Characteristics:**
+
 - 🧠 Highest semantic quality
 - 🔗 Uses embedding similarity
 - 📈 Adaptive chunk sizes
 - ⚡ Requires EmbeddingService
 
 **Usage:**
+
 ```java
 EmbeddingService embeddingService = new YourEmbeddingService();
 
@@ -230,6 +239,7 @@ SemanticChunking custom = new SemanticChunking(
 ```
 
 **Algorithm:**
+
 1. Split text into sentences
 2. Generate embeddings for each sentence
 3. Group sentences by cosine similarity
@@ -238,12 +248,14 @@ SemanticChunking custom = new SemanticChunking(
 ### 4. MarkdownAwareChunking
 
 **Characteristics:**
+
 - 📋 Preserves Markdown structure
 - 🏗️ Header-based chunking
 - 💻 Code block preservation
 - 📊 Table and list awareness
 
 **Usage:**
+
 ```java
 // Default configuration
 MarkdownAwareChunking strategy = MarkdownAwareChunking.defaults();
@@ -263,6 +275,7 @@ MarkdownAwareChunking custom = new MarkdownAwareChunking(
 ```
 
 **Features:**
+
 - Header hierarchy preservation (H1-H6)
 - Code block integrity
 - Table structure maintenance
@@ -323,6 +336,7 @@ ChunkingStrategy strategy = ChunkingFactory.createOptimalStrategy(
 ### Strategy-Specific Configuration
 
 #### Sentence-Aware Configuration
+
 ```java
 SentenceAwareConfig sentenceConfig = SentenceAwareConfig.builder()
     .sizeTolerance(0.3)         // 30% deviation allowed
@@ -335,6 +349,7 @@ ChunkingConfig config = ChunkingConfig.builder()
 ```
 
 #### Semantic Configuration
+
 ```java
 SemanticConfig semanticConfig = SemanticConfig.builder()
     .embeddingService(embeddingService)
@@ -345,6 +360,7 @@ SemanticConfig semanticConfig = SemanticConfig.builder()
 ```
 
 #### Markdown Configuration
+
 ```java
 MarkdownConfig markdownConfig = MarkdownConfig.builder()
     .preserveCodeBlocks(true)
@@ -527,12 +543,12 @@ void testSentenceAwareChunking() {
 
 ### Processing Time Comparison (1MB document)
 
-| Strategy | Processing Time | Memory Usage | Quality Score |
-|----------|----------------|--------------|---------------|
-| **Fixed-Size** | 15ms | Low | 0.45 |
-| **Sentence-Aware** | 85ms | Medium | 0.78 |
-| **Markdown-Aware** | 120ms | Medium | 0.82 |
-| **Semantic** | 850ms | High | 0.91 |
+| Strategy           | Processing Time | Memory Usage | Quality Score |
+|--------------------|-----------------|--------------|---------------|
+| **Fixed-Size**     | 15ms            | Low          | 0.45          |
+| **Sentence-Aware** | 85ms            | Medium       | 0.78          |
+| **Markdown-Aware** | 120ms           | Medium       | 0.82          |
+| **Semantic**       | 850ms           | High         | 0.91          |
 
 ### Throughput Benchmarks
 
@@ -670,6 +686,7 @@ public void monitorChunkQuality(List<DocumentChunk> chunks) {
 **Problem:** Chunks have consistently low quality scores.
 
 **Solutions:**
+
 ```java
 // Check strategy suitability
 if (!strategy.isSuitableFor(document)) {
@@ -688,6 +705,7 @@ ChunkingConfig betterConfig = ChunkingConfig.builder()
 **Problem:** OutOfMemoryError when processing large documents.
 
 **Solutions:**
+
 ```java
 // Use smaller chunks
 ChunkingConfig memoryOptimizedConfig = ChunkingConfig.builder()
@@ -714,6 +732,7 @@ public void processLargeDocumentInBatches(RAGDocument largeDoc) {
 **Problem:** Semantic chunking takes too long.
 
 **Solutions:**
+
 ```java
 // Optimize embedding configuration
 SemanticConfig fastConfig = SemanticConfig.builder()
@@ -739,6 +758,7 @@ public class CachedEmbeddingService implements EmbeddingService {
 **Problem:** Chunks don't meet size requirements.
 
 **Solutions:**
+
 ```java
 // Adjust size tolerance for sentence-aware
 SentenceAwareConfig flexibleConfig = SentenceAwareConfig.builder()
@@ -758,6 +778,7 @@ ChunkingConfig constrainedConfig = ChunkingConfig.builder()
 **Problem:** Chunks missing expected metadata.
 
 **Solutions:**
+
 ```java
 // Verify strategy supports metadata
 if (strategy instanceof MarkdownAwareChunking) {
@@ -841,22 +862,26 @@ public void profileChunking(RAGDocument document) {
 ## 📞 Support & Contributing
 
 ### Getting Help
+
 - 📖 Read this comprehensive documentation
-- 🧪 Check the test cases for usage examples  
+- 🧪 Check the test cases for usage examples
 - 🔍 Run the ChunkingExamples.java for hands-on learning
 - 🐛 Check troubleshooting section above
 
 ### Contributing
+
 - 🐛 Report issues with detailed reproduction steps
 - 💡 Suggest improvements with use case examples
 - 🧪 Add test cases for edge cases
 - 📚 Improve documentation
 
 ### Links
+
 - [Main Documentation](Chunking_Strategy_Documentation.md)
 - [Examples](src/main/java/com/noteflix/pcm/rag/chunking/examples/ChunkingExamples.java)
 - [Tests](src/test/java/com/noteflix/pcm/rag/chunking/)
 
 ---
 
-**🎉 Hệ thống chunking PCM Desktop được thiết kế để cung cấp hiệu suất tối ưu cho mọi use case từ xử lý khối lượng lớn đến chất lượng semantic cao nhất!**
+**🎉 Hệ thống chunking PCM Desktop được thiết kế để cung cấp hiệu suất tối ưu cho mọi use case từ xử lý khối lượng lớn
+đến chất lượng semantic cao nhất!**

@@ -24,6 +24,7 @@
 #### Single Responsibility Principle
 
 ✅ **DO:**
+
 ```java
 // Each class has one clear purpose
 public class UserListPage extends BaseView {
@@ -40,6 +41,7 @@ public class UserService {
 ```
 
 ❌ **DON'T:**
+
 ```java
 // Page doing everything
 public class UserPage extends BaseView {
@@ -61,6 +63,7 @@ public class UserPage extends BaseView {
 #### Open/Closed Principle
 
 ✅ **DO:**
+
 ```java
 // Open for extension
 public abstract class BasePage extends VBox {
@@ -77,6 +80,7 @@ public class MyPage extends BasePage {
 ```
 
 ❌ **DON'T:**
+
 ```java
 // Modifying base class for each new feature
 public class BasePage extends VBox {
@@ -90,6 +94,7 @@ public class BasePage extends VBox {
 ### 2. Meaningful Names
 
 ✅ **DO:**
+
 ```java
 Button submitButton = new Button("Submit");
 TextField userEmailField = new TextField();
@@ -100,6 +105,7 @@ public void handleSendMessage() { ... }
 ```
 
 ❌ **DON'T:**
+
 ```java
 Button b1 = new Button("Submit");
 TextField tf = new TextField();
@@ -112,6 +118,7 @@ public void onClick() { ... }
 ### 3. Keep Methods Small
 
 ✅ **DO:**
+
 ```java
 @Override
 protected Node createMainContent() {
@@ -134,6 +141,7 @@ private Node createToolbar() {
 ```
 
 ❌ **DON'T:**
+
 ```java
 @Override
 protected Node createMainContent() {

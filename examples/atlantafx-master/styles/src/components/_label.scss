@@ -9,7 +9,7 @@
     -fx-opacity: cfg.$opacity-disabled;
   }
 
-  &:show-mnemonics>.mnemonic-underline {
+  &:show-mnemonics > .mnemonic-underline {
     -fx-stroke: -color-fg-default;
   }
 

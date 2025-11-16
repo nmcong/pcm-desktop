@@ -1,6 +1,7 @@
 # Vector Store Architecture Overview
 
 ## Table of Contents
+
 1. [System Architecture](#system-architecture)
 2. [Component Design](#component-design)
 3. [Interface Specifications](#interface-specifications)
@@ -12,6 +13,7 @@
 ## System Architecture
 
 ### High-Level Architecture
+
 ```
 ┌─────────────────────────────────────────────────────────────────┐
 │                        RAG Application Layer                     │
@@ -39,16 +41,19 @@
 ### Layered Architecture Benefits
 
 #### 1. Abstraction Layer
+
 - **Consistent Interface**: All vector stores implement the same `VectorStore` interface
 - **Technology Independence**: Switch implementations without changing application code
 - **Future-Proofing**: Easy to add new vector store implementations
 
 #### 2. Implementation Layer
+
 - **Technology-Specific Optimizations**: Each implementation can leverage unique features
 - **Performance Tuning**: Optimize for specific use cases and data patterns
 - **Resource Management**: Handle technology-specific lifecycle and cleanup
 
 #### 3. Storage Layer
+
 - **Persistence Strategy**: File-based vs. service-based storage options
 - **Backup & Recovery**: Implementation-specific data protection strategies
 - **Scalability Options**: Scale-up vs. scale-out architectures
@@ -58,6 +63,7 @@
 ### Core Interfaces
 
 #### VectorStore Interface
+
 ```java
 public interface VectorStore extends AutoCloseable {
     // Document management
@@ -79,12 +85,14 @@ public interface VectorStore extends AutoCloseable {
 ```
 
 **Design Principles**:
+
 - **CRUD Operations**: Complete document lifecycle management
 - **Batch Support**: Efficient bulk operations
 - **Query Flexibility**: Rich search options through RetrievalOptions
 - **Resource Safety**: Explicit resource management with AutoCloseable
 
 #### RetrievalOptions Configuration
+
 ```java
 public class RetrievalOptions {
     // Result configuration
@@ -102,6 +110,7 @@ public class RetrievalOptions {
 ```
 
 **Design Features**:
+
 - **Sensible Defaults**: Works out-of-box with minimal configuration
 - **Rich Filtering**: Type-based and metadata-based filtering
 - **Extensible**: Support for implementation-specific options
@@ -110,6 +119,7 @@ public class RetrievalOptions {
 ### Data Models
 
 #### RAGDocument Model
+
 ```java
 @Builder
 @Data
@@ -133,6 +143,7 @@ public class RAGDocument {
 ```
 
 #### ScoredDocument Result
+
 ```java
 @Builder
 @Data
@@ -149,6 +160,7 @@ public class ScoredDocument {
 ```
 
 #### Document Classification
+
 ```java
 public enum DocumentType {
     // Content types
@@ -184,6 +196,7 @@ public enum DocumentType {
 ### Implementation Architecture
 
 #### LuceneVectorStore Architecture
+
 ```
 ┌─────────────────────────────────────────────────────────────────┐
 │                    LuceneVectorStore                            │
@@ -218,32 +231,33 @@ public enum DocumentType {
 **Key Components**:
 
 1. **IndexWriter Management**
-   - Document lifecycle operations
-   - Transaction management with commits
-   - Memory buffer optimization
-   - Merge policy configuration
+    - Document lifecycle operations
+    - Transaction management with commits
+    - Memory buffer optimization
+    - Merge policy configuration
 
 2. **SearcherManager Pool**
-   - Thread-safe searcher access
-   - Automatic refresh after updates
-   - Resource pooling and cleanup
-   - Concurrent read operations
+    - Thread-safe searcher access
+    - Automatic refresh after updates
+    - Resource pooling and cleanup
+    - Concurrent read operations
 
 3. **Query Processing Pipeline**
-   - Text analysis and tokenization
-   - Query parsing with error handling
-   - Filter application and combination
-   - Score normalization and ranking
+    - Text analysis and tokenization
+    - Query parsing with error handling
+    - Filter application and combination
+    - Score normalization and ranking
 
 4. **Storage Management**
-   - File-based index persistence
-   - Segment merging strategies
-   - Lock management for concurrent access
-   - Backup and recovery support
+    - File-based index persistence
+    - Segment merging strategies
+    - Lock management for concurrent access
+    - Backup and recovery support
 
 ### Error Handling Architecture
 
 #### Exception Hierarchy
+
 ```java
 // Base exception
 public class VectorStoreException extends RuntimeException {
@@ -259,6 +273,7 @@ public class ConfigurationException extends VectorStoreException { /* ... */ }
 ```
 
 #### Error Recovery Strategies
+
 ```java
 public class ErrorRecoveryManager {
     
@@ -313,6 +328,7 @@ public class ErrorRecoveryManager {
 ### Search Interface Contract
 
 #### Method Signatures
+
 ```java
 public interface VectorStore {
     /**
@@ -330,6 +346,7 @@ public interface VectorStore {
 ```
 
 #### Input Validation Requirements
+
 ```java
 // Query validation
 if (query == null || query.trim().isEmpty()) {
@@ -351,6 +368,7 @@ if (options.getMinScore() < 0.0 || options.getMinScore() > 1.0) {
 ```
 
 #### Output Guarantees
+
 ```java
 /**
  * Search result guarantees:
@@ -383,6 +401,7 @@ public List<ScoredDocument> search(String query, RetrievalOptions options) {
 ### Indexing Interface Contract
 
 #### Batch Operations
+
 ```java
 /**
  * Batch indexing with transaction semantics.
@@ -409,6 +428,7 @@ public void indexDocuments(List<RAGDocument> documents) {
 ```
 
 #### Consistency Guarantees
+
 ```java
 /**
  * Consistency model:
@@ -440,6 +460,7 @@ public class ConsistencyManager {
 ## Implementation Patterns
 
 ### Factory Pattern for Vector Store Creation
+
 ```java
 public class VectorStoreFactory {
     
@@ -499,6 +520,7 @@ public class VectorStoreFactory {
 ```
 
 ### Strategy Pattern for Search Algorithms
+
 ```java
 public interface SearchStrategy {
     List<ScoredDocument> search(String query, RetrievalOptions options, IndexSearcher searcher);
@@ -542,6 +564,7 @@ public class SearchContext {
 ```
 
 ### Observer Pattern for Index Events
+
 ```java
 public interface IndexEventListener {
     void onDocumentIndexed(String documentId, RAGDocument document);
@@ -613,6 +636,7 @@ public class CacheInvalidationListener implements IndexEventListener {
 ## Integration Points
 
 ### Spring Framework Integration
+
 ```java
 @Configuration
 @EnableConfigurationProperties(VectorStoreProperties.class)
@@ -657,6 +681,7 @@ public class VectorStoreProperties {
 ```
 
 ### Monitoring and Metrics Integration
+
 ```java
 @Component
 public class VectorStoreMetrics {
@@ -703,6 +728,7 @@ public class VectorStoreMetrics {
 ```
 
 ### Health Check Integration
+
 ```java
 @Component
 public class VectorStoreHealthIndicator implements HealthIndicator {
@@ -750,6 +776,7 @@ public class VectorStoreHealthIndicator implements HealthIndicator {
 ## Extension Mechanisms
 
 ### Plugin Architecture
+
 ```java
 public interface VectorStorePlugin {
     String getName();
@@ -808,6 +835,7 @@ public class VectorStorePluginManager {
 ```
 
 ### Custom Similarity Functions
+
 ```java
 public interface SimilarityFunction {
     String getName();
@@ -868,6 +896,7 @@ public class SimilarityRegistry {
 ```
 
 ### Document Processors
+
 ```java
 public interface DocumentProcessor {
     RAGDocument process(RAGDocument document);
@@ -969,6 +998,7 @@ public class DocumentProcessingPipeline {
 ## Future Roadmap
 
 ### Phase 1: Enhanced Search Capabilities (Q1 2024)
+
 ```yaml
 Semantic Search:
   - Embedding generation pipeline
@@ -984,6 +1014,7 @@ Query Improvements:
 ```
 
 ### Phase 2: Scale & Performance (Q2 2024)
+
 ```yaml
 Distributed Architecture:
   - Qdrant integration
@@ -999,6 +1030,7 @@ Performance Optimizations:
 ```
 
 ### Phase 3: Advanced Features (Q3 2024)
+
 ```yaml
 Multi-Modal Search:
   - Image + text search
@@ -1014,6 +1046,7 @@ Analytics & Insights:
 ```
 
 ### Phase 4: Enterprise Features (Q4 2024)
+
 ```yaml
 Security & Compliance:
   - Access controls
@@ -1029,6 +1062,7 @@ Integration Ecosystem:
 ```
 
 ### Technology Evolution
+
 ```yaml
 Vector Stores:
   Current: Lucene (file-based)
@@ -1052,6 +1086,7 @@ APIs & Interfaces:
 ---
 
 **Related Documentation:**
+
 - [Lucene Implementation Guide](lucene-guide.md)
 - [Qdrant vs Lucene Comparison](qdrant-vs-lucene.md)
 - [Performance Benchmarks](performance-benchmarks.md)

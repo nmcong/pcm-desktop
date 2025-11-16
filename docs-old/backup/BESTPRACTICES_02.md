@@ -1,4 +1,5 @@
-Dưới đây là một “khung chuẩn” để bạn tổ chức dự án JavaFX gọn gàng, sạch, dễ test và bám SOLID. Mình dùng MVVM + DI nhẹ, tách navigation, async, i18n, theme, và đóng gói native.
+Dưới đây là một “khung chuẩn” để bạn tổ chức dự án JavaFX gọn gàng, sạch, dễ test và bám SOLID. Mình dùng MVVM + DI nhẹ,
+tách navigation, async, i18n, theme, và đóng gói native.
 
 # Kiến trúc đề xuất
 
@@ -268,4 +269,5 @@ jpackage --name MyApp --input build/libs --main-jar myapp-all.jar \
 * [ ] Thiết lập Checkstyle/SpotBugs/Spotless.
 * [ ] jpackage phát hành.
 
-Nếu bạn muốn, mình có thể biến khung này thành skeleton project (MVVM + DI nhẹ + 2 màn hình mẫu + Gradle + jpackage) để bạn dùng ngay.
+Nếu bạn muốn, mình có thể biến khung này thành skeleton project (MVVM + DI nhẹ + 2 màn hình mẫu + Gradle + jpackage) để
+bạn dùng ngay.

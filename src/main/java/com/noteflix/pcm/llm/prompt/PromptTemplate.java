@@ -20,25 +20,25 @@ import java.util.Map;
  */
 public interface PromptTemplate {
 
-  /**
-   * Render template with variables.
-   *
-   * @param variables Variables to substitute in template
-   * @return Rendered prompt string
-   */
-  String render(Map<String, Object> variables);
+    /**
+     * Render template with variables.
+     *
+     * @param variables Variables to substitute in template
+     * @return Rendered prompt string
+     */
+    String render(Map<String, Object> variables);
 
-  /**
-   * Get template name.
-   *
-   * @return Template name
-   */
-  String getName();
+    /**
+     * Get template name.
+     *
+     * @return Template name
+     */
+    String getName();
 
-  /**
-   * Get template description.
-   *
-   * @return Description of what this template does
-   */
-  String getDescription();
+    /**
+     * Get template description.
+     *
+     * @return Description of what this template does
+     */
+    String getDescription();
 }

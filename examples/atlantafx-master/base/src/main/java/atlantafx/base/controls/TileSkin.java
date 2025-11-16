@@ -17,8 +17,8 @@ public class TileSkin extends TileSkinBase<Tile> {
 
         pseudoClassStateChanged(Styles.STATE_INTERACTIVE, control.getActionHandler() != null);
         registerChangeListener(
-            control.actionHandlerProperty(),
-            o -> pseudoClassStateChanged(Styles.STATE_INTERACTIVE, getSkinnable().getActionHandler() != null)
+                control.actionHandlerProperty(),
+                o -> pseudoClassStateChanged(Styles.STATE_INTERACTIVE, getSkinnable().getActionHandler() != null)
         );
 
         container.setOnMouseClicked(e -> {

@@ -43,12 +43,19 @@ import org.jspecify.annotations.Nullable;
  */
 public class CustomTextField extends TextField {
 
+    private final ObjectProperty<@Nullable Node> left = new SimpleObjectProperty<>(this, "left");
+    private final ObjectProperty<@Nullable Node> right = new SimpleObjectProperty<>(this, "right");
+
     /**
      * Creates an empty CustomTextField.
      */
     public CustomTextField() {
         getStyleClass().add("custom-text-field");
     }
+
+    ///////////////////////////////////////////////////////////////////////////
+    // Properties                                                            //
+    ///////////////////////////////////////////////////////////////////////////
 
     /**
      * Creates a CustomTextField with initial text content.
@@ -78,18 +85,12 @@ public class CustomTextField extends TextField {
         };
     }
 
-    ///////////////////////////////////////////////////////////////////////////
-    // Properties                                                            //
-    ///////////////////////////////////////////////////////////////////////////
-
     /**
      * Represents the {@link Node} that is placed on the left of the text field.
      */
     public final ObjectProperty<@Nullable Node> leftProperty() {
         return left;
     }
-
-    private final ObjectProperty<@Nullable Node> left = new SimpleObjectProperty<>(this, "left");
 
     /**
      * Returns the {@link Node} that is placed on the left of the text field.
@@ -111,8 +112,6 @@ public class CustomTextField extends TextField {
     public final ObjectProperty<@Nullable Node> rightProperty() {
         return right;
     }
-
-    private final ObjectProperty<@Nullable Node> right = new SimpleObjectProperty<>(this, "right");
 
     /**
      * Returns the {@link Node} that is placed on the right of the text field.

@@ -20,59 +20,69 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class MainLayer extends BorderPane {
 
-  /** -- GETTER -- Gets the sidebar for external manipulation */
-  private SidebarView sidebar;
+    /**
+     * -- GETTER -- Gets the sidebar for external manipulation
+     */
+    private SidebarView sidebar;
 
-  /** -- GETTER -- Gets the main content pane for external manipulation */
-  private StackPane mainContentPane;
+    /**
+     * -- GETTER -- Gets the main content pane for external manipulation
+     */
+    private StackPane mainContentPane;
 
-  private PageNavigator pageNavigator;
+    private PageNavigator pageNavigator;
 
-  public MainLayer() {
-    createView();
-  }
+    public MainLayer() {
+        createView();
+    }
 
-  /** Creates the view with 2-part layout (similar to AtlantaFX Sampler MainLayer line 90) */
-  private void createView() {
-    // LEFT PART: Sidebar with fixed width (full height)
-    sidebar = new SidebarView();
-    sidebar.setMinWidth(AppConstants.SIDEBAR_WIDTH);
-    sidebar.setMaxWidth(AppConstants.SIDEBAR_WIDTH);
-    sidebar.getStyleClass().add("sidebar-full-height");
+    /**
+     * Creates the view with 2-part layout (similar to AtlantaFX Sampler MainLayer line 90)
+     */
+    private void createView() {
+        // LEFT PART: Sidebar with fixed width (full height)
+        sidebar = new SidebarView();
+        sidebar.setMinWidth(AppConstants.SIDEBAR_WIDTH);
+        sidebar.setMaxWidth(AppConstants.SIDEBAR_WIDTH);
+        sidebar.getStyleClass().add("sidebar-full-height");
 
-    // CENTER PART: Main content area (flexible width) - will contain navbar + content
-    mainContentPane = new StackPane();
-    mainContentPane.getStyleClass().add("content-area");
-    HBox.setHgrow(mainContentPane, Priority.ALWAYS);
+        // CENTER PART: Main content area (flexible width) - will contain navbar + content
+        mainContentPane = new StackPane();
+        mainContentPane.getStyleClass().add("content-area");
+        HBox.setHgrow(mainContentPane, Priority.ALWAYS);
 
-    // Initialize navigation
-    initializeNavigation();
+        // Initialize navigation
+        initializeNavigation();
 
-    // Setup main layout - sidebar takes full height, content area is on the right
-    setId("main");
-    setLeft(sidebar); // LEFT PART: Sidebar (full height)
-    setCenter(mainContentPane); // CENTER PART: Content area (navbar + main content)
+        // Setup main layout - sidebar takes full height, content area is on the right
+        setId("main");
+        setLeft(sidebar); // LEFT PART: Sidebar (full height)
+        setCenter(mainContentPane); // CENTER PART: Content area (navbar + main content)
 
-    log.info("MainLayer initialized with sidebar full height layout");
-  }
+        log.info("MainLayer initialized with sidebar full height layout");
+    }
 
-  /** Initializes navigation system */
-  private void initializeNavigation() {
-    // Create page navigator
-    pageNavigator = new DefaultPageNavigator(mainContentPane);
+    /**
+     * Initializes navigation system
+     */
+    private void initializeNavigation() {
+        // Create page navigator
+        pageNavigator = new DefaultPageNavigator(mainContentPane);
 
-    // Inject navigator into sidebar
-    sidebar.setPageNavigator(pageNavigator);
+        // Inject navigator into sidebar
+        sidebar.setPageNavigator(pageNavigator);
 
-    // Navigate to default page (AI Assistant - Clean Architecture Implementation)
-    pageNavigator.navigateToPage(AIAssistantPage.class);
+        // Navigate to default page (AI Assistant - Clean Architecture Implementation)
+        pageNavigator.navigateToPage(AIAssistantPage.class);
 
-    log.info("Navigation system initialized");
-  }
+        log.info("Navigation system initialized");
+    }
 
-  /** Switches the main content to a new view */
-  public void setMainContent(javafx.scene.Node content) {
-    mainContentPane.getChildren().setAll(content);
-    log.info("Main content updated");
-  }
+    /**
+     * Switches the main content to a new view
+     */
+    public void setMainContent(javafx.scene.Node content) {
+        mainContentPane.getChildren().setAll(content);
+        log.info("Main content updated");
+    }
 }

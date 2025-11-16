@@ -10,7 +10,7 @@
 ✅ **Streaming Support:** Real-time responses  
 ✅ **Function Calling:** Let LLM use your tools  
 ✅ **Event-Driven:** Callbacks for UI integration  
-✅ **Production Ready:** Retry, logging, error handling  
+✅ **Production Ready:** Retry, logging, error handling
 
 ---
 
@@ -83,6 +83,7 @@ openai.configure(ProviderConfig.builder()
 ```
 
 **Models:**
+
 - `gpt-4-turbo-preview` - Most capable, 128K context
 - `gpt-4` - High intelligence, 8K context
 - `gpt-3.5-turbo` - Fast & efficient, 16K context
@@ -98,6 +99,7 @@ anthropic.configure(ProviderConfig.builder()
 ```
 
 **Models:**
+
 - `claude-3-5-sonnet-20241022` - Latest, most intelligent
 - `claude-3-opus-20240229` - Powerful analysis
 - `claude-3-sonnet-20240229` - Balanced
@@ -116,6 +118,7 @@ ollama.configure(ProviderConfig.builder()
 ```
 
 **Models:** (Download with `ollama pull <model>`)
+
 - `llama2` - Meta's Llama 2
 - `llama3` - Meta's Llama 3
 - `mistral` - Mistral 7B
@@ -306,6 +309,7 @@ log.info("Tokens used: {} (prompt: {}, completion: {})",
 ## 📚 **More Examples**
 
 See `src/main/java/com/noteflix/pcm/llm/examples/ProviderUsageExample.java` for complete examples:
+
 1. Basic setup & chat
 2. Streaming responses
 3. Using multiple providers
@@ -346,6 +350,7 @@ models.forEach(m ->
 ## 🎉 **You're Ready!**
 
 You now have:
+
 - ✅ 3 LLM providers (OpenAI, Anthropic, Ollama)
 - ✅ Streaming support
 - ✅ Function calling

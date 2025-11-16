@@ -7,39 +7,39 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 $scrollbar-thickness: 8px !default;
-$thumb-radius:        cfg.$border-radius !default;
+$thumb-radius: cfg.$border-radius !default;
 
 .scroll-bar {
 
   -fx-background-color: cfg.$scrollbar-color-track;
   -fx-opacity: cfg.$scrollbar-opacity-inactive;
 
-  >.thumb {
+  > .thumb {
     -fx-background-color: cfg.$scrollbar-color-thumb;
     -fx-background-radius: $thumb-radius;
   }
 
-  >.track {
+  > .track {
     -fx-background-color: transparent;
     -fx-border-radius: 0;
   }
 
   // hide archaic (arguably) increment and decrement buttons
-  >.increment-button {
+  > .increment-button {
     visibility: hidden;
     -fx-managed: false;
 
-    >.increment-arrow {
+    > .increment-arrow {
       -fx-shape: " ";
       -fx-padding: 0;
     }
   }
 
-  >.decrement-button {
+  > .decrement-button {
     visibility: hidden;
     -fx-managed: false;
 
-    >.decrement-arrow {
+    > .decrement-arrow {
       -fx-shape: " ";
       -fx-padding: 0;
     }
@@ -73,17 +73,17 @@ $thumb-radius:        cfg.$border-radius !default;
   -fx-background-radius: 0;
   -fx-padding: 0;
 
-  >.viewport {
+  > .viewport {
     -fx-background-color: transparent;
   }
 
-  >.corner {
+  > .corner {
     -fx-background-color: cfg.$scrollbar-color-track;
     -fx-opacity: cfg.$scrollbar-opacity-inactive;
   }
 
   &:disabled {
-    >.scroll-bar {
+    > .scroll-bar {
       -fx-opacity: cfg.$scrollbar-opacity-disabled;
     }
   }

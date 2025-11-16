@@ -7,38 +7,38 @@ package com.noteflix.pcm.rag.model;
  * @version 1.0.0
  */
 public enum DocumentType {
-  // Source code
-  SOURCE_CODE,
-  JAVA_CLASS,
-  JAVA_INTERFACE,
-  JAVA_METHOD,
+    // Source code
+    SOURCE_CODE,
+    JAVA_CLASS,
+    JAVA_INTERFACE,
+    JAVA_METHOD,
 
-  // Database objects
-  DATABASE_SCHEMA,
-  TABLE,
-  VIEW,
-  PROCEDURE,
-  FUNCTION,
-  PACKAGE,
-  TRIGGER,
+    // Database objects
+    DATABASE_SCHEMA,
+    TABLE,
+    VIEW,
+    PROCEDURE,
+    FUNCTION,
+    PACKAGE,
+    TRIGGER,
 
-  // System metadata
-  SCREEN,
-  WORKFLOW,
-  BATCH_JOB,
-  SUBSYSTEM,
-  PROJECT,
+    // System metadata
+    SCREEN,
+    WORKFLOW,
+    BATCH_JOB,
+    SUBSYSTEM,
+    PROJECT,
 
-  // Documentation
-  KNOWLEDGE_BASE,
-  API_DOC,
-  COMMENT,
-  TEXT,
-  TECHNICAL_MANUAL,
-  RESEARCH_PAPER,
-  ARTICLE,
+    // Documentation
+    KNOWLEDGE_BASE,
+    API_DOC,
+    COMMENT,
+    TEXT,
+    TECHNICAL_MANUAL,
+    RESEARCH_PAPER,
+    ARTICLE,
 
-  // Generic
-  OTHER,
-  UNKNOWN
+    // Generic
+    OTHER,
+    UNKNOWN
 }

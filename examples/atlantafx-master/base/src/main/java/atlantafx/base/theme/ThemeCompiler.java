@@ -8,6 +8,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.stream.Stream;
+
 import javafx.css.Stylesheet;
 
 /**
@@ -34,8 +35,8 @@ public class ThemeCompiler {
 
             if (args.length > 1) {
                 throw new IllegalArgumentException(
-                    "Unexpected arguments were found: "
-                        + Arrays.toString(Arrays.copyOfRange(args, 1, args.length))
+                        "Unexpected arguments were found: "
+                                + Arrays.toString(Arrays.copyOfRange(args, 1, args.length))
                 );
             }
 
@@ -59,13 +60,13 @@ public class ThemeCompiler {
 
         try (Stream<Path> stream = Files.list(dir)) {
             stream.filter(f -> f.toString().endsWith(".css"))
-                .forEach(f -> {
-                    try {
-                        convertToBinary(f, f.resolveSibling(getFilename(f) + ".bss"));
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
-                });
+                    .forEach(f -> {
+                        try {
+                            convertToBinary(f, f.resolveSibling(getFilename(f) + ".bss"));
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                    });
         }
     }
 

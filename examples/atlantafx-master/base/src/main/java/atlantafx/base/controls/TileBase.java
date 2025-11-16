@@ -17,6 +17,14 @@ import org.jspecify.annotations.Nullable;
  */
 public abstract class TileBase extends Control {
 
+    private final ObjectProperty<@Nullable Node> graphic = new SimpleObjectProperty<>(this, "graphic");
+    private final StringProperty title = new SimpleStringProperty(this, "title");
+    private final StringProperty description = new SimpleStringProperty(this, "description");
+
+    ///////////////////////////////////////////////////////////////////////////
+    // Properties                                                            //
+    ///////////////////////////////////////////////////////////////////////////
+
     public TileBase() {
         this(null, null, null);
     }
@@ -37,10 +45,6 @@ public abstract class TileBase extends Control {
         getStyleClass().add("tile-base");
     }
 
-    ///////////////////////////////////////////////////////////////////////////
-    // Properties                                                            //
-    ///////////////////////////////////////////////////////////////////////////
-
     /**
      * Represents the tile’s graphic node. It is commonly used to add images or icons
      * that are associated with the tile.
@@ -48,8 +52,6 @@ public abstract class TileBase extends Control {
     public ObjectProperty<@Nullable Node> graphicProperty() {
         return graphic;
     }
-
-    private final ObjectProperty<@Nullable Node> graphic = new SimpleObjectProperty<>(this, "graphic");
 
     public @Nullable Node getGraphic() {
         return graphic.get();
@@ -65,8 +67,6 @@ public abstract class TileBase extends Control {
     public StringProperty titleProperty() {
         return title;
     }
-
-    private final StringProperty title = new SimpleStringProperty(this, "title");
 
     public @Nullable String getTitle() {
         return title.get();
@@ -85,8 +85,6 @@ public abstract class TileBase extends Control {
     public StringProperty descriptionProperty() {
         return description;
     }
-
-    private final StringProperty description = new SimpleStringProperty(this, "description");
 
     public @Nullable String getDescription() {
         return description.get();

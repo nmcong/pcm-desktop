@@ -3,18 +3,21 @@
 ## 🚀 Quick Start (5 minutes)
 
 ### 1. Build the project
+
 ```bash
 ./scripts/build.sh    # macOS/Linux
 scripts\build.bat     # Windows
 ```
 
 ### 2. Run the example
+
 ```bash
 java -cp "out:lib/javafx/*:lib/others/*:lib/rag/*" \
   com.noteflix.pcm.rag.examples.BasicRAGExample
 ```
 
 ### 3. See the results!
+
 ```
 === Basic RAG Example (Offline) ===
 
@@ -31,6 +34,7 @@ Query: "customer service validation"
 ## 💻 Basic Usage
 
 ### Step 1: Create Vector Store
+
 ```java
 // Offline mode (Lucene)
 VectorStore store = VectorStoreFactory.create(
@@ -44,11 +48,13 @@ VectorStore store = VectorStoreFactory.create(
 ```
 
 ### Step 2: Create RAG Service
+
 ```java
 RAGService rag = new DefaultRAGService(store);
 ```
 
 ### Step 3: Index Documents
+
 ```java
 RAGDocument doc = RAGDocument.builder()
     .id(UUID.randomUUID().toString())
@@ -62,6 +68,7 @@ rag.indexDocument(doc);
 ```
 
 ### Step 4: Query
+
 ```java
 RAGResponse response = rag.query("How do I validate customers?");
 
@@ -83,6 +90,7 @@ for (RAGContext ctx : response.getSources()) {
 The system uses **Strategy Pattern** - easy to swap!
 
 ### Lucene (Offline)
+
 ```java
 VectorStore store = VectorStoreFactory.create(
     VectorStoreConfig.lucene("data/rag/index")
@@ -90,6 +98,7 @@ VectorStore store = VectorStoreFactory.create(
 ```
 
 ### Qdrant (When implemented)
+
 ```java
 // Local
 VectorStore store = VectorStoreFactory.create(
@@ -103,6 +112,7 @@ VectorStore store = VectorStoreFactory.create(
 ```
 
 ### In-Memory (Testing)
+
 ```java
 VectorStore store = VectorStoreFactory.create(
     VectorStoreConfig.inMemory()
@@ -128,6 +138,7 @@ DocumentType.OTHER              // Everything else
 ## 🔍 Advanced Querying
 
 ### Filter by Type
+
 ```java
 RetrievalOptions options = RetrievalOptions.builder()
     .maxResults(5)
@@ -140,6 +151,7 @@ RAGResponse response = rag.query("database connection", options);
 ```
 
 ### Filter by Metadata
+
 ```java
 RetrievalOptions options = RetrievalOptions.builder()
     .build();
@@ -227,9 +239,9 @@ showSources(response.getSources());
    ```
 
 2. **Use appropriate chunk size**:
-   - Small chunks (500): Better precision, more results
-   - Large chunks (2000): Better context, fewer results
-   - Default (1000): Balanced
+    - Small chunks (500): Better precision, more results
+    - Large chunks (2000): Better context, fewer results
+    - Default (1000): Balanced
 
 3. **Set appropriate filters**:
    ```java
@@ -248,6 +260,7 @@ showSources(response.getSources());
 ## 🐛 Troubleshooting
 
 ### Build fails with "package org.apache.lucene does not exist"
+
 ```bash
 # Check Lucene JARs
 ls -la lib/rag/
@@ -260,6 +273,7 @@ ls -la lib/rag/
 ```
 
 ### Example fails with "Cannot find vector store"
+
 ```bash
 # Ensure build includes RAG libs
 ./scripts/build.sh
@@ -269,6 +283,7 @@ java -cp "out:lib/javafx/*:lib/others/*:lib/rag/*" ...
 ```
 
 ### No results returned
+
 ```java
 // Lower min score
 options.setMinScore(0.0);
@@ -294,19 +309,19 @@ System.out.println("Indexed documents: " + count);
 ## ✅ Next Steps
 
 1. **Index your project**:
-   - Java source files
-   - SQL procedures
-   - Knowledge base articles
+    - Java source files
+    - SQL procedures
+    - Knowledge base articles
 
 2. **Integrate with UI**:
-   - Add search box
-   - Display results
-   - Show sources
+    - Add search box
+    - Display results
+    - Show sources
 
 3. **Optional enhancements**:
-   - Semantic search (embeddings)
-   - LLM integration (answer generation)
-   - Qdrant support (for scale)
+    - Semantic search (embeddings)
+    - LLM integration (answer generation)
+    - Qdrant support (for scale)
 
 ---
 

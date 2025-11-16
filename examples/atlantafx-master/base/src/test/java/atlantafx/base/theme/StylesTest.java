@@ -6,6 +6,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatNullPointerException;
 
 import java.util.Base64;
+
 import javafx.css.PseudoClass;
 import javafx.scene.layout.Region;
 import org.jspecify.annotations.NullMarked;
@@ -131,7 +132,7 @@ public class StylesTest {
     @SuppressWarnings("DataFlowIssue")
     void testAppendStyleNullNode() {
         assertThatNullPointerException().isThrownBy(
-            () -> Styles.appendStyle(null, "-fx-background-color", "red")
+                () -> Styles.appendStyle(null, "-fx-background-color", "red")
         );
     }
 
@@ -181,8 +182,8 @@ public class StylesTest {
         node.setStyle("-fx-background-color:red;-fx-text-fill:white;");
         Styles.removeStyle(node, "-fx-background-color");
         assertThat(node.getStyle())
-            .contains("-fx-text-fill:white;")
-            .doesNotContain("-fx-background-color:red;");
+                .contains("-fx-text-fill:white;")
+                .doesNotContain("-fx-background-color:red;");
     }
 
     @Test
@@ -205,7 +206,7 @@ public class StylesTest {
     @SuppressWarnings("DataFlowIssue")
     void testRemoveStyleNullNode() {
         assertThatNullPointerException().isThrownBy(
-            () -> Styles.removeStyle(null, "-fx-background-color")
+                () -> Styles.removeStyle(null, "-fx-background-color")
         );
     }
 
@@ -253,7 +254,7 @@ public class StylesTest {
     @SuppressWarnings("DataFlowIssue")
     void testToDataURIWithNullCSS() {
         assertThatNullPointerException().isThrownBy(
-            () -> Styles.toDataURI(null)
+                () -> Styles.toDataURI(null)
         );
     }
 

@@ -5,7 +5,9 @@ package atlantafx.base.layout;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import atlantafx.base.util.JavaFXTest;
+
 import java.util.function.Consumer;
+
 import javafx.scene.Node;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
@@ -34,9 +36,9 @@ public class DeckPaneTest {
     @Test
     public void testSettingTopNode() {
         var deck = new DeckPane(
-            new Rectangle(10, 10),
-            new Rectangle(20, 20),
-            new Rectangle(30, 30)
+                new Rectangle(10, 10),
+                new Rectangle(20, 20),
+                new Rectangle(30, 30)
         );
 
         assertThat(deck.getTopNode()).isEqualTo(deck.getChildren().get(2));
@@ -51,9 +53,9 @@ public class DeckPaneTest {
     @Test
     public void testViewOrderRestoredForRemovedNodes() {
         var deck = new DeckPane(
-            new Rectangle(10, 10),
-            new Rectangle(20, 20),
-            new Rectangle(30, 30)
+                new Rectangle(10, 10),
+                new Rectangle(20, 20),
+                new Rectangle(30, 30)
         );
         deck.setAnimationDuration(Duration.ZERO);
         var node = deck.getChildren().get(1);
@@ -200,8 +202,8 @@ public class DeckPaneTest {
 
             assertThat(node.getViewOrder()).isEqualTo(DeckPane.Z_DECK_TOP);
             pane.getChildren().stream()
-                .filter(child -> child != node)
-                .forEach(child -> assertThat(child.getViewOrder()).isEqualTo(DeckPane.Z_DEFAULT));
+                    .filter(child -> child != node)
+                    .forEach(child -> assertThat(child.getViewOrder()).isEqualTo(DeckPane.Z_DEFAULT));
         }
 
         /**

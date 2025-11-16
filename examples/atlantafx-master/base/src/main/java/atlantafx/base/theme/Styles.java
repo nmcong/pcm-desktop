@@ -6,6 +6,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 
 import java.util.Base64;
 import java.util.Objects;
+
 import javafx.css.PseudoClass;
 import javafx.scene.Node;
 import javafx.scene.control.TabPane;
@@ -162,7 +163,7 @@ public final class Styles {
      */
     public static void addStyleClass(Node node,
                                      String styleClass,
-                                     String @Nullable... excludes) {
+                                     String @Nullable ... excludes) {
         if (excludes != null && excludes.length > 0) {
             node.getStyleClass().removeAll(excludes);
         }
@@ -184,7 +185,7 @@ public final class Styles {
      */
     public static void activatePseudoClass(Node node,
                                            PseudoClass pseudoClass,
-                                           PseudoClass @Nullable... excludes) {
+                                           PseudoClass @Nullable ... excludes) {
         if (excludes != null) {
             for (PseudoClass exclude : excludes) {
                 node.pseudoClassStateChanged(exclude, false);

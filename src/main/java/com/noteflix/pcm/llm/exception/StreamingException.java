@@ -8,11 +8,11 @@ package com.noteflix.pcm.llm.exception;
  */
 public class StreamingException extends LLMException {
 
-  public StreamingException(String message) {
-    super(message);
-  }
+    public StreamingException(String message) {
+        super(message);
+    }
 
-  public StreamingException(String message, Throwable cause) {
-    super(message, cause);
-  }
+    public StreamingException(String message, Throwable cause) {
+        super(message, cause);
+    }
 }

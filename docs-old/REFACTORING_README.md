@@ -29,6 +29,7 @@ PCM Desktop đã được refactor theo **MVVM architecture** với **Best Pract
 ## ✅ What Was Completed
 
 ### Core Infrastructure (100%)
+
 - ✅ Dependency Injection system (`Injector`)
 - ✅ Async utilities (`Asyncs`)
 - ✅ Dialog service (`DialogService`)
@@ -38,17 +39,20 @@ PCM Desktop đã được refactor theo **MVVM architecture** với **Best Pract
 - ✅ Module system (`module-info.java`)
 
 ### ViewModels (Examples Created)
+
 - ✅ Base ViewModel pattern
 - ✅ AIAssistantViewModel (complete example)
 - ✅ SettingsViewModel (complete example)
 - ⏳ Other pages (framework ready, needs implementation)
 
 ### Application Updates
+
 - ✅ PCMApplication - DI and i18n initialization
 - ✅ MainController - Using new utilities
 - ✅ Injector - Service and ViewModel registration
 
 ### Documentation (Comprehensive)
+
 - ✅ Architecture guide (detailed)
 - ✅ Quick start guide (examples)
 - ✅ Refactoring summary
@@ -167,11 +171,13 @@ public class MyPage extends BasePage {
 ## 🎓 Key Concepts
 
 ### 1. MVVM Pattern
+
 - **View**: UI components (JavaFX)
 - **ViewModel**: UI state + commands
 - **Model**: Domain entities + services
 
 ### 2. Dependency Injection
+
 ```java
 // Get services via DI
 Injector injector = Injector.getInstance();
@@ -179,6 +185,7 @@ ConversationService service = injector.get(ConversationService.class);
 ```
 
 ### 3. Property Binding
+
 ```java
 // Automatic UI updates
 label.textProperty().bind(viewModel.nameProperty());
@@ -186,6 +193,7 @@ button.disableProperty().bind(viewModel.busyProperty());
 ```
 
 ### 4. Async Operations
+
 ```java
 // Non-blocking IO
 Asyncs.runAsync(
@@ -196,6 +204,7 @@ Asyncs.runAsync(
 ```
 
 ### 5. Internationalization
+
 ```java
 // Multi-language
 I18n.setLocale("vi");
@@ -209,27 +218,28 @@ String title = I18n.get("app.title");
 ### For Existing Pages
 
 1. **Extract to ViewModel:**
-   - Move properties to ViewModel
-   - Move logic to ViewModel methods
-   - Keep only UI wiring in Page/Controller
+    - Move properties to ViewModel
+    - Move logic to ViewModel methods
+    - Keep only UI wiring in Page/Controller
 
 2. **Add Binding:**
-   - Replace setText/setDisable with binding
-   - Use ObservableList for tables
+    - Replace setText/setDisable with binding
+    - Use ObservableList for tables
 
 3. **Use Utilities:**
-   - DialogService for dialogs
-   - Asyncs for background tasks
-   - I18n for text
+    - DialogService for dialogs
+    - Asyncs for background tasks
+    - I18n for text
 
 4. **Register in DI:**
-   - Add ViewModel factory to Injector
+    - Add ViewModel factory to Injector
 
 ---
 
 ## 📝 TODO for Complete Migration
 
 ### Optional Enhancements
+
 - [ ] Refactor all remaining pages to use ViewModels
 - [ ] Reorganize into feature-based packages (optional)
 - [ ] Add more i18n languages
@@ -243,17 +253,21 @@ String title = I18n.get("app.title");
 ## 🐛 Troubleshooting
 
 ### If you see "Service not found" errors:
+
 - Check if service is registered in `Injector.registerDefaults()`
 
 ### If UI doesn't update:
+
 - Use property binding instead of manual updates
 - Check if properties are Observable (StringProperty, etc.)
 
 ### If app blocks:
+
 - Move IO operations to `Asyncs.runAsync()`
 - Never do network/DB calls on FX thread
 
 ### If i18n keys show as "!key!":
+
 - Check if key exists in `resources/i18n/messages.properties`
 - Verify bundle is loaded with `I18n.getBundle()`
 
@@ -299,6 +313,7 @@ pcm-desktop/
 ## 🎯 Benefits
 
 ### For Developers
+
 - ✅ Cleaner, more maintainable code
 - ✅ Easy to test (ViewModels)
 - ✅ Less boilerplate
@@ -306,6 +321,7 @@ pcm-desktop/
 - ✅ Better IDE support
 
 ### For the Project
+
 - ✅ Follows industry standards
 - ✅ SOLID principles applied
 - ✅ Easy to extend
@@ -313,6 +329,7 @@ pcm-desktop/
 - ✅ Scalable architecture
 
 ### For Users
+
 - ✅ Responsive UI (non-blocking)
 - ✅ Consistent UX
 - ✅ Multi-language support
@@ -333,7 +350,7 @@ pcm-desktop/
 ## 💡 Tips
 
 - Start small - refactor one page at a time
-- Use binding - reduce manual UI updates  
+- Use binding - reduce manual UI updates
 - Think async - IO on background thread
 - Test ViewModels - they're easy to test
 - Follow examples - AIAssistantViewModel is complete
@@ -348,13 +365,14 @@ pcm-desktop/
 ✅ i18n system functional  
 ✅ Example ViewModels created  
 ✅ Documentation comprehensive  
-✅ Application running with new architecture  
+✅ Application running with new architecture
 
 ---
 
 ## 📞 Need Help?
 
 Check these resources:
+
 1. `REFACTORING_SUMMARY.md` - What changed
 2. `docs/ARCHITECTURE_REFACTORING.md` - How it works
 3. `docs/REFACTORING_QUICK_START.md` - How to use
@@ -363,7 +381,7 @@ Check these resources:
 ---
 
 **Status:** ✅ Ready to use  
-**Next Steps:** Apply patterns to remaining pages (optional)  
+**Next Steps:** Apply patterns to remaining pages (optional)
 
 Happy coding! 🚀
 

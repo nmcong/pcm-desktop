@@ -5,25 +5,28 @@
 ### ✅ Implemented Features
 
 #### 1. **Vector Store Architecture (Strategy Pattern)**
+
 - ✅ `VectorStore` interface - allows easy swap between implementations
 - ✅ `VectorStoreType` enum - LUCENE, QDRANT, PGVECTOR, CHROMA, IN_MEMORY
 - ✅ `VectorStoreConfig` - flexible configuration
 - ✅ `VectorStoreFactory` - factory pattern for instantiation
 
 #### 2. **Vector Store Implementations**
+
 - ✅ **LuceneVectorStore** - 100% offline, production-ready
-  - Apache Lucene 9.11.1
-  - BM25 ranking
-  - Full-text search
-  - Metadata filtering
-  - Snippet extraction
+    - Apache Lucene 9.11.1
+    - BM25 ranking
+    - Full-text search
+    - Metadata filtering
+    - Snippet extraction
 - ✅ **InMemoryVectorStore** - for testing
-  - Simple keyword matching
-  - Fast prototyping
+    - Simple keyword matching
+    - Fast prototyping
 - ✅ **QdrantVectorStore** - stub for future implementation
-  - Ready to add Qdrant client
+    - Ready to add Qdrant client
 
 #### 3. **Core Models**
+
 - ✅ `RAGDocument` - document model
 - ✅ `ScoredDocument` - search result with score
 - ✅ `RAGContext` - retrieved context
@@ -33,37 +36,41 @@
 - ✅ `DocumentType` - Java, SQL, Knowledge Base, etc.
 
 #### 4. **RAG Service**
+
 - ✅ `RAGService` interface
 - ✅ `DefaultRAGService` implementation
-  - Document indexing (single & batch)
-  - Query processing
-  - Context building
-  - Answer generation (simple mode)
-  - Performance metrics
+    - Document indexing (single & batch)
+    - Query processing
+    - Context building
+    - Answer generation (simple mode)
+    - Performance metrics
 
 #### 5. **Chunking Strategies**
+
 - ✅ `ChunkingStrategy` interface
 - ✅ `DocumentChunk` model
 - ✅ `FixedSizeChunking` implementation
-  - Configurable chunk size & overlap
-  - Default: 1000 chars, 200 overlap
+    - Configurable chunk size & overlap
+    - Default: 1000 chars, 200 overlap
 
 #### 6. **Examples & Testing**
+
 - ✅ `BasicRAGExample` - complete working example
-  - Indexes 4 sample documents (Java, SQL, Batch Job, Knowledge Base)
-  - 3 query examples
-  - Performance metrics
+    - Indexes 4 sample documents (Java, SQL, Batch Job, Knowledge Base)
+    - 3 query examples
+    - Performance metrics
 
 #### 7. **Build System**
+
 - ✅ Updated `build.sh` for macOS/Linux
 - ✅ Updated `build.bat` for Windows
 - ✅ Lucene JARs in `lib/rag/`:
-  - lucene-core-9.11.1.jar
-  - lucene-analyzers-common-9.11.1.jar
-  - lucene-queryparser-9.11.1.jar
-  - lucene-highlighter-9.11.1.jar
-  - lucene-analysis-common-9.11.1.jar
-  - lucene-queries-9.11.1.jar
+    - lucene-core-9.11.1.jar
+    - lucene-analyzers-common-9.11.1.jar
+    - lucene-queryparser-9.11.1.jar
+    - lucene-highlighter-9.11.1.jar
+    - lucene-analysis-common-9.11.1.jar
+    - lucene-queries-9.11.1.jar
 
 ---
 
@@ -175,24 +182,27 @@ src/main/java/com/noteflix/pcm/rag/
 ## 🔄 Next Steps (Optional Enhancements)
 
 ### Phase 2: Advanced Features
+
 - [ ] Semantic search with embeddings
-  - Local embedding models (e.g., all-MiniLM-L6-v2)
-  - Vector similarity search
+    - Local embedding models (e.g., all-MiniLM-L6-v2)
+    - Vector similarity search
 - [ ] Advanced chunking strategies
-  - Sentence-based chunking
-  - Paragraph-based chunking
-  - Code-aware chunking (for Java/SQL)
+    - Sentence-based chunking
+    - Paragraph-based chunking
+    - Code-aware chunking (for Java/SQL)
 - [ ] Document parsers
-  - Java source parser
-  - SQL parser
-  - Markdown parser
+    - Java source parser
+    - SQL parser
+    - Markdown parser
 
 ### Phase 3: LLM Integration
+
 - [ ] Integrate with existing LLM providers (OpenAI, Anthropic, Custom)
 - [ ] Context-aware answer generation
 - [ ] Citation generation
 
 ### Phase 4: Qdrant Implementation
+
 - [ ] Add Qdrant Java client
 - [ ] Implement `QdrantVectorStore`
 - [ ] Migration tool (Lucene → Qdrant)
@@ -202,18 +212,21 @@ src/main/java/com/noteflix/pcm/rag/
 ## 🚀 Usage
 
 ### Build
+
 ```bash
 ./scripts/build.sh    # macOS/Linux
 scripts\build.bat     # Windows
 ```
 
 ### Run Example
+
 ```bash
 java -cp "out:lib/javafx/*:lib/others/*:lib/rag/*" \
   com.noteflix.pcm.rag.examples.BasicRAGExample
 ```
 
 ### In Application
+
 ```java
 // Initialize
 VectorStore store = VectorStoreFactory.createDefault();

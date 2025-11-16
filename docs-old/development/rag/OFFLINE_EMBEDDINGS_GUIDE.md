@@ -3,6 +3,7 @@
 ## 🎯 Vấn đề
 
 **Để có semantic search với Qdrant, cần:**
+
 1. ❌ **ChatGPT/GPT models**: Không có embedding API, cần internet
 2. ✅ **Embedding models**: Convert text → vectors (embeddings)
 
@@ -13,6 +14,7 @@
 ## 📊 So sánh Keyword vs Semantic Search
 
 ### Keyword Search (Lucene - hiện tại)
+
 ```
 Query: "validate customer email"
 → Tìm documents có từ "validate", "customer", "email"
@@ -22,6 +24,7 @@ Result: Documents có exact words
 ```
 
 ### Semantic Search (Embeddings + Qdrant)
+
 ```
 Query: "validate customer email"
 → Convert to vector: [0.23, -0.45, 0.12, ...]
@@ -42,6 +45,7 @@ Result: Documents có nghĩa tương tự:
 ### Phương án 1: ONNX Runtime + Sentence Transformers (RECOMMENDED) ⭐
 
 **Ưu điểm:**
+
 - ✅ 100% offline
 - ✅ Fast inference
 - ✅ Small models (80-420 MB)
@@ -50,11 +54,11 @@ Result: Documents có nghĩa tương tự:
 
 **Models phổ biến:**
 
-| Model | Dimensions | Size | Speed | Quality | Recommended |
-|-------|-----------|------|-------|---------|-------------|
-| **all-MiniLM-L6-v2** | 384 | 80 MB | ⚡⚡⚡ Very fast | ⭐⭐⭐ Good | ✅ Best for desktop |
-| **all-mpnet-base-v2** | 768 | 420 MB | ⚡⚡ Fast | ⭐⭐⭐⭐ Better | For larger corpus |
-| **multilingual-e5-small** | 384 | 120 MB | ⚡⚡⚡ Fast | ⭐⭐⭐ Good | ✅ Vietnamese support |
+| Model                     | Dimensions | Size   | Speed         | Quality     | Recommended          |
+|---------------------------|------------|--------|---------------|-------------|----------------------|
+| **all-MiniLM-L6-v2**      | 384        | 80 MB  | ⚡⚡⚡ Very fast | ⭐⭐⭐ Good    | ✅ Best for desktop   |
+| **all-mpnet-base-v2**     | 768        | 420 MB | ⚡⚡ Fast       | ⭐⭐⭐⭐ Better | For larger corpus    |
+| **multilingual-e5-small** | 384        | 120 MB | ⚡⚡⚡ Fast      | ⭐⭐⭐ Good    | ✅ Vietnamese support |
 
 ---
 
@@ -92,6 +96,7 @@ echo "✅ Model downloaded!"
 ### Step 3: Implement Embedding Service
 
 **Interface:**
+
 ```java
 package com.noteflix.pcm.rag.embedding;
 
@@ -122,6 +127,7 @@ public interface EmbeddingService {
 ```
 
 **ONNX Implementation:**
+
 ```java
 package com.noteflix.pcm.rag.embedding;
 
@@ -261,12 +267,14 @@ public class ONNXEmbeddingService implements EmbeddingService {
 **DJL = Deep Learning for Java (Amazon)**
 
 **Ưu điểm:**
+
 - ✅ 100% offline
 - ✅ Easier API
 - ✅ Auto-download models
 - ✅ Support nhiều frameworks (PyTorch, TensorFlow, ONNX)
 
 **Setup:**
+
 ```bash
 cd lib/rag
 
@@ -281,6 +289,7 @@ wget https://repo1.maven.org/maven2/ai/djl/huggingface/tokenizers/0.25.0/tokeniz
 ```
 
 **Implementation (Simpler!):**
+
 ```java
 package com.noteflix.pcm.rag.embedding;
 
@@ -356,6 +365,7 @@ public class DJLEmbeddingService implements EmbeddingService {
 ## 🔄 Integration với RAG System
 
 ### Update RAGDocument
+
 ```java
 @Data
 @Builder
@@ -374,6 +384,7 @@ public class RAGDocument {
 ```
 
 ### Update VectorStore
+
 ```java
 public interface VectorStore {
     /**
@@ -394,6 +405,7 @@ public interface VectorStore {
 ```
 
 ### Enhanced RAG Service
+
 ```java
 @Slf4j
 public class SemanticRAGService implements RAGService {
@@ -446,11 +458,13 @@ public class SemanticRAGService implements RAGService {
 ### Embedding Generation Speed
 
 **all-MiniLM-L6-v2 (384d):**
+
 - Single text: ~10-20ms
 - Batch 100 texts: ~500ms
 - Memory: ~200MB
 
 **all-mpnet-base-v2 (768d):**
+
 - Single text: ~30-50ms
 - Batch 100 texts: ~1.5s
 - Memory: ~500MB
@@ -462,6 +476,7 @@ public class SemanticRAGService implements RAGService {
 ## 🎯 RECOMMENDED SETUP
 
 ### Phase 1: Keyword Search (DONE) ✅
+
 ```java
 VectorStore store = VectorStoreFactory.create(
     VectorStoreConfig.lucene("data/rag/index")
@@ -471,6 +486,7 @@ RAGService rag = new DefaultRAGService(store);
 ```
 
 ### Phase 2: Add Semantic Search (Optional)
+
 ```java
 // 1. Create embedding service
 EmbeddingService embeddings = new DJLEmbeddingService(
@@ -506,6 +522,7 @@ RAGResponse response = rag.query(
 ## 🌟 Vietnamese Support
 
 **Model: multilingual-e5-small**
+
 - ✅ Supports Vietnamese
 - ✅ 384 dimensions
 - ✅ 120 MB
@@ -580,32 +597,34 @@ echo "Ready for semantic search! 🚀"
 ## ✅ SUMMARY
 
 ### Câu hỏi:
+
 **"LLM để tạo vector db thì sao? Cách offline là gì?"**
 
 ### Trả lời:
 
 1. ❌ **ChatGPT/GPT không dùng được** cho embeddings offline
-   - Cần internet
-   - Không có embedding API public
-   
+    - Cần internet
+    - Không có embedding API public
+
 2. ✅ **Dùng local embedding models:**
-   - **all-MiniLM-L6-v2** (RECOMMENDED)
-   - 100% offline
-   - Fast (~10-20ms per text)
-   - Small (80 MB)
-   - High quality
+    - **all-MiniLM-L6-v2** (RECOMMENDED)
+    - 100% offline
+    - Fast (~10-20ms per text)
+    - Small (80 MB)
+    - High quality
 
 3. ✅ **Implementation:**
-   - DJL (Deep Java Library) - Easier! ⭐
-   - ONNX Runtime - More control
-   - Both 100% offline
+    - DJL (Deep Java Library) - Easier! ⭐
+    - ONNX Runtime - More control
+    - Both 100% offline
 
 4. ✅ **Setup:**
-   - Download model (1 time, ~80 MB)
-   - Add DJL libs (3 JARs)
-   - Use `EmbeddingService`
+    - Download model (1 time, ~80 MB)
+    - Add DJL libs (3 JARs)
+    - Use `EmbeddingService`
 
 ### Flow:
+
 ```
 Text → EmbeddingService → Vector (384 floats)
          ↓
@@ -615,9 +634,11 @@ Text → EmbeddingService → Vector (384 floats)
 ```
 
 **Hiện tại:**
+
 - ✅ Lucene (keyword search) - Working!
 
 **Nếu cần semantic search:**
+
 - ✅ Add DJL + all-MiniLM-L6-v2
 - ✅ 100% offline
 - ✅ Vietnamese support available!

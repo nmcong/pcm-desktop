@@ -9,6 +9,7 @@ import java.util.Objects;
 import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+
 import javafx.application.Platform;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
@@ -119,9 +120,9 @@ public class MaskTextFormatter extends TextFormatter<String> {
                     filter.doInternalChange(() -> field.setText(placeholder));
 
                     final int caretPos = IntStream.range(0, mask.size())
-                        .filter(i -> !mask.get(i).isFixed())
-                        .findFirst()
-                        .orElse(0);
+                            .filter(i -> !mask.get(i).isFixed())
+                            .findFirst()
+                            .orElse(0);
 
                     Platform.runLater(() -> {
                         field.deselect();
@@ -163,8 +164,8 @@ public class MaskTextFormatter extends TextFormatter<String> {
 
     protected static String createPlaceholderMask(List<MaskChar> mask) {
         return mask.stream()
-            .map(mc -> Character.toString(mc.getPlaceholder()))
-            .collect(Collectors.joining());
+                .map(mc -> Character.toString(mc.getPlaceholder()))
+                .collect(Collectors.joining());
     }
 
     protected static List<MaskChar> fromString(String inputMask) {
@@ -181,7 +182,7 @@ public class MaskTextFormatter extends TextFormatter<String> {
                 case MaskChar.INPUT_MASK_DIGIT_OR_LETTER -> new SimpleMaskChar(Character::isLetterOrDigit);
                 case MaskChar.INPUT_MASK_ANY_NON_SPACE -> new SimpleMaskChar(ch -> !Character.isSpaceChar(ch));
                 case MaskChar.INPUT_MASK_HEX -> new SimpleMaskChar(ch ->
-                    (ch >= 'A' && ch <= 'F') || (ch >= 'a' && ch <= 'f') || Character.isDigit(ch)
+                        (ch >= 'A' && ch <= 'F') || (ch >= 'a' && ch <= 'f') || Character.isDigit(ch)
                 );
                 case MaskChar.INPUT_MASK_DIGIT_NON_ZERO -> new SimpleMaskChar(ch -> Character.isDigit(ch) && ch != '0');
                 case MaskChar.INPUT_MASK_DIGIT -> new SimpleMaskChar(Character::isDigit);

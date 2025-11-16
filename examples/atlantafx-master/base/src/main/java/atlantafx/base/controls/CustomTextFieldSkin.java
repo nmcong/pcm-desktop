@@ -47,11 +47,9 @@ public abstract class CustomTextFieldSkin extends TextFieldSkin {
     private static final PseudoClass HAS_NO_SIDE_NODE = PseudoClass.getPseudoClass("no-side-nodes");
     private static final PseudoClass HAS_LEFT_NODE = PseudoClass.getPseudoClass("left-node-visible");
     private static final PseudoClass HAS_RIGHT_NODE = PseudoClass.getPseudoClass("right-node-visible");
-
+    private final TextField control;
     private @Nullable StackPane leftPane;
     private @Nullable StackPane rightPane;
-
-    private final TextField control;
 
     public CustomTextFieldSkin(final TextField control) {
         super(control);

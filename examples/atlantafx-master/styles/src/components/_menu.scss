@@ -9,17 +9,17 @@
 //  MenuBar                                                                  //
 ///////////////////////////////////////////////////////////////////////////////
 
-$color-menubar-bg:        -color-bg-subtle !default;
-$color-menubar-bg-hover:  if(cfg.$darkMode, -color-base-6, -color-base-1) !default;
+$color-menubar-bg: -color-bg-subtle !default;
+$color-menubar-bg-hover: if(cfg.$darkMode, -color-base-6, -color-base-1) !default;
 
-$color-menuitem-bg:       -color-bg-default !default;
+$color-menuitem-bg: -color-bg-default !default;
 $color-menuitem-bg-hover: if(cfg.$darkMode, -color-base-7, -color-base-1) !default;
-$color-menuitem-fg:       -color-fg-default !default;
+$color-menuitem-fg: -color-fg-default !default;
 $color-menuitem-fg-hover: -color-fg-default !default;
 
-$separator-padding:       map-get(cfg.$separators, "small") !default;
-$menu-button-padding-x:   cfg.$menu-padding-x - math.div(cfg.$menubar-padding-x, 2) !default;
-$menu-button-padding-y:   cfg.$menu-padding-y - math.div(cfg.$menubar-padding-y, 2) !default;
+$separator-padding: map-get(cfg.$separators, "small") !default;
+$menu-button-padding-x: cfg.$menu-padding-x - math.div(cfg.$menubar-padding-x, 2) !default;
+$menu-button-padding-y: cfg.$menu-padding-y - math.div(cfg.$menubar-padding-y, 2) !default;
 
 .menu-bar {
 
@@ -28,10 +28,10 @@ $menu-button-padding-y:   cfg.$menu-padding-y - math.div(cfg.$menubar-padding-y,
   -fx-background-radius: 0;
   -fx-padding: 0;
 
-  >.container {
+  > .container {
     -fx-padding: cfg.$menubar-padding-y cfg.$menubar-padding-x cfg.$menubar-padding-y cfg.$menubar-padding-x;
 
-    >.menu-button {
+    > .menu-button {
       -fx-background-color: transparent;
       -fx-background-insets: 0 0 cfg.$border-width 0;
       -fx-background-radius: cfg.$popup-radius;
@@ -39,16 +39,16 @@ $menu-button-padding-y:   cfg.$menu-padding-y - math.div(cfg.$menubar-padding-y,
       -fx-effect: none;
 
       // reset padding of menu buttons when in menu bar
-      >.label {
+      > .label {
         -fx-padding: 0;
         -fx-text-fill: -color-fg-default;
       }
 
       // hide the down arrow for a menu placed in a menubar
-      >.arrow-button {
+      > .arrow-button {
         -fx-padding: 0;
 
-        >.arrow {
+        > .arrow {
           -fx-padding: 0;
           -fx-background-color: transparent;
           -fx-shape: null;
@@ -71,8 +71,8 @@ $menu-button-padding-y:   cfg.$menu-padding-y - math.div(cfg.$menubar-padding-y,
 .menu {
   -fx-background-color: transparent;
 
-  >.right-container {
-    >.arrow {
+  > .right-container {
+    > .arrow {
       @include icons.get("chevron-right", false);
       -fx-background-color: -color-fg-muted;
     }
@@ -110,35 +110,35 @@ $menu-button-padding-y:   cfg.$menu-padding-y - math.div(cfg.$menubar-padding-y,
   -fx-padding: cfg.$menu-padding-y cfg.$menu-padding-x cfg.$menu-padding-y cfg.$menu-padding-x;
   -fx-background-radius: cfg.$popup-radius;
 
-  >.graphic-container {
+  > .graphic-container {
     -fx-padding: 0 cfg.$graphic-gap 0 0;
   }
 
   // affects both menu and hotkey labels text
-  >.label {
+  > .label {
     -fx-padding: 0 1em 0 0;
     -fx-text-fill: -color-fg-default;
   }
 
   // left container is for checkbox and radio icons
-  >.left-container {
+  > .left-container {
     -fx-padding: 0 1em 0 0;
   }
 
   // right container is for submenu indication,
   // note that hotkey is only displayed when submenu isn't present
-  >.right-container {
+  > .right-container {
     -fx-padding: 0 0 0 0.5em;
   }
 
   &:focused {
     -fx-background-color: $color-menuitem-bg-hover, $color-menuitem-bg-hover;
 
-    >.label {
+    > .label {
       -fx-text-fill: $color-menuitem-fg-hover;
     }
 
-    >.right-container >.arrow {
+    > .right-container > .arrow {
       -fx-background-color: $color-menuitem-fg-hover;
     }
 
@@ -153,20 +153,20 @@ $menu-button-padding-y:   cfg.$menu-padding-y - math.div(cfg.$menubar-padding-y,
   }
 }
 
-.radio-menu-item:checked>.left-container>.radio,
-.check-menu-item:checked>.left-container>.check {
+.radio-menu-item:checked > .left-container > .radio,
+.check-menu-item:checked > .left-container > .check {
   @include icons.get("check", true);
   -fx-background-color: -color-fg-muted;
   -fx-min-height: cfg.$checkbox-mark-size;
-  -fx-min-width:  cfg.$checkbox-mark-size;
+  -fx-min-width: cfg.$checkbox-mark-size;
   -fx-max-height: cfg.$checkbox-mark-size;
-  -fx-max-width:  cfg.$checkbox-mark-size;
+  -fx-max-width: cfg.$checkbox-mark-size;
 }
 
-.radio-menu-item:hover:checked>.left-container>.radio,
-.radio-menu-item:focused:checked>.left-container>.radio,
-.check-menu-item:hover:checked>.left-container>.check,
-.check-menu-item:focused:checked>.left-container>.check {
+.radio-menu-item:hover:checked > .left-container > .radio,
+.radio-menu-item:focused:checked > .left-container > .radio,
+.check-menu-item:hover:checked > .left-container > .check,
+.check-menu-item:focused:checked > .left-container > .check {
   -fx-background-color: $color-menuitem-fg-hover;
 }
 
@@ -178,15 +178,15 @@ $menu-button-padding-y:   cfg.$menu-padding-y - math.div(cfg.$menubar-padding-y,
   &:pressed {
     -fx-background-color: transparent;
 
-    >.label {
+    > .label {
       -fx-text-fill: -color-fg-muted;
     }
   }
 
-  >.label {
+  > .label {
     -fx-text-fill: -color-fg-muted;
 
-    >.text {
+    > .text {
       -fx-font-weight: bold;
     }
   }
@@ -204,7 +204,7 @@ $menu-button-padding-y:   cfg.$menu-padding-y - math.div(cfg.$menubar-padding-y,
   @include effects.shadow(-color-shadow-default, cfg.$popup-shadow-radius, cfg.$popup-shadow-spread);
 
   // no idea what's that thing and how to trigger its appearance
-  >.scroll-arrow {
+  > .scroll-arrow {
     -fx-padding: 0.5em;
     -fx-background-color: transparent;
 
@@ -229,9 +229,9 @@ $menu-button-padding-y:   cfg.$menu-padding-y - math.div(cfg.$menubar-padding-y,
 //  Mnemonics                                                                //
 ///////////////////////////////////////////////////////////////////////////////
 
-.context-menu:show-mnemonics>.mnemonic-underline,
-.menu:show-mnemonics>.mnemonic-underline,
-.menu-bar:show-mnemonics>.mnemonic-underline,
-.menu-item>.label:show-mnemonics>.mnemonic-underline {
+.context-menu:show-mnemonics > .mnemonic-underline,
+.menu:show-mnemonics > .mnemonic-underline,
+.menu-bar:show-mnemonics > .mnemonic-underline,
+.menu-item > .label:show-mnemonics > .mnemonic-underline {
   -fx-stroke: -color-fg-default;
 }

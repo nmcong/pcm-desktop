@@ -32,10 +32,10 @@ The "New Knowledge Base Item" modal has been completely redesigned with modern U
 - **Inline Error Messages**: Field-specific error messages below inputs
 - **Visual Error States**: Red borders and background on invalid fields
 - **Smart Validation Rules**:
-  - Title: Required, 10-200 characters
-  - Category: Required
-  - Type: Required
-  - Problem: Required, minimum 20 characters
+    - Title: Required, 10-200 characters
+    - Category: Required
+    - Type: Required
+    - Problem: Required, minimum 20 characters
 - **Auto-focus**: Automatically focuses first error field
 
 ### 5. **Loading States**
@@ -143,13 +143,13 @@ modal.show();
 ## 📦 Files Modified
 
 1. **KnowledgeBaseModal.js** (634 lines)
-   - Complete rewrite with new component structure
-   - Added tag management, tabs, validation
+    - Complete rewrite with new component structure
+    - Added tag management, tabs, validation
 
 2. **knowledge-base.css** (544 new lines)
-   - Enhanced modal styles
-   - Tag chips, tabs, editor preview
-   - Responsive breakpoints
+    - Enhanced modal styles
+    - Tag chips, tabs, editor preview
+    - Responsive breakpoints
 
 ## ✅ Benefits
 

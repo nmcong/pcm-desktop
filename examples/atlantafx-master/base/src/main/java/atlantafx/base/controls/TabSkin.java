@@ -29,20 +29,15 @@ import static javafx.animation.Animation.Status;
 
 public class TabSkin extends StackPane {
 
-    public enum TransitionState { NONE, SHOWING, HIDING }
-
     protected static final PseudoClass SELECTED_PSEUDOCLASS = PseudoClass.getPseudoClass("selected");
     protected static final PseudoClass PINNED_PSEUDOCLASS = PseudoClass.getPseudoClass("pinned");
-
     /**
      * Set when current tab width less than min tab width.
      */
     protected static final PseudoClass MIN_WIDTH_PSEUDOCLASS = PseudoClass.getPseudoClass("min-width-exceeded");
-
     protected final Tab tab;
     protected final TabLine control;
     protected final TabLineBehavior behavior;
-
     protected final HBox tabBox;
     protected final Label label;
     protected final CloseButton closeBtn;
@@ -54,18 +49,16 @@ public class TabSkin extends StackPane {
             getStyleClass().setAll(tab.getStyleClass());
         }
     };
-
-    protected @Nullable Tooltip currentTooltip;
-    protected boolean closing = false;
-    protected TransitionState transitionState = TransitionState.NONE;
-    protected @Nullable Timeline currentTransition;
     protected final DoubleProperty transitionProgress = new SimpleDoubleProperty(1.0) {
         @Override
         protected void invalidated() {
             requestLayout();
         }
     };
-
+    protected @Nullable Tooltip currentTooltip;
+    protected boolean closing = false;
+    protected TransitionState transitionState = TransitionState.NONE;
+    protected @Nullable Timeline currentTransition;
     public TabSkin(Tab tab, TabLine control, TabLineBehavior behavior) {
         this.tab = tab;
         this.control = control;
@@ -118,16 +111,16 @@ public class TabSkin extends StackPane {
         }));
 
         propertiesSubscription.and(tab.textProperty().subscribe(
-            o -> label.setText(tab.getText())
+                o -> label.setText(tab.getText())
         ));
         propertiesSubscription.and(tab.graphicProperty().subscribe(
-            o -> label.setGraphic(tab.getGraphic())
+                o -> label.setGraphic(tab.getGraphic())
         ));
         propertiesSubscription.and(tab.tooltipProperty().subscribe(
-            o -> updateTooltip(tab.getTooltip())
+                o -> updateTooltip(tab.getTooltip())
         ));
         propertiesSubscription.and(tab.styleProperty().subscribe(
-            o -> setStyle(tab.getStyle())
+                o -> setStyle(tab.getStyle())
         ));
         propertiesSubscription.and(control.tabFixedWidthProperty().subscribe(o -> {
             requestLayout();
@@ -248,20 +241,20 @@ public class TabSkin extends StackPane {
         double width = snapSizeX(label.prefWidth(-1));
         if (closingPolicy.canClose(getTab())) {
             width += snapSizeX(closeBtn.prefWidth(-1))
-                     + closeBtn.snappedLeftInset()
-                     + closeBtn.snappedRightInset();
+                    + closeBtn.snappedLeftInset()
+                    + closeBtn.snappedRightInset();
         }
 
         return snapSizeX(width)
-            + snappedLeftInset()
-            + snappedRightInset();
+                + snappedLeftInset()
+                + snappedRightInset();
     }
 
     @Override
     protected double computePrefHeight(double width) {
         return snapSizeY(tabBox.prefHeight(width))
-            + snappedTopInset()
-            + snappedBottomInset();
+                + snappedTopInset()
+                + snappedBottomInset();
     }
 
     @Override
@@ -302,8 +295,6 @@ public class TabSkin extends StackPane {
         }
     }
 
-    //=========================================================================
-
     protected void updateTooltip(@Nullable Tooltip tooltip) {
         if (currentTooltip != null) {
             Tooltip.uninstall(this, currentTooltip);
@@ -315,6 +306,8 @@ public class TabSkin extends StackPane {
             currentTooltip = tooltip;
         }
     }
+
+    //=========================================================================
 
     protected void updateEllipsisString() {
         label.setEllipsisString(control.getEllipsisString());
@@ -346,6 +339,8 @@ public class TabSkin extends StackPane {
 
         return timeline;
     }
+
+    public enum TransitionState {NONE, SHOWING, HIDING}
 
     //=========================================================================
     // Inner Classes

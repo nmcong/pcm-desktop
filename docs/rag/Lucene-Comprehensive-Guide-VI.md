@@ -18,7 +18,8 @@
 
 ### Apache Lucene là gì?
 
-**Apache Lucene** là một thư viện truy xuất thông tin mã nguồn mở được viết hoàn toàn bằng Java. Đây là nền tảng cho nhiều công cụ tìm kiếm nổi tiếng như Elasticsearch, Solr, và Amazon CloudSearch.
+**Apache Lucene** là một thư viện truy xuất thông tin mã nguồn mở được viết hoàn toàn bằng Java. Đây là nền tảng cho
+nhiều công cụ tìm kiếm nổi tiếng như Elasticsearch, Solr, và Amazon CloudSearch.
 
 ```mermaid
 graph TB
@@ -40,6 +41,7 @@ graph TB
 ### Nguyên lý cốt lõi
 
 #### 1. **Chỉ mục đảo ngược (Inverted Index)**
+
 ```
 Tài liệu 1: "Ngôn ngữ lập trình Java"
 Tài liệu 2: "Hướng dẫn lập trình Python" 
@@ -55,6 +57,7 @@ phát_triển  → [3]
 ```
 
 #### 2. **Thuật toán chấm điểm BM25**
+
 ```mathematica
 BM25(q,d) = Σ IDF(qi) × f(qi,d) × (k1 + 1) / (f(qi,d) + k1 × (1 - b + b × |d|/avgdl))
 
@@ -67,6 +70,7 @@ Trong đó:
 ```
 
 #### 3. **Quy trình phân tích văn bản**
+
 ```
 Văn bản thô → Tokenizer → Bộ lọc Token → Thuật ngữ được lập chỉ mục
     ↓           ↓            ↓              ↓
@@ -75,16 +79,16 @@ Văn bản thô → Tokenizer → Bộ lọc Token → Thuật ngữ được l�
 
 ### Tính năng chính
 
-| Tính năng | Mô tả | Sử dụng trong PCM Desktop |
-|---------|-------------|-------------------|
-| **Tìm kiếm toàn văn** | Tìm kiếm văn bản nâng cao với truy vấn boolean | Tìm kiếm mã nguồn, tìm kiếm tài liệu |
-| **Xếp hạng BM25** | Xếp hạng kết quả dựa trên mức độ liên quan | Chấm điểm mức độ liên quan cho kết quả tìm kiếm |
+| Tính năng                   | Mô tả                                           | Sử dụng trong PCM Desktop                       |
+|-----------------------------|-------------------------------------------------|-------------------------------------------------|
+| **Tìm kiếm toàn văn**       | Tìm kiếm văn bản nâng cao với truy vấn boolean  | Tìm kiếm mã nguồn, tìm kiếm tài liệu            |
+| **Xếp hạng BM25**           | Xếp hạng kết quả dựa trên mức độ liên quan      | Chấm điểm mức độ liên quan cho kết quả tìm kiếm |
 | **Tìm kiếm thời gian thực** | Tìm kiếm gần thời gian thực sau khi lập chỉ mục | Tìm kiếm ngay lập tức sau khi cập nhật tài liệu |
-| **Tìm kiếm phân khía** | Lọc theo các trường metadata | Lọc theo loại tệp, dự án, ngày |
-| **Làm nổi bật** | Làm nổi bật từ khóa truy vấn trong kết quả | Làm nổi bật đoạn mã |
-| **Tìm kiếm mờ** | Tìm kiếm chịu đựng lỗi chính tả | Xử lý lỗi chính tả trong truy vấn tìm kiếm |
-| **Tìm kiếm cụm từ** | Khớp cụm từ chính xác | Tìm các mẫu mã cụ thể |
-| **Tìm kiếm ký tự đại diện** | Tìm kiếm dựa trên mẫu | Tìm kiếm với mẫu như "get*Method" |
+| **Tìm kiếm phân khía**      | Lọc theo các trường metadata                    | Lọc theo loại tệp, dự án, ngày                  |
+| **Làm nổi bật**             | Làm nổi bật từ khóa truy vấn trong kết quả      | Làm nổi bật đoạn mã                             |
+| **Tìm kiếm mờ**             | Tìm kiếm chịu đựng lỗi chính tả                 | Xử lý lỗi chính tả trong truy vấn tìm kiếm      |
+| **Tìm kiếm cụm từ**         | Khớp cụm từ chính xác                           | Tìm các mẫu mã cụ thể                           |
+| **Tìm kiếm ký tự đại diện** | Tìm kiếm dựa trên mẫu                           | Tìm kiếm với mẫu như "get*Method"               |
 
 ---
 
@@ -134,6 +138,7 @@ public void indexDocument(RAGDocument document) {
 ```
 
 **Các trường hợp sử dụng:**
+
 - Lập chỉ mục tệp mã nguồn Java
 - Tìm kiếm phương thức, lớp, biến cụ thể
 - Tìm mẫu mã trong các dự án
@@ -178,6 +183,7 @@ public class HybridRetrievalService {
 ### 3. Các tình huống sử dụng thực tế
 
 #### Tình huống 1: Tìm kiếm mã nguồn của nhà phát triển
+
 ```java
 // Truy vấn tìm kiếm: "validate customer information"
 // Lucene tìm thấy:
@@ -194,6 +200,7 @@ List<ScoredDocument> results = luceneStore.search("validate customer information
 ```
 
 #### Tình huống 2: Tìm kiếm tài liệu
+
 ```java
 // Truy vấn tìm kiếm: "API authentication guide"
 // Lucene tìm thấy:
@@ -210,6 +217,7 @@ List<ScoredDocument> results = luceneStore.search("API authentication guide", op
 ```
 
 #### Tình huống 3: Khám phá tri thức
+
 ```java
 // Truy vấn tìm kiếm: "database connection pooling"
 // Kết hợp:
@@ -291,15 +299,15 @@ private static final String FIELD_METADATA_PREFIX = "meta_";    // Metadata tùy
 
 #### Chiến lược cấu hình trường
 
-| Trường | Loại Lucene | Lưu trữ | Lập chỉ mục | Phân tích | Mục đích |
-|-------|-------------|--------|---------|----------|---------|
-| `id` | StringField | ✅ | ❌ | ❌ | Tra cứu tài liệu duy nhất |
-| `content` | TextField | ✅ | ✅ | ✅ | Nội dung tìm kiếm chính |
-| `type` | StringField | ✅ | ✅ | ❌ | Lọc theo loại tài liệu |
-| `title` | TextField | ✅ | ✅ | ✅ | Tiêu đề tài liệu có thể tìm kiếm |
-| `sourcePath` | StringField | ✅ | ❌ | ❌ | Tham chiếu hệ thống tệp |
-| `indexedAt` | StringField | ✅ | ❌ | ❌ | Metadata để theo dõi |
-| `meta_*` | StringField | ✅ | ✅ | ❌ | Metadata tùy chỉnh có thể lọc |
+| Trường       | Loại Lucene | Lưu trữ | Lập chỉ mục | Phân tích | Mục đích                         |
+|--------------|-------------|---------|-------------|-----------|----------------------------------|
+| `id`         | StringField | ✅       | ❌           | ❌         | Tra cứu tài liệu duy nhất        |
+| `content`    | TextField   | ✅       | ✅           | ✅         | Nội dung tìm kiếm chính          |
+| `type`       | StringField | ✅       | ✅           | ❌         | Lọc theo loại tài liệu           |
+| `title`      | TextField   | ✅       | ✅           | ✅         | Tiêu đề tài liệu có thể tìm kiếm |
+| `sourcePath` | StringField | ✅       | ❌           | ❌         | Tham chiếu hệ thống tệp          |
+| `indexedAt`  | StringField | ✅       | ❌           | ❌         | Metadata để theo dõi             |
+| `meta_*`     | StringField | ✅       | ✅           | ❌         | Metadata tùy chỉnh có thể lọc    |
 
 ### Quá trình chuyển đổi tài liệu
 
@@ -423,8 +431,9 @@ private double normalizeScore(float score) {
 ```
 
 **Lợi ích:**
+
 - ✅ Chấm điểm nhất quán trên các truy vấn khác nhau
-- ✅ Thích ứng với thay đổi bộ sưu tập tài liệu  
+- ✅ Thích ứng với thay đổi bộ sưu tập tài liệu
 - ✅ Lọc ngưỡng tốt hơn
 - ✅ Cải thiện so sánh mức độ liên quan
 
@@ -447,10 +456,11 @@ echo "[INFO] 1. Downloading Apache Lucene"
 ```
 
 **Phân tích thư viện:**
+
 - **lucene-core** (8.2MB): Chức năng lập chỉ mục và tìm kiếm cốt lõi
 - **lucene-analysis-common** (1.8MB): Bộ phân tích và bộ lọc văn bản
 - **lucene-queryparser** (425KB): Phân tích và xây dựng truy vấn
-- **lucene-queries** (245KB): Loại truy vấn chuyên biệt  
+- **lucene-queries** (245KB): Loại truy vấn chuyên biệt
 - **lucene-highlighter** (195KB): Làm nổi bật kết quả tìm kiếm
 
 Tổng: ~10.8MB phụ thuộc
@@ -464,6 +474,7 @@ Tổng: ~10.8MB phụ thuộc
 **Các phần chính:**
 
 ##### Constructor và khởi tạo (Dòng 63-88)
+
 ```java
 public LuceneVectorStore(String indexPath) throws VectorStoreException {
     // Xác thực đường dẫn
@@ -486,6 +497,7 @@ public LuceneVectorStore(String indexPath) throws VectorStoreException {
 ```
 
 ##### Thao tác lập chỉ mục (Dòng 90-156)
+
 ```java
 @Override
 public void indexDocument(RAGDocument document) {
@@ -523,6 +535,7 @@ public void indexDocuments(List<RAGDocument> documents) {
 ```
 
 ##### Triển khai tìm kiếm (Dòng 158-235)
+
 ```java
 @Override
 public List<ScoredDocument> search(String query, RetrievalOptions options) {
@@ -583,6 +596,7 @@ public List<ScoredDocument> search(String query, RetrievalOptions options) {
 #### 2. Các lớp tích hợp
 
 ##### Giao diện VectorStore
+
 ```java
 // Tệp: VectorStore.java
 public interface VectorStore extends AutoCloseable {
@@ -605,6 +619,7 @@ public interface VectorStore extends AutoCloseable {
 ```
 
 ##### Factory VectorStore
+
 ```java
 // Tệp: VectorStoreFactory.java
 public class VectorStoreFactory {
@@ -1357,11 +1372,13 @@ public class RobustLuceneOperations {
 #### 1. Hỏng chỉ mục
 
 **Triệu chứng:**
+
 - `CorruptIndexException` trong khi tìm kiếm
 - Tệp segment bị thiếu hoặc hỏng
 - Kết quả tìm kiếm không nhất quán
 
 **Lệnh chẩn đoán:**
+
 ```java
 public class IndexDiagnostics {
     
@@ -1410,6 +1427,7 @@ public class IndexDiagnostics {
 ```
 
 **Giải pháp:**
+
 ```bash
 # 1. Kiểm tra dung lượng đĩa
 df -h /path/to/lucene/index
@@ -1427,6 +1445,7 @@ java -cp lucene-core.jar org.apache.lucene.index.CheckIndex /path/to/index -fix
 #### 2. Vấn đề bộ nhớ
 
 **OutOfMemoryError trong khi lập chỉ mục:**
+
 ```java
 // Giải pháp: Tối ưu hóa cấu hình IndexWriter
 IndexWriterConfig config = new IndexWriterConfig(analyzer);
@@ -1442,6 +1461,7 @@ log.info("Sử dụng heap: {}MB / {}MB",
 ```
 
 **OutOfMemoryError trong khi tìm kiếm:**
+
 ```java
 // Giải pháp: Triển khai phân trang kết quả tìm kiếm
 public class PaginatedSearch {
@@ -1465,6 +1485,7 @@ public class PaginatedSearch {
 #### 3. Suy giảm hiệu suất
 
 **Hiệu suất tìm kiếm chậm:**
+
 ```java
 // Giám sát hiệu suất
 public class SearchPerformanceMonitor {
@@ -1563,6 +1584,7 @@ public class LuceneDashboard {
 ### Ngắn hạn (3-6 tháng)
 
 #### 1. Tìm kiếm mã nguồn nâng cao
+
 ```java
 // Tìm kiếm mã thông minh với phân tích AST
 public class CodeAwareSearch {
@@ -1595,6 +1617,7 @@ public class CodeAwareSearch {
 ```
 
 #### 2. Hỗ trợ đa ngôn ngữ
+
 ```java
 // Bộ phân tích đặc thù ngôn ngữ
 public class MultiLanguageAnalyzer extends Analyzer {
@@ -1621,6 +1644,7 @@ public class MultiLanguageAnalyzer extends Analyzer {
 ### Trung hạn (6-12 tháng)
 
 #### 1. Tích hợp Machine Learning
+
 ```java
 // Learning to Rank với Lucene
 public class LearningToRankIntegration {
@@ -1699,6 +1723,7 @@ public class DistributedLuceneCluster {
 ### Dài hạn (1-2 năm)
 
 #### 1. Neural Information Retrieval
+
 ```java
 // IR neural kết hợp + truyền thống
 public class NeuralIRIntegration {
@@ -1749,6 +1774,7 @@ public class NeuralIRIntegration {
 ```
 
 #### 2. Tìm kiếm cộng tác thời gian thực
+
 ```java
 // Công cụ tìm kiếm thời gian thực với phản hồi người dùng
 public class CollaborativeSearchEngine {
@@ -1826,19 +1852,20 @@ Apache Lucene đóng vai trò **cốt lõi** trong PCM Desktop như một **côn
 ✅ **Độ tin cậy**: Uptime 99.9% với xử lý lỗi phù hợp  
 ✅ **Khả năng mở rộng**: Scale tuyến tính với số lượng tài liệu  
 ✅ **Tính linh hoạt**: Hỗ trợ nhiều loại tài liệu và metadata  
-✅ **Bảo mật**: Xác thực đầu vào toàn diện và bảo vệ đường dẫn  
+✅ **Bảo mật**: Xác thực đầu vào toàn diện và bảo vệ đường dẫn
 
 ### Giá trị chiến lược
 
 Đầu tư Lucene trong PCM Desktop cung cấp:
 
 - **Nền tảng**: Cơ sở vững chắc cho các tính năng tìm kiếm nâng cao
-- **Khả năng mở rộng**: Nền tảng cho tích hợp ML và AI  
+- **Khả năng mở rộng**: Nền tảng cho tích hợp ML và AI
 - **Kiểm soát**: Kiểm soát hoàn toàn hành vi tìm kiếm và điều chỉnh
 - **Chi phí**: Không có phí giấy phép, chi phí vận hành tối thiểu
 - **Cộng đồng**: Cộng đồng lớn và tài liệu mở rộng
 
-Apache Lucene là **lựa chọn chiến lược** đúng đắn cho PCM Desktop, cung cấp cả **giá trị tức thì** và **khả năng mở rộng dài hạn** cho các khả năng tìm kiếm nâng cao và AI.
+Apache Lucene là **lựa chọn chiến lược** đúng đắn cho PCM Desktop, cung cấp cả **giá trị tức thì** và **khả năng mở rộng
+dài hạn** cho các khả năng tìm kiếm nâng cao và AI.
 
 ---
 

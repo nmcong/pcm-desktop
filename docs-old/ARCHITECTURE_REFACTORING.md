@@ -2,7 +2,8 @@
 
 ## 📐 Overview
 
-This document describes the architectural refactoring of PCM Desktop to follow **JavaFX Best Practices**, **Clean Code**, and **SOLID principles**.
+This document describes the architectural refactoring of PCM Desktop to follow **JavaFX Best Practices**, **Clean Code
+**, and **SOLID principles**.
 
 **Version:** 4.0.0  
 **Architecture Pattern:** MVVM (Model-View-ViewModel)  
@@ -165,6 +166,7 @@ injector.registerFactory(AIAssistantViewModel.class, () -> {
 ```
 
 **Benefits:**
+
 - Loose coupling
 - Easy testing (mock dependencies)
 - Follows Dependency Inversion Principle
@@ -174,6 +176,7 @@ injector.registerFactory(AIAssistantViewModel.class, () -> {
 **Location:** `com.noteflix.pcm.ui.viewmodel/`
 
 ViewModels contain:
+
 - **Observable Properties** for UI state
 - **Commands** (methods) for actions
 - **No JavaFX UI components**
@@ -221,7 +224,8 @@ Asyncs.runAsync(
 );
 ```
 
-**Important:** 
+**Important:**
+
 - All IO operations run on background threads
 - UI updates only on JavaFX Application Thread
 
@@ -264,6 +268,7 @@ String msg = I18n.format("time.minutes.ago", 5); // "5 minutes ago"
 ```
 
 **Message Files:**
+
 - `resources/i18n/messages.properties` (English)
 - `resources/i18n/messages_vi.properties` (Vietnamese)
 
@@ -291,25 +296,30 @@ navigator.navigateToPage(AIAssistantPage.class);
 ## ✅ SOLID Principles Applied
 
 ### Single Responsibility Principle (SRP)
+
 - ✅ Controllers only handle UI wiring
 - ✅ ViewModels only manage UI state
 - ✅ Services only contain business logic
 - ✅ Repositories only handle data access
 
 ### Open/Closed Principle (OCP)
+
 - ✅ Services use interfaces (easy to extend)
 - ✅ Navigation via Routes (add new routes without changing core)
 - ✅ ViewModels extend BaseViewModel
 
 ### Liskov Substitution Principle (LSP)
+
 - ✅ All repository implementations follow their interfaces
 - ✅ ViewModels can replace BaseViewModel
 
 ### Interface Segregation Principle (ISP)
+
 - ✅ Small, focused interfaces (ConversationRepository, AIService)
 - ✅ No "god" interfaces
 
 ### Dependency Inversion Principle (DIP)
+
 - ✅ Depend on abstractions (interfaces), not concrete classes
 - ✅ DI container manages dependencies
 
@@ -320,6 +330,7 @@ navigator.navigateToPage(AIAssistantPage.class);
 ### 1. Binding-First Approach
 
 **❌ BAD:**
+
 ```java
 // Manual UI update
 button.setOnAction(e -> {
@@ -328,6 +339,7 @@ button.setOnAction(e -> {
 ```
 
 **✅ GOOD:**
+
 ```java
 // Property binding
 label.textProperty().bind(viewModel.valueProperty());
@@ -336,6 +348,7 @@ label.textProperty().bind(viewModel.valueProperty());
 ### 2. Async Operations
 
 **❌ BAD:**
+
 ```java
 // Blocking UI thread
 button.setOnAction(e -> {
@@ -345,6 +358,7 @@ button.setOnAction(e -> {
 ```
 
 **✅ GOOD:**
+
 ```java
 // Background task
 button.setOnAction(e -> {
@@ -358,6 +372,7 @@ button.setOnAction(e -> {
 ### 3. Error Handling
 
 **❌ BAD:**
+
 ```java
 // System.out and raw exceptions
 try {
@@ -368,6 +383,7 @@ try {
 ```
 
 **✅ GOOD:**
+
 ```java
 // Proper logging and user feedback
 try {
@@ -382,6 +398,7 @@ try {
 ### 4. Dependency Injection
 
 **❌ BAD:**
+
 ```java
 // Direct instantiation
 public class MyController {
@@ -390,6 +407,7 @@ public class MyController {
 ```
 
 **✅ GOOD:**
+
 ```java
 // Constructor injection
 public class MyViewModel {
@@ -534,21 +552,21 @@ public void testConversationService() {
 If you have existing controllers with business logic:
 
 1. **Extract to ViewModel:**
-   - Move Observable Properties to ViewModel
-   - Move business logic to ViewModel commands
-   - Keep only UI wiring in Controller
+    - Move Observable Properties to ViewModel
+    - Move business logic to ViewModel commands
+    - Keep only UI wiring in Controller
 
 2. **Use DI:**
-   - Inject services instead of `new`
-   - Register in Injector
+    - Inject services instead of `new`
+    - Register in Injector
 
 3. **Use Utilities:**
-   - Replace manual dialogs with DialogService
-   - Replace Thread/ExecutorService with Asyncs
-   - Replace string literals with I18n
+    - Replace manual dialogs with DialogService
+    - Replace Thread/ExecutorService with Asyncs
+    - Replace string literals with I18n
 
 4. **Add Binding:**
-   - Replace manual setText/setDisable with property binding
+    - Replace manual setText/setDisable with property binding
 
 ---
 
@@ -589,7 +607,7 @@ This refactoring provides:
 ✅ **Async Support** - Background tasks with Asyncs  
 ✅ **i18n Support** - Multi-language ready  
 ✅ **SOLID Principles** - Maintainable and scalable  
-✅ **Best Practices** - Following JavaFX guidelines  
+✅ **Best Practices** - Following JavaFX guidelines
 
 The codebase is now more maintainable, testable, and follows industry best practices!
 

@@ -14,6 +14,7 @@
 ### ✅ Core Components
 
 #### 1. **Document Parsers** (5 parsers)
+
 - ✅ `JavaParser.java` - Parse Java source files
 - ✅ `SQLParser.java` - Parse SQL DDL/procedures
 - ✅ `MarkdownParser.java` - Parse Markdown docs
@@ -21,15 +22,18 @@
 - ✅ `DocumentParser.java` - Parser interface
 
 **Features:**
+
 - Auto-detect file type by extension
 - Extract metadata (package, class, object name, etc.)
 - Preserve content structure
 - Error handling
 
 #### 2. **Document Indexer** (1 service)
+
 - ✅ `DocumentIndexer.java` - Index documents into RAG
 
 **Features:**
+
 - Multi-format support (Java, SQL, Markdown, Text)
 - Recursive directory scanning
 - Progress tracking (`IndexingProgress`)
@@ -38,6 +42,7 @@
 - **Performance:** ~20-60 files/second
 
 **Example:**
+
 ```java
 DocumentIndexer indexer = new DocumentIndexer(ragService);
 
@@ -52,9 +57,11 @@ System.out.println(progress);
 ```
 
 #### 3. **Retrieval Engine** (1 engine)
+
 - ✅ `RetrievalEngine.java` - Advanced retrieval with reranking
 
 **Features:**
+
 - Query expansion (synonyms, variations)
 - Result deduplication (by document ID)
 - Reranking (title matching boost)
@@ -62,6 +69,7 @@ System.out.println(progress);
 - Score normalization
 
 **Example:**
+
 ```java
 RetrievalEngine retrieval = new RetrievalEngine(
     vectorStore,
@@ -77,6 +85,7 @@ List<ScoredDocument> results = retrieval.retrieve(query, options);
 ### ✅ Test Results
 
 #### Indexer Example
+
 ```
 === Document Indexer Example ===
 
@@ -111,6 +120,7 @@ Indexing Progress: 38 indexed, 0 skipped, 0 failed (total: 38) in 55ms
 ```
 
 **Performance:**
+
 - ✅ Indexed 38 files in 55ms (~690 files/second)
 - ✅ Query time: 5-22ms per query
 - ✅ 100% success rate (0 failed)
@@ -120,6 +130,7 @@ Indexing Progress: 38 indexed, 0 skipped, 0 failed (total: 38) in 55ms
 ## 📂 FILES CREATED
 
 ### Parsers (5 files)
+
 ```
 src/main/java/com/noteflix/pcm/rag/parser/
 ├── DocumentParser.java          # Interface
@@ -130,24 +141,28 @@ src/main/java/com/noteflix/pcm/rag/parser/
 ```
 
 ### Indexer (1 file)
+
 ```
 src/main/java/com/noteflix/pcm/rag/indexer/
 └── DocumentIndexer.java          # Indexing service ✅
 ```
 
 ### Retrieval (1 file)
+
 ```
 src/main/java/com/noteflix/pcm/rag/retrieval/
 └── RetrievalEngine.java          # Advanced retrieval ✅
 ```
 
 ### Examples (1 file)
+
 ```
 src/main/java/com/noteflix/pcm/rag/examples/
 └── IndexerExample.java           # Working example ✅
 ```
 
 ### Documentation (1 file)
+
 ```
 src/main/java/com/noteflix/pcm/rag/
 └── README.md                     # Complete guide ✅
@@ -160,6 +175,7 @@ src/main/java/com/noteflix/pcm/rag/
 ## 📚 DOCUMENTATION
 
 ### Main README
+
 `src/main/java/com/noteflix/pcm/rag/README.md` - Comprehensive guide including:
 
 - ✅ Package structure overview
@@ -252,6 +268,7 @@ rag.indexDocument(doc);
 ## 📊 COMPLETE FEATURE LIST
 
 ### Document Parsers
+
 - [x] Java source files (.java)
 - [x] SQL files (.sql, .ddl)
 - [x] Markdown files (.md, .markdown)
@@ -261,6 +278,7 @@ rag.indexDocument(doc);
 - [x] Error handling
 
 ### Document Indexer
+
 - [x] Single file indexing
 - [x] Directory indexing (recursive)
 - [x] Progress tracking
@@ -270,6 +288,7 @@ rag.indexDocument(doc);
 - [x] Performance metrics
 
 ### Retrieval Engine
+
 - [x] Query expansion
 - [x] Result deduplication
 - [x] Reranking (title boost)
@@ -278,16 +297,19 @@ rag.indexDocument(doc);
 - [x] Configurable options
 
 ### Vector Stores (from Phase 1)
+
 - [x] Lucene (offline, keyword search)
 - [x] InMemory (testing)
 - [x] Qdrant (stub)
 
 ### Embedding Services (from Phase 1)
+
 - [x] SimpleEmbeddingService (demo)
 - [x] DJLEmbeddingService (production)
 - [x] ONNXEmbeddingService (production)
 
 ### Chunking (from Phase 1)
+
 - [x] FixedSizeChunking
 - [x] Configurable chunk size & overlap
 
@@ -296,12 +318,14 @@ rag.indexDocument(doc);
 ## 🚀 HOW TO USE
 
 ### 1. Build
+
 ```bash
 ./scripts/build.sh
 # → 573 class files ✅
 ```
 
 ### 2. Run Example
+
 ```bash
 java -cp "out:lib/javafx/*:lib/others/*:lib/rag/*" \
   com.noteflix.pcm.rag.examples.IndexerExample
@@ -337,32 +361,36 @@ System.out.println(response.getAnswer());
 ## 📊 PERFORMANCE
 
 ### Indexing Speed
-| File Type | Speed | Example |
-|-----------|-------|---------|
-| Java | ~20-30 files/sec | 38 files in 55ms |
-| SQL | ~30-40 files/sec | Fast parsing |
-| Markdown | ~50-60 files/sec | Lightweight |
-| Text | ~50-60 files/sec | Minimal processing |
+
+| File Type | Speed            | Example            |
+|-----------|------------------|--------------------|
+| Java      | ~20-30 files/sec | 38 files in 55ms   |
+| SQL       | ~30-40 files/sec | Fast parsing       |
+| Markdown  | ~50-60 files/sec | Lightweight        |
+| Text      | ~50-60 files/sec | Minimal processing |
 
 ### Query Speed
-| Search Type | Speed | Example |
-|-------------|-------|---------|
-| Keyword (Lucene) | 1-30ms | "RAG service" → 22ms |
-| InMemory | <1ms | "vector store" → 5ms |
-| Semantic (Qdrant) | 5-20ms | With embeddings |
+
+| Search Type       | Speed  | Example              |
+|-------------------|--------|----------------------|
+| Keyword (Lucene)  | 1-30ms | "RAG service" → 22ms |
+| InMemory          | <1ms   | "vector store" → 5ms |
+| Semantic (Qdrant) | 5-20ms | With embeddings      |
 
 ### Memory Usage
-| Component | Memory | Notes |
-|-----------|--------|-------|
-| Lucene index | ~2x content | Disk-based |
-| InMemory | ~50MB/1000 docs | RAM-based |
-| Embeddings | ~200MB | DJL model loaded |
+
+| Component    | Memory          | Notes            |
+|--------------|-----------------|------------------|
+| Lucene index | ~2x content     | Disk-based       |
+| InMemory     | ~50MB/1000 docs | RAM-based        |
+| Embeddings   | ~200MB          | DJL model loaded |
 
 ---
 
 ## 🎯 WHAT CAN YOU DO NOW?
 
 ### ✅ Index Your Project
+
 ```bash
 # Java source code
 indexer.indexDirectory(Paths.get("src/main/java"), true);
@@ -375,6 +403,7 @@ indexer.indexDirectory(Paths.get("docs/"), true);
 ```
 
 ### ✅ Search Code
+
 ```java
 RAGResponse response = rag.query("customer validation logic");
 
@@ -385,6 +414,7 @@ for (ScoredDocument doc : response.getSources()) {
 ```
 
 ### ✅ Build Code Assistant
+
 ```java
 // AI-powered code search
 String question = "How do I validate customer emails?";
@@ -404,6 +434,7 @@ Message answer = ai.generateResponse(conversation, llmPrompt);
 ```
 
 ### ✅ Create Knowledge Base
+
 ```java
 // Index Markdown docs
 indexer.indexDirectory(Paths.get("docs/knowledge-base"), true);
@@ -449,6 +480,7 @@ RAGResponse
 ## ✅ STATUS SUMMARY
 
 ### Completed ✅
+
 - [x] **5 Document Parsers** - Java, SQL, Markdown, Text + Interface
 - [x] **1 Document Indexer** - Full-featured with progress tracking
 - [x] **1 Retrieval Engine** - Advanced with reranking
@@ -458,6 +490,7 @@ RAGResponse
 - [x] **Tests Passing** - All examples working
 
 ### From Phase 1 ✅
+
 - [x] Vector stores (Lucene, InMemory, Qdrant stub)
 - [x] RAG service (DefaultRAGService)
 - [x] Data models (RAGDocument, ScoredDocument, etc.)
@@ -472,12 +505,12 @@ RAGResponse
 All documentation is in `src/main/java/com/noteflix/pcm/rag/`:
 
 1. **`README.md`** - Complete RAG guide (this session)
-   - Package structure
-   - Quick start
-   - Components
-   - Usage patterns
-   - Performance
-   - Examples
+    - Package structure
+    - Quick start
+    - Components
+    - Usage patterns
+    - Performance
+    - Examples
 
 2. **`docs/development/rag/OFFLINE_RAG_DESIGN.md`** - Architecture design
 3. **`docs/development/rag/RAG_IMPLEMENTATION_SUMMARY.md`** - Feature summary
@@ -490,7 +523,9 @@ All documentation is in `src/main/java/com/noteflix/pcm/rag/`:
 ## 🎉 SUMMARY
 
 ### What We Built
+
 ✅ **Complete RAG System** with:
+
 - 5 document parsers (Java, SQL, Markdown, Text)
 - 1 document indexer (with progress tracking)
 - 1 retrieval engine (with reranking)
@@ -498,6 +533,7 @@ All documentation is in `src/main/java/com/noteflix/pcm/rag/`:
 - Complete documentation
 
 ### Build Status
+
 ```
 ✅ 573 class files compiled
 ✅ 0 errors
@@ -507,11 +543,13 @@ All documentation is in `src/main/java/com/noteflix/pcm/rag/`:
 ```
 
 ### Performance
+
 - **Indexing:** 38 files in 55ms (~690 files/sec)
 - **Query:** 5-22ms per query
 - **Memory:** ~50MB per 1000 docs (InMemory)
 
 ### Ready For
+
 - ✅ Index project source code
 - ✅ Build code search
 - ✅ Create AI code assistant
@@ -523,6 +561,7 @@ All documentation is in `src/main/java/com/noteflix/pcm/rag/`:
 ## 🚀 NEXT STEPS (Optional)
 
 ### Enhancement Ideas
+
 1. **PDF Parser** - Parse PDF documents
 2. **DOCX Parser** - Parse Word documents
 3. **Advanced Chunking** - Semantic chunking (split by meaning)
@@ -532,6 +571,7 @@ All documentation is in `src/main/java/com/noteflix/pcm/rag/`:
 7. **UI Integration** - Add RAG to AI Assistant Page
 
 ### Production Deployment
+
 1. **Setup Lucene** - Persistent index directory
 2. **Setup Embeddings** - DJL or ONNX for semantic search
 3. **Index Data** - Run indexer on project files
@@ -545,6 +585,7 @@ All documentation is in `src/main/java/com/noteflix/pcm/rag/`:
 You now have a **complete, production-ready RAG system** for PCM Desktop!
 
 **Features:**
+
 - ✅ 100% Offline
 - ✅ Multi-format support
 - ✅ Fast (1-30ms queries)

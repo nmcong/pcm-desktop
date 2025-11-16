@@ -1,6 +1,7 @@
 # Custom Tray Widget với Time Tracking Display
 
 ## Table of Contents
+
 1. [Overview](#overview)
 2. [Dynamic Tray Icon Implementation](#dynamic-tray-icon-implementation)
 3. [Time Tracking Integration](#time-tracking-integration)
@@ -13,13 +14,16 @@
 ## Overview
 
 ### Concept
+
 Thay vì sử dụng static icon, chúng ta sẽ tạo **dynamic tray widget** hiển thị thông tin real-time:
-- **Check-in time**: Thời gian vào hệ thống  
+
+- **Check-in time**: Thời gian vào hệ thống
 - **Current session duration**: Thời gian đã làm việc
 - **Status indicator**: Working/Break/Idle state
 - **Visual progress**: Progress bar cho work session
 
 ### Technical Approach
+
 - **Dynamic Image Generation**: Tạo BufferedImage real-time
 - **Timer-based Updates**: Cập nhật icon theo schedule
 - **Text Rendering**: Custom font và layout
@@ -27,6 +31,7 @@ Thay vì sử dụng static icon, chúng ta sẽ tạo **dynamic tray widget** h
 - **Tooltip Information**: Detailed info on hover
 
 ### Supported Information Display
+
 ```yaml
 Primary Display:
   - Current time (HH:MM)
@@ -70,31 +75,31 @@ import java.util.concurrent.TimeUnit;
 
 @Slf4j
 public class DynamicTrayIconManager {
-    
+
     private static DynamicTrayIconManager instance;
     private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(2);
-    
+
     private TrayIcon trayIcon;
     private SystemTray systemTray;
     private TimeTrackingService timeTrackingService;
-    
+
     // Display configuration
     private TrayDisplayMode displayMode = TrayDisplayMode.TIME_AND_DURATION;
     private TrayDisplayTheme theme = TrayDisplayTheme.AUTO;
     private boolean showSeconds = false;
     private boolean showProgressBar = true;
-    
+
     // Graphics resources
     private Font primaryFont;
     private Font secondaryFont;
     private Color primaryColor;
     private Color backgroundColor;
     private Color accentColor;
-    
+
     // Animation state
     private boolean isBlinking = false;
     private int animationFrame = 0;
-    
+
     public static DynamicTrayIconManager getInstance() {
         if (instance == null) {
             synchronized (DynamicTrayIconManager.class) {
@@ -105,30 +110,30 @@ public class DynamicTrayIconManager {
         }
         return instance;
     }
-    
+
     private DynamicTrayIconManager() {
         initializeGraphicsResources();
     }
-    
+
     /**
      * Initialize with time tracking service
      */
     public boolean initialize(TimeTrackingService timeService) {
         this.timeTrackingService = timeService;
-        
+
         if (!SystemTray.isSupported()) {
             log.warn("System tray not supported");
             return false;
         }
-        
+
         try {
             systemTray = SystemTray.getSystemTray();
             createInitialTrayIcon();
             systemTray.add(trayIcon);
-            
+
             // Start update scheduler
             startUpdateScheduler();
-            
+
             log.info("Dynamic tray icon initialized successfully");
             return true;
         } catch (Exception e) {
@@ -136,18 +141,18 @@ public class DynamicTrayIconManager {
             return false;
         }
     }
-    
+
     /**
      * Create initial tray icon with popup menu
      */
     private void createInitialTrayIcon() {
         Dimension traySize = systemTray.getTrayIconSize();
         BufferedImage initialImage = generateTrayImage(traySize);
-        
+
         PopupMenu popup = createPopupMenu();
         trayIcon = new TrayIcon(initialImage, generateTooltipText(), popup);
         trayIcon.setImageAutoSize(true);
-        
+
         // Add click listeners
         trayIcon.addActionListener(e -> handleTrayClick());
         trayIcon.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -159,30 +164,30 @@ public class DynamicTrayIconManager {
             }
         });
     }
-    
+
     /**
      * Generate dynamic tray image based on current state
      */
     private BufferedImage generateTrayImage(Dimension size) {
         BufferedImage image = new BufferedImage(
-            size.width, size.height, BufferedImage.TYPE_INT_ARGB
+                size.width, size.height, BufferedImage.TYPE_INT_ARGB
         );
         Graphics2D g2d = image.createGraphics();
-        
+
         try {
             // Enable anti-aliasing
             g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
             g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
             g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
-            
+
             // Clear background
             g2d.setComposite(AlphaComposite.Clear);
             g2d.fillRect(0, 0, size.width, size.height);
             g2d.setComposite(AlphaComposite.SrcOver);
-            
+
             // Determine colors based on theme
             updateColorsForCurrentTheme();
-            
+
             // Render based on display mode
             switch (displayMode) {
                 case CURRENT_TIME:
@@ -201,52 +206,52 @@ public class DynamicTrayIconManager {
                     renderCompactInfo(g2d, size);
                     break;
             }
-            
+
             // Add progress bar if enabled
             if (showProgressBar && timeTrackingService != null) {
                 renderProgressBar(g2d, size);
             }
-            
+
             // Add status indicator
             renderSessionStatusIndicator(g2d, size);
-            
+
         } finally {
             g2d.dispose();
         }
-        
+
         return image;
     }
-    
+
     /**
      * Render current time display
      */
     private void renderCurrentTime(Graphics2D g2d, Dimension size) {
         LocalTime now = LocalTime.now();
-        String timeStr = now.format(showSeconds ? 
-            DateTimeFormatter.ofPattern("HH:mm:ss") : 
-            DateTimeFormatter.ofPattern("HH:mm")
+        String timeStr = now.format(showSeconds ?
+                DateTimeFormatter.ofPattern("HH:mm:ss") :
+                DateTimeFormatter.ofPattern("HH:mm")
         );
-        
+
         g2d.setFont(primaryFont);
         g2d.setColor(primaryColor);
-        
+
         FontMetrics fm = g2d.getFontMetrics();
         Rectangle2D bounds = fm.getStringBounds(timeStr, g2d);
-        
+
         int x = (size.width - (int) bounds.getWidth()) / 2;
         int y = (size.height + fm.getAscent()) / 2;
-        
+
         // Add background for better readability
         if (backgroundColor != null) {
             g2d.setColor(backgroundColor);
-            g2d.fillRoundRect(x - 2, y - fm.getAscent() - 1, 
-                (int) bounds.getWidth() + 4, fm.getHeight() + 2, 4, 4);
+            g2d.fillRoundRect(x - 2, y - fm.getAscent() - 1,
+                    (int) bounds.getWidth() + 4, fm.getHeight() + 2, 4, 4);
             g2d.setColor(primaryColor);
         }
-        
+
         g2d.drawString(timeStr, x, y);
     }
-    
+
     /**
      * Render session duration
      */
@@ -255,39 +260,39 @@ public class DynamicTrayIconManager {
             renderFallbackIcon(g2d, size);
             return;
         }
-        
+
         WorkSession currentSession = timeTrackingService.getCurrentSession();
         if (currentSession == null) {
             renderNoSessionIcon(g2d, size);
             return;
         }
-        
+
         Duration elapsed = currentSession.getElapsedTime();
         String durationStr = formatDuration(elapsed);
-        
+
         g2d.setFont(primaryFont);
         g2d.setColor(primaryColor);
-        
+
         FontMetrics fm = g2d.getFontMetrics();
         Rectangle2D bounds = fm.getStringBounds(durationStr, g2d);
-        
+
         int x = (size.width - (int) bounds.getWidth()) / 2;
         int y = (size.height + fm.getAscent()) / 2;
-        
+
         // Background
         if (backgroundColor != null) {
             g2d.setColor(backgroundColor);
-            g2d.fillRoundRect(x - 2, y - fm.getAscent() - 1, 
-                (int) bounds.getWidth() + 4, fm.getHeight() + 2, 4, 4);
+            g2d.fillRoundRect(x - 2, y - fm.getAscent() - 1,
+                    (int) bounds.getWidth() + 4, fm.getHeight() + 2, 4, 4);
             g2d.setColor(primaryColor);
         }
-        
+
         g2d.drawString(durationStr, x, y);
-        
+
         // Add small clock icon
         renderSmallClockIcon(g2d, size);
     }
-    
+
     /**
      * Render time and duration combined
      */
@@ -295,7 +300,7 @@ public class DynamicTrayIconManager {
         // Current time (top)
         LocalTime now = LocalTime.now();
         String timeStr = now.format(DateTimeFormatter.ofPattern("HH:mm"));
-        
+
         // Session duration (bottom)
         String durationStr = "";
         if (timeTrackingService != null) {
@@ -305,17 +310,17 @@ public class DynamicTrayIconManager {
                 durationStr = formatDurationCompact(elapsed);
             }
         }
-        
+
         g2d.setFont(secondaryFont); // Smaller font for dual display
         FontMetrics fm = g2d.getFontMetrics();
-        
+
         // Render time
         g2d.setColor(primaryColor);
         Rectangle2D timeBounds = fm.getStringBounds(timeStr, g2d);
         int timeX = (size.width - (int) timeBounds.getWidth()) / 2;
         int timeY = (size.height / 2) - 2;
         g2d.drawString(timeStr, timeX, timeY);
-        
+
         // Render duration if available
         if (!durationStr.isEmpty()) {
             g2d.setColor(accentColor);
@@ -325,34 +330,34 @@ public class DynamicTrayIconManager {
             g2d.drawString(durationStr, durationX, durationY);
         }
     }
-    
+
     /**
      * Render status indicator with basic info
      */
     private void renderStatusIndicator(Graphics2D g2d, Dimension size) {
         // Get current status
         WorkSessionStatus status = getCurrentWorkStatus();
-        
+
         // Status color
         Color statusColor = getStatusColor(status);
-        
+
         // Draw status circle
         int circleSize = Math.min(size.width, size.height) - 4;
         int circleX = (size.width - circleSize) / 2;
         int circleY = (size.height - circleSize) / 2;
-        
+
         g2d.setColor(statusColor);
         g2d.fillOval(circleX, circleY, circleSize, circleSize);
-        
+
         // Add border
         g2d.setColor(primaryColor);
         g2d.setStroke(new BasicStroke(1.5f));
         g2d.drawOval(circleX, circleY, circleSize, circleSize);
-        
+
         // Add status symbol
-        renderStatusSymbol(g2d, status, circleX + circleSize/4, circleY + circleSize/4, circleSize/2);
+        renderStatusSymbol(g2d, status, circleX + circleSize / 4, circleY + circleSize / 4, circleSize / 2);
     }
-    
+
     /**
      * Render compact information display
      */
@@ -361,98 +366,98 @@ public class DynamicTrayIconManager {
             renderFallbackIcon(g2d, size);
             return;
         }
-        
+
         WorkSession currentSession = timeTrackingService.getCurrentSession();
         if (currentSession == null) {
             renderNoSessionIcon(g2d, size);
             return;
         }
-        
+
         // Get session info
         Duration elapsed = currentSession.getElapsedTime();
         LocalTime checkInTime = currentSession.getStartTime().toLocalTime();
-        
+
         // Format for compact display
         String checkInStr = checkInTime.format(DateTimeFormatter.ofPattern("HH:mm"));
         String elapsedStr = formatDurationCompact(elapsed);
-        
+
         g2d.setFont(secondaryFont);
         FontMetrics fm = g2d.getFontMetrics();
-        
+
         // Background
         if (backgroundColor != null) {
             g2d.setColor(backgroundColor);
             g2d.fillRoundRect(1, 1, size.width - 2, size.height - 2, 6, 6);
         }
-        
+
         // Check-in time (top line)
         g2d.setColor(primaryColor);
         int line1Y = (size.height / 3) + fm.getAscent() / 2;
         drawCenteredText(g2d, "IN: " + checkInStr, size.width, line1Y, fm);
-        
+
         // Elapsed time (bottom line)
         g2d.setColor(accentColor);
         int line2Y = (2 * size.height / 3) + fm.getAscent() / 2;
         drawCenteredText(g2d, elapsedStr, size.width, line2Y, fm);
     }
-    
+
     /**
      * Render progress bar for work session
      */
     private void renderProgressBar(Graphics2D g2d, Dimension size) {
         if (timeTrackingService == null) return;
-        
+
         WorkSession currentSession = timeTrackingService.getCurrentSession();
         if (currentSession == null) return;
-        
+
         // Calculate progress (e.g., towards 8-hour workday)
         Duration elapsed = currentSession.getElapsedTime();
         Duration targetDuration = Duration.ofHours(8); // Configurable
-        
+
         float progress = Math.min(1.0f, (float) elapsed.toMinutes() / targetDuration.toMinutes());
-        
+
         // Progress bar dimensions
         int barWidth = size.width - 4;
         int barHeight = 2;
         int barX = 2;
         int barY = size.height - barHeight - 2;
-        
+
         // Background
         g2d.setColor(new Color(0, 0, 0, 50));
         g2d.fillRect(barX, barY, barWidth, barHeight);
-        
+
         // Progress fill
         Color progressColor = getProgressColor(progress);
         g2d.setColor(progressColor);
         int fillWidth = (int) (barWidth * progress);
         g2d.fillRect(barX, barY, fillWidth, barHeight);
     }
-    
+
     /**
      * Render session status indicator (small dot)
      */
     private void renderSessionStatusIndicator(Graphics2D g2d, Dimension size) {
         if (timeTrackingService == null) return;
-        
+
         WorkSessionStatus status = getCurrentWorkStatus();
         Color statusColor = getStatusColor(status);
-        
+
         // Small indicator in top-right corner
         int dotSize = Math.max(3, size.width / 8);
         int dotX = size.width - dotSize - 2;
         int dotY = 2;
-        
+
         // Add pulsing effect for active status
         if (status == WorkSessionStatus.ACTIVE && isBlinking) {
             int alpha = 128 + (int) (127 * Math.sin(animationFrame * 0.3));
-            statusColor = new Color(statusColor.getRed(), statusColor.getGreen(), 
-                                  statusColor.getBlue(), alpha);
+            statusColor = new Color(statusColor.getRed(), statusColor.getGreen(),
+                    statusColor.getBlue(), alpha);
         }
-        
+
         g2d.setColor(statusColor);
         g2d.fillOval(dotX, dotY, dotSize, dotSize);
     }
-    
+
     /**
      * Start the update scheduler
      */
@@ -465,7 +470,7 @@ public class DynamicTrayIconManager {
                 log.error("Error updating tray icon", e);
             }
         }, 1, 1, TimeUnit.SECONDS);
-        
+
         // Animation timer for effects
         scheduler.scheduleAtFixedRate(() -> {
             animationFrame++;
@@ -477,13 +482,13 @@ public class DynamicTrayIconManager {
             }
         }, 0, 500, TimeUnit.MILLISECONDS);
     }
-    
+
     /**
      * Update tray icon with current information
      */
     private void updateTrayIcon() {
         if (trayIcon == null) return;
-        
+
         try {
             Dimension traySize = systemTray.getTrayIconSize();
             BufferedImage newImage = generateTrayImage(traySize);
@@ -493,32 +498,32 @@ public class DynamicTrayIconManager {
             log.debug("Failed to update tray icon", e);
         }
     }
-    
+
     /**
      * Generate detailed tooltip text
      */
     private String generateTooltipText() {
         StringBuilder tooltip = new StringBuilder("PCM Desktop");
-        
+
         if (timeTrackingService != null) {
             WorkSession currentSession = timeTrackingService.getCurrentSession();
             if (currentSession != null) {
                 LocalTime checkInTime = currentSession.getStartTime().toLocalTime();
                 Duration elapsed = currentSession.getElapsedTime();
-                
+
                 tooltip.append("\n");
                 tooltip.append("Check-in: ").append(checkInTime.format(DateTimeFormatter.ofPattern("HH:mm")));
                 tooltip.append("\nElapsed: ").append(formatDurationLong(elapsed));
-                
+
                 WorkSessionStatus status = getCurrentWorkStatus();
                 tooltip.append("\nStatus: ").append(getStatusDisplayName(status));
-                
+
                 // Add break information if available
                 Duration breakTime = currentSession.getTotalBreakTime();
                 if (breakTime.toMinutes() > 0) {
                     tooltip.append("\nBreak time: ").append(formatDurationLong(breakTime));
                 }
-                
+
                 // Add productivity info
                 double productivity = calculateProductivityScore(currentSession);
                 tooltip.append("\nProductivity: ").append(String.format("%.0f%%", productivity * 100));
@@ -526,25 +531,25 @@ public class DynamicTrayIconManager {
                 tooltip.append("\nNot checked in");
             }
         }
-        
+
         tooltip.append("\n\nDouble-click to open");
-        
+
         return tooltip.toString();
     }
-    
+
     // === Utility Methods ===
-    
+
     private void initializeGraphicsResources() {
         try {
             // Load fonts
             primaryFont = new Font("SansSerif", Font.BOLD, 9);
             secondaryFont = new Font("SansSerif", Font.PLAIN, 7);
-            
+
             // Default colors (will be updated based on theme)
             primaryColor = Color.BLACK;
             backgroundColor = new Color(255, 255, 255, 200);
             accentColor = new Color(0, 120, 215); // Windows blue
-            
+
         } catch (Exception e) {
             log.error("Failed to initialize graphics resources", e);
             // Fallback to system defaults
@@ -555,7 +560,7 @@ public class DynamicTrayIconManager {
             accentColor = Color.BLUE;
         }
     }
-    
+
     private void updateColorsForCurrentTheme() {
         switch (theme) {
             case DARK:
@@ -580,11 +585,11 @@ public class DynamicTrayIconManager {
                 break;
         }
     }
-    
+
     private boolean isSystemDarkTheme() {
         // Platform-specific dark theme detection
         String os = System.getProperty("os.name").toLowerCase();
-        
+
         if (os.contains("win")) {
             return WindowsThemeDetector.isDarkTheme();
         } else if (os.contains("mac")) {
@@ -592,52 +597,52 @@ public class DynamicTrayIconManager {
         } else if (os.contains("linux")) {
             return LinuxThemeDetector.isDarkTheme();
         }
-        
+
         return false; // Default to light theme
     }
-    
+
     private String formatDuration(Duration duration) {
         long hours = duration.toHours();
         long minutes = duration.toMinutes() % 60;
-        
+
         if (hours > 0) {
             return String.format("%dh%02dm", hours, minutes);
         } else {
             return String.format("%dm", minutes);
         }
     }
-    
+
     private String formatDurationCompact(Duration duration) {
         long hours = duration.toHours();
         long minutes = duration.toMinutes() % 60;
-        
+
         if (hours > 0) {
             return String.format("%d:%02d", hours, minutes);
         } else {
             return String.format("0:%02d", minutes);
         }
     }
-    
+
     private String formatDurationLong(Duration duration) {
         long hours = duration.toHours();
         long minutes = duration.toMinutes() % 60;
-        
+
         if (hours > 0) {
             return String.format("%d hours, %d minutes", hours, minutes);
         } else {
             return String.format("%d minutes", minutes);
         }
     }
-    
+
     private WorkSessionStatus getCurrentWorkStatus() {
         if (timeTrackingService == null) return WorkSessionStatus.INACTIVE;
-        
+
         WorkSession currentSession = timeTrackingService.getCurrentSession();
         if (currentSession == null) return WorkSessionStatus.INACTIVE;
-        
+
         return currentSession.getCurrentStatus();
     }
-    
+
     private Color getStatusColor(WorkSessionStatus status) {
         switch (status) {
             case ACTIVE:
@@ -651,7 +656,7 @@ public class DynamicTrayIconManager {
                 return new Color(156, 163, 175); // Gray
         }
     }
-    
+
     private Color getProgressColor(float progress) {
         if (progress < 0.5f) {
             return new Color(239, 68, 68); // Red
@@ -661,33 +666,38 @@ public class DynamicTrayIconManager {
             return new Color(34, 197, 94); // Green
         }
     }
-    
+
     private String getStatusDisplayName(WorkSessionStatus status) {
         switch (status) {
-            case ACTIVE: return "Working";
-            case BREAK: return "On Break";
-            case AWAY: return "Away";
-            case INACTIVE: return "Inactive";
-            default: return "Unknown";
+            case ACTIVE:
+                return "Working";
+            case BREAK:
+                return "On Break";
+            case AWAY:
+                return "Away";
+            case INACTIVE:
+                return "Inactive";
+            default:
+                return "Unknown";
         }
     }
-    
+
     private double calculateProductivityScore(WorkSession session) {
         // Simplified productivity calculation
         Duration totalTime = session.getElapsedTime();
         Duration activeTime = session.getActiveTime();
-        
+
         if (totalTime.toMinutes() == 0) return 0.0;
-        
+
         return (double) activeTime.toMinutes() / totalTime.toMinutes();
     }
-    
+
     private void drawCenteredText(Graphics2D g2d, String text, int width, int y, FontMetrics fm) {
         Rectangle2D bounds = fm.getStringBounds(text, g2d);
         int x = (width - (int) bounds.getWidth()) / 2;
         g2d.drawString(text, x, y);
     }
-    
+
     private void renderFallbackIcon(Graphics2D g2d, Dimension size) {
         // Render default PCM icon when no time tracking data
         g2d.setColor(primaryColor);
@@ -695,7 +705,7 @@ public class DynamicTrayIconManager {
         FontMetrics fm = g2d.getFontMetrics();
         drawCenteredText(g2d, "PCM", size.width, (size.height + fm.getAscent()) / 2, fm);
     }
-    
+
     private void renderNoSessionIcon(Graphics2D g2d, Dimension size) {
         // Render "not checked in" indicator
         g2d.setColor(new Color(156, 163, 175)); // Gray
@@ -703,68 +713,68 @@ public class DynamicTrayIconManager {
         FontMetrics fm = g2d.getFontMetrics();
         drawCenteredText(g2d, "OFF", size.width, (size.height + fm.getAscent()) / 2, fm);
     }
-    
+
     private void renderSmallClockIcon(Graphics2D g2d, Dimension size) {
         // Small clock icon in corner
         int iconSize = Math.max(4, size.width / 6);
         int iconX = size.width - iconSize - 1;
         int iconY = 1;
-        
+
         g2d.setColor(accentColor);
         g2d.drawOval(iconX, iconY, iconSize, iconSize);
-        
+
         // Clock hands
         int centerX = iconX + iconSize / 2;
         int centerY = iconY + iconSize / 2;
         g2d.drawLine(centerX, centerY, centerX, iconY + 2);
         g2d.drawLine(centerX, centerY, iconX + iconSize - 2, centerY);
     }
-    
+
     private void renderStatusSymbol(Graphics2D g2d, WorkSessionStatus status, int x, int y, int size) {
         g2d.setColor(Color.WHITE);
         g2d.setStroke(new BasicStroke(1.5f));
-        
+
         switch (status) {
             case ACTIVE:
                 // Checkmark
-                g2d.drawLine(x + size/4, y + size/2, x + size/2, y + 3*size/4);
-                g2d.drawLine(x + size/2, y + 3*size/4, x + 3*size/4, y + size/4);
+                g2d.drawLine(x + size / 4, y + size / 2, x + size / 2, y + 3 * size / 4);
+                g2d.drawLine(x + size / 2, y + 3 * size / 4, x + 3 * size / 4, y + size / 4);
                 break;
             case BREAK:
                 // Pause symbol
                 int barWidth = size / 6;
-                g2d.fillRect(x + size/3 - barWidth/2, y + size/4, barWidth, size/2);
-                g2d.fillRect(x + 2*size/3 - barWidth/2, y + size/4, barWidth, size/2);
+                g2d.fillRect(x + size / 3 - barWidth / 2, y + size / 4, barWidth, size / 2);
+                g2d.fillRect(x + 2 * size / 3 - barWidth / 2, y + size / 4, barWidth, size / 2);
                 break;
             case AWAY:
                 // Cross
-                g2d.drawLine(x + size/4, y + size/4, x + 3*size/4, y + 3*size/4);
-                g2d.drawLine(x + 3*size/4, y + size/4, x + size/4, y + 3*size/4);
+                g2d.drawLine(x + size / 4, y + size / 4, x + 3 * size / 4, y + 3 * size / 4);
+                g2d.drawLine(x + 3 * size / 4, y + size / 4, x + size / 4, y + 3 * size / 4);
                 break;
             case INACTIVE:
                 // Question mark
-                g2d.drawString("?", x + size/3, y + 2*size/3);
+                g2d.drawString("?", x + size / 3, y + 2 * size / 3);
                 break;
         }
     }
-    
+
     // === Event Handlers ===
-    
+
     private void handleTrayClick() {
         // Single click action - could toggle between display modes
         cycleDisplayMode();
     }
-    
+
     private void handleTrayDoubleClick() {
         // Double click - restore main window
         Platform.runLater(() -> {
             SystemTrayManager.getInstance().restoreWindow();
         });
     }
-    
+
     private PopupMenu createPopupMenu() {
         PopupMenu popup = new PopupMenu();
-        
+
         // Display mode submenu
         Menu displayModeMenu = new Menu("Display Mode");
         for (TrayDisplayMode mode : TrayDisplayMode.values()) {
@@ -776,9 +786,9 @@ public class DynamicTrayIconManager {
             displayModeMenu.add(modeItem);
         }
         popup.add(displayModeMenu);
-        
+
         popup.addSeparator();
-        
+
         // Quick actions
         MenuItem checkInOut = new MenuItem();
         if (getCurrentWorkStatus() == WorkSessionStatus.INACTIVE) {
@@ -789,73 +799,73 @@ public class DynamicTrayIconManager {
             checkInOut.addActionListener(e -> timeTrackingService.endSession());
         }
         popup.add(checkInOut);
-        
+
         MenuItem takeBreak = new MenuItem("Take Break");
         takeBreak.addActionListener(e -> timeTrackingService.startBreak());
         popup.add(takeBreak);
-        
+
         popup.addSeparator();
-        
+
         // Standard menu items
         MenuItem showApp = new MenuItem("Show Application");
-        showApp.addActionListener(e -> Platform.runLater(() -> 
-            SystemTrayManager.getInstance().restoreWindow()));
+        showApp.addActionListener(e -> Platform.runLater(() ->
+                SystemTrayManager.getInstance().restoreWindow()));
         popup.add(showApp);
-        
+
         MenuItem settings = new MenuItem("Settings");
-        settings.addActionListener(e -> Platform.runLater(() -> 
-            openSettings()));
+        settings.addActionListener(e -> Platform.runLater(() ->
+                openSettings()));
         popup.add(settings);
-        
+
         popup.addSeparator();
-        
+
         MenuItem exit = new MenuItem("Exit");
-        exit.addActionListener(e -> Platform.runLater(() -> 
-            exitApplication()));
+        exit.addActionListener(e -> Platform.runLater(() ->
+                exitApplication()));
         popup.add(exit);
-        
+
         return popup;
     }
-    
+
     private void cycleDisplayMode() {
         TrayDisplayMode[] modes = TrayDisplayMode.values();
         int currentIndex = displayMode.ordinal();
         int nextIndex = (currentIndex + 1) % modes.length;
         displayMode = modes[nextIndex];
         updateTrayIcon();
-        
+
         // Show brief notification about new mode
         if (trayIcon != null) {
-            trayIcon.displayMessage("Display Mode", 
-                "Switched to: " + displayMode.getDisplayName(), 
-                TrayIcon.MessageType.INFO);
+            trayIcon.displayMessage("Display Mode",
+                    "Switched to: " + displayMode.getDisplayName(),
+                    TrayIcon.MessageType.INFO);
         }
     }
-    
+
     // === Configuration ===
-    
+
     public void setDisplayMode(TrayDisplayMode mode) {
         this.displayMode = mode;
         updateTrayIcon();
     }
-    
+
     public void setTheme(TrayDisplayTheme theme) {
         this.theme = theme;
         updateTrayIcon();
     }
-    
+
     public void setShowSeconds(boolean showSeconds) {
         this.showSeconds = showSeconds;
         updateTrayIcon();
     }
-    
+
     public void setShowProgressBar(boolean showProgressBar) {
         this.showProgressBar = showProgressBar;
         updateTrayIcon();
     }
-    
+
     // === Cleanup ===
-    
+
     public void cleanup() {
         if (scheduler != null && !scheduler.isShutdown()) {
             scheduler.shutdown();
@@ -868,71 +878,71 @@ public class DynamicTrayIconManager {
                 Thread.currentThread().interrupt();
             }
         }
-        
+
         if (systemTray != null && trayIcon != null) {
             systemTray.remove(trayIcon);
             trayIcon = null;
         }
-        
+
         log.info("Dynamic tray icon manager cleaned up");
     }
-    
+
     // === Enums ===
-    
+
     public enum TrayDisplayMode {
         CURRENT_TIME("Current Time"),
-        SESSION_DURATION("Session Duration"), 
+        SESSION_DURATION("Session Duration"),
         TIME_AND_DURATION("Time & Duration"),
         STATUS_INDICATOR("Status Indicator"),
         COMPACT_INFO("Compact Info");
-        
+
         private final String displayName;
-        
+
         TrayDisplayMode(String displayName) {
             this.displayName = displayName;
         }
-        
+
         public String getDisplayName() {
             return displayName;
         }
     }
-    
+
     public enum TrayDisplayTheme {
         LIGHT, DARK, AUTO
     }
-    
+
     public enum WorkSessionStatus {
         ACTIVE, BREAK, AWAY, INACTIVE
     }
-    
+
     // === Platform-specific theme detection placeholder classes ===
-    
+
     private static class WindowsThemeDetector {
         static boolean isDarkTheme() {
             // Implementation for Windows theme detection
             return false;
         }
     }
-    
+
     private static class MacOSThemeDetector {
         static boolean isDarkTheme() {
             // Implementation for macOS theme detection
             return false;
         }
     }
-    
+
     private static class LinuxThemeDetector {
         static boolean isDarkTheme() {
             // Implementation for Linux theme detection
             return false;
         }
     }
-    
+
     // Placeholder methods
     private void openSettings() {
         log.info("Opening settings from tray menu");
     }
-    
+
     private void exitApplication() {
         cleanup();
         Platform.exit();
@@ -1488,112 +1498,112 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class AdvancedTextRenderer {
-    
+
     /**
      * Render text with outline for better visibility
      */
-    public static void renderTextWithOutline(Graphics2D g2d, String text, Font font, 
-                                           Color textColor, Color outlineColor, 
-                                           int x, int y, float outlineWidth) {
-        
+    public static void renderTextWithOutline(Graphics2D g2d, String text, Font font,
+                                             Color textColor, Color outlineColor,
+                                             int x, int y, float outlineWidth) {
+
         // Create outlined font
         FontRenderContext frc = g2d.getFontRenderContext();
         GlyphVector gv = font.createGlyphVector(frc, text);
         Shape textShape = gv.getOutline(x, y);
-        
+
         // Render outline
         g2d.setStroke(new BasicStroke(outlineWidth, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
         g2d.setColor(outlineColor);
         g2d.draw(textShape);
-        
+
         // Render text fill
         g2d.setColor(textColor);
         g2d.fill(textShape);
     }
-    
+
     /**
      * Render text with gradient
      */
     public static void renderGradientText(Graphics2D g2d, String text, Font font,
-                                        Color startColor, Color endColor,
-                                        int x, int y, int width) {
-        
+                                          Color startColor, Color endColor,
+                                          int x, int y, int width) {
+
         // Create gradient paint
         GradientPaint gradient = new GradientPaint(
-            x, y, startColor,
-            x + width, y, endColor
+                x, y, startColor,
+                x + width, y, endColor
         );
-        
+
         // Set font and paint
         g2d.setFont(font);
         g2d.setPaint(gradient);
-        
+
         // Render text
         g2d.drawString(text, x, y);
     }
-    
+
     /**
      * Render text with shadow
      */
     public static void renderTextWithShadow(Graphics2D g2d, String text, Font font,
-                                          Color textColor, Color shadowColor,
-                                          int x, int y, int shadowOffset) {
-        
+                                            Color textColor, Color shadowColor,
+                                            int x, int y, int shadowOffset) {
+
         g2d.setFont(font);
-        
+
         // Render shadow
         g2d.setColor(shadowColor);
         g2d.drawString(text, x + shadowOffset, y + shadowOffset);
-        
+
         // Render text
         g2d.setColor(textColor);
         g2d.drawString(text, x, y);
     }
-    
+
     /**
      * Render multiline text with proper alignment
      */
     public static void renderMultilineText(Graphics2D g2d, String[] lines, Font font,
-                                         Color textColor, int x, int y, int lineHeight,
-                                         TextAlignment alignment, int maxWidth) {
-        
+                                           Color textColor, int x, int y, int lineHeight,
+                                           TextAlignment alignment, int maxWidth) {
+
         g2d.setFont(font);
         g2d.setColor(textColor);
         FontMetrics fm = g2d.getFontMetrics();
-        
+
         int currentY = y + fm.getAscent();
-        
+
         for (String line : lines) {
             int textX = calculateAlignmentX(line, fm, x, maxWidth, alignment);
             g2d.drawString(line, textX, currentY);
             currentY += lineHeight;
         }
     }
-    
+
     /**
      * Auto-fit text to available space
      */
-    public static Font getAutoFitFont(Graphics2D g2d, String text, Font baseFont, 
-                                    int maxWidth, int maxHeight) {
-        
+    public static Font getAutoFitFont(Graphics2D g2d, String text, Font baseFont,
+                                      int maxWidth, int maxHeight) {
+
         Font currentFont = baseFont;
         FontMetrics fm = g2d.getFontMetrics(currentFont);
-        
+
         // Reduce font size until text fits
-        while ((fm.stringWidth(text) > maxWidth || fm.getHeight() > maxHeight) && 
-               currentFont.getSize() > 6) {
-            
+        while ((fm.stringWidth(text) > maxWidth || fm.getHeight() > maxHeight) &&
+                currentFont.getSize() > 6) {
+
             currentFont = currentFont.deriveFont((float) (currentFont.getSize() - 1));
             fm = g2d.getFontMetrics(currentFont);
         }
-        
+
         return currentFont;
     }
-    
-    private static int calculateAlignmentX(String text, FontMetrics fm, int x, 
-                                         int maxWidth, TextAlignment alignment) {
+
+    private static int calculateAlignmentX(String text, FontMetrics fm, int x,
+                                           int maxWidth, TextAlignment alignment) {
         int textWidth = fm.stringWidth(text);
-        
+
         switch (alignment) {
             case CENTER:
                 return x + (maxWidth - textWidth) / 2;
@@ -1604,7 +1614,7 @@ public class AdvancedTextRenderer {
                 return x;
         }
     }
-    
+
     public enum TextAlignment {
         LEFT, CENTER, RIGHT
     }
@@ -2380,48 +2390,48 @@ import java.util.concurrent.locks.ReentrantLock;
 
 @Slf4j
 public class TrayUpdateOptimizer {
-    
+
     private final ReentrantLock updateLock = new ReentrantLock();
     private final AtomicReference<BufferedImage> cachedImage = new AtomicReference<>();
     private volatile long lastUpdateTime = 0;
     private volatile String lastDisplayData = "";
-    
+
     // Configuration
     private final long MIN_UPDATE_INTERVAL = 1000; // 1 second minimum
     private final long FAST_UPDATE_INTERVAL = 100; // For animations
-    
+
     /**
      * Check if tray icon needs updating
      */
     public boolean shouldUpdate(String currentDisplayData, boolean forceUpdate) {
         long currentTime = System.currentTimeMillis();
-        
+
         if (forceUpdate) {
             return true;
         }
-        
+
         // Check if enough time has passed
         if (currentTime - lastUpdateTime < MIN_UPDATE_INTERVAL) {
             return false;
         }
-        
+
         // Check if display data has changed
         return !currentDisplayData.equals(lastDisplayData);
     }
-    
+
     /**
      * Cache and return optimized image
      */
-    public BufferedImage getCachedOrUpdate(String displayData, 
-                                          ImageGenerator generator) {
-        
+    public BufferedImage getCachedOrUpdate(String displayData,
+                                           ImageGenerator generator) {
+
         if (!shouldUpdate(displayData, false)) {
             BufferedImage cached = cachedImage.get();
             if (cached != null) {
                 return cached;
             }
         }
-        
+
         if (updateLock.tryLock()) {
             try {
                 // Double-check after acquiring lock
@@ -2431,17 +2441,17 @@ public class TrayUpdateOptimizer {
                         return cached;
                     }
                 }
-                
+
                 // Generate new image
                 BufferedImage newImage = generator.generateImage();
-                
+
                 // Cache the result
                 cachedImage.set(newImage);
                 lastDisplayData = displayData;
                 lastUpdateTime = System.currentTimeMillis();
-                
+
                 return newImage;
-                
+
             } catch (Exception e) {
                 log.error("Error generating tray image", e);
                 return cachedImage.get(); // Return cached version on error
@@ -2454,12 +2464,12 @@ public class TrayUpdateOptimizer {
             if (cached != null) {
                 return cached;
             }
-            
+
             // Fallback: generate directly (should be rare)
             return generator.generateImage();
         }
     }
-    
+
     /**
      * Force immediate update
      */
@@ -2475,7 +2485,7 @@ public class TrayUpdateOptimizer {
             updateLock.unlock();
         }
     }
-    
+
     /**
      * Clear cache
      */
@@ -2489,7 +2499,7 @@ public class TrayUpdateOptimizer {
             updateLock.unlock();
         }
     }
-    
+
     @FunctionalInterface
     public interface ImageGenerator {
         BufferedImage generateImage();
@@ -2773,7 +2783,7 @@ import java.util.List;
 @ConfigurationProperties(prefix = "tray.widget")
 @Data
 public class TrayWidgetConfiguration {
-    
+
     private DisplayConfig display = new DisplayConfig();
     private TextConfig text = new TextConfig();
     private ColorConfig colors = new ColorConfig();
@@ -2781,7 +2791,7 @@ public class TrayWidgetConfiguration {
     private AnimationConfig animation = new AnimationConfig();
     private NotificationConfig notifications = new NotificationConfig();
     private PerformanceConfig performance = new PerformanceConfig();
-    
+
     @Data
     public static class DisplayConfig {
         private TrayDisplayMode mode = TrayDisplayMode.TIME_AND_DURATION;
@@ -2790,64 +2800,66 @@ public class TrayWidgetConfiguration {
         private boolean showProgressBar = true;
         private int updateInterval = 1000;
     }
-    
+
     @Data
     public static class TextConfig {
         private FontConfig primaryFont = new FontConfig("SansSerif", 9, Font.BOLD);
         private FontConfig secondaryFont = new FontConfig("SansSerif", 7, Font.PLAIN);
-        
+
         @Data
         public static class FontConfig {
             private String family;
             private int size;
             private int style;
-            
-            public FontConfig() {}
-            
+
+            public FontConfig() {
+            }
+
             public FontConfig(String family, int size, int style) {
                 this.family = family;
                 this.size = size;
                 this.style = style;
             }
-            
+
             public Font toFont() {
                 return new Font(family, style, size);
             }
         }
     }
-    
+
     @Data
     public static class ColorConfig {
         private boolean auto = true;
         private ThemeColors light = new ThemeColors("#000000", "#F0F0F0E6", "#0078D4");
         private ThemeColors dark = new ThemeColors("#FFFFFF", "#202020B4", "#64C8FF");
-        
+
         @Data
         public static class ThemeColors {
             private String primary;
             private String background;
             private String accent;
-            
-            public ThemeColors() {}
-            
+
+            public ThemeColors() {
+            }
+
             public ThemeColors(String primary, String background, String accent) {
                 this.primary = primary;
                 this.background = background;
                 this.accent = accent;
             }
-            
+
             public Color getPrimaryColor() {
                 return Color.decode(primary);
             }
-            
+
             public Color getBackgroundColor() {
                 return parseColorWithAlpha(background);
             }
-            
+
             public Color getAccentColor() {
                 return Color.decode(accent);
             }
-            
+
             private Color parseColorWithAlpha(String colorStr) {
                 if (colorStr.length() == 9 && colorStr.startsWith("#")) {
                     // #RRGGBBAA format
@@ -2859,39 +2871,39 @@ public class TrayWidgetConfiguration {
             }
         }
     }
-    
+
     @Data
     public static class PlatformConfig {
         private WindowsConfig windows = new WindowsConfig();
         private MacOSConfig macos = new MacOSConfig();
         private LinuxConfig linux = new LinuxConfig();
-        
+
         @Data
         public static class WindowsConfig {
             private boolean highDPI = true;
             private boolean themeAware = true;
         }
-        
+
         @Data
         public static class MacOSConfig {
             private boolean useTemplate = true;
             private boolean hideInDock = false;
         }
-        
+
         @Data
         public static class LinuxConfig {
             private boolean desktopOptimized = true;
         }
     }
-    
+
     @Data
     public static class AnimationConfig {
         private boolean enabled = true;
         private int blinkDuration = 500;
         private boolean fadeEnabled = false;
     }
-    
-    @Data  
+
+    @Data
     public static class NotificationConfig {
         private boolean enabled = true;
         private boolean showOnStatusChange = true;
@@ -2900,7 +2912,7 @@ public class TrayWidgetConfiguration {
         private boolean showOnBreak = true;
         private int duration = 5000;
     }
-    
+
     @Data
     public static class PerformanceConfig {
         private boolean cacheEnabled = true;
@@ -3135,6 +3147,7 @@ public class TrayPerformanceTest {
 **Tổng kết Implementation:**
 
 ✅ **Dynamic Tray Widget với:**
+
 - Real-time hiển thị check-in/session time
 - Multiple display modes (time, duration, combined, status)
 - Cross-platform optimizations (Windows/macOS/Linux)
@@ -3144,12 +3157,14 @@ public class TrayPerformanceTest {
 - Full testing framework
 
 ✅ **Key Features:**
+
 - Time tracking integration
 - Theme-aware colors
-- Platform-specific icon styles  
+- Platform-specific icon styles
 - Animation support
 - Context menu integration
 - Performance monitoring
 - Visual testing tools
 
-Đây là complete solution cho custom tray widget thay thế simple icon, hiển thị thông tin time tracking real-time với professional quality và cross-platform compatibility.
+Đây là complete solution cho custom tray widget thay thế simple icon, hiển thị thông tin time tracking real-time với
+professional quality và cross-platform compatibility.

@@ -7,6 +7,7 @@
 ### ❌ "Missing JavaFX application class" Error (macOS/Linux)
 
 **Quick Fix**:
+
 ```bash
 # Remove duplicate libraries
 cd /Users/nguyencong/Workspace/pcm-desktop
@@ -27,6 +28,7 @@ rm -f lib/others/sqlite-jdbc-3.47.1.0.jar
 ### ❌ "Java 21 required" Error
 
 **Quick Fix**:
+
 ```bash
 # On macOS
 brew install --cask temurin21
@@ -41,6 +43,7 @@ export PATH="$JAVA_HOME/bin:$PATH"
 ### ❌ "JavaFX libraries not found"
 
 **Quick Fix**:
+
 ```bash
 # Run setup script
 ./scripts/setup.sh
@@ -51,6 +54,7 @@ export PATH="$JAVA_HOME/bin:$PATH"
 ## 🔍 Diagnostic Commands
 
 ### Check Environment
+
 ```bash
 # Java version (should be 21)
 java -version
@@ -63,6 +67,7 @@ ps aux | grep PCMApplication
 ```
 
 ### Check Libraries
+
 ```bash
 # List JavaFX libraries
 ls -la lib/javafx/
@@ -75,6 +80,7 @@ ls lib/others/*.jar | wc -l
 ```
 
 ### Check Application
+
 ```bash
 # View real-time logs
 tail -f logs/pcm-desktop.log
@@ -91,6 +97,7 @@ ls -la out/com/noteflix/pcm/PCMApplication.class
 ## 🛠️ Common Commands
 
 ### Build & Run
+
 ```bash
 # Clean build
 ./scripts/build.sh --clean
@@ -106,6 +113,7 @@ ls -la out/com/noteflix/pcm/PCMApplication.class
 ```
 
 ### Using Maven
+
 ```bash
 # Clean and compile
 mvn clean compile
@@ -154,12 +162,12 @@ If the issue persists:
 
 ## 🏷️ Issue Quick Links
 
-| Issue | Location | Status |
-|-------|----------|--------|
-| JavaFX Startup Error | [runtime/javafx-application-startup-issue.md](runtime/javafx-application-startup-issue.md) | ✅ Resolved |
-| Build Issues | `build/` | 📝 Coming Soon |
-| Database Issues | `database/` | 📝 Coming Soon |
-| Integration Issues | `integration/` | 📝 Coming Soon |
+| Issue                | Location                                                                                   | Status         |
+|----------------------|--------------------------------------------------------------------------------------------|----------------|
+| JavaFX Startup Error | [runtime/javafx-application-startup-issue.md](runtime/javafx-application-startup-issue.md) | ✅ Resolved     |
+| Build Issues         | `build/`                                                                                   | 📝 Coming Soon |
+| Database Issues      | `database/`                                                                                | 📝 Coming Soon |
+| Integration Issues   | `integration/`                                                                             | 📝 Coming Soon |
 
 ---
 

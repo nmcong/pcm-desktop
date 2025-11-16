@@ -1,12 +1,13 @@
 # Tài Liệu Chi Tiết về Các Chiến Thuật Chunking trong RAG
 
 ## Mục Lục
+
 1. [Tổng Quan về Document Chunking](#tổng-quan-về-document-chunking)
 2. [Chunking Strategies](#chunking-strategies)
-   - [Fixed-Size Chunking](#1-fixed-size-chunking)
-   - [Sentence-Aware Chunking](#2-sentence-aware-chunking)
-   - [Semantic Chunking](#3-semantic-chunking)
-   - [Markdown-Aware Chunking](#4-markdown-aware-chunking)
+    - [Fixed-Size Chunking](#1-fixed-size-chunking)
+    - [Sentence-Aware Chunking](#2-sentence-aware-chunking)
+    - [Semantic Chunking](#3-semantic-chunking)
+    - [Markdown-Aware Chunking](#4-markdown-aware-chunking)
 3. [Bảng So Sánh Chi Tiết](#bảng-so-sánh-chi-tiết)
 4. [Hướng Dẫn Sử Dụng](#hướng-dẫn-sử-dụng)
 5. [Cấu Hình và Tùy Chỉnh](#cấu-hình-và-tùy-chỉnh)
@@ -18,15 +19,20 @@
 ## Tổng Quan về Document Chunking
 
 ### Chunking là gì?
-Document chunking là quá trình chia nhỏ văn bản dài thành các đoạn nhỏ hơn (chunks) để tối ưu hiệu quả tìm kiếm và xử lý trong hệ thống RAG (Retrieval Augmented Generation). Mỗi chunk chứa một phần thông tin có ý nghĩa và có thể được xử lý độc lập.
+
+Document chunking là quá trình chia nhỏ văn bản dài thành các đoạn nhỏ hơn (chunks) để tối ưu hiệu quả tìm kiếm và xử lý
+trong hệ thống RAG (Retrieval Augmented Generation). Mỗi chunk chứa một phần thông tin có ý nghĩa và có thể được xử lý
+độc lập.
 
 ### Tại sao cần Chunking?
+
 - **Giới hạn context window**: LLM có giới hạn về số token có thể xử lý cùng lúc
 - **Tăng độ chính xác**: Chunks nhỏ giúp tìm kiếm thông tin chính xác hơn
 - **Giảm nhiễu**: Tránh thông tin không liên quan trong quá trình retrieval
 - **Tối ưu hiệu suất**: Xử lý chunks nhỏ nhanh hơn so với toàn bộ document
 
 ### Enhanced DocumentChunk
+
 Hệ thống sử dụng lớp `DocumentChunk` được nâng cấp với 30+ metadata fields:
 
 ```java
@@ -85,6 +91,7 @@ public class DocumentChunk {
 **Mô tả**: Chia văn bản thành các chunks có kích thước cố định, không quan tâm đến cấu trúc ngữ nghĩa.
 
 **Đặc điểm**:
+
 - ✅ Đơn giản, nhanh chóng
 - ✅ Kích thước chunk có thể dự đoán
 - ✅ Hiệu suất cao cho xử lý batch
@@ -93,6 +100,7 @@ public class DocumentChunk {
 - ❌ Chất lượng semantic thấp
 
 **Cách hoạt động**:
+
 ```java
 public class FixedSizeChunking implements ChunkingStrategy {
     private final int chunkSize;
@@ -109,12 +117,14 @@ public class FixedSizeChunking implements ChunkingStrategy {
 ```
 
 **Khi nào sử dụng**:
+
 - Xử lý khối lượng lớn document
 - Không quan tâm đến cấu trúc ngữ nghĩa
 - Cần tốc độ xử lý nhanh
 - Document có cấu trúc đơn giản
 
 **Cấu hình**:
+
 ```java
 // Cấu hình mặc định
 FixedSizeChunking strategy = new FixedSizeChunking(1000, 200);
@@ -125,6 +135,7 @@ ChunkingStrategy strategy = ChunkingFactory.createForUseCase(
 ```
 
 **Ví dụ thực tế**:
+
 ```java
 // Input: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua..."
 // Chunk 1 (0-1000): "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod..."
@@ -138,6 +149,7 @@ ChunkingStrategy strategy = ChunkingFactory.createForUseCase(
 **Mô tả**: Chia văn bản dựa trên ranh giới câu, đảm bảo tính toàn vẹn ngữ nghĩa của từng câu.
 
 **Đặc điểm**:
+
 - ✅ Bảo toàn cấu trúc câu
 - ✅ Tốt cho văn bản narrative
 - ✅ Dễ đọc và hiểu
@@ -147,6 +159,7 @@ ChunkingStrategy strategy = ChunkingFactory.createForUseCase(
 - ❌ Yêu cầu xử lý ngôn ngữ
 
 **Cách hoạt động**:
+
 ```java
 public class SentenceAwareChunking implements ChunkingStrategy {
     // Regex pattern để nhận diện câu
@@ -168,12 +181,14 @@ public class SentenceAwareChunking implements ChunkingStrategy {
 ```
 
 **Thuật toán chi tiết**:
+
 1. **Sentence Detection**: Sử dụng regex pattern phức tạp để nhận diện câu
 2. **Abbreviation Protection**: Bảo vệ các từ viết tắt (Dr., Mr., etc.)
 3. **Sentence Grouping**: Nhóm câu để đạt target chunk size
 4. **Quality Scoring**: Tính toán dựa trên completeness và coherence
 
 **Cấu hình linh hoạt**:
+
 ```java
 // Strict mode - tolerance thấp
 SentenceAwareChunking strict = SentenceAwareChunking.strict();
@@ -190,6 +205,7 @@ SentenceAwareChunking custom = new SentenceAwareChunking(
 ```
 
 **Quality Metrics**:
+
 ```java
 // Quality Score calculation
 double sizeScore = 1.0 - Math.abs(chunkSize - targetSize) / targetSize;
@@ -202,9 +218,11 @@ double qualityScore = (sizeScore * 0.4 + completenessScore * 0.4 + structureScor
 
 ### 3. Semantic Chunking
 
-**Mô tả**: Chia văn bản dựa trên semantic similarity sử dụng embeddings, tạo chunks có tính coherence cao về mặt nội dung.
+**Mô tả**: Chia văn bản dựa trên semantic similarity sử dụng embeddings, tạo chunks có tính coherence cao về mặt nội
+dung.
 
 **Đặc điểm**:
+
 - ✅ Chất lượng semantic cao nhất
 - ✅ Chunks có tính nhất quán về topic
 - ✅ Tối ưu cho RAG applications
@@ -215,6 +233,7 @@ double qualityScore = (sizeScore * 0.4 + completenessScore * 0.4 + structureScor
 - ❌ Cần model embeddings chất lượng cao
 
 **Cách hoạt động**:
+
 ```java
 public class SemanticChunking implements ChunkingStrategy {
     private final EmbeddingService embeddingService;
@@ -232,6 +251,7 @@ public class SemanticChunking implements ChunkingStrategy {
 ```
 
 **Thuật toán Semantic Grouping**:
+
 ```java
 private List<SemanticGroup> groupSegmentsBySimilarity(
     List<TextSegment> segments, List<float[]> embeddings) {
@@ -260,6 +280,7 @@ private List<SemanticGroup> groupSegmentsBySimilarity(
 ```
 
 **Cosine Similarity Calculation**:
+
 ```java
 private double cosineSimilarity(float[] a, float[] b) {
     double dotProduct = 0.0;
@@ -276,11 +297,13 @@ private double cosineSimilarity(float[] a, float[] b) {
 ```
 
 **Sliding Window Strategy**:
+
 - Sử dụng sliding window để tính similarity với các segments gần nhất
 - Giúp duy trì context cục bộ
 - Tránh việc so sánh với toàn bộ group (expensive)
 
 **Cấu hình cho các use cases**:
+
 ```java
 // High precision - academic papers
 SemanticChunking precise = SemanticChunking.precise(embeddingService);
@@ -304,9 +327,11 @@ SemanticChunking custom = new SemanticChunking(
 
 ### 4. Markdown-Aware Chunking
 
-**Mô tả**: Chia văn bản Markdown dựa trên cấu trúc tài liệu (headers, code blocks, lists, tables), bảo toàn hierarchy và formatting.
+**Mô tả**: Chia văn bản Markdown dựa trên cấu trúc tài liệu (headers, code blocks, lists, tables), bảo toàn hierarchy và
+formatting.
 
 **Đặc điểm**:
+
 - ✅ Bảo toàn cấu trúc Markdown
 - ✅ Tôn trọng hierarchy (H1, H2, H3...)
 - ✅ Preserve code blocks và tables
@@ -317,6 +342,7 @@ SemanticChunking custom = new SemanticChunking(
 - ❌ Kích thước chunks không đều
 
 **Cách hoạt động**:
+
 ```java
 public class MarkdownAwareChunking implements ChunkingStrategy {
     // Markdown regex patterns
@@ -336,6 +362,7 @@ public class MarkdownAwareChunking implements ChunkingStrategy {
 ```
 
 **Markdown Structure Analysis**:
+
 ```java
 private MarkdownStructure analyzeMarkdownStructure(String content) {
     MarkdownStructure structure = new MarkdownStructure();
@@ -364,6 +391,7 @@ private MarkdownStructure analyzeMarkdownStructure(String content) {
 ```
 
 **Section Creation Algorithm**:
+
 ```java
 private void createSections(String content, MarkdownStructure structure) {
     for (int i = 0; i < headers.size(); i++) {
@@ -381,6 +409,7 @@ private void createSections(String content, MarkdownStructure structure) {
 ```
 
 **Preservation Features**:
+
 - **Code Blocks**: Giữ nguyên ```code``` blocks
 - **Tables**: Bảo toàn format table Markdown
 - **Lists**: Maintain list structure (ordered/unordered)
@@ -388,6 +417,7 @@ private void createSections(String content, MarkdownStructure structure) {
 - **Horizontal Rules**: Preserve document sections
 
 **Cấu hình linh hoạt**:
+
 ```java
 // Header-focused chunking
 MarkdownAwareChunking headerFocused = MarkdownAwareChunking.headerFocused();
@@ -406,6 +436,7 @@ MarkdownAwareChunking custom = new MarkdownAwareChunking(
 ```
 
 **Quality Scoring cho Markdown**:
+
 ```java
 private double calculateMarkdownQuality(List<MarkdownSection> sections) {
     double structureScore = Math.min(1.0, sections.size() / 3.0);
@@ -421,47 +452,47 @@ private double calculateMarkdownQuality(List<MarkdownSection> sections) {
 
 ## Bảng So Sánh Chi Tiết
 
-| Tiêu Chí | Fixed-Size | Sentence-Aware | Semantic | Markdown-Aware |
-|----------|------------|----------------|----------|----------------|
-| **Complexity** | ⭐ | ⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ |
-| **Performance** | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐ | ⭐⭐⭐ |
-| **Quality** | ⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ |
-| **Predictable Size** | ⭐⭐⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐ | ⭐⭐ |
-| **Semantic Coherence** | ⭐ | ⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ |
-| **Structure Preservation** | ❌ | ⭐⭐ | ⭐ | ⭐⭐⭐⭐⭐ |
-| **Resource Usage** | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐ | ⭐⭐⭐ |
-| **Dependencies** | None | None | EmbeddingService | None |
+| Tiêu Chí                   | Fixed-Size | Sentence-Aware | Semantic         | Markdown-Aware |
+|----------------------------|------------|----------------|------------------|----------------|
+| **Complexity**             | ⭐          | ⭐⭐             | ⭐⭐⭐⭐⭐            | ⭐⭐⭐⭐           |
+| **Performance**            | ⭐⭐⭐⭐⭐      | ⭐⭐⭐⭐           | ⭐⭐               | ⭐⭐⭐            |
+| **Quality**                | ⭐⭐         | ⭐⭐⭐⭐           | ⭐⭐⭐⭐⭐            | ⭐⭐⭐⭐           |
+| **Predictable Size**       | ⭐⭐⭐⭐⭐      | ⭐⭐⭐            | ⭐⭐               | ⭐⭐             |
+| **Semantic Coherence**     | ⭐          | ⭐⭐⭐            | ⭐⭐⭐⭐⭐            | ⭐⭐⭐⭐           |
+| **Structure Preservation** | ❌          | ⭐⭐             | ⭐                | ⭐⭐⭐⭐⭐          |
+| **Resource Usage**         | ⭐⭐⭐⭐⭐      | ⭐⭐⭐⭐           | ⭐⭐               | ⭐⭐⭐            |
+| **Dependencies**           | None       | None           | EmbeddingService | None           |
 
 ### Performance Comparison
 
-| Strategy | Avg Processing Time | Memory Usage | CPU Usage | Best for Document Size |
-|----------|-------------------|--------------|-----------|----------------------|
-| **Fixed-Size** | ~10ms | Low | Low | Any |
-| **Sentence-Aware** | ~50ms | Low-Medium | Medium | 1KB-1MB |
-| **Semantic** | ~500ms | High | High | 5KB-500KB |
-| **Markdown-Aware** | ~100ms | Medium | Medium | 1KB-5MB |
+| Strategy           | Avg Processing Time | Memory Usage | CPU Usage | Best for Document Size |
+|--------------------|---------------------|--------------|-----------|------------------------|
+| **Fixed-Size**     | ~10ms               | Low          | Low       | Any                    |
+| **Sentence-Aware** | ~50ms               | Low-Medium   | Medium    | 1KB-1MB                |
+| **Semantic**       | ~500ms              | High         | High      | 5KB-500KB              |
+| **Markdown-Aware** | ~100ms              | Medium       | Medium    | 1KB-5MB                |
 
 ### Use Case Matrix
 
-| Document Type | Best Strategy | Alternative | Avoid |
-|---------------|---------------|-------------|-------|
-| **Technical Docs** | Markdown-Aware | Sentence-Aware | Fixed-Size |
-| **Academic Papers** | Semantic | Sentence-Aware | Fixed-Size |
-| **Novels/Stories** | Sentence-Aware | Semantic | Markdown-Aware |
-| **Code Documentation** | Markdown-Aware | Fixed-Size | Semantic |
-| **News Articles** | Sentence-Aware | Semantic | Markdown-Aware |
-| **Legal Documents** | Sentence-Aware | Semantic | Fixed-Size |
-| **API Documentation** | Markdown-Aware | Sentence-Aware | Fixed-Size |
-| **Bulk Processing** | Fixed-Size | Sentence-Aware | Semantic |
+| Document Type          | Best Strategy  | Alternative    | Avoid          |
+|------------------------|----------------|----------------|----------------|
+| **Technical Docs**     | Markdown-Aware | Sentence-Aware | Fixed-Size     |
+| **Academic Papers**    | Semantic       | Sentence-Aware | Fixed-Size     |
+| **Novels/Stories**     | Sentence-Aware | Semantic       | Markdown-Aware |
+| **Code Documentation** | Markdown-Aware | Fixed-Size     | Semantic       |
+| **News Articles**      | Sentence-Aware | Semantic       | Markdown-Aware |
+| **Legal Documents**    | Sentence-Aware | Semantic       | Fixed-Size     |
+| **API Documentation**  | Markdown-Aware | Sentence-Aware | Fixed-Size     |
+| **Bulk Processing**    | Fixed-Size     | Sentence-Aware | Semantic       |
 
 ### Quality Metrics Comparison
 
-| Strategy | Typical Quality Score | Coherence Score | Density Score | Completeness |
-|----------|---------------------|-----------------|---------------|-------------|
-| **Fixed-Size** | 0.3-0.6 | 0.2-0.5 | 0.7-0.9 | Low |
-| **Sentence-Aware** | 0.6-0.8 | 0.7-0.9 | 0.8-0.9 | High |
-| **Semantic** | 0.8-0.95 | 0.8-0.95 | 0.7-0.9 | Very High |
-| **Markdown-Aware** | 0.7-0.9 | 0.8-0.9 | 0.8-0.9 | High |
+| Strategy           | Typical Quality Score | Coherence Score | Density Score | Completeness |
+|--------------------|-----------------------|-----------------|---------------|--------------|
+| **Fixed-Size**     | 0.3-0.6               | 0.2-0.5         | 0.7-0.9       | Low          |
+| **Sentence-Aware** | 0.6-0.8               | 0.7-0.9         | 0.8-0.9       | High         |
+| **Semantic**       | 0.8-0.95              | 0.8-0.95        | 0.7-0.9       | Very High    |
+| **Markdown-Aware** | 0.7-0.9               | 0.8-0.9         | 0.8-0.9       | High         |
 
 ---
 
@@ -470,6 +501,7 @@ private double calculateMarkdownQuality(List<MarkdownSection> sections) {
 ### Lựa Chọn Strategy
 
 #### 1. Dựa trên loại document:
+
 ```java
 // For Markdown documents
 ChunkingStrategy strategy = ChunkingFactory.createForUseCase(
@@ -485,6 +517,7 @@ ChunkingStrategy strategy = ChunkingFactory.createForUseCase(
 ```
 
 #### 2. Automatic selection:
+
 ```java
 // Let system choose optimal strategy
 ChunkingStrategy strategy = ChunkingFactory.createOptimalStrategy(
@@ -496,6 +529,7 @@ List<StrategyRecommendation> recommendations =
 ```
 
 #### 3. With fallback mechanism:
+
 ```java
 ChunkingStrategy strategy = ChunkingFactory.createWithFallback(
     config, embeddingService);
@@ -504,6 +538,7 @@ ChunkingStrategy strategy = ChunkingFactory.createWithFallback(
 ### Cấu Hình Chi Tiết
 
 #### ChunkingConfig Builder:
+
 ```java
 ChunkingConfig config = ChunkingConfig.builder()
     .targetChunkSize(1500)
@@ -519,6 +554,7 @@ ChunkingConfig config = ChunkingConfig.builder()
 ```
 
 #### Document-type specific configs:
+
 ```java
 // Add custom config for specific document types
 config.addDocumentTypeConfig(
@@ -535,6 +571,7 @@ config.addDocumentTypeConfig(
 #### Strategy-specific configurations:
 
 **Sentence-Aware Config:**
+
 ```java
 ChunkingConfig config = ChunkingConfig.builder()
     .sentenceAwareConfig(
@@ -546,6 +583,7 @@ ChunkingConfig config = ChunkingConfig.builder()
 ```
 
 **Semantic Config:**
+
 ```java
 ChunkingConfig config = ChunkingConfig.builder()
     .semanticConfig(
@@ -559,6 +597,7 @@ ChunkingConfig config = ChunkingConfig.builder()
 ```
 
 **Markdown Config:**
+
 ```java
 ChunkingConfig config = ChunkingConfig.builder()
     .markdownConfig(
@@ -575,6 +614,7 @@ ChunkingConfig config = ChunkingConfig.builder()
 ### Quality Assessment
 
 #### Strategy Suitability:
+
 ```java
 // Check if strategy is suitable for document
 if (strategy.isSuitableFor(document)) {
@@ -587,6 +627,7 @@ if (strategy.isSuitableFor(document)) {
 ```
 
 #### Quality Estimation:
+
 ```java
 // Estimate quality before chunking
 double estimatedQuality = strategy.estimateQuality(document);
@@ -604,6 +645,7 @@ if (estimatedQuality < 0.7) {
 ### ChunkingConfig Deep Dive
 
 #### Core Parameters:
+
 ```java
 @Data
 @Builder  
@@ -627,6 +669,7 @@ public class ChunkingConfig {
 ```
 
 #### Advanced Features:
+
 ```java
 // Custom parameters for extensibility
 config.getCustomParameters().put("custom_threshold", 0.85);
@@ -646,6 +689,7 @@ config.setMaxChunksPerDocument(100); // Limit for safety
 ### Factory Pattern Usage
 
 #### UseCase-based Creation:
+
 ```java
 public enum UseCase {
     GENERAL_PURPOSE("General purpose documents"),
@@ -661,6 +705,7 @@ ChunkingStrategy strategy = ChunkingFactory.createForUseCase(
 ```
 
 #### Strategy Recommendations:
+
 ```java
 // Get ranked recommendations
 List<StrategyRecommendation> recommendations = 
@@ -685,21 +730,25 @@ for (StrategyRecommendation rec : recommendations) {
 ### 1. Strategy Selection Guidelines
 
 **For Technical Documentation:**
+
 - **Primary**: Markdown-Aware (preserves structure)
 - **Secondary**: Sentence-Aware (fallback for non-markdown)
 - **Avoid**: Fixed-Size (loses code structure)
 
 **For Academic Papers:**
+
 - **Primary**: Semantic (topic coherence)
-- **Secondary**: Sentence-Aware (preserves arguments)  
+- **Secondary**: Sentence-Aware (preserves arguments)
 - **Configuration**: High similarity threshold (0.8+)
 
 **For Narrative Content:**
+
 - **Primary**: Sentence-Aware (preserves story flow)
 - **Secondary**: Semantic (for complex narratives)
 - **Configuration**: Flexible size tolerance (0.4+)
 
 **For High-Volume Processing:**
+
 - **Primary**: Fixed-Size (speed)
 - **Secondary**: Sentence-Aware (better quality)
 - **Configuration**: Disable quality metrics for speed
@@ -707,6 +756,7 @@ for (StrategyRecommendation rec : recommendations) {
 ### 2. Quality Optimization
 
 #### Size Configuration:
+
 ```java
 // Optimal size ranges by content type
 Map<ContentType, SizeConfig> sizeGuide = Map.of(
@@ -718,6 +768,7 @@ Map<ContentType, SizeConfig> sizeGuide = Map.of(
 ```
 
 #### Quality Thresholds:
+
 ```java
 // Recommended quality thresholds
 Map<UseCase, QualityThresholds> qualityGuide = Map.of(
@@ -731,6 +782,7 @@ Map<UseCase, QualityThresholds> qualityGuide = Map.of(
 ### 3. Performance Optimization
 
 #### Batch Processing:
+
 ```java
 // For multiple documents
 List<RAGDocument> documents = loadDocuments();
@@ -751,6 +803,7 @@ for (int i = 0; i < documents.size(); i += batchSize) {
 ```
 
 #### Caching Strategies:
+
 ```java
 // Cache embeddings for semantic chunking
 @Component
@@ -771,6 +824,7 @@ public class CachedEmbeddingService implements EmbeddingService {
 ### 4. Error Handling and Fallbacks
 
 #### Robust Strategy Implementation:
+
 ```java
 @Component
 public class RobustChunkingService {
@@ -808,6 +862,7 @@ public class RobustChunkingService {
 ### Example 1: Technical Documentation
 
 **Input Document** (Markdown):
+
 ```markdown
 # API Documentation
 
@@ -827,10 +882,13 @@ Send a POST request to `/auth/login`:
 ## User Management
 
 ### Create User
+
 POST `/users` - Create a new user account.
 
-### Update User  
+### Update User
+
 PUT `/users/{id}` - Update existing user.
+
 ```
 
 **Markdown-Aware Chunking Result**:
@@ -855,6 +913,7 @@ DocumentChunk chunk2 = DocumentChunk.builder()
 ### Example 2: Academic Paper
 
 **Input Document**:
+
 ```text
 Machine learning has revolutionized the field of artificial intelligence. 
 The development of neural networks, particularly deep learning architectures, 
@@ -870,6 +929,7 @@ developing more efficient architectures and better understanding mechanisms.
 ```
 
 **Semantic Chunking Process**:
+
 ```java
 // 1. Create text segments (sentences)
 List<TextSegment> segments = [
@@ -893,6 +953,7 @@ float[][] embeddings = embeddingService.embedBatch(segmentTexts);
 ```
 
 **Result**:
+
 ```java
 // Chunk 1: ML/DL Introduction (coherence: 0.92)
 DocumentChunk chunk1 = DocumentChunk.builder()
@@ -919,6 +980,7 @@ DocumentChunk chunk3 = DocumentChunk.builder()
 ### Example 3: Batch Processing Pipeline
 
 **Complete Processing Workflow**:
+
 ```java
 @Service
 public class DocumentProcessingService {
@@ -981,19 +1043,22 @@ public class DocumentProcessingService {
 Hệ thống chunking được thiết kế với 4 strategies chính, mỗi strategy có những ưu điểm và use cases riêng:
 
 1. **Fixed-Size**: Đơn giản, nhanh, phù hợp xử lý khối lượng lớn
-2. **Sentence-Aware**: Cân bằng giữa quality và performance, phù hợp văn bản narrative  
+2. **Sentence-Aware**: Cân bằng giữa quality và performance, phù hợp văn bản narrative
 3. **Semantic**: Chất lượng cao nhất, phù hợp academic content và complex documents
 4. **Markdown-Aware**: Tối ưu cho technical documentation và structured content
 
 **Recommendation Engine** tự động lựa chọn strategy phù hợp nhất dựa trên:
+
 - Document type và structure analysis
 - Content length và complexity
 - Quality requirements
 - Performance constraints
 
 **Quality Metrics** cung cấp feedback để tối ưu hóa:
+
 - Quality Score (0.0-1.0): Chất lượng tổng thể
 - Coherence Score (0.0-1.0): Tính nhất quán semantic
 - Density Score (0.0-1.0): Mật độ thông tin
 
-**Extensibility**: Hệ thống được thiết kế để dễ dàng thêm strategies mới và custom configurations cho các use cases đặc biệt.
+**Extensibility**: Hệ thống được thiết kế để dễ dàng thêm strategies mới và custom configurations cho các use cases đặc
+biệt.

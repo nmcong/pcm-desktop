@@ -18,35 +18,35 @@ import com.noteflix.pcm.llm.model.LLMResponse;
  */
 public interface LLMClient {
 
-  /**
-   * Send a message to the LLM and get response
-   *
-   * <p>This is the core method that all providers must implement
-   *
-   * @param request The LLM request containing messages and parameters
-   * @return The LLM response with generated content
-   * @throws com.noteflix.pcm.llm.exception.LLMException if request fails
-   */
-  LLMResponse sendMessage(LLMRequest request) throws com.noteflix.pcm.llm.exception.LLMException;
+    /**
+     * Send a message to the LLM and get response
+     *
+     * <p>This is the core method that all providers must implement
+     *
+     * @param request The LLM request containing messages and parameters
+     * @return The LLM response with generated content
+     * @throws com.noteflix.pcm.llm.exception.LLMException if request fails
+     */
+    LLMResponse sendMessage(LLMRequest request) throws com.noteflix.pcm.llm.exception.LLMException;
 
-  /**
-   * Get the provider name
-   *
-   * @return Provider name (e.g., "OpenAI", "Anthropic", "Ollama")
-   */
-  String getProviderName();
+    /**
+     * Get the provider name
+     *
+     * @return Provider name (e.g., "OpenAI", "Anthropic", "Ollama")
+     */
+    String getProviderName();
 
-  /**
-   * Check if the provider is available/reachable
-   *
-   * @return true if provider is available
-   */
-  boolean isAvailable();
+    /**
+     * Check if the provider is available/reachable
+     *
+     * @return true if provider is available
+     */
+    boolean isAvailable();
 
-  /**
-   * Get the model name this client is configured for
-   *
-   * @return Model name (e.g., "gpt-4", "claude-3-5-sonnet")
-   */
-  String getModel();
+    /**
+     * Get the model name this client is configured for
+     *
+     * @return Model name (e.g., "gpt-4", "claude-3-5-sonnet")
+     */
+    String getModel();
 }

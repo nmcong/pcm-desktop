@@ -2,7 +2,8 @@
 
 ## 📋 Overview
 
-`AIExtractionService` uses **ProviderRegistry** to automatically extract knowledge items from text using any configured AI provider (OpenAI, Claude, Gemini, ViByte, HuggingFace).
+`AIExtractionService` uses **ProviderRegistry** to automatically extract knowledge items from text using any configured
+AI provider (OpenAI, Claude, Gemini, ViByte, HuggingFace).
 
 ### ✨ Features
 
@@ -69,10 +70,10 @@ Extract knowledge items from text using AI.
 
 - `text` (string) - Text to extract ideas from
 - `options` (object) - Optional configuration
-  - `maxItems` (number) - Max items to extract (default: 10)
-  - `temperature` (number) - AI temperature 0-1 (default: 0.3)
-  - `providerId` (string) - Specific provider ID or null for active
-  - `model` (string) - Specific model or null for provider default
+    - `maxItems` (number) - Max items to extract (default: 10)
+    - `temperature` (number) - AI temperature 0-1 (default: 0.3)
+    - `providerId` (string) - Specific provider ID or null for active
+    - `model` (string) - Specific model or null for provider default
 
 **Returns:** `Promise<Array<ExtractedItem>>`
 
@@ -144,10 +145,10 @@ Post-process extracted items with metadata.
 
 - `items` (Array) - Extracted items
 - `options` (object) - Options
-  - `defaultCategoryId` - Default category
-  - `additionalTags` - Tags to add
-  - `provider` - Provider name
-  - `model` - Model name
+    - `defaultCategoryId` - Default category
+    - `additionalTags` - Tags to add
+    - `provider` - Provider name
+    - `model` - Model name
 
 **Returns:** `Array<ProcessedItem>`
 

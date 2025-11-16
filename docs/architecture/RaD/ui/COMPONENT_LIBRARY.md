@@ -18,7 +18,8 @@
 
 ## Overview
 
-Component Library cung cấp các UI components tái sử dụng, nhất quán và dễ dàng customize. Tất cả components tuân theo AtlantaFX design system và JavaFX best practices.
+Component Library cung cấp các UI components tái sử dụng, nhất quán và dễ dàng customize. Tất cả components tuân theo
+AtlantaFX design system và JavaFX best practices.
 
 ### Design Principles
 
@@ -816,47 +817,48 @@ public class UserManagementPage extends BaseView {
 
 ## Component Catalog
 
-| Category | Component | Status | Priority |
-|----------|-----------|--------|----------|
-| **Buttons** |
-| | IconButton | 🔄 Planned | High |
-| | PrimaryButton | 🔄 Planned | High |
-| | SecondaryButton | 🔄 Planned | High |
-| | ButtonBuilder | 🔄 Planned | Medium |
-| **Cards** |
-| | Card | 🔄 Planned | High |
-| | StatCard | 🔄 Planned | High |
-| | InfoCard | 🔄 Planned | Medium |
-| **Forms** |
-| | FormField | 🔄 Planned | High |
-| | ValidatedTextField | 🔄 Planned | High |
-| | FormBuilder | 🔄 Planned | High |
-| **Dialogs** |
-| | DialogBuilder | 🔄 Planned | High |
-| | ConfirmDialog | 🔄 Planned | High |
-| | InfoDialog | 🔄 Planned | Medium |
-| **Lists** |
-| | ListItem | 🔄 Planned | High |
-| | AvatarListItem | 🔄 Planned | Medium |
-| | IconListItem | 🔄 Planned | Medium |
+| Category       | Component              | Status     | Priority |
+|----------------|------------------------|------------|----------|
+| **Buttons**    |
+|                | IconButton             | 🔄 Planned | High     |
+|                | PrimaryButton          | 🔄 Planned | High     |
+|                | SecondaryButton        | 🔄 Planned | High     |
+|                | ButtonBuilder          | 🔄 Planned | Medium   |
+| **Cards**      |
+|                | Card                   | 🔄 Planned | High     |
+|                | StatCard               | 🔄 Planned | High     |
+|                | InfoCard               | 🔄 Planned | Medium   |
+| **Forms**      |
+|                | FormField              | 🔄 Planned | High     |
+|                | ValidatedTextField     | 🔄 Planned | High     |
+|                | FormBuilder            | 🔄 Planned | High     |
+| **Dialogs**    |
+|                | DialogBuilder          | 🔄 Planned | High     |
+|                | ConfirmDialog          | 🔄 Planned | High     |
+|                | InfoDialog             | 🔄 Planned | Medium   |
+| **Lists**      |
+|                | ListItem               | 🔄 Planned | High     |
+|                | AvatarListItem         | 🔄 Planned | Medium   |
+|                | IconListItem           | 🔄 Planned | Medium   |
 | **Navigation** |
-| | NavigationBar | 🔄 Planned | Medium |
-| | Breadcrumb | 🔄 Planned | Medium |
-| | AppHeader | 🔄 Planned | High |
-| | SidebarView | ✅ Exists | High |
-| **Text** |
-| | UniversalTextComponent | ✅ Exists | High |
-| **Widgets** |
-| | SearchBox | 🔄 Planned | High |
-| | LoadingIndicator | 🔄 Planned | High |
-| | StatusBadge | 🔄 Planned | Medium |
-| | ThemeToggle | 🔄 Planned | Low |
-| **Layouts** |
-| | TwoColumnLayout | 🔄 Planned | High |
-| | ThreeColumnLayout | 🔄 Planned | Low |
-| | HeaderContentLayout | 🔄 Planned | Medium |
+|                | NavigationBar          | 🔄 Planned | Medium   |
+|                | Breadcrumb             | 🔄 Planned | Medium   |
+|                | AppHeader              | 🔄 Planned | High     |
+|                | SidebarView            | ✅ Exists   | High     |
+| **Text**       |
+|                | UniversalTextComponent | ✅ Exists   | High     |
+| **Widgets**    |
+|                | SearchBox              | 🔄 Planned | High     |
+|                | LoadingIndicator       | 🔄 Planned | High     |
+|                | StatusBadge            | 🔄 Planned | Medium   |
+|                | ThemeToggle            | 🔄 Planned | Low      |
+| **Layouts**    |
+|                | TwoColumnLayout        | 🔄 Planned | High     |
+|                | ThreeColumnLayout      | 🔄 Planned | Low      |
+|                | HeaderContentLayout    | 🔄 Planned | Medium   |
 
 **Status Legend:**
+
 - ✅ Exists: Component đã tồn tại
 - 🔄 Planned: Component sẽ được tạo trong refactoring
 - ⏸️ Deferred: Tạm hoãn

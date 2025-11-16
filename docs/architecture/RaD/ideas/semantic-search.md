@@ -1,6 +1,7 @@
 # Semantic Search (FTS5 + TF‑IDF) Design
 
-This document describes how to extend the requirement-analysis platform with a semantic/keyword search layer based on SQLite FTS5 (TF-IDF scoring) and how it integrates with existing metadata, AST, and vector search (Qdrant).
+This document describes how to extend the requirement-analysis platform with a semantic/keyword search layer based on
+SQLite FTS5 (TF-IDF scoring) and how it integrates with existing metadata, AST, and vector search (Qdrant).
 
 ---
 
@@ -69,30 +70,33 @@ BEGIN
 END;
 ```
 
-> Note: FTS5 already computes TF-IDF/BM25 scores via the `bm25()` function. Use `fts5_rank` or `bm25(search_index)` when querying.
+> Note: FTS5 already computes TF-IDF/BM25 scores via the `bm25()` function. Use `fts5_rank` or `bm25(search_index)` when
+> querying.
 
 ---
 
 ## 3. Ingestion Flow
 
 1. **Source Detection**  
-   During the “Source Scan & AST Build” stage (see `system-analysis.md`), identify textual artifacts that should be searchable:
-   - Code files (after stripping comments? optional)
-   - Markdown/HTML docs
-   - Knowledge base articles
-   - Agent responses (for retro queries)
+   During the “Source Scan & AST Build” stage (see `system-analysis.md`), identify textual artifacts that should be
+   searchable:
+    - Code files (after stripping comments? optional)
+    - Markdown/HTML docs
+    - Knowledge base articles
+    - Agent responses (for retro queries)
 
 2. **Change Check**  
    For each artifact, compute checksum:
-   - If `search_corpus` already has the same checksum → skip.
-   - Otherwise upsert content and let FTS triggers update `search_index`.
+    - If `search_corpus` already has the same checksum → skip.
+    - Otherwise upsert content and let FTS triggers update `search_index`.
 
-3. **Normalization**  
-   - Optional: store normalized text (lowercase, remove sensitive data) in `content`.
-   - Keep original path/title in `label` for display.
+3. **Normalization**
+    - Optional: store normalized text (lowercase, remove sensitive data) in `content`.
+    - Keep original path/title in `label` for display.
 
-4. **Chunk Control**  
-   - For very large files, split into sections (i.e., align with `vector_documents` chunk_id) and store each chunk as a separate corpus row.
+4. **Chunk Control**
+    - For very large files, split into sections (i.e., align with `vector_documents` chunk_id) and store each chunk as a
+      separate corpus row.
 
 ---
 
@@ -100,7 +104,7 @@ END;
 
 1. **Receive requirement** (from `user_requests`).
 2. **Intent classification** (optional) to identify project/subsystem filters.
-3. **FTS Search**  
+3. **FTS Search**
    ```sql
    SELECT corpus_id, project_id, source_type, label,
           bm25(search_index, 1.2, 0.75) AS score
@@ -111,15 +115,15 @@ END;
     LIMIT 50;
    ```
 4. **Vector Search** (Qdrant) using the same query as embedding.
-5. **Score Fusion**  
-   - Normalize FTS and vector scores (min-max or z-normalization).
-   - Weighted sum or reciprocal rank fusion to produce final candidate list.
-6. **Context Assembly**  
-   - Fetch metadata via `search_corpus` (paths, line numbers).
-   - Pair with AST info if needed (via `file_id` → `source_files` → `ast_nodes`).
-7. **LLM Prompting**  
-   - Provide fused context to LLM along with request.
-   - Log chosen contexts in `request_artifacts`.
+5. **Score Fusion**
+    - Normalize FTS and vector scores (min-max or z-normalization).
+    - Weighted sum or reciprocal rank fusion to produce final candidate list.
+6. **Context Assembly**
+    - Fetch metadata via `search_corpus` (paths, line numbers).
+    - Pair with AST info if needed (via `file_id` → `source_files` → `ast_nodes`).
+7. **LLM Prompting**
+    - Provide fused context to LLM along with request.
+    - Log chosen contexts in `request_artifacts`.
 
 ---
 
@@ -127,7 +131,8 @@ END;
 
 - `POST /search/fts`: takes text query, optional filters (project, source_type), returns ranked hits and metadata.
 - `POST /search/hybrid`: executes both FTS and vector search, returns fused results plus trace (scores, chosen context).
-- `POST /corpus/reindex`: optionally re-index a set of files/projects; triggers recalculation of `search_corpus` entries.
+- `POST /corpus/reindex`: optionally re-index a set of files/projects; triggers recalculation of `search_corpus`
+  entries.
 
 Each endpoint logs latency and number of hits for observability.
 
@@ -136,11 +141,13 @@ Each endpoint logs latency and number of hits for observability.
 ## 6. Maintenance & Performance Tips
 
 1. **Vacuum** FTS tables periodically: `INSERT INTO search_index(search_index) VALUES('optimize');`
-2. **FTS external content**: if dataset grows large, switch to the “external content” mode to keep FTS index slim and rely on `search_corpus` as the content table.
+2. **FTS external content**: if dataset grows large, switch to the “external content” mode to keep FTS index slim and
+   rely on `search_corpus` as the content table.
 3. **Stop-word tuning**: configure `tokenize = 'unicode61'` with custom stop-word list to match domain vocabulary.
 4. **Query rewriting**: support quotes for exact matches, prefix search (`token*`), and boolean operators (AND/OR/NOT).
 5. **Security**: sanitize user queries to prevent injection (FTS uses its own syntax).
-6. **Monitoring**: track `bm25` score distributions to detect drift; low scores may indicate stale corpus or domain mismatch.
+6. **Monitoring**: track `bm25` score distributions to detect drift; low scores may indicate stale corpus or domain
+   mismatch.
 
 ---
 
@@ -148,6 +155,8 @@ Each endpoint logs latency and number of hits for observability.
 
 - Align ingestion with `system-analysis.md` (Section 4.2/4.3).
 - Reference `vector_documents` to avoid duplicate chunking.
-- ER relationships: `search_corpus` connects to `projects` and `source_files`. Update `system-analysis-erd.md` if the new table is adopted.
+- ER relationships: `search_corpus` connects to `projects` and `source_files`. Update `system-analysis-erd.md` if the
+  new table is adopted.
 
-This semantic search layer allows the platform to answer keyword-heavy queries rapidly while still benefiting from deep understanding via RAG/LLM.
+This semantic search layer allows the platform to answer keyword-heavy queries rapidly while still benefiting from deep
+understanding via RAG/LLM.

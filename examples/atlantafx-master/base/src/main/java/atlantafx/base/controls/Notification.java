@@ -29,6 +29,19 @@ import org.jspecify.annotations.Nullable;
  */
 public class Notification extends Control {
 
+    protected final ObjectProperty<@Nullable EventHandler<? super Event>> onClose =
+            new SimpleObjectProperty<>(this, "onClose");
+    private final ObjectProperty<@Nullable Node> graphic = new SimpleObjectProperty<>(this, "graphic");
+    private final StringProperty message = new SimpleStringProperty(this, "message");
+    private final ReadOnlyObjectWrapper<ObservableList<Button>> primaryActions =
+            new ReadOnlyObjectWrapper<>(this, "primaryActions", FXCollections.observableArrayList());
+
+    ///////////////////////////////////////////////////////////////////////////
+    // Properties                                                            //
+    ///////////////////////////////////////////////////////////////////////////
+    private final ReadOnlyObjectWrapper<ObservableList<MenuItem>> secondaryActions =
+            new ReadOnlyObjectWrapper<>(this, "secondaryActions", FXCollections.observableArrayList());
+
     /**
      * Creates an empty Notification.
      */
@@ -70,10 +83,6 @@ public class Notification extends Control {
         return new NotificationSkin(this);
     }
 
-    ///////////////////////////////////////////////////////////////////////////
-    // Properties                                                            //
-    ///////////////////////////////////////////////////////////////////////////
-
     /**
      * Represents an optional graphical component that can be displayed alongside
      * the notification message.
@@ -81,8 +90,6 @@ public class Notification extends Control {
     public ObjectProperty<@Nullable Node> graphicProperty() {
         return graphic;
     }
-
-    private final ObjectProperty<@Nullable Node> graphic = new SimpleObjectProperty<>(this, "graphic");
 
     public @Nullable Node getGraphic() {
         return graphic.get();
@@ -99,8 +106,6 @@ public class Notification extends Control {
     public StringProperty messageProperty() {
         return message;
     }
-
-    private final StringProperty message = new SimpleStringProperty(this, "message");
 
     public @Nullable String getMessage() {
         return message.get();
@@ -121,9 +126,6 @@ public class Notification extends Control {
     public ReadOnlyObjectProperty<ObservableList<Button>> primaryActionsProperty() {
         return primaryActions.getReadOnlyProperty();
     }
-
-    private final ReadOnlyObjectWrapper<ObservableList<Button>> primaryActions =
-        new ReadOnlyObjectWrapper<>(this, "primaryActions", FXCollections.observableArrayList());
 
     public ObservableList<Button> getPrimaryActions() {
         return primaryActions.get();
@@ -149,9 +151,6 @@ public class Notification extends Control {
         return secondaryActions.getReadOnlyProperty();
     }
 
-    private final ReadOnlyObjectWrapper<ObservableList<MenuItem>> secondaryActions =
-        new ReadOnlyObjectWrapper<>(this, "secondaryActions", FXCollections.observableArrayList());
-
     public ObservableList<MenuItem> getSecondaryActions() {
         return secondaryActions.get();
     }
@@ -172,9 +171,6 @@ public class Notification extends Control {
     public ObjectProperty<@Nullable EventHandler<? super Event>> onCloseProperty() {
         return onClose;
     }
-
-    protected final ObjectProperty<@Nullable EventHandler<? super Event>> onClose =
-        new SimpleObjectProperty<>(this, "onClose");
 
     public @Nullable EventHandler<? super Event> getOnClose() {
         return onClose.get();

@@ -7,9 +7,11 @@
 ## 📚 Danh Mục Tài Liệu
 
 ### 1️⃣ [LLM_REFACTOR_DESIGN.md](./LLM_REFACTOR_DESIGN.md)
+
 **Thiết kế kiến trúc tổng thể cho LLM Module**
 
 **Nội dung chính:**
+
 - ✅ Simplified API - Một phương thức duy nhất `provider.chat()`
 - ✅ Provider Registry - Quản lý và chuyển đổi providers
 - ✅ Token Limiting - Giới hạn tokens với custom counter
@@ -22,6 +24,7 @@
 - ✅ Common Patterns - Error handling, retry, token counting, context management
 
 **Kiến trúc:**
+
 ```
 ProviderRegistry
   ├── OpenAI Provider
@@ -37,6 +40,7 @@ Each Provider implements:
 ```
 
 **Đọc khi:**
+
 - Cần hiểu tổng quan về kiến trúc LLM module
 - Thiết kế providers mới
 - Implement core features
@@ -44,9 +48,11 @@ Each Provider implements:
 ---
 
 ### 2️⃣ [LLM_MULTIPLE_TOOLS_AND_SUMMARY.md](./LLM_MULTIPLE_TOOLS_AND_SUMMARY.md)
+
 **Chi tiết về multiple tool calls và auto-summarization**
 
 **Nội dung chính:**
+
 - ✅ **Multiple Tool Calls** - LLM có thể gọi nhiều tools trong một response
 - ✅ **Sequential Execution** - Thực thi tools theo thứ tự
 - ✅ **Parallel Execution** - Tối ưu với dependency analysis
@@ -55,15 +61,18 @@ Each Provider implements:
 - ✅ **Smart Context Management** - Quản lý context window thông minh
 
 **Tool Execution Strategies:**
+
 - Sequential: Thực thi từng tool theo thứ tự
 - Parallel: Phân tích dependencies và chạy song song khi có thể
 
 **Summarization Strategies:**
+
 - LLMSummarizer: Dùng LLM để tóm tắt (chất lượng cao)
 - ExtractiveSummarizer: Trích xuất key points (nhanh, rẻ)
 - CustomSummarizer: Tùy chỉnh logic riêng
 
 **Đọc khi:**
+
 - Implement function calling với nhiều tools
 - Cần quản lý conversations dài
 - Tối ưu token usage
@@ -71,9 +80,11 @@ Each Provider implements:
 ---
 
 ### 3️⃣ [LLM_FUNCTION_ANNOTATION_DESIGN.md](./LLM_FUNCTION_ANNOTATION_DESIGN.md)
+
 **Annotation-based function definition với auto-scanning**
 
 **Nội dung chính:**
+
 - ✅ **@LLMFunction** - Đánh dấu methods là LLM-callable
 - ✅ **@Param** - Mô tả parameters với validation
 - ✅ **@FunctionProvider** - Đánh dấu classes chứa functions
@@ -82,6 +93,7 @@ Each Provider implements:
 - ✅ **Reflection-based Execution** - Gọi methods động
 
 **Example:**
+
 ```java
 @FunctionProvider
 public class SearchFunctions {
@@ -104,6 +116,7 @@ public class SearchFunctions {
 ```
 
 **Auto-registration:**
+
 ```java
 // At startup
 FunctionRegistry registry = FunctionRegistry.getInstance();
@@ -112,6 +125,7 @@ registry.scanPackage("com.noteflix.pcm.functions");
 ```
 
 **Đọc khi:**
+
 - Implement custom functions cho LLM
 - Setup function scanning
 - Integrate với DI container
@@ -119,9 +133,11 @@ registry.scanPackage("com.noteflix.pcm.functions");
 ---
 
 ### 4️⃣ [LLM_LOGGING_DESIGN.md](./LLM_LOGGING_DESIGN.md)
+
 **Logging và audit trail system cho LLM calls**
 
 **Nội dung chính:**
+
 - ✅ **Complete Audit Trail** - Lưu đầy đủ request/response
 - ✅ **Tool Execution Logs** - Log từng tool call với params & results
 - ✅ **Multiple Storage** - Database (SQLite) hoặc File (JSON)
@@ -130,23 +146,26 @@ registry.scanPackage("com.noteflix.pcm.functions");
 - ✅ **Analytics** - Token usage, cost tracking, performance metrics
 
 **Data Models:**
+
 - **LLMCallLog**: Toàn bộ thông tin 1 LLM call
-  - Request: messages, options, tools
-  - Response: content, thinking, tool calls, usage
-  - Metadata: timestamp, duration, user, session
-  - Error: có lỗi không, error message
+    - Request: messages, options, tools
+    - Response: content, thinking, tool calls, usage
+    - Metadata: timestamp, duration, user, session
+    - Error: có lỗi không, error message
 
 - **ToolCallLog**: Chi tiết execution của 1 tool
-  - Input: tool name, arguments
-  - Output: result hoặc error
-  - Timing: execution duration
+    - Input: tool name, arguments
+    - Output: result hoặc error
+    - Timing: execution duration
 
 **Storage Options:**
+
 - **DatabaseLogger**: SQLite với indexes (fast queries)
 - **FileLogger**: JSON files organized by date (simple)
 - **CompositeLogger**: Log to multiple destinations
 
 **Đọc khi:**
+
 - Setup logging cho production
 - Cần tracking costs
 - Debug LLM interactions
@@ -155,11 +174,13 @@ registry.scanPackage("com.noteflix.pcm.functions");
 ---
 
 ### 5️⃣ [LLM_TOOL_CACHE_AND_PROMPTS.md](./LLM_TOOL_CACHE_AND_PROMPTS.md)
+
 **Tool result caching và prompt template system**
 
 **Nội dung chính:**
 
 #### **A. Tool Result Caching**
+
 - ✅ **Cache Strategy Pattern** - Linh hoạt chọn cách xử lý tool results
 - ✅ **Smart Summarization** - Tự động quyết định full/summary
 - ✅ **Token Budget Control** - Kiểm soát chi phí tokens
@@ -168,28 +189,29 @@ registry.scanPackage("com.noteflix.pcm.functions");
 **Caching Strategies:**
 
 1. **AlwaysFullStrategy** (Default)
-   - Luôn gửi full results
-   - Accuracy tối đa
-   - Use case: Khi chính xác quan trọng nhất
+    - Luôn gửi full results
+    - Accuracy tối đa
+    - Use case: Khi chính xác quan trọng nhất
 
 2. **SmartSummarizationStrategy**
-   - Tự động quyết định dựa trên kích thước
-   - Small results: full
-   - Large results: summarize
-   - Medium: depends on context window
-   - Use case: Cân bằng accuracy vs cost
+    - Tự động quyết định dựa trên kích thước
+    - Small results: full
+    - Large results: summarize
+    - Medium: depends on context window
+    - Use case: Cân bằng accuracy vs cost
 
 3. **TokenBudgetStrategy**
-   - Strict token limit per tool result
-   - Use case: Budget constraints
+    - Strict token limit per tool result
+    - Use case: Budget constraints
 
 4. **AdaptiveStrategy**
-   - Học từ history
-   - Cache & reuse similar results
-   - Avoid summarization nếu gây lỗi
-   - Use case: Production optimization
+    - Học từ history
+    - Cache & reuse similar results
+    - Avoid summarization nếu gây lỗi
+    - Use case: Production optimization
 
 **Cache Decision Logic:**
+
 ```java
 CacheDecision {
     shouldCache: boolean        // Cache để reuse?
@@ -200,6 +222,7 @@ CacheDecision {
 ```
 
 #### **B. Prompt Template System**
+
 - ✅ **Template Registry** - Quản lý tập trung prompts
 - ✅ **Variable Substitution** - Dynamic prompt generation
 - ✅ **i18n Support** - Multi-language prompts
@@ -207,6 +230,7 @@ CacheDecision {
 - ✅ **Advanced Features** - Conditionals, loops, nested variables
 
 **Built-in Templates:**
+
 - `system.default` - Default system message
 - `system.with_role` - System message với role
 - `summarize.conversation` - Tóm tắt conversation
@@ -216,6 +240,7 @@ CacheDecision {
 - `error.tool_execution` - Tool error recovery
 
 **Multi-language Example:**
+
 ```java
 promptRegistry.register("system.helpful", I18nPromptTemplate.builder()
     .templatesByLocale(Map.of(
@@ -231,6 +256,7 @@ String prompt = promptRegistry.render("system.helpful", Map.of());
 ```
 
 **Đọc khi:**
+
 - Cần tối ưu token costs
 - Setup prompt templates
 - Implement multi-language support
@@ -239,14 +265,17 @@ String prompt = promptRegistry.render("system.helpful", Map.of());
 ---
 
 ### 6️⃣ [LLM_MODULE_STRUCTURE.md](./LLM_MODULE_STRUCTURE.md)
+
 **Current structure của LLM module (existing code)**
 
 **Nội dung chính:**
+
 - 📂 Package structure hiện tại
 - 📄 Các file quan trọng
 - 🔍 Code cần refactor
 
 **Đọc khi:**
+
 - Cần hiểu code hiện tại
 - Planning refactoring
 - Onboarding new developers
@@ -257,40 +286,41 @@ String prompt = promptRegistry.render("system.helpful", Map.of());
 
 ### **Tôi muốn...**
 
-| Mục tiêu | Đọc tài liệu | Phần cụ thể |
-|----------|--------------|-------------|
-| Hiểu tổng quan kiến trúc | [LLM_REFACTOR_DESIGN.md](./LLM_REFACTOR_DESIGN.md) | § New Architecture |
-| Setup providers | [LLM_REFACTOR_DESIGN.md](./LLM_REFACTOR_DESIGN.md) | § Provider Registry |
-| Implement function calling | [LLM_FUNCTION_ANNOTATION_DESIGN.md](./LLM_FUNCTION_ANNOTATION_DESIGN.md) | Toàn bộ |
-| Handle multiple tool calls | [LLM_MULTIPLE_TOOLS_AND_SUMMARY.md](./LLM_MULTIPLE_TOOLS_AND_SUMMARY.md) | § Multiple Tool Calls |
-| Setup logging | [LLM_LOGGING_DESIGN.md](./LLM_LOGGING_DESIGN.md) | § Complete Example |
-| Tối ưu token costs | [LLM_TOOL_CACHE_AND_PROMPTS.md](./LLM_TOOL_CACHE_AND_PROMPTS.md) | § Tool Result Caching |
-| Customize prompts | [LLM_TOOL_CACHE_AND_PROMPTS.md](./LLM_TOOL_CACHE_AND_PROMPTS.md) | § Prompt Template System |
-| Multi-language prompts | [LLM_TOOL_CACHE_AND_PROMPTS.md](./LLM_TOOL_CACHE_AND_PROMPTS.md) | § Multi-language Support |
-| Auto-summarize conversations | [LLM_MULTIPLE_TOOLS_AND_SUMMARY.md](./LLM_MULTIPLE_TOOLS_AND_SUMMARY.md) | § Auto Summarization |
+| Mục tiêu                     | Đọc tài liệu                                                             | Phần cụ thể              |
+|------------------------------|--------------------------------------------------------------------------|--------------------------|
+| Hiểu tổng quan kiến trúc     | [LLM_REFACTOR_DESIGN.md](./LLM_REFACTOR_DESIGN.md)                       | § New Architecture       |
+| Setup providers              | [LLM_REFACTOR_DESIGN.md](./LLM_REFACTOR_DESIGN.md)                       | § Provider Registry      |
+| Implement function calling   | [LLM_FUNCTION_ANNOTATION_DESIGN.md](./LLM_FUNCTION_ANNOTATION_DESIGN.md) | Toàn bộ                  |
+| Handle multiple tool calls   | [LLM_MULTIPLE_TOOLS_AND_SUMMARY.md](./LLM_MULTIPLE_TOOLS_AND_SUMMARY.md) | § Multiple Tool Calls    |
+| Setup logging                | [LLM_LOGGING_DESIGN.md](./LLM_LOGGING_DESIGN.md)                         | § Complete Example       |
+| Tối ưu token costs           | [LLM_TOOL_CACHE_AND_PROMPTS.md](./LLM_TOOL_CACHE_AND_PROMPTS.md)         | § Tool Result Caching    |
+| Customize prompts            | [LLM_TOOL_CACHE_AND_PROMPTS.md](./LLM_TOOL_CACHE_AND_PROMPTS.md)         | § Prompt Template System |
+| Multi-language prompts       | [LLM_TOOL_CACHE_AND_PROMPTS.md](./LLM_TOOL_CACHE_AND_PROMPTS.md)         | § Multi-language Support |
+| Auto-summarize conversations | [LLM_MULTIPLE_TOOLS_AND_SUMMARY.md](./LLM_MULTIPLE_TOOLS_AND_SUMMARY.md) | § Auto Summarization     |
 
 ---
 
 ## 📊 Feature Matrix
 
-| Feature | Design Doc | Priority | Status |
-|---------|-----------|----------|--------|
-| Provider Registry | [Design](./LLM_REFACTOR_DESIGN.md) | 🔴 High | Pending |
-| Token Counter | [Design](./LLM_REFACTOR_DESIGN.md) | 🔴 High | Pending |
-| Function Registry | [Design](./LLM_REFACTOR_DESIGN.md) | 🔴 High | Pending |
-| Event System | [Design](./LLM_REFACTOR_DESIGN.md) | 🔴 High | Pending |
+| Feature             | Design Doc                                    | Priority  | Status  |
+|---------------------|-----------------------------------------------|-----------|---------|
+| Provider Registry   | [Design](./LLM_REFACTOR_DESIGN.md)            | 🔴 High   | Pending |
+| Token Counter       | [Design](./LLM_REFACTOR_DESIGN.md)            | 🔴 High   | Pending |
+| Function Registry   | [Design](./LLM_REFACTOR_DESIGN.md)            | 🔴 High   | Pending |
+| Event System        | [Design](./LLM_REFACTOR_DESIGN.md)            | 🔴 High   | Pending |
 | Multiple Tool Calls | [Design](./LLM_MULTIPLE_TOOLS_AND_SUMMARY.md) | 🟡 Medium | Pending |
-| Auto Summarization | [Design](./LLM_MULTIPLE_TOOLS_AND_SUMMARY.md) | 🟡 Medium | Pending |
+| Auto Summarization  | [Design](./LLM_MULTIPLE_TOOLS_AND_SUMMARY.md) | 🟡 Medium | Pending |
 | Annotation Scanning | [Design](./LLM_FUNCTION_ANNOTATION_DESIGN.md) | 🟡 Medium | Pending |
-| LLM Call Logging | [Design](./LLM_LOGGING_DESIGN.md) | 🔴 High | Pending |
-| Tool Result Caching | [Design](./LLM_TOOL_CACHE_AND_PROMPTS.md) | 🟡 Medium | Pending |
-| Prompt Templates | [Design](./LLM_TOOL_CACHE_AND_PROMPTS.md) | 🟢 Low | Pending |
+| LLM Call Logging    | [Design](./LLM_LOGGING_DESIGN.md)             | 🔴 High   | Pending |
+| Tool Result Caching | [Design](./LLM_TOOL_CACHE_AND_PROMPTS.md)     | 🟡 Medium | Pending |
+| Prompt Templates    | [Design](./LLM_TOOL_CACHE_AND_PROMPTS.md)     | 🟢 Low    | Pending |
 
 ---
 
 ## 🏗️ Implementation Order
 
 ### **Phase 1: Core Infrastructure** 🔴
+
 1. Provider Interface & Registry
 2. Token Counter (default + custom)
 3. Message models với System support
@@ -299,14 +329,17 @@ String prompt = promptRegistry.render("system.helpful", Map.of());
 **Docs:** [LLM_REFACTOR_DESIGN.md](./LLM_REFACTOR_DESIGN.md)
 
 ### **Phase 2: Function Calling** 🔴
+
 1. Standardized Tool format
 2. FunctionRegistry basic
 3. Annotation scanning
 4. DI integration
 
-**Docs:** [LLM_REFACTOR_DESIGN.md](./LLM_REFACTOR_DESIGN.md), [LLM_FUNCTION_ANNOTATION_DESIGN.md](./LLM_FUNCTION_ANNOTATION_DESIGN.md)
+**Docs:
+** [LLM_REFACTOR_DESIGN.md](./LLM_REFACTOR_DESIGN.md), [LLM_FUNCTION_ANNOTATION_DESIGN.md](./LLM_FUNCTION_ANNOTATION_DESIGN.md)
 
 ### **Phase 3: Providers** 🔴
+
 1. Refactor OpenAI provider
 2. Refactor Anthropic provider
 3. Refactor Ollama provider
@@ -315,14 +348,17 @@ String prompt = promptRegistry.render("system.helpful", Map.of());
 **Docs:** [LLM_REFACTOR_DESIGN.md](./LLM_REFACTOR_DESIGN.md)
 
 ### **Phase 4: Advanced Features** 🟡
+
 1. Multiple tool calls support
 2. Tool result caching
 3. Auto-summarization
 4. Thinking mode
 
-**Docs:** [LLM_MULTIPLE_TOOLS_AND_SUMMARY.md](./LLM_MULTIPLE_TOOLS_AND_SUMMARY.md), [LLM_TOOL_CACHE_AND_PROMPTS.md](./LLM_TOOL_CACHE_AND_PROMPTS.md)
+**Docs:
+** [LLM_MULTIPLE_TOOLS_AND_SUMMARY.md](./LLM_MULTIPLE_TOOLS_AND_SUMMARY.md), [LLM_TOOL_CACHE_AND_PROMPTS.md](./LLM_TOOL_CACHE_AND_PROMPTS.md)
 
 ### **Phase 5: Observability** 🔴
+
 1. LLM call logging
 2. Tool execution logging
 3. Analytics & statistics
@@ -331,6 +367,7 @@ String prompt = promptRegistry.render("system.helpful", Map.of());
 **Docs:** [LLM_LOGGING_DESIGN.md](./LLM_LOGGING_DESIGN.md)
 
 ### **Phase 6: Polish** 🟢
+
 1. Prompt template system
 2. i18n prompts
 3. Error handling improvements
@@ -343,30 +380,35 @@ String prompt = promptRegistry.render("system.helpful", Map.of());
 ## 🔑 Key Design Decisions
 
 ### **1. Why Provider Registry Pattern?**
+
 - ✅ Easy to switch between providers
 - ✅ Centralized configuration
 - ✅ Consistent API across providers
 - ✅ Support multiple active providers
 
 ### **2. Why Annotation-based Functions?**
+
 - ✅ Declarative & clean
 - ✅ Auto-discovery
 - ✅ Type-safe with validation
 - ✅ Easy to maintain
 
 ### **3. Why Cache Tool Results?**
+
 - ✅ Avoid redundant expensive operations
 - ✅ Control token costs
 - ✅ Improve response time
 - ✅ Flexible strategies per use case
 
 ### **4. Why Prompt Templates?**
+
 - ✅ Separate prompts from code
 - ✅ Easy A/B testing
 - ✅ Multi-language support
 - ✅ Version control friendly
 
 ### **5. Why Comprehensive Logging?**
+
 - ✅ Debugging LLM interactions
 - ✅ Cost tracking & optimization
 - ✅ Audit trail for compliance
@@ -377,18 +419,21 @@ String prompt = promptRegistry.render("system.helpful", Map.of());
 ## 📖 How to Read These Docs
 
 ### **For Architects/Tech Leads:**
+
 1. Start with [LLM_REFACTOR_DESIGN.md](./LLM_REFACTOR_DESIGN.md) - Overall architecture
 2. Review all § Architecture sections
 3. Evaluate design decisions
 4. Plan implementation phases
 
 ### **For Developers (Implementing):**
+
 1. Read relevant spec for your feature
 2. Follow code examples
 3. Check § Integration sections
 4. Refer to § File Structure for where to put code
 
 ### **For New Team Members:**
+
 1. Start with [LLM_MODULE_STRUCTURE.md](./LLM_MODULE_STRUCTURE.md) - Current state
 2. Read [LLM_REFACTOR_DESIGN.md](./LLM_REFACTOR_DESIGN.md) - Future state
 3. Skim other docs to understand capabilities
@@ -436,16 +481,19 @@ All specifications follow these principles:
 ## 📞 Questions?
 
 **Architecture Questions:**
+
 - Review [LLM_REFACTOR_DESIGN.md](./LLM_REFACTOR_DESIGN.md) first
 - Check design principles section
 - Discuss with tech lead
 
 **Implementation Questions:**
+
 - Find the relevant spec
 - Check code examples
 - Refer to § Integration sections
 
 **Missing Information:**
+
 - Document is incomplete
 - Open an issue or discussion
 - Propose additions to specs
@@ -454,14 +502,14 @@ All specifications follow these principles:
 
 ## 📝 Document Status
 
-| Document | Version | Last Updated | Status |
-|----------|---------|--------------|--------|
-| LLM_REFACTOR_DESIGN.md | 1.0 | 2025-11-12 | ✅ Complete |
-| LLM_MULTIPLE_TOOLS_AND_SUMMARY.md | 1.0 | 2025-11-12 | ✅ Complete |
-| LLM_FUNCTION_ANNOTATION_DESIGN.md | 1.0 | 2025-11-12 | ✅ Complete |
-| LLM_LOGGING_DESIGN.md | 1.0 | 2025-11-12 | ✅ Complete |
-| LLM_TOOL_CACHE_AND_PROMPTS.md | 1.0 | 2025-11-12 | ✅ Complete |
-| README.md (this) | 1.0 | 2025-11-12 | ✅ Complete |
+| Document                          | Version | Last Updated | Status     |
+|-----------------------------------|---------|--------------|------------|
+| LLM_REFACTOR_DESIGN.md            | 1.0     | 2025-11-12   | ✅ Complete |
+| LLM_MULTIPLE_TOOLS_AND_SUMMARY.md | 1.0     | 2025-11-12   | ✅ Complete |
+| LLM_FUNCTION_ANNOTATION_DESIGN.md | 1.0     | 2025-11-12   | ✅ Complete |
+| LLM_LOGGING_DESIGN.md             | 1.0     | 2025-11-12   | ✅ Complete |
+| LLM_TOOL_CACHE_AND_PROMPTS.md     | 1.0     | 2025-11-12   | ✅ Complete |
+| README.md (this)                  | 1.0     | 2025-11-12   | ✅ Complete |
 
 ---
 

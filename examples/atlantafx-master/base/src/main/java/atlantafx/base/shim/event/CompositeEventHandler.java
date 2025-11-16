@@ -37,12 +37,12 @@ public final class CompositeEventHandler<T extends Event> {
 
     private EventHandler<? super T> eventHandler;
 
-    public void setEventHandler(final EventHandler<? super T> eventHandler) {
-        this.eventHandler = eventHandler;
-    }
-
     public EventHandler<? super T> getEventHandler() {
         return eventHandler;
+    }
+
+    public void setEventHandler(final EventHandler<? super T> eventHandler) {
+        this.eventHandler = eventHandler;
     }
 
     public void addEventHandler(final EventHandler<? super T> eventHandler) {
@@ -127,17 +127,17 @@ public final class CompositeEventHandler<T extends Event> {
     }
 
     private EventProcessorRecord<T> createEventHandlerRecord(
-        final EventHandler<? super T> eventHandler) {
+            final EventHandler<? super T> eventHandler) {
         return (eventHandler instanceof WeakEventHandler)
-            ? new WeakEventHandlerRecord<>((WeakEventHandler<? super T>) eventHandler)
-            : new NormalEventHandlerRecord<>(eventHandler);
+                ? new WeakEventHandlerRecord<>((WeakEventHandler<? super T>) eventHandler)
+                : new NormalEventHandlerRecord<>(eventHandler);
     }
 
     private EventProcessorRecord<T> createEventFilterRecord(
-        final EventHandler<? super T> eventFilter) {
+            final EventHandler<? super T> eventFilter) {
         return (eventFilter instanceof WeakEventHandler)
-            ? new WeakEventFilterRecord<>((WeakEventHandler<? super T>) eventFilter)
-            : new NormalEventFilterRecord<>(eventFilter);
+                ? new WeakEventFilterRecord<>((WeakEventHandler<? super T>) eventFilter)
+                : new NormalEventFilterRecord<>(eventFilter);
     }
 
     private void remove(final EventProcessorRecord<T> record) {
@@ -179,8 +179,8 @@ public final class CompositeEventHandler<T extends Event> {
     }
 
     private EventProcessorRecord<T> find(
-        final EventHandler<? super T> eventProcessor,
-        final boolean isFilter) {
+            final EventHandler<? super T> eventProcessor,
+            final boolean isFilter) {
         EventProcessorRecord<T> record = firstRecord;
         while (record != null) {
             if (record.isDisconnected()) {
@@ -225,11 +225,11 @@ public final class CompositeEventHandler<T extends Event> {
     }
 
     private static final class NormalEventHandlerRecord<T extends Event>
-        extends EventProcessorRecord<T> {
+            extends EventProcessorRecord<T> {
         private final EventHandler<? super T> eventHandler;
 
         public NormalEventHandlerRecord(
-            final EventHandler<? super T> eventHandler) {
+                final EventHandler<? super T> eventHandler) {
             this.eventHandler = eventHandler;
         }
 
@@ -260,11 +260,11 @@ public final class CompositeEventHandler<T extends Event> {
     }
 
     private static final class WeakEventHandlerRecord<T extends Event>
-        extends EventProcessorRecord<T> {
+            extends EventProcessorRecord<T> {
         private final WeakEventHandler<? super T> weakEventHandler;
 
         public WeakEventHandlerRecord(
-            final WeakEventHandler<? super T> weakEventHandler) {
+                final WeakEventHandler<? super T> weakEventHandler) {
             this.weakEventHandler = weakEventHandler;
         }
 
@@ -295,11 +295,11 @@ public final class CompositeEventHandler<T extends Event> {
     }
 
     private static final class NormalEventFilterRecord<T extends Event>
-        extends EventProcessorRecord<T> {
+            extends EventProcessorRecord<T> {
         private final EventHandler<? super T> eventFilter;
 
         public NormalEventFilterRecord(
-            final EventHandler<? super T> eventFilter) {
+                final EventHandler<? super T> eventFilter) {
             this.eventFilter = eventFilter;
         }
 
@@ -330,11 +330,11 @@ public final class CompositeEventHandler<T extends Event> {
     }
 
     private static final class WeakEventFilterRecord<T extends Event>
-        extends EventProcessorRecord<T> {
+            extends EventProcessorRecord<T> {
         private final WeakEventHandler<? super T> weakEventFilter;
 
         public WeakEventFilterRecord(
-            final WeakEventHandler<? super T> weakEventFilter) {
+                final WeakEventHandler<? super T> weakEventFilter) {
             this.weakEventFilter = weakEventFilter;
         }
 

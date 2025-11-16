@@ -21,18 +21,32 @@ import java.util.function.Consumer;
 
 public class TabsDragHandler {
 
-    public enum DragState { NONE, START, REORDER }
-
     protected static final Duration DRAG_DURATION = Duration.millis(120);
     protected static final int DRAG_FORWARDS = 1;
     protected static final int DRAG_BACKWARDS = -1;
     protected static final double DRAG_DISTANCE_THRESHOLD = 0.75;
-
+    protected final TabLine control;
+    protected final TabsContainer tabsContainer;
+    protected final TabLineBehavior behavior;
+    protected final ChangeListener<Tab.DragPolicy> dragPolicyListener;
+    protected @Nullable TabSkin dragTabSkin;
+    protected @Nullable TabSkin dropTabSkin;
+    protected @Nullable TabSkin transitionTabSkin;
+    protected DragState dragState = DragState.NONE;
+    protected double dragEventLocalX;
+    protected int dragTabStartIndex;
+    protected int dragTabCurrentIndex;
+    protected int dragDirection = DRAG_FORWARDS;
+    protected double dragTabSourceX;
+    protected double dragTabTransitionX;
+    protected final DragTransition dragTransition = createDragTransition();
+    protected double dragTabDestX;
+    protected final EventHandler<MouseEvent> tabMouseReleasedHandler = this::handleTabMouseReleased;
+    protected double dropTabSourceX;
+    protected double dropTabTransitionX;
+    protected final DragTransition dropTransition = createDropTransition();
     protected final EventHandler<MouseEvent> tabDraggedHandler = this::handleTabDragged;
     protected final EventHandler<MouseEvent> tabMousePressedHandler = this::handleTabMousePressed;
-    protected final EventHandler<MouseEvent> tabMouseReleasedHandler = this::handleTabMouseReleased;
-    protected final DragTransition dragTransition = createDragTransition();
-    protected final DragTransition dropTransition = createDropTransition();
     protected final ListChangeListener<Node> tabsDragListener = change -> {
         while (change.next()) {
             if (change.wasAdded()) {
@@ -47,26 +61,6 @@ public class TabsDragHandler {
             }
         }
     };
-
-    protected final TabLine control;
-    protected final TabsContainer tabsContainer;
-    protected final TabLineBehavior behavior;
-    protected final ChangeListener<Tab.DragPolicy> dragPolicyListener;
-
-    protected @Nullable TabSkin dragTabSkin;
-    protected @Nullable TabSkin dropTabSkin;
-    protected @Nullable TabSkin transitionTabSkin;
-    protected DragState dragState = DragState.NONE;
-    protected double dragEventLocalX;
-    protected int dragTabStartIndex;
-    protected int dragTabCurrentIndex;
-    protected int dragDirection = DRAG_FORWARDS;
-    protected double dragTabSourceX;
-    protected double dragTabTransitionX;
-    protected double dragTabDestX;
-    protected double dropTabSourceX;
-    protected double dropTabTransitionX;
-
     public TabsDragHandler(TabLine control,
                            TabsContainer tabsContainer,
                            TabLineBehavior behavior) {
@@ -101,8 +95,6 @@ public class TabsDragHandler {
         transitionTabSkin = null;
     }
 
-    //=========================================================================
-
     protected DragTransition createDragTransition() {
         var transition = new DragTransition(frac -> {
             if (dragTabSkin != null) {
@@ -119,6 +111,8 @@ public class TabsDragHandler {
 
         return transition;
     }
+
+    //=========================================================================
 
     protected DragTransition createDropTransition() {
         var transition = new DragTransition(frac -> {
@@ -356,6 +350,8 @@ public class TabsDragHandler {
         control.reorderTabs(from, to);
         control.getSelectionModel().select(fromTab);
     }
+
+    public enum DragState {NONE, START, REORDER}
 
     //=========================================================================
 

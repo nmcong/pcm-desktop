@@ -3,6 +3,7 @@
 package atlantafx.base.util;
 
 import atlantafx.base.theme.Styles;
+
 import java.util.ArrayDeque;
 import java.util.Collection;
 import java.util.Collections;
@@ -14,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -179,7 +181,7 @@ public interface BBCodeHandler {
         protected final Block root;
         protected final Deque<Tag> openTags = new ArrayDeque<>();
         protected final Deque<Block> openBlocks = new ArrayDeque<>();
-        protected char @Nullable[] doc;
+        protected char @Nullable [] doc;
         protected int textCursor;
 
         /**
@@ -465,12 +467,12 @@ public interface BBCodeHandler {
                     grid.setUserData(getListStartNumber(tag.getParam("ol")));
                     grid.getStyleClass().addAll("ol", "list");
                     grid.getColumnConstraints().addAll(
-                        new ColumnConstraints(
-                            Region.USE_PREF_SIZE, -1, Region.USE_PREF_SIZE, Priority.NEVER, HPos.LEFT, false
-                        ),
-                        new ColumnConstraints(
-                            -1, -1, -1, Priority.SOMETIMES, HPos.LEFT, false
-                        )
+                            new ColumnConstraints(
+                                    Region.USE_PREF_SIZE, -1, Region.USE_PREF_SIZE, Priority.NEVER, HPos.LEFT, false
+                            ),
+                            new ColumnConstraints(
+                                    -1, -1, -1, Priority.SOMETIMES, HPos.LEFT, false
+                            )
                     );
                     yield new Block(grid, null);
                 }
@@ -482,9 +484,9 @@ public interface BBCodeHandler {
                         // use Label instead of Text because of better vertical alignment
                         grid.addRow(grid.getRowCount(), new Label(getListItemNumber(grid)), text);
                         grid.getRowConstraints().add(
-                            new RowConstraints(
-                                -1, -1, -1, Priority.NEVER, VPos.TOP, false
-                            )
+                                new RowConstraints(
+                                        -1, -1, -1, Priority.NEVER, VPos.TOP, false
+                                )
                         );
                         yield new Block(text, text);
                     } else if (parent.node().getStyleClass().contains("ul")) {
@@ -548,7 +550,7 @@ public interface BBCodeHandler {
             var currentStyle = current.node().getStyle();
             var newStyle = getStyle();
             current.node().setStyle(
-                currentStyle != null && !currentStyle.isEmpty() ? currentStyle + ";" + newStyle : getStyle()
+                    currentStyle != null && !currentStyle.isEmpty() ? currentStyle + ";" + newStyle : getStyle()
             );
 
             if (!isGrid) { // grid requires col and row number
@@ -574,7 +576,7 @@ public interface BBCodeHandler {
             }
         }
 
-        protected void addStyleIfPresent(@Nullable Map<String,String> params,
+        protected void addStyleIfPresent(@Nullable Map<String, String> params,
                                          String name, String key, Collection<String> c) {
             if (params != null && params.containsKey(key)) {
                 c.add(name + ":" + params.get(key));
@@ -641,8 +643,8 @@ public interface BBCodeHandler {
         protected String getListItemNumber(GridPane grid) {
             int start = (int) Objects.requireNonNullElse(grid.getUserData(), 1);
             return start < OL_LETTER_OFFSET
-                ? (start + grid.getRowCount()) + "." // number
-                : (char) (start + grid.getRowCount() - OL_LETTER_OFFSET) + "."; // letter
+                    ? (start + grid.getRowCount()) + "." // number
+                    : (char) (start + grid.getRowCount() - OL_LETTER_OFFSET) + "."; // letter
         }
 
         protected Set<String> getStyleClass() {
@@ -732,10 +734,6 @@ public interface BBCodeHandler {
                @Nullable Set<String> styleClasses,
                @Nullable Set<String> styles) {
 
-        public enum Type {
-            BLOCK, TEXT, SELF_CLOSE
-        }
-
         public Tag {
             Objects.requireNonNull(name);
             Objects.requireNonNull(type);
@@ -759,6 +757,10 @@ public interface BBCodeHandler {
 
         public boolean isSelfClose() {
             return type == Type.SELF_CLOSE;
+        }
+
+        public enum Type {
+            BLOCK, TEXT, SELF_CLOSE
         }
     }
 }

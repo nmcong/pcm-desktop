@@ -3,7 +3,9 @@
 package atlantafx.base.layout;
 
 import atlantafx.base.controls.ModalPane;
+
 import java.util.Objects;
+
 import javafx.beans.NamedArg;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
@@ -29,6 +31,9 @@ public class ModalBox extends AnchorPane {
     protected final StackPane closeButton = new StackPane();
     protected final StackPane closeButtonIcon = new StackPane();
     protected final @Nullable String selector;
+    protected final ObjectProperty<EventHandler<? super Event>> onClose =
+            new SimpleObjectProperty<>(this, "onClose");
+    protected final BooleanProperty clearOnClose = new SimpleBooleanProperty(this, "clearOnClose");
     protected @Nullable ModalPane modalPane;
 
     /**
@@ -116,6 +121,10 @@ public class ModalBox extends AnchorPane {
         setCloseButtonPosition();
     }
 
+    ///////////////////////////////////////////////////////////////////////////
+    // Properties                                                            //
+    ///////////////////////////////////////////////////////////////////////////
+
     protected void setCloseButtonPosition() {
         setTopAnchor(closeButton, 10d);
         setRightAnchor(closeButton, 10d);
@@ -138,10 +147,6 @@ public class ModalBox extends AnchorPane {
         }
     }
 
-    ///////////////////////////////////////////////////////////////////////////
-    // Properties                                                            //
-    ///////////////////////////////////////////////////////////////////////////
-
     /**
      * The property representing the user specified close handler.
      *
@@ -152,9 +157,6 @@ public class ModalBox extends AnchorPane {
     public ObjectProperty<EventHandler<? super Event>> onCloseProperty() {
         return onClose;
     }
-
-    protected final ObjectProperty<EventHandler<? super Event>> onClose =
-        new SimpleObjectProperty<>(this, "onClose");
 
     public EventHandler<? super Event> getOnClose() {
         return onClose.get();
@@ -172,8 +174,6 @@ public class ModalBox extends AnchorPane {
     public BooleanProperty clearOnCloseProperty() {
         return clearOnClose;
     }
-
-    protected final BooleanProperty clearOnClose = new SimpleBooleanProperty(this, "clearOnClose");
 
     public boolean isClearOnClose() {
         return clearOnClose.get();

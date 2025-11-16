@@ -6,7 +6,8 @@
 
 ## 📋 **Overview**
 
-This guide shows how to integrate the new LLM architecture (with CustomAPIProvider, thinking mode, token tracking) into your JavaFX UI.
+This guide shows how to integrate the new LLM architecture (with CustomAPIProvider, thinking mode, token tracking) into
+your JavaFX UI.
 
 ---
 
@@ -558,7 +559,7 @@ After integration:
 ✅ **Multi-Provider** - Easy switching between providers  
 ✅ **CustomAPIProvider** - Use your own LLM service  
 ✅ **Event-Driven** - Responsive UI updates  
-✅ **Production Ready** - Robust error handling  
+✅ **Production Ready** - Robust error handling
 
 ---
 

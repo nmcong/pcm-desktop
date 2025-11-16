@@ -3,6 +3,7 @@
 package atlantafx.decorations;
 
 import java.util.Objects;
+
 import javafx.scene.control.Control;
 import javafx.scene.control.Skin;
 import javafx.scene.layout.HeaderBar;

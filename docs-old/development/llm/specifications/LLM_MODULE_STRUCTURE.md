@@ -58,6 +58,7 @@ src/main/java/com/noteflix/pcm/llm/
 ## 🏗️ Architecture Pattern
 
 ### **Strategy Pattern** (Client Implementations)
+
 ```
 LLMClient (Interface)
     ↑
@@ -67,6 +68,7 @@ LLMClient (Interface)
 ```
 
 ### **Factory Pattern** (Client Creation)
+
 ```
 LLMClientFactory
     │
@@ -75,6 +77,7 @@ LLMClientFactory
 ```
 
 ### **Observer Pattern** (Streaming)
+
 ```
 StreamingObserver (Interface)
     │
@@ -90,6 +93,7 @@ StreamingObserver (Interface)
 ### 1️⃣ **API Layer** (`api/`)
 
 #### `LLMClient.java` - Base Interface
+
 ```java
 public interface LLMClient {
     LLMResponse sendMessage(LLMRequest request);
@@ -99,12 +103,14 @@ public interface LLMClient {
 }
 ```
 
-**Mục đích:** 
+**Mục đích:**
+
 - ✅ Định nghĩa contract cho tất cả LLM providers
 - ✅ Dependency Inversion Principle
 - ✅ Dễ dàng swap providers
 
 #### `StreamingCapable.java`
+
 ```java
 public interface StreamingCapable {
     void streamMessage(LLMRequest request, StreamingObserver observer);
@@ -112,11 +118,13 @@ public interface StreamingCapable {
 ```
 
 **Mục đích:**
+
 - ✅ Support streaming responses (như ChatGPT)
 - ✅ Real-time token generation
 - ✅ Better UX
 
 #### `FunctionCallingCapable.java`
+
 ```java
 public interface FunctionCallingCapable {
     LLMResponse sendMessageWithFunctions(
@@ -127,11 +135,13 @@ public interface FunctionCallingCapable {
 ```
 
 **Mục đích:**
+
 - ✅ Support OpenAI function calling
 - ✅ Tool use (như Anthropic)
 - ✅ Agent capabilities
 
 #### `EmbeddingsCapable.java`
+
 ```java
 public interface EmbeddingsCapable {
     EmbeddingsResponse getEmbeddings(EmbeddingsRequest request);
@@ -139,6 +149,7 @@ public interface EmbeddingsCapable {
 ```
 
 **Mục đích:**
+
 - ✅ Vector embeddings cho RAG
 - ✅ Semantic search
 - ✅ Knowledge base integration
@@ -148,35 +159,39 @@ public interface EmbeddingsCapable {
 ### 2️⃣ **Client Layer** (`client/`)
 
 #### **OpenAI Client**
+
 - File: `openai/OpenAIClient.java`
 - Supports: GPT-4, GPT-3.5-turbo, GPT-4-turbo
 - Features:
-  - ✅ Chat completions
-  - ✅ Streaming với SSE
-  - ✅ Function calling
-  - ✅ Embeddings (text-embedding-ada-002)
+    - ✅ Chat completions
+    - ✅ Streaming với SSE
+    - ✅ Function calling
+    - ✅ Embeddings (text-embedding-ada-002)
 
 #### **Anthropic Client**
+
 - File: `anthropic/AnthropicClient.java`
 - Supports: Claude 3.5 Sonnet, Claude 3 Opus, Claude 3 Haiku
 - Features:
-  - ✅ Chat completions
-  - ✅ Tool use
-  - ✅ Long context (200k tokens)
+    - ✅ Chat completions
+    - ✅ Tool use
+    - ✅ Long context (200k tokens)
 
 #### **Ollama Client**
+
 - File: `ollama/OllamaClient.java`
 - Supports: Local models (Llama, Mistral, etc.)
 - Features:
-  - ✅ Local inference
-  - ✅ No API keys needed
-  - ✅ Privacy-first
+    - ✅ Local inference
+    - ✅ No API keys needed
+    - ✅ Privacy-first
 
 ---
 
 ### 3️⃣ **Factory Layer** (`factory/`)
 
 #### `LLMClientFactory.java`
+
 ```java
 public class LLMClientFactory {
     public LLMClient getClient(LLMProviderConfig config) {
@@ -190,6 +205,7 @@ public class LLMClientFactory {
 ```
 
 **Features:**
+
 - ✅ Singleton pattern
 - ✅ Client caching
 - ✅ Lazy initialization
@@ -202,6 +218,7 @@ public class LLMClientFactory {
 #### Key Models:
 
 **`LLMRequest.java`**
+
 ```java
 public class LLMRequest {
     private List<Message> messages;
@@ -213,6 +230,7 @@ public class LLMRequest {
 ```
 
 **`LLMResponse.java`**
+
 ```java
 public class LLMResponse {
     private String content;
@@ -224,6 +242,7 @@ public class LLMResponse {
 ```
 
 **`LLMChunk.java`** (for streaming)
+
 ```java
 public class LLMChunk {
     private String content;
@@ -233,6 +252,7 @@ public class LLMChunk {
 ```
 
 **`StreamingObserver.java`**
+
 ```java
 public interface StreamingObserver {
     void onChunk(LLMChunk chunk);
@@ -242,6 +262,7 @@ public interface StreamingObserver {
 ```
 
 **`LLMProviderConfig.java`**
+
 ```java
 public class LLMProviderConfig {
     private LLMProvider provider;  // OPENAI, ANTHROPIC, OLLAMA
@@ -264,6 +285,7 @@ LLMException (Base)
 ```
 
 **Hierarchy:**
+
 - ✅ Clear error types
 - ✅ Easy to catch and handle
 - ✅ Good error messages
@@ -273,6 +295,7 @@ LLMException (Base)
 ### 6️⃣ **Middleware Layer** (`middleware/`)
 
 #### `RateLimiter.java`
+
 ```java
 public class RateLimiter {
     // Token bucket algorithm
@@ -282,11 +305,13 @@ public class RateLimiter {
 ```
 
 **Mục đích:**
+
 - ✅ Prevent API rate limit errors
 - ✅ Configurable rates
 - ✅ Per-provider limits
 
 #### `RetryPolicy.java`
+
 ```java
 public class RetryPolicy {
     public <T> T execute(Callable<T> task);
@@ -296,11 +321,13 @@ public class RetryPolicy {
 ```
 
 **Mục đích:**
+
 - ✅ Handle transient errors
 - ✅ Automatic retry
 - ✅ Exponential backoff
 
 #### `RequestLogger.java`
+
 ```java
 public class RequestLogger {
     public void logRequest(LLMRequest request);
@@ -309,6 +336,7 @@ public class RequestLogger {
 ```
 
 **Mục đích:**
+
 - ✅ Debug requests/responses
 - ✅ Audit trail
 - ✅ Performance monitoring
@@ -318,6 +346,7 @@ public class RequestLogger {
 ### 7️⃣ **Service Layer** (`service/`)
 
 #### `LLMService.java` - Main Service
+
 ```java
 public class LLMService {
     // High-level methods
@@ -332,6 +361,7 @@ public class LLMService {
 ```
 
 **Mục đích:**
+
 - ✅ Simplified API
 - ✅ Business logic
 - ✅ Error handling
@@ -342,6 +372,7 @@ public class LLMService {
 ## 🎯 Usage Examples
 
 ### **Basic Chat**
+
 ```java
 LLMService service = new LLMService();
 service.initialize(LLMProviderConfig.builder()
@@ -355,6 +386,7 @@ System.out.println(response);
 ```
 
 ### **Streaming Chat**
+
 ```java
 service.chatStreaming("Tell me a story", new StreamingObserver() {
     @Override
@@ -375,6 +407,7 @@ service.chatStreaming("Tell me a story", new StreamingObserver() {
 ```
 
 ### **Function Calling**
+
 ```java
 List<FunctionDefinition> functions = List.of(
     FunctionDefinition.builder()
@@ -396,6 +429,7 @@ if (response.hasFunctionCall()) {
 ```
 
 ### **Switch Providers**
+
 ```java
 // Start with OpenAI
 service.initialize(openAIConfig);
@@ -414,25 +448,25 @@ service.switchProvider(ollamaConfig);
 ### **SOLID Principles**
 
 1. ✅ **Single Responsibility**
-   - Each client handles one provider
-   - Each middleware handles one concern
-   - Clear separation
+    - Each client handles one provider
+    - Each middleware handles one concern
+    - Clear separation
 
 2. ✅ **Open/Closed**
-   - Easy to add new providers (extend)
-   - Don't need to modify existing code
+    - Easy to add new providers (extend)
+    - Don't need to modify existing code
 
 3. ✅ **Liskov Substitution**
-   - All clients can replace `LLMClient`
-   - Polymorphism works correctly
+    - All clients can replace `LLMClient`
+    - Polymorphism works correctly
 
 4. ✅ **Interface Segregation**
-   - Small, focused interfaces
-   - Optional capabilities (Streaming, Functions, Embeddings)
+    - Small, focused interfaces
+    - Optional capabilities (Streaming, Functions, Embeddings)
 
 5. ✅ **Dependency Inversion**
-   - Depend on abstractions (`LLMClient`)
-   - Not on concrete implementations
+    - Depend on abstractions (`LLMClient`)
+    - Not on concrete implementations
 
 ### **Design Patterns**
 
@@ -448,26 +482,31 @@ service.switchProvider(ollamaConfig);
 ## 🚀 Benefits
 
 ### **Flexibility**
+
 - ✅ Easy to switch providers
 - ✅ Support multiple providers simultaneously
 - ✅ Provider-specific features available
 
 ### **Maintainability**
+
 - ✅ Clear structure
 - ✅ Easy to find code
 - ✅ Well-documented
 
 ### **Testability**
+
 - ✅ Mock `LLMClient` interface
 - ✅ Test each provider independently
 - ✅ Integration tests with real APIs
 
 ### **Extensibility**
+
 - ✅ Add new providers easily
 - ✅ Add new capabilities
 - ✅ Plugin architecture ready
 
 ### **Performance**
+
 - ✅ Client caching
 - ✅ Connection pooling
 - ✅ Rate limiting
@@ -478,6 +517,7 @@ service.switchProvider(ollamaConfig);
 ## 📈 Future Enhancements
 
 ### Planned Features:
+
 - [ ] **Embeddings Support** - For RAG systems
 - [ ] **Vision APIs** - GPT-4 Vision, Claude with images
 - [ ] **Audio APIs** - Whisper, TTS

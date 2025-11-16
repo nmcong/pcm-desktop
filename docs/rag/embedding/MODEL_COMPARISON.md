@@ -1,6 +1,7 @@
 # So sánh Models và Benchmarks
 
 ## 📚 Mục lục
+
 - [Tổng quan](#tổng-quan)
 - [Comparison Matrix](#comparison-matrix)
 - [Detailed Benchmarks](#detailed-benchmarks)
@@ -39,13 +40,13 @@ Test Data:
 
 ### Quick Comparison
 
-| Model | Dim | Speed | Quality | Memory | Size | Multilingual |
-|-------|-----|-------|---------|--------|------|--------------|
-| **all-MiniLM-L6-v2** | 384 | ⚡⚡⚡⚡⚡ | ⭐⭐⭐⭐ | 💚💚💚💚💚 | 90MB | ❌ |
-| **all-MiniLM-L12-v2** | 384 | ⚡⚡⚡⚡ | ⭐⭐⭐⭐ | 💚💚💚💚 | 120MB | ❌ |
-| **all-distilroberta-v1** | 768 | ⚡⚡⚡ | ⭐⭐⭐⭐⭐ | 💚💚💚 | 330MB | ❌ |
-| **all-mpnet-base-v2** | 768 | ⚡⚡⚡ | ⭐⭐⭐⭐⭐ | 💚💚💚 | 420MB | ❌ |
-| **multilingual-mpnet** | 768 | ⚡⚡ | ⭐⭐⭐⭐ | 💚💚 | 1GB | ✅ 50+ |
+| Model                    | Dim | Speed | Quality | Memory     | Size  | Multilingual |
+|--------------------------|-----|-------|---------|------------|-------|--------------|
+| **all-MiniLM-L6-v2**     | 384 | ⚡⚡⚡⚡⚡ | ⭐⭐⭐⭐    | 💚💚💚💚💚 | 90MB  | ❌            |
+| **all-MiniLM-L12-v2**    | 384 | ⚡⚡⚡⚡  | ⭐⭐⭐⭐    | 💚💚💚💚   | 120MB | ❌            |
+| **all-distilroberta-v1** | 768 | ⚡⚡⚡   | ⭐⭐⭐⭐⭐   | 💚💚💚     | 330MB | ❌            |
+| **all-mpnet-base-v2**    | 768 | ⚡⚡⚡   | ⭐⭐⭐⭐⭐   | 💚💚💚     | 420MB | ❌            |
+| **multilingual-mpnet**   | 768 | ⚡⚡    | ⭐⭐⭐⭐    | 💚💚       | 1GB   | ✅ 50+        |
 
 ### Detailed Specifications
 
@@ -258,6 +259,7 @@ Note: float32 format, không nén
 ### Use Case 1: Code Documentation Search
 
 **Setup:**
+
 - 5,000 Java files
 - Average file: 200 lines
 - Queries: Natural language questions
@@ -284,6 +286,7 @@ Reason:
 ### Use Case 2: Customer Support FAQ
 
 **Setup:**
+
 - 2,000 FAQ entries
 - ~1,000 queries/day
 - Real-time requirement: < 100ms
@@ -306,6 +309,7 @@ Recommendation:
 ### Use Case 3: Academic Paper Search
 
 **Setup:**
+
 - 100,000 papers
 - Complex scientific queries
 - Batch processing (offline)
@@ -330,6 +334,7 @@ Reason:
 ### Use Case 4: E-commerce Product Search
 
 **Setup:**
+
 - 50,000 products
 - User search queries
 - Target: < 50ms response
@@ -391,11 +396,13 @@ Recommendation: all-MiniLM-L6-v2
 ### 90-10 Rule
 
 **90% of use cases:** `all-MiniLM-L6-v2`
+
 - Fast enough
 - Quality good enough
 - Resource efficient
 
 **10% of use cases requiring:**
+
 - **Best quality:** `all-mpnet-base-v2`
 - **Multilingual:** `paraphrase-multilingual-mpnet-base-v2`
 - **Domain-specific:** Specialized models
@@ -407,11 +414,13 @@ Recommendation: all-MiniLM-L6-v2
 ### From MiniLM-L6 to MPNet
 
 **Khi nào migrate:**
+
 - Quality không đủ tốt
 - Có thêm resources
 - Speed không phải vấn đề
 
 **Impact:**
+
 ```
 Quality:    +4.9%  (69.4 → 72.8)
 Speed:      -61%   (15ms → 39ms)
@@ -441,6 +450,7 @@ EmbeddingService service = new DJLEmbeddingService(
 ```
 
 **⚠️ Important:**
+
 - Embeddings từ models khác nhau KHÔNG tương thích
 - Phải re-index toàn bộ documents
 - Dimension khác nhau: 384 → 768
@@ -448,6 +458,7 @@ EmbeddingService service = new DJLEmbeddingService(
 ### From Monolingual to Multilingual
 
 **Impact:**
+
 ```
 Languages:  English → 50+ languages
 Speed:      -74%    (15ms → 58ms)
@@ -456,10 +467,12 @@ Quality:    -5.3%   (69.4 → 65.7, English only)
 ```
 
 **When to migrate:**
+
 - Need multilingual support
 - Worth the performance trade-off
 
 **Code:**
+
 ```java
 // Same interface, just change model path
 EmbeddingService service = new DJLEmbeddingService(
@@ -592,16 +605,19 @@ Overall winner: all-MiniLM-L6-v2
 ### Chọn model trong 30 giây:
 
 **1. Bạn cần multilingual?**
-   - Yes → `paraphrase-multilingual-mpnet-base-v2`
-   - No → Tiếp 👇
+
+- Yes → `paraphrase-multilingual-mpnet-base-v2`
+- No → Tiếp 👇
 
 **2. Resources có giới hạn? (RAM < 1GB hoặc cần fast)**
-   - Yes → `all-MiniLM-L6-v2` ⭐
-   - No → Tiếp 👇
+
+- Yes → `all-MiniLM-L6-v2` ⭐
+- No → Tiếp 👇
 
 **3. Quality quan trọng nhất?**
-   - Yes → `all-mpnet-base-v2`
-   - No → `all-MiniLM-L6-v2` ⭐
+
+- Yes → `all-mpnet-base-v2`
+- No → `all-MiniLM-L6-v2` ⭐
 
 **Default choice:** `all-MiniLM-L6-v2` ✅
 

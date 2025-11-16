@@ -3,17 +3,17 @@
 @use "../settings/config" as cfg;
 @use "../settings/effects";
 
-$color-bg:     -color-bg-default !default;
+$color-bg: -color-bg-default !default;
 $color-border: -color-border-default !default;
-$padding-x:    0.75em !default;
-$padding-y:    1em    !default;
-$spacing:      1em   !default;
+$padding-x: 0.75em !default;
+$padding-y: 1em !default;
+$spacing: 1em !default;
 
 $title-font-size: cfg.$font-title-4;
 
 .card {
 
-  >.container {
+  > .container {
     -fx-background-color: $color-bg;
     -fx-background-radius: cfg.$border-radius;
     -fx-alignment: TOP_LEFT;
@@ -24,27 +24,26 @@ $title-font-size: cfg.$font-title-4;
     -fx-border-width: cfg.$border-width;
     -fx-border-radius: cfg.$border-radius;
 
-    >.header {
+    > .header {
       -fx-alignment: TOP_LEFT;
       -fx-padding: 0 $padding-x 0 $padding-x 0;
     }
 
-    >.sub-header {
+    > .sub-header {
       -fx-alignment: TOP_LEFT;
       -fx-padding: 0 $padding-x 0 $padding-x 0;
     }
 
-    >.body {
+    > .body {
       // double vertical spacing for body
       -fx-padding: 0 $padding-x 0 $padding-x;
       -fx-alignment: TOP_LEFT;
     }
 
-    >.footer {
+    > .footer {
       -fx-alignment: TOP_LEFT;
       -fx-padding: 0 $padding-x 0 $padding-x 0;
     }
-
 
 
     TextFlow {
@@ -57,7 +56,7 @@ $title-font-size: cfg.$font-title-4;
   }
 
   &:has-image {
-    >.container >.sub-header {
+    > .container > .sub-header {
       -fx-padding: 0;
 
       &:disabled {
@@ -66,7 +65,7 @@ $title-font-size: cfg.$font-title-4;
     }
   }
 
-  &.edge-to-edge>.container {
+  &.edge-to-edge > .container {
     -fx-background-radius: 0;
     -fx-border-width: 0;
     -fx-border-radius: 0;
@@ -74,12 +73,12 @@ $title-font-size: cfg.$font-title-4;
   }
 
   .tile {
-    >.container {
+    > .container {
       // prevent double indentation
       -fx-padding: 0;
       -fx-background-radius: 0;
 
-      >.header >.title {
+      > .header > .title {
         -fx-font-size: $title-font-size;
       }
     }

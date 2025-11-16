@@ -42,8 +42,8 @@
                             <span class="input-group-text">
                                 <i class="bi bi-search"></i>
                             </span>
-                            <input type="text" class="form-control" name="search" 
-                                   placeholder="Tìm kiếm theo tên, email, mã nhân viên..." 
+                            <input type="text" class="form-control" name="search"
+                                   placeholder="Tìm kiếm theo tên, email, mã nhân viên..."
                                    value="${search}">
                         </div>
                     </div>
@@ -66,78 +66,78 @@
                 <div class="table-responsive">
                     <table class="table table-striped table-hover" id="employeeTable">
                         <thead class="table-dark">
-                            <tr>
-                                <th>Mã NV</th>
-                                <th>Họ và tên</th>
-                                <th>Email</th>
-                                <th>Số điện thoại</th>
-                                <th>Phòng ban</th>
-                                <th>Chức vụ</th>
-                                <th>Trạng thái</th>
-                                <th>Thao tác</th>
-                            </tr>
+                        <tr>
+                            <th>Mã NV</th>
+                            <th>Họ và tên</th>
+                            <th>Email</th>
+                            <th>Số điện thoại</th>
+                            <th>Phòng ban</th>
+                            <th>Chức vụ</th>
+                            <th>Trạng thái</th>
+                            <th>Thao tác</th>
+                        </tr>
                         </thead>
                         <tbody>
-                            <c:choose>
-                                <c:when test="${empty employees}">
+                        <c:choose>
+                            <c:when test="${empty employees}">
+                                <tr>
+                                    <td colspan="8" class="text-center py-4">
+                                        <i class="bi bi-inbox" style="font-size: 3rem;"></i>
+                                        <p class="mt-2">Không có nhân viên nào</p>
+                                    </td>
+                                </tr>
+                            </c:when>
+                            <c:otherwise>
+                                <c:forEach items="${employees}" var="employee">
                                     <tr>
-                                        <td colspan="8" class="text-center py-4">
-                                            <i class="bi bi-inbox" style="font-size: 3rem;"></i>
-                                            <p class="mt-2">Không có nhân viên nào</p>
+                                        <td><strong>${employee.employeeCode}</strong></td>
+                                        <td>${employee.fullName}</td>
+                                        <td>${employee.email}</td>
+                                        <td>${employee.phone}</td>
+                                        <td>
+                                            <c:if test="${not empty employee.department}">
+                                                <span class="badge bg-info">${employee.department.name}</span>
+                                            </c:if>
+                                        </td>
+                                        <td>${employee.position}</td>
+                                        <td>
+                                            <c:choose>
+                                                <c:when test="${employee.status eq 'ACTIVE'}">
+                                                    <span class="badge bg-success">Đang làm việc</span>
+                                                </c:when>
+                                                <c:when test="${employee.status eq 'INACTIVE'}">
+                                                    <span class="badge bg-secondary">Nghỉ việc</span>
+                                                </c:when>
+                                                <c:when test="${employee.status eq 'ON_LEAVE'}">
+                                                    <span class="badge bg-warning">Nghỉ phép</span>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <span class="badge bg-danger">Tạm ngưng</span>
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </td>
+                                        <td>
+                                            <div class="btn-group" role="group">
+                                                <a href="<c:url value='/employees/view/${employee.id}'/>"
+                                                   class="btn btn-sm btn-info" title="Xem chi tiết">
+                                                    <i class="bi bi-eye"></i>
+                                                </a>
+                                                <a href="<c:url value='/employees/edit/${employee.id}'/>"
+                                                   class="btn btn-sm btn-warning" title="Chỉnh sửa">
+                                                    <i class="bi bi-pencil"></i>
+                                                </a>
+                                                <button type="button" class="btn btn-sm btn-danger delete-btn"
+                                                        data-id="${employee.id}"
+                                                        data-name="${employee.fullName}"
+                                                        title="Xóa">
+                                                    <i class="bi bi-trash"></i>
+                                                </button>
+                                            </div>
                                         </td>
                                     </tr>
-                                </c:when>
-                                <c:otherwise>
-                                    <c:forEach items="${employees}" var="employee">
-                                        <tr>
-                                            <td><strong>${employee.employeeCode}</strong></td>
-                                            <td>${employee.fullName}</td>
-                                            <td>${employee.email}</td>
-                                            <td>${employee.phone}</td>
-                                            <td>
-                                                <c:if test="${not empty employee.department}">
-                                                    <span class="badge bg-info">${employee.department.name}</span>
-                                                </c:if>
-                                            </td>
-                                            <td>${employee.position}</td>
-                                            <td>
-                                                <c:choose>
-                                                    <c:when test="${employee.status eq 'ACTIVE'}">
-                                                        <span class="badge bg-success">Đang làm việc</span>
-                                                    </c:when>
-                                                    <c:when test="${employee.status eq 'INACTIVE'}">
-                                                        <span class="badge bg-secondary">Nghỉ việc</span>
-                                                    </c:when>
-                                                    <c:when test="${employee.status eq 'ON_LEAVE'}">
-                                                        <span class="badge bg-warning">Nghỉ phép</span>
-                                                    </c:when>
-                                                    <c:otherwise>
-                                                        <span class="badge bg-danger">Tạm ngưng</span>
-                                                    </c:otherwise>
-                                                </c:choose>
-                                            </td>
-                                            <td>
-                                                <div class="btn-group" role="group">
-                                                    <a href="<c:url value='/employees/view/${employee.id}'/>" 
-                                                       class="btn btn-sm btn-info" title="Xem chi tiết">
-                                                        <i class="bi bi-eye"></i>
-                                                    </a>
-                                                    <a href="<c:url value='/employees/edit/${employee.id}'/>" 
-                                                       class="btn btn-sm btn-warning" title="Chỉnh sửa">
-                                                        <i class="bi bi-pencil"></i>
-                                                    </a>
-                                                    <button type="button" class="btn btn-sm btn-danger delete-btn" 
-                                                            data-id="${employee.id}" 
-                                                            data-name="${employee.fullName}"
-                                                            title="Xóa">
-                                                        <i class="bi bi-trash"></i>
-                                                    </button>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    </c:forEach>
-                                </c:otherwise>
-                            </c:choose>
+                                </c:forEach>
+                            </c:otherwise>
+                        </c:choose>
                         </tbody>
                     </table>
                 </div>
@@ -171,18 +171,18 @@
 </div>
 
 <script>
-$(document).ready(function() {
-    // Handle delete button click
-    $('.delete-btn').click(function() {
-        const employeeId = $(this).data('id');
-        const employeeName = $(this).data('name');
-        
-        $('#employeeName').text(employeeName);
-        $('#deleteForm').attr('action', '<c:url value="/employees/delete/"/>' + employeeId);
-        
-        new bootstrap.Modal($('#deleteModal')).show();
+    $(document).ready(function () {
+        // Handle delete button click
+        $('.delete-btn').click(function () {
+            const employeeId = $(this).data('id');
+            const employeeName = $(this).data('name');
+
+            $('#employeeName').text(employeeName);
+            $('#deleteForm').attr('action', '<c:url value="/employees/delete/"/>' + employeeId);
+
+            new bootstrap.Modal($('#deleteModal')).show();
+        });
     });
-});
 </script>
 
 <jsp:include page="../common/footer.jsp"/>

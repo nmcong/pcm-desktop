@@ -1,6 +1,7 @@
 # Qdrant vs Lucene: Comprehensive Comparison
 
 ## Table of Contents
+
 1. [Executive Summary](#executive-summary)
 2. [Architecture Comparison](#architecture-comparison)
 3. [Feature Matrix](#feature-matrix)
@@ -15,21 +16,22 @@
 
 ### TL;DR Recommendations
 
-| Scenario | Recommended Solution | Reason |
-|----------|---------------------|---------|
-| **Semantic Search & RAG** | Qdrant | Native vector similarity, embedding support |
-| **Traditional Text Search** | Lucene | Mature full-text search, BM25 ranking |
-| **Hybrid Search** | Qdrant + Lucene | Best of both worlds |
-| **Offline/On-Premise** | Lucene | No external dependencies |
-| **Cloud-Native** | Qdrant | Built for distributed deployment |
-| **Small-Medium Scale** | Lucene | Simpler setup and maintenance |
-| **Large Scale (>10M docs)** | Qdrant | Better scalability and performance |
-| **Budget Constrained** | Lucene | No licensing costs, minimal resources |
-| **Compliance/Security** | Lucene | Full control, no external services |
+| Scenario                    | Recommended Solution | Reason                                      |
+|-----------------------------|----------------------|---------------------------------------------|
+| **Semantic Search & RAG**   | Qdrant               | Native vector similarity, embedding support |
+| **Traditional Text Search** | Lucene               | Mature full-text search, BM25 ranking       |
+| **Hybrid Search**           | Qdrant + Lucene      | Best of both worlds                         |
+| **Offline/On-Premise**      | Lucene               | No external dependencies                    |
+| **Cloud-Native**            | Qdrant               | Built for distributed deployment            |
+| **Small-Medium Scale**      | Lucene               | Simpler setup and maintenance               |
+| **Large Scale (>10M docs)** | Qdrant               | Better scalability and performance          |
+| **Budget Constrained**      | Lucene               | No licensing costs, minimal resources       |
+| **Compliance/Security**     | Lucene               | Full control, no external services          |
 
 ## Architecture Comparison
 
 ### Lucene Architecture
+
 ```
 ┌─────────────────────┐
 │   Application       │
@@ -52,12 +54,14 @@
 ```
 
 **Key Characteristics:**
+
 - **Embedded Library**: Runs within your application JVM
 - **File-Based Index**: Segments stored on local file system
 - **Inverted Index**: Optimized for term-based search
 - **Single-Node**: Designed for single machine deployment
 
 ### Qdrant Architecture
+
 ```
 ┌─────────────────────┐
 │   Application       │
@@ -83,6 +87,7 @@
 ```
 
 **Key Characteristics:**
+
 - **Standalone Service**: Runs as separate server/cluster
 - **Vector-Native**: HNSW, IVF indexes for similarity search
 - **Distributed**: Built-in clustering and replication
@@ -90,57 +95,60 @@
 
 ## Feature Matrix
 
-| Feature Category | Lucene | Qdrant | Winner |
-|------------------|--------|---------|--------|
-| **Search Types** |
-| Full-Text Search | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ | Lucene |
-| Vector Similarity | ⭐⭐ | ⭐⭐⭐⭐⭐ | Qdrant |
-| Hybrid Search | ⭐⭐ | ⭐⭐⭐⭐⭐ | Qdrant |
-| Fuzzy Search | ⭐⭐⭐⭐⭐ | ⭐⭐⭐ | Lucene |
-| Boolean Queries | ⭐⭐⭐⭐⭐ | ⭐⭐⭐ | Lucene |
-| **Performance** |
-| Query Latency | ⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | Qdrant |
-| Indexing Speed | ⭐⭐⭐⭐ | ⭐⭐⭐⭐ | Tie |
-| Memory Usage | ⭐⭐⭐⭐ | ⭐⭐⭐ | Lucene |
-| Disk Usage | ⭐⭐⭐⭐⭐ | ⭐⭐⭐ | Lucene |
-| **Scalability** |
-| Horizontal Scaling | ⭐⭐ | ⭐⭐⭐⭐⭐ | Qdrant |
-| Vertical Scaling | ⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | Qdrant |
-| Concurrent Users | ⭐⭐⭐ | ⭐⭐⭐⭐⭐ | Qdrant |
-| **Operations** |
-| Setup Complexity | ⭐⭐⭐⭐⭐ | ⭐⭐⭐ | Lucene |
-| Maintenance | ⭐⭐⭐⭐ | ⭐⭐⭐ | Tie |
-| Monitoring | ⭐⭐⭐ | ⭐⭐⭐⭐ | Qdrant |
-| **Development** |
-| Learning Curve | ⭐⭐⭐ | ⭐⭐⭐⭐ | Qdrant |
-| API Richness | ⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | Qdrant |
-| Documentation | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ | Lucene |
+| Feature Category   | Lucene | Qdrant | Winner |
+|--------------------|--------|--------|--------|
+| **Search Types**   |
+| Full-Text Search   | ⭐⭐⭐⭐⭐  | ⭐⭐⭐⭐   | Lucene |
+| Vector Similarity  | ⭐⭐     | ⭐⭐⭐⭐⭐  | Qdrant |
+| Hybrid Search      | ⭐⭐     | ⭐⭐⭐⭐⭐  | Qdrant |
+| Fuzzy Search       | ⭐⭐⭐⭐⭐  | ⭐⭐⭐    | Lucene |
+| Boolean Queries    | ⭐⭐⭐⭐⭐  | ⭐⭐⭐    | Lucene |
+| **Performance**    |
+| Query Latency      | ⭐⭐⭐⭐   | ⭐⭐⭐⭐⭐  | Qdrant |
+| Indexing Speed     | ⭐⭐⭐⭐   | ⭐⭐⭐⭐   | Tie    |
+| Memory Usage       | ⭐⭐⭐⭐   | ⭐⭐⭐    | Lucene |
+| Disk Usage         | ⭐⭐⭐⭐⭐  | ⭐⭐⭐    | Lucene |
+| **Scalability**    |
+| Horizontal Scaling | ⭐⭐     | ⭐⭐⭐⭐⭐  | Qdrant |
+| Vertical Scaling   | ⭐⭐⭐⭐   | ⭐⭐⭐⭐⭐  | Qdrant |
+| Concurrent Users   | ⭐⭐⭐    | ⭐⭐⭐⭐⭐  | Qdrant |
+| **Operations**     |
+| Setup Complexity   | ⭐⭐⭐⭐⭐  | ⭐⭐⭐    | Lucene |
+| Maintenance        | ⭐⭐⭐⭐   | ⭐⭐⭐    | Tie    |
+| Monitoring         | ⭐⭐⭐    | ⭐⭐⭐⭐   | Qdrant |
+| **Development**    |
+| Learning Curve     | ⭐⭐⭐    | ⭐⭐⭐⭐   | Qdrant |
+| API Richness       | ⭐⭐⭐⭐   | ⭐⭐⭐⭐⭐  | Qdrant |
+| Documentation      | ⭐⭐⭐⭐⭐  | ⭐⭐⭐⭐   | Lucene |
 
 ## Performance Analysis
 
 ### Benchmarks Overview
 
 #### Dataset: 1M Wikipedia Articles
-| Metric | Lucene | Qdrant | Notes |
-|--------|--------|---------|-------|
-| **Indexing Time** | 15 min | 18 min | Text extraction + embedding generation |
-| **Index Size** | 2.3 GB | 4.7 GB | Qdrant includes dense vectors |
-| **Query Latency (p95)** | 12ms | 8ms | Vector similarity faster than text |
-| **Throughput (QPS)** | 850 | 1200 | Qdrant better concurrent handling |
-| **Memory Usage** | 1.2 GB | 2.8 GB | Vector indexes more memory intensive |
+
+| Metric                  | Lucene | Qdrant | Notes                                  |
+|-------------------------|--------|--------|----------------------------------------|
+| **Indexing Time**       | 15 min | 18 min | Text extraction + embedding generation |
+| **Index Size**          | 2.3 GB | 4.7 GB | Qdrant includes dense vectors          |
+| **Query Latency (p95)** | 12ms   | 8ms    | Vector similarity faster than text     |
+| **Throughput (QPS)**    | 850    | 1200   | Qdrant better concurrent handling      |
+| **Memory Usage**        | 1.2 GB | 2.8 GB | Vector indexes more memory intensive   |
 
 #### Search Quality Comparison
-| Query Type | Lucene nDCG@10 | Qdrant nDCG@10 | Best Approach |
-|------------|-----------------|-----------------|---------------|
-| **Exact Match** | 0.95 | 0.87 | Lucene (keyword matching) |
-| **Semantic Similar** | 0.72 | 0.91 | Qdrant (embedding similarity) |
-| **Multi-topic** | 0.68 | 0.85 | Qdrant (vector composition) |
-| **Spelling Errors** | 0.89 | 0.71 | Lucene (fuzzy matching) |
-| **Synonyms** | 0.61 | 0.88 | Qdrant (semantic understanding) |
+
+| Query Type           | Lucene nDCG@10 | Qdrant nDCG@10 | Best Approach                   |
+|----------------------|----------------|----------------|---------------------------------|
+| **Exact Match**      | 0.95           | 0.87           | Lucene (keyword matching)       |
+| **Semantic Similar** | 0.72           | 0.91           | Qdrant (embedding similarity)   |
+| **Multi-topic**      | 0.68           | 0.85           | Qdrant (vector composition)     |
+| **Spelling Errors**  | 0.89           | 0.71           | Lucene (fuzzy matching)         |
+| **Synonyms**         | 0.61           | 0.88           | Qdrant (semantic understanding) |
 
 ### Scalability Analysis
 
 #### Lucene Scaling Characteristics
+
 ```
 Performance vs Dataset Size (Single Node)
 
@@ -162,6 +170,7 @@ Query Latency (ms)
 ```
 
 #### Qdrant Scaling Characteristics
+
 ```
 Performance vs Dataset Size (Clustered)
 
@@ -186,6 +195,7 @@ Query Latency (ms)
 ### Real-World Performance Scenarios
 
 #### Scenario 1: Document Search (10M documents)
+
 ```yaml
 Lucene Performance:
   - Average Query Time: 15ms
@@ -203,6 +213,7 @@ Qdrant Performance:
 ```
 
 #### Scenario 2: Real-Time RAG System
+
 ```yaml
 Requirements:
   - 100 concurrent users
@@ -227,6 +238,7 @@ Qdrant Solution:
 ### Lucene Deployment
 
 #### Advantages
+
 ```yaml
 Simplicity:
   - Single JAR dependency
@@ -242,6 +254,7 @@ Control:
 ```
 
 #### Challenges
+
 ```yaml
 Scaling:
   - Manual sharding required
@@ -259,6 +272,7 @@ Operations:
 ### Qdrant Deployment
 
 #### Advantages
+
 ```yaml
 Cloud-Native:
   - Docker containers
@@ -274,6 +288,7 @@ Distributed:
 ```
 
 #### Challenges
+
 ```yaml
 Infrastructure:
   - Additional service to manage
@@ -291,6 +306,7 @@ Complexity:
 ### Production Architecture Examples
 
 #### Lucene Production Setup
+
 ```yaml
 Architecture:
   Application Tier:
@@ -320,6 +336,7 @@ Cons:
 ```
 
 #### Qdrant Production Setup
+
 ```yaml
 Architecture:
   Application Tier:
@@ -353,31 +370,33 @@ Cons:
 ### When to Choose Lucene
 
 #### ✅ Strong Fit Scenarios
+
 1. **Traditional Text Search**
-   - Document management systems
-   - Content management platforms
-   - Legal document search
-   - E-commerce product search
+    - Document management systems
+    - Content management platforms
+    - Legal document search
+    - E-commerce product search
 
 2. **Offline/Air-Gapped Environments**
-   - Government systems
-   - Military applications
-   - Compliance-heavy industries
-   - On-premise only requirements
+    - Government systems
+    - Military applications
+    - Compliance-heavy industries
+    - On-premise only requirements
 
 3. **Budget-Constrained Projects**
-   - Startups with limited resources
-   - Open source projects
-   - Internal tools
-   - Proof-of-concept systems
+    - Startups with limited resources
+    - Open source projects
+    - Internal tools
+    - Proof-of-concept systems
 
 4. **High Control Requirements**
-   - Custom ranking algorithms
-   - Specialized text analysis
-   - Performance critical applications
-   - Embedded systems
+    - Custom ranking algorithms
+    - Specialized text analysis
+    - Performance critical applications
+    - Embedded systems
 
 #### Example Implementation
+
 ```java
 // Traditional document search
 LuceneVectorStore searchEngine = new LuceneVectorStore("/data/index");
@@ -395,31 +414,33 @@ List<ScoredDocument> results = searchEngine.search(query, options);
 ### When to Choose Qdrant
 
 #### ✅ Strong Fit Scenarios
+
 1. **Semantic Search & RAG Systems**
-   - Question-answering systems
-   - Recommendation engines
-   - Similarity-based search
-   - Multi-modal search
+    - Question-answering systems
+    - Recommendation engines
+    - Similarity-based search
+    - Multi-modal search
 
 2. **Large-Scale Applications**
-   - Enterprise knowledge bases
-   - Customer support systems
-   - E-learning platforms
-   - Content discovery platforms
+    - Enterprise knowledge bases
+    - Customer support systems
+    - E-learning platforms
+    - Content discovery platforms
 
 3. **Cloud-Native Deployments**
-   - Microservices architectures
-   - Auto-scaling requirements
-   - Multi-region deployments
-   - Container-based systems
+    - Microservices architectures
+    - Auto-scaling requirements
+    - Multi-region deployments
+    - Container-based systems
 
 4. **Modern ML Workflows**
-   - Embedding-based applications
-   - Vector similarity search
-   - Hybrid search requirements
-   - Real-time ML serving
+    - Embedding-based applications
+    - Vector similarity search
+    - Hybrid search requirements
+    - Real-time ML serving
 
 #### Example Implementation
+
 ```python
 # Semantic search with embeddings
 from qdrant_client import QdrantClient
@@ -455,6 +476,7 @@ results = client.search(
 ### Hybrid Approaches
 
 #### Lucene + Qdrant Integration
+
 For applications requiring both traditional text search and semantic similarity:
 
 ```yaml
@@ -480,6 +502,7 @@ Query Flow:
 ```
 
 #### Implementation Example
+
 ```java
 public class HybridSearchService {
     private final QdrantVectorStore qdrantStore;
@@ -540,6 +563,7 @@ public class HybridSearchService {
 ### Lucene to Qdrant Migration
 
 #### Phase 1: Preparation (2-4 weeks)
+
 ```yaml
 Assessment:
   - Document current Lucene usage
@@ -555,6 +579,7 @@ Infrastructure:
 ```
 
 #### Phase 2: Parallel Implementation (4-6 weeks)
+
 ```yaml
 Development:
   - Implement Qdrant client integration
@@ -570,6 +595,7 @@ Testing:
 ```
 
 #### Phase 3: Gradual Migration (2-4 weeks)
+
 ```yaml
 Deployment:
   - Deploy Qdrant cluster
@@ -585,6 +611,7 @@ Validation:
 ```
 
 #### Phase 4: Complete Migration (1-2 weeks)
+
 ```yaml
 Cutover:
   - Migrate remaining data
@@ -602,6 +629,7 @@ Cleanup:
 ### Migration Tools and Scripts
 
 #### Data Migration Script
+
 ```python
 import logging
 from typing import List, Iterator
@@ -676,6 +704,7 @@ class LuceneToQdrantMigrator:
 ### Total Cost of Ownership (TCO) Comparison
 
 #### Lucene TCO (3-year projection)
+
 ```yaml
 Development Costs:
   - Initial Development: $50k - $80k
@@ -698,6 +727,7 @@ Breakdown:
 ```
 
 #### Qdrant TCO (3-year projection)
+
 ```yaml
 Development Costs:
   - Initial Integration: $20k - $40k
@@ -722,6 +752,7 @@ Breakdown:
 ### ROI Analysis
 
 #### Lucene ROI Factors
+
 ```yaml
 Positive ROI:
   - Lower infrastructure costs
@@ -737,6 +768,7 @@ Negative ROI:
 ```
 
 #### Qdrant ROI Factors
+
 ```yaml
 Positive ROI:
   - Faster time-to-market
@@ -754,6 +786,7 @@ Negative ROI:
 ### Cost Optimization Strategies
 
 #### Lucene Cost Optimization
+
 ```yaml
 Development:
   - Use existing Lucene expertise
@@ -769,6 +802,7 @@ Operations:
 ```
 
 #### Qdrant Cost Optimization
+
 ```yaml
 Infrastructure:
   - Right-size cluster nodes
@@ -788,26 +822,28 @@ Development:
 ### Decision Matrix
 
 #### Technical Requirements
-| Requirement | Weight | Lucene Score | Qdrant Score | Weighted Lucene | Weighted Qdrant |
-|-------------|--------|--------------|--------------|-----------------|-----------------|
-| Full-text search | 0.2 | 9 | 7 | 1.8 | 1.4 |
-| Semantic search | 0.25 | 4 | 9 | 1.0 | 2.25 |
-| Performance | 0.2 | 7 | 9 | 1.4 | 1.8 |
-| Scalability | 0.15 | 5 | 9 | 0.75 | 1.35 |
-| Maintenance | 0.1 | 6 | 8 | 0.6 | 0.8 |
-| Security | 0.1 | 8 | 7 | 0.8 | 0.7 |
-| **Total** | **1.0** | | | **6.35** | **8.3** |
+
+| Requirement      | Weight  | Lucene Score | Qdrant Score | Weighted Lucene | Weighted Qdrant |
+|------------------|---------|--------------|--------------|-----------------|-----------------|
+| Full-text search | 0.2     | 9            | 7            | 1.8             | 1.4             |
+| Semantic search  | 0.25    | 4            | 9            | 1.0             | 2.25            |
+| Performance      | 0.2     | 7            | 9            | 1.4             | 1.8             |
+| Scalability      | 0.15    | 5            | 9            | 0.75            | 1.35            |
+| Maintenance      | 0.1     | 6            | 8            | 0.6             | 0.8             |
+| Security         | 0.1     | 8            | 7            | 0.8             | 0.7             |
+| **Total**        | **1.0** |              |              | **6.35**        | **8.3**         |
 
 #### Business Requirements
-| Factor | Weight | Lucene Score | Qdrant Score | Weighted Lucene | Weighted Qdrant |
-|--------|--------|--------------|--------------|-----------------|-----------------|
-| Time to Market | 0.2 | 6 | 8 | 1.2 | 1.6 |
-| Development Cost | 0.15 | 8 | 6 | 1.2 | 0.9 |
-| Operational Cost | 0.15 | 8 | 6 | 1.2 | 0.9 |
-| Risk | 0.2 | 7 | 6 | 1.4 | 1.2 |
-| Vendor Lock-in | 0.15 | 9 | 5 | 1.35 | 0.75 |
-| Future Flexibility | 0.15 | 6 | 8 | 0.9 | 1.2 |
-| **Total** | **1.0** | | | **7.25** | **6.55** |
+
+| Factor             | Weight  | Lucene Score | Qdrant Score | Weighted Lucene | Weighted Qdrant |
+|--------------------|---------|--------------|--------------|-----------------|-----------------|
+| Time to Market     | 0.2     | 6            | 8            | 1.2             | 1.6             |
+| Development Cost   | 0.15    | 8            | 6            | 1.2             | 0.9             |
+| Operational Cost   | 0.15    | 8            | 6            | 1.2             | 0.9             |
+| Risk               | 0.2     | 7            | 6            | 1.4             | 1.2             |
+| Vendor Lock-in     | 0.15    | 9            | 5            | 1.35            | 0.75            |
+| Future Flexibility | 0.15    | 6            | 8            | 0.9             | 1.2             |
+| **Total**          | **1.0** |              |              | **7.25**        | **6.55**        |
 
 ### Decision Tree
 
@@ -838,36 +874,42 @@ graph TD
 ### Risk Assessment
 
 #### Lucene Risks
-| Risk | Probability | Impact | Mitigation |
-|------|-------------|---------|------------|
-| Scaling Challenges | High | High | Plan sharding strategy early |
-| Semantic Search Limitations | Medium | High | Implement embedding pipeline |
-| Development Complexity | Medium | Medium | Invest in team training |
-| Index Corruption | Low | High | Implement robust backup/recovery |
+
+| Risk                        | Probability | Impact | Mitigation                       |
+|-----------------------------|-------------|--------|----------------------------------|
+| Scaling Challenges          | High        | High   | Plan sharding strategy early     |
+| Semantic Search Limitations | Medium      | High   | Implement embedding pipeline     |
+| Development Complexity      | Medium      | Medium | Invest in team training          |
+| Index Corruption            | Low         | High   | Implement robust backup/recovery |
 
 #### Qdrant Risks
-| Risk | Probability | Impact | Mitigation |
-|------|-------------|---------|------------|
-| Vendor Dependency | Medium | Medium | Evaluate open-source alternatives |
-| Network Latency | Medium | Medium | Optimize client configuration |
-| Infrastructure Complexity | Low | High | Use managed services |
-| Version Compatibility | Low | Medium | Plan upgrade strategies |
+
+| Risk                      | Probability | Impact | Mitigation                        |
+|---------------------------|-------------|--------|-----------------------------------|
+| Vendor Dependency         | Medium      | Medium | Evaluate open-source alternatives |
+| Network Latency           | Medium      | Medium | Optimize client configuration     |
+| Infrastructure Complexity | Low         | High   | Use managed services              |
+| Version Compatibility     | Low         | Medium | Plan upgrade strategies           |
 
 ### Final Recommendations
 
 #### For Most Organizations (80% of use cases)
+
 **Recommended: Qdrant**
 
 Reasoning:
+
 - Modern applications increasingly need semantic search
 - Better out-of-box performance and scalability
 - Simpler operational model
 - Future-proof for ML/AI developments
 
 #### For Specific Scenarios (20% of use cases)
+
 **Recommended: Lucene**
 
 When you have:
+
 - Strict offline/air-gapped requirements
 - Primary need for traditional text search
 - Limited budget for infrastructure
@@ -875,6 +917,7 @@ When you have:
 - Small to medium scale requirements (< 5M documents)
 
 #### Migration Path for Existing Lucene Users
+
 1. **Assess current usage patterns**
 2. **Pilot Qdrant with subset of data**
 3. **Implement hybrid approach temporarily**
@@ -884,6 +927,7 @@ When you have:
 ---
 
 **Related Documentation:**
+
 - [Lucene Implementation Guide](lucene-guide.md)
 - [Architecture Overview](architecture-overview.md)
 - [Performance Benchmarks](performance-benchmarks.md)

@@ -81,6 +81,13 @@ import org.jspecify.annotations.Nullable;
  */
 public class CalendarSkin extends BehaviorSkinBase<Calendar, CalendarBehavior> {
 
+    // UI
+    protected final VBox rootPane = new VBox();
+    // model
+    protected final List<DateCell> dayNameCells = new ArrayList<>();
+    protected final List<DateCell> weekNumberCells = new ArrayList<>();
+    protected final List<DateCell> dayCells = new ArrayList<>();
+    protected final int daysPerWeek = getDaysPerWeek();
     // formatters
     final DateTimeFormatter yearFormatter = DateTimeFormatter.ofPattern("y");
     final DateTimeFormatter monthFormatter = DateTimeFormatter.ofPattern("MMMM");
@@ -88,37 +95,17 @@ public class CalendarSkin extends BehaviorSkinBase<Calendar, CalendarBehavior> {
     final DateTimeFormatter dayCellFormatter = DateTimeFormatter.ofPattern("d");
     final DateTimeFormatter monthFormatterSO = DateTimeFormatter.ofPattern("LLLL");    // standalone month name
     final DateTimeFormatter weekDayNameFormatter = DateTimeFormatter.ofPattern("ccc"); // standalone day name
-
-    // UI
-    protected final VBox rootPane = new VBox();
+    private final ObjectProperty<YearMonth> displayedYearMonth
+            = new SimpleObjectProperty<>(this, "displayedYearMonth");
+    private final ObjectBinding<LocalDate> firstDayOfMonth =
+            Bindings.createObjectBinding(() -> displayedYearMonth.get().atDay(1), displayedYearMonth);
     protected CalendarGrid calendarGrid;
-
     protected Button forwardButton = NullSafetyHelper.lateNonNull();
     protected Button backButton = NullSafetyHelper.lateNonNull();
     protected Label monthLabel = NullSafetyHelper.lateNonNull();
     protected Label yearLabel = NullSafetyHelper.lateNonNull();
-
-    // model
-    protected final List<DateCell> dayNameCells = new ArrayList<>();
-    protected final List<DateCell> weekNumberCells = new ArrayList<>();
-    protected final List<DateCell> dayCells = new ArrayList<>();
     protected LocalDate[] dayCellDates = NullSafetyHelper.lateNonNull();
     protected @Nullable DateCell lastFocusedDayCell = null;
-    protected final int daysPerWeek = getDaysPerWeek();
-
-    private final ObjectProperty<YearMonth> displayedYearMonth
-        = new SimpleObjectProperty<>(this, "displayedYearMonth");
-
-    public ObjectProperty<YearMonth> displayedYearMonthProperty() {
-        return displayedYearMonth;
-    }
-
-    private final ObjectBinding<LocalDate> firstDayOfMonth =
-        Bindings.createObjectBinding(() -> displayedYearMonth.get().atDay(1), displayedYearMonth);
-
-    public LocalDate getFirstDayOfMonth() {
-        return firstDayOfMonth.get();
-    }
 
     public CalendarSkin(Calendar control) {
         super(control);
@@ -128,7 +115,7 @@ public class CalendarSkin extends BehaviorSkinBase<Calendar, CalendarBehavior> {
         registerChangeListener(control.valueProperty(), e -> {
             LocalDate date = control.getValue();
             displayedYearMonthProperty().set(
-                date != null ? YearMonth.from(date) : YearMonth.now(ZoneId.systemDefault())
+                    date != null ? YearMonth.from(date) : YearMonth.now(ZoneId.systemDefault())
             );
             updateValues();
             control.fireEvent(new ActionEvent());
@@ -164,6 +151,33 @@ public class CalendarSkin extends BehaviorSkinBase<Calendar, CalendarBehavior> {
         });
     }
 
+    private static String capitalize(String word) {
+        if (word.length() > 0) {
+            int firstChar = word.codePointAt(0);
+            if (!Character.isTitleCase(firstChar)) {
+                word = new String(new int[]{Character.toTitleCase(firstChar)}, 0, 1)
+                        + word.substring(Character.offsetByCodePoints(word, 0, 1));
+            }
+        }
+        return word;
+    }
+
+    private static boolean isToday(@Nullable LocalDate date) {
+        return date != null && date.equals(today());
+    }
+
+    private static LocalDate today() {
+        return LocalDate.now(ZoneId.systemDefault());
+    }
+
+    public ObjectProperty<YearMonth> displayedYearMonthProperty() {
+        return displayedYearMonth;
+    }
+
+    public LocalDate getFirstDayOfMonth() {
+        return firstDayOfMonth.get();
+    }
+
     @Override
     public CalendarBehavior createDefaultBehavior() {
         return new CalendarBehavior(getControl(), this);
@@ -176,6 +190,10 @@ public class CalendarSkin extends BehaviorSkinBase<Calendar, CalendarBehavior> {
     public Scene getScene() {
         return getControl().getScene();
     }
+
+    ///////////////////////////////////////////////////////////////////////////
+    // UI                                                                    //
+    ///////////////////////////////////////////////////////////////////////////
 
     /**
      * The primary chronology for display.
@@ -195,7 +213,7 @@ public class CalendarSkin extends BehaviorSkinBase<Calendar, CalendarBehavior> {
     }
 
     ///////////////////////////////////////////////////////////////////////////
-    // UI                                                                    //
+    // API                                                                   //
     ///////////////////////////////////////////////////////////////////////////
 
     protected void createUI() {
@@ -208,7 +226,7 @@ public class CalendarSkin extends BehaviorSkinBase<Calendar, CalendarBehavior> {
 
         LocalDate value = getControl().getValue();
         displayedYearMonth.set(
-            value != null ? YearMonth.from(value) : YearMonth.now(ZoneId.systemDefault())
+                value != null ? YearMonth.from(value) : YearMonth.now(ZoneId.systemDefault())
         );
         displayedYearMonth.addListener((observable, oldValue, newValue) -> updateValues());
 
@@ -292,37 +310,6 @@ public class CalendarSkin extends BehaviorSkinBase<Calendar, CalendarBehavior> {
         return monthYearPane;
     }
 
-    protected class CalendarGrid extends GridPane {
-
-        @Override
-        protected double computePrefWidth(double height) {
-            final double width = super.computePrefWidth(height);
-
-            // Make sure width snaps to pixel when divided by number of columns.
-            // GridPane doesn't do this with percentage width constraints.
-            // See GridPane.adjustColumnWidths().
-            final int nCols = daysPerWeek + (getControl().isShowWeekNumbers() ? 1 : 0);
-            final double snapHGap = snapSpaceX(getHgap());
-            final double hGaps = snapHGap * (nCols - 1);
-            final double left = snapSpaceX(getInsets().getLeft());
-            final double right = snapSpaceX(getInsets().getRight());
-            final double contentWidth = width - left - right - hGaps;
-            return (snapSizeX(contentWidth / nCols) * nCols) + left + right + hGaps;
-        }
-
-        @Override
-        protected void layoutChildren() {
-            // prevent AssertionError in GridPane
-            if (getWidth() > 0 && getHeight() > 0) {
-                super.layoutChildren();
-            }
-        }
-    }
-
-    ///////////////////////////////////////////////////////////////////////////
-    // API                                                                   //
-    ///////////////////////////////////////////////////////////////////////////
-
     public void refresh() {
         updateDayNameCells();
         updateValues();
@@ -392,9 +379,9 @@ public class CalendarSkin extends BehaviorSkinBase<Calendar, CalendarBehavior> {
                 // use a formatter to ensure correct localization
                 // such as when Thai numerals are required.
                 String cellText = weekNumberFormatter
-                    .withLocale(locale)
-                    .withDecimalStyle(DecimalStyle.of(locale))
-                    .format(date);
+                        .withLocale(locale)
+                        .withDecimalStyle(DecimalStyle.of(locale))
+                        .format(date);
                 weekNumberCells.get(i).setText(cellText);
             }
         }
@@ -456,9 +443,9 @@ public class CalendarSkin extends BehaviorSkinBase<Calendar, CalendarBehavior> {
                 }
 
                 String cellText = dayCellFormatter.withLocale(locale)
-                    .withChronology(chrono)
-                    .withDecimalStyle(DecimalStyle.of(locale))
-                    .format(cDate);
+                        .withChronology(chrono)
+                        .withDecimalStyle(DecimalStyle.of(locale))
+                        .format(cDate);
 
                 dayCell.setText(cellText);
                 dayCell.updateItem(date, false);
@@ -491,13 +478,13 @@ public class CalendarSkin extends BehaviorSkinBase<Calendar, CalendarBehavior> {
         try {
             ChronoLocalDate chronoDate = chrono.date(yearMonth.atDay(1));
             String str = monthFormatterSO.withLocale(getLocale())
-                .withChronology(chrono)
-                .format(chronoDate);
+                    .withChronology(chrono)
+                    .format(chronoDate);
             if (Character.isDigit(str.charAt(0))) {
                 // fallback: if standalone format returned a number, use standard format instead
                 str = monthFormatter.withLocale(getLocale())
-                    .withChronology(chrono)
-                    .format(chronoDate);
+                        .withChronology(chrono)
+                        .format(chronoDate);
             }
             return capitalize(str);
         } catch (DateTimeException ex) {
@@ -511,9 +498,9 @@ public class CalendarSkin extends BehaviorSkinBase<Calendar, CalendarBehavior> {
         try {
             ChronoLocalDate chronoDate = chrono.date(yearMonth.atDay(1));
             return yearFormatter.withLocale(getLocale())
-                .withChronology(chrono)
-                .withDecimalStyle(DecimalStyle.of(getLocale()))
-                .format(chronoDate);
+                    .withChronology(chrono)
+                    .withDecimalStyle(DecimalStyle.of(getLocale()))
+                    .format(chronoDate);
         } catch (DateTimeException ex) {
             // date is out of range
             return "";
@@ -583,8 +570,8 @@ public class CalendarSkin extends BehaviorSkinBase<Calendar, CalendarBehavior> {
     protected DateCell createDayCell() {
         Callback<Calendar, DateCell> factory = getControl().getDayCellFactory();
         return Objects.requireNonNullElseGet(
-            factory != null ? factory.call(getControl()) : null,
-            DateCell::new
+                factory != null ? factory.call(getControl()) : null,
+                DateCell::new
         );
     }
 
@@ -620,22 +607,30 @@ public class CalendarSkin extends BehaviorSkinBase<Calendar, CalendarBehavior> {
         }
     }
 
-    private static String capitalize(String word) {
-        if (word.length() > 0) {
-            int firstChar = word.codePointAt(0);
-            if (!Character.isTitleCase(firstChar)) {
-                word = new String(new int[] {Character.toTitleCase(firstChar)}, 0, 1)
-                    + word.substring(Character.offsetByCodePoints(word, 0, 1));
+    protected class CalendarGrid extends GridPane {
+
+        @Override
+        protected double computePrefWidth(double height) {
+            final double width = super.computePrefWidth(height);
+
+            // Make sure width snaps to pixel when divided by number of columns.
+            // GridPane doesn't do this with percentage width constraints.
+            // See GridPane.adjustColumnWidths().
+            final int nCols = daysPerWeek + (getControl().isShowWeekNumbers() ? 1 : 0);
+            final double snapHGap = snapSpaceX(getHgap());
+            final double hGaps = snapHGap * (nCols - 1);
+            final double left = snapSpaceX(getInsets().getLeft());
+            final double right = snapSpaceX(getInsets().getRight());
+            final double contentWidth = width - left - right - hGaps;
+            return (snapSizeX(contentWidth / nCols) * nCols) + left + right + hGaps;
+        }
+
+        @Override
+        protected void layoutChildren() {
+            // prevent AssertionError in GridPane
+            if (getWidth() > 0 && getHeight() > 0) {
+                super.layoutChildren();
             }
         }
-        return word;
-    }
-
-    private static boolean isToday(@Nullable LocalDate date) {
-        return date != null && date.equals(today());
-    }
-
-    private static LocalDate today() {
-        return LocalDate.now(ZoneId.systemDefault());
     }
 }

@@ -42,9 +42,9 @@ public class TabMenuButton extends Button {
         });
 
         Bindings.bindContent(
-            contextMenu.getItems(),
-            tabLine.getTabs(),
-            mapper
+                contextMenu.getItems(),
+                tabLine.getTabs(),
+                mapper
         );
     }
 

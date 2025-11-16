@@ -1,6 +1,7 @@
 # Project Structure & Layering Guide
 
-This document describes a recommended folder/package structure for PCM Desktop that aligns with Clean Architecture and SOLID principles. Adapt it to Maven/Gradle conventions while keeping the separation of concerns intact.
+This document describes a recommended folder/package structure for PCM Desktop that aligns with Clean Architecture and
+SOLID principles. Adapt it to Maven/Gradle conventions while keeping the separation of concerns intact.
 
 ---
 
@@ -50,13 +51,16 @@ Suggested sub-packages:
 - `application.testcase` – plan tests based on impact.
 - `application.ingestion` – source scans, CHM import use cases.
 
-Each use case class depends on interfaces defined in `domain` (e.g., `RequestRepository`, `AstRepository`, `SemanticSearchService`). Dependency injection (manual or via framework) provides concrete implementations from `infrastructure`.
+Each use case class depends on interfaces defined in `domain` (
+e.g., `RequestRepository`, `AstRepository`, `SemanticSearchService`). Dependency injection (manual or via framework)
+provides concrete implementations from `infrastructure`.
 
 ### 2.2 `domain` Layer
 
 Contains pure domain logic: entities, value objects, repository/service interfaces.
 
 Sub-packages:
+
 - `domain.system` – System, Subsystem, Project aggregates.
 - `domain.code` – SourceFile, AstNode, Snapshot, Impact models.
 - `domain.request` – UserRequest, AgentResponse, Feedback.
@@ -119,7 +123,8 @@ Consider a separate `src/integrationTest` module if tests require heavy setup (D
 1. `application` depends on `domain` abstractions.
 2. `domain` depends on no other layer.
 3. `infrastructure` depends on `domain` (to implement interfaces) and may depend on third-party libs.
-4. `ui` depends on `application` (use cases) and `domain` (view models referencing domain objects). It should avoid direct `infrastructure` calls.
+4. `ui` depends on `application` (use cases) and `domain` (view models referencing domain objects). It should avoid
+   direct `infrastructure` calls.
 5. `shared` should not depend on `ui`; limit cross-layer coupling.
 
 This ensures SOLID adherence (especially Dependency Inversion) and makes testing easier.
@@ -134,4 +139,5 @@ This ensures SOLID adherence (especially Dependency Inversion) and makes testing
 - **Docs**: Continue storing RaD descriptions under `docs/RaD/`, architecture notes under `docs/architecture/`, etc.
 - **Models**: If shipping local LLM/embedding models, store them under `models/` with README describing usage.
 
-Adhering to this structure keeps the codebase maintainable, supports modular testing, and aligns with Clean Architecture principles.
+Adhering to this structure keeps the codebase maintainable, supports modular testing, and aligns with Clean Architecture
+principles.

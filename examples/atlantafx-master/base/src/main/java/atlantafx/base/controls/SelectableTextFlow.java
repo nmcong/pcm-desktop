@@ -50,9 +50,37 @@ import java.util.function.Predicate;
 public class SelectableTextFlow extends TextFlow {
 
     protected static final Predicate<Character> WORD_BOUNDARY_PREDICATE =
-        c -> Character.isWhitespace(c) || !(Character.isAlphabetic(c) || Character.isDigit(c));
+            c -> Character.isWhitespace(c) || !(Character.isAlphabetic(c) || Character.isDigit(c));
 
     protected final Selection selection = new Selection(this);
+    protected final SimpleObjectProperty<@Nullable ContextMenu> contextMenuProperty = new SimpleObjectProperty<>();
+    protected final ObjectProperty<Paint> highlightTextFill = new StyleableObjectProperty<>(Color.BLUE) {
+
+        @Override
+        public Object getBean() {
+            return SelectableTextFlow.this;
+        }
+
+        @Override
+        public String getName() {
+            return "highlightTextFill";
+        }
+
+        @Override
+        public CssMetaData<SelectableTextFlow, Paint> getCssMetaData() {
+            return StyleableProperties.HIGHLIGHT_TEXT_FILL;
+        }
+    };
+    protected final SimpleObjectProperty<Predicate<Character>> wordBoundaryPredicate = new SimpleObjectProperty<>(
+            this, "wordBoundaryPredicate", WORD_BOUNDARY_PREDICATE
+    );
+
+    //=========================================================================
+    // Properties
+    //=========================================================================
+    private final BooleanProperty textSelectionOnMouseClick = new SimpleBooleanProperty(
+            this, "textSelectionOnMouseClick", false
+    );
     protected int mouseDragStartPos = -1;
 
     /**
@@ -67,7 +95,7 @@ public class SelectableTextFlow extends TextFlow {
      *
      * @param children the child {@code Text} elements to be added to the flow, or null for no children
      */
-    public SelectableTextFlow(Text @Nullable... children) {
+    public SelectableTextFlow(Text @Nullable ... children) {
         super();
 
         setCursor(Cursor.TEXT);
@@ -81,9 +109,9 @@ public class SelectableTextFlow extends TextFlow {
         }
     }
 
-    //=========================================================================
-    // Properties
-    //=========================================================================
+    public static List<CssMetaData<? extends Styleable, ?>> getClassCssMetaData() {
+        return StyleableProperties.STYLEABLES;
+    }
 
     /**
      * Specifies the {@link ContextMenu} associated with this component.
@@ -94,8 +122,6 @@ public class SelectableTextFlow extends TextFlow {
     public final SimpleObjectProperty<@Nullable ContextMenu> contextMenuProperty() {
         return contextMenuProperty;
     }
-
-    protected final SimpleObjectProperty<@Nullable ContextMenu> contextMenuProperty = new SimpleObjectProperty<>();
 
     public @Nullable ContextMenu getContextMenu() {
         return contextMenuProperty.get();
@@ -115,24 +141,6 @@ public class SelectableTextFlow extends TextFlow {
         return highlightTextFill;
     }
 
-    protected final ObjectProperty<Paint> highlightTextFill = new StyleableObjectProperty<>(Color.BLUE) {
-
-        @Override
-        public Object getBean() {
-            return SelectableTextFlow.this;
-        }
-
-        @Override
-        public String getName() {
-            return "highlightTextFill";
-        }
-
-        @Override
-        public CssMetaData<SelectableTextFlow, Paint> getCssMetaData() {
-            return StyleableProperties.HIGHLIGHT_TEXT_FILL;
-        }
-    };
-
     public Paint getHighlightTextFill() {
         return highlightTextFill.get();
     }
@@ -148,10 +156,6 @@ public class SelectableTextFlow extends TextFlow {
     public final SimpleObjectProperty<Predicate<Character>> wordBoundaryPredicateProperty() {
         return wordBoundaryPredicate;
     }
-
-    protected final SimpleObjectProperty<Predicate<Character>> wordBoundaryPredicate = new SimpleObjectProperty<>(
-        this, "wordBoundaryPredicate", WORD_BOUNDARY_PREDICATE
-    );
 
     public Predicate<Character> getWordBoundaryPredicate() {
         return wordBoundaryPredicateProperty().get();
@@ -170,21 +174,17 @@ public class SelectableTextFlow extends TextFlow {
         return textSelectionOnMouseClick;
     }
 
-    private final BooleanProperty textSelectionOnMouseClick = new SimpleBooleanProperty(
-        this, "textSelectionOnMouseClick", false
-    );
-
     public boolean getTextSelectionOnMouseClick() {
         return textSelectionOnMouseClickProperty().get();
-    }
-
-    public void setTextSelectionOnMouseClick(boolean textSelectionOnMouseClick) {
-        textSelectionOnMouseClickProperty().set(textSelectionOnMouseClick);
     }
 
     //=========================================================================
     // API
     //=========================================================================
+
+    public void setTextSelectionOnMouseClick(boolean textSelectionOnMouseClick) {
+        textSelectionOnMouseClickProperty().set(textSelectionOnMouseClick);
+    }
 
     /**
      * Sets the text content of the TextFlow by replacing its children with the specified Text nodes.
@@ -250,6 +250,8 @@ public class SelectableTextFlow extends TextFlow {
         selection.clear();
     }
 
+    //=========================================================================
+
     /**
      * Copies the currently selected text range to the clipboard.
      */
@@ -259,8 +261,6 @@ public class SelectableTextFlow extends TextFlow {
         content.putString(getSelectedRangeAsString());
         clipboard.setContent(content);
     }
-
-    //=========================================================================
 
     protected void initListeners() {
         // bind fill property to any newly added text node
@@ -379,9 +379,9 @@ public class SelectableTextFlow extends TextFlow {
         var isBoundary = Objects.requireNonNull(getWordBoundaryPredicate());
 
         if (sb == null || sb.isEmpty()
-            || charIndex < 0
-            || charIndex >= sb.length()
-            || isBoundary.test(sb.charAt(charIndex))) {
+                || charIndex < 0
+                || charIndex >= sb.length()
+                || isBoundary.test(sb.charAt(charIndex))) {
 
             return null;
         }
@@ -409,12 +409,21 @@ public class SelectableTextFlow extends TextFlow {
         return start >= 0 && end > start ? new Range(start, end + 1) : null;
     }
 
+    //=========================================================================
+
     // for unit-tests
     Selection getSelection() {
         return selection;
     }
 
     //=========================================================================
+    // Styleable Properties
+    //=========================================================================
+
+    @Override
+    public List<CssMetaData<? extends Styleable, ?>> getCssMetaData() {
+        return getClassCssMetaData();
+    }
 
     protected static class Selection extends Path {
 
@@ -484,13 +493,13 @@ public class SelectableTextFlow extends TextFlow {
 
             for (var node : textFlow.getChildren()) {
                 if (node instanceof Text text
-                    && text.getSelectionStart() >= 0
-                    && text.getSelectionEnd() > text.getSelectionStart()) {
+                        && text.getSelectionStart() >= 0
+                        && text.getSelectionEnd() > text.getSelectionStart()) {
 
                     sb.append(
-                        text.getText(),
-                        Math.max(text.getSelectionStart(), 0),
-                        Math.min(text.getSelectionEnd(), text.getText().length())
+                            text.getText(),
+                            Math.max(text.getSelectionStart(), 0),
+                            Math.min(text.getSelectionEnd(), text.getText().length())
                     );
                 }
             }
@@ -513,14 +522,10 @@ public class SelectableTextFlow extends TextFlow {
         }
     }
 
-    //=========================================================================
-    // Styleable Properties
-    //=========================================================================
-
     private static class StyleableProperties {
 
         private static final CssMetaData<SelectableTextFlow, Paint> HIGHLIGHT_FILL = new CssMetaData<>(
-            "-fx-highlight-fill", PaintConverter.getInstance(), Color.TRANSPARENT
+                "-fx-highlight-fill", PaintConverter.getInstance(), Color.TRANSPARENT
         ) {
 
             @Override
@@ -536,14 +541,14 @@ public class SelectableTextFlow extends TextFlow {
         };
 
         private static final CssMetaData<SelectableTextFlow, Paint> HIGHLIGHT_TEXT_FILL = new CssMetaData<>(
-            "-fx-highlight-text-fill", PaintConverter.getInstance(), Color.TRANSPARENT
+                "-fx-highlight-text-fill", PaintConverter.getInstance(), Color.TRANSPARENT
         ) {
 
             @Override
             @SuppressWarnings("ConstantValue")
             public boolean isSettable(SelectableTextFlow styleable) {
                 return styleable.highlightTextFillProperty() == null
-                    || !styleable.highlightTextFillProperty().isBound();
+                        || !styleable.highlightTextFillProperty().isBound();
             }
 
             @Override
@@ -554,13 +559,13 @@ public class SelectableTextFlow extends TextFlow {
         };
 
         private static final CssMetaData<SelectableTextFlow, Paint> HIGHLIGHT_STROKE = new CssMetaData<>(
-            "-fx-highlight-stroke", PaintConverter.getInstance(), Color.TRANSPARENT
+                "-fx-highlight-stroke", PaintConverter.getInstance(), Color.TRANSPARENT
         ) {
 
             @Override
             public boolean isSettable(SelectableTextFlow styleable) {
                 return styleable.selection.strokeProperty() == null
-                    || !styleable.selection.strokeProperty().isBound();
+                        || !styleable.selection.strokeProperty().isBound();
             }
 
             @Override
@@ -574,7 +579,7 @@ public class SelectableTextFlow extends TextFlow {
 
         static {
             final List<CssMetaData<? extends Styleable, ?>> styleables = new ArrayList<>(
-                TextFlow.getClassCssMetaData()
+                    TextFlow.getClassCssMetaData()
             );
 
             styleables.add(HIGHLIGHT_FILL);
@@ -582,14 +587,5 @@ public class SelectableTextFlow extends TextFlow {
             styleables.add(HIGHLIGHT_TEXT_FILL);
             STYLEABLES = Collections.unmodifiableList(styleables);
         }
-    }
-
-    public static List<CssMetaData<? extends Styleable, ?>> getClassCssMetaData() {
-        return StyleableProperties.STYLEABLES;
-    }
-
-    @Override
-    public List<CssMetaData<? extends Styleable, ?>> getCssMetaData() {
-        return getClassCssMetaData();
     }
 }

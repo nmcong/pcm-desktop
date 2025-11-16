@@ -50,25 +50,29 @@
 ## 📦 **Technology Stack (Offline)**
 
 ### 1. Vector Storage: Apache Lucene 9.11.1
+
 - **Type:** Pure Java, embedded
 - **Why:** No external service, fast, battle-tested
 - **Features:**
-  - Full-text search
-  - BM25 ranking
-  - Vector search (KNN)
-  - Faceted search
+    - Full-text search
+    - BM25 ranking
+    - Vector search (KNN)
+    - Faceted search
 
 ### 2. Embedding: TF-IDF + BM25 (Built-in)
+
 - **Type:** Statistical embeddings
 - **Why:** No ML model needed, fast, effective for code search
 - **Fallback:** Simple term frequency vectors
 
 ### 3. Document Processing: Pure Java
+
 - **Parser:** JavaParser (for code)
 - **Text Processing:** Apache OpenNLP (optional)
 - **Chunking:** Custom splitters
 
 ### 4. Storage: Local File System
+
 - **Index Location:** `data/rag/lucene-index/`
 - **Documents:** `data/rag/documents/`
 - **Cache:** `data/rag/cache/`
@@ -168,6 +172,7 @@ src/main/java/com/noteflix/pcm/rag/
 ## 🎯 **Key Features**
 
 ### 1. Document Indexing
+
 ```java
 // Index Java source code
 CodeIndexer codeIndexer = new CodeIndexer();
@@ -183,6 +188,7 @@ kbIndexer.indexArticles("docs/knowledge-base");
 ```
 
 ### 2. Smart Chunking
+
 ```java
 // For code: chunk by method/class
 CodeChunker codeChunker = new CodeChunker();
@@ -194,6 +200,7 @@ List<Chunk> textChunks = textChunker.chunk(document);
 ```
 
 ### 3. Retrieval
+
 ```java
 // Simple keyword search
 List<RAGContext> results = retrievalEngine.retrieve(
@@ -217,6 +224,7 @@ List<RAGContext> filtered = retrievalEngine.retrieve(
 ```
 
 ### 4. Response Generation
+
 ```java
 // Query with LLM integration
 RAGResponse response = ragService.query(
@@ -233,19 +241,20 @@ RAGResponse response = ragService.query(
 
 ## 📊 **Performance Targets**
 
-| Operation | Target | Notes |
-|-----------|--------|-------|
-| **Indexing** | 1000 docs/sec | Java files |
-| **Search** | <500ms | Top 10 results |
-| **Full Query** | <2 seconds | With LLM |
-| **Index Size** | <1GB | For 10K docs |
-| **Memory** | <512MB | Runtime |
+| Operation      | Target        | Notes          |
+|----------------|---------------|----------------|
+| **Indexing**   | 1000 docs/sec | Java files     |
+| **Search**     | <500ms        | Top 10 results |
+| **Full Query** | <2 seconds    | With LLM       |
+| **Index Size** | <1GB          | For 10K docs   |
+| **Memory**     | <512MB        | Runtime        |
 
 ---
 
 ## 🔍 **Search Strategies**
 
 ### 1. BM25 (Best Match 25)
+
 ```java
 // Statistical ranking
 // Good for: exact keyword matching
@@ -253,6 +262,7 @@ RAGResponse response = ragService.query(
 ```
 
 ### 2. TF-IDF (Term Frequency-Inverse Document Frequency)
+
 ```java
 // Term importance
 // Good for: general text search
@@ -260,6 +270,7 @@ RAGResponse response = ragService.query(
 ```
 
 ### 3. Hybrid (BM25 + Semantic)
+
 ```java
 // Combine keyword + meaning
 // Good for: best accuracy
@@ -324,6 +335,7 @@ data/rag/
 ## 🎨 **Usage Examples**
 
 ### Example 1: Index & Search Code
+
 ```java
 // Initialize
 RAGService ragService = new DefaultRAGService();
@@ -349,6 +361,7 @@ for (RAGContext ctx : response.getSources()) {
 ```
 
 ### Example 2: Database Search
+
 ```java
 // Index database schema
 ragService.indexDataSource(
@@ -366,6 +379,7 @@ RAGResponse response = ragService.query(
 ```
 
 ### Example 3: Knowledge Base
+
 ```java
 // Index KB articles
 ragService.indexDataSource(
@@ -420,6 +434,7 @@ public class RAGService {
 ## 📚 **Required Libraries**
 
 ### Apache Lucene (ONLY dependency)
+
 ```
 lib/lucene-core-9.11.1.jar          - Core search engine
 lib/lucene-queryparser-9.11.1.jar   - Query parsing
@@ -428,6 +443,7 @@ lib/lucene-highlighter-9.11.1.jar   - Result highlighting
 ```
 
 ### Optional (Already have)
+
 ```
 ✅ Jackson (JSON processing)
 ✅ SLF4J (Logging)
@@ -452,6 +468,7 @@ lib/lucene-highlighter-9.11.1.jar   - Result highlighting
 ## 🚀 **Implementation Plan**
 
 ### Phase 1: Core (This Session)
+
 - [x] Design architecture
 - [ ] Create package structure
 - [ ] Implement Lucene vector store
@@ -459,18 +476,21 @@ lib/lucene-highlighter-9.11.1.jar   - Result highlighting
 - [ ] Add simple examples
 
 ### Phase 2: Indexers
+
 - [ ] Java code indexer
 - [ ] Database schema indexer
 - [ ] Knowledge base indexer
 - [ ] Metadata indexer
 
 ### Phase 3: Advanced
+
 - [ ] Smart chunking
 - [ ] Query rewriting
 - [ ] Result ranking
 - [ ] Caching
 
 ### Phase 4: Integration
+
 - [ ] LLM integration
 - [ ] UI integration
 - [ ] Testing & optimization

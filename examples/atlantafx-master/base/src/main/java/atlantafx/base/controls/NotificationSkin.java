@@ -67,9 +67,9 @@ public class NotificationSkin extends SkinBase<Notification> {
         menuButton.getStyleClass().add("secondary-menu-button");
         menuButton.getChildren().setAll(menuButtonIcon);
         menuButton.setOnMouseClicked(e -> actionsMenu.show(
-            menuButton,
-            menuButton.localToScreen(menuButton.getLayoutBounds()).getMinX(),
-            menuButton.localToScreen(menuButton.getLayoutBounds()).getMaxY()
+                menuButton,
+                menuButton.localToScreen(menuButton.getLayoutBounds()).getMinX(),
+                menuButton.localToScreen(menuButton.getLayoutBounds()).getMaxY()
         ));
         menuButton.setVisible(!getSkinnable().getSecondaryActions().isEmpty());
         menuButton.setManaged(!getSkinnable().getSecondaryActions().isEmpty());
@@ -150,11 +150,11 @@ public class NotificationSkin extends SkinBase<Notification> {
         var messageHeight = messageText.getBoundsInLocal().getHeight();
 
         return Math.max(Math.max(graphicSlot.getHeight(), actionsBox.getHeight()), messageHeight)
-            + (buttonBar.isManaged() ? buttonBar.getHeight() + container.getSpacing() : 0)
-            + header.getPadding().getTop()
-            + header.getPadding().getBottom()
-            + container.getPadding().getTop()
-            + container.getPadding().getBottom();
+                + (buttonBar.isManaged() ? buttonBar.getHeight() + container.getSpacing() : 0)
+                + header.getPadding().getTop()
+                + header.getPadding().getBottom()
+                + container.getPadding().getTop()
+                + container.getPadding().getBottom();
     }
 
     @Override

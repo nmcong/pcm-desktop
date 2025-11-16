@@ -3,8 +3,10 @@
 package atlantafx.base.controls;
 
 import atlantafx.base.util.Animations;
+
 import java.util.Objects;
 import java.util.function.Function;
+
 import javafx.animation.Animation;
 import javafx.beans.NamedArg;
 import javafx.beans.property.BooleanProperty;
@@ -98,7 +100,20 @@ public class ModalPane extends Control {
      * when it leaves the user view.
      */
     public static final Duration DEFAULT_DURATION_OUT = Duration.millis(100);
+    protected final ObjectProperty<@Nullable Node> content = new SimpleObjectProperty<>(this, "content", null);
+    protected final BooleanProperty display = new SimpleBooleanProperty(this, "display", false);
+    protected final ObjectProperty<Pos> alignment = new SimpleObjectProperty<>(this, "alignment", Pos.CENTER);
+    protected final ObjectProperty<@Nullable Function<Node, Animation>> inTransitionFactory = new SimpleObjectProperty<>(
+            this, "inTransitionFactory", node -> Animations.zoomIn(node, DEFAULT_DURATION_IN)
+    );
+    protected final ObjectProperty<@Nullable Function<Node, Animation>> outTransitionFactory = new SimpleObjectProperty<>(
+            this, "outTransitionFactory", node -> Animations.zoomOut(node, DEFAULT_DURATION_OUT)
+    );
 
+    ///////////////////////////////////////////////////////////////////////////
+    // Properties                                                            //
+    ///////////////////////////////////////////////////////////////////////////
+    protected final BooleanProperty persistent = new SimpleBooleanProperty(this, "persistent", false);
     private final int topViewOrder;
 
     /**
@@ -137,18 +152,12 @@ public class ModalPane extends Control {
         return topViewOrder;
     }
 
-    ///////////////////////////////////////////////////////////////////////////
-    // Properties                                                            //
-    ///////////////////////////////////////////////////////////////////////////
-
     /**
      * Specifies the content node to display inside the modal pane.
      */
     public ObjectProperty<@Nullable Node> contentProperty() {
         return content;
     }
-
-    protected final ObjectProperty<@Nullable Node> content = new SimpleObjectProperty<>(this, "content", null);
 
     public @Nullable Node getContent() {
         return content.get();
@@ -167,8 +176,6 @@ public class ModalPane extends Control {
         return display;
     }
 
-    protected final BooleanProperty display = new SimpleBooleanProperty(this, "display", false);
-
     public boolean isDisplay() {
         return display.get();
     }
@@ -183,8 +190,6 @@ public class ModalPane extends Control {
     public ObjectProperty<Pos> alignmentProperty() {
         return alignment;
     }
-
-    protected final ObjectProperty<Pos> alignment = new SimpleObjectProperty<>(this, "alignment", Pos.CENTER);
 
     public Pos getAlignment() {
         return alignment.get();
@@ -202,10 +207,6 @@ public class ModalPane extends Control {
         return inTransitionFactory;
     }
 
-    protected final ObjectProperty<@Nullable Function<Node, Animation>> inTransitionFactory = new SimpleObjectProperty<>(
-        this, "inTransitionFactory", node -> Animations.zoomIn(node, DEFAULT_DURATION_IN)
-    );
-
     public @Nullable Function<Node, Animation> getInTransitionFactory() {
         return inTransitionFactory.get();
     }
@@ -221,10 +222,6 @@ public class ModalPane extends Control {
     public ObjectProperty<@Nullable Function<Node, Animation>> outTransitionFactoryProperty() {
         return outTransitionFactory;
     }
-
-    protected final ObjectProperty<@Nullable Function<Node, Animation>> outTransitionFactory = new SimpleObjectProperty<>(
-        this, "outTransitionFactory", node -> Animations.zoomOut(node, DEFAULT_DURATION_OUT)
-    );
 
     public @Nullable Function<Node, Animation> getOutTransitionFactory() {
         return outTransitionFactory.get();
@@ -244,8 +241,6 @@ public class ModalPane extends Control {
     public BooleanProperty persistentProperty() {
         return persistent;
     }
-
-    protected final BooleanProperty persistent = new SimpleBooleanProperty(this, "persistent", false);
 
     public boolean getPersistent() {
         return persistent.get();

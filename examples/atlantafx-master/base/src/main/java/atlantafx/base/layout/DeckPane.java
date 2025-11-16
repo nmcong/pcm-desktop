@@ -5,6 +5,7 @@ package atlantafx.base.layout;
 import java.util.Comparator;
 import java.util.Objects;
 import java.util.function.Consumer;
+
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.ParallelTransition;
@@ -52,6 +53,14 @@ public class DeckPane extends AnchorPane {
 
     // the rest of the nodes
     protected static final int Z_DEFAULT = 0;
+    protected final ObjectProperty<Duration> animationDuration =
+            new SimpleObjectProperty<>(this, "animationDuration", Duration.seconds(1));
+    protected final ReadOnlyBooleanWrapper animationActive =
+            new ReadOnlyBooleanWrapper(this, "animationActive");
+    protected final ObjectProperty<@Nullable Consumer<Node>> beforeShowCallback =
+            new SimpleObjectProperty<>(this, "beforeShowCallback");
+    protected final ObjectProperty<@Nullable Consumer<Node>> afterHideCallback =
+            new SimpleObjectProperty<>(this, "afterHideCallback");
 
     /**
      * Creates a new empty DeckPane.
@@ -91,11 +100,11 @@ public class DeckPane extends AnchorPane {
         }
 
         return getChildren().stream()
-            // if two elements have equal viewOrder, last wins
-            // unlike the default min() implementation
-            .reduce((o1, o2) -> Z_COMPARATOR.compare(o1, o2) >= 0 ? o2 : o1)
-            // if all equal, return the last node
-            .orElse(getChildren().get(size - 1));
+                // if two elements have equal viewOrder, last wins
+                // unlike the default min() implementation
+                .reduce((o1, o2) -> Z_COMPARATOR.compare(o1, o2) >= 0 ? o2 : o1)
+                // if all equal, return the last node
+                .orElse(getChildren().get(size - 1));
     }
 
     /**
@@ -167,8 +176,8 @@ public class DeckPane extends AnchorPane {
         setViewOrder(target, Z_ANIMATED_IN);
 
         var transition = new ParallelTransition(
-            moveYUpFromTopBorderToOffCanvas(topNode),  // out
-            moveYUpFromBottomBorderToTopBorder(target) // in
+                moveYUpFromTopBorderToOffCanvas(topNode),  // out
+                moveYUpFromBottomBorderToTopBorder(target) // in
         );
         transition.setOnFinished(e -> onTransitionFinished(topNode, target));
         setAnimationActive(true);
@@ -195,8 +204,8 @@ public class DeckPane extends AnchorPane {
         setViewOrder(target, Z_ANIMATED_IN);
 
         var transition = new ParallelTransition(
-            moveYDownFromTopBorderToBottomBorder(topNode), // out
-            moveYDownFromOffCanvasToTopBorder(target)      // in
+                moveYDownFromTopBorderToBottomBorder(topNode), // out
+                moveYDownFromOffCanvasToTopBorder(target)      // in
         );
         transition.setOnFinished(e -> onTransitionFinished(topNode, target));
         setAnimationActive(true);
@@ -223,8 +232,8 @@ public class DeckPane extends AnchorPane {
         setViewOrder(target, Z_ANIMATED_IN);
 
         var transition = new ParallelTransition(
-            moveXLeftFromLeftBorderToOffCanvas(topNode), // out
-            moveXLeftFromRightBorderToLeftBorder(target)  // in
+                moveXLeftFromLeftBorderToOffCanvas(topNode), // out
+                moveXLeftFromRightBorderToLeftBorder(target)  // in
         );
         transition.setOnFinished(e -> onTransitionFinished(topNode, target));
         setAnimationActive(true);
@@ -251,13 +260,17 @@ public class DeckPane extends AnchorPane {
         setViewOrder(target, Z_ANIMATED_IN);
 
         var transition = new ParallelTransition(
-            moveXRightFromLeftBorderToRightBorder(topNode), // out
-            moveXRightFromOffCanvasToLeftBorder(target)     // in
+                moveXRightFromLeftBorderToRightBorder(topNode), // out
+                moveXRightFromOffCanvasToLeftBorder(target)     // in
         );
         transition.setOnFinished(e -> onTransitionFinished(topNode, target));
         setAnimationActive(true);
         transition.play();
     }
+
+    ///////////////////////////////////////////////////////////////////////////
+    // Properties                                                            //
+    ///////////////////////////////////////////////////////////////////////////
 
     /**
      * Places target node on the top of the pane while playing the
@@ -359,19 +372,12 @@ public class DeckPane extends AnchorPane {
         transition.play();
     }
 
-    ///////////////////////////////////////////////////////////////////////////
-    // Properties                                                            //
-    ///////////////////////////////////////////////////////////////////////////
-
     /**
      * Represents the duration of the transition effect that is played when changing the top node.
      */
     public ObjectProperty<Duration> animationDurationProperty() {
         return animationDuration;
     }
-
-    protected final ObjectProperty<Duration> animationDuration =
-        new SimpleObjectProperty<>(this, "animationDuration", Duration.seconds(1));
 
     public Duration getAnimationDuration() {
         return animationDuration.get();
@@ -389,9 +395,6 @@ public class DeckPane extends AnchorPane {
         return animationActive.getReadOnlyProperty();
     }
 
-    protected final ReadOnlyBooleanWrapper animationActive =
-        new ReadOnlyBooleanWrapper(this, "animationActive");
-
     public boolean isAnimationActive() {
         return animationActive.get();
     }
@@ -406,9 +409,6 @@ public class DeckPane extends AnchorPane {
     public ObjectProperty<Consumer<Node>> beforeShowCallbackProperty() {
         return beforeShowCallback;
     }
-
-    protected final ObjectProperty<@Nullable Consumer<Node>> beforeShowCallback =
-        new SimpleObjectProperty<>(this, "beforeShowCallback");
 
     public @Nullable Consumer<Node> getBeforeShowCallback() {
         return beforeShowCallback.get();
@@ -430,9 +430,6 @@ public class DeckPane extends AnchorPane {
     public ObjectProperty<Consumer<Node>> afterHideCallbackProperty() {
         return afterHideCallback;
     }
-
-    protected final ObjectProperty<@Nullable Consumer<Node>> afterHideCallback =
-        new SimpleObjectProperty<>(this, "afterHideCallback");
 
     public @Nullable Consumer<Node> getAfterHideCallback() {
         return afterHideCallback.get();
@@ -496,12 +493,12 @@ public class DeckPane extends AnchorPane {
 
         var timeline = new Timeline();
         timeline.getKeyFrames().add(
-            new KeyFrame(
-                animationDuration.getValue(),
-                new KeyValue(clip.heightProperty(), 0),
-                new KeyValue(clip.translateYProperty(), getHeight()),
-                new KeyValue(node.translateYProperty(), -getHeight())
-            ));
+                new KeyFrame(
+                        animationDuration.getValue(),
+                        new KeyValue(clip.heightProperty(), 0),
+                        new KeyValue(clip.translateYProperty(), getHeight()),
+                        new KeyValue(node.translateYProperty(), -getHeight())
+                ));
 
         return timeline;
     }
@@ -518,11 +515,11 @@ public class DeckPane extends AnchorPane {
         var timeline = new Timeline();
 
         timeline.getKeyFrames().add(
-            new KeyFrame(
-                animationDuration.getValue(),
-                new KeyValue(clip.heightProperty(), getHeight()),
-                new KeyValue(node.translateYProperty(), 0)
-            ));
+                new KeyFrame(
+                        animationDuration.getValue(),
+                        new KeyValue(clip.heightProperty(), getHeight()),
+                        new KeyValue(node.translateYProperty(), 0)
+                ));
 
         return timeline;
     }
@@ -538,11 +535,11 @@ public class DeckPane extends AnchorPane {
 
         var timeline = new Timeline();
         timeline.getKeyFrames().add(
-            new KeyFrame(
-                animationDuration.getValue(),
-                new KeyValue(clip.heightProperty(), 0),
-                new KeyValue(node.translateYProperty(), getHeight())
-            ));
+                new KeyFrame(
+                        animationDuration.getValue(),
+                        new KeyValue(clip.heightProperty(), 0),
+                        new KeyValue(node.translateYProperty(), getHeight())
+                ));
 
         return timeline;
     }
@@ -560,12 +557,12 @@ public class DeckPane extends AnchorPane {
         var timeline = new Timeline();
 
         timeline.getKeyFrames().add(
-            new KeyFrame(
-                animationDuration.getValue(),
-                new KeyValue(clip.heightProperty(), getHeight()),
-                new KeyValue(clip.translateYProperty(), 0),
-                new KeyValue(node.translateYProperty(), 0)
-            ));
+                new KeyFrame(
+                        animationDuration.getValue(),
+                        new KeyValue(clip.heightProperty(), getHeight()),
+                        new KeyValue(clip.translateYProperty(), 0),
+                        new KeyValue(node.translateYProperty(), 0)
+                ));
 
         return timeline;
     }
@@ -582,12 +579,12 @@ public class DeckPane extends AnchorPane {
 
         var timeline = new Timeline();
         timeline.getKeyFrames().add(
-            new KeyFrame(
-                animationDuration.getValue(),
-                new KeyValue(clip.widthProperty(), 0),
-                new KeyValue(clip.translateXProperty(), getWidth()),
-                new KeyValue(node.translateXProperty(), -getWidth())
-            ));
+                new KeyFrame(
+                        animationDuration.getValue(),
+                        new KeyValue(clip.widthProperty(), 0),
+                        new KeyValue(clip.translateXProperty(), getWidth()),
+                        new KeyValue(node.translateXProperty(), -getWidth())
+                ));
 
         return timeline;
     }
@@ -604,11 +601,11 @@ public class DeckPane extends AnchorPane {
         var timeline = new Timeline();
 
         timeline.getKeyFrames().add(
-            new KeyFrame(
-                animationDuration.getValue(),
-                new KeyValue(clip.widthProperty(), getWidth()),
-                new KeyValue(node.translateXProperty(), 0)
-            ));
+                new KeyFrame(
+                        animationDuration.getValue(),
+                        new KeyValue(clip.widthProperty(), getWidth()),
+                        new KeyValue(node.translateXProperty(), 0)
+                ));
 
         return timeline;
     }
@@ -624,11 +621,11 @@ public class DeckPane extends AnchorPane {
 
         var timeline = new Timeline();
         timeline.getKeyFrames().add(
-            new KeyFrame(
-                animationDuration.getValue(),
-                new KeyValue(clip.widthProperty(), 0),
-                new KeyValue(node.translateXProperty(), getWidth())
-            ));
+                new KeyFrame(
+                        animationDuration.getValue(),
+                        new KeyValue(clip.widthProperty(), 0),
+                        new KeyValue(node.translateXProperty(), getWidth())
+                ));
 
         return timeline;
     }
@@ -646,12 +643,12 @@ public class DeckPane extends AnchorPane {
         var timeline = new Timeline();
 
         timeline.getKeyFrames().add(
-            new KeyFrame(
-                animationDuration.getValue(),
-                new KeyValue(clip.widthProperty(), getWidth()),
-                new KeyValue(clip.translateXProperty(), 0),
-                new KeyValue(node.translateXProperty(), 0)
-            ));
+                new KeyFrame(
+                        animationDuration.getValue(),
+                        new KeyValue(clip.widthProperty(), getWidth()),
+                        new KeyValue(clip.translateXProperty(), 0),
+                        new KeyValue(node.translateXProperty(), 0)
+                ));
 
         return timeline;
     }
@@ -671,9 +668,9 @@ public class DeckPane extends AnchorPane {
      */
     protected void setViewOrder(Node node, int viewOrder) {
         if (viewOrder == Z_DEFAULT
-            || viewOrder == Z_DECK_TOP
-            || viewOrder == Z_ANIMATED_IN
-            || viewOrder == Z_ANIMATED_OUT) {
+                || viewOrder == Z_DECK_TOP
+                || viewOrder == Z_ANIMATED_IN
+                || viewOrder == Z_ANIMATED_OUT) {
             node.setViewOrder(viewOrder);
         } else {
             throw new IllegalArgumentException("Unknown view order value: " + viewOrder);

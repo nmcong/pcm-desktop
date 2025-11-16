@@ -1,6 +1,7 @@
 package com.noteflix.pcm.llm.api;
 
 import com.noteflix.pcm.llm.model.JsonSchema;
+
 import java.util.Map;
 
 /**
@@ -41,34 +42,34 @@ import java.util.Map;
  */
 public interface RegisteredFunction {
 
-  /**
-   * Get function name (unique identifier). Use snake_case convention (e.g., "search_projects").
-   *
-   * @return Function name
-   */
-  String getName();
+    /**
+     * Get function name (unique identifier). Use snake_case convention (e.g., "search_projects").
+     *
+     * @return Function name
+     */
+    String getName();
 
-  /**
-   * Get function description. This helps the LLM understand when to use this function. Be clear and
-   * descriptive.
-   *
-   * @return Function description
-   */
-  String getDescription();
+    /**
+     * Get function description. This helps the LLM understand when to use this function. Be clear and
+     * descriptive.
+     *
+     * @return Function description
+     */
+    String getDescription();
 
-  /**
-   * Get parameter schema. Defines expected parameters, their types, and which are required.
-   *
-   * @return JSON Schema for parameters
-   */
-  JsonSchema getParameters();
+    /**
+     * Get parameter schema. Defines expected parameters, their types, and which are required.
+     *
+     * @return JSON Schema for parameters
+     */
+    JsonSchema getParameters();
 
-  /**
-   * Execute the function with given arguments.
-   *
-   * @param args Function arguments (from LLM)
-   * @return Function result (will be converted to string for LLM)
-   * @throws Exception if execution fails
-   */
-  Object execute(Map<String, Object> args) throws Exception;
+    /**
+     * Execute the function with given arguments.
+     *
+     * @param args Function arguments (from LLM)
+     * @return Function result (will be converted to string for LLM)
+     * @throws Exception if execution fails
+     */
+    Object execute(Map<String, Object> args) throws Exception;
 }

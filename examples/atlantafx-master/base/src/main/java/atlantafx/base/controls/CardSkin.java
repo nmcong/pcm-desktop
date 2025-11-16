@@ -44,7 +44,7 @@ public class CardSkin implements Skin<Card> {
         headerSlot = new StackPane();
         headerSlot.getStyleClass().add("header");
         headerSlotListener = new SlotListener(
-            headerSlot, (n, active) -> getSkinnable().pseudoClassStateChanged(HAS_HEADER, active)
+                headerSlot, (n, active) -> getSkinnable().pseudoClassStateChanged(HAS_HEADER, active)
         );
         control.headerProperty().addListener(headerSlotListener);
         headerSlotListener.changed(control.headerProperty(), null, control.getHeader());
@@ -52,11 +52,11 @@ public class CardSkin implements Skin<Card> {
         subHeaderSlot = new StackPane();
         subHeaderSlot.getStyleClass().add("sub-header");
         subHeaderSlotListener = new SlotListener(
-            subHeaderSlot,
-            (n, active) -> {
-                getSkinnable().pseudoClassStateChanged(HAS_SUBHEADER, active);
-                getSkinnable().pseudoClassStateChanged(HAS_IMAGE, n instanceof ImageView);
-            }
+                subHeaderSlot,
+                (n, active) -> {
+                    getSkinnable().pseudoClassStateChanged(HAS_SUBHEADER, active);
+                    getSkinnable().pseudoClassStateChanged(HAS_IMAGE, n instanceof ImageView);
+                }
         );
         control.subHeaderProperty().addListener(subHeaderSlotListener);
         subHeaderSlotListener.changed(control.subHeaderProperty(), null, control.getSubHeader());
@@ -65,7 +65,7 @@ public class CardSkin implements Skin<Card> {
         bodySlot.getStyleClass().add("body");
         VBox.setVgrow(bodySlot, Priority.ALWAYS);
         bodySlotListener = new SlotListener(
-            bodySlot, (n, active) -> getSkinnable().pseudoClassStateChanged(HAS_BODY, active)
+                bodySlot, (n, active) -> getSkinnable().pseudoClassStateChanged(HAS_BODY, active)
         );
         control.bodyProperty().addListener(bodySlotListener);
         bodySlotListener.changed(control.bodyProperty(), null, control.getBody());
@@ -73,7 +73,7 @@ public class CardSkin implements Skin<Card> {
         footerSlot = new StackPane();
         footerSlot.getStyleClass().add("footer");
         footerSlotListener = new SlotListener(
-            footerSlot, (n, active) -> getSkinnable().pseudoClassStateChanged(HAS_FOOTER, active)
+                footerSlot, (n, active) -> getSkinnable().pseudoClassStateChanged(HAS_FOOTER, active)
         );
         control.footerProperty().addListener(footerSlotListener);
         footerSlotListener.changed(control.footerProperty(), null, control.getFooter());

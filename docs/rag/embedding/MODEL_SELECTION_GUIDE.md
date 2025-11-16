@@ -1,6 +1,7 @@
 # Hướng dẫn Chọn Model Embedding
 
 ## 📚 Mục lục
+
 - [Giới thiệu](#giới-thiệu)
 - [Ma trận Lựa chọn](#ma-trận-lựa-chọn)
 - [Models phổ biến](#models-phổ-biến)
@@ -16,14 +17,14 @@ Việc chọn model embedding phù hợp phụ thuộc vào nhiều yếu tố:
 
 ### Các yếu tố cần xem xét
 
-| Yếu tố | Câu hỏi cần trả lời |
-|--------|---------------------|
-| **Performance** | Tốc độ inference quan trọng như thế nào? |
-| **Quality** | Cần độ chính xác cao đến mức nào? |
-| **Memory** | Có giới hạn về RAM không? |
-| **Domain** | Domain/ngôn ngữ chuyên biệt không? |
-| **Size** | Có giới hạn về kích thước deployment? |
-| **Multilingual** | Cần hỗ trợ nhiều ngôn ngữ không? |
+| Yếu tố           | Câu hỏi cần trả lời                      |
+|------------------|------------------------------------------|
+| **Performance**  | Tốc độ inference quan trọng như thế nào? |
+| **Quality**      | Cần độ chính xác cao đến mức nào?        |
+| **Memory**       | Có giới hạn về RAM không?                |
+| **Domain**       | Domain/ngôn ngữ chuyên biệt không?       |
+| **Size**         | Có giới hạn về kích thước deployment?    |
+| **Multilingual** | Cần hỗ trợ nhiều ngôn ngữ không?         |
 
 ### Trade-offs chính
 
@@ -34,6 +35,7 @@ Quality ←→ Memory
 ```
 
 **Quy tắc chung:**
+
 - Model lớn hơn → Chất lượng tốt hơn, chậm hơn
 - Model nhỏ hơn → Nhanh hơn, chất lượng thấp hơn
 - Multilingual models → Chậm hơn, cần nhiều memory hơn
@@ -44,15 +46,15 @@ Quality ←→ Memory
 
 ### Theo Use Case
 
-| Use Case | Model khuyến nghị | Lý do |
-|----------|-------------------|-------|
-| **Code search/RAG** | all-MiniLM-L6-v2 | ✅ Cân bằng speed/quality<br>✅ Kích thước nhỏ<br>✅ Nhanh |
-| **Semantic search (General)** | all-mpnet-base-v2 | ✅ Quality tốt nhất<br>⚠️ Chậm hơn 1.5x |
-| **Multilingual** | paraphrase-multilingual-mpnet-base-v2 | ✅ Hỗ trợ 50+ ngôn ngữ<br>⚠️ Cần nhiều memory |
-| **Real-time chat** | all-MiniLM-L6-v2 | ✅ Inference < 20ms<br>✅ Lightweight |
-| **High accuracy** | all-mpnet-base-v2 | ✅ State-of-the-art quality |
-| **Large datasets** | all-MiniLM-L6-v2 | ✅ Fast batch processing<br>✅ Low memory |
-| **Specialized (Legal, Medical)** | Legal-BERT, BioBERT | ✅ Domain-specific |
+| Use Case                         | Model khuyến nghị                     | Lý do                                                   |
+|----------------------------------|---------------------------------------|---------------------------------------------------------|
+| **Code search/RAG**              | all-MiniLM-L6-v2                      | ✅ Cân bằng speed/quality<br>✅ Kích thước nhỏ<br>✅ Nhanh |
+| **Semantic search (General)**    | all-mpnet-base-v2                     | ✅ Quality tốt nhất<br>⚠️ Chậm hơn 1.5x                  |
+| **Multilingual**                 | paraphrase-multilingual-mpnet-base-v2 | ✅ Hỗ trợ 50+ ngôn ngữ<br>⚠️ Cần nhiều memory            |
+| **Real-time chat**               | all-MiniLM-L6-v2                      | ✅ Inference < 20ms<br>✅ Lightweight                     |
+| **High accuracy**                | all-mpnet-base-v2                     | ✅ State-of-the-art quality                              |
+| **Large datasets**               | all-MiniLM-L6-v2                      | ✅ Fast batch processing<br>✅ Low memory                 |
+| **Specialized (Legal, Medical)** | Legal-BERT, BioBERT                   | ✅ Domain-specific                                       |
 
 ### Theo Constraints
 
@@ -95,10 +97,12 @@ Quality ←→ Memory
 ### 1. all-MiniLM-L6-v2 ⭐ **KHUYẾN NGHỊ MẶC ĐỊNH**
 
 **Tổng quan:**
+
 - Model nhỏ, nhanh, chất lượng tốt
 - "Sweet spot" cho hầu hết use cases
 
 **Thông số:**
+
 ```yaml
 Dimension: 384
 Parameters: 22M
@@ -108,6 +112,7 @@ Quality score: 69.4/100
 ```
 
 **Ưu điểm:**
+
 - ✅ Cực kỳ nhanh
 - ✅ Kích thước nhỏ
 - ✅ Chất lượng tốt cho general use cases
@@ -115,10 +120,12 @@ Quality score: 69.4/100
 - ✅ Ít tốn memory
 
 **Nhược điểm:**
+
 - ⚠️ Quality không bằng MPNet
 - ⚠️ Chỉ tiếng Anh
 
 **Khi nào dùng:**
+
 - ✅ Code search & RAG systems
 - ✅ Real-time applications
 - ✅ Large-scale deployments
@@ -126,11 +133,13 @@ Quality score: 69.4/100
 - ✅ Fast prototyping
 
 **Setup:**
+
 ```bash
 ./scripts/setup-embeddings-djl.sh all-MiniLM-L6-v2
 ```
 
 **Code:**
+
 ```java
 EmbeddingService service = new DJLEmbeddingService(
     "data/models/all-MiniLM-L6-v2"
@@ -142,10 +151,12 @@ EmbeddingService service = new DJLEmbeddingService(
 ### 2. all-mpnet-base-v2 ⭐ **CHẤT LƯỢNG CAO NHẤT**
 
 **Tổng quan:**
+
 - Model chất lượng cao nhất cho tiếng Anh
 - Dựa trên MPNet architecture
 
 **Thông số:**
+
 ```yaml
 Dimension: 768
 Parameters: 110M
@@ -155,33 +166,39 @@ Quality score: 72.8/100 (Highest!)
 ```
 
 **Ưu điểm:**
+
 - ✅ Chất lượng tốt nhất
 - ✅ State-of-the-art performance
 - ✅ Tốt cho semantic understanding
 - ✅ Robust với diverse queries
 
 **Nhược điểm:**
+
 - ⚠️ Chậm hơn 2x so với MiniLM
 - ⚠️ Cần nhiều memory hơn
 - ⚠️ Model size lớn (~420 MB)
 
 **Khi nào dùng:**
+
 - ✅ High-accuracy applications
 - ✅ Semantic search (không realtime)
 - ✅ Quality > Speed
 - ✅ Sufficient resources
 
 **Không dùng khi:**
+
 - ❌ Real-time requirements
 - ❌ Resource constraints
 - ❌ Mobile/edge deployment
 
 **Setup:**
+
 ```bash
 ./scripts/setup-embeddings-djl.sh all-mpnet-base-v2
 ```
 
 **Code:**
+
 ```java
 EmbeddingService service = new DJLEmbeddingService(
     "data/models/all-mpnet-base-v2"
@@ -193,10 +210,12 @@ EmbeddingService service = new DJLEmbeddingService(
 ### 3. paraphrase-multilingual-mpnet-base-v2 ⭐ **CHO ĐA NGÔN NGỮ**
 
 **Tổng quan:**
+
 - Hỗ trợ 50+ ngôn ngữ
 - Cross-lingual semantic search
 
 **Thông số:**
+
 ```yaml
 Dimension: 768
 Parameters: 278M
@@ -207,6 +226,7 @@ Quality score: 65.7/100
 ```
 
 **Ngôn ngữ hỗ trợ:**
+
 ```
 ✅ English, Tiếng Việt, Chinese, Japanese, Korean
 ✅ French, German, Spanish, Italian, Portuguese
@@ -215,24 +235,28 @@ Quality score: 65.7/100
 ```
 
 **Ưu điểm:**
+
 - ✅ Multilingual support
 - ✅ Cross-lingual search
 - ✅ Unified embedding space
 - ✅ Good quality across languages
 
 **Nhược điểm:**
+
 - ⚠️ Rất chậm
 - ⚠️ Cần nhiều memory (~1.5 GB RAM)
 - ⚠️ Model size lớn
 - ⚠️ Quality thấp hơn monolingual
 
 **Khi nào dùng:**
+
 - ✅ Multilingual applications
 - ✅ Cross-language search
 - ✅ International products
 - ✅ Mixed-language content
 
 **Setup:**
+
 ```bash
 ./scripts/setup-embeddings-djl.sh paraphrase-multilingual-mpnet-base-v2
 ```
@@ -242,10 +266,12 @@ Quality score: 65.7/100
 ### 4. all-MiniLM-L12-v2
 
 **Tổng quan:**
+
 - Version lớn hơn của MiniLM-L6
 - Middle ground giữa speed và quality
 
 **Thông số:**
+
 ```yaml
 Dimension: 384
 Parameters: 33M
@@ -255,16 +281,19 @@ Quality score: 70.2/100
 ```
 
 **So sánh với L6:**
+
 - Quality: +1% better
 - Speed: 25% slower
 - Size: 30% larger
 
 **Khi nào dùng:**
+
 - ✅ Cần quality tốt hơn L6 một chút
 - ✅ Vẫn giữ được tốc độ tốt
 - ✅ Có resources đủ
 
 **Không cần dùng nếu:**
+
 - ❌ L6 đã đủ tốt (hầu hết cases)
 - ❌ Cần optimize memory
 
@@ -273,10 +302,12 @@ Quality score: 70.2/100
 ### 5. all-distilroberta-v1
 
 **Tổng quan:**
+
 - Distilled version của RoBERTa
 - Cân bằng giữa RoBERTa-large và MiniLM
 
 **Thông số:**
+
 ```yaml
 Dimension: 768
 Parameters: 82M
@@ -286,6 +317,7 @@ Quality score: 71.5/100
 ```
 
 **Khi nào dùng:**
+
 - ✅ Cần quality giữa MiniLM và MPNet
 - ✅ Code understanding tốt
 - ✅ Technical content
@@ -297,6 +329,7 @@ Quality score: 71.5/100
 ### Use Case 1: Code Search & Documentation RAG
 
 **Yêu cầu:**
+
 - Fast retrieval (< 50ms)
 - Good semantic understanding
 - Code + natural language
@@ -305,6 +338,7 @@ Quality score: 71.5/100
 **Model khuyến nghị:** `all-MiniLM-L6-v2`
 
 **Lý do:**
+
 ```
 ✅ Speed: ~15ms inference
 ✅ Quality: Đủ tốt cho code search
@@ -319,6 +353,7 @@ Quality score: 71.5/100
 ### Use Case 2: Customer Support Chatbot
 
 **Yêu cầu:**
+
 - Real-time response
 - Semantic matching với FAQ
 - ~1000 FAQ entries
@@ -327,6 +362,7 @@ Quality score: 71.5/100
 **Model khuyến nghị:**
 
 **Monolingual (English/Vietnamese):** `all-MiniLM-L6-v2`
+
 ```
 ✅ Real-time: < 20ms
 ✅ User experience: Instant
@@ -334,6 +370,7 @@ Quality score: 71.5/100
 ```
 
 **Multilingual:** `paraphrase-multilingual-MiniLM-L12-v2`
+
 ```
 ✅ 50+ languages
 ⚠️ Slower (~40ms) - vẫn acceptable
@@ -344,6 +381,7 @@ Quality score: 71.5/100
 ### Use Case 3: Academic Paper Search
 
 **Yêu cầu:**
+
 - High accuracy
 - Scientific/technical content
 - Complex queries
@@ -352,6 +390,7 @@ Quality score: 71.5/100
 **Model khuyến nghị:** `all-mpnet-base-v2`
 
 **Lý do:**
+
 ```
 ✅ Best quality: 72.8/100
 ✅ Scientific understanding
@@ -364,6 +403,7 @@ Quality score: 71.5/100
 ### Use Case 4: E-commerce Product Search
 
 **Yêu cầu:**
+
 - Fast search (< 100ms total)
 - Product descriptions
 - User queries
@@ -372,6 +412,7 @@ Quality score: 71.5/100
 **Model khuyến nghị:** `all-MiniLM-L6-v2` + caching
 
 **Strategy:**
+
 ```java
 // Pre-compute tất cả product embeddings
 float[][] productEmbeddings = precomputeEmbeddings(products);
@@ -384,6 +425,7 @@ List<Product> results = searchSimilar(queryEmb, productEmbeddings);
 ```
 
 **Performance:**
+
 - Pre-compute: 1 lần (offline)
 - Query embed: ~15ms
 - Vector search: ~5ms
@@ -394,6 +436,7 @@ List<Product> results = searchSimilar(queryEmb, productEmbeddings);
 ### Use Case 5: Legal Document Analysis
 
 **Yêu cầu:**
+
 - Legal domain
 - High accuracy
 - Complex legal language
@@ -402,11 +445,13 @@ List<Product> results = searchSimilar(queryEmb, productEmbeddings);
 **Model khuyến nghị:** Domain-specific model
 
 **Options:**
+
 1. **Legal-BERT** (specialized)
 2. **all-mpnet-base-v2** (general but good)
 3. Fine-tune MiniLM trên legal corpus
 
 **Setup Legal-BERT:**
+
 ```bash
 # Download từ HuggingFace
 ./scripts/setup-embeddings-djl.sh nlpaueb/legal-bert-base-uncased

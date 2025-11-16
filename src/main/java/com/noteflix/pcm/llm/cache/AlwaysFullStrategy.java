@@ -9,18 +9,18 @@ package com.noteflix.pcm.llm.cache;
  */
 public class AlwaysFullStrategy implements ToolResultCacheStrategy {
 
-  @Override
-  public CacheDecision decide(ToolExecutionContext context) {
-    return CacheDecision.builder()
-        .shouldCache(true)
-        .shouldSummarize(false)
-        .summarizationStrategy("none")
-        .reason("AlwaysFullStrategy: Always send full results for maximum accuracy")
-        .build();
-  }
+    @Override
+    public CacheDecision decide(ToolExecutionContext context) {
+        return CacheDecision.builder()
+                .shouldCache(true)
+                .shouldSummarize(false)
+                .summarizationStrategy("none")
+                .reason("AlwaysFullStrategy: Always send full results for maximum accuracy")
+                .build();
+    }
 
-  @Override
-  public String getStrategyName() {
-    return "always-full";
-  }
+    @Override
+    public String getStrategyName() {
+        return "always-full";
+    }
 }

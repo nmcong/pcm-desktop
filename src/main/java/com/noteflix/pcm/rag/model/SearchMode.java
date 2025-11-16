@@ -7,12 +7,18 @@ package com.noteflix.pcm.rag.model;
  * @version 1.0.0
  */
 public enum SearchMode {
-  /** Keyword-based search (BM25) */
-  KEYWORD,
+    /**
+     * Keyword-based search (BM25)
+     */
+    KEYWORD,
 
-  /** Semantic search (embeddings) */
-  SEMANTIC,
+    /**
+     * Semantic search (embeddings)
+     */
+    SEMANTIC,
 
-  /** Hybrid: combine keyword + semantic */
-  HYBRID
+    /**
+     * Hybrid: combine keyword + semantic
+     */
+    HYBRID
 }

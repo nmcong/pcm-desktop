@@ -1,11 +1,12 @@
 package com.noteflix.pcm.rag.chunking.core;
 
 import com.noteflix.pcm.rag.model.DocumentType;
+import lombok.Builder;
+import lombok.Data;
+
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
-import lombok.Builder;
-import lombok.Data;
 
 /**
  * Enhanced document chunk with comprehensive metadata.
@@ -27,185 +28,241 @@ import lombok.Data;
 @Builder
 public class DocumentChunk {
 
-  // === Core Properties ===
+    // === Core Properties ===
 
-  /** Unique chunk ID (format: {documentId}_chunk_{index}) */
-  private String chunkId;
+    /**
+     * Unique chunk ID (format: {documentId}_chunk_{index})
+     */
+    private String chunkId;
 
-  /** Original document ID */
-  private String documentId;
+    /**
+     * Original document ID
+     */
+    private String documentId;
 
-  /** Chunk content text */
-  private String content;
+    /**
+     * Chunk content text
+     */
+    private String content;
 
-  /** Chunk index (0-based) */
-  private int index;
+    /**
+     * Chunk index (0-based)
+     */
+    private int index;
 
-  // === Position Information ===
+    // === Position Information ===
 
-  /** Start position in original document (character-based) */
-  private int startPosition;
+    /**
+     * Start position in original document (character-based)
+     */
+    private int startPosition;
 
-  /** End position in original document (character-based) */
-  private int endPosition;
+    /**
+     * End position in original document (character-based)
+     */
+    private int endPosition;
 
-  /** Start line number in original document (1-based) */
-  private Integer startLine;
+    /**
+     * Start line number in original document (1-based)
+     */
+    private Integer startLine;
 
-  /** End line number in original document (1-based) */
-  private Integer endLine;
+    /**
+     * End line number in original document (1-based)
+     */
+    private Integer endLine;
 
-  // === Document Metadata ===
+    // === Document Metadata ===
 
-  /** Original document title */
-  private String documentTitle;
+    /**
+     * Original document title
+     */
+    private String documentTitle;
 
-  /** Original document type */
-  private DocumentType documentType;
+    /**
+     * Original document type
+     */
+    private DocumentType documentType;
 
-  /** Original document source path */
-  private String sourcePath;
+    /**
+     * Original document source path
+     */
+    private String sourcePath;
 
-  /** Document creation/modification time */
-  private LocalDateTime documentTimestamp;
+    /**
+     * Document creation/modification time
+     */
+    private LocalDateTime documentTimestamp;
 
-  // === Chunking Information ===
+    // === Chunking Information ===
 
-  /** Chunking strategy used */
-  private String chunkingStrategy;
+    /**
+     * Chunking strategy used
+     */
+    private String chunkingStrategy;
 
-  /** Chunk size in characters */
-  private int chunkSizeChars;
+    /**
+     * Chunk size in characters
+     */
+    private int chunkSizeChars;
 
-  /** Estimated token count (approximation) */
-  private Integer estimatedTokens;
+    /**
+     * Estimated token count (approximation)
+     */
+    private Integer estimatedTokens;
 
-  /** Overlap size with previous chunk */
-  private Integer overlapSize;
+    /**
+     * Overlap size with previous chunk
+     */
+    private Integer overlapSize;
 
-  /** Has overlap with previous chunk */
-  @Builder.Default
-  private boolean hasOverlapBefore = false;
+    /**
+     * Has overlap with previous chunk
+     */
+    @Builder.Default
+    private boolean hasOverlapBefore = false;
 
-  /** Has overlap with next chunk */
-  @Builder.Default
-  private boolean hasOverlapAfter = false;
+    /**
+     * Has overlap with next chunk
+     */
+    @Builder.Default
+    private boolean hasOverlapAfter = false;
 
-  // === Quality Metrics ===
+    // === Quality Metrics ===
 
-  /** Chunk quality score (0.0 - 1.0) */
-  private Double qualityScore;
+    /**
+     * Chunk quality score (0.0 - 1.0)
+     */
+    private Double qualityScore;
 
-  /** Semantic coherence score (0.0 - 1.0) */
-  private Double coherenceScore;
+    /**
+     * Semantic coherence score (0.0 - 1.0)
+     */
+    private Double coherenceScore;
 
-  /** Information density score (0.0 - 1.0) */
-  private Double densityScore;
+    /**
+     * Information density score (0.0 - 1.0)
+     */
+    private Double densityScore;
 
-  // === Context Information ===
+    // === Context Information ===
 
-  /** Previous chunk ID for context linking */
-  private String previousChunkId;
+    /**
+     * Previous chunk ID for context linking
+     */
+    private String previousChunkId;
 
-  /** Next chunk ID for context linking */
-  private String nextChunkId;
+    /**
+     * Next chunk ID for context linking
+     */
+    private String nextChunkId;
 
-  /** Section/chapter title containing this chunk */
-  private String sectionTitle;
+    /**
+     * Section/chapter title containing this chunk
+     */
+    private String sectionTitle;
 
-  /** Hierarchical level (for structured documents) */
-  private Integer hierarchyLevel;
+    /**
+     * Hierarchical level (for structured documents)
+     */
+    private Integer hierarchyLevel;
 
-  // === Processing Metadata ===
+    // === Processing Metadata ===
 
-  /** When this chunk was created */
-  @Builder.Default
-  private LocalDateTime createdAt = LocalDateTime.now();
+    /**
+     * When this chunk was created
+     */
+    @Builder.Default
+    private LocalDateTime createdAt = LocalDateTime.now();
 
-  /** Language detected in chunk (ISO 639-1 code) */
-  private String language;
+    /**
+     * Language detected in chunk (ISO 639-1 code)
+     */
+    private String language;
 
-  /** Custom metadata for extensibility */
-  @Builder.Default
-  private Map<String, String> metadata = new HashMap<>();
+    /**
+     * Custom metadata for extensibility
+     */
+    @Builder.Default
+    private Map<String, String> metadata = new HashMap<>();
 
-  // === Utility Methods ===
+    // === Utility Methods ===
 
-  /**
-   * Get chunk length in characters.
-   *
-   * @return Character count
-   */
-  public int getLength() {
-    return content != null ? content.length() : 0;
-  }
-
-  /**
-   * Estimate token count using simple heuristic (4 chars per token average).
-   *
-   * @return Estimated token count
-   */
-  public int getEstimatedTokenCount() {
-    if (estimatedTokens != null) {
-      return estimatedTokens;
+    /**
+     * Get chunk length in characters.
+     *
+     * @return Character count
+     */
+    public int getLength() {
+        return content != null ? content.length() : 0;
     }
-    // Simple heuristic: ~4 characters per token for English text
-    return Math.max(1, getLength() / 4);
-  }
 
-  /**
-   * Check if this chunk is at document boundary.
-   *
-   * @return true if first or last chunk
-   */
-  public boolean isAtBoundary() {
-    return index == 0 || nextChunkId == null;
-  }
-
-  /**
-   * Get chunk summary for logging/debugging.
-   *
-   * @return Formatted summary string
-   */
-  public String getSummary() {
-    return String.format(
-        "Chunk[id=%s, index=%d, pos=%d-%d, chars=%d, tokens=%d]",
-        chunkId, index, startPosition, endPosition, getLength(), getEstimatedTokenCount());
-  }
-
-  /**
-   * Add custom metadata.
-   *
-   * @param key Metadata key
-   * @param value Metadata value
-   */
-  public void addMetadata(String key, String value) {
-    if (metadata == null) {
-      metadata = new HashMap<>();
+    /**
+     * Estimate token count using simple heuristic (4 chars per token average).
+     *
+     * @return Estimated token count
+     */
+    public int getEstimatedTokenCount() {
+        if (estimatedTokens != null) {
+            return estimatedTokens;
+        }
+        // Simple heuristic: ~4 characters per token for English text
+        return Math.max(1, getLength() / 4);
     }
-    metadata.put(key, value);
-  }
 
-  /**
-   * Get custom metadata.
-   *
-   * @param key Metadata key
-   * @return Metadata value or null
-   */
-  public String getMetadata(String key) {
-    return metadata != null ? metadata.get(key) : null;
-  }
-
-  /**
-   * Create a truncated preview of chunk content.
-   *
-   * @param maxLength Maximum preview length
-   * @return Truncated content with ellipsis if needed
-   */
-  public String getContentPreview(int maxLength) {
-    if (content == null || content.length() <= maxLength) {
-      return content;
+    /**
+     * Check if this chunk is at document boundary.
+     *
+     * @return true if first or last chunk
+     */
+    public boolean isAtBoundary() {
+        return index == 0 || nextChunkId == null;
     }
-    return content.substring(0, maxLength - 3) + "...";
-  }
+
+    /**
+     * Get chunk summary for logging/debugging.
+     *
+     * @return Formatted summary string
+     */
+    public String getSummary() {
+        return String.format(
+                "Chunk[id=%s, index=%d, pos=%d-%d, chars=%d, tokens=%d]",
+                chunkId, index, startPosition, endPosition, getLength(), getEstimatedTokenCount());
+    }
+
+    /**
+     * Add custom metadata.
+     *
+     * @param key   Metadata key
+     * @param value Metadata value
+     */
+    public void addMetadata(String key, String value) {
+        if (metadata == null) {
+            metadata = new HashMap<>();
+        }
+        metadata.put(key, value);
+    }
+
+    /**
+     * Get custom metadata.
+     *
+     * @param key Metadata key
+     * @return Metadata value or null
+     */
+    public String getMetadata(String key) {
+        return metadata != null ? metadata.get(key) : null;
+    }
+
+    /**
+     * Create a truncated preview of chunk content.
+     *
+     * @param maxLength Maximum preview length
+     * @return Truncated content with ellipsis if needed
+     */
+    public String getContentPreview(int maxLength) {
+        if (content == null || content.length() <= maxLength) {
+            return content;
+        }
+        return content.substring(0, maxLength - 3) + "...";
+    }
 }

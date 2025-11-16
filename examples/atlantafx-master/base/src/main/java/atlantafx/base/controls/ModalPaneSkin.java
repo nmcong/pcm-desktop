@@ -3,7 +3,9 @@
 package atlantafx.base.controls;
 
 import atlantafx.base.util.Animations;
+
 import java.util.List;
+
 import javafx.animation.Animation;
 import javafx.animation.Timeline;
 import javafx.beans.value.ChangeListener;
@@ -27,20 +29,17 @@ import org.jspecify.annotations.Nullable;
  */
 public class ModalPaneSkin extends SkinBase<ModalPane> {
 
-    protected @Nullable ModalPane control;
-
     protected final StackPane root;
     protected final ScrollPane scrollPane;
     protected final StackPane contentWrapper;
-
-    protected final EventHandler<KeyEvent> keyHandler = createKeyHandler();
-    protected final EventHandler<MouseEvent> mouseHandler = createMouseHandler();
     protected final ChangeListener<Animation.Status> animationInListener = createAnimationInListener();
     protected final ChangeListener<Animation.Status> animationOutListener = createAnimationOutListener();
-
+    protected @Nullable ModalPane control;
     protected @Nullable List<ScrollBar> scrollbars;
     protected @Nullable Animation inTransition;
     protected @Nullable Animation outTransition;
+    protected final EventHandler<KeyEvent> keyHandler = createKeyHandler();
+    protected final EventHandler<MouseEvent> mouseHandler = createMouseHandler();
 
     protected ModalPaneSkin(ModalPane control) {
         super(control);
@@ -150,13 +149,13 @@ public class ModalPaneSkin extends SkinBase<ModalPane> {
     @SuppressWarnings("ShortCircuitBoolean")
     protected boolean isClickInArea(MouseEvent e, Node area) {
         return (e.getX() >= area.getLayoutX() & e.getX() <= area.getLayoutX() + area.getLayoutBounds().getWidth())
-            && (e.getY() >= area.getLayoutY() & e.getY() <= area.getLayoutY() + area.getLayoutBounds().getHeight());
+                && (e.getY() >= area.getLayoutY() & e.getY() <= area.getLayoutY() + area.getLayoutBounds().getHeight());
     }
 
     protected EventHandler<KeyEvent> createKeyHandler() {
         return event -> {
             if (event.getCode() == KeyCode.ESCAPE) {
-                Node content  = getSkinnable().getContent();
+                Node content = getSkinnable().getContent();
                 if (getSkinnable().getPersistent() && content != null) {
                     createCloseBlockedAnimation(content).playFromStart();
                 } else {
@@ -184,9 +183,9 @@ public class ModalPaneSkin extends SkinBase<ModalPane> {
 
             if (scrollbars == null || scrollbars.isEmpty()) {
                 scrollbars = scrollPane.lookupAll(".scroll-bar").stream()
-                    .filter(node -> node instanceof ScrollBar)
-                    .map(node -> (ScrollBar) node)
-                    .toList();
+                        .filter(node -> node instanceof ScrollBar)
+                        .map(node -> (ScrollBar) node)
+                        .toList();
             }
 
             var scrollBarClick = scrollbars.stream().anyMatch(scrollBar -> isClickInArea(event, scrollBar));

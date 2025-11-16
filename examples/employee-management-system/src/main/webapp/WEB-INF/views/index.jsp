@@ -33,7 +33,7 @@
             </div>
         </div>
     </div>
-    
+
     <div class="col-md-4 mb-4">
         <div class="card bg-success text-white h-100">
             <div class="card-body">
@@ -54,7 +54,7 @@
             </div>
         </div>
     </div>
-    
+
     <div class="col-md-4 mb-4">
         <div class="card bg-info text-white h-100">
             <div class="card-body">
@@ -126,18 +126,19 @@
                 <i class="bi bi-info-circle-fill"></i> Chào mừng!
             </h4>
             <p class="mb-0">
-                Đây là hệ thống quản lý nhân sự. Bạn có thể quản lý thông tin nhân viên, phòng ban và các chức năng liên quan khác.
+                Đây là hệ thống quản lý nhân sự. Bạn có thể quản lý thông tin nhân viên, phòng ban và các chức năng liên
+                quan khác.
             </p>
         </div>
     </div>
 </div>
 
 <script>
-$(document).ready(function() {
-    $('#searchBtn').click(function() {
-        window.location.href = '<c:url value="/employees"/>';
+    $(document).ready(function () {
+        $('#searchBtn').click(function () {
+            window.location.href = '<c:url value="/employees"/>';
+        });
     });
-});
 </script>
 
 <jsp:include page="common/footer.jsp"/>

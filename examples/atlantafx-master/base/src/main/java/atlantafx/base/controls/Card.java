@@ -18,6 +18,15 @@ import org.jspecify.annotations.Nullable;
  */
 public class Card extends Control {
 
+    private final ObjectProperty<@Nullable Node> header = new SimpleObjectProperty<>(this, "header");
+    private final ObjectProperty<@Nullable Node> subHeader = new SimpleObjectProperty<>(this, "subHeader");
+
+    ///////////////////////////////////////////////////////////////////////////
+    // Properties                                                            //
+    ///////////////////////////////////////////////////////////////////////////
+    private final ObjectProperty<@Nullable Node> body = new SimpleObjectProperty<>(this, "body");
+    private final ObjectProperty<@Nullable Node> footer = new SimpleObjectProperty<>(this, "footer");
+
     /**
      * Creates an empty Card.
      */
@@ -34,18 +43,12 @@ public class Card extends Control {
         return new CardSkin(this);
     }
 
-    ///////////////////////////////////////////////////////////////////////////
-    // Properties                                                            //
-    ///////////////////////////////////////////////////////////////////////////
-
     /**
      * Represents the card’s header node.
      */
     public ObjectProperty<@Nullable Node> headerProperty() {
         return header;
     }
-
-    private final ObjectProperty<@Nullable Node> header = new SimpleObjectProperty<>(this, "header");
 
     public @Nullable Node getHeader() {
         return header.get();
@@ -62,8 +65,6 @@ public class Card extends Control {
         return subHeader;
     }
 
-    private final ObjectProperty<@Nullable Node> subHeader = new SimpleObjectProperty<>(this, "subHeader");
-
     public @Nullable Node getSubHeader() {
         return subHeader.get();
     }
@@ -79,8 +80,6 @@ public class Card extends Control {
         return body;
     }
 
-    private final ObjectProperty<@Nullable Node> body = new SimpleObjectProperty<>(this, "body");
-
     public @Nullable Node getBody() {
         return body.get();
     }
@@ -95,8 +94,6 @@ public class Card extends Control {
     public ObjectProperty<@Nullable Node> footerProperty() {
         return footer;
     }
-
-    private final ObjectProperty<@Nullable Node> footer = new SimpleObjectProperty<>(this, "footer");
 
     public @Nullable Node getFooter() {
         return footer.get();

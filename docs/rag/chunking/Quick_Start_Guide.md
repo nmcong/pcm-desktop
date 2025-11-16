@@ -2,11 +2,13 @@
 
 ## Giới thiệu nhanh
 
-PCM Chunking System cung cấp **15 chunking strategies** cho document processing trong RAG applications. System hỗ trợ automatic strategy selection và quality assessment.
+PCM Chunking System cung cấp **15 chunking strategies** cho document processing trong RAG applications. System hỗ trợ
+automatic strategy selection và quality assessment.
 
 ## 🚀 Sử dụng cơ bản (5 phút)
 
 ### 1. Import cần thiết
+
 ```java
 import com.noteflix.pcm.rag.chunking.api.ChunkingStrategy;
 import com.noteflix.pcm.rag.chunking.core.ChunkingConfig;
@@ -17,6 +19,7 @@ import com.noteflix.pcm.rag.model.DocumentType;
 ```
 
 ### 2. Tạo document
+
 ```java
 RAGDocument document = RAGDocument.builder()
     .id("my-document")
@@ -27,6 +30,7 @@ RAGDocument document = RAGDocument.builder()
 ```
 
 ### 3. Chunk document (Automatic - Recommended)
+
 ```java
 // Automatic strategy selection
 ChunkingStrategy strategy = ChunkingFactory.createOptimalStrategy(
@@ -44,6 +48,7 @@ for (DocumentChunk chunk : chunks) {
 ## 🎯 Lựa chọn Strategy cụ thể
 
 ### LangChain4j Strategies (Recommended for Production)
+
 ```java
 // Best general-purpose strategy
 ChunkingStrategy strategy = ChunkingFactory.createStrategy(
@@ -59,6 +64,7 @@ ChunkingStrategy strategy = ChunkingFactory.createStrategy(
 ```
 
 ### PCM Strategies (Best for Semantic Analysis)
+
 ```java
 // Semantic chunking (highest quality)
 ChunkingStrategy strategy = ChunkingFactory.createStrategy(
@@ -75,17 +81,18 @@ ChunkingStrategy strategy = ChunkingFactory.createStrategy(
 
 ## 📊 So sánh nhanh strategies
 
-| Strategy | Speed | Quality | Best For |
-|----------|-------|---------|----------|
-| `LANGCHAIN4J_HIERARCHICAL` | ⭐⭐⭐ | ⭐⭐⭐⭐⭐ | **General purpose** |
-| `SEMANTIC` | ⭐⭐ | ⭐⭐⭐⭐⭐ | Academic papers |
-| `LANGCHAIN4J_PARAGRAPH` | ⭐⭐⭐⭐ | ⭐⭐⭐⭐ | Well-structured docs |
-| `SENTENCE_AWARE` | ⭐⭐⭐⭐ | ⭐⭐⭐⭐ | Narrative content |
-| `FIXED_SIZE` | ⭐⭐⭐⭐⭐ | ⭐⭐⭐ | High-volume processing |
+| Strategy                   | Speed | Quality | Best For               |
+|----------------------------|-------|---------|------------------------|
+| `LANGCHAIN4J_HIERARCHICAL` | ⭐⭐⭐   | ⭐⭐⭐⭐⭐   | **General purpose**    |
+| `SEMANTIC`                 | ⭐⭐    | ⭐⭐⭐⭐⭐   | Academic papers        |
+| `LANGCHAIN4J_PARAGRAPH`    | ⭐⭐⭐⭐  | ⭐⭐⭐⭐    | Well-structured docs   |
+| `SENTENCE_AWARE`           | ⭐⭐⭐⭐  | ⭐⭐⭐⭐    | Narrative content      |
+| `FIXED_SIZE`               | ⭐⭐⭐⭐⭐ | ⭐⭐⭐     | High-volume processing |
 
 ## 🔧 Configuration nhanh
 
 ### Theo Document Type
+
 ```java
 // Technical documentation
 ChunkingConfig config = ChunkingConfig.forTechnicalDocs();
@@ -101,6 +108,7 @@ ChunkingConfig config = ChunkingConfig.forNarrativeContent();
 ```
 
 ### Custom Configuration
+
 ```java
 ChunkingConfig config = ChunkingConfig.builder()
     .primaryStrategy(ChunkingConfig.ChunkingStrategyType.LANGCHAIN4J_HIERARCHICAL)
@@ -212,17 +220,20 @@ public class QuickStartExample {
 ## 🚀 Next Steps
 
 ### Để tìm hiểu sâu hơn:
+
 1. **[LangChain4j Integration Guide](LangChain4j_Integration_Guide.md)** - Chi tiết về LangChain4j
 2. **[Complete Strategy Comparison](Complete_Chunking_Strategy_Comparison.md)** - So sánh tất cả 15 strategies
 3. **[Chunking Strategy Documentation](Chunking_Strategy_Documentation.md)** - Technical details
 
 ### Các tính năng nâng cao:
+
 - **Semantic Chunking**: Sử dụng embeddings cho highest quality
 - **Quality Assessment**: Automatic quality scoring và fallback
 - **Metadata Preservation**: Giữ nguyên tất cả metadata qua chunking
 - **Performance Optimization**: Tune configuration cho từng use case
 
 ### Performance Tips:
+
 - Sử dụng `LANGCHAIN4J_HIERARCHICAL` cho general-purpose
 - Sử dụng `SEMANTIC` cho highest quality (cần embedding service)
 - Sử dụng `FIXED_SIZE` cho highest speed

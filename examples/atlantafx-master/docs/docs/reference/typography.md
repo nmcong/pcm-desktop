@@ -2,7 +2,8 @@
 
 AtlantaFX doesn't include any fonts, it uses operating system font family.
 
-Default font size is `14px` (`~= 11pt`). You're free to change it, but please note that all stylesheets are tested with default font size only, so some controls may break with this change.
+Default font size is `14px` (`~= 11pt`). You're free to change it, but please note that all stylesheets are tested with
+default font size only, so some controls may break with this change.
 
 ## Font size
 
@@ -27,7 +28,7 @@ Default font size is `14px` (`~= 11pt`). You're free to change it, but please no
 ## Font weight
 
 !!! warning
-    JavaFX only supports bold or regular font weight. Other values are recognized by CSS parser, but reduced to one them.
+JavaFX only supports bold or regular font weight. Other values are recognized by CSS parser, but reduced to one them.
 
 * `text-bold`
 * `text-bolder`

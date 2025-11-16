@@ -5,6 +5,7 @@
 Complete RAG system for PCM Desktop with 100% offline support.
 
 **RAG = Retrieval + Generation**
+
 - **Retrieval**: Find relevant documents from knowledge base
 - **Generation**: Use LLM to generate answers based on retrieved context
 
@@ -80,7 +81,7 @@ com.noteflix.pcm.rag/
 ```java
 // Create vector store (offline)
 VectorStore store = VectorStoreFactory.create(
-    VectorStoreConfig.lucene("data/rag/index")
+        VectorStoreConfig.lucene("data/rag/index")
 );
 
 // Create RAG service
@@ -88,20 +89,28 @@ RAGService rag = new DefaultRAGService(store);
 
 // Index a document
 RAGDocument doc = RAGDocument.builder()
-    .id(UUID.randomUUID().toString())
-    .type(DocumentType.SOURCE_CODE)
-    .title("CustomerService.java")
-    .content("public class CustomerService { ... }")
-    .indexedAt(LocalDateTime.now())
-    .build();
+        .id(UUID.randomUUID().toString())
+        .type(DocumentType.SOURCE_CODE)
+        .title("CustomerService.java")
+        .content("public class CustomerService { ... }")
+        .indexedAt(LocalDateTime.now())
+        .build();
 
-rag.indexDocument(doc);
+rag.
+
+indexDocument(doc);
 
 // Query
 RAGResponse response = rag.query("How to validate customers?");
 
-System.out.println("Answer: " + response.getAnswer());
-System.out.println("Sources: " + response.getSources().size());
+System.out.
+
+println("Answer: "+response.getAnswer());
+        System.out.
+
+println("Sources: "+response.getSources().
+
+size());
 ```
 
 ### 2. Index Directory
@@ -112,11 +121,13 @@ DocumentIndexer indexer = new DocumentIndexer(rag);
 
 // Index entire directory
 IndexingProgress progress = indexer.indexDirectory(
-    Paths.get("src/main/java"),
-    true  // recursive
+        Paths.get("src/main/java"),
+        true  // recursive
 );
 
-System.out.println(progress);
+System.out.
+
+println(progress);
 // → Indexing Progress: 150 indexed, 20 skipped, 0 failed (total: 170) in 5234ms
 ```
 
@@ -125,29 +136,36 @@ System.out.println(progress);
 ```java
 // Create retrieval engine with reranking
 RetrievalEngine retrieval = new RetrievalEngine(
-    store,
-    true,  // query expansion
-    true   // reranking
+        store,
+        true,  // query expansion
+        true   // reranking
 );
 
 // Retrieve with options
 RetrievalOptions options = RetrievalOptions.builder()
-    .maxResults(10)
-    .minScore(0.5)
-    .searchMode(SearchMode.KEYWORD)
-    .build();
+        .maxResults(10)
+        .minScore(0.5)
+        .searchMode(SearchMode.KEYWORD)
+        .build();
 
 List<ScoredDocument> results = retrieval.retrieve(
-    "customer validation logic",
-    options
+        "customer validation logic",
+        options
 );
 
-for (ScoredDocument result : results) {
-    System.out.printf("%.3f - %s%n", 
-        result.getScore(), 
-        result.getDocument().getTitle()
+for(
+ScoredDocument result :results){
+        System.out.
+
+printf("%.3f - %s%n",
+       result.getScore(), 
+        result.
+
+getDocument().
+
+getTitle()
     );
-}
+            }
 ```
 
 ---
@@ -157,6 +175,7 @@ for (ScoredDocument result : results) {
 ### Vector Stores
 
 **Lucene (Offline) - Current ✅**
+
 - 100% offline
 - BM25 ranking
 - Fast keyword search
@@ -164,25 +183,27 @@ for (ScoredDocument result : results) {
 
 ```java
 VectorStore store = VectorStoreFactory.create(
-    VectorStoreConfig.lucene("data/rag/index")
+        VectorStoreConfig.lucene("data/rag/index")
 );
 ```
 
 **Qdrant (Optional)**
+
 - Semantic search
 - Vector similarity
 - Can run locally
 
 ```java
 VectorStore store = VectorStoreFactory.create(
-    VectorStoreConfig.qdrantLocal()
+        VectorStoreConfig.qdrantLocal()
 );
 ```
 
 **In-Memory (Testing)**
+
 ```java
 VectorStore store = VectorStoreFactory.create(
-    VectorStoreConfig.inMemory()
+        VectorStoreConfig.inMemory()
 );
 ```
 
@@ -191,21 +212,25 @@ VectorStore store = VectorStoreFactory.create(
 ### Document Parsers
 
 **JavaParser** - Parse Java source files
+
 - Extracts package, class names
 - Preserves code structure
 - Metadata: package, class, language
 
 **SQLParser** - Parse SQL files
+
 - Tables, procedures, functions
 - Auto-detects object type
 - Metadata: objectName, language
 
 **MarkdownParser** - Parse Markdown docs
+
 - Extracts title from # heading
 - Categorizes by path
 - Metadata: format, category
 
 **TextParser** - Plain text files
+
 - Fallback for .txt, .log, .properties, .xml, .json, .yml
 - Auto-detects file type
 - Metadata: format, fileType
@@ -215,6 +240,7 @@ VectorStore store = VectorStoreFactory.create(
 ### Document Indexer
 
 **Features:**
+
 - Multi-format support (Java, SQL, Markdown, Text)
 - Recursive directory scanning
 - Progress tracking
@@ -222,22 +248,31 @@ VectorStore store = VectorStoreFactory.create(
 - Skip hidden files
 
 **Usage:**
+
 ```java
 DocumentIndexer indexer = new DocumentIndexer(ragService);
 
 // Index single file
-indexer.indexFile(Paths.get("src/Customer.java"));
+indexer.
+
+indexFile(Paths.get("src/Customer.java"));
 
 // Index directory
 IndexingProgress progress = indexer.indexDirectory(
-    Paths.get("src/main/java"),
-    true  // recursive
+        Paths.get("src/main/java"),
+        true  // recursive
 );
 
-System.out.printf("Indexed: %d, Skipped: %d, Failed: %d%n",
-    progress.getIndexedCount(),
-    progress.getSkippedCount(),
-    progress.getFailedCount()
+System.out.
+
+printf("Indexed: %d, Skipped: %d, Failed: %d%n",
+       progress.getIndexedCount(),
+    progress.
+
+getSkippedCount(),
+    progress.
+
+getFailedCount()
 );
 ```
 
@@ -246,17 +281,19 @@ System.out.printf("Indexed: %d, Skipped: %d, Failed: %d%n",
 ### Retrieval Engine
 
 **Features:**
+
 - Query expansion (synonyms, variations)
 - Result deduplication
 - Reranking (title matching, boost)
 - Diversity filtering (avoid redundant results)
 
 **Usage:**
+
 ```java
 RetrievalEngine retrieval = new RetrievalEngine(
-    vectorStore,
-    true,  // enable query expansion
-    true   // enable reranking
+        vectorStore,
+        true,  // enable query expansion
+        true   // enable reranking
 );
 
 List<ScoredDocument> results = retrieval.retrieve(query, options);
@@ -267,6 +304,7 @@ List<ScoredDocument> results = retrieval.retrieve(query, options);
 ### Embeddings (Semantic Search)
 
 **SimpleEmbeddingService** - Ready now!
+
 ```java
 EmbeddingService embeddings = new SimpleEmbeddingService(384);
 float[] vector = embeddings.embed("Some text");
@@ -274,6 +312,7 @@ float[] vector = embeddings.embed("Some text");
 ```
 
 **DJLEmbeddingService** - Production
+
 ```bash
 # Setup
 ./scripts/setup-embeddings-djl.sh
@@ -282,13 +321,14 @@ float[] vector = embeddings.embed("Some text");
 
 ```java
 EmbeddingService embeddings = new DJLEmbeddingService(
-    "data/models/all-MiniLM-L6-v2"
+        "data/models/all-MiniLM-L6-v2"
 );
 float[] vector = embeddings.embed("Some text");
 // Real 384-dim embedding!
 ```
 
 **ONNXEmbeddingService** - Production (more control)
+
 ```bash
 # Setup
 ./scripts/setup-embeddings-onnx.sh
@@ -297,7 +337,7 @@ float[] vector = embeddings.embed("Some text");
 
 ```java
 EmbeddingService embeddings = new ONNXEmbeddingService(
-    "data/models/all-MiniLM-L6-v2"
+        "data/models/all-MiniLM-L6-v2"
 );
 ```
 
@@ -336,12 +376,16 @@ public class IndexProjectExample {
 ```java
 // Search only in Java files
 RetrievalOptions options = RetrievalOptions.builder()
-    .maxResults(5)
-    .minScore(0.3)
-    .build();
+        .maxResults(5)
+        .minScore(0.3)
+        .build();
 
-options.addTypes(DocumentType.SOURCE_CODE);
-options.addFilter("language", "java");
+options.
+
+addTypes(DocumentType.SOURCE_CODE);
+options.
+
+addFilter("language","java");
 
 RAGResponse response = rag.query("customer validation", options);
 ```
@@ -356,9 +400,9 @@ RAGService rag = new SemanticRAGService(store, embeddings);
 
 // Hybrid search
 RetrievalOptions options = RetrievalOptions.builder()
-    .searchMode(SearchMode.HYBRID)  // Combine keyword + semantic
-    .maxResults(10)
-    .build();
+        .searchMode(SearchMode.HYBRID)  // Combine keyword + semantic
+        .maxResults(10)
+        .build();
 
 RAGResponse response = rag.query("How to check email?", options);
 ```
@@ -368,16 +412,19 @@ RAGResponse response = rag.query("How to check email?", options);
 ## 📊 Performance
 
 ### Indexing Speed
+
 - **Java files**: ~20-30 files/second
 - **SQL files**: ~30-40 files/second
 - **Markdown**: ~50-60 files/second
 
 ### Search Speed
+
 - **Lucene (keyword)**: 1-30ms per query
 - **In-memory**: <1ms per query
 - **Qdrant (semantic)**: 5-20ms per query
 
 ### Memory Usage
+
 - **Lucene index**: ~2x original content size
 - **In-memory**: ~50MB per 1000 docs
 - **Embeddings**: ~200MB (DJL model loaded)
@@ -391,7 +438,7 @@ RAGResponse response = rag.query("How to check email?", options);
 ```java
 // Lucene (offline)
 VectorStoreConfig config = VectorStoreConfig.lucene(
-    "data/rag/lucene-index"
+        "data/rag/lucene-index"
 );
 
 // Qdrant (local)
@@ -399,9 +446,9 @@ VectorStoreConfig config = VectorStoreConfig.qdrantLocal();
 
 // Qdrant (remote)
 VectorStoreConfig config = VectorStoreConfig.qdrant(
-    "api.qdrant.io",
-    6333,
-    "api-key"
+        "api.qdrant.io",
+        6333,
+        "api-key"
 );
 ```
 
@@ -409,15 +456,19 @@ VectorStoreConfig config = VectorStoreConfig.qdrant(
 
 ```java
 RetrievalOptions options = RetrievalOptions.builder()
-    .maxResults(10)          // Max results
-    .minScore(0.5)           // Min relevance score
-    .includeSnippets(true)   // Extract snippets
-    .searchMode(SearchMode.KEYWORD)  // or SEMANTIC, HYBRID
-    .build();
+        .maxResults(10)          // Max results
+        .minScore(0.5)           // Min relevance score
+        .includeSnippets(true)   // Extract snippets
+        .searchMode(SearchMode.KEYWORD)  // or SEMANTIC, HYBRID
+        .build();
 
 // Add filters
-options.addTypes(DocumentType.SOURCE_CODE, DocumentType.DATABASE_SCHEMA);
-options.addFilter("package", "com.noteflix.pcm");
+options.
+
+addTypes(DocumentType.SOURCE_CODE, DocumentType.DATABASE_SCHEMA);
+options.
+
+addFilter("package","com.noteflix.pcm");
 ```
 
 ### Chunking Strategy
@@ -430,9 +481,12 @@ ChunkingStrategy chunker = new FixedSizeChunking(1000, 200);
 List<DocumentChunk> chunks = chunker.chunk(document);
 
 // Index each chunk
-for (DocumentChunk chunk : chunks) {
-    RAGDocument chunkDoc = createChunkDocument(chunk);
-    rag.indexDocument(chunkDoc);
+for(
+DocumentChunk chunk :chunks){
+RAGDocument chunkDoc = createChunkDocument(chunk);
+    rag.
+
+indexDocument(chunkDoc);
 }
 ```
 
@@ -450,6 +504,7 @@ All examples in `com.noteflix.pcm.rag.examples`:
 6. **IndexerExample** - Document indexing
 
 **Run example:**
+
 ```bash
 java -cp "out:lib/javafx/*:lib/others/*:lib/rag/*" \
   com.noteflix.pcm.rag.examples.BasicRAGExample
@@ -515,7 +570,9 @@ DocumentParser parser = findParser(filePath);
 options.setMaxResults(5);
 
 // Add type filters
-options.addTypes(DocumentType.SOURCE_CODE);
+options.
+
+addTypes(DocumentType.SOURCE_CODE);
 
 // Use simpler queries
 ```
@@ -535,6 +592,7 @@ options.addTypes(DocumentType.SOURCE_CODE);
 ## ✅ Status
 
 ### Implemented ✅
+
 - Vector stores (Lucene, InMemory)
 - Document models
 - Document parsers (Java, SQL, Markdown, Text)
@@ -545,6 +603,7 @@ options.addTypes(DocumentType.SOURCE_CODE);
 - Examples & tests
 
 ### Optional Enhancements
+
 - [ ] Qdrant implementation
 - [ ] DJL/ONNX production setup
 - [ ] Advanced reranking (cross-encoder)
@@ -556,6 +615,7 @@ options.addTypes(DocumentType.SOURCE_CODE);
 ## 🚀 Summary
 
 **PCM Desktop RAG System:**
+
 - ✅ **100% Offline** - No internet required
 - ✅ **Multi-format** - Java, SQL, Markdown, Text
 - ✅ **Fast** - 1-30ms query time

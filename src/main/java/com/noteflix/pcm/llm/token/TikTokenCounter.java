@@ -2,8 +2,9 @@ package com.noteflix.pcm.llm.token;
 
 import com.noteflix.pcm.llm.api.TokenCounter;
 import com.noteflix.pcm.llm.model.Message;
-import java.util.List;
 import lombok.extern.slf4j.Slf4j;
+
+import java.util.List;
 
 /**
  * Accurate token counter using TikToken algorithm (GPT models).
@@ -16,39 +17,39 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class TikTokenCounter implements TokenCounter {
 
-  private final String model;
-  private final TokenCounter fallback;
+    private final String model;
+    private final TokenCounter fallback;
 
-  public TikTokenCounter(String model) {
-    this.model = model;
-    this.fallback = new DefaultTokenCounter();
+    public TikTokenCounter(String model) {
+        this.model = model;
+        this.fallback = new DefaultTokenCounter();
 
-    log.warn("TikTokenCounter not fully implemented yet. Using fallback counter.");
-    log.info("To enable accurate token counting, integrate TikToken library");
-  }
+        log.warn("TikTokenCounter not fully implemented yet. Using fallback counter.");
+        log.info("To enable accurate token counting, integrate TikToken library");
+    }
 
-  @Override
-  public int count(String text) {
-    // TODO: Implement TikToken-based counting
-    // For now, use fallback
-    return fallback.count(text);
-  }
+    @Override
+    public int count(String text) {
+        // TODO: Implement TikToken-based counting
+        // For now, use fallback
+        return fallback.count(text);
+    }
 
-  @Override
-  public int count(List<Message> messages) {
-    // TODO: Implement TikToken-based counting with proper message formatting
-    // Different models have different message format overheads
-    return fallback.count(messages);
-  }
+    @Override
+    public int count(List<Message> messages) {
+        // TODO: Implement TikToken-based counting with proper message formatting
+        // Different models have different message format overheads
+        return fallback.count(messages);
+    }
 
-  @Override
-  public int estimate(String text) {
-    // Estimation can use fallback
-    return fallback.estimate(text);
-  }
+    @Override
+    public int estimate(String text) {
+        // Estimation can use fallback
+        return fallback.estimate(text);
+    }
 
-  @Override
-  public String getName() {
-    return "tiktoken-" + model;
-  }
+    @Override
+    public String getName() {
+        return "tiktoken-" + model;
+    }
 }

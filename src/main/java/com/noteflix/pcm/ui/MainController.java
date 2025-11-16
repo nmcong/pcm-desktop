@@ -17,39 +17,39 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class MainController {
 
-  public MainController() {
-    log.info("🚀 Initializing Project Cognition Mentor Controller - Pure Java Architecture...");
-    log.info("✅ Controller initialized successfully");
-    log.info("🎨 Using AtlantaFX Sampler patterns for UI");
-  }
+    public MainController() {
+        log.info("🚀 Initializing Project Cognition Mentor Controller - Pure Java Architecture...");
+        log.info("✅ Controller initialized successfully");
+        log.info("🎨 Using AtlantaFX Sampler patterns for UI");
+    }
 
-  public void exit() {
-    log.info("🚪 Exit");
-    Platform.exit();
-  }
+    public void exit() {
+        log.info("🚪 Exit");
+        Platform.exit();
+    }
 
-  public void openAbout() {
-    log.info("ℹ️ About");
+    public void openAbout() {
+        log.info("ℹ️ About");
 
-    Alert alert = new Alert(Alert.AlertType.INFORMATION);
-    alert.setTitle(I18n.get("menu.help.about"));
-    alert.setHeaderText(I18n.appTitle());
-    alert.setContentText(
-      """
-        Version 1.0.0
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(I18n.get("menu.help.about"));
+        alert.setHeaderText(I18n.appTitle());
+        alert.setContentText(
+                """
+                        Version 1.0.0
 
-        Project Cognition Mentor
-        AI-Powered System Analysis & Business Management
+                        Project Cognition Mentor
+                        AI-Powered System Analysis & Business Management
 
-        Features:
-        • Screen and form tracking
-        • Workflow visualization
-        • Database object management
-        • Source code analysis
-        • AI-powered natural language queries
-        • Knowledge base integration
+                        Features:
+                        • Screen and form tracking
+                        • Workflow visualization
+                        • Database object management
+                        • Source code analysis
+                        • AI-powered natural language queries
+                        • Knowledge base integration
 
-        © 2025 nmcong.it@gmail.com""");
-    alert.showAndWait();
-  }
+                        © 2025 nmcong.it@gmail.com""");
+        alert.showAndWait();
+    }
 }
