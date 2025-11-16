@@ -28,6 +28,8 @@ public class LoadingManager {
     
     private final IProjectService projectService;
     private final Consumer<String> onSectionHeaderCreate;
+    private final Runnable onRefreshStart; // Callback when refresh starts
+    private final Runnable onRefreshComplete; // Callback when refresh completes
     
     // Loading state
     private boolean isLoading = false;
@@ -36,9 +38,14 @@ public class LoadingManager {
     // Loading animations
     private final List<RotateTransition> loadingAnimations = new ArrayList<>();
     
-    public LoadingManager(IProjectService projectService, Consumer<String> onSectionHeaderCreate) {
+    public LoadingManager(IProjectService projectService, 
+                         Consumer<String> onSectionHeaderCreate,
+                         Runnable onRefreshStart,
+                         Runnable onRefreshComplete) {
         this.projectService = projectService;
         this.onSectionHeaderCreate = onSectionHeaderCreate;
+        this.onRefreshStart = onRefreshStart;
+        this.onRefreshComplete = onRefreshComplete;
     }
     
     /**
@@ -137,9 +144,20 @@ public class LoadingManager {
         
         isLoading = true;
         
+        // Notify refresh start (to start button animation)
+        if (onRefreshStart != null) {
+            onRefreshStart.run();
+        }
+        
         loadingTask = projectService.refreshDataAsync().thenRun(() -> {
             Platform.runLater(() -> {
                 isLoading = false;
+                
+                // Notify refresh complete (to stop button animation)
+                if (onRefreshComplete != null) {
+                    onRefreshComplete.run();
+                }
+                
                 onComplete.run();
                 log.info("Sidebar refresh completed");
             });

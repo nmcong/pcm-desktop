@@ -89,7 +89,6 @@ public class SidebarView extends VBox implements ThemeChangeListener, Navigation
 
     // Initialize component managers
     this.highlightManager = new ProjectHighlightManager(projectItems);
-    this.loadingManager = new LoadingManager(projectService, this::handleSectionHeaderCreate);
     this.header = new SidebarHeader(this::openSearchDialog);
     this.mainMenu = new MainMenu(
         this::navigateWithCancellation,
@@ -101,14 +100,7 @@ public class SidebarView extends VBox implements ThemeChangeListener, Navigation
         this::handleSettingsMenu
     );
     
-    // Navigation handler initialized with null pageNavigator (will be updated when pageNavigator is set)
-    this.navigationHandler = new SidebarNavigationHandler(
-        null, // pageNavigator will be set later
-        projectService, 
-        highlightManager,
-        () -> mainMenu.clearHighlighting() // Callback to clear menu highlighting
-    );
-    
+    // Project section manager needs to be initialized first to access refresh button controls
     this.projectSectionManager = new ProjectSectionManager(
         projectService,
         projectItems,
@@ -117,6 +109,22 @@ public class SidebarView extends VBox implements ThemeChangeListener, Navigation
         this::handleRefreshProjects,
         this::handleNewProject,
         this::buildSidebarWithProjects // For context menu actions - just rebuild UI
+    );
+    
+    // Loading manager with refresh button callbacks
+    this.loadingManager = new LoadingManager(
+        projectService, 
+        this::handleSectionHeaderCreate,
+        () -> projectSectionManager.startRefreshAnimation(), // Start refresh animation
+        () -> projectSectionManager.stopRefreshAnimation()   // Stop refresh animation
+    );
+    
+    // Navigation handler initialized with null pageNavigator (will be updated when pageNavigator is set)
+    this.navigationHandler = new SidebarNavigationHandler(
+        null, // pageNavigator will be set later
+        projectService, 
+        highlightManager,
+        () -> mainMenu.clearHighlighting() // Callback to clear menu highlighting
     );
 
     // Register for theme changes
@@ -189,17 +197,10 @@ public class SidebarView extends VBox implements ThemeChangeListener, Navigation
   private void refreshWithLoadingState() {
     log.debug("Refreshing sidebar with loading state");
     
-    // Clear current content and show loading
-    getChildren().clear();
-    getChildren().addAll(createHeader(), createMainMenu());
+    // Instead of clearing everything, just refresh the data and let the animation show in the button
+    // This prevents losing the refresh button during loading
     
-    // Show loading placeholders using loading manager
-    getChildren().addAll(
-        loadingManager.createLoadingSection("FAVORITES"), 
-        loadingManager.createLoadingSection("PROJECTS")
-    );
-    
-    // Start async data refresh using loading manager
+    // Start async data refresh using loading manager (which will handle button animation)
     loadingManager.refreshProjectDataAsync(this::buildSidebarWithProjects);
   }
   
@@ -229,6 +230,9 @@ public class SidebarView extends VBox implements ThemeChangeListener, Navigation
     
     // Stop all loading animations using loading manager
     loadingManager.stopLoadingAnimations();
+    
+    // Stop refresh animation before rebuilding (since we'll lose the button reference)
+    projectSectionManager.stopRefreshAnimation();
     
     // Clear existing children
     getChildren().clear();

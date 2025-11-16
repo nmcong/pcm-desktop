@@ -3,14 +3,17 @@ package com.noteflix.pcm.ui.components.sidebar;
 import atlantafx.base.theme.Styles;
 import com.noteflix.pcm.application.service.project.IProjectService;
 import com.noteflix.pcm.domain.entity.Project;
+import javafx.animation.RotateTransition;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
+import javafx.util.Duration;
 import lombok.extern.slf4j.Slf4j;
 import org.kordamp.ikonli.javafx.FontIcon;
 import org.kordamp.ikonli.octicons.Octicons;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -30,6 +33,11 @@ public class ProjectSectionManager {
     private final Runnable onRefreshProjects;
     private final Runnable onNewProject;
     private final Runnable onRebuildUI; // For context menu actions that just need UI rebuild
+    
+    // Refresh button state management
+    private Button currentRefreshButton;
+    private FontIcon currentRefreshIcon;
+    private RotateTransition refreshAnimation;
     
     public ProjectSectionManager(IProjectService projectService,
                                 Map<String, HBox> projectItems,
@@ -142,11 +150,60 @@ public class ProjectSectionManager {
     
     private Button createRefreshButton() {
         Button refreshButton = new Button();
-        refreshButton.setGraphic(new FontIcon(Octicons.SYNC_24));
+        FontIcon refreshIcon = new FontIcon(Octicons.SYNC_24);
+        refreshButton.setGraphic(refreshIcon);
         refreshButton.getStyleClass().addAll(Styles.BUTTON_ICON, Styles.FLAT, "icon-btn");
         refreshButton.setTooltip(new Tooltip("Refresh Projects"));
-        refreshButton.setOnAction(e -> onRefreshProjects.run());
+        refreshButton.setOnAction(e -> {
+            startRefreshAnimation();
+            onRefreshProjects.run();
+        });
+        
+        // Store references for state management
+        this.currentRefreshButton = refreshButton;
+        this.currentRefreshIcon = refreshIcon;
+        
         return refreshButton;
+    }
+    
+    /**
+     * Start refresh animation and disable button
+     */
+    public void startRefreshAnimation() {
+        if (currentRefreshButton != null && currentRefreshIcon != null) {
+            // Disable button
+            currentRefreshButton.setDisable(true);
+            
+            // Create and start rotation animation
+            if (refreshAnimation != null) {
+                refreshAnimation.stop();
+            }
+            
+            refreshAnimation = new RotateTransition(Duration.seconds(1.0), currentRefreshIcon);
+            refreshAnimation.setByAngle(360);
+            refreshAnimation.setCycleCount(RotateTransition.INDEFINITE);
+            refreshAnimation.play();
+            
+            log.debug("Started refresh animation");
+        }
+    }
+    
+    /**
+     * Stop refresh animation and re-enable button
+     */
+    public void stopRefreshAnimation() {
+        if (currentRefreshButton != null) {
+            // Re-enable button
+            currentRefreshButton.setDisable(false);
+            
+            // Stop animation
+            if (refreshAnimation != null) {
+                refreshAnimation.stop();
+                refreshAnimation = null;
+            }
+            
+            log.debug("Stopped refresh animation");
+        }
     }
     
     private Button createAddButton() {

@@ -26,12 +26,7 @@ public class ProjectService {
         
         // Simulate network/database delay
         Thread.sleep(2000);
-        
-        // Simulate potential loading failure (5% chance)
-        if (Math.random() < 0.05) {
-          throw new RuntimeException("Failed to load project data from server");
-        }
-        
+
         ProjectData projectData = createMockProjectData(projectCode);
         log.info("Successfully loaded project data for: {}", projectCode);
         
