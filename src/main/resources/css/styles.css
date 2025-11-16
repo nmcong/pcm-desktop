@@ -791,8 +791,8 @@
 }
 
 .send-btn {
-    -fx-background-color: -fx-accent-primary;
-    -fx-text-fill: white;
+    -fx-background-color: -fx-send-btn-bg;
+    -fx-text-fill: -fx-send-btn-text;
     -fx-background-radius: 16px;
     -fx-min-width: 32px;
     -fx-min-height: 32px;
@@ -801,7 +801,92 @@
 }
 
 .send-btn:hover {
-    -fx-background-color: -fx-accent-hover;
+    -fx-background-color: -fx-send-btn-hover;
+}
+
+/* Message Avatars */
+.message-avatar {
+    -fx-background-color: -fx-avatar-bg;
+    -fx-background-radius: 16px;
+    -fx-border-color: -fx-avatar-border;
+    -fx-border-width: 1px;
+    -fx-border-radius: 16px;
+    -fx-alignment: center;
+}
+
+.ai-avatar {
+    -fx-icon-color: -fx-ai-avatar-color;
+}
+
+.user-avatar {
+    -fx-icon-color: -fx-user-avatar-color;
+}
+
+/* AI Message Content (no bubble) */
+.ai-message-content {
+    -fx-padding: 0;
+}
+
+.ai-message-text {
+    -fx-font-size: 14px;
+    -fx-text-fill: -fx-text-primary;
+    -fx-line-spacing: 2px;
+}
+
+/* AI Message Actions */
+.ai-message-actions {
+    -fx-padding: 4px 0 0 0;
+}
+
+.message-action-buttons {
+    -fx-spacing: 4px;
+}
+
+.message-action-btn {
+    -fx-text-fill: -fx-text-muted;
+    -fx-background-color: transparent;
+    -fx-padding: 4px;
+    -fx-background-radius: 4px;
+}
+
+.message-action-btn:hover {
+    -fx-text-fill: -fx-accent-primary;
+    -fx-background-color: rgba(99, 102, 241, 0.1);
+}
+
+/* Conversation Delete Button */
+.conversation-delete-btn {
+    -fx-text-fill: -fx-text-muted;
+    -fx-background-color: transparent;
+    -fx-padding: 2px;
+}
+
+.conversation-delete-btn:hover {
+    -fx-text-fill: -fx-error;
+    -fx-background-color: rgba(239, 68, 68, 0.1);
+    -fx-background-radius: 4px;
+}
+
+/* AI Status Indicator */
+.ai-status-indicator {
+    -fx-padding: 8px 0;
+}
+
+.status-icon {
+    -fx-icon-color: -fx-accent-primary;
+    -fx-icon-size: 14px;
+}
+
+.status-text {
+    -fx-text-fill: -fx-text-muted;
+    -fx-font-style: italic;
+}
+
+.status-thinking .status-icon,
+.status-loading .status-icon,
+.status-planning .status-icon,
+.status-searching .status-icon {
+    -fx-icon-color: -fx-accent-primary;
 }
 
 /* Quick Suggestions */

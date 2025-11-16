@@ -8,8 +8,8 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import org.kordamp.ikonli.antdesignicons.AntDesignIconsOutlined;
-import org.kordamp.ikonli.feather.Feather;
 import org.kordamp.ikonli.javafx.FontIcon;
+import org.kordamp.ikonli.octicons.Octicons;
 
 /**
  * Welcome screen component shown when no conversation is active
@@ -68,13 +68,13 @@ public class WelcomeScreen extends VBox {
         // Define 4 suggestion themes with icons
         SuggestionCard[] suggestions = {
                 new SuggestionCard(
-                        Feather.SEARCH, "Search Knowledge", "Explore database schema and structure"),
+                        Octicons.SEARCH_24, "Search Knowledge", "Explore database schema and structure"),
                 new SuggestionCard(
-                        Feather.TOOL, "Find Solutions", "Review code quality and best practices"),
+                        Octicons.TOOLS_24, "Find Solutions", "Review code quality and best practices"),
                 new SuggestionCard(
-                        Feather.EDIT_3, "Create Content", "Generate documentation and reports"),
+                        Octicons.PENCIL_24, "Create Content", "Generate documentation and reports"),
                 new SuggestionCard(
-                        Feather.ACTIVITY, "Analyze System", "Get insights on performance and metrics")
+                        Octicons.PULSE_24, "Analyze System", "Get insights on performance and metrics")
         };
 
         // Add cards to grid (2x2 layout)

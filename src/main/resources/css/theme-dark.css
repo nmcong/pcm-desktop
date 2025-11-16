@@ -40,6 +40,17 @@
     -fx-success: #10b981;
     -fx-warning: #f59e0b;
     -fx-error: #ef4444;
+
+    /* Send Button Colors */
+    -fx-send-btn-bg: #3b82f6;
+    -fx-send-btn-text: #ffffff;
+    -fx-send-btn-hover: #2563eb;
+
+    /* Avatar Colors */
+    -fx-avatar-bg: #1f2937;
+    -fx-avatar-border: #374151;
+    -fx-ai-avatar-color: #60a5fa;
+    -fx-user-avatar-color: #a78bfa;
 }
 
 /* ================================================================
@@ -155,33 +166,31 @@
     -fx-padding: 20px;
 }
 
-/* User Message - Blue bubble with darker shadow */
+/* User Message - Dark gray bubble with border (old AI style) */
 .user-message-bubble {
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 8, 0, 0, 2);
+    -fx-background-color: #1f2937;
+    -fx-border-color: #374151;
+    -fx-border-width: 1px;
+    -fx-border-radius: 18px;
+    -fx-background-radius: 18px;
+    -fx-effect: dropshadow(gaussian, rgba(99, 102, 241, 0.15), 12, 0, 0, 2);
 }
 
 .user-message-bubble .message-text {
-    -fx-text-fill: white;
-}
-
-.user-message-bubble .message-time {
-    -fx-text-fill: rgba(255, 255, 255, 0.7);
-}
-
-/* AI Message - Dark gray bubble with subtle border */
-.ai-message-bubble {
-    -fx-border-color: #2d3142;
-    -fx-border-width: 1px;
-    -fx-border-radius: 18px 18px 18px 4px;
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 8, 0, 0, 2);
-}
-
-.ai-message-bubble .message-text {
     -fx-text-fill: #f8fafc;
 }
 
-.ai-message-bubble .message-time {
+.user-message-bubble .message-time {
     -fx-text-fill: #64748b;
+}
+
+/* AI Message - No bubble, plain text */
+.ai-message-content {
+    -fx-background-color: transparent;
+}
+
+.ai-message-text {
+    -fx-text-fill: #f8fafc;
 }
 
 /* Message Icons with glow effects */

@@ -16,8 +16,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import lombok.extern.slf4j.Slf4j;
-import org.kordamp.ikonli.feather.Feather;
 import org.kordamp.ikonli.javafx.FontIcon;
+import org.kordamp.ikonli.octicons.Octicons;
 
 import java.util.List;
 import java.util.Optional;
@@ -70,7 +70,7 @@ public class AIAssistantPage extends BaseView implements ChatEventHandler {
         super(
                 "AI Assistant",
                 "Chat with AI to analyze your system, review code, and get intelligent insights",
-                new FontIcon(Feather.MESSAGE_CIRCLE));
+                new FontIcon(Octicons.COMMENT_DISCUSSION_16));
 
         // IMPORTANT: Assign services IMMEDIATELY after super() to avoid NPE
         this.conversationService = conversationService;
@@ -92,6 +92,12 @@ public class AIAssistantPage extends BaseView implements ChatEventHandler {
     }
 
     @Override
+    protected VBox createPageHeader() {
+        // AI Chat doesn't need the standard page header
+        return null;
+    }
+
+    @Override
     protected VBox createMainContent() {
         VBox mainContent = new VBox();
         mainContent.getStyleClass().add("ai-chat-main");
@@ -104,12 +110,6 @@ public class AIAssistantPage extends BaseView implements ChatEventHandler {
 
         mainContent.getChildren().add(mainLayout);
         return mainContent;
-    }
-
-    @Override
-    protected VBox createPageHeader() {
-        // AI Chat doesn't need the standard page header
-        return null;
     }
 
     private HBox createMainLayout() {
@@ -156,7 +156,7 @@ public class AIAssistantPage extends BaseView implements ChatEventHandler {
             container.getChildren().add(welcomeScreen);
         } else {
             // Chat state
-            messagesArea = new ChatMessagesArea();
+            messagesArea = new ChatMessagesArea(this);
             VBox.setVgrow(messagesArea, Priority.ALWAYS);
 
             // Load messages
@@ -177,7 +177,7 @@ public class AIAssistantPage extends BaseView implements ChatEventHandler {
     @Override
     public void onNewChat() {
         currentConversationId = null;
-        rebuildUI();
+        refreshContentArea();
         if (inputArea != null) {
             inputArea.requestInputFocus();
         }
@@ -187,7 +187,10 @@ public class AIAssistantPage extends BaseView implements ChatEventHandler {
     public void onClearChat() {
         if (currentConversationId != null) {
             conversationService.clearConversation(currentConversationId);
-            rebuildUI();
+            if (messagesArea != null) {
+                messagesArea.clear();
+            }
+            loadConversations(); // Refresh sidebar
         }
     }
 
@@ -212,7 +215,7 @@ public class AIAssistantPage extends BaseView implements ChatEventHandler {
                 Conversation conv = conversationService.createConversation(
                         "New Chat", currentUserId, "openai", "gpt-3.5-turbo");
                 currentConversationId = conv.getId();
-                rebuildUI();
+                refreshContentArea();
             } catch (Exception e) {
                 log.error("Failed to create conversation", e);
                 showError(e);
@@ -228,8 +231,8 @@ public class AIAssistantPage extends BaseView implements ChatEventHandler {
         inputArea.clear();
         inputArea.setInputEnabled(false);
 
-        // Show loading
-        messagesArea.showLoadingIndicator();
+        // Show thinking status
+        messagesArea.showThinkingStatus();
 
         // Get AI response (with streaming)
         aiService.streamResponse(
@@ -249,7 +252,7 @@ public class AIAssistantPage extends BaseView implements ChatEventHandler {
                     @Override
                     public void onComplete() {
                         Platform.runLater(() -> {
-                            messagesArea.hideLoadingIndicator();
+                            messagesArea.hideStatusIndicator();
                             messagesArea.finalizeStreamingMessage();
                             inputArea.setInputEnabled(true);
                             inputArea.requestInputFocus();
@@ -261,7 +264,7 @@ public class AIAssistantPage extends BaseView implements ChatEventHandler {
                     @Override
                     public void onError(Throwable error) {
                         Platform.runLater(() -> {
-                            messagesArea.hideLoadingIndicator();
+                            messagesArea.hideStatusIndicator();
                             showError(error);
                             inputArea.setInputEnabled(true);
                         });
@@ -273,7 +276,7 @@ public class AIAssistantPage extends BaseView implements ChatEventHandler {
     public void onConversationSelected(Long conversationId) {
         if (!conversationId.equals(currentConversationId)) {
             currentConversationId = conversationId;
-            rebuildUI();
+            refreshContentArea();
         }
     }
 
@@ -285,6 +288,52 @@ public class AIAssistantPage extends BaseView implements ChatEventHandler {
             List<Conversation> results = conversationService.searchConversations(currentUserId, query);
             updateSidebar(results);
         }
+    }
+
+    @Override
+    public void onDeleteConversation(Long conversationId) {
+        if (conversationId == null) {
+            return;
+        }
+
+        try {
+            conversationService.deleteConversation(conversationId);
+            
+            // If deleting current conversation, clear it
+            if (conversationId.equals(currentConversationId)) {
+                currentConversationId = null;
+                refreshContentArea();
+            }
+            
+            // Refresh sidebar
+            loadConversations();
+        } catch (Exception e) {
+            log.error("Failed to delete conversation", e);
+            showError(e);
+        }
+    }
+
+    @Override
+    public void onCopyMessage(String content) {
+        // Copy to clipboard
+        javafx.scene.input.Clipboard clipboard = javafx.scene.input.Clipboard.getSystemClipboard();
+        javafx.scene.input.ClipboardContent clipboardContent = new javafx.scene.input.ClipboardContent();
+        clipboardContent.putString(content);
+        clipboard.setContent(clipboardContent);
+        
+        log.info("Message copied to clipboard");
+    }
+
+    @Override
+    public void onShowTokenInfo(Long messageId) {
+        // TODO: Implement token info dialog
+        log.info("Show token info for message: {}", messageId);
+        
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Token Info");
+        alert.setHeaderText("Message Token Information");
+        alert.setContentText("Message ID: " + messageId + "\n\nToken count feature coming soon...");
+        alert.showAndWait();
     }
 
     // ========== Helper Methods ==========
@@ -345,14 +394,26 @@ public class AIAssistantPage extends BaseView implements ChatEventHandler {
         log.error("AI response error", error);
     }
 
-    private void rebuildUI() {
+    /**
+     * Refresh only the content area (messages + input) without rebuilding entire UI
+     */
+    private void refreshContentArea() {
+        // Get the main layout (HBox with sidebar and content)
         VBox mainContent = (VBox) getChildren().get(getChildren().size() - 1);
-        mainContent.getChildren().clear();
-
-        HBox mainLayout = createMainLayout();
-        VBox.setVgrow(mainLayout, Priority.ALWAYS);
-
-        mainContent.getChildren().add(mainLayout);
+        HBox mainLayout = (HBox) mainContent.getChildren().get(0);
+        
+        // Remove old content area (index 1, after sidebar)
+        if (mainLayout.getChildren().size() > 1) {
+            mainLayout.getChildren().remove(1);
+        }
+        
+        // Create and add new content area
+        VBox newContentArea = createContentArea();
+        HBox.setHgrow(newContentArea, Priority.ALWAYS);
+        mainLayout.getChildren().add(newContentArea);
+        
+        // Update sidebar highlighting
+        updateSidebar(conversationService.getUserConversations(currentUserId));
     }
 
     @Override

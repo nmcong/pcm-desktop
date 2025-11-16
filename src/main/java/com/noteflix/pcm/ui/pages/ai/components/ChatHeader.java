@@ -11,8 +11,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
-import org.kordamp.ikonli.feather.Feather;
 import org.kordamp.ikonli.javafx.FontIcon;
+import org.kordamp.ikonli.octicons.Octicons;
 
 /**
  * Header component for chat area
@@ -31,7 +31,7 @@ public class ChatHeader extends HBox {
         setPadding(new Insets(12, 16, 12, 16));
         setSpacing(12);
 
-        FontIcon chatIcon = new FontIcon(Feather.MESSAGE_CIRCLE);
+        FontIcon chatIcon = new FontIcon(Octicons.COMMENT_DISCUSSION_16);
         chatIcon.setIconSize(16);
 
         VBox titleBox = new VBox(2);
@@ -48,7 +48,7 @@ public class ChatHeader extends HBox {
 
         // Chat actions
         Button clearBtn = new Button();
-        clearBtn.setGraphic(new FontIcon(Feather.TRASH_2));
+        clearBtn.setGraphic(new FontIcon(Octicons.TRASH_16));
         clearBtn.getStyleClass().addAll(Styles.BUTTON_ICON, Styles.FLAT);
         clearBtn.setTooltip(new Tooltip("Clear Chat"));
         clearBtn.setOnAction(e -> eventHandler.onClearChat());

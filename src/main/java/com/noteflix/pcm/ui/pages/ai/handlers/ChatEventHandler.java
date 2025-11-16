@@ -13,5 +13,11 @@ public interface ChatEventHandler {
     void onConversationSelected(Long conversationId);
 
     void onSearch(String query);
+
+    void onDeleteConversation(Long conversationId);
+
+    void onCopyMessage(String content);
+
+    void onShowTokenInfo(Long messageId);
 }
 

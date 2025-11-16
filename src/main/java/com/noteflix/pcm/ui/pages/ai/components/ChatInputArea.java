@@ -9,8 +9,8 @@ import javafx.scene.control.TextArea;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-import org.kordamp.ikonli.feather.Feather;
 import org.kordamp.ikonli.javafx.FontIcon;
+import org.kordamp.ikonli.octicons.Octicons;
 
 /**
  * Component for chat input with send button
@@ -65,7 +65,7 @@ public class ChatInputArea extends VBox {
         inputActions.setPadding(new Insets(8));
 
         sendButton = new Button();
-        sendButton.setGraphic(new FontIcon(Feather.SEND));
+        sendButton.setGraphic(new FontIcon(Octicons.PAPER_AIRPLANE_16));
         sendButton.getStyleClass().addAll(Styles.BUTTON_ICON, "send-btn");
         sendButton.setOnAction(e -> handleSend());
 
