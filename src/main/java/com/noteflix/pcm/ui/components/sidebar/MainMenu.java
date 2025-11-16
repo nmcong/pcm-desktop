@@ -33,7 +33,6 @@ public class MainMenu extends VBox {
     // Menu item handlers
     private final Runnable onAIAssistant;
     private final Runnable onKnowledgeBase;
-    private final Runnable onTextComponent;
     private final Runnable onBatchJobs;
     private final Runnable onDBObjects;
     private final Runnable onSettings;
@@ -41,7 +40,6 @@ public class MainMenu extends VBox {
     public MainMenu(Consumer<Runnable> navigationHandler,
                    Runnable onAIAssistant,
                    Runnable onKnowledgeBase,
-                   Runnable onTextComponent,
                    Runnable onBatchJobs,
                    Runnable onDBObjects,
                    Runnable onSettings) {
@@ -50,7 +48,6 @@ public class MainMenu extends VBox {
         this.navigationHandler = navigationHandler;
         this.onAIAssistant = onAIAssistant;
         this.onKnowledgeBase = onKnowledgeBase;
-        this.onTextComponent = onTextComponent;
         this.onBatchJobs = onBatchJobs;
         this.onDBObjects = onDBObjects;
         this.onSettings = onSettings;
@@ -65,7 +62,6 @@ public class MainMenu extends VBox {
         // Create menu items
         Button aiAssistantBtn = createAIAssistantMenuItem();
         Button knowledgeBaseBtn = createMenuItem("Knowledge Base", Octicons.BOOK_24, onKnowledgeBase);
-        Button textComponentBtn = createMenuItem("Text Component", Octicons.FILE_CODE_24, onTextComponent);
         Button batchJobsBtn = createMenuItem("Batch Jobs", Octicons.CLOCK_24, onBatchJobs);
         Button dbObjectsBtn = createMenuItem("DB Objects", Octicons.DATABASE_24, onDBObjects);
         Button settingsBtn = createMenuItem("Settings", Octicons.TOOLS_24, onSettings);
@@ -73,7 +69,6 @@ public class MainMenu extends VBox {
         // Store button references for highlighting
         menuButtons.put(AIAssistantPage.class, aiAssistantBtn);
         menuButtons.put(KnowledgeBasePage.class, knowledgeBaseBtn);
-        menuButtons.put(UniversalTextDemoPage.class, textComponentBtn);
         menuButtons.put(BatchJobsPage.class, batchJobsBtn);
         menuButtons.put(DatabaseObjectsPage.class, dbObjectsBtn);
         menuButtons.put(SettingsPage.class, settingsBtn);
@@ -81,7 +76,6 @@ public class MainMenu extends VBox {
         getChildren().addAll(
             aiAssistantBtn,
             knowledgeBaseBtn, 
-            textComponentBtn,
             batchJobsBtn,
             dbObjectsBtn,
             settingsBtn);

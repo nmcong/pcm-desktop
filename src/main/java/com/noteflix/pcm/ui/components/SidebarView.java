@@ -94,7 +94,6 @@ public class SidebarView extends VBox implements ThemeChangeListener, Navigation
         this::navigateWithCancellation,
         this::handleAIAssistant,
         this::handleKnowledgeBase,
-        this::handleTextComponent,
         this::handleBatchJobs,
         this::handleDBObjects,
         this::handleSettingsMenu
@@ -347,14 +346,6 @@ public class SidebarView extends VBox implements ThemeChangeListener, Navigation
     }
   }
 
-  private void handleTextComponent() {
-    navigationHandler.clearProjectHighlightingForMenuNavigation();
-    if (pageNavigator != null) {
-      pageNavigator.navigateToPage(UniversalTextDemoPage.class);
-    } else {
-      showInfo("Universal Text Component", "Demo of Universal Text Component");
-    }
-  }
 
   private void handleBatchJobs() {
     navigationHandler.clearProjectHighlightingForMenuNavigation();
