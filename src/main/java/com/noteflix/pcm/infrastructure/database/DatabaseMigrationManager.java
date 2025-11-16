@@ -121,9 +121,8 @@ public class DatabaseMigrationManager {
     private List<String> getAvailableMigrations() {
         List<String> migrations = new ArrayList<>();
 
-        // Hardcoded migration files (in real app, would scan directory)
-        migrations.add("V1__initial_schema.sql");
-        migrations.add("V2__chat_tables.sql");
+        // Single migration file - complete database setup
+        migrations.add("V1__init_database.sql");
 
         return migrations;
     }

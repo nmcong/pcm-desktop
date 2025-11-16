@@ -5,7 +5,7 @@ import com.noteflix.pcm.ui.base.BaseView;
 import com.noteflix.pcm.ui.pages.BatchJobsPage;
 import com.noteflix.pcm.ui.pages.DatabaseObjectsPage;
 import com.noteflix.pcm.ui.pages.KnowledgeBasePage;
-import com.noteflix.pcm.ui.pages.SettingsPage;
+import com.noteflix.pcm.ui.pages.settings.SettingsPage;
 import com.noteflix.pcm.ui.pages.ai.AIAssistantPage;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;

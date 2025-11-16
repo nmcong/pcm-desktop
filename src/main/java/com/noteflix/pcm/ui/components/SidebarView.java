@@ -13,7 +13,7 @@ import com.noteflix.pcm.ui.components.sidebar.*;
 import com.noteflix.pcm.ui.pages.BatchJobsPage;
 import com.noteflix.pcm.ui.pages.DatabaseObjectsPage;
 import com.noteflix.pcm.ui.pages.KnowledgeBasePage;
-import com.noteflix.pcm.ui.pages.SettingsPage;
+import com.noteflix.pcm.ui.pages.settings.SettingsPage;
 import com.noteflix.pcm.ui.pages.ai.AIAssistantPage;
 import com.noteflix.pcm.ui.pages.projects.BaseProjectPage;
 import javafx.application.Platform;

@@ -1,5 +1,7 @@
 package com.noteflix.pcm;
 
+import com.noteflix.pcm.application.service.chat.AIService;
+import com.noteflix.pcm.application.service.provider.ProviderSyncService;
 import com.noteflix.pcm.core.constants.AppConstants;
 import com.noteflix.pcm.core.di.Injector;
 import com.noteflix.pcm.core.i18n.I18n;
@@ -50,10 +52,15 @@ public class PCMApplication extends Application {
         I18n.setLocale("en"); // Default to English
         log.info("✅ i18n initialized: {}", I18n.getCurrentLocale().getDisplayName());
 
-        // Run database migrations BEFORE UI initialization
-        log.info("🔄 Running database migrations...");
-        runDatabaseMigrations();
-        log.info("✅ Database initialization completed successfully");
+        // Auto-initialize database if needed
+        log.info("🔄 Checking database...");
+        initializeDatabase();
+        log.info("✅ Database ready");
+
+        // Initialize providers and sync to database
+        log.info("🔄 Initializing LLM providers...");
+        initializeProviders();
+        log.info("✅ LLM providers initialized and synced to database");
     }
 
     @Override
@@ -99,20 +106,43 @@ public class PCMApplication extends Application {
     }
 
     /**
-     * Run database migrations
+     * Initialize database - auto-creates tables if they don't exist
      */
-    private void runDatabaseMigrations() {
+    private void initializeDatabase() {
         try {
             DatabaseMigrationManager migrationManager =
                     new DatabaseMigrationManager(ConnectionManager.INSTANCE);
 
+            // This will only run if tables don't exist (idempotent)
             migrationManager.migrate();
 
-            log.info("✅ Database migrations completed");
+            log.info("✅ Database initialized");
 
         } catch (Exception e) {
-            log.error("❌ Database migration failed", e);
-            throw new RuntimeException("Failed to run database migrations", e);
+            log.error("❌ Database initialization failed", e);
+            throw new RuntimeException("Failed to initialize database", e);
+        }
+    }
+
+    /**
+     * Initialize LLM providers and sync to database
+     */
+    private void initializeProviders() {
+        try {
+            // Initialize AIService which registers all providers
+            AIService aiService = new AIService();
+            log.info("✅ AIService initialized with providers");
+
+            // Sync registered providers to database
+            ProviderSyncService syncService = new ProviderSyncService();
+            int syncedCount = syncService.syncProvidersToDatabase();
+            syncService.syncActiveProvider();
+            log.info("✅ Synced {} provider(s) to database", syncedCount);
+
+        } catch (Exception e) {
+            log.error("❌ Provider initialization failed", e);
+            // Don't throw - allow app to start even if providers fail
+            log.warn("Application will continue without LLM providers");
         }
     }
 

@@ -101,11 +101,11 @@ public class MessageBubble extends VBox {
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
 
-        // Action buttons (hidden by default, shown on hover)
+        // Action buttons (always reserved space, shown/hidden on hover)
         HBox actionButtons = new HBox(4);
         actionButtons.getStyleClass().add("message-action-buttons");
         actionButtons.setVisible(false);
-        actionButtons.setManaged(false);
+        actionButtons.setManaged(true); // Always reserve space for buttons
 
         // Copy button
         Button copyBtn = new Button();
@@ -126,14 +126,11 @@ public class MessageBubble extends VBox {
         bottomRow.getChildren().addAll(timeLabel, spacer, actionButtons);
 
         // Show actions on hover
-        VBox parent = (VBox) getParent();
         setOnMouseEntered(e -> {
             actionButtons.setVisible(true);
-            actionButtons.setManaged(true);
         });
         setOnMouseExited(e -> {
             actionButtons.setVisible(false);
-            actionButtons.setManaged(false);
         });
 
         return bottomRow;

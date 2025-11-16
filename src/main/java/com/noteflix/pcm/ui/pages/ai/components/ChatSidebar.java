@@ -100,33 +100,42 @@ public class ChatSidebar extends VBox {
         VBox textContent = new VBox(4);
         HBox.setHgrow(textContent, Priority.ALWAYS);
 
+        // Title with timestamp on same line
+        HBox titleRow = new HBox(8);
+        titleRow.setAlignment(Pos.CENTER_LEFT);
+        
         Label titleLabel = new Label(conv.getTitle());
         titleLabel.getStyleClass().addAll(Styles.TEXT_BOLD);
-        titleLabel.setMaxWidth(160);
+        titleLabel.setMaxWidth(120);
+        
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
+        
+        Label timeLabel = new Label(
+                conv.getUpdatedAt().format(DateTimeFormatter.ofPattern("MMM dd")));
+        timeLabel.getStyleClass().addAll(Styles.TEXT_SMALL, "text-muted");
+        
+        titleRow.getChildren().addAll(titleLabel, spacer, timeLabel);
 
         Label previewLabel = new Label(
                 conv.getPreview() != null ? conv.getPreview() : "Empty conversation");
         previewLabel.getStyleClass().addAll(Styles.TEXT_SMALL, "text-muted");
-        previewLabel.setMaxWidth(160);
+        previewLabel.setMaxWidth(180);
 
-        textContent.getChildren().addAll(titleLabel, previewLabel);
+        textContent.getChildren().addAll(titleRow, previewLabel);
 
-        // Delete conversation button (hidden by default)
+        // Delete conversation button (hidden by default, always at the end)
         Button deleteBtn = new Button();
-        deleteBtn.setGraphic(new FontIcon(Octicons.X_16));
+        deleteBtn.setGraphic(new FontIcon(Octicons.TRASH_16));
         deleteBtn.getStyleClass().addAll(Styles.BUTTON_ICON, Styles.FLAT, "conversation-delete-btn");
         deleteBtn.setVisible(false);
-        deleteBtn.setManaged(false);
+        deleteBtn.setManaged(true); // Always reserve space
         deleteBtn.setOnAction(e -> {
             e.consume(); // Prevent conversation selection
             eventHandler.onDeleteConversation(conv.getId());
         });
 
-        Label timeLabel = new Label(
-                conv.getUpdatedAt().format(DateTimeFormatter.ofPattern("MMM dd")));
-        timeLabel.getStyleClass().addAll(Styles.TEXT_SMALL, "text-muted");
-
-        content.getChildren().addAll(textContent, deleteBtn, timeLabel);
+        content.getChildren().addAll(textContent, deleteBtn);
 
         Button sessionBtn = new Button();
         sessionBtn.setGraphic(content);
@@ -140,11 +149,9 @@ public class ChatSidebar extends VBox {
         // Show delete button on hover
         sessionBtn.setOnMouseEntered(e -> {
             deleteBtn.setVisible(true);
-            deleteBtn.setManaged(true);
         });
         sessionBtn.setOnMouseExited(e -> {
             deleteBtn.setVisible(false);
-            deleteBtn.setManaged(false);
         });
 
         sessionBtn.setOnAction(e -> eventHandler.onConversationSelected(conv.getId()));
