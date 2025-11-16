@@ -9,10 +9,8 @@ import com.noteflix.pcm.infrastructure.database.ConnectionManager;
 import com.noteflix.pcm.infrastructure.database.DatabaseMigrationManager;
 import com.noteflix.pcm.ui.MainController;
 import com.noteflix.pcm.ui.MainView;
-import java.util.Objects;
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import lombok.extern.slf4j.Slf4j;
 

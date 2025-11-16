@@ -116,9 +116,9 @@ public class MainView extends BorderPane implements ThemeChangeListener {
     MenuItem profileItem = new MenuItem("Profile");
     MenuItem preferencesItem = new MenuItem("Preferences");
     MenuItem aboutItem = new MenuItem("About");
-    aboutItem.setOnAction(e -> controller.handleHelpAbout());
+    aboutItem.setOnAction(e -> controller.openAbout());
     MenuItem logoutItem = new MenuItem("Logout");
-    logoutItem.setOnAction(e -> controller.handleFileExit());
+    logoutItem.setOnAction(e -> controller.exit());
 
     userMenu
         .getItems()
