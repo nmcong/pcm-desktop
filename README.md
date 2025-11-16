@@ -1,10 +1,10 @@
-# PCM Desktop Application
+# Project Cognition Mentor (PCM)
 
-**Project Code Management** - AI-Powered System Analysis & Business Management Tool
+**Project Cognition Mentor** - AI-Powered System Analysis & Business Management Tool
 
 ## 📋 Overview
 
-PCM Desktop là ứng dụng desktop AI-powered sử dụng Large Language Models (LLM) để phân tích và quản lý toàn bộ hệ thống
+Project Cognition Mentor là ứng dụng desktop AI-powered sử dụng Large Language Models (LLM) để phân tích và quản lý toàn bộ hệ thống
 phần mềm doanh nghiệp. Ứng dụng cho phép người dùng đặt câu hỏi và nhận được phân tích chi tiết về source code, nghiệp
 vụ, database, và các thành phần hệ thống.
 

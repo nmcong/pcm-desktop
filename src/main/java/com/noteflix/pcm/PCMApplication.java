@@ -17,7 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * PCM Desktop Application - Main Entry Point
  *
- * <p>Project Code Management (PCM) AI-Powered System Analysis & Business Management Tool
+ * <p>Project Cognition Mentor (PCM) AI-Powered System Analysis & Business Management Tool
  *
  * <p>This application provides comprehensive management and analysis capabilities for enterprise
  * software systems, including: - Source code analysis and mapping - Subsystem and project
@@ -32,7 +32,7 @@ import lombok.extern.slf4j.Slf4j;
 public class PCMApplication extends Application {
 
   public static void main(String[] args) {
-    log.info("🚀 Starting PCM Desktop Application - AI-Powered System Analysis Tool...");
+    log.info("🚀 Starting Project Cognition Mentor - AI-Powered System Analysis Tool...");
     launch(args);
   }
 
@@ -116,7 +116,7 @@ public class PCMApplication extends Application {
 
   @Override
   public void stop() {
-    log.info("Shutting down PCM Desktop Application...");
+    log.info("Shutting down Project Cognition Mentor...");
 
     // Shutdown async executor
     Asyncs.shutdown();

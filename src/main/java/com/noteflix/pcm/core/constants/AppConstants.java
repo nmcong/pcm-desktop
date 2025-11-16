@@ -4,7 +4,7 @@ package com.noteflix.pcm.core.constants;
 public final class AppConstants {
 
   // Application Info
-  public static final String APP_TITLE = "PCM - AI-Powered System Analysis";
+  public static final String APP_TITLE = "Project Cognition Mentor - AI-Powered System Analysis";
   public static final String APP_VERSION = "1.0.0";
   // Window Dimensions
   public static final int DEFAULT_WINDOW_WIDTH = 1400;

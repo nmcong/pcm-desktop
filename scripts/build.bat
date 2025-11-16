@@ -1,6 +1,6 @@
 @echo off
 REM =================================================================
-REM PCM Desktop - Build Script (Windows)
+REM Project Cognition Mentor - Build Script (Windows)
 REM =================================================================
 
 setlocal enabledelayedexpansion

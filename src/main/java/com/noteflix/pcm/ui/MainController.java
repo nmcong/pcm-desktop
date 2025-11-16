@@ -6,9 +6,9 @@ import javafx.scene.control.Alert;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * Main Controller for PCM Desktop WebApp
+ * Main Controller for Project Cognition Mentor WebApp
  *
- * <p>This controller manages the main PCM interface for project code management. Now using pure
+ * <p>This controller manages the main Project Cognition Mentor interface for project code management. Now using pure
  * Java code (no FXML) following AtlantaFX Sampler patterns.
  *
  * @author Noteflix Team
@@ -18,7 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 public class MainController {
 
   public MainController() {
-    log.info("🚀 Initializing PCM Desktop Controller - Pure Java Architecture...");
+    log.info("🚀 Initializing Project Cognition Mentor Controller - Pure Java Architecture...");
     log.info("✅ Controller initialized successfully");
     log.info("🎨 Using AtlantaFX Sampler patterns for UI");
   }
@@ -38,6 +38,7 @@ public class MainController {
       """
         Version 1.0.0
 
+        Project Cognition Mentor
         AI-Powered System Analysis & Business Management
 
         Features:

@@ -1,9 +1,9 @@
 #!/bin/bash
 
 # =================================================================
-# PCM Desktop - Unified Run Script (macOS/Linux)
+# Project Cognition Mentor - Unified Run Script (macOS/Linux)
 # =================================================================
-# Runs the PCM Desktop application with various modes
+# Runs the Project Cognition Mentor application with various modes
 #
 # Usage:
 #   ./run.sh                # Run main application
@@ -97,7 +97,7 @@ while [[ $# -gt 0 ]]; do
             shift
             ;;
         --help|-h)
-            echo "PCM Desktop - Run Script"
+            echo "Project Cognition Mentor - Run Script"
             echo ""
             echo "Usage: $0 [OPTIONS]"
             echo ""
@@ -123,7 +123,7 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-echo -e "${BLUE}🚀 PCM Desktop - Run Script${NC}"
+echo -e "${BLUE}🚀 Project Cognition Mentor - Run Script${NC}"
 echo "================================"
 echo ""
 
@@ -223,7 +223,7 @@ case $RUN_MODE in
         
     normal)
         if [ "$WITH_TEXT_COMPONENT" = true ]; then
-            echo -e "${BLUE}🎬 Starting PCM Desktop with Text Component...${NC}"
+            echo -e "${BLUE}🎬 Starting Project Cognition Mentor with Text Component...${NC}"
             echo ""
             
             # Verify text component libraries
@@ -259,7 +259,7 @@ case $RUN_MODE in
                 -cp "$CLASSPATH" \
                 com.noteflix.pcm.PCMApplication
         else
-            echo -e "${BLUE}🎬 Starting PCM Desktop...${NC}"
+            echo -e "${BLUE}🎬 Starting Project Cognition Mentor...${NC}"
             echo ""
             
             # Standard run - same as run.bat on Windows

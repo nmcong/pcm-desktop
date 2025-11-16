@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # =================================================================
-# PCM Desktop - Unified Build Script (macOS/Linux)
+# Project Cognition Mentor - Unified Build Script (macOS/Linux)
 # =================================================================
 # Compiles Java source code with optional text component support
 #
@@ -84,7 +84,7 @@ while [[ $# -gt 0 ]]; do
             shift
             ;;
         --help|-h)
-            echo "PCM Desktop - Build Script"
+            echo "Project Cognition Mentor - Build Script"
             echo ""
             echo "Usage: $0 [OPTIONS]"
             echo ""
@@ -108,7 +108,7 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-echo -e "${BLUE}🔨 PCM Desktop - Build Script${NC}"
+echo -e "${BLUE}🔨 Project Cognition Mentor - Build Script${NC}"
 echo "================================"
 echo ""
 

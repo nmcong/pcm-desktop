@@ -1,4 +1,4 @@
-# PCM Desktop - UI Module Complete Guide
+# Project Cognition Mentor - UI Module Complete Guide
 
 **Version:** 3.0.0  
 **Date:** November 16, 2025  
